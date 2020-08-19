@@ -1,41 +1,55 @@
 // GridTracker ©2020 N0TTL
 
 var fs = require('fs');
+var g_isShowing = false;
+var callRoster = {};
+var g_blockedCalls =  {};
+var g_blockedCQ =  {};
+var g_blockedDxcc =  {};
+var g_scriptReport = {};
+var g_worked =  {};
+var g_confirmed =  {};
+var g_modes = {};
+var g_modes_phone = {};
+var g_currentUSCallsigns = null;
+var r_currentUSState = "";
+var r_currentDXCCs = -1;
+var r_callsignManifest = null;
+var g_rosterSettings = {};
+var g_day = 0;
+var r_jsonDir = "";
+var g_menu = null;
+var g_callMenu = null;
+var g_ageMenu = null;
+var g_callingMenu = null;
+var g_targetHash = "";
+var g_clearIgnores = null;
+var g_clearIgnoresCall = null;
+var g_dxccMenu = null;
+var g_targetDxcc = -1;
+var g_clearDxccIgnore = null;
+var g_clearDxccIgnoreMainMenu = null;
+var g_CQMenu = null;
+var g_targetCQ = "";
+var g_clearCQIgnore = null;
+var g_clearCQIgnoreMainMenu = null;
+var g_timerInterval = null;
+var g_styleFont = null;
+var g_hotKeys = { "NumpadSubtract":reduceFont , "Minus":reduceFont , "NumpadAdd":increaseFont, "Equal":increaseFont, "Numpad0":resetFont , "Digit0":resetFont };
+var g_regFocus = false;
+var g_awards = {};
+var g_awardTypes = {};
+var g_awardTracker = {};
 
-var g_blockedCalls = Object();
-var g_blockedCQ = Object();
-var g_blockedDxcc = Object();
 
-//var g_slots = Array(4000);
-
-document.addEventListener("dragover", function (event) {
-	event.preventDefault();
-});
-
-document.addEventListener("drop", function (event) {
-	event.preventDefault();
-});
-
-if (typeof localStorage.blockedCQ == 'undefined')
-{
-	localStorage.blockedCQ = "{}";
-}
-
-if (typeof localStorage.blockedCalls != 'undefined' )
-{
-	g_blockedCalls = JSON.parse(localStorage.blockedCalls);
-	g_blockedCQ =  JSON.parse(localStorage.blockedCQ);
-	g_blockedDxcc = JSON.parse(localStorage.blockedDxcc);
-}
-
-function storeBlocks()
-{
-	localStorage.blockedCalls = JSON.stringify(g_blockedCalls);
-	localStorage.blockedCQ = JSON.stringify(g_blockedCQ);
-	localStorage.blockedDxcc  = JSON.stringify(g_blockedDxcc);
-}
-
-var g_rosterSettings = null;
+var g_modeColors = {};
+g_modeColors["FT4"] = '1111FF';
+g_modeColors["FT8"] = '11FF11';
+g_modeColors["JT4"] = 'EE1111';
+g_modeColors["JT9"] = '7CFC00';
+g_modeColors["JT65"] = 'E550E5';
+g_modeColors["QRA64"] = 'FF00FF';
+g_modeColors["MSK144"] = '4949FF';
 
 var g_defaultSettings =
 {
@@ -53,8 +67,10 @@ var g_defaultSettings =
 	"maxFreq":3500,
 	"noMyDxcc":false,
 	"onlyMyDxcc":false,
-	"noRoundUp":false,
-	"onlyRoundUp":false,
+	"noMsg":false,
+	"noMsgValue": "CQ RU",
+	"onlyMsg":false,
+	"onlyMsgValue": "CQ FD",
 	"cqOnly":true,
 	"usesLoTW":false,
 	"maxLoTW":27,
@@ -69,10 +85,12 @@ var g_defaultSettings =
 		"huntCallsign":false,
 		"huntGrid":true,
 		"huntDXCC":true,
-		"huntCqZone":false,
-		"huntItuZone":false,
-		"huntUsState":false,
-		"huntWPX":false,
+		"huntCQz":false,
+		"huntITUz":false,
+		"huntState":false,
+		"huntCounty": false,
+		"huntCont": false,
+		"huntPX":false,
 		"huntQRZ":true,
 		"huntOAMS":false
 	},
@@ -81,12 +99,17 @@ var g_defaultSettings =
 		"Msg":false,
 		"DXCC":true,
 		"Flag":true,
-		"dB":true,
-		"Freq":true,
-		"DT":true,
-		"Dist":true,
-		"Azim":true,
 		"State":true,
+		"County":true,
+		"Cont":true,
+		"dB":true,
+		"Freq":false,
+		"DT":false,
+		"Dist":false,
+		"Azim":true,
+		"CQz" : false,
+		"ITUz" : false,
+		"PX" : true,
 		"LoTW":false,
 		"eQSL":false,
 		"OQRS":false,
@@ -97,20 +120,60 @@ var g_defaultSettings =
 	},
 	"reference":0,
 	"controls":true,
+	"compact": false,
 	"fontSize":12,
 	"settingProfiles":false,
 	"lastSortIndex":6,
 	"lastSortReverse":1
 }
 
-var g_modeColors = {};
-g_modeColors["FT4"] = '1111FF';
-g_modeColors["FT8"] = '11FF11';
-g_modeColors["JT4"] = 'EE1111';
-g_modeColors["JT9"] = '7CFC00';
-g_modeColors["JT65"] = 'E550E5';
-g_modeColors["QRA64"] = 'FF00FF';
-g_modeColors["MSK144"] = '4949FF';
+document.addEventListener("dragover", function (event)
+{
+	event.preventDefault();
+});
+
+document.addEventListener("drop", function (event)
+{
+	event.preventDefault();
+});
+
+window.addEventListener("message", receiveMessage, false);
+
+if (typeof localStorage.blockedCQ == 'undefined')
+{
+	localStorage.blockedCQ = "{}";
+}
+
+if (typeof localStorage.awardTracker == 'undefined')
+{
+	localStorage.awardTracker = "{}";
+	g_rosterSettings = {};
+	writeRosterSettings();
+
+}
+
+g_awardTracker  = JSON.parse(localStorage.awardTracker);
+
+if (typeof localStorage.blockedCalls != 'undefined' )
+{
+	g_blockedCalls = JSON.parse(localStorage.blockedCalls);
+	g_blockedCQ =  JSON.parse(localStorage.blockedCQ);
+	g_blockedDxcc = JSON.parse(localStorage.blockedDxcc);
+	
+}
+
+function storeBlocks()
+{
+	localStorage.blockedCalls = JSON.stringify(g_blockedCalls);
+	localStorage.blockedCQ = JSON.stringify(g_blockedCQ);
+	localStorage.blockedDxcc  = JSON.stringify(g_blockedDxcc);
+	
+}
+
+function storeAwardTracker()
+{
+	localStorage.awardTracker = JSON.stringify(g_awardTracker);
+}
 
 function loadSettings()
 {
@@ -120,8 +183,7 @@ function loadSettings()
 		readSettings = JSON.parse(localStorage.rosterSettings);
 	}
 	g_rosterSettings = deepmerge(g_defaultSettings, readSettings);
-	if ( "huntGT" in g_rosterSettings.wanted )
-		delete  g_rosterSettings.wanted.huntGT;
+	
 	if ( "GT" in g_rosterSettings.columns )
 		delete g_rosterSettings.columns.GT;
 	
@@ -152,11 +214,10 @@ function lockNewWindows()
     }
 }
 
-
-function myCallCompare(a, b) {
+function myCallCompare(a, b) 
+{
 	return a.DEcall.localeCompare(b.DEcall);
 }
-
 
 function myGridCompare(a, b)
 {
@@ -169,8 +230,6 @@ function myGridCompare(a, b)
         return -1;
     return 0;
 }
-
-
 
 function myDxccCompare(a, b)
 {
@@ -197,9 +256,9 @@ function myLifeCompare(a, b)
 
 function mySpotCompare(a, b)
 {
-    if (a.spot > b.spot)
+    if (a.spot.when > b.spot.when)
         return 1;
-    if (a.spot < b.spot)
+    if (a.spot.when < b.spot.when)
         return -1;
     return 0;
 }
@@ -267,15 +326,36 @@ function myCQCompare(a, b)
 
 function myWPXCompare(a, b)
 {
-	if (a.wpx == null ) return 1;
-	if (b.wpx == null ) return -1;
-    if (a.wpx > b.wpx)
+	if (a.px == null ) return 1;
+	if (b.px == null ) return -1;
+    if (a.px > b.px)
         return 1;
-    if (a.wpx < b.wpx)
+    if (a.px < b.px)
         return -1;
     return 0;
 }
 
+function myCntyCompare(a, b)
+{
+	if (a.cnty == null ) return 1;
+	if (b.cnty == null ) return -1;
+    if (a.cnty.substr(3) > b.cnty.substr(3))
+        return 1;
+    if (a.cnty.substr(3) < b.cnty.substr(3))
+        return -1;
+    return 0;
+}
+
+function myContCompare(a, b)
+{
+	if (a.cont == null ) return 1;
+	if (b.cont == null ) return -1;
+    if (a.cont > b.cont)
+        return 1;
+    if (a.cont < b.cont)
+        return -1;
+    return 0;
+}
 function myGTCompare(a, b)
 {
 	if ( a.style.gt != 0 && b.style.gt == 0 )
@@ -285,8 +365,7 @@ function myGTCompare(a, b)
 	return 0;
 }
 
-var r_sortFunction = [myCallCompare, myGridCompare, myDbCompare, myDTCompare, myFreqCompare, myDxccCompare, myTimeCompare,myDistanceCompare, myHeadingCompare, myStateCompare,myCQCompare, myWPXCompare, myLifeCompare, mySpotCompare, myGTCompare];
-
+var r_sortFunction = [myCallCompare, myGridCompare, myDbCompare, myDTCompare, myFreqCompare, myDxccCompare, myTimeCompare,myDistanceCompare, myHeadingCompare, myStateCompare,myCQCompare, myWPXCompare, myLifeCompare, mySpotCompare, myGTCompare, myCntyCompare, myContCompare];
 
 function showRosterBox(sortIndex)
 {
@@ -305,11 +384,10 @@ function showRosterBox(sortIndex)
 	window.opener.goProcessRoster();
 }
 
-
-function hashMaker( band, mode )
+function hashMaker(band, mode)
 {
 	//"Current Band & Mode"
-	if ( g_rosterSettings.reference == 0 )
+	if ( g_rosterSettings.reference == 0 || g_rosterSettings.reference == 6)
 		return band + mode;
 		
 	//"Current Band, Any Mode"
@@ -334,35 +412,32 @@ function hashMaker( band, mode )
 		
 }
 
-var callRoster = Object();
-var g_worked = Object();
-var g_confirmed = Object();
-
-
-function processRoster(roster, worked, confirmed)
+function processRoster(roster)
 {
 	callRoster = roster;
-	g_worked = worked;
-	g_confirmed = confirmed;
-
 	viewRoster();
 }
 
-
 function viewRoster()
 {
-	
 	var bands = Object();
 	var modes = Object();
 	
 	var callMode = g_rosterSettings.callsign;
 	var onlyHits = false;
+	var isAwardTracker = false;
 	if ( callMode == "hits" )
 	{
 		callMode = "all";
 		onlyHits = true;
 	}
-
+	if ( referenceNeed.value == 6 )
+	{
+		callMode = "all";
+		onlyHits = true;
+		isAwardTracker = true;
+		g_rosterSettings.huntNeed = "confirmed";
+	}
 	
 	var canMsg = (window.opener.g_mapSettings.offlineMode == false && window.opener.g_appSettings.gtShareEnable == "true" && window.opener.g_appSettings.gtMsgEnable == "true" );
 			
@@ -429,13 +504,6 @@ function viewRoster()
 			callRoster[callHash].tx = false;
 			continue;
 		}
-		/*if ( g_slots[callRoster[call].message.DF] == 0 || ( g_slots[callRoster[call].message.DF] < callRoster[call].message.SR+30 ) )
-		{
-
-			if ( g_bw )
-				g_slots.fill(callRoster[call].message.SR+30, callRoster[call].message.DF, callRoster[call].message.DF+g_bw );
-		}*/
-		
 		if ( call in g_blockedCalls )
 		{
 			callRoster[callHash].tx = false;
@@ -496,16 +564,33 @@ function viewRoster()
 			continue;
 		}
 		
-		if ( g_rosterSettings.noRoundUp == true && (callRoster[callHash].DXcall == "CQ RU" ||  callRoster[callHash].DXcall == "CQ FTRU" ) ) 
+		if ( g_rosterSettings.noMsg == true  ) 
 		{
-			callRoster[callHash].tx = false;
-			continue;
-
+			try 
+			{
+				if ( callRoster[callHash].callObj.msg.match(g_rosterSettings.noMsgValue) )
+				{
+					callRoster[callHash].tx = false;
+					continue;
+				}
+			}
+			catch (e)
+			{
+			}
 		}
-		if ( g_rosterSettings.onlyRoundUp == true && callRoster[callHash].DXcall != "CQ RU" &&  callRoster[callHash].DXcall != "CQ FTRU" )
+		if ( g_rosterSettings.onlyMsg == true  )
 		{
-			callRoster[callHash].tx = false;
-			continue;
+			try 
+			{
+				if ( !(callRoster[callHash].callObj.msg.match(g_rosterSettings.onlyMsgValue)) )
+				{
+					callRoster[callHash].tx = false;
+					continue;
+				}
+			}
+			catch (e)
+			{
+			}
 		}
 		
 		if ( callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC )
@@ -623,20 +708,20 @@ function viewRoster()
 
 			if ( g_rosterSettings.hunting == "wpx" )
 			{
-				if ( String(callRoster[callHash].callObj.wpx) == null )
+				if ( String(callRoster[callHash].callObj.px) == null )
 				{
 					callRoster[callHash].tx = false;
 					continue;
 				}
-				var hash  = String(callRoster[callHash].callObj.wpx) + hashMaker(callRoster[callHash].callObj.band , callRoster[callHash].callObj.mode);
+				var hash  = String(callRoster[callHash].callObj.px) + hashMaker(callRoster[callHash].callObj.band , callRoster[callHash].callObj.mode);
 				
-				if (  g_rosterSettings.huntNeed == "worked" &  hash in g_worked.wpx  )
+				if (  g_rosterSettings.huntNeed == "worked" &  hash in g_worked.px  )
 				{
 						callRoster[callHash].tx = false;
 						continue;
 				}
 				
-				if ( g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.wpx )
+				if ( g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.px )
 				{
 						callRoster[callHash].tx = false;
 						continue;
@@ -757,23 +842,26 @@ function viewRoster()
 				continue;
 			}
 		}
-		else
+		if ( isAwardTracker )
 		{
+			var tx = false;
+			var baseHash = hashMaker(callRoster[callHash].callObj.band , callRoster[callHash].callObj.mode);
+			for ( var award in g_awardTracker )
+			{
+				if ( g_awardTracker[award].enable )
+				{
+					tx = testAward(award, callRoster[callHash].callObj, baseHash );
+					if ( tx ) 
+						break;
+				}
+
+			}
+			callRoster[callHash].tx = tx;
+
 		}
 	}
 	
-	if ( (callMode != "all" &&  g_rosterSettings.hunting == "usstates") ||  (callMode == "all" &&  huntUsState.checked == true))
-	{
-		usCallsignInfoDiv.style.display="block";
-		if ( window.opener.g_callsignLookups.ulsUseEnable == false )
-			usCallsignInfoDiv.innerHTML = "<b>US Callsign database must be enabled in settings for this feature to function</b>";
-		else
-		{
-			usCallsignInfoDiv.innerHTML = "";
-		}
-	}
-	else if ( (callMode != "all" &&  huntMode.value != "usstates" &&  huntMode.value != "usstate") ||  (callMode == "all" &&  huntUsState.checked == false ) )
-		usCallsignInfoDiv.style.display="none";
+
 	
 	
 	var hasGtPin = false;
@@ -808,6 +896,7 @@ function viewRoster()
 			var workHash = hashMaker(callRoster[callHash].callObj.band , callRoster[callHash].callObj.mode);
 			
 			var call = callRoster[callHash].DEcall;
+			var testHash = call + workHash;
 			var colorObject = Object();
 
 			var callPointer = ( callRoster[callHash].callObj.CQ == true ? "cursor:pointer" : "" );
@@ -817,27 +906,31 @@ function viewRoster()
 			var grid 	 = "#00FFFF";
 			var calling  = "#90EE90";
 			var dxcc	 = "#FFA500";
-			var state 	 = "#FFFFFF";
-			var cqz 	 = "#FFFFFF";
-			var ituz 	 = "#FFFFFF";
+			var state 	 = "#90EE90";
+			var cnty 	 = "#CCDD00";
+			var cont 	 = "#00DDDD";
+			var cqz 	 = "#DDDDDD";
+			var ituz 	 = "#DDDDDD";
 			var wpx      = "#FFFF00";
 			
 			hasGtPin = false;
 			shouldAlert = false;
-			var callsignBg , gridBg , callingBg , dxccBg , stateBg , cqzBg , ituzBg , wpxBg, gtBg;
-			var gridConf , callingConf , dxccConf , stateConf , cqzConf , ituzConf , wpxConf;
+			var callsignBg , gridBg , callingBg , dxccBg , stateBg , cntyBg, contBg, cqzBg , ituzBg , wpxBg, gtBg;
+			var callConf, gridConf , callingConf , dxccConf , stateConf , cntyConf, contConf, cqzConf , ituzConf , wpxConf;
 			
-			callsignBg = gridBg = callingBg = dxccBg = stateBg = cqzBg = ituzBg = wpxBg = gtBg = row;
+			callsignBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
 			
-			gridConf = callingConf = dxccConf = stateConf = cqzConf = ituzConf = wpxConf = "";
+			callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = cqzConf = ituzConf = wpxConf = "";
 
-			if (   (call + workHash in g_worked.call) )
+			if (  testHash in g_worked.call )
 			{
-				callPointer =  "text-decoration: line-through; ";
 				didWork = true;
+						
+				callConf = unconf + callsign + inversionAlpha + ";";
+					
 			}
 		
-			if ( call in window.opener.g_gtCallsigns && window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[call]].canmsg == true )
+			if ( call in window.opener.g_gtCallsigns && window.opener.g_gtCallsigns[call] in window.opener.g_gtFlagPins &&  window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[call]].canmsg == true )
 			{
 				// grab the CID
 				colorObject.gt = window.opener.g_gtCallsigns[call];
@@ -856,13 +949,31 @@ function viewRoster()
 				
 				if ( huntCallsign.checked == true )
 				{
-					if (  !(call + workHash in g_worked.call) )
-						{ 
-							callsignBg = callsign + inversionAlpha ; 
-							callsign = bold; 
-							shouldAlert = true; 
-							callRoster[callHash].callObj.reason.push("callsign"); 
-						}		
+					
+					if ( g_rosterSettings.huntNeed == "worked" &&  didWork )
+					{
+						callRoster[testHash].callObj.reason.push("call");
+						callConf = unconf + callsign + inversionAlpha + ";"; 
+					}
+					if ( didWork && (g_rosterSettings.huntNeed == "confirmed" &&  !(testHash in g_confirmed.call) ) )
+					{
+						shouldAlert = true; 
+						callRoster[testHash].callObj.reason.push("call");
+						callConf = unconf + callsign + inversionAlpha + ";"; 
+					}
+					else if ( didWork && (g_rosterSettings.huntNeed == "confirmed" &&  (testHash in g_confirmed.call) ) )
+					{
+						callConf = "";
+					}
+					else if ( !didWork )
+					{
+						shouldAlert = true; 
+						callConf = "";
+						callsignBg = callsign + inversionAlpha; 
+						callsign = bold; 
+					}
+	
+	
 				}
 				
 				if ( huntQRZ.checked == true && callRoster[callHash].callObj.qrz == true )
@@ -917,7 +1028,7 @@ function viewRoster()
 							}
 						}
 				}
-				if ( huntUsState.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true )
+				if ( huntState.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true )
 				{
 					var stateSearch = callRoster[callHash].callObj.state;
 					var finalDxcc = callRoster[callHash].callObj.dxcc;
@@ -944,7 +1055,32 @@ function viewRoster()
 						}
 					}
 				}
-				if ( huntCqZone.checked == true )
+				if ( huntCounty.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true )
+				{
+					var finalDxcc = callRoster[callHash].callObj.dxcc;
+					if ( callRoster[callHash].callObj.cnty && ( finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6) && callRoster[callHash].callObj.cnty.length > 0 )
+					{
+
+						var hash = callRoster[callHash].callObj.cnty + workHash;
+						if ( (g_rosterSettings.huntNeed == "worked" && !(hash in g_worked.cnty)) || ( g_rosterSettings.huntNeed == "confirmed" && !(hash in g_confirmed.cnty)))
+						{ 
+							shouldAlert = true; 
+							callRoster[callHash].callObj.reason.push("uscnty");
+
+							if ( g_rosterSettings.huntNeed == "confirmed" &&  (hash in g_worked.cnty) )
+							{
+								cntyConf = unconf + cnty + inversionAlpha + ";";
+							}
+							else
+							{
+								cntyBg = cnty + inversionAlpha ; 
+								cnty = bold; 
+							}
+						}
+					}
+					
+				}
+				if ( huntCQz.checked == true )
 				{
 					var workedTotal = confirmedTotal = callRoster[callHash].callObj.cqza.length;	
 					var workedFound = confirmedFound = 0;
@@ -974,7 +1110,7 @@ function viewRoster()
 					}
 						
 				}
-				if ( huntItuZone.checked == true )
+				if ( huntITUz.checked == true )
 				{
 					var workedTotal = confirmedTotal = callRoster[callHash].callObj.ituza.length;	
 					var workedFound = confirmedFound = 0;
@@ -1003,15 +1139,15 @@ function viewRoster()
 					}
 						
 				}
-				if ( huntWPX.checked == true && callRoster[callHash].callObj.wpx)
+				if ( huntPX.checked == true && callRoster[callHash].callObj.px)
 				{
-					var hash = String(callRoster[callHash].callObj.wpx) + workHash;
-					if ( (g_rosterSettings.huntNeed == "worked" &&  !(hash in g_worked.wpx) ) ||
-						 (g_rosterSettings.huntNeed == "confirmed" &&  !(hash in g_confirmed.wpx) ))
+					var hash = String(callRoster[callHash].callObj.px) + workHash;
+					if ( (g_rosterSettings.huntNeed == "worked" &&  !(hash in g_worked.px) ) ||
+						 (g_rosterSettings.huntNeed == "confirmed" &&  !(hash in g_confirmed.px) ))
 						{ 
 							shouldAlert = true; 
 							callRoster[callHash].callObj.reason.push("wpx");
-							if ( g_rosterSettings.huntNeed == "confirmed" &&  (hash in g_worked.wpx) )
+							if ( g_rosterSettings.huntNeed == "confirmed" &&  (hash in g_worked.px) )
 							{
 								wpxConf = unconf + wpx + inversionAlpha + ";";
 							}
@@ -1019,6 +1155,25 @@ function viewRoster()
 							{
 								wpxBg = wpx + inversionAlpha ; 
 								wpx = bold; 
+							}
+						}
+				}
+				if ( huntCont.checked == true && callRoster[callHash].callObj.cont)
+				{
+					var hash = String(callRoster[callHash].callObj.cont) + workHash;
+					if ( (g_rosterSettings.huntNeed == "worked" &&  !(hash in g_worked.cont) ) ||
+						 (g_rosterSettings.huntNeed == "confirmed" &&  !(hash in g_confirmed.cont) ))
+						{ 
+							shouldAlert = true; 
+							callRoster[callHash].callObj.reason.push("cont");
+							if ( g_rosterSettings.huntNeed == "confirmed" &&  (hash in g_worked.cont) )
+							{
+								contConf = unconf + cont + inversionAlpha + ";";
+							}
+							else
+							{
+								contBg = cont + inversionAlpha ; 
+								cont = bold; 
 							}
 						}
 				}
@@ -1031,14 +1186,16 @@ function viewRoster()
 				{ callingBg = calling + inversionAlpha; calling = bold;}
 				
 	
-			colorObject.callsign = "style='background-color:"+callsignBg+";color:"+callsign+";"+callPointer+"'" ;
+			colorObject.callsign = "style='"+callConf+"background-color:"+callsignBg+";color:"+callsign+";"+callPointer+"'" ;
 			colorObject.grid 	 = "style='"+gridConf+"background-color:"+gridBg+";color:"+grid+";cursor:pointer'";
 			colorObject.calling  = "style='"+callingConf+"background-color:"+callingBg+";color:"+calling+"'";
 			colorObject.dxcc	 = "style='"+dxccConf+"background-color:"+dxccBg+";color:"+dxcc+"'";
 			colorObject.state 	 = "style='"+stateConf+"background-color:"+stateBg+";color:"+state+"'";
+			colorObject.cnty 	 = "style='"+cntyConf+"background-color:"+cntyBg+";color:"+cnty+"'";
+			colorObject.cont 	 = "style='"+contConf+"background-color:"+contBg+";color:"+cont+"'";
 			colorObject.cqz 	 = "style='"+cqzConf+"background-color:"+cqzBg+";color:"+cqz+"'";
 			colorObject.ituz 	 = "style='"+ituzConf+"background-color:"+ituzBg+";color:"+ituz+"'";
-			colorObject.wpx 	 = "style='"+wpxConf+"background-color:"+wpxBg+";color:"+wpx+"'";
+			colorObject.px 	 = "style='"+wpxConf+"background-color:"+wpxBg+";color:"+wpx+"'";
 			if ( didWork && shouldAlert )
 				shouldAlert = false;
 				
@@ -1047,9 +1204,15 @@ function viewRoster()
 			callRoster[callHash].callObj.style = colorObject;
 			
 			if ( g_rosterSettings.columns.Spot )
-				callRoster[callHash].spot = window.opener.getSpotTime( callRoster[callHash].callObj.DEcall +  callRoster[callHash].callObj.mode  +  callRoster[callHash].callObj.band +  callRoster[callHash].callObj.grid );
+			{
+				callRoster[callHash].callObj.spot = window.opener.getSpotTime( callRoster[callHash].callObj.DEcall +  callRoster[callHash].callObj.mode  +  callRoster[callHash].callObj.band +  callRoster[callHash].callObj.grid );
+				if ( callRoster[callHash].callObj.spot == null )
+				{
+					callRoster[callHash].callObj.spot = { "when":0, "snr":0 };
+				}
+			}
 			else
-				callRoster[callHash].spot = 0;
+				callRoster[callHash].callObj.spot = { "when":0, "snr":0 };
 			
 			modes[callRoster[callHash].callObj.mode] = true;
 			bands[callRoster[callHash].callObj.band] = true;
@@ -1068,86 +1231,83 @@ function viewRoster()
 	var showBands = (window.opener.g_instancesIndex.length > 1?true:false);
 	var showModes = (Object.keys(modes).length > 1?true:false);
 	
-    var showCqZone = false;
-	var showItuZone = false;
-	var showWPX = false;
-	if ( (g_rosterSettings.hunting == "cq" &&  callMode != "all" ) || ( g_rosterSettings.wanted.huntCqZone == true &&  callMode == "all") )
-		showCqZone = true;
-	if ( (g_rosterSettings.hunting == "itu" && callMode != "all" ) || ( g_rosterSettings.wanted.huntItuZone == true && callMode == "all") )
-		showItuZone = true;
-	if ( (g_rosterSettings.hunting == "wpx" &&  callMode != "all" ) || ( g_rosterSettings.wanted.huntWPX == true &&  callMode == "all") )
-		showWPX = true;
+
 		
-	var worker = "<table id='callTable' class='darkTable' align=left>";
+	var worker = ""
 	
-
-	worker += "<th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
-
-	if ( showBands )
+	if ( g_rosterSettings.compact == false )
 	{
-		worker += "<th style='' onclick='' >Band</th>";
+		worker = "<table id='callTable' class='darkTable' align=left>";
+		
+
+		worker += "<th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
+
+		if ( showBands )
+		{
+			worker += "<th style='' onclick='' >Band</th>";
+		}
+		if ( showModes )
+		{
+			worker += "<th style='' onclick='' >Mode</th>";
+		}
+		
+		worker += "<th style='cursor:pointer;' onclick='showRosterBox(1);'  >Grid</th>";
+		if ( g_rosterSettings.columns.Calling )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(10);' >Calling</th>";
+		if ( g_rosterSettings.columns.Msg )
+			worker += "<th >Msg</th>";
+		if ( g_rosterSettings.columns.DXCC )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >DXCC</th>";
+		if ( g_rosterSettings.columns.Flag  )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >Flag</th>";
+		if ( g_rosterSettings.columns.State  )
+			worker += "<th  style='cursor:pointer;' onclick='showRosterBox(9);'  >State</th>";
+		if ( g_rosterSettings.columns.County  )
+			worker += "<th  style='cursor:pointer;' onclick='showRosterBox(15);' >County</th>";
+		if ( g_rosterSettings.columns.Cont )
+			worker += "<th  style='cursor:pointer;' onclick='showRosterBox(16);' >Cont</th>";
+		if ( g_rosterSettings.columns.dB )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(2);' >dB</th>";
+		if ( g_rosterSettings.columns.Freq )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(4);' >Freq</th>";
+		if ( g_rosterSettings.columns.DT )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(3);' >DT</th>";
+		if ( g_rosterSettings.columns.Dist )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(7);' >Dist("+window.opener.distanceUnit.value.toLowerCase()+")</th>";
+		if ( g_rosterSettings.columns.Azim )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(8);' >Azim</th>";
+		if ( g_rosterSettings.columns.CQz )
+			worker += "<th>CQz</th>";
+		if ( g_rosterSettings.columns.ITUz )
+			worker += "<th>ITUz</th>";
+		if ( g_rosterSettings.columns.PX )
+			worker += "<th  style='cursor:pointer;' onclick='showRosterBox(11);'>PX</th>";	
+		
+		if ( window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.columns.LoTW )
+			worker += "<th  >LoTW</th>";
+		if ( window.opener.g_callsignLookups.eqslUseEnable == true && g_rosterSettings.columns.eQSL )
+			worker += "<th >eQSL</th>";
+		if ( window.opener.g_callsignLookups.oqrsUseEnable == true && g_rosterSettings.columns.OQRS )
+			worker += "<th >OQRS</th>";
+
+		if ( g_rosterSettings.columns.Spot )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(13);' >Spot</th>";
+		
+		if ( g_rosterSettings.columns.Life )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(12);' >Life</th>";
+
+		if ( g_rosterSettings.columns.OAMS )
+			worker += "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAM</th>";
+
+		if ( g_rosterSettings.columns.Age )
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th>";
 	}
-	if ( showModes )
+	else
 	{
-		worker += "<th style='' onclick='' >Mode</th>";
+		worker = '<div id="buttonsDiv" style="margin-left:0px;white-space:normal;">';
 	}
-	
-	worker += "<th style='cursor:pointer;' onclick='showRosterBox(1);'  >Grid</th>";
-	if ( g_rosterSettings.columns.Calling )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(10);' >Calling</th>";
-	if ( g_rosterSettings.columns.Msg )
-		worker += "<th >Msg</th>";
-	if ( g_rosterSettings.columns.DXCC )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >DXCC</th>";
-	if ( g_rosterSettings.columns.Flag  )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >Flag</th>";
-	
-	if ( g_rosterSettings.columns.dB )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(2);' >dB</th>";
-	if ( g_rosterSettings.columns.Freq )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(4);' >Freq</th>";
-	if ( g_rosterSettings.columns.DT )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(3);' >DT</th>";
-	if ( g_rosterSettings.columns.Dist )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(7);' >Dist("+window.opener.distanceUnit.value.toLowerCase()+")</th>";
-	if ( g_rosterSettings.columns.Azim )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(8);' >Azim</th>";
-
-	if ( showCqZone )
-		worker += "<th>CQz</th>";
-	if ( showItuZone )
-		worker += "<th>ITUz</th>";
-	if ( ( g_rosterSettings.columns.State ||   ( g_rosterSettings.wanted.huntUsState == true &&  callMode == "all") || ( callMode != "all" &&  g_rosterSettings.hunting == "usstates") ) && window.opener.g_callsignLookups.ulsUseEnable == true )
-		worker += "<th  style='cursor:pointer;' onclick='showRosterBox(9);'  >State</th>";
-
-	if ( showWPX )
-		worker += "<th  style='cursor:pointer;' onclick='showRosterBox(11);'>PX</th>";	
-	
-	if ( window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.columns.LoTW )
-		worker += "<th  >LoTW</th>";
-	if ( window.opener.g_callsignLookups.eqslUseEnable == true && g_rosterSettings.columns.eQSL )
-		worker += "<th >eQSL</th>";
-	if ( window.opener.g_callsignLookups.oqrsUseEnable == true && g_rosterSettings.columns.OQRS )
-		worker += "<th >OQRS</th>";
-
-	
-
-
-	if ( g_rosterSettings.columns.Spot )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(13);' >Spot</th>";
-	
-	if ( g_rosterSettings.columns.Life )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(12);' >Life</th>";
-
-	if ( g_rosterSettings.columns.OAMS )
-		worker += "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAM</th>";
-
-	if ( g_rosterSettings.columns.Age )
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th>";
 	
 	var shouldAlert = 0;
-	
-	
 	
 	for (var x in newCallList)
 	{
@@ -1155,9 +1315,12 @@ function viewRoster()
 			continue;
 		
 		var spotString = "";
+		var spotSnr = null;
 		if (  g_rosterSettings.columns.Spot &&  newCallList[x].qrz == false )
 		{
 			spotString = getSpotString(newCallList[x]);
+			if ( spotString != "" )
+				spotSnr = newCallList[x].spot.snr;
 			if ( g_rosterSettings.onlySpot && spotString == "")
 				continue;
 		}
@@ -1168,23 +1331,28 @@ function viewRoster()
 		var ituzone = (grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-");
 		var thisCall = newCallList[x].DEcall;
 
-		worker += "<tr id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
-
 		var thisClass = "";
 		if ( thisCall.match("^[A-Z][0-9][A-Z](\/\w+)?$") )
-			thisClass = "class='oneByOne'";
+			newCallList[x].style.callsign = "class='oneByOne'";
 		if ( thisCall == window.opener.g_instances[newCallList[x].instance].status.DXcall )
 		{
 			if ( window.opener.g_instances[newCallList[x].instance].status.TxEnabled == 1 )
 			{
-				thisClass = "class='dxCalling'";
+				newCallList[x].style.callsign = "class='dxCalling'";
 			}
 			else
 			{
-				thisClass = "class='dxCaller'";
+				newCallList[x].style.callsign = "class='dxCaller'";
 			}
 		}
 		
+		if ( g_rosterSettings.compact == false )
+		{
+		
+
+
+		
+		worker += "<tr id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
 		worker += "<td "+thisClass+" title='Callsign' align=left " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
 			 thisCall + newCallList[x].band+newCallList[x].mode + "\")'>" + thisCall.formatCallsign() + "</td>";
 
@@ -1214,7 +1382,13 @@ function viewRoster()
 				" (" + window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[newCallList[x].dxcc]].pp  + ")</td>";
 		if ( g_rosterSettings.columns.Flag )
 			worker += "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" + geo.flag + "'></td>";
-		
+		if ( g_rosterSettings.columns.State )
+			worker += "<td align='center' "+newCallList[x].style.state+" >"+ (newCallList[x].state ? newCallList[x].state.substr(3) : "")+"</td>";
+		if ( g_rosterSettings.columns.County )
+			worker += "<td align='center' "+newCallList[x].style.cnty+" >"+ (newCallList[x].cnty ? toTitleCase(newCallList[x].cnty.substr(3)) : "")+"</td>";
+		if ( g_rosterSettings.columns.Cont )
+			worker += "<td align='center' "+newCallList[x].style.cont+" >"+ (newCallList[x].cont ?  newCallList[x].cont:"")+"</td>";
+	
 		if ( g_rosterSettings.columns.dB )
 			worker += "<td style='color:#DD44DD'><b>" + newCallList[x].RSTsent + "</b></td>";
 		if ( g_rosterSettings.columns.Freq )			
@@ -1226,16 +1400,13 @@ function viewRoster()
 		if ( g_rosterSettings.columns.Azim )
 			worker += "<td style='color:yellow'>"+parseInt(newCallList[x].heading)+"</td>";
 		
-		if ( showCqZone )
+		if ( g_rosterSettings.columns.CQz )
 			worker += "<td "+newCallList[x].style.cqz+">"+ newCallList[x].cqza.join(",")+"</td>";
-		if  ( showItuZone )
+		if  (  g_rosterSettings.columns.ITUz )
 			worker += "<td "+newCallList[x].style.ituz+">"+ newCallList[x].ituza.join(",")+"</td>";
 		
-		if ( ( g_rosterSettings.columns.State || ( g_rosterSettings.wanted.huntUsState == true &&  callMode == "all") || ( callMode != "all" &&  g_rosterSettings.hunting == "usstates") ) && window.opener.g_callsignLookups.ulsUseEnable == true )
-			worker += "<td align='center' "+newCallList[x].style.state+" >"+ (newCallList[x].state ? newCallList[x].state.substr(3) : "")+"</td>";
-
-		if  ( showWPX )
-			worker += "<td "+newCallList[x].style.wpx+">"+ (newCallList[x].wpx ? newCallList[x].wpx:'')+"</td>";
+		if  (  g_rosterSettings.columns.PX )
+			worker += "<td "+newCallList[x].style.px+">"+ (newCallList[x].px ? newCallList[x].px:'')+"</td>";
 		
 		if ( window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.columns.LoTW )
 		{
@@ -1262,12 +1433,11 @@ function viewRoster()
 			worker += "<td  style='color:#0F0;' align='center'>"+ (thisCall in window.opener.g_oqrsCallsigns ? "&#10004;" : "")+"</td>";
 
 		if ( g_rosterSettings.columns.Spot )
-			worker += "<td style='color:#FFF;' class='spotCol' id='sp"+thisCall+newCallList[x].band+newCallList[x].mode+"'>"+  spotString +"</td>";	
+			worker += "<td style='color:#EEE;' class='spotCol' id='sp"+thisCall+newCallList[x].band+newCallList[x].mode+"' "+ (spotSnr?"title='"+spotSnr+"'" :"")+">"+  spotString +"</td>";	
 		if ( g_rosterSettings.columns.Life )
-			worker += "<td style='color:#FFF;' class='lifeCol' id='lm"+thisCall+newCallList[x].band+newCallList[x].mode+"'>"+  (timeNowSec() - newCallList[x].life).toDHMS() +"</td>";
+			worker += "<td style='color:#EEE;' class='lifeCol' id='lm"+thisCall+newCallList[x].band+newCallList[x].mode+"'>"+  (timeNowSec() - newCallList[x].life).toDHMS() +"</td>";
 
 
-		
 		if ( g_rosterSettings.columns.OAMS  )
 		{
 			if ( newCallList[x].style.gt != 0 )
@@ -1286,9 +1456,16 @@ function viewRoster()
 		}
 
 		if ( g_rosterSettings.columns.Age )
-			worker += "<td style='color:#FFF' class='timeCol' id='tm"+thisCall+newCallList[x].band+newCallList[x].mode+"'>"+  (timeNowSec() - newCallList[x].age).toDHMS() +"</td>";
+			worker += "<td style='color:#EEE' class='timeCol' id='tm"+thisCall+newCallList[x].band+newCallList[x].mode+"'>"+  (timeNowSec() - newCallList[x].age).toDHMS() +"</td>";
 		
 		worker += "</tr>";
+		}
+		else
+		{
+			worker += "<div class='compact'  id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
+		worker += "<div "+thisClass+" title='Callsign' " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
+			 thisCall + newCallList[x].band+newCallList[x].mode + "\")'>" + thisCall.formatCallsign() + "</div></div>";
+		}
 
 		if (  g_rosterSettings.realtime == false )
 		{
@@ -1301,8 +1478,6 @@ function viewRoster()
 			g_scriptReport[call].rect = null;
 			delete g_scriptReport[call].rect;
 			delete g_scriptReport[call].style;
-			delete g_scriptReport[call].worked;
-			delete g_scriptReport[call].confirmed;
 			delete g_scriptReport[call].wspr;
 			delete g_scriptReport[call].qso;
 			delete g_scriptReport[call].instance;
@@ -1330,10 +1505,19 @@ function viewRoster()
 		
 		newCallList[x].shouldAlert = false;
 	}
-	worker += "</table>";
-	rosterTable.innerHTML = worker;
-    	
-    callTable.style.width =  (parseInt(window.innerWidth)-6)+"px";
+	
+	if ( g_rosterSettings.compact == false )
+	{
+		worker += "</table>";
+		rosterTable.innerHTML = worker;	
+		callTable.style.width =  (parseInt(window.innerWidth)-6)+"px";
+	}
+	else
+	{
+    	rosterTable.innerHTML = worker + "</div>";	
+		buttonsDiv.style.width =  (parseInt(window.innerWidth)-6)+"px";
+	}
+    
 	
 	var dirPath = window.opener.g_scriptDir;
 	var scriptExists = false;
@@ -1362,12 +1546,12 @@ function viewRoster()
 	}
 	catch (e)
 	{
-		console.log(e);
+
 	}
 			
 	if ( shouldAlert > 0  )
 	{
-		if ( window.opener.g_classicAlerts.huntRoster == true && g_isShowing == true )
+		if ( window.opener.g_classicAlerts.huntRoster == true  )
 		{
 			var notify = window.opener.huntRosterNotify.value;
 			if ( notify == "0" )
@@ -1410,7 +1594,6 @@ function viewRoster()
 	}
 }
 
-var g_day = 0;
 function realtimeRoster()
 {
 	var now = timeNowSec();
@@ -1457,12 +1640,11 @@ function realtimeRoster()
 	}
 }
 
-function getSpotString( callObj )
+function getSpotString(callObj)
 {
-	callObj.spot = window.opener.getSpotTime( callObj.DEcall +  callObj.mode  +  callObj.band +  callObj.grid );
-	if ( callObj.spot > 0 )
+	if ( callObj.spot &&  callObj.spot.when> 0 )
 	{
-		when = timeNowSec() - callObj.spot;
+		when = timeNowSec() - callObj.spot.when;
 		if ( when <= window.opener.g_receptionSettings.viewHistoryTimeSec )
 			return parseInt(when).toDHMS();
 	}
@@ -1470,32 +1652,30 @@ function getSpotString( callObj )
 	return "";
 }
 
-var g_isShowing = true;
-
-function openChatToCid( cid )
+function openChatToCid(cid)
 {
 	window.opener.showMessaging(cid);
 	
 }
 
-function initiateQso( thisHash )
+function initiateQso(thisHash)
 {
 	window.opener.initiateQso(thisHash);
 }
 
-function callLookup( thisHash, grid )
+function callLookup(thisHash, grid)
 {
 	var thisCall = callRoster[thisHash].DEcall;
 	window.opener.startLookup(thisCall,grid);
 }
 
-function callingLookup( thisHash, grid )
+function callingLookup(thisHash, grid)
 {
 	var thisCall = callRoster[thisHash].DXcall;
 	window.opener.startLookup(thisCall,grid);
 }
 
-function callGenMessage( thisHash, grid )
+function callGenMessage(thisHash, grid)
 {
 	var thisCall = callRoster[thisHash].DEcall;
 	var instance = callRoster[thisHash].callObj.instance;
@@ -1503,7 +1683,7 @@ function callGenMessage( thisHash, grid )
 	window.opener.startGenMessages(thisCall,grid, instance);
 }
 
-function callingGenMessage( thisHash, grid )
+function callingGenMessage(thisHash, grid)
 {
 	var thisCall = callRoster[thisHash].DXcall;
 	var instance = callRoster[thisHash].callObj.instance;
@@ -1511,17 +1691,17 @@ function callingGenMessage( thisHash, grid )
 	window.opener.startGenMessages(thisCall,grid, instance);
 }
 
-function centerOn( grid )
+function centerOn(grid)
 {
 	window.opener.centerOn(grid);
 }
 
-
-function instanceChange( what )
+function instanceChange(what)
 {
 	window.opener.g_instances[what.id].crEnable = what.checked;
 	window.opener.goProcessRoster();
 }
+
 function updateInstances()
 {
 	if ( window.opener.g_instancesIndex.length > 1 )
@@ -1537,14 +1717,14 @@ function updateInstances()
 			var sp = inst.split(" - ");
 			var shortInst = sp[sp.length-1].substring(0,18);
 			var color = "blue";
-			var bcolor ="yellow";
+	
 			
 			if ( instances[inst].open == false )
 			{
 				color = "purple";
-				bcolor = "grey";
+		
 			}
-			worker += "<div style='margin:1px;padding-top:0px;padding-right:3px;padding-bottom:2px;display:inline-block;background-color:"+color+";border-style:outset;border-color:"+bcolor+";border-width:2px' class='roundBorder'><input type='checkbox' id='"+inst+"' onchange='instanceChange(this);' "+(instances[inst].crEnable?"checked":"")+" >"+shortInst+"</div>";
+			worker += "<div class='button'  style='margin:1px;padding:2px;display:inline-block;background-color:"+color+";;border-width:1px' ><input type='checkbox' id='"+inst+"' onchange='instanceChange(this);' "+(instances[inst].crEnable?"checked":"")+" >"+shortInst+"</div>";
 		}
 		instancesDiv.innerHTML = worker;
 		instancesDiv.style.display = "block";
@@ -1554,21 +1734,7 @@ function updateInstances()
 	
 }
 
-var g_scriptReport = Object();
-
-var g_RxDF = 0;
-var g_TxDF = 0;
-var g_bw = 0;
-
-/*	g_RxDF = newMessage.RxDF;
-	g_TxDF = newMessage.TxDF;
-	g_bw = 0;
-	if ( newMessage.TxMode == "FT8" )
-		g_bw = 49;
-	if ( newMessage.TxMode == "FT4" )
-		g_bw = 89;*/
-	
-function processStatus( newMessage )
+function processStatus(newMessage)
 {
 	if (newMessage.Transmitting == 0) // Not Transmitting
     {
@@ -1583,10 +1749,6 @@ function processStatus( newMessage )
             txrxdec.style.backgroundColor = 'Green';
             txrxdec.style.borderColor = 'GreenYellow';
             txrxdec.innerHTML = "RECEIVE";
-			
-			//getOptimalTx();
-			//g_slots.fill(0, 0, 4000);
-
         }
     }
     else
@@ -1598,52 +1760,335 @@ function processStatus( newMessage )
 
 }
 
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+		
+
+function newOption(value, text) {
+	if (typeof text == 'undefined')
+		text = value;
+	var option = document.createElement("option");
+	option.value = value;
+	option.text = text;
+	return option;
+}
+
+function createSelectOptions( selectElementString, selectNameDefault, forObject, altName = null, defaultValue = null, checkSponsor = null )
+{
+	var selector = document.getElementById(selectElementString);
+	selector.innerHTML = '';
+
+	var option = document.createElement("option");
+	option.value = defaultValue;
+	option.text = selectNameDefault;
+	option.selected = true;
+	option.disabled = true;
+	option.style.display = "none";
+	selector.appendChild(option);
+	
+	var obj = null;
+	if ( forObject )
+	{
+		obj = Object.keys(forObject).sort();
+	}
+	for ( var k in obj )
+	{
+		var opt = obj[k];
+		var option = document.createElement("option");
+		option.value = opt;
+		option.text = (altName? forObject[opt][altName]:opt);
+		if ( checkSponsor && (opt + "-" + checkSponsor in g_awardTracker ) )
+			option.disabled = true;
+				
+		selector.appendChild(option);
+	}
+}
+
+function awardSponsorChanged()
+{
+	awardName.style.display = "";
+	createSelectOptions("awardName","Select Award", g_awards[awardSponsor.value].awards, "name", null, awardSponsor.value);
+}
+
+function awardNameChanged()
+{
+	var awardToAdd = newAwardTrackerObject(awardSponsor.value,awardName.value, true);
+
+	var hash = awardToAdd.name + "-"	+ awardToAdd.sponsor;
+	if ( !(hash in g_awardTracker) )
+	{
+		g_awardTracker[hash] = awardToAdd;
+		storeAwardTracker();
+		processAward( hash );
+		updateAwardList(hash);
+		window.opener.goProcessRoster();
+	}
+	createSelectOptions("awardName","Select Award", g_awards[awardToAdd.sponsor].awards, "name", null, awardToAdd.sponsor);
+
+}
+
+
+
+function updateAwardList( target = null )
+{
+	var worker = '<table id="awardTable" class="awardTableCSS" style="padding:0;margin:0;margin-top:-5px;" >';
+		worker += "<tr style='font-size:smaller'>";
+		worker += "<td align='left'>";
+		worker += "Name";
+		worker += "</td>";
+		worker += "<td>";
+		worker += "Award";
+		worker += "</td>";
+		worker += "<td>";
+		worker += "Track";
+		worker += "</td>";
+		worker += "<td>";
+		worker += "";
+		worker += "</td>";
+		worker += "</tr>";
+	
+		worker += "</table>";
+		
+	awardWantedDiv.innerHTML = worker;
+	
+	var keys = Object.keys(g_awardTracker).sort();		
+			
+	for ( var key in keys )
+	{
+		var award = g_awardTracker[keys[key]];
+		var rule = g_awards[award.sponsor].awards[award.name].rule;
+		var row = awardTable.insertRow();
+		row.id = keys[key];
+		var baseAward = false;
+		var baseCount = 0;
+		
+		var endorseCount = 0;
+		var endorseTotal = 0;
+		var allEndorse = false;
+		
+		var tooltip = g_awards[award.sponsor].awards[award.name].tooltip+ " (" + g_awards[award.sponsor].sponsor + ")\n";
+		tooltip += toTitleCase(award.test.look) + " QSO\n";
+		for ( var mode in award.comp.counts )
+		{
+			tooltip +=  mode + "\n";
+			for ( var count  in award.comp.counts[mode] )
+			{
+				endorseTotal++;
+				if ( award.comp.counts[mode][count].per == 100 )
+				{
+					baseAward = true;
+					endorseCount++;
+				}
+				if ( award.comp.counts[mode][count].num > baseCount )
+					baseCount = award.comp.counts[mode][count].num;
+				
+				tooltip += "\t" + award.comp.counts[mode][count].num + "/" +count + " (" +award.comp.counts[mode][count].per+"%)\n";
+				var wrk = "";
+				if ( Object.keys(award.comp.endorse).length > 0 )
+				{
+					for ( var band in award.comp.endorse[mode] )
+					{
+						endorseTotal++;
+						if ( award.comp.endorse[mode][band][count] == true )
+						{
+							endorseCount++;
+							wrk += band + " ";
+						}
+					}
+
+				}
+				if ( wrk.length > 0 )
+				{
+					tooltip += "\t\t" + wrk + "\n";
+				}
+			}
+			
+		}
+		if ( baseCount > 0 && endorseCount == endorseTotal )
+			allEndorse = true;
+		
+		var cell = createCellHtml(row, "<p style='font-size:smaller;'>" +  g_awards[award.sponsor].awards[award.name].tooltip +" - "+award.sponsor );
+		cell.style.textAlign = "left";
+		cell.style.color = "lightblue";
+				
+		createCellHtml(row, "<p style='margin:0;' >" + (allEndorse? "<img src='./img/award-trophy.svg' height='18px'>":baseAward?"<img src='./img/award-medal.svg' height='16px'>":baseCount>0?"<img src='./img/award-tally.svg' height='16px'>":"<img src='./img/award-empty.svg' height='14px'>"),  tooltip);
+		createCell(row, "enable" , award.enable, award.enable, "Toggle Tracking",  true);
+		createCellHtml(row, "<p title='Remove Tracker' onclick='deleteAwardTracker(this)' style='margin:0;cursor:pointer;'><img src='./img/award-delete.svg' height='16px'>");
+	}
+
+}
+
+function deleteAwardTracker( sender )
+{
+	var id = sender.parentNode.parentNode.id;
+	delete g_awardTracker[id];
+	storeAwardTracker();
+	resetAwardAdd();
+	updateAwardList();
+	window.opener.goProcessRoster();
+}
+
+function awardCheckboxChanged( sender )
+{
+	var awardId = sender.target.parentNode.parentNode.id;
+	g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] = sender.target.checked;
+	storeAwardTracker();
+	window.opener.goProcessRoster();
+}
+
+function awardValueChanged( sender )
+{
+	var awardId = sender.target.parentNode.parentNode.id;
+	g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] = sender.target.value;
+	storeAwardTracker();
+	window.opener.goProcessRoster();
+}
+
+function createCell( row, target, value, data = null, title = null,  checkbox = false)
+{
+	var cell = row.insertCell();
+	if ( data == null )
+		cell.innerHTML = value;
+	if ( title )
+		cell.title = title;
+	if ( checkbox )
+	{
+		var x = document.createElement("INPUT");
+		x.setAttribute("type", "checkbox");
+		x.checked = value;
+		x.name = target;
+		x.addEventListener("change", awardCheckboxChanged);
+		cell.appendChild(x);
+	}
+	else if ( data )
+	{
+		cell.appendChild( createAwardSelector( cell, target, value, data));
+	}
+	return cell;
+}
+
+function createCellHtml( row, html, title = null)
+{
+	var cell = row.insertCell();
+	cell.innerHTML = html;
+	if ( title )
+		cell.title = title;
+	
+	return cell;
+}
+
+function createAwardSelector( cell , target, value, forObject )
+{
+	var selector = document.createElement("select");
+	selector.name = target;
+	selector.value = value;
+	selector.disabled = (forObject.length == 1 ? true : false);
+	selector.style.margin = "0px";
+	selector.style.padding = "1px";
+	if ( selector.disabled )
+		selector.style.cursor = "auto";
+	selector.addEventListener("change", awardValueChanged);
+	for ( var opt in forObject )
+	{
+		var option = document.createElement("option");
+		option.value = forObject[opt];
+		if ( option.value  == "Phone" || option.value == "CW" )
+			option.disabled = true;
+		option.text = forObject[opt];
+		selector.appendChild(option);
+	}
+	return selector;
+}
+
+function resetAwardAdd()
+{
+	awardName.style.display = "none";
+	createSelectOptions("awardName","Select Award", null);
+	createSelectOptions("awardSponsor","Select Sponsor", g_awards,"sponsor");
+}
+
+function openAwardPopup()
+{
+	awardHunterDiv.style.zIndex = 100;
+	resetAwardAdd();
+
+}
+
+function closeAwardPopup()
+{
+	awardHunterDiv.style.zIndex = -1;
+	resetAwardAdd();
+}
+
+
 
 function setVisual()
 {
 	huntNeedTd.style.display = "none";
 	huntStateTd.style.display = "none";
 	huntDXCCsTd.style.display = "none";
-	usCallsignInfoDiv.style.display = "none";
 
-
-		
-	if ( callsignNeed.value == "all" || callsignNeed.value == "hits")
+	// Award Hunter
+	if ( referenceNeed.value == 6 )
 	{
-
-		huntingMatrixDiv.style.display = "block";
-		huntNeedTd.style.display = "block";
-		huntModeTd.style.display = "none";
+		/*for ( key in g_rosterSettings.wanted )
+		{
+			document.getElementById(key).checked = true;
+			var t = key.replace("hunt","");
+			if ( t in g_rosterSettings.columns )
+				g_rosterSettings.columns[t] = true;
+		}*/
+	
+		huntingTr.style.display = "none";
+		callsignsTr.style.display = "none";
+		huntingMatrixDiv.style.display = "none";
+		awardHunterTr.style.display = "";
+		awardWantedDiv.style.display = "";
+		updateAwardList();
 	}
 	else
 	{
-		huntingMatrixDiv.style.display = "none";
-		huntModeTd.style.display = "block";
+		for ( key in g_rosterSettings.wanted )
+			document.getElementById(key).checked = g_rosterSettings.wanted[key];
 		
-		if (   huntMode.value != "callsign" &&  huntMode.value != "usstate" &&  huntMode.value != "dxccs" )	
+		awardHunterTr.style.display = "none";
+		awardWantedDiv.style.display = "none";
+		huntingTr.style.display = "";
+		callsignsTr.style.display = "";
+		closeAwardPopup();
+		if ( callsignNeed.value == "all" || callsignNeed.value == "hits")
 		{
-			huntNeedTd.style.display = "block";
-		}
-		if ( huntMode.value == "usstate" )	
-		{
-			huntStateTd.style.display = "block";
-			usCallsignInfoDiv.style.display = "block";
-			usCallsignInfoDiv.innerHTML = "";
-		}
-		if ( huntMode.value == "usstates")
-		{
-			huntNeedTd.style.display = "block";
-			usCallsignInfoDiv.style.display = "block";
-			if ( window.opener.g_callsignLookups.ulsUseEnable == false )
-				usCallsignInfoDiv.innerHTML = "US Callsign database must be enabled in settings";
-			else
-				usCallsignInfoDiv.innerHTML = "";
-		}
-		if ( huntMode.value == "dxccs" )
-		{
-			huntDXCCsTd.style.display = "block";
-		}
 
+			huntingMatrixDiv.style.display = "";
+			huntNeedTd.style.display = "block";
+			huntModeTd.style.display = "none";
+		}
+		else
+		{
+			huntingMatrixDiv.style.display = "";
+			huntModeTd.style.display = "block";
+			
+			if (   huntMode.value != "callsign" &&  huntMode.value != "usstate" &&  huntMode.value != "dxccs" )	
+			{
+				huntNeedTd.style.display = "block";
+			}
+			if ( huntMode.value == "usstate" )	
+			{
+				huntStateTd.style.display = "block";
+			}
+			if ( huntMode.value == "usstates")
+			{
+				huntNeedTd.style.display = "block";
+			}
+			if ( huntMode.value == "dxccs" )
+			{
+				huntDXCCsTd.style.display = "block";
+			}
+
+		}
 	}
 	if ( wantMaxDT.checked == true )
 	{
@@ -1740,9 +2185,20 @@ function setVisual()
 	resize();
 }
 
-function wantedChanged( element )
-{
+function wantedChanged(element)
+{	
 	g_rosterSettings.wanted[element.id] = element.checked;
+	
+	if ( element.checked == true )
+	{
+		var t = element.id.replace("hunt","");
+
+		if ( t in g_rosterSettings.columns )
+		{
+			g_rosterSettings.columns[t] = true;
+		}
+	}
+			
 	writeRosterSettings();
 	
 	g_scriptReport = Object();
@@ -1778,8 +2234,17 @@ function valuesChanged()
 	g_rosterSettings.cqOnly 	 = cqOnly.checked;
 	g_rosterSettings.noMyDxcc    = noMyDxcc.checked;
 	g_rosterSettings.onlyMyDxcc  = onlyMyDxcc.checked;
-	g_rosterSettings.noRoundUp 	 = noRoundUp.checked;
-	g_rosterSettings.onlyRoundUp = onlyRoundUp.checked;
+	if ( noMsg.checked && onlyMsg.checked && noMsgValue.value == onlyMsgValue.value)
+	{
+		if ( g_rosterSettings.noMsg )
+			noMsg.checked = false;
+		else 
+			onlyMsg.checked = false;
+	}
+	g_rosterSettings.noMsg 	 = noMsg.checked;
+	g_rosterSettings.onlyMsg = onlyMsg.checked;
+	g_rosterSettings.noMsgValue 	 = noMsgValue.value;
+	g_rosterSettings.onlyMsgValue = onlyMsgValue.value;
 	g_rosterSettings.usesLoTW = usesLoTW.checked ;
 	g_rosterSettings.useseQSL = useseQSL.checked ;
 	g_rosterSettings.usesOQRS = usesOQRS.checked ;
@@ -1847,7 +2312,6 @@ function getBuffer(file_url, callback, flag, mode, port, cookie)
     });
 }
 
-var g_currentUSCallsigns = null;
 function callsignResult(buffer, flag)
 {
     var rawData = JSON.parse(buffer);
@@ -1857,11 +2321,9 @@ function callsignResult(buffer, flag)
 	for ( key in rawData.c )
 		g_currentUSCallsigns[rawData.c[key]] = true;
 		
-	usCallsignInfoDiv.innerHTML = window.opener.g_enums[r_currentUSState] + " loaded with "+ rawData.c.length +" entries, updated: " + window.opener.userTimeString(rawData.ts*1000);
 	window.opener.goProcessRoster();
 }
 
-var r_currentUSState = "";
 function stateChangedValue(what)
 {
 	if ( r_currentUSState != stateSelect.value && stateSelect.value != "" )
@@ -1871,8 +2333,6 @@ function stateChangedValue(what)
 		if ( window.opener.g_mapSettings.offlineMode == false )
 		{
 		    var callState = r_currentUSState.replace("CN-", "");;
-		    usCallsignInfoDiv.innerHTML = "Loading "+window.opener.g_enums[r_currentUSState]+"  callsigns...";
-	
 			getBuffer("https://tagloomis.com/gt/callsigns/"+callState+".callsigns.json", callsignResult, r_currentUSState, "https", 443);
 		}
 		else
@@ -1881,7 +2341,7 @@ function stateChangedValue(what)
 			r_currentUSState = "";
 			g_currentUSCallsigns = null;
 			stateSelect.value = "";
-			usCallsignInfoDiv.innerHTML = "US State data only available online.";
+	
 			return;
 		}
 	}
@@ -1890,19 +2350,16 @@ function stateChangedValue(what)
 	{
 		r_currentUSState = "";
 		g_currentUSCallsigns = null;
-		usCallsignInfoDiv.innerHTML = "";
+
 		window.opener.goProcessRoster();
 	}
 }
 
-var r_currentDXCCs = -1;
 function DXCCsChangedValue(what)
 {
 	r_currentDXCCs = DXCCsSelect.value;
 	window.opener.goProcessRoster();
 }
-
-
 
 function initDXCCSelector()
 {
@@ -1925,7 +2382,6 @@ function initDXCCSelector()
 	newSelect.oninput = DXCCsChangedValue;
 }
 
-var r_callsignManifest = null;
 function manifestResult(buffer, flag)
 {
     r_callsignManifest = JSON.parse(buffer);
@@ -1950,36 +2406,219 @@ function manifestResult(buffer, flag)
 			
 }
 
-var r_jsonDir = "";
-var g_menu = null;
-var g_callMenu = null;
-var g_ageMenu = null;
-var g_callingMenu = null;
-
-var g_targetHash = "";
-var g_clearIgnores = null;
-var g_clearIgnoresCall = null;
-
-var g_dxccMenu = null;
-var g_targetDxcc = -1;
-var g_clearDxccIgnore = null;
-var g_clearDxccIgnoreMainMenu = null;
-
-var g_CQMenu = null;
-var g_targetCQ = "";
-var g_clearCQIgnore = null;
-var g_clearCQIgnoreMainMenu = null;
-
-window.addEventListener("message", receiveMessage, false);
-
 function receiveMessage(event) 
 {
 	
 }
 
+var g_tracker = {};
+
+function updateWorked()
+{
+	g_worked = window.opener.g_tracker.worked;
+	g_confirmed = window.opener.g_tracker.confirmed;
+	g_modes = window.opener.g_modes;
+	g_modes_phone = window.opener.g_modes_phone;
+	g_tracker = window.opener.g_tracker;
+	
+	processAllAwardTrackers();
+}
+
+function deleteCallsignIgnore(key)
+{
+	delete g_blockedCalls[key];
+	storeBlocks();
+	openIgnoreEdit();
+	window.opener.goProcessRoster();
+	
+}
+
+function deleteDxccIgnore(key)
+{
+	delete g_blockedDxcc[key];
+	storeBlocks();
+	openIgnoreEdit();
+	window.opener.goProcessRoster();
+}
+
+function deleteCQIgnore(key)
+{
+	delete g_blockedCQ[key];
+	storeBlocks();
+	openIgnoreEdit();
+	window.opener.goProcessRoster();
+}
+
+function clearAllCallsignIgnores()
+{
+	g_blockedCalls = Object();
+	storeBlocks();
+	openIgnoreEdit();
+	window.opener.goProcessRoster();	
+}
+
+function clearAllDxccIgnores()
+{
+	g_blockedDxcc = Object();
+	storeBlocks();
+	openIgnoreEdit();
+	window.opener.goProcessRoster();	
+}
+
+function clearAllCQIgnores()
+{
+	g_blockedCQ = Object();
+	storeBlocks();
+	openIgnoreEdit();
+	window.opener.goProcessRoster();	
+}
+
+function closeEditIgnores()
+{
+	mainCallRoster.style.display = "block";
+	editView.style.display = "none";
+}
+
+function openIgnoreEdit()
+{
+	mainCallRoster.style.display = "none";
+	editView.style.display = "inline-block";
+	var worker = "";
+	var clearString = "<th>none</th>";
+		 {
+			if ( Object.keys(g_blockedCalls).length > 0 ) 
+				clearString = "<th style='cursor:pointer;' onclick='clearAllCallsignIgnores()'>Clear All</th>";
+			worker +=
+			"<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" + ( window.innerHeight - 135)  +
+			"px;'><table class='darkTable' align=center><tr><th align=left>Callsigns</th>"+clearString+"</tr>";
+			Object.keys(g_blockedCalls).sort().forEach(function (key, i) {
+				worker += "<tr><td align=left style='color:#FFFF00;' >" + key + "</td><td style='cursor:pointer;' onclick='deleteCallsignIgnore(\"" + key + "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+
+			});
+			worker += "</table></div>";
+		}
+	
+
+		 {
+			 clearString = "<th>none</th>";
+			if ( Object.keys(g_blockedCQ).length > 0 ) 
+				clearString = "<th style='cursor:pointer;' onclick='clearAllCQIgnores()'>Clear All</th>";
+			worker +=
+			"<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" + ( window.innerHeight - 135)  +
+			"px;'><table class='darkTable' align=center><tr><th align=left>CQ</th>"+clearString+"</tr>";
+			Object.keys(g_blockedCQ).sort().forEach(function (key, i) {
+				worker += "<tr><td align=left style='color:cyan;' >" + key + "</td><td style='cursor:pointer;' onclick='deleteCQIgnore(\"" + key + "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+
+			});
+			worker += "</table></div>";
+		}
+		
+		
+		{
+			clearString = "<th>none</th>";
+			if ( Object.keys(g_blockedDxcc).length > 0 ) 
+				clearString = "<th style='cursor:pointer;' onclick='clearAllDxccIgnores()'>Clear All</th>";
+			worker +=
+			"<div  style='margin:10px;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
+			( window.innerHeight - 135) +
+			"px;'><table class='darkTable' align=center><tr><th align=left>DXCCs</th>"+clearString+"</tr>";
+			Object.keys(g_blockedDxcc).sort().forEach(function (key, i) {
+				worker += "<tr><td align=left style='color:#FFA500' >" + window.opener.g_dxccToAltName[key] +
+				" (" + window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp  + ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" + key + "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+
+			});
+			worker += "</table></div>";
+		}
+		editTables.innerHTML = worker;
+
+	
+}
+
+function setFontSize()
+{
+	if ( g_styleFont )
+	{
+		g_styleFont.parentNode.removeChild(g_styleFont);
+		g_styleFont = null;
+	}
+	g_styleFont = document.createElement('style');
+	g_styleFont.innerHTML = "table, th, td, select, .compact {font-size: "+g_rosterSettings.fontSize+"px;}";
+	document.body.appendChild(g_styleFont);
+	resize();
+}
+
+function reduceFont()
+{
+	if ( g_rosterSettings.fontSize > 10 )
+	{
+		g_rosterSettings.fontSize--;
+		writeRosterSettings();
+		setFontSize();
+	}
+}
+
+function increaseFont()
+{
+	if ( g_rosterSettings.fontSize < 50 )
+	{
+		g_rosterSettings.fontSize++;
+		writeRosterSettings();
+		setFontSize();
+	}
+}
+
+function resetFont()
+{
+
+	g_rosterSettings.fontSize = g_defaultSettings.fontSize;
+	writeRosterSettings();
+	setFontSize();
+}
+
+function onMyKeyDown(event)
+{
+	if ( event.ctrlKey )
+	{
+		if ( event.code in g_hotKeys )
+		{
+			g_hotKeys[event.code]();
+		}
+	}
+	else if ( !g_regFocus )
+	{
+		window.opener.onMyKeyDown(event);
+	}
+}
+
+function checkForEnter(ele)
+{
+	if(event.key === 'Enter') {
+        ele.blur();       
+    }
+}
+
+function resize()
+{
+	rosterTable.style.height =  window.innerHeight - (rosterHead.clientHeight+8) ;
+	awardWantedDiv.style.height = exceptionDiv.clientHeight;
+
+	if ( typeof callTable != 'undefined' )
+	    callTable.style.width =  (parseInt(window.innerWidth)-6)+"px";
+		
+	if ( editView.style.display == "inline-block" )
+		openIgnoreEdit();
+
+	window.opener.goProcessRoster();
+}
 
 function init()
 {
+	loadAwardJson();
+	
+	updateWorked();
+	
+	//addAllAwards();
+	
 	window.addEventListener("message", receiveMessage, false);
 
 	lockNewWindows();
@@ -2020,6 +2659,27 @@ function init()
 	  }
 	});
 	g_menu.append(item);
+	
+	item = new nw.MenuItem({
+	 type: "normal", 
+	  label: g_rosterSettings.compact? "Roster Mode":"Compact Mode",
+	  click: function() {
+		if ( this.label == "Compact Mode" )
+		{
+			this.label = "Roster Mode";
+			g_rosterSettings.compact = true;
+		}
+		else
+		{
+			this.label = "Compact Mode";
+			g_rosterSettings.compact = false;
+		}
+		localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
+		resize();
+	  }
+	});
+	g_menu.append(item);
+	
 	
 	rosterHead.style.display =  g_rosterSettings.controls?"block":"none";
 
@@ -2157,7 +2817,6 @@ function init()
 
 
 	g_CQMenu =  new nw.Menu();
-	// TO CQ
 
 	item = new nw.MenuItem({
 	 type: "normal", 
@@ -2221,7 +2880,6 @@ function init()
 	});
 	g_CQMenu.append(item);
 	
-	//END TO CQ
 	g_dxccMenu = new nw.Menu();
 	
 	item = new nw.MenuItem({
@@ -2396,8 +3054,13 @@ function init()
 	cqOnly.checked = 		g_rosterSettings.cqOnly   ;
 	noMyDxcc.checked =   	g_rosterSettings.noMyDxcc   ;
 	onlyMyDxcc.checked = 	g_rosterSettings.onlyMyDxcc ;
-	noRoundUp.checked =  	g_rosterSettings.noRoundUp  ;
-	onlyRoundUp.checked =	g_rosterSettings.onlyRoundUp;
+
+	
+	noMsg.checked		= g_rosterSettings.noMsg;
+	onlyMsg.checked		= g_rosterSettings.onlyMsg;
+	noMsgValue.value	= g_rosterSettings.noMsgValue;
+	onlyMsgValue.value	= g_rosterSettings.onlyMsgValue;
+	
 	usesLoTW.checked = g_rosterSettings.usesLoTW;
 	useseQSL.checked = g_rosterSettings.useseQSL;
 	onlySpot.checked = g_rosterSettings.onlySpot;
@@ -2417,250 +3080,1089 @@ function init()
 	
 	updateInstances();
 	setFontSize();
-	
-	//g_slots.fill(0, 0, 4000);
+
 }
 
-function deleteCallsignIgnore( key )
+function getTypeFromMode(mode)
 {
-	delete g_blockedCalls[key];
-	storeBlocks();
-	openIgnoreEdit();
-	window.opener.goProcessRoster();
-	
-}
-
-function deleteDxccIgnore( key )
-{
-	delete g_blockedDxcc[key];
-	storeBlocks();
-	openIgnoreEdit();
-	window.opener.goProcessRoster();
-}
-
-function deleteCQIgnore( key )
-{
-	delete g_blockedCQ[key];
-	storeBlocks();
-	openIgnoreEdit();
-	window.opener.goProcessRoster();
-}
-
-function clearAllCallsignIgnores()
-{
-	g_blockedCalls = Object();
-	storeBlocks();
-	openIgnoreEdit();
-	window.opener.goProcessRoster();	
-}
-
-
-/*function getOptimalTx()
-{
-
-	var txSlot = Object();
-	var count = 0;
-	var startX = 0;
-	var start = false;
-	for ( var x=200; x <= 2950 ; x++ )
+	if (mode in g_modes)
 	{
-		if ( start && g_slots[x] > 0  )
+		if ( g_modes[mode] == true )
+			return "Digital";
+		else if ( g_modes_phone[mode] == true )
+			return "Phone";
+
+	}
+	return "";
+}
+
+function testAward( awardName, obj, baseHash )
+{
+	var rule = g_awardTracker[awardName].rule;
+	var test = g_awardTracker[awardName].test;
+	
+	if ( obj.dxcc < 1 )
+		return false;
+	
+	if ( test.dxcc && rule.dxcc.indexOf(obj.dxcc) == -1 )
+		return false;
+
+	if ( test.mode && rule.mode.indexOf(obj.mode) == -1 )
+		return false;
+	
+	if ( test.band && rule.band.indexOf(obj.band) == -1 )
+		return false;
+	
+	if ( test.DEcall && rule.call.indexOf(obj.DEcall) == -1 )
+		return false;
+
+	if ( test.cont && rule.cont.indexOf(obj.cont) == -1 )
+		return false;
+	
+	if ( test.prop && rule.propMode != obj.propMode )
+		return false;
+	
+	if ( test.sat && rule.satName.indexOf(obj.satName) == -1)
+		return false;
+
+	return g_awardTypes[rule.type].test(g_awardTracker[awardName], obj, baseHash);
+	
+}
+function processAward( awardName )
+{
+	var award = g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name];
+	g_awardTracker[awardName].rule = award.rule;
+	var test = g_awardTracker[awardName].test = {};
+	var mode = award.rule.mode.slice();
+	
+	var Index = mode.indexOf("Mixed");
+	if ( Index > -1 )
+		mode.splice(Index,1);
+
+	Index = mode.indexOf("Digital");
+	if ( Index > -1 )
+		mode.splice(Index,1);
+
+	Index = mode.indexOf("Phone");
+	if ( Index > -1 )
+		mode.splice(Index,1);
+	
+	test.mode  = (mode.length > 0 );
+	
+	test.confirmed = ( ("qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule)? 
+				g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req == "confirmed" : 
+				g_awards[g_awardTracker[awardName].sponsor].qsl_req == "confirmed");
+				
+	test.look = ( ("qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule)? 
+				g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req  : 
+				g_awards[g_awardTracker[awardName].sponsor].qsl_req );
+				
+	test.DEcall = ( "call" in award.rule);
+	test.band = ( "band" in award.rule && award.rule.band.indexOf("Mixed") == -1 );
+	test.dxcc = ( "dxcc" in award.rule );
+	test.cont = ( "cont" in award.rule );
+	test.prop = ( "propMode" in award.rule );
+	test.sat  = ( "satName" in award.rule );
+	
+	g_awardTracker[awardName].stat = {};
+	
+	for (var i in window.opener.g_QSOhash) 
+	{
+		var obj = window.opener.g_QSOhash[i];
+
+		if ( test.confirmed &&  !obj.confirmed )
+				continue;
+		
+		if ( obj.dxcc < 1 )
+			continue;
+		
+		if ( test.dxcc && award.rule.dxcc.indexOf(obj.dxcc) == -1 )
+			continue;
+
+		if ( test.mode && award.rule.mode.indexOf(obj.mode) == -1 )
+			continue;
+		
+		if ( test.band && award.rule.band.indexOf(obj.band) == -1 )
+			continue;
+		
+		if ( test.DEcall && award.rule.call.indexOf(obj.DEcall) == -1 )
+			continue;
+
+		if ( test.cont && award.rule.cont.indexOf(obj.cont) == -1 )
+			continue;
+		
+		if ( test.prop && award.rule.propMode != obj.propMode )
+			continue;
+		
+		if ( test.sat && award.rule.satName.indexOf(obj.satName) == -1)
+			continue;
+	
+		g_awardTypes[award.rule.type].score(g_awardTracker[awardName], obj);
+	}
+	
+	g_awardTracker[awardName].comp = g_awardTypes[award.rule.type].compile( g_awardTracker[awardName], g_awardTracker[awardName].stat);
+	g_awardTracker[awardName].stat = {};
+}
+
+function newAwardCountObject() 
+{
+	var statCountObject = {};
+	
+	statCountObject.bands = {};
+	statCountObject.bands["Mixed"] = {};
+	statCountObject.bands["Digital"] = {};
+	statCountObject.bands["Phone"] = {};
+	statCountObject.modes = {};
+	statCountObject.modes["Mixed"] = {};
+	statCountObject.modes["Digital"] = {};
+	statCountObject.modes["Phone"] = {};
+	statCountObject.unique = null;
+	return statCountObject;
+}
+
+
+
+function workAwardObject( obj, band, mode, isDigital , isPhone, unique = null )
+{
+	obj.bands["Mixed"][band] = ~~obj.bands["Mixed"][band] + 1;
+	if ( !(mode in obj.bands) )
+		obj.bands[mode] = {};
+	obj.bands[mode][band] = ~~obj.bands[mode][band] + 1;
+	obj.modes["Mixed"][mode] = ~~obj.modes["Mixed"][mode] + 1;
+	
+	if ( isDigital  )
+	{
+		obj.bands["Digital"][band] = ~~obj.bands["Digital"][band] + 1;
+		obj.modes["Digital"][mode] = ~~obj.modes["Digital"][mode] + 1;
+	}
+	if ( isPhone )
+	{
+
+		obj.bands["Phone"][band] = ~~obj.bands["Phone"][band] + 1;
+		obj.modes["Phone"][mode] = ~~obj.modes["Phone"][mode] + 1;
+	}
+	if ( unique )
+	{
+
+		if ( obj.unique == null )
+			obj.unique = {};
+		if ( !(unique in obj.unique) )
+			obj.unique[unique] =  newAwardCountObject();
+		workAwardObject( obj.unique[unique], band, mode, isDigital , isPhone );
+	}
+	return true;
+}
+
+function buildAwardTypeHandlers()
+{
+	g_awardTypes = 
+			 {
+				"IOTA": { "name": "Islands On The Air"},
+				"call": { "name": "Callsign"},
+				"callarea": { "name": "Call Area"},
+				"calls2dxcc": { "name": "Stations per DXCC"},
+				"cnty": { "name": "County"},
+				"cont": { "name": "Continents"},
+				"cont5": { "name": "5 Continents"},
+				"cont52band": { "name": "5 Continents per Band"},
+				"cqz": { "name": "CQ Zone"},
+				"dxcc": { "name": "DXCC"},
+				"grids": { "name": "Grids"},
+				"numsfx": { "name": "Call Area + Suffix"},
+				"px": { "name": "Prefix"},
+				"pxa": { "name": "Prefixes"},
+				"pxplus": { "name": "Special Calls"},
+				"sfx": { "name": "Suffix"},
+				"states": { "name": "States"},
+				"cont2band": { "name" : "Continents per Band"},
+				"calls2band": { "name" : "Stations per Band"},
+				"dxcc2band": { "name" : "DXCC per Band"},
+				"states2band": { "name" : "States per Band"}
+			 };
+	
+	g_awardTypes["IOTA"].score 		= scoreAIOTA;
+	g_awardTypes["call"].score 		= scoreAcall; 	
+	g_awardTypes["callarea"].score 	= scoreAcallarea;
+	g_awardTypes["calls2dxcc"].score= scoreAcalls2dxcc; 	
+	g_awardTypes["cnty"].score 		= scoreAcnty;  	
+	g_awardTypes["cont"].score		= scoreAcont; 	
+	g_awardTypes["cont5"].score 	= scoreAcont5;  
+	g_awardTypes["cont52band"].score= scoreAcont52band;  
+	g_awardTypes["cqz"].score 		= scoreAcqz;  	
+	g_awardTypes["dxcc"].score 		= scoreAdxcc; 	
+	g_awardTypes["grids"].score 	= scoreAgrids;  	
+	g_awardTypes["numsfx"].score 	= scoreAnumsfx; 	
+	g_awardTypes["px"].score 		= scoreApx;  
+	g_awardTypes["pxa"].score 		= scoreApxa;  	
+	g_awardTypes["pxplus"].score 	= scoreApxplus; 
+	g_awardTypes["sfx"].score 		= scoreAsfx;  	
+	g_awardTypes["states"].score 	= scoreAstates; 	
+	g_awardTypes["cont2band"].score = scoreAcont2band; 	
+	g_awardTypes["calls2band"].score = scoreAcalls2band; 
+	g_awardTypes["dxcc2band"].score = scoreAdxcc2band; 
+	g_awardTypes["states2band"].score = scoreAstates2band; 
+	
+	g_awardTypes["IOTA"].test 		= testAIOTA;
+	g_awardTypes["call"].test 		= testAcall; 	
+	g_awardTypes["callarea"].test 	= testAcallarea;
+	g_awardTypes["calls2dxcc"].test	= testAcalls2dxcc; 	
+	g_awardTypes["cnty"].test 		= testAcnty;  	
+	g_awardTypes["cont"].test		= testAcont; 
+    g_awardTypes["cont5"].test 		= testAcont5;	
+	g_awardTypes["cont52band"].test = testAcont52band;  
+	g_awardTypes["cqz"].test 		= testAcqz;  	
+	g_awardTypes["dxcc"].test 		= testAdxcc; 	
+	g_awardTypes["grids"].test 		= testAgrids;  	
+	g_awardTypes["numsfx"].test 	= testAnumsfx; 	
+	g_awardTypes["px"].test 		= testApx;  
+	g_awardTypes["pxa"].test 		= testApxa;  	
+	g_awardTypes["pxplus"].test 	= testApxplus; 
+	g_awardTypes["sfx"].test 		= testAsfx;  	
+	g_awardTypes["states"].test 	= testAstates;
+	g_awardTypes["cont2band"].test 	= testAcont2band; 
+	g_awardTypes["calls2band"].test = testAcalls2band; 
+	g_awardTypes["dxcc2band"].test = testAdxcc2band; 
+	g_awardTypes["states2band"].test = testAstates2band; 
+	
+	g_awardTypes["IOTA"].compile 		= singleCompile;
+	g_awardTypes["call"].compile 		= singleCompile; 	
+	g_awardTypes["callarea"].compile 	= singleCompile;
+	g_awardTypes["calls2dxcc"].compile	= doubleCompile; 	
+	g_awardTypes["cnty"].compile 		= singleCompile;  	
+	g_awardTypes["cont"].compile		= singleCompile; 
+	g_awardTypes["cont5"].compile 		= singleCompile;	
+	g_awardTypes["cont52band"].compile 	= doubleCompile;  
+	g_awardTypes["cqz"].compile 		= singleCompile;  	
+	g_awardTypes["dxcc"].compile 		= singleCompile; 	
+	g_awardTypes["grids"].compile 		= singleCompile;  	
+	g_awardTypes["numsfx"].compile 		= singleCompile; 	
+	g_awardTypes["px"].compile 			= singleCompile;  
+	g_awardTypes["pxa"].compile 		= singleCompile;  	
+	g_awardTypes["pxplus"].compile 		= singleCompile; 
+	g_awardTypes["sfx"].compile 		= singleCompile;  	
+	g_awardTypes["states"].compile 		= singleCompile;
+	g_awardTypes["cont2band"].compile	= doubleCompile; 	
+	g_awardTypes["calls2band"].compile	= doubleCompile; 	
+	g_awardTypes["dxcc2band"].compile	= doubleCompile; 
+	g_awardTypes["states2band"].compile	= doubleCompile; 
+	
+ 	
+}
+
+function scoreAstates(award, obj) 
+{ 
+	if ( obj.state )
+	{
+		if ( !(obj.state in award.stat ) )
+			award.stat[obj.state] = newAwardCountObject() ;
+		return workAwardObject( award.stat[obj.state], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+function testAstates(award, obj, baseHash ) 
+{ 
+	if ( obj.state && obj.state + baseHash in g_tracker[award.test.look].state )
+	{
+		return false;																
+	}
+	return true;
+}
+
+function scoreAstates2band(award, obj) 
+{ 
+	if ( obj.state )
+	{
+		if ( !(obj.band in award.stat ) )
+			award.stat[obj.band] = newAwardCountObject() ;
+		return workAwardObject( award.stat[obj.band], obj.band, obj.mode, obj.digital, obj.phone, obj.state);
+	}
+	return false;
+}
+
+function testAstates2band(award, obj, baseHash) 
+{
+	if ( obj.state && obj.state + baseHash in g_tracker[award.test.look].state )
+	{
+		return false;																
+	}
+	return true;
+}
+
+function scoreAdxcc(award, obj) 
+{
+	if ( !(obj.dxcc in award.stat ) )
+			award.stat[obj.dxcc] = newAwardCountObject() ;
+	return workAwardObject( award.stat[obj.dxcc], obj.band, obj.mode, obj.digital, obj.phone);
+}
+	
+function testAdxcc(award, obj, baseHash ) 
+{
+	if ( String(obj.dxcc)+baseHash in g_tracker[award.test.look].dxcc )
+	{
+		return false;																
+	}
+	return true;																	
+}
+
+
+function scoreAcont(award, obj) 
+{ 
+	if ( obj.cont )
+	{
+		var cont = obj.cont;
+		if ( cont == "AN" )
+			cont = "OC";
+		if ( !(cont in award.stat ) )
+			award.stat[cont] = newAwardCountObject() ;
+		return workAwardObject( award.stat[cont], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+function testAcont(award, obj, baseHash) 
+{ 
+	if ( obj.cont )
+	{
+		var cont = obj.cont;
+		if ( cont == "AN" )
+			cont = "OC";
+		
+		if (  cont + baseHash in g_tracker[award.test.look].cont )
 		{
-			if ( count == g_bw+1 )
-			{
-				txSlot[startX] = count;
-			}
-			start = false;
-			count = 0;
+			return false;																
+		}		
+	}
+	return true;
+}
+
+
+function scoreAcont5(award, obj, baseHash) 
+{ 
+	if ( obj.cont )
+	{
+		var cont = obj.cont;
+		if ( cont == "NA" || cont == "SA" )
+			cont = "AM";
+		if ( cont == "AN" )
+			cont = "OC";
+		
+		if ( !(cont in award.stat ) )
+			award.stat[cont] = newAwardCountObject() ;
+		return workAwardObject( award.stat[cont], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+function testAcont5(award, obj, baseHash) 
+{ 
+	if ( obj.cont )
+	{
+		var cont = obj.cont;
+		if ( cont == "NA" || cont == "SA" )
+			cont = "AM";
+		if ( cont == "AN" )
+			cont = "OC";
+		
+		if (  cont + baseHash in g_tracker[award.test.look].cont )
+		{
+			return false;																
 		}
-		if ( g_slots[x] == 0 )
+	}
+	return true;
+}
+
+function scoreAcont2band(award, obj) 
+{ 
+	if ( !(obj.band in award.stat ) )
+			award.stat[obj.band] = newAwardCountObject() ;
+	
+	return workAwardObject( award.stat[obj.band], obj.band, obj.mode, obj.digital, obj.phone, obj.cont);
+}
+
+function testAcont2band(award, obj, baseHash) 
+{ 
+	if ( obj.cont )
+	{
+		var cont = obj.cont;
+		if ( cont == "AN" )
+			cont = "OC";
+		
+		if (  cont + baseHash in g_tracker[award.test.look].cont )
 		{
-			if ( !start )
+			return false;																
+		}		
+	}
+	return true;
+}
+
+function scoreAcont52band(award, obj) 
+{ 
+	if ( obj.cont )
+	{
+		var cont = obj.cont;
+		if ( cont == "NA" || cont == "SA" )
+			cont = "AM";
+		if ( cont == "AN" )
+			cont = "OC";
+		
+		if ( !(obj.band in award.stat ) )
+			award.stat[obj.band] = newAwardCountObject() ;
+		return workAwardObject( award.stat[obj.band], obj.band, obj.mode, obj.digital, obj.phone, cont);
+	}
+	return false;
+}
+
+	
+function testAcont52band(award, obj, baseHash) 
+{ 
+	if ( obj.cont )
+	{
+		var cont = obj.cont;
+		if ( cont == "NA" || cont == "SA" )
+			cont = "AM";
+		if ( cont == "AN" )
+			cont = "OC";
+		
+		if (  cont + baseHash in g_tracker[award.test.look].cont )
+		{
+			return false;																
+		}
+	}
+	return true;
+}
+
+
+function scoreAgrids(award, obj) 
+{ 
+	if ( obj.grid )
+	{
+		var grid = obj.grid.substr(0,4);
+		
+		if ( !(grid in award.stat ) )
+			award.stat[grid] = newAwardCountObject() ;
+		return workAwardObject( award.stat[grid], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+	
+function testAgrids(award, obj, baseHash) 
+{ 
+	if ( obj.grid && obj.grid + baseHash in g_tracker[award.test.look].grid )
+	{
+		return false;																
+	}
+	return true;
+}
+
+function scoreAcnty(award, obj) 
+{ 
+	if ( obj.cnty )
+	{
+		if ( !(obj.cnty in award.stat ) )
+			award.stat[obj.cnty] = newAwardCountObject() ;
+		return workAwardObject( award.stat[obj.cnty], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+function testAcnty(award, obj, baseHash) 
+{
+	if ( obj.cnty && obj.cnty + baseHash in g_tracker[award.test.look].cnty )
+	{
+		return false;																
+	}
+	return true;
+}
+
+
+function scoreAcall(award, obj)
+{ 
+	var call = obj.DEcall;
+
+	if ( call.indexOf("/") > -1 )
+	{
+		if ( call.endsWith("/MM") )
+			return false;
+		call = call.replace("/P","").replace("/R","").replace("/QRP");
+	}
+
+	if ( !(call in award.stat ) )
+		award.stat[call] = newAwardCountObject() ;
+	return workAwardObject( award.stat[call], obj.band, obj.mode, obj.digital, obj.phone);
+}
+
+function testAcall(award, obj, baseHash)
+{ 
+	if ( obj.DEcall.indexOf("/") > -1 && obj.DEcall.endsWith("/MM") )
+		return false;
+	
+	if ( obj.DEcall + baseHash in g_tracker[award.test.look].call )
+	{
+		return false;																
+	}
+	return true;																	
+}
+
+function scoreAIOTA(award, obj)
+{ 
+	if ( obj.IOTA )
+	{
+		var test = g_awards[award.sponsor].awards[award.name];
+		
+		if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
+			return false;
+		
+		if ( !(obj.IOTA in award.stat ) )
+			award.stat[obj.IOTA] = newAwardCountObject() ;
+		return workAwardObject( award.stat[obj.IOTA], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+// NO IOTA YET
+function testAIOTA(award, obj, baseHash) 
+{ 
+	/*if ( obj.IOTA )
+	{
+		var test = g_awards[award.sponsor].awards[award.name];
+		
+		if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
+			return false;
+																
+	}*/  
+	
+	return false;
+}
+
+function scoreAcallarea(award, obj)
+{
+	if ( obj.zone != null )
+	{
+		var test = g_awards[award.sponsor].awards[award.name];
+		
+		if ( "zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1 )
+			return false;
+		
+		if ( !(obj.zone in award.stat ) )
+			award.stat[obj.zone] = newAwardCountObject() ;
+		return workAwardObject( award.stat[obj.zone], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+function testAcallarea(award, obj, baseHash) 
+{
+	if ( obj.zone != null )
+	{
+		var test = g_awards[award.sponsor].awards[award.name];
+		
+		if ( "zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1 )
+			return false;
+																
+	}
+	return true;
+}
+
+function scoreApx(award, obj)
+{
+	if ( obj.px )
+	{
+		var test = g_awards[award.sponsor].awards[award.name];
+		var px = obj.px;
+		if ( "px" in test.rule )
+		{
+			px = px.substr(0, test.rule.px[0].length);
+			if ( test.rule.px.indexOf(px) == -1 )
+				return false;
+		}
+			
+		if ( !(px in award.stat ) )
+			award.stat[px] = newAwardCountObject() ;
+		return workAwardObject( award.stat[px], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false;
+}
+
+function testApx(award, obj, baseHash)
+{
+	if ( obj.px )
+	{
+		var test = g_awards[award.sponsor].awards[award.name];
+		var px = obj.px;
+		if ( "px" in test.rule )
+		{
+			px = px.substr(0, test.rule.px[0].length);
+			if ( test.rule.px.indexOf(px) == -1 )
+				return false;
+		}
+		
+		if ( String(obj.px)+baseHash in g_tracker[award.test.look].px )
+		{
+			return false;																
+		}
+	}
+	return true;																	
+
+}
+
+function scoreApxa(award, obj)
+{
+	if ( obj.px )
+	{
+		var test = g_awards[award.sponsor].awards[award.name];
+		for ( var i in test.rule.pxa )
+		{
+			if ( test.rule.pxa[i].indexOf(obj.px) > -1 )
 			{
-				startX = x;
-				start = true;
-			}
-			count++;
-			if ( count == g_bw+1 )
-			{
-				txSlot[startX] = count;
-				start = false;
-				count = 0;
+				if ( !(i in award.stat ) )
+					award.stat[i] = newAwardCountObject() ;
+				return workAwardObject( award.stat[i], obj.band, obj.mode, obj.digital, obj.phone);
 			}
 		}
 	}
-	if ( start && count >= g_bw+1 )
+	return false;
+}
+
+function testApxa(award, obj, baseHash) 
+{
+	if ( obj.px )
 	{
-		txSlot[startX] = count;
-	}
-	
-	var closest = 10000;
-	var found = 0;
-	for ( freq in txSlot )
-	{
-		var dif = Math.abs(1500 - freq );
-		if ( dif < closest )
+		var test = g_awards[award.sponsor].awards[award.name];
+		for ( var i in test.rule.pxa )
 		{
-			found = freq;
-			closest = dif;
+			if ( test.rule.pxa[i].indexOf(obj.px) > -1 )
+			{
+				return false;														
+			}
+		}
+		
+		if ( String(obj.px)+baseHash in g_tracker[award.test.look].px )
+		{
+			return false;																
 		}
 	}
+	return true;
+}
+
+function scoreAsfx(award, obj) 
+{ 
+	var test = g_awards[award.sponsor].awards[award.name];
+	var suf = obj.DEcall.replace(obj.px,"");
+	for ( var i in test.rule.sfx )
+	{
+		for ( var s in test.rule.sfx[i] )
+		{
+			if ( suf.indexOf(test.rule.sfx[i][s]) == 0 )
+			{
+				if ( !(i in award.stat ) )
+					award.stat[i] = newAwardCountObject() ;
+				return workAwardObject( award.stat[i], obj.band, obj.mode, obj.digital, obj.phone);
+			}
+		}
+	}
+
+	return false;
+}
+
+function testAsfx(award, obj, baseHash) 
+{ 
+	var test = g_awards[award.sponsor].awards[award.name];
+	var suf = obj.DEcall.replace(obj.px,"");
+	for ( var i in test.rule.sfx )
+	{
+		for ( var s in test.rule.sfx[i] )
+		{
+			if ( suf.indexOf(test.rule.sfx[i][s]) == 0 )
+			{
+				return false;														
+			}
+		}
+	}
+
+	return true;
+}
+
+function scoreAcalls2dxcc(award, obj) 
+{ 
+	if ( !(obj.dxcc in award.stat ) )
+			award.stat[obj.dxcc] = newAwardCountObject() ;
 	
-	if ( closest != 10000 )
-	{	
-		slotDiv.innerHTML = "<div style='cursor:pointer' onclick='window.opener.setRxdf("+found+");'> Optimal Tx Offset: <font color='#F22' >" + found + " Hz</font></div>";
+	return workAwardObject( award.stat[obj.dxcc], obj.band, obj.mode, obj.digital, obj.phone, obj.DEcall);
+}
+
+
+function testAcalls2dxcc(award, obj, baseHash) 
+{ 
+	if ( obj.DEcall+baseHash in g_tracker[award.test.look].call )
+	{
+		return false;																
+	}
+	return true;																	
+}
+
+function scoreAcalls2band(award, obj) 
+{ 
+	if ( !(obj.band in award.stat ) )
+			award.stat[obj.band] = newAwardCountObject() ;
+	
+	return workAwardObject( award.stat[obj.band], obj.band, obj.mode, obj.digital, obj.phone, obj.DEcall);
+
+}
+
+function testAcalls2band(award, obj, baseHash) 
+{ 
+	if ( obj.DEcall+baseHash in g_tracker[award.test.look].call )
+	{
+		return false;																
+	}
+	return true;
+}
+
+function scoreAdxcc2band(award, obj) 
+{ 
+	if ( !(obj.band in award.stat ) )
+			award.stat[obj.band] = newAwardCountObject() ;
+	
+	return workAwardObject( award.stat[obj.band], obj.band, obj.mode, obj.digital, obj.phone, obj.dxcc);
+
+}
+
+function testAdxcc2band(award, obj, baseHash) 
+{ 
+	if ( String(obj.dxcc)+baseHash in g_tracker[award.test.look].dxcc )
+	{
+		return false;																
+	}
+	return true;
+}
+
+function scoreAcqz(award, obj)
+{ 
+	if ( obj.cqz )
+	{
+		if ( !(obj.cqz in award.stat ) )
+				award.stat[obj.cqz] = newAwardCountObject() ;
+		
+		return workAwardObject( award.stat[obj.cqz], obj.band, obj.mode, obj.digital, obj.phone);
+	}
+	return false; 
+}
+
+function testAcqz(award, obj, baseHash )
+{ 
+	if ( obj.cqz && obj.cqz + baseHash in g_tracker[award.test.look].cqz )
+	{
+			return false;																															
+	}
+	return true; 
+}
+
+function scoreAnumsfx(award, obj) 
+{
+	var test = g_awards[award.sponsor].awards[award.name];
+	var px = obj.px.substr(0,obj.px.length-1);
+	var suf = obj.DEcall.replace(px,"");
+	suf = suf.substr(0, test.rule.numsfx[0][0].length);
+	for ( var i in test.rule.numsfx )
+	{
+		for ( var s in test.rule.numsfx[i] )
+		{
+			if ( suf.indexOf(test.rule.numsfx[i][s]) == 0 )
+			{
+				if ( !(i in award.stat ) )
+					award.stat[i] = newAwardCountObject() ;
+				return workAwardObject( award.stat[i], obj.band, obj.mode, obj.digital, obj.phone);
+			}
+		}
+	}
+
+	return false;
+}
+
+function testAnumsfx(award, obj) 
+{
+	var test = g_awards[award.sponsor].awards[award.name];
+	var px = obj.px.substr(0,obj.px.length-1);
+	var suf = obj.DEcall.replace(px,"");
+	suf = suf.substr(0, test.rule.numsfx[0][0].length);
+	for ( var i in test.rule.numsfx )
+	{
+		for ( var s in test.rule.numsfx[i] )
+		{
+			if ( suf.indexOf(test.rule.numsfx[i][s]) == 0 )
+			{
+				return false;														
+			}
+		}
+	}
+
+	return true;
+}
+
+
+function scoreApxplus(award, obj) 
+{ 
+	var test = g_awards[award.sponsor].awards[award.name];
+
+	if ( test.rule.pxplus )
+	{
+		for ( var i in test.rule.pxplus )
+		{
+			if ( obj.DEcall.indexOf(test.rule.pxplus[i]) == 0 )
+			{
+				if ( !(i in award.stat ) )
+					award.stat[i] = newAwardCountObject() ;
+				return workAwardObject( award.stat[i], obj.band, obj.mode, obj.digital, obj.phone);
+			}
+		}
+	}
+	return false;
+}
+
+function testApxplus(award, obj) 
+{ 
+	var test = g_awards[award.sponsor].awards[award.name];
+
+	if ( test.rule.pxplus )
+	{
+		for ( var i in test.rule.pxplus )
+		{
+			if ( obj.DEcall.indexOf(test.rule.pxplus[i]) == 0 )
+			{
+				return false;														
+			}
+		}
+	}
+	return true;
+}
+
+
+function loadAwardJson()
+{		
+	g_awards = {};
+	var fs = require('fs');
+	if (fs.existsSync("./data/awards.json")) 
+	{
+		fileBuf = fs.readFileSync("./data/awards.json");
+		try {
+			g_awards = JSON.parse(fileBuf);
+			//fs.writeFileSync("./data/awards.json", JSON.stringify(g_awards,null,2));
+
+			for ( var sp in g_awards )
+			{
+				for ( var aw in g_awards[sp].awards )
+				{
+					if ( !("unique" in  g_awards[sp].awards[aw].rule ) )
+						 g_awards[sp].awards[aw].rule.unique = 1;
+					 
+					if (  g_awards[sp].awards[aw].rule.band[0] == "Mixed" )
+					{
+						g_awards[sp].awards[aw].rule.band.shift();
+					}
+					
+					if ( g_awards[sp].awards[aw].rule.band.length == 0 )
+					{
+						g_awards[sp].awards[aw].rule.band = [];
+						for ( var key in g_awards[sp].mixed )
+						{
+							g_awards[sp].awards[aw].rule.band.push( g_awards[sp].mixed[key] );
+						}
+					}
+					if ( g_awards[sp].awards[aw].rule.endorse.length == 1 &&  g_awards[sp].awards[aw].rule.endorse[0] == "Mixed" )
+					{
+						g_awards[sp].awards[aw].rule.endorse = [];
+						for ( var key in g_awards[sp].mixed )
+						{
+							g_awards[sp].awards[aw].rule.endorse.push( g_awards[sp].mixed[key] );
+						}
+
+					}
+			
+				}
+			}
+			
+			buildAwardTypeHandlers();
+		}
+		
+		catch (e) {
+			alert("Core awards.json : " + (e) );
+			g_awards = {};
+		}
+		delete filebuf;
 	}
 	else
-		slotDiv.innerHTML = "<div > Optimal Tx Offset: <font color='#FF0' >No Open</font></div>";
+		alert("Missing core awards.json");
 	
-
-}*/
-
-function clearAllDxccIgnores()
-{
-	g_blockedDxcc = Object();
-	storeBlocks();
-	openIgnoreEdit();
-	window.opener.goProcessRoster();	
-}
-
-function clearAllCQIgnores()
-{
-	g_blockedCQ = Object();
-	storeBlocks();
-	openIgnoreEdit();
-	window.opener.goProcessRoster();	
-}
-
-function closeEditIgnores()
-{
-	mainCallRoster.style.display = "block";
-	editView.style.display = "none";
-}
-
-function openIgnoreEdit()
-{
-	mainCallRoster.style.display = "none";
-	editView.style.display = "inline-block";
-	var worker = "";
-	var clearString = "<th>none</th>";
-		 {
-			if ( Object.keys(g_blockedCalls).length > 0 ) 
-				clearString = "<th style='cursor:pointer;' onclick='clearAllCallsignIgnores()'>Clear All</th>";
-			worker +=
-			"<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" + ( window.innerHeight - 135)  +
-			"px;'><table class='darkTable' align=center><tr><th align=left>Callsigns</th>"+clearString+"</tr>";
-			Object.keys(g_blockedCalls).sort().forEach(function (key, i) {
-				worker += "<tr><td align=left style='color:#FFFF00;' >" + key + "</td><td style='cursor:pointer;' onclick='deleteCallsignIgnore(\"" + key + "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-
-			});
-			worker += "</table></div>";
-		}
 	
+}
 
-		 {
-			 clearString = "<th>none</th>";
-			if ( Object.keys(g_blockedCQ).length > 0 ) 
-				clearString = "<th style='cursor:pointer;' onclick='clearAllCQIgnores()'>Clear All</th>";
-			worker +=
-			"<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" + ( window.innerHeight - 135)  +
-			"px;'><table class='darkTable' align=center><tr><th align=left>CQ</th>"+clearString+"</tr>";
-			Object.keys(g_blockedCQ).sort().forEach(function (key, i) {
-				worker += "<tr><td align=left style='color:cyan;' >" + key + "</td><td style='cursor:pointer;' onclick='deleteCQIgnore(\"" + key + "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-
-			});
-			worker += "</table></div>";
-		}
-		
-		
+function processAllAwardTrackers()
+{
+	for ( var tracker in g_awardTracker )
+	{
+		if ( !(g_awardTracker[tracker].sponsor in g_awards) )
 		{
-			clearString = "<th>none</th>";
-			if ( Object.keys(g_blockedDxcc).length > 0 ) 
-				clearString = "<th style='cursor:pointer;' onclick='clearAllDxccIgnores()'>Clear All</th>";
-			worker +=
-			"<div  style='margin:10px;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
-			( window.innerHeight - 135) +
-			"px;'><table class='darkTable' align=center><tr><th align=left>DXCCs</th>"+clearString+"</tr>";
-			Object.keys(g_blockedDxcc).sort().forEach(function (key, i) {
-				worker += "<tr><td align=left style='color:#FFA500' >" + window.opener.g_dxccToAltName[key] +
-				" (" + window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp  + ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" + key + "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-
-			});
-			worker += "</table></div>";
+			delete g_awardTracker[tracker];
+			continue;
 		}
-		editTables.innerHTML = worker;
-
-	
-}
-
-var g_timerInterval = null;
-
-var g_styleFont = null;
-function setFontSize()
-{
-	if ( g_styleFont )
-	{
-		g_styleFont.parentNode.removeChild(g_styleFont);
-		g_styleFont = null;
-	}
-	g_styleFont = document.createElement('style');
-	g_styleFont.innerHTML = "table, th, td, select {font-size: "+g_rosterSettings.fontSize+"px;}";
-	document.body.appendChild(g_styleFont);
-}
-
-function reduceFont()
-{
-	if ( g_rosterSettings.fontSize > 10 )
-	{
-		g_rosterSettings.fontSize--;
-		writeRosterSettings();
-		setFontSize();
-	}
-}
-function increaseFont()
-{
-
-	if ( g_rosterSettings.fontSize < 50 )
-	{
-		g_rosterSettings.fontSize++;
-		writeRosterSettings();
-		setFontSize();
-	}
-}
-
-var g_hotKeys = { "NumpadSubtract" : reduceFont , "Minus" : reduceFont , "NumpadAdd":increaseFont, "Equal":increaseFont };
-
-var g_regFocus = false;
-
-function onMyKeyDown(event)
-{
-	if ( event.ctrlKey )
-	{
-		if ( event.code in g_hotKeys )
+		if ( !(g_awardTracker[tracker].name in g_awards[g_awardTracker[tracker].sponsor].awards) )
 		{
-			g_hotKeys[event.code]();
+			delete g_awardTracker[tracker];
+			continue;
+		}
+		processAward(tracker);
+	}
+	updateAwardList();
+}
+
+function newAwardTrackerObject(sponsor, award, enable)
+{
+	var newAward = {};
+	newAward.sponsor = sponsor;
+	newAward.name = award;
+	newAward.enable = enable;
+	newAward.mode = g_awards[sponsor].awards[award].rule.mode[0];
+	newAward.band = g_awards[sponsor].awards[award].rule.band[0];
+	newAward.count = g_awards[sponsor].awards[award].rule.count[0],
+	newAward.stat = {};
+	newAward.comp = {};
+	newAward.test = {};
+	return newAward;
+}
+
+function addAllAwards()
+{
+	for ( var sponsor in g_awards )
+	{
+		for ( var award in g_awards[sponsor].awards )
+		{
+			var awardToAdd = newAwardTrackerObject(sponsor, award, true);
+
+			var hash = awardToAdd.name + "-" + awardToAdd.sponsor;
+			if ( !(hash in g_awardTracker) )
+			{
+				g_awardTracker[hash] = awardToAdd;
+				processAward( hash );
+				storeAwardTracker();
+			}	
 		}
 	}
-	else if ( !g_regFocus )
+	updateAwardList();
+	window.opener.goProcessRoster();
+}
+
+function delAllAwards()
+{
+	g_awardTracker = {};
+	storeAwardTracker();
+	updateAwardList();
+	window.opener.goProcessRoster();
+}
+
+
+function newCompileCountObject() 
+{
+	var compileCountObject = {};
+	compileCountObject.bands = {};
+	compileCountObject.modes = {};
+	compileCountObject.endorse = {};
+	compileCountObject.counts = {};
+	return compileCountObject;
+}
+
+function singleCompile(award, obj) 
+{ 
+	var test = g_awards[award.sponsor].awards[award.name];
+	var rule = test.rule;
+	var comp = newCompileCountObject();
+	for ( var mode in rule.mode )
 	{
-		window.opener.onMyKeyDown(event);
-	}
-}
-
-function checkForEnter( ele )
-{
-	if(event.key === 'Enter') {
-        ele.blur();       
-    }
-}
-function resize()
-{
-	rosterTable.style.height =  window.innerHeight - (masterTable.clientHeight+8) ;
-
-	if ( typeof callTable != 'undefined' )
-	    callTable.style.width =  (parseInt(window.innerWidth)-6)+"px";
+		comp.modes[rule.mode[mode]] = 0;
+		comp.bands[rule.mode[mode]] = {};
 		
-	if ( editView.style.display == "inline-block" )
-		openIgnoreEdit();
+		for ( var band in rule.band )
+		{
+			comp.bands[rule.mode[mode]][rule.band[band]] = 0;
+		}
+		for ( var key in obj )
+		{
+			if ( rule.mode[mode] in obj[key].bands && Object.keys(obj[key].bands[rule.mode[mode]]).length )
+			{
+				comp.modes[rule.mode[mode]] += 1;
+				
+				for ( var band in rule.band )
+				{
+					if ( rule.band[band] in obj[key].bands[rule.mode[mode]] )
+						comp.bands[rule.mode[mode]][rule.band[band]] += 1;
+				}
+			}
+		}	
+	}
+	
 
+
+	for ( var mode in comp.modes )
+	{
+		comp.endorse[mode] = {};
+		comp.counts[mode] = {};
+		for ( var cnts in rule.count )
+		{
+			comp.counts[mode][rule.count[cnts]] = { "num": comp.modes[mode] , "per" : parseInt(Math.min(100, (comp.modes[mode]  /  rule.count[cnts]  )*100.0))};
+		}
+	
+		for ( var endorse in rule.endorse )
+		{	
+			comp.endorse[mode][rule.endorse[endorse]] = {}
+			for ( var cnts in rule.count )
+			{
+				comp.endorse[mode][rule.endorse[endorse]][rule.count[cnts]] = (comp.bands[mode][rule.endorse[endorse]] >= rule.count[cnts]);
+			}
+		}
+	}	
+
+	return comp;
+}
+
+
+function doubleCompile(award, firstLevel) 
+{ 	
+	var test = g_awards[award.sponsor].awards[award.name];
+	var rule = test.rule;
+	
+	for ( var k in firstLevel )
+	{
+		firstLevel[k].bands = {};
+		//firstLevel[k].modes = {};
+		var obj = singleCompile(award, firstLevel[k].unique);
+
+		for ( var mode in obj.bands )
+		{
+			for ( var cnt in test.rule.count )
+			{	
+				if ( obj.counts[mode][test.rule.count[cnt]].num >= test.rule.unique )
+					for ( var band in obj.bands[mode] )
+					{
+						if ( !(mode in firstLevel[k].bands) )
+							firstLevel[k].bands[mode] = {};
+
+						if ( obj.bands[mode][band] > 0 )
+							firstLevel[k].bands[mode][band] =  ~~firstLevel[k].bands[mode][band] + 1;
+					}
+			}
+		}
+		/*for ( var mode in obj.modes )
+		{
+			if ( !(mode in firstLevel[k].modes) )
+				firstLevel[k].modes[mode] = 0;
+			if ( obj.modes[mode] > 0 )
+				firstLevel[k].modes[mode] +=  1;
+		}*/
+	
+		delete firstLevel[k].unique;
+		firstLevel[k].unique = null;
+	}	
+	
+	return singleCompile(award,firstLevel);
 }

@@ -26,13 +26,15 @@ var validSettings =
 	"speechSettings",
 	"startupLogs",
 	"trustedQslSettings",
-	"bandActivity"
+	"bandActivity",
+	"awardTracker"
 ];
 
 var def_appSettings = 
 {
 	"alertMute" : 0,
 	"callRosterOpen" : false,
+	"rosterAlwaysOnTop": false,
 	"centerGridsquare" : "",
 	"chatUUID" : "",
 	"crScript" : 1,
@@ -71,7 +73,7 @@ var def_appSettings =
 	"myRawFreq": "",
 	"myRawGrid": "",
 	"pathWidthWeight" : 1.0,
-	"pushPinMode" : true,
+	"pushPinMode" : false,
 	"qrzPathWidthWeight" : 1.2,
 	"sixWideMode" : 0,
 	"savedAppData": null,
@@ -244,8 +246,8 @@ var def_callsignLookups =
 	"eqslUseEnable" :  false,
 	"eqslWeeklyEnable" :  false,
 	"eqslLastUpdate" :  0,
-	"ulsUseEnable" :  false,
-	"ulsWeeklyEnable" :  false,
+	"ulsUseEnable" :  true,
+	"ulsWeeklyEnable" :  true,
 	"ulsLastUpdate" :  0,
 	"oqrsUseEnable" :  false,
 	"oqrsWeeklyEnable" :  false,

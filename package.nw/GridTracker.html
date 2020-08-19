@@ -6,7 +6,6 @@
 		<link rel="stylesheet" href="./lib/ol.css" />
 		<link rel="stylesheet" href="./lib/style.css"/>
 		<script src="./lib/defaults.js" type="text/javascript" ></script>
-		<script src="./lib/winstate.js" type="text/javascript" ></script>
 		<script src="./lib/protos.js" type="text/javascript" ></script>
 		<script src="./lib/alerts.js" type="text/javascript" ></script>
 		<script src="./lib/third-party.js" type="text/javascript" ></script>
@@ -258,6 +257,7 @@
 				<div id="gtShareButton" onclick="toggleGtShareEnable();" class="iconButton" title="Share your On-Air Status with other GridTracker users"><img id="gtShareFlagImg" src="./img/share-off.png" class="buttonImg" /></div>				
 				<div id="gtFlagButton" onclick="toggleGtMap();" class="iconButton" title="Toggle View GridTracker Users"><img id="gtFlagImg" src="" class="buttonImg" /></div>	
 				<div id="msgButton" onclick="showMessaging();" class="iconButton" title="Messaging Window" ><img id="msgImg" src="./img/gt_chat.png" class="buttonImg" /></div>	
+				<div id="legendToggleDiv" onclick="toggleLegend()" class="iconButton" title="Toggle Map Legend"><img id="legendImg" src="./img/gt_key.png" class="buttonImg" /></div>
 		   </div>
 			<div id="SpotsDiv" style="display:none;border:1px solid yellow;margin:1px;margin-bottom:1px;margin-top:2px;" class="roundBorder" >
 			   <table align="center">
@@ -771,7 +771,25 @@
                         <td colspan=2><input type="range" min="0.00" max="1" value="1" step="0.01" class="slider" id="audioVolume" oninput="changeAudioValues()"/></td>
                      </tr>
                   </table>
-               </div><br/>
+               </div>
+			   <div class="mapItem">
+                  <table align="center">
+                     <tr >
+                        <td title="Lightning Strike Audio Alert">Lightning Strike Audio Alert</td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <select id="strikesAlert" value="0" onchange="changeStrikesAlert();">
+						      <option value="0">None</option>
+                              <option value="1">Short</option>
+                              <option value="2">Long</option>
+							  <option value="3">Voice</option>
+                           </select>
+                        </td>
+                     </tr>
+                  </table>
+				</div>
+			   <br/>
 			   <div  class="mapItem" style="white-space:nowrap">
                   <table align="center">
                      <tr>
@@ -796,7 +814,7 @@
                         </td>
                      </tr>
                   </table>
-               </div>
+               </div>	  
 			   <br/>
 			   <div class="mapItem">
                   <table align="center">
@@ -941,23 +959,6 @@
                      </tr>
                   </table>
                </div>
-			   <div class="mapItem">
-                  <table align="center">
-                     <tr >
-                        <td title="Lightning Strike Audio Alert">Lightning Strike Audio Alert</td>
-                     </tr>
-                     <tr>
-                        <td>
-                           <select id="strikesAlert" value="0" onchange="changeStrikesAlert();">
-						      <option value="0">None</option>
-                              <option value="1">Short</option>
-                              <option value="2">Long</option>
-							  <option value="3">Voice</option>
-                           </select>
-                        </td>
-                     </tr>
-                  </table>
-				</div>
 				<div class="mapItem">
                   <table align="center">
                      <tr>
@@ -978,18 +979,7 @@
                      </tr>
                   </table>
                </div>
-			   <br/>
-			   	<div class="mapItem">
-                  <table align="center">
-                     <tr>
-                        <td align="center">Map Legend</td>
-                     </tr>
-                     <tr align="center">
-                        <td><div id="legendToggleDiv" onclick="toggleLegend()" class="iconButton" title="Toggle Map Legend"><img id="legendImg" src="./img/gt_key.png" class="buttonImg" /></div></td>
-                     </tr>
-                  </table>
-               </div>
-			 
+
 			   	<div class="mapItem">
                   <table align="center">
                      <tr>
@@ -1338,6 +1328,16 @@
                </div>
             </div>
 			<div id="callRosterDiv" class="settingsTabcontent">
+				<div  class="mapItem">
+				<table align="center">
+					<tr align="center">
+					   <td align="center">Window Always On Top</td>
+					</tr>
+					<tr align="center" >
+					   <td colspan=2><input type="checkbox" id="rosterAlwaysOnTop" onchange="changeRosterTop(this);"/>
+					</tr>
+				</table>
+				</div>
 				<div  class="mapItem">
 				<table align="center">
 					<tr align="center">
@@ -1783,8 +1783,8 @@
                </div>
             </div>
 			<div id="updateSettingsDiv"	class="settingsTabcontent">
-               <pre style="left:0;overflow:auto;display:inline-block;height:510px;width:740px;padding:4px;text-align:left;font-size:14px;" id="updateText" >
-               </pre>
+               <div style="left:0;overflow:auto;display:inline-block;height:510px;width:740px;padding:4px;text-align:left;font-size:14px;" id="updateText" >
+               </div>
             </div>
             <div style="top:0;right:1px;position:absolute">
                <button class="Xbutton"  onclick="rootSettingsDiv.style.display='none';">X</button>

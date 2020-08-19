@@ -583,6 +583,7 @@ select {
     -webkit-border-radius:6px;
     text-indent: 0.20px;
     text-overflow: '';
+	min-width:30px;
     padding: 2px;
 	padding-right: 3px;
 	background-color:darkgreen;
@@ -599,6 +600,15 @@ select:hover
 	border-color:#FFF;
 }
 
+select:disabled
+{
+	border:1px solid grey;
+	background-color:#008;
+	color:#ff0;
+	outline:none;
+
+}
+
 select option {
     margin: 40px;
     background: #000;
@@ -611,13 +621,17 @@ select option {
     border-radius:8px;
     text-indent: 0.20px;
     text-overflow: '';
-    text-align:right;
     padding: 5px;
 }
 
 select option:focus 
 {
 	color: #F00;
+}
+
+option:disabled 
+{
+	color: #666;
 }
 
 a {

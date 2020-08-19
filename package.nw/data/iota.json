@@ -1,0 +1,927 @@
+OC001--VK	- Australia 
+OC002--VK9X	- Christmas 
+OC003--VK9Y	- Cocos 
+OC004--VK9L	- Lord Howe 
+OC005--VK9N	- Norfolk 
+OC006--VK7	- Tasmania 
+OC007--VK9Z	- Willis 
+OC008--P2	- Bismarck 
+OC009--KC6	- Palau 
+OC010--V63	- Pohnpei 
+OC011--V63	- Truk 
+OC012--V63	- Yap 
+OC013--ZK1	- Rarotonga 
+OC014--ZK1	- Manihiki 
+OC015--T2	- Tuvalu 
+OC016--3D2	- Vanua/Viti Lev 
+OC017--T30	- Gilbert 
+OC018--T30	- Banaba 
+OC019--KH6	- Hawaiian 
+OC020--KH7	- Kure 
+OC021--YB	- Java 
+OC022--YB9	- Bali 
+OC023--KH3	- Johnston 
+OC024--T32	- Christmas 
+OC025--P2	- Admiralty 
+OC026--KH2	- Guam 
+OC027--FO	- Marquesas 
+OC028--V73	- Ralik 
+OC029--V73	- Ratak 
+OC030--KH4	- Midway 
+OC031--C2	- Nauru 
+OC032--FK	- New Caledonia 
+OC033--FK	- Loyalty 
+OC034--YB/P2	- New Guinea 
+OC035--YJ	- New Hebrides 
+OC036--ZL1/2	- North Island 
+OC037--ZL9	- Campbell 
+OC038--ZL7	- Chatham 
+OC039--ZL8	- Kermadec 
+OC040--ZK2	- Niue 
+OC041--P2	- Ninigo 
+OC042--DU1/4	- Luzon 
+OC043--T31	- Phoenix 
+OC044--VR6	- Pitcairn 
+OC045--KH8	- Tutuila 
+OC046--FO	- Windward 
+OC047--H4	- Solomon 
+OC048--ZK3	- Tokelau 
+OC049--A3	- Tongatapu 
+OC050--FO	- Ruruta 
+OC051--FO	- Rapa 
+OC052--FO	- Duke/Gloucester 
+OC053--KH9	- Wake 
+OC054--FW	- Wallsi 
+OC055--KH6	- Fren. Frigate 
+OC056--VR6	- Henderson 
+OC057--FO	- Maupihaa 
+OC058--FK	- D'Entrecastea 
+OC059--V63	- Kosrae 
+OC060--3D2	- Rotuma 
+OC061--		- Minerva Reefs 
+OC062--FO	- Pukapuka 
+OC063--FO	- Gambier 
+OC064--A3	- Vava'u 
+OC065--H4	- Reef 
+OC066--FO	- Tuamotu 
+OC067--FO	- Leeward 
+OC068--ZL4	- Snares 
+OC069--P2	- Lihir 
+OC070--YB8	- Ceram 
+OC071--VK6	- Buccaneer 
+OC072--VK9Z	- Mellish 
+OC073--JD	- Minami Torish 
+OC074--ZL9	- Auckland 
+OC075--YB5	- Riau 
+OC075--YB8	- Sula 
+OC077--KH8	- Manau 
+OC077--V63	- Ulithi 
+OC079--FK	- Belep 
+OC080--ZK1	- Suwarrow 
+OC081--KH5	- Jarvis 
+OC082--ZK1	- Penrhyn 
+OC083--ZK1	- Aitutaki 
+OC084--T32	- Fanning/Washi 
+OC085--KH5	- Palymra 
+OC086--KH0	- North Marianas 
+OC087--V73	- Enewetak 
+OC088--YB/9M/V8	- Borneo 
+OC089--KH1	- Baker/Howlan 
+OC090--DU1	- Calamian 
+OC091--DU1	- Polillo 
+OC092--DU2	- Babuyan 
+OC093--DU2	- Batan 
+OC094--FO	- Disappointment 
+OC095--3D2	- Lau 
+OC096--KH5	- Kingman Reef 
+OC097--5W	- Western Samoa 
+OC098--ZK1	- Pakapuka 
+OC099--P2	- Tabar 
+OC100--H4	- Santa Cruz 
+OC101--P2	- Feni 
+OC102--P2	- Tanga 
+OC103--P2	- St. Matthias 
+OC104--YJ	- Banks 
+OC105--DU8	- Cagayan Sulu 
+OC106--YB5	- Natuna Besar 
+OC107--YB5	- Lingga 
+OC108--YB5	- Anambas 
+OC109--YB5	- Natuna Selat 
+OC110--YJ	- Torres 
+OC111--YJ	- Shepherd 
+OC112--3D2	- Conway Reef 
+OC113--FO	- Actaeon 
+OC114--FO	- Raivavae 
+OC115--P2	- Trobriand 
+OC116--P2	- D'Entrecastea 
+OC117--P2	- Louisiade 
+OC118--FW	- Horne 
+OC119--DU8	- Jolo 
+OC120--DU1	- Cuyo 
+OC121--3D2	- Mamanuca 
+OC122--YB5	- Tambelan 
+OC123--A3	- Niuafo'ou 
+OC124--ZK1	- Palmerston 
+OC125--DU6	- Semirara 
+OC126--DU1	- Lubang 
+OC127--H4	- Rennell 
+OC128--DU1	- Palawan 
+OC129--DU5/7	- Visayan 
+OC130--DU8/9	- Mindanao 
+OC131--FO	- King George 
+OC132--V63	- East Yap 
+OC133--9M6	- Sabah Coast 
+OC134--ZL3/4	- South Island 
+OC135--P2	- Bougainville 
+OC136--VK3	- Phillip 
+OC137--VK4	- Moreton/Bribi 
+OC138--VK4	- Torres Strait 
+OC139--VK5	- Kangaroo 
+OC140--VK6	- Barrow/Theve 
+OC141--VK8	- Groot Eylan 
+OC142--VK4	- Fraser/Curtis 
+OC143--YB	- Sumatra 
+OC144--YB4	- Bangka/Belitun 
+OC145--YB8	- Halmahera 
+OC146--YB8	- Sulawesi 
+OC147--YB9	- Irian Jaya Coast 
+OC148--YB9	- Timor 
+OC149--H4	- New Georgia 
+OC150--YB9	- Lombok 
+OC151--YB9	- Flores 
+OC152--FO	- Tubuai 
+OC153--P2	- Papua N.G. Coast 
+OC154--VK6	- Sir G. Moore 
+OC155--V63	- West Truk 
+OC156--3D2	- Yasawa 
+OC157--YB8	- Banda 
+OC158--H4	- Florida 
+OC159--ZK1	- Mangaia 
+OC160--VK4	- Cumberland 
+OC161--YB6	- Nias 
+OC162--H4	- Shortland 
+OC163--H4	- Vanikolo 
+OC164--VK6	- Penguin 
+OC165--9M8	- Sarawak Coast 
+OC166--YB7	- Kalimantan Coast 
+OC167--V63	- Kapingamarangi 
+OC168--H4	- Russell 
+OC169--A3	- Ha'apai 
+OC170--VK6	- Woody 
+OC171--VK4	- Magnetic 
+OC172--VK4	- Fitzroy 
+OC173--VK8	- Bathurst 
+OC174--DU8	- Tawi Tawi 
+OC175--DU9	- Sarangani 
+OC176--FK	- Chesterfield 
+OC177--YB1	- Seribu 
+OC178--H4	- Tikopia 
+OC179--H44	- Duff 
+OC180--V63	- Ngulu 
+OC181--P29	- Witu 
+OC182--VR6	- Ducie 
+OC183--VK6	- Wedge 
+OC184--V85	- Muara Besar 
+OC185--VK8	- Bremmer 
+OC186--YB2	- Karimunjawa 
+OC187--VK4	- Lizard 
+OC188--DU8	- Pangutaran 
+OC189--3D2	- Ringgold 
+OC190--KH8	- Rose 
+OC191--A3	- Niauatoputapu 
+OC192--H4	- Onting Java 
+OC193--VK6	- Cheyne 
+OC194--VK2	- Solitary 
+OC195--VK7	- Furneaux 
+OC196--VK3	- Gabo 
+OC197--YB3	- Bawean 
+OC198--VK8	- Sir E. Pellew 
+OC199--VK6	- Dampier 
+OC200--KH8	- Swains 
+OC201--ZL1	- North Island Coast 
+OC208--YB8	- Banggai 
+OC209--YB8	- Talaud 
+OC210--YB8	- Sangihe 
+OC211--VK6	- Houtman Abrolhos 
+OC212--VK2	- NSW State Centre 
+OC213--YB8	- Togian 
+OC214--VK6	- WA NW Coast East 
+OC215--YB5	- Mentawai 
+OC216--VK	- Northern Territory outlier 
+OC217--YB3	- Kangean 
+OC218--FK	- Matthew 
+OC219--YB8	- Tukangbesi 
+OC220--VK5	- South Australia 
+OC221--YB8	- Kai isl. 
+OC222--YB8	- Obi isl. 
+OC223--VK2	- New South Wales state south 
+OC224--YB8	- Tanimbar isl 
+OC225--DU8	- Turtle isl 
+OC226--V6	- Pingelap and Mwokil (Mokil) atolls 
+SA001--CE0	- Easter 
+SA002--VP8	- Falkland 
+SA003--PY0F	- Fernando/Noronh 
+SA004--HC8	- Galapagos 
+SA005--CE0	- Juan Fernando 
+SA006--PJ	- Netherlands Antilles 
+SA007--HK0	- Mapelo 
+SA008--LU/CE	- Tierra del Fuego 
+SA009--9Y	- Tobago 
+SA010--PY0T	- Trindade 
+SA011--9Y	- Trinidad 
+SA012--YV	- Nueva Esparta 
+SA013--CE0	- San Felix 
+SA014--PY0S	- St. Peter & Paul 
+SA015--YV	- Los Monjes 
+SA016--PR8	- Maranhao Cen 
+SA017--HK0	- Gorgona 
+SA018--CE7	- Chiloe 
+SA019--PY6	- Abrolhos 
+SA020--FY	- Salut 
+SA021--LU	- B.Aires Pr. West 
+SA022--LU	- B.Aires Pr. South 
+SA023--PY6	- Bahia Centre 
+SA024--PY2	- Sao Paulo South 
+SA025--PR8	- Maranhao East 
+SA026--PP5	- Santa Catarina South 
+SA027--PP5	- Santa Catarina North 
+SA028--PY2	- Sao Paulo North 
+SA029--PY1	- Rio de Janeiro 
+SA030--CX	- Flores 
+SA031--CE8	- Wollaston 
+SA032--CE8	- Wellington 
+SA033--HC4	- La Plata 
+SA034--HC2	- Puna 
+SA035--YV	- Los Roques 
+SA036--P4	- Aruba 
+SA037--YV	- La Blanquilla 
+SA038--PY0R	- Atol/Rocas 
+SA039--CX	- Lobos 
+SA040--HK1	- Rosario 
+SA041--PR8	- Maranhao West 
+SA042--PY8	- Para West 
+SA043--CE7	- Guaitecas 
+SA044--YV	- La Tortuga 
+SA045--PQ8	- Amata 
+SA046--PY7	- Pernambuco 
+SA047--PY5	- Parana 
+SA048--YV	- Sucre/Anzoate 
+SA049--LU/X	- Los Estados 
+SA050--CE8	- Navarino 
+SA051--YV	- Las Aves 
+SA052--OA4	- San Lorenzo 
+SA053--CE7	- San Pedro 
+SA054--YV	- La Orchila 
+SA055--LU	- B. Aires Pr. N 
+SA056--HC4	- La Isla-Cojimie 
+SA057--CX	- San Gabriel 
+SA058--YV	- Farallon Centi 
+SA059--YV	- Los Testigos 
+SA060--PY8	- Para East 
+SA061--CE6	- Mocha 
+SA062--PY6	- Bahia South 
+SA063--YV8	- Monagas/Delt 
+SA064--CE7	- Los Chonos 
+SA065--LU	- Chubut South 
+SA066--YV1	- Zulia/Falcon 
+SA067--PP1	- Espirito Santo 
+SA068--8R	- Laguan 
+SA069--CE1	- Santa Maria 
+SA070--CE5	- QuiriQuina 
+SA071--PY2	- Sao Paula Ce. 
+SA072--PR8	- Maranhao East 
+SA073--OA5	- Ica Dept. Group 
+SA074--OA3	- Amcash Dept. 
+SA075--OA2	- La Libertad Dept. 
+SA076--OA1	- Tumbes/Piura/Lambayeque 
+SA077--PY1	- Rio de Janeiro East 
+SA078--HK1	- Sucre/Cordoba Group 
+SA079--PY1	- Rio de Janeiro Centre 
+SA080--PY6	- Bahia Centre 
+SA081--HK8	- Narino Division 
+SA082--HK2	- Guajara-Magdalena 
+SA083--CE0	- Salas y Gomez 
+SA084--HK4	- Choco South 
+SA085--CE1	- Atamaca Province Group 
+SA086--CE2	- Coquimbo / Aconcagua province group 
+NA001--C6	- Grt. Bahama Bk 
+NA002--VP5	- Caicos 
+NA003--VP5	- Turks 
+NA004--KL7	- Endeavor 
+NA005--VP9	- Bermuda 
+NA006--VE8	- Victoria 
+NA007--VE8	- Southampton 
+NA008--VE8	- Ellesmere 
+NA009--VE8	- Parry 
+NA010--VE1	- Cape Breton 
+NA011--FO/X	- Clipperton 
+NA012--TI9	- Cocos 
+NA013--YN	- Maiz 
+NA014--VE1	- NB Prov. South 
+NA015--CO/KG4	- Cuba/Guantanamo 
+NA016--ZF	- Cayman 
+NA017--XE2	- Cedros 
+NA018--OX	- Greenland 
+NA019--KL7	- Kodiak 
+NA020--YV0	- Aves 
+NA021--8P	- Barbados 
+NA022--VP2E	- Anguilla 
+NA023--VP2V	- Br. Virgin 
+NA024--J3	- Grenada 
+NA025--J8	- Grenadines 
+NA026--W2	- New York 
+NA027--VO1	- Newfoundland 
+NA028--KL7	- Pribilof 
+NA029--VE1	- Prince Edward 
+NA030--XE4	- Revilla Giged 
+NA031--W1	- Rhode Island 
+NA032--FP	- St. Pierre & Miq 
+NA033--HK0	- San Andres 
+NA034--W4	- Florida/Tampa Bay 
+NA035--HR6	- Swan 
+NA036--VE7	- Vancouver 
+NA037--KL7	- Semichi 
+NA038--VE2	- La Madeliene 
+NA039--KL7	- Andreanof 
+NA040--KL7	- St. Lawrence 
+NA041--KL7	- Alexander 
+NA042--KL7	- Prince William Sd 
+NA043--VE8	- Sverdrup 
+NA044--VO2	- Labrador South 
+NA045--XE3	- Mujeres 
+NA046--W1	- Massach. South 
+NA047--VE8	- Baffin 
+NA048--C6	- Bimini 
+NA049--HK0	- Providencia 
+NA050--KL7	- Barter 
+NA051--VE7	- Queen Charlotte 
+NA052--W4	- Florida/Marco 
+NA053--KL7	- Trinity 
+NA054--C6	- Berry 
+NA055--W1	- Maine East 
+NA056--CO	- Los Canarreos 
+NA057--HR6	- Bahia 
+NA058--W4	- Georgia 
+NA059--KL7	- Fox 
+NA060--HR4	- Tigre 
+NA061--VE7	- BC Prov. North 
+NA062--W4	- Florida Keys 
+NA063--VE1	- Sable 
+NA064--KL7	- Near 
+NA065--W7	- San Juan 
+NA066--W6	- South Channel 
+NA067--W	- N.Carol. East 
+NA068--VE1	- NB Prov. North 
+NA069--W4	- Florida/Sanibel 
+NA070--KL7	- Rat 
+NA071--HP	- Coiba 
+NA072--HP	- Las Perlas 
+NA073--V3	- Ambergris 
+NA074--KL7	- Nunivak 
+NA075--VE7	- Gulf 
+NA076--W4 	- Florida/Cedar Key 
+NA077--VE2	- Anticosti 
+NA078--XE2	- Santa Margarita 
+NA079--W4	- Dry Tortugas 
+NA080--C6	- Lit. Bahama Bk 
+NA081--VE1	- NS Prov. East 
+NA082--W5	- Mississippi 
+NA083--W4	- Virginia 
+NA084--VE2	- Harrington 
+NA085--W4	- Florida/St. George 
+NA086--CO	- Camaguey 
+NA087--KL7	- Shumagin 
+NA088--HP	- Bocas del Tor 
+NA089--W4	- LA/Chandeleur 
+NA090--XE3	- Cozumel 
+NA091--VE7	- BC Prov. South 
+NA092--W5	- Texas West 
+NA093--CO	- Los Colorados 
+NA094--VE1	- St. Paul 
+NA095--KP5	- Desecheo 
+NA096--HH/HI	- Hispaniola 
+NA097--6Y	- Jamaica 
+NA098--KP1	- Navassa 
+NA099--KP4	- Puerto Rico 
+NA100--V2	- Antigua 
+NA101--J7	- Dominica 
+NA102--FG	- Guadeloupe 
+NA103--VP2M	- Montserrat 
+NA104--V4	- St. Christopher 
+NA105--FS/PJ	- St. Martin 
+NA106--KP2	- US Virgin 
+NA107--FM	- Martinique 
+NA108--J6	- St. Lucia 
+NA019--J8	- St. Vincent 
+NA110--W4	- South Carolina 
+NA111--W2	- New Jersey 
+NA112--W4	- North Carolina West 
+NA113--C6	- South Bahamas 
+NA114--FG	- Les Saintes 
+NA115--XE4	- Clarion 
+NA116--TI8	- Chira/Jasper 
+NA117--TI8	- Cano 
+NA118--VE7	- Dundas 
+NA119--W4	- LA/Dernieres 
+NA120--W4	- LA/Marsh 
+NA121--KL7	- Walrus 
+NA122--HI	- Dom. Republic Coast 
+NA123--V3	- Turneffe 
+NA124--XE2	- San Jose 
+NA125--VE2	- Sept Isles 
+NA126--VE1	- NS Prov. South 
+NA127--VE1	- NS Prov. West 
+NA128--VE2	- Aux Lievres 
+NA129--VE8	- Banks 
+NA130--VE8	- Resolution 
+NA131--VE8	- King William 
+NA132--HK0	- Bajo Nuevo 
+NA133--HK0	- Serrana Bank 
+NA134--OX	- West Coast 
+NA135--XE3	- Carmen 
+NA136--W1	- Connecticut 
+NA137--W1	- Maine West 
+NA138--W4	- Florida/Amelia 
+NA139--W3	- Maryland East 
+NA140--W3	- Maryland West 
+NA141--W4	- Florida/Hutchinson 
+NA142--W4	- Florida/Alabama 
+NA143--W5	- Texas East 
+NA144--W6	- North Channel 
+NA145--PJ	- Saba/St. Eustati 
+NA146--FJ	- St. Barthelemy 
+NA147--J3	- Grenadines 
+NA148--W1	- Mass Nth/NH 
+NA149--HH	- Haitian Coast 
+NA150--KL7	- Little Diomede 
+NA151--OX	- East Coast 
+NA152--KL7	- Sarichef 
+NA153--XE3	- Yucatan/Perez 
+NA154--VE2	- NS Prov. North 
+NA155--TI6	- Uvita 
+NA156--VE8	- Nottingham 
+NA157--KL7	- Kayak/Wingham 
+NA158--KL7	- Cook Inlet 
+NA159--VE8	- King George 
+NA160--HR3	- Cayos Cochinos 
+NA161--KL7	- Pleasant 
+NA162--XE2	- San Martin 
+NA163--XE2	- Partida/Smith 
+NA164--XE2	- Natividad 
+NA165--XE2	- San Marcos 
+NA166--XE2	- San Pedro Nola 
+NA167--XE2	- Patos/Tiburon 
+NA168--W5	- LA/Grand Isle 
+NA169--W7	- WA/Tatoosh 
+NA170--HP	- San Blas 
+NA171--XE2	- Altamura 
+NA172--KL7	- Plover 
+NA173--VE8	- Charlton 
+NA174--VE8	- Igloolik 
+NA175--VE8	- Couper 
+NA176--VE2	- Mingan 
+NA177--VE2	- Bonaventure 
+NA178--W6	- Farallon 
+NA179--XE2	- Guadalupe 
+NA180--V3	- South Water 
+NA181--VE7	- Estevan 
+NA182--VE8	- Nicholson 
+NA183--XE3	- Roqueta 
+NA184--W6	- California North 
+NA185--VE8	- Thomson 
+NA186--VE8	- Fox 
+NA187--W6	- California Centre 
+NA188--XE3	- Cacaluta 
+NA189--XE1	- Tres Marietas 
+NA190--YS	- Meanguera 
+NA191--TI7	- Huevos 
+NA192--VE8	- Hendrickson 
+NA193--VY1	- Herschel 
+NA194--VO2	- Big 
+NA195--VE8	- Hopewell 
+NA196--VE8	- Belcher 
+NA197--KL7	- Chugach 
+NA198--VO	- Newfoundland Coast 
+NA199--FS	- St. Martin Coast 
+NA200--XE3	- Quintana Roo State 
+NA201--CO	- Jarndines de la Reina 
+NA202--HP	- Colon/Veraguas N 
+NA203--HP9	- Los Santos/Herrera 
+NA204--CO	- Sabana Archipeligo 
+NA205--VO2	- Center Group 
+NA206--KL7	- Baren 
+NA207--VE8	- N. W. T. 
+NA208--VE8	- N. W. T. 
+NA209--YN	- Carribean sea coast south group 
+NA210--KL7	- Norton Sound Coast group 
+NA211--W7	- Oregon state group 
+NA212--YN	- Pacific Ocean coast group 
++EU001--SV5	- Dodecanese 
+EU002--OH0	- Aland 
+EU003--CU	- Azores 
+EU004--EA6	- Balearic 
+EU005--G/GM/GW	- Mainland 
+EU006--EJ	- Aran 
+EU007--EJ	- Blaskets 
+EU008--GM	- Inner Hebrides 
+EU009--GM	- Orkneys 
+EU010--GM	- Outer Hebrides 
+EU011--G	- Scilly Isles 
+EU012--GM	- Shetlands 
+EU013--GJ	- Jersey 
+EU014--TK	- Corsica 
+EU015--SV9	- Crete 
+EU016--9A	- Adriatic South 
+EU017--ID9	- Eolie 
+EU018--OY	- Faeroes 
+EU019--UA10	- Franz Josef 
+EU020--SM1	- Gotland 
+EU021--TF	- Iceland 
+EU022--JX	- Jan Mayen 
+EU023--9H	- Maltese 
+EU024--IS0	- Sardinia 
+EU025--IT9	- Sicily 
+EU026--JW	- Svalbard 
+EU027--JW	- Bear 
+EU028--IA5	- Toscano 
+EU029--OZ	- Sjaelland 
+EU030--OZ	- Bornholm 
+EU031--IC8	- Napoletano 
+EU032--F	- Oleron/Aix 
+EU033--LA	- Vesteralen 
+EU034--ES	- Saaremaa 
+EU035--UA10	- Novaya Zeml 
+EU036--LA	- Hitra/Smola 
+EU037--SM7	- Kalmar/Oland 
+EU038--PA	- West Frisian 
+EU039--F	- Chausey 
+EU040--CT	- Estremadura 
+EU041--IM0	- Maddalena 
+EU042--DL	- North Frisian 
+EU043--SM6	- Goteborg/Bo 
+EU044--LA	- Mageroya 
+EU045--IB0	- Ponziano 
+EU046--LA	- Senja/Tromso 
+EU047--DL	- East Frisian 
+EU048--F	- Belle/Groix 
+EU049--SV8	- Aegean 
+EU050--IL7	- Tremiti 
+EU051--IE9	- Ustica 
+EU052--SV8	- Ionian 
+EU053--OJ0	- Market Reef 
+EU054--IF9	- Egadi 
+EU055--LA	- Karmoy/Solun 
+EU056--LA	- Nordoyane 
+EU057--DL	- Rugen 
+EU058--F	- Lerins 
+EU059--GM	- St. Kilda 
+EU060--SV1	- Euboea 
+EU061--LA	- Hvaler/Tjome 
+EU062--LA	- Donna/Vikna 
+EU063--JW	- Kong Karls 
+EU064--F	- Noirmoutier 
+EU065--F	- Ouessant/Molen 
+EU066--UA10	- Solovetskiy 
+EU067--SV8	- Cyclades 
+EU068--F	- Sein 
+EU069--EA5	- Columbretes 
+EU070--F	- Hyeres 
+EU071--TF7	- Westman 
+EU072--SV2	- N.Sporades 
+EU073--IJ7	- Cheradi 
+EU074--F	- Brehat 
+EU075--SV8	- Hydra 
+EU076--LA	- Lofoten 
+EU077--EA1	- La Coruna 
+EU078--EA3	- Gerona 
+EU079--LA	- Soroyane 
+EU080--EA1	- Pontevedra 
+EU081--F	- St. Marcouf 
+EU082--UA1Z	- Kil'din 
+EU083--IP1	- Liguria 
+EU084--SM5/0	- Stockholm 
+EU085--UA1P	- Kolguyev 
+EU086--UA1P	- Vaygach 
+EU087--SM3	- Vasternorrl 
+EU088--OZ	- Kattegat 
+EU089--CU8/9	- Flores 
+EU090--9A	- Palagruza 
+EU091--IJ7	- Sant'Andrea 
+EU092--GM	- Summer 
+EU093--EA5	- Alicante/Mur 
+EU094--F	- Glenan 
+EU095--F	- Pomegues/Riou 
+EU096--OH1	- Turku-Pori 
+EU097--OH2	- Uusimaa 
+EU098--DL	- Y-Poel 
+EU099--GJ	- Les Minquiers 
+EU100--TK	- Cerbicales 
+EU101--OH6	- Vaasa 
+EU102--UA1P	- Gulyayevski 
+EU103--EJ	- Saltee 
+EU104--TK	- Sanguinaires 
+EU105--F	- Batz 
+EU106--GW	- St. Tudwal's 
+EU107--F	- Sept Isles 
+EU108--GM	- Treshnish 
+EU109--G	- Farne 
+EU110--9A	- Brioni 
+EU111--GM	- Monach 
+EU112--SM	- Shiant 
+EU113--SV8	- Kithira 
+EU114--GU	- Guernsey 
+EU115--EI/GI	- Ireland 
+EU116--GD	- Isle of Man 
+EU117--4J1	- Malyj Vysots 
+EU118--GM	- Flannan 
+EU119--UA10	- Morzhovets 
+EU120--G	- English Coast 
+EU121--EJ	- Irish Coast 
+EU122--GI	- Northern Ireland Coast 
+EU123--GM	- Scottish Coast 
+EU124--GW	- Welsh Coast 
+EU125--OZ	- North Sea Coast 
+EU126--OH8/9	- Oulu/Lappi 
+EU127--DL	- Helgoland 
+EU128--DL	- Fehmarn 
+EU129--DL/SP1	- Usedom 
+EU130--IL3	- Grado 
+EU131--IL3	- Venezia 
+EU132--SP1	- Wolin 
+EU133--UA1A	- Kotlin 
+EU134--EA2	- Vizcaya/Guipuzc 
+EU135--SM2	- Vasterbotten 
+EU136--9A	- Adriatic North 
+EU137--SM7	- Kristianstad 
+EU138--SM7	- Blekinge 
+EU139--SM2	- Norrbotten 
+EU140--OH5	- Kymi 
+EU141--LA	- Vardo 
+EU142--EA1	- Oviedo/Cantabr 
+EU143--EA7	- Cadiz/Huelva 
+EU144--ID8	- Calabria/Basilic 
+EU145--CT	- Algarve/Baixo 
+EU146--PA	- Goeree/Schouwe 
+EU147--UA1N	- Kondostrov 
+EU148--F	- Fort Brescou 
+EU149--ES	- Aegna/Prangli 
+EU150--CT	- Beira/Minho 
+EU151--EA5	- Castellon/Vale 
+EU152--EA7	- Almeria/Malaga 
+EU153--UA1O	- Lyasomin 
+EU154--EA3	- Barcelona/Tarr 
+EU155--I4	- Marche/Emelia 
+EU156--F	- Tombelaine 
+EU157--F	- Agot/Cezembre 
+EU158--SV3	- Sfaktiria 
+EU159--F	- Cordouan 
+EU160--UA1P	- Kambal'nitskiy 
+EU161--UA1Z	- Kharlov 
+EU162--UA1Z	- Naumikha 
+EU163--YU6	- Montenegro 
+EU164--TK	- Corsica Coastal 
+EU165--IM0	- Sardinia Coastal 
+EU166--IT9	- Sicily Coastal 
+EU167--CT	- Baixo Alentejo Pr 
+EU168--TF	- Iceland Coast 
+EU169--ZA	- Adriatic Coast 
+EU170--9A	- 
+AS001--VU	- Andaman 
+AS002--A9	- Bahrain 
+AS003--4S	- Sri Lanka 
+AS004--5B/ZC	- Cyprus/UK Base 
+AS005--UA0B	- Dickson 
+AS006--VS6	- Hong Kong 
+AS007--JA	- Honshu 
+AS008--JA1	- Izu 
+AS009--4W	- Red Sea Coast 
+AS010--A4	- Kuria Muria 
+AS011--VU	- Laccadive 
+AS012--JA6	- Amakusa 
+AS013--8Q	- Maldives 
+AS014--A4	- Masirah 
+AS015--9M2	- Pinang 
+AS016--7O	- Gulf of Aden West 
+AS017--JA6	- Okinawa 
+AS018--UA0f	- Sakhalin 
+AS019--9V	- Singapore 
+AS020--BV	- Taiwan 
+AS021--A6	- Abu Dhabi 
+AS022--UA0Q	- Medvezh'i 
+AS023--JA6	- Amani 
+AS024--JA6	- Yaeyama 
+AS025--UA0F	- Kuril'skiye 
+AS026--HL4	- Cheju-Do 
+AS027--UA0K	- Vrangelya 
+AS028--UA0Q	- Anzhu 
+AS029--UA0Q	- Lyakhovskiy 
+AS030--JD	- Kazan 
+AS031--JD	- Ogasawara 
+AS032--JA6	- Osumi 
+AS033--VU	- Nicobar 
+AS034--		- Jabal At Tair 
+AS035--		- Abu Ail 
+AS036--JA6	- Tsushima 
+AS037--JA6	- Koshiki 
+AS038--UA0K	- Ayon 
+AS039--UA0Z	- Komandorski 
+AS040--JA6	- Goto 
+AS041--JA4	- Oki 
+AS042--UA0B	- Severnaya Z 
+AS043--JA1	- Nampo 
+AS044--UA0C	- Shantarskiy 
+AS045--HL5	- Ullung 
+AS046--9M2	- Johor East/Pah 
+AS047--JA6	- Daito 
+AS048--UA0Q	- De Long 
+AS049--JA6	- Tokara 
+AS050--UA0B	- Sergeya Kir 
+AS051--1S	- Spratly 
+AS052--7J	- Okino Torishim 
+AS053--HS	- Phuket 
+AS054--UA0B	- Koms. Pravdy 
+AS055--UA0B	- Vize 
+AS056--JA6	- Danjo 
+AS057--UA0B	- Uyedineniya 
+AS058--9M2	- Perlis/Kedah 
+AS059--UA0I	- Zav'yalova 
+AS060--HL4	- Chollanam-Do 
+AS061--UA0K	- Ratmanova 
+AS062--UA0F	- Habomai 
+AS063--UA0B	- Petra/Andre 
+AS064--UA0X	- Karaginskiy 
+AS065--UA0K	- Kolyuchin 
+AS066--UA0L	- Russkiy 
+AS067--JA6	- Uji 
+AS068--UA0B	- Kamennyye 
+AS069--UA0C	- Iony 
+AS070--UA0Q	- Gusmp 
+AS070--UA0K	- Arakamchech 
+AS072--9M2	- Perak 
+AS073--9M2	- Terengganu 
+AS074--9M2	- Selangor 
+AS075--XX	- Macau 
+AS076--JA5	- Shikoku 
+AS077--JA6	- Kyushu 
+AS078--JA8	- Hokkaido 
+AS079--JA6	- Miyako 
+AS080--HL3	- Chungchongn 
+AS081--HL5	- Kyongsangna 
+AS082--UA0Q	- Dunay/Muost 
+AS083--UA9K	- Belyy/Oleniy 
+AS084--HL4	- Ch'uja 
+AS085--HL4	- Soan 
+AS086--UA0B	- Izvestiy Ts 
+AS087--UA0B	- Arktichesko 
+AS088--A7	- Persian Gulf 
+AS089--UA9K	- Sharopovy K 
+AS090--HL2	- Tokchok 
+AS091--UA0X	- Ptichiy 
+AS092--UA0K	- K. Meechkyn 
+AS093--HL4	- Huksan 
+AS094--BY	- Hainan 
+AS095--UA0Z	- Krasheninnik 
+AS096--VU	- St. Mary Isles 
+AS097--9M2	- Johor W./Mel 
+AS098--TA4	- Anatolia SW 
+AS099--TA3	- Anatolia West 
+AS100--4X	- Akhziv 
+AS101--HS	- Samui 
+AS102--BV9	- Kin-men 
+AS103--BV7	- P'eng-Hu 
+AS104--UA0B	- Nansena 
+AS105--HL2	- Kyonggi-Do 
+AS106--VU	- Minicoy 
+AS107--HS	- Samet 
+AS108--OD	- Ramkin 
+AS109--UA9K	- Narechi 
+AS110--BV9	- Pratas 
+AS111--HZ	- Abu'Ali 
+AS112--A4	- Daymaniyat 
+AS113--BV9	- Ma-Tsu 
+AS114--UA0C	- Baidukov 
+AS115--TA4	- Anatolia South 
+AS116--BY7	- Scarborough 
+AS117--JA	- Honshu Coast 
+AS118--9K	- Persian Gulf 
+AS119--A4	- Musandam 
+AS120--5B	- Cyprus Coast 
+AS121--UA0B	- Nordenshelda 
+AS122--HL	- Paengnyong 
+AS123--TA	- Anatolia SE 
+AS124--A6	- Gulf of Oman 
+AS125--HS0	- Koh Chang 
+AS126--HS	- Butang 
+AS127--S2	- Chittagong 
+AS128--XV	- Mekong Delta West group 
+AS129--BY7	- Guangdong province east group 
+AS130--XV	- Con Son group 
+AS131--BY	- Guangdong province west group 
+AS132--XV	- Fai Tsi Long Archipelago 
+AS133--XU	- Gulf of Thailand group 
+AS134--BY3	- Hebei/Tianjin province group 
+AS135--BY4	- Shandong province south group 
+AS136--BY4	- Jiangsu province group 
+AS137--BY5	- Zhoushan archipelago 
+AS138--BY5	- Fujian province group 
+AS139--BY7	- Guangxi province group 
+AS140--S2	- Khulna region group 
+AN001--		- Adelaide 
+AN002--3Y	- Bouvet 
+AN003--VK0	- Heard 
+AN004--3Y	- Peter 1 
+AN005--VK0	- Macquarie 
+AN006--		- Biscoe 
+AN007--VP8	- South Georgia 
+AN008--		- South Orkney 
+AN009--VP8	- South Sandwich 
+AN010--		- South Shetland 
+AN011--		- Ross 
+AN012--		- Palmer 
+AN013--		- Joinville 
+AN014--		- Berkner 
+AN015--		- Queen Maud L/Ongul 
+AN016--		- Antarctica 
+AN017--		- Adelie L/Petrels 
+AN018--		- Alexander 
+AF001--3B6	- Agalega 
+AF002--FT8Z	- Amsterdam 
+AF003--ZD8	- Ascension 
+AF004--EA8	- Canary 
+AF005--D4	- Cape Verde 
+AF006--VQ9	- Diego Garcia 
+AF007--D6	- Comoro 
+AF008--FT8W	- Crozet 
+AF009--FR/E	- Europa 
+AF010--3C	- Bioko 
+AF011--FR/G	- Glorioso 
+AF012--FR/J	- Juan de Nova 
+AF013--5R	- Madagascar 
+AF014--CT3	- Madeira 
+AF015--3B7	- St. Brandon 
+AF016--FR	- Reunion 
+AF017--3B9	- Rodrigues 
+AF018--IH9	- Pantelleria 
+AF019--IG9	- Pelagie 
+AF020--J5	- Bijagos 
+AF021--ZS8M	- Marion 
+AF022--ZD7	- St. Helena 
+AF023--S9	- Sao Tome 
+AF024--S7	- Seychelles 
+AF025--S7	- Aldabra 
+AF026--S7	- Cosmoledo 
+AF027--FH	- Mayotte 
+AF028--7O	- Socotra 
+AF029--ZD9	- Tristan da Cuhna 
+AF030--ZD9	- Gough 
+AF031--FR/T	- Tromelin 
+AF032--5H	- Zanzibar 
+AF033--S7	- Amirante 
+AF034--FR	- Bassas da Indi 
+AF035--S7	- Farquhar 
+AF036--EA9	- Chafarinas 
+AF037--9L	- Banana 
+AF038--ET	- Dahlak 
+AF039--3C0	- Annobon 
+AF040--5Z	- Coast Prov. N. 
+AF041--VQ9	- Egmont 
+AF042--EA9	- Alboran 
+AF043--TR	- Estuaire Prov 
+AF044--S9	- Principe 
+AF045--6W	- Atlantic Coast North 
+AF046--CT3	- Desertas 
+AF047--CT3	- Selvagens 
+AF048--FT8X	- Kerguelen 
+AF049--3B8	- Mauritius 
+AF050--5T	- Nouadhibou Pr 
+AF051--3X	- Los 
+AF052--T5	- Indian Ocean Coast West 
+AF053--J2	- Gulf of Aden 
+AF054--5H	- Mafia 
+AF055--ZS1	- Penguin 
+AF056--9L	- Southern Prov 
+AF057--5R	- Malagasy Coast 
+AF058--VQ9	- Salomon 
+AF059--J2	- Saouabia 
+AF060--C5	- Bijol 
+AF061--C9	- Cabo Delgado 
+AF062--ST	- Suakin Archipelago 
+AF063--5H	- Pemba 
+AF064--ZS1	- Dassen 
+AF065--CN	- Mogador 
+AF066--C9	- Maputo/Gaza 
+AF067--5Z	- Coast Prov.s 
+AF068--CN/S0	- Herne 
+AF069--C9	- Maputo/Gaza 
+AF070--V5	- Atlantic Coast South 
+AF071--		- Geyser Bank 
+AF072--C9	- Inhambane 
+AF073--3V	- Qerqenah 
+AF074--5H	- Lindi/Mtwara Region 
+AF075--5H	- Dar es Salaam/Pwani 
+AF076--5N	- Gulf of Guinea 
+AF077--ZS1	- Cape Province 
+AF078--6W2	- Atlantic Coast South Group 
+AF079--ZS2	- Cape Province-Indian Ocean coast Group 
+AF080--E30	- Red Sea Coast North group 
+AF081--E30	- Red Sea Coast South group 

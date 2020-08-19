@@ -36,8 +36,9 @@ function dropHandler(ev) {
 function findAdiField( row, field)
 {
     var value = "";
-    var firstSplitArray = row.split("<" + field + ":");
-    if ( firstSplitArray.length == 2 )
+	var regex = new RegExp("<"+field+":",'i');
+    var firstSplitArray = row.split(regex);
+    if ( firstSplitArray && firstSplitArray.length == 2 )
     {
         var secondSplitArray = firstSplitArray[1].split(">");
         if ( secondSplitArray.length > 1 )
@@ -57,20 +58,23 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 {
     var rawAdiBuffer = "";
 	if ( typeof adiBuffer == "object" )
-		rawAdiBuffer = String(adiBuffer).toUpperCase();
+		rawAdiBuffer = String(adiBuffer);
 	else
-		rawAdiBuffer = adiBuffer.toUpperCase();
+		rawAdiBuffer = adiBuffer;
 	
-    var adiArray = rawAdiBuffer.split("<EOH>");
+	var regex = new RegExp( '<EOH>', 'i');
+	
+    var adiArray = rawAdiBuffer.split(regex);
 	var activeAdifArray = Array();
 	var activeAdifLogMode = true;
 	
-	if ( adiArray[0].indexOf("PSKREPORTER") > -1 )
+	if ( adiArray[0].indexOf("PSKReporter") > -1 )
 		activeAdifLogMode = false; 
 
     if ( adiArray.length > 1 )
     {
-        activeAdifArray = adiArray[1].split("<EOR>");          
+		regex = new RegExp('<EOR>','i');
+        activeAdifArray = adiArray[1].split(regex);          
     }
 
     var dateTime = new Date();
@@ -96,14 +100,15 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 				var finalBand = findAdiField(activeAdifArray[x], "BAND").toLowerCase();
 				var dateVal = findAdiField(activeAdifArray[x], "QSO_DATE");
 				var timeVal = findAdiField(activeAdifArray[x], "TIME_ON");
-				var finalState = findAdiField(activeAdifArray[x], "STATE");
+				var finalState = findAdiField(activeAdifArray[x], "STATE").toUpperCase();
 				if ( finalState.length == 0 ) 
 					finalState = null;
-				var finalPropMode = findAdiField(activeAdifArray[x], "PROP_MODE");
-				var finalCont = findAdiField(activeAdifArray[x], "CONT");
+				var finalPropMode = findAdiField(activeAdifArray[x], "PROP_MODE").toUpperCase();
+				var finalSatName = findAdiField(activeAdifArray[x], "SAT_NAME").toUpperCase();
+				var finalCont = findAdiField(activeAdifArray[x], "CONT").toUpperCase();
 				if ( finalCont.length == 0 ) 
 					finalCont = null;
-				var finalCnty = findAdiField(activeAdifArray[x], "CNTY");
+				var finalCnty = findAdiField(activeAdifArray[x], "CNTY").toUpperCase();
 				if ( finalCnty.length == 0 ) 
 					finalCnty = null;
 				else
@@ -114,7 +119,7 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 					finalCnty = finalCnty.replace("LAPORTE","LA PORTE");
 					finalCnty = finalCnty.replace("DU PAGE","DUPAGE");
 				}
-				var finalMode = findAdiField(activeAdifArray[x], "MODE");
+				var finalMode = findAdiField(activeAdifArray[x], "MODE").toUpperCase();
 				var subMode = findAdiField(activeAdifArray[x], "SUBMODE");
 				if ( subMode == "FT4" && (finalMode == "MFSK" || finalMode == "DATA") )
 					finalMode = "FT4";
@@ -136,10 +141,10 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 					
 				var finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
 				if ( finalDxcc == 0  )
-					finalDxcc = callsignToDxcc( finalDXcall );
+					finalDxcc = Number(callsignToDxcc( finalDXcall ));
 				
 				if ( !(finalDxcc in g_dxccToGeoData) )
-					finalDxcc = callsignToDxcc( finalDXcall );
+					finalDxcc = Number(callsignToDxcc( finalDXcall ));
 				
 				// If my callsign isn't present, it must be for me anyway
 				if ( finalDEcall == "" )
@@ -159,11 +164,11 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 				if ( parseInt(finalItuZone) < 1 ||  parseInt(finalItuZone) > 90 )
 					finalItuZone = "";
 				
-
+				var finalIOTA = findAdiField(activeAdifArray[x], "IOTA").toUpperCase();
 				
-				var qrzConfirmed =  findAdiField(activeAdifArray[x], "APP_QRZLOG_STATUS");
-				var lotwConfirmed1 = findAdiField(activeAdifArray[x], "QSL_RCVD"); 
-				var lotw_qsl_rcvd = findAdiField(activeAdifArray[x],"LOTW_QSL_RCVD"); 
+				var qrzConfirmed =  findAdiField(activeAdifArray[x], "APP_QRZLOG_STATUS").toUpperCase();
+				var lotwConfirmed1 = findAdiField(activeAdifArray[x], "QSL_RCVD").toUpperCase(); 
+				var lotw_qsl_rcvd = findAdiField(activeAdifArray[x],"LOTW_QSL_RCVD").toUpperCase(); 
 				
 					
 				if (  qrzConfirmed == "C" ||  lotw_qsl_rcvd == "Y" ||   lotw_qsl_rcvd == "V" || lotwConfirmed1 == "Y"  )
@@ -181,8 +186,18 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 					finalGrid = finalVucc[0];
 					finalVucc.shift();
 				}
+				var isDigital = false;
+				var isPhone = false;
+				if (finalMode in g_modes )
+				{
+					isDigital = g_modes[finalMode];
+				} 
+				if ( finalMode in g_modes_phone  )
+				{
+					isPhone = g_modes_phone[finalMode];			
+				}
 				if (  finalDXcall != "" )
-					addDeDx( finalGrid, finalDXcall, false, false, false, finalDEcall, finalRSTsent, finalTime, finalMsg, finalMode, finalBand, confirmed, false, finalRSTrecv, finalDxcc, finalState,finalCont, finalCnty, finalCqZone, finalItuZone, finalVucc, finalPropMode); 
+					addDeDx( finalGrid, finalDXcall, false, false, false, finalDEcall, finalRSTsent, finalTime, finalMsg, finalMode, finalBand, confirmed, false, finalRSTrecv, finalDxcc, finalState,finalCont, finalCnty, finalCqZone, finalItuZone, finalVucc, finalPropMode, isDigital, isPhone, finalIOTA, finalSatName); 
 
 			}
 			else
@@ -245,11 +260,9 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 	}
 	g_fromDirectCallNoFileDialog = false;
 
+	updateRosterWorked();
 	goProcessRoster();
 }
-
-
-
 
 
 function clubLogCallback( buffer, flag, cookie)
@@ -332,9 +345,11 @@ function tryToWriteAdifToDocFolder( filename, buffer, append = false )
 
 function cleanAndPrepADIF( name, adiBuffer, reverse = false, noheader = false)
 {
-	var rawAdiBuffer = adiBuffer.toUpperCase();
-	rawAdiBuffer = rawAdiBuffer.replace("<APP_LOTW_EOF>",'');
-    var adiArray = rawAdiBuffer.split("<EOH>");
+	var rawAdiBuffer = adiBuffer;
+	var regex = new RegExp( '<APP_LOTW_EOF>', 'i');
+	rawAdiBuffer = rawAdiBuffer.replace(regex,'');
+	regex = new RegExp( '<EOH>', 'i');
+    var adiArray = rawAdiBuffer.split(regex);
 	var activeAdifArray = Array();
 	var activeAdifLogMode = true;
 	var finalBuffer = "";
@@ -344,7 +359,8 @@ function cleanAndPrepADIF( name, adiBuffer, reverse = false, noheader = false)
 
     if ( adiArray.length > 1 )
     {
-        activeAdifArray = adiArray[1].split("<EOR>");     
+		regex = new RegExp( '<EOR>', 'i');
+        activeAdifArray = adiArray[1].split(regex);     
 
 		if ( reverse == false )
 		{
@@ -1600,7 +1616,8 @@ var g_adifLookupMap =
 function sendToLogger(ADIF)
 {
 	var report = "";
-	var record = parseADIFRecord( ADIF.split("<EOH>")[1] );
+	var regex = new RegExp( "<EOH>", 'i');
+	var record = parseADIFRecord( ADIF.split(regex)[1] );
 	var localMode = record["MODE"];
 	
 	if ( localMode == "MFSK" && "SUBMODE" in record )
@@ -2385,7 +2402,8 @@ function sendDXKeeperLogMessage(newMessage, port, address)
 
 function parseADIFRecord( adif )
 {
-	var newLine = adif.split("<EOR>");
+	var regex = new RegExp( '<EOR>', 'i');
+	var newLine = adif.split(regex);
 	var line = newLine[0].trim();  // Catch the naughty case of someone sending two records at the same time
 	var record = {};
 

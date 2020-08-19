@@ -1,8 +1,8 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200806;
-var gtBeta = "";
+var gtVersion = 1200819;
+var gtBeta = "r2";
 
 var g_startVersion = 0;
 
@@ -208,11 +208,9 @@ function saveAndCloseApp()
 		try 
 		{
 			var data = {};
-	
-			data.g_workedCallsigns = g_workedCallsigns;
-			data.g_confirmedCallsigns = g_confirmedCallsigns;
-			data.g_worked = g_worked;
-			data.g_confirmed = g_confirmed;
+
+			data.tracker = g_tracker;
+
 			for (var  key in g_QSOhash )
 				g_QSOhash[key].rect = null;
 
@@ -283,11 +281,10 @@ function clearAndReload() {
 {
 	win.hide();
 	win.setMinimumSize(400, 600);
-	initWindowState(g_windowName);
 	win.on('close', function () {
 		saveAndCloseApp();
 	});
-
+	win.show();
 }
 
 
@@ -302,7 +299,9 @@ var g_closing = false;
 var g_liveGrids = {};
 var g_qsoGrids = {};
 var g_liveCallsigns = {};
-var g_qsoCallsigns = {};
+
+
+
 var g_lastCallsignCount = 0;
 
 var g_flightPaths = Array();
@@ -317,7 +316,7 @@ var g_showAllGrids = false;
 var g_maps = Array();
 var g_modes = {};
 var g_modes_phone = {};
-var g_colorBands = ["OOB", "4000m", "2200m", "600m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m",	"12m", "11m", "10m", "6m", "4m", "2m", "1.25m", "70cm", "23cm"];
+var g_colorBands = ["OOB", "4000m", "2200m", "600m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "11m", "10m", "6m", "4m", "2m", "1.25m", "70cm", "23cm"];
 
 var g_pathIgnore = {};
 g_pathIgnore["RU"] = true;
@@ -336,12 +335,13 @@ var g_searchBand = "dummy";
 var g_myDXCC = -1;
 
 var g_QSOhash = {};
-var g_QSLhash = {};
+var g_QSLcount = 0;
+var g_QSOcount = 0;
 var g_ignoreMessages = 0;
 var g_lastTimeSinceMessageInSeconds = timeNowSec();
 var g_loadQSOs = false;
 var g_fromDirectCallNoFileDialog = false;
-var g_workedBorderColor = "#222222FF";
+var g_qsoWorkedBorderColor = "#222222FF";
 var g_pushPinMode = false;
 var g_pskBandActivityTimerHandle = null;
 var g_workingIniPath = "";
@@ -360,34 +360,37 @@ var g_wacZones = {};
 var g_wasZones = {};
 var g_ituZones = {};
 var g_gtFlagPins = {};
-var g_workedCallsigns = {};
-var g_confirmedCallsigns = {};
+
 var g_dxccCount = {};
 
 initQSOdata();
 
-var g_worked = {};
-var g_confirmed = {};
+var g_tracker = { "worked": {} , "confirmed": {} };
 
 function initQSOdata() {
-	g_worked = {};
-	g_worked.band = {};
-	g_worked.call = {};
-	g_worked.grid = {};
-	g_worked.dxcc = {};
-	g_worked.cqz = {};
-	g_worked.ituz = {};
-	g_worked.state = {};
-	g_worked.wpx = {};
+	g_tracker = { "worked": {} , "confirmed": {} };
+	
+	g_tracker.worked.band = {};
+	g_tracker.worked.call = {};
+	g_tracker.worked.grid = {};
+	g_tracker.worked.dxcc = {};
+	g_tracker.worked.cqz = {};
+	g_tracker.worked.ituz = {};
+	g_tracker.worked.state = {};
+	g_tracker.worked.px = {};
+	g_tracker.worked.cnty = {};
+	g_tracker.worked.cont = {};
 
-	g_confirmed = {};
-	g_confirmed.call = {};
-	g_confirmed.grid = {};
-	g_confirmed.dxcc = {};
-	g_confirmed.cqz = {};
-	g_confirmed.ituz = {};
-	g_confirmed.state = {};
-	g_confirmed.wpx = {};
+	g_tracker.confirmed.band = {};
+	g_tracker.confirmed.call = {};
+	g_tracker.confirmed.grid = {};
+	g_tracker.confirmed.dxcc = {};
+	g_tracker.confirmed.cqz = {};
+	g_tracker.confirmed.ituz = {};
+	g_tracker.confirmed.state = {};
+	g_tracker.confirmed.px = {};
+	g_tracker.confirmed.cnty = {};
+	g_tracker.confirmed.cont = {};
 }
 
 var g_offlineLayer = null;
@@ -797,38 +800,65 @@ function setState( details )
 {
 	if (details.state != null && details.state.length > 0) {
 		
-		var isDigi = false;
-		if (details.mode in g_modes && g_modes[details.mode] == true)
-			isDigi = true;
-		
+		var isDigi = details.digital;
+
 		if (details.state.substr(0, 2) != "US")
 			details.state = "US-" + details.state;
 
-		g_worked.state[details.state + details.band + details.mode] = true;
-		g_worked.state[details.state] = true;
-		g_worked.state[details.state + details.mode] = true;
-		g_worked.state[details.state + details.band] = true;
-		if (isDigi == true) {
-			g_worked.state[details.state + "dg"] = true;
-			g_worked.state[details.state + details.band + "dg"] = true;
+		g_tracker.worked.state[details.state + details.band + details.mode] = true;
+		g_tracker.worked.state[details.state] = true;
+		g_tracker.worked.state[details.state + details.mode] = true;
+		g_tracker.worked.state[details.state + details.band] = true;
+		if (isDigi) {
+			g_tracker.worked.state[details.state + "dg"] = true;
+			g_tracker.worked.state[details.state + details.band + "dg"] = true;
 		}
+
 		
 		if ( details.confirmed )
 		{
-				g_confirmed.state[details.state + details.band + details.mode] = true;
-				g_confirmed.state[details.state] = true;
-				g_confirmed.state[details.state + details.mode] = true;
-				g_confirmed.state[details.state + details.band] = true;
-				if (isDigi == true) {
-					g_confirmed.state[details.state + "dg"] = true;
-					g_confirmed.state[details.state + details.band + "dg"] = true;
+				g_tracker.confirmed.state[details.state + details.band + details.mode] = true;
+				g_tracker.confirmed.state[details.state] = true;
+				g_tracker.confirmed.state[details.state + details.mode] = true;
+				g_tracker.confirmed.state[details.state + details.band] = true;
+				if (isDigi) {
+					g_tracker.confirmed.state[details.state + "dg"] = true;
+					g_tracker.confirmed.state[details.state + details.band + "dg"] = true;
+				}
+		}
+	}
+	
+	if (details.cnty != null && details.cnty.length > 0) {
+		
+		var isDigi = details.digital;
+
+		g_tracker.worked.cnty[details.cnty + details.band + details.mode] = true;
+		g_tracker.worked.cnty[details.cnty] = true;
+		g_tracker.worked.cnty[details.cnty + details.mode] = true;
+		g_tracker.worked.cnty[details.cnty + details.band] = true;
+		if (isDigi) {
+			g_tracker.worked.cnty[details.cnty + "dg"] = true;
+			g_tracker.worked.cnty[details.cnty + details.band + "dg"] = true;
+		}
+
+		
+		if ( details.confirmed )
+		{
+				g_tracker.confirmed.cnty[details.cnty + details.band + details.mode] = true;
+				g_tracker.confirmed.cnty[details.cnty] = true;
+				g_tracker.confirmed.cnty[details.cnty + details.mode] = true;
+				g_tracker.confirmed.cnty[details.cnty + details.band] = true;
+				if (isDigi) {
+					g_tracker.confirmed.cnty[details.cnty + "dg"] = true;
+					g_tracker.confirmed.cnty[details.cnty + details.band + "dg"] = true;
 				}
 		}
 	}
 }
 
 function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRSTsent, finalTime, ifinalMsg,
-	mode, band, confirmed, notQso, finalRSTrecv, finalDxcc, finalState, finalCont, finalCnty, finalCqZone, finalItuZone, finalVucc = [], finalPropMode = "") {
+	mode, band, confirmed, notQso, finalRSTrecv, finalDxcc, finalState, finalCont, finalCnty, finalCqZone, finalItuZone, 
+	finalVucc = [], finalPropMode = "", finalDigital = false, finalPhone = false, finalIOTA = "", finalSatName = "") {
 	var callsign = null;
 	var rect = null;
 	var worked = false;
@@ -876,6 +906,10 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 				details.propMode = finalPropMode;
 			if (finalVucc.length > 0 )
 				details.vucc_grids = finalVucc;
+			if (finalIOTA.length > 0 )
+				details.IOTA = finalIOTA;
+			if (finalSatName.length > 0 )
+				details.satName = finalSatName;
 			
 		} else {
 			details = {};
@@ -894,18 +928,27 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			details.state = finalState;
 			details.zipcode = null;
 			details.qso = true;
-			details.wpx = null;
+			details.px = null;
+			details.zone = null;
+			details.cont = null;
+			
 			details.vucc_grids = finalVucc;
 			details.propMode = finalPropMode;
+			details.digital = finalDigital;
+			details.phone = finalPhone;
+			details.IOTA = finalIOTA;
+			details.satName = finalSatName;
 		}
 
 		if (finalDxcc < 1)
 			finalDxcc = callsignToDxcc(finalDXcall);
 		details.dxcc = finalDxcc;
 		
-		if ( details.dxcc > 0 && details.wpx == null )
+		if ( details.dxcc > 0 && details.px == null )
 		{
-			details.wpx = getWpx(finalDXcall);
+			details.px = getWpx(finalDXcall);
+			if ( details.px )
+				details.zone = Number(details.px.charAt(details.px.length-1));
 		}
 
 		if (details.state != null && finalDxcc != 291 && finalDxcc != 110 && finalDxcc != 6 && finalDxcc != 202)
@@ -922,6 +965,8 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		details.cont = finalCont;
 		if (details.cont == null && finalDxcc > 0) {
 			details.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
+			if ( details.dxcc == 390 && details.zone == 1 )
+				details.cont = "EU";
 		}
 
 		details.cnty = finalCnty;
@@ -939,44 +984,42 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 
 			}
 		}
+
 		if (lookupCall) {
 			if (g_callsignLookups.ulsUseEnable) {
 				lookupUsCallsign(details, true);
 			}
 		}
 
-		var isDigi = false;
-		if (mode in g_modes && g_modes[mode])
-			isDigi = true;
-		var isPhone = false;
-		if (mode in g_modes_phone && g_modes_phone[mode])
-			isPhone = true;
+		var isDigi = details.digital;
+		var isPhone = details.phone;
+
 
 		details.wspr = wspr;
 		if (finalMsg.length > 0)
 			details.msg = finalMsg;
 
-		g_workedCallsigns[finalDXcall] = true;
 
-		g_worked.call[finalDXcall + band + mode] = true;
-		g_worked.call[finalDXcall] = true;
-		g_worked.call[finalDXcall + mode] = true;
-		g_worked.call[finalDXcall + band] = true;
+
+		g_tracker.worked.call[finalDXcall + band + mode] = true;
+		g_tracker.worked.call[finalDXcall] = true;
+		g_tracker.worked.call[finalDXcall + mode] = true;
+		g_tracker.worked.call[finalDXcall + band] = true;
 
 		if (isDigi == true) {
-			g_worked.call[finalDXcall + "dg"] = true;
-			g_worked.call[finalDXcall + band + "dg"] = true;
+			g_tracker.worked.call[finalDXcall + "dg"] = true;
+			g_tracker.worked.call[finalDXcall + band + "dg"] = true;
 		}
 
 		var fourGrid = details.grid.substr(0, 4);
 		if (fourGrid != "") {
-			g_worked.grid[fourGrid + band + mode] = true;
-			g_worked.grid[fourGrid] = true;
-			g_worked.grid[fourGrid + mode] = true;
-			g_worked.grid[fourGrid + band] = true;
+			g_tracker.worked.grid[fourGrid + band + mode] = true;
+			g_tracker.worked.grid[fourGrid] = true;
+			g_tracker.worked.grid[fourGrid + mode] = true;
+			g_tracker.worked.grid[fourGrid + band] = true;
 			if (isDigi == true) {
-				g_worked.grid[fourGrid + "dg"] = true;
-				g_worked.grid[fourGrid + band + "dg"] = true;
+				g_tracker.worked.grid[fourGrid + "dg"] = true;
+				g_tracker.worked.grid[fourGrid + band + "dg"] = true;
 			}
 
 		}
@@ -984,56 +1027,74 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			details.ituz = g_gridToITUZone[fourGrid][0];
 		}
 		if (details.ituz.length > 0) {
-			g_worked.ituz[details.ituz + band + mode] = true;
-			g_worked.ituz[details.ituz] = true;
-			g_worked.ituz[details.ituz + mode] = true;
-			g_worked.ituz[details.ituz + band] = true;
+			g_tracker.worked.ituz[details.ituz + band + mode] = true;
+			g_tracker.worked.ituz[details.ituz] = true;
+			g_tracker.worked.ituz[details.ituz + mode] = true;
+			g_tracker.worked.ituz[details.ituz + band] = true;
 			if (isDigi == true) {
-				g_worked.ituz[details.ituz + "dg"] = true;
-				g_worked.ituz[details.ituz + band + "dg"] = true;
+				g_tracker.worked.ituz[details.ituz + "dg"] = true;
+				g_tracker.worked.ituz[details.ituz + band + "dg"] = true;
 			}
 		}
 		if (details.cqz.length == 0 && fourGrid in g_gridToCQZone && g_gridToCQZone[fourGrid].length == 1) {
 			details.cqz = g_gridToCQZone[fourGrid][0];
 		}
 		if (details.cqz.length > 0) {
-			g_worked.cqz[details.cqz + band + mode] = true;
-			g_worked.cqz[details.cqz] = true;
-			g_worked.cqz[details.cqz + mode] = true;
-			g_worked.cqz[details.cqz + band] = true;
+			g_tracker.worked.cqz[details.cqz + band + mode] = true;
+			g_tracker.worked.cqz[details.cqz] = true;
+			g_tracker.worked.cqz[details.cqz + mode] = true;
+			g_tracker.worked.cqz[details.cqz + band] = true;
 			if (isDigi == true) {
-				g_worked.cqz[details.cqz + "dg"] = true;
-				g_worked.cqz[details.cqz + band + "dg"] = true;
+				g_tracker.worked.cqz[details.cqz + "dg"] = true;
+				g_tracker.worked.cqz[details.cqz + band + "dg"] = true;
 			}
 		}
 
 		if (details.dxcc > 0) {
 			var sDXCC = String(details.dxcc);
-			g_worked.dxcc[sDXCC + band + mode] = true;
-			g_worked.dxcc[sDXCC] = true;
-			g_worked.dxcc[sDXCC + mode] = true;
-			g_worked.dxcc[sDXCC + band] = true;
+			g_tracker.worked.dxcc[sDXCC + band + mode] = true;
+			g_tracker.worked.dxcc[sDXCC] = true;
+			g_tracker.worked.dxcc[sDXCC + mode] = true;
+			g_tracker.worked.dxcc[sDXCC + band] = true;
 			if (isDigi == true) {
-				g_worked.dxcc[sDXCC + "dg"] = true;
-				g_worked.dxcc[sDXCC + band + "dg"] = true;
+				g_tracker.worked.dxcc[sDXCC + "dg"] = true;
+				g_tracker.worked.dxcc[sDXCC + band + "dg"] = true;
 			}
 		}
 
-		if ( details.wpx  )
+		if ( details.px  )
 		{
-			g_worked.wpx[details.wpx + band + mode] = true;
-			g_worked.wpx[details.wpx] = hash;
-			g_worked.wpx[details.wpx + mode] = true;
-			g_worked.wpx[details.wpx + band] = true;
+			g_tracker.worked.px[details.px + band + mode] = true;
+			g_tracker.worked.px[details.px] = hash;
+			g_tracker.worked.px[details.px + mode] = true;
+			g_tracker.worked.px[details.px + band] = true;
 			if (isDigi == true) 
 			{
-				g_worked.wpx[details.wpx + "dg"] = true;
-				g_worked.wpx[details.wpx + band + "dg"] = true;
+				g_tracker.worked.px[details.px + "dg"] = true;
+				g_tracker.worked.px[details.px + band + "dg"] = true;
 			}	
 			if (isPhone == true) 
 			{
-				g_worked.wpx[details.wpx + "ph"] = true;
-				g_worked.wpx[details.wpx + band + "ph"] = true;
+				g_tracker.worked.px[details.px + "ph"] = true;
+				g_tracker.worked.px[details.px + band + "ph"] = true;
+			}	
+		}
+		
+		if ( details.cont  )
+		{
+			g_tracker.worked.cont[details.cont + band + mode] = true;
+			g_tracker.worked.cont[details.cont] = hash;
+			g_tracker.worked.cont[details.cont + mode] = true;
+			g_tracker.worked.cont[details.cont + band] = true;
+			if (isDigi == true) 
+			{
+				g_tracker.worked.cont[details.cont + "dg"] = true;
+				g_tracker.worked.cont[details.cont + band + "dg"] = true;
+			}	
+			if (isPhone == true) 
+			{
+				g_tracker.worked.cont[details.cont + "ph"] = true;
+				g_tracker.worked.cont[details.cont + band + "ph"] = true;
 			}	
 		}
 			
@@ -1046,72 +1107,83 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 
 		g_QSOhash[hash] = details;
 		if (confirmed == true) {
-			g_QSLhash[hash] = true;
+			
 			if (fourGrid != "") {
-				g_confirmed.grid[fourGrid + band + mode] = true;
-				g_confirmed.grid[fourGrid] = true;
-				g_confirmed.grid[fourGrid + mode] = true;
-				g_confirmed.grid[fourGrid + band] = true;
+				g_tracker.confirmed.grid[fourGrid + band + mode] = true;
+				g_tracker.confirmed.grid[fourGrid] = true;
+				g_tracker.confirmed.grid[fourGrid + mode] = true;
+				g_tracker.confirmed.grid[fourGrid + band] = true;
 				if (isDigi == true) {
-					g_confirmed.grid[fourGrid + "dg"] = true;
-					g_confirmed.grid[fourGrid + band + "dg"] = true;
+					g_tracker.confirmed.grid[fourGrid + "dg"] = true;
+					g_tracker.confirmed.grid[fourGrid + band + "dg"] = true;
 				}
 			}
 			if (details.ituz.length > 0) {
-				g_confirmed.ituz[details.ituz + band + mode] = true;
-				g_confirmed.ituz[details.ituz] = true;
-				g_confirmed.ituz[details.ituz + mode] = true;
-				g_confirmed.ituz[details.ituz + band] = true;
+				g_tracker.confirmed.ituz[details.ituz + band + mode] = true;
+				g_tracker.confirmed.ituz[details.ituz] = true;
+				g_tracker.confirmed.ituz[details.ituz + mode] = true;
+				g_tracker.confirmed.ituz[details.ituz + band] = true;
 				if (isDigi == true) {
-					g_confirmed.ituz[details.ituz + "dg"] = true;
-					g_confirmed.ituz[details.ituz + band + "dg"] = true;
+					g_tracker.confirmed.ituz[details.ituz + "dg"] = true;
+					g_tracker.confirmed.ituz[details.ituz + band + "dg"] = true;
 				}
 			}
 			if (details.cqz.length > 0) {
-				g_confirmed.cqz[details.cqz + band + mode] = true;
-				g_confirmed.cqz[details.cqz] = true;
-				g_confirmed.cqz[details.cqz + mode] = true;
-				g_confirmed.cqz[details.cqz + band] = true;
+				g_tracker.confirmed.cqz[details.cqz + band + mode] = true;
+				g_tracker.confirmed.cqz[details.cqz] = true;
+				g_tracker.confirmed.cqz[details.cqz + mode] = true;
+				g_tracker.confirmed.cqz[details.cqz + band] = true;
 				if (isDigi == true) {
-					g_confirmed.cqz[details.cqz + "dg"] = true;
-					g_confirmed.cqz[details.cqz + band + "dg"] = true;
+					g_tracker.confirmed.cqz[details.cqz + "dg"] = true;
+					g_tracker.confirmed.cqz[details.cqz + band + "dg"] = true;
 				}
 			}
 
 			if (details.dxcc > 0) {
 				var sDXCC = String(details.dxcc);
-				g_confirmed.dxcc[sDXCC + band + mode] = true;
-				g_confirmed.dxcc[sDXCC] = true;
-				g_confirmed.dxcc[sDXCC + mode] = true;
-				g_confirmed.dxcc[sDXCC + band] = true;
+				g_tracker.confirmed.dxcc[sDXCC + band + mode] = true;
+				g_tracker.confirmed.dxcc[sDXCC] = true;
+				g_tracker.confirmed.dxcc[sDXCC + mode] = true;
+				g_tracker.confirmed.dxcc[sDXCC + band] = true;
 				if (isDigi == true) {
-					g_confirmed.dxcc[sDXCC + "dg"] = true;
-					g_confirmed.dxcc[sDXCC + band + "dg"] = true;
+					g_tracker.confirmed.dxcc[sDXCC + "dg"] = true;
+					g_tracker.confirmed.dxcc[sDXCC + band + "dg"] = true;
 				}
 			}
 			
-			if ( details.wpx )
+			if ( details.px )
 			{
-				g_confirmed.wpx[details.wpx + band + mode] = true;
-				g_confirmed.wpx[details.wpx] = hash;
-				g_confirmed.wpx[details.wpx + mode] = true;
-				g_confirmed.wpx[details.wpx + band] = true;
+				g_tracker.confirmed.px[details.px + band + mode] = true;
+				g_tracker.confirmed.px[details.px] = hash;
+				g_tracker.confirmed.px[details.px + mode] = true;
+				g_tracker.confirmed.px[details.px + band] = true;
 				if (isDigi == true) 
 				{
-					g_confirmed.wpx[details.wpx + "dg"] = true;
-					g_confirmed.wpx[details.wpx + band + "dg"] = true;
+					g_tracker.confirmed.px[details.px + "dg"] = true;
+					g_tracker.confirmed.px[details.px + band + "dg"] = true;
 				}	
 			}
 		
-			g_confirmedCallsigns[finalDXcall] = true;
-
-			g_confirmed.call[finalDXcall + band + mode] = true;
-			g_confirmed.call[finalDXcall] = true;
-			g_confirmed.call[finalDXcall + mode] = true;
-			g_confirmed.call[finalDXcall + band] = true;
+			if ( details.cont )
+			{
+				g_tracker.confirmed.cont[details.cont + band + mode] = true;
+				g_tracker.confirmed.cont[details.cont] = hash;
+				g_tracker.confirmed.cont[details.cont + mode] = true;
+				g_tracker.confirmed.cont[details.cont + band] = true;
+				if (isDigi == true) 
+				{
+					g_tracker.confirmed.cont[details.cont + "dg"] = true;
+					g_tracker.confirmed.cont[details.cont + band + "dg"] = true;
+				}	
+			}
+			
+			g_tracker.confirmed.call[finalDXcall + band + mode] = true;
+			g_tracker.confirmed.call[finalDXcall] = true;
+			g_tracker.confirmed.call[finalDXcall + mode] = true;
+			g_tracker.confirmed.call[finalDXcall + band] = true;
 			if (isDigi == true) {
-				g_confirmed.call[finalDXcall + "dg"] = true;
-				g_confirmed.call[finalDXcall + band + "dg"] = true;
+				g_tracker.confirmed.call[finalDXcall + "dg"] = true;
+				g_tracker.confirmed.call[finalDXcall + band + "dg"] = true;
 			}
 			didConfirm = true;
 		} 
@@ -1169,9 +1241,23 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		newCallsign.dt = 0.0;
 		newCallsign.qso = false;
 		newCallsign.distance = 0;
-		newCallsign.wpx = null;
+		newCallsign.px = null;
+		newCallsign.zone = null;
+		newCallsign.finalCnty = finalCnty;
+		newCallsign.cont = finalCont;
 		if ( finalDxcc > -1 )
-			newCallsign.wpx = getWpx(finalDXcall);
+		{
+			newCallsign.px = getWpx(finalDXcall);
+			if ( newCallsign.px )
+				newCallsign.zone = Number(newCallsign.px.charAt(newCallsign.px.length-1));
+			
+			if (newCallsign.cont == null ) 
+			{
+				newCallsign.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
+				if ( newCallsign.dxcc == 390 && newCallsign.zone == 1 )
+					newCallsign.cont = "EU";
+				}
+		}
 		if (finalRSTsent != null) {
 			newCallsign.RSTsent = finalRSTsent;
 		}
@@ -1191,6 +1277,10 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		newCallsign.qrz = false;
 		newCallsign.vucc_grids = [];
 		newCallsign.propMode = "";
+		newCallsign.digital = finalDigital;
+		newCallsign.phone = finalPhone;
+		newCallsign.IOTA = finalIOTA;
+		newCallsign.satName = finalSatName;
 		
 		if (newCallsign.state == null && (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6 || finalDxcc == 202) && finalGrid.length > 0) {
 			if (g_callsignLookups.ulsUseEnable) {
@@ -1227,6 +1317,10 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 				callsign.RSTrecv = finalRSTrecv;
 			callsign.vucc_grids = [];
 			callsign.propMode = "";
+			callsign.digital = finalDigital;
+			callsign.phone = finalPhone;
+			callsign.IOTA = finalIOTA;
+			callsign.satName = finalSatName;
 		}
 	}
 }
@@ -1412,10 +1506,10 @@ function createFlagTipTable(toolElement) {
 		var dxccName = g_dxccToAltName[dxcc];
 		var workColor = "cyan";
 		
-		if (g_gtFlagPins[key].call + myBand + myMode in g_worked.call) {
+		if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.worked.call) {
 			workColor = "yellow";
 		}
-		if (g_gtFlagPins[key].call + myBand + myMode in g_confirmed.call) {
+		if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.confirmed.call) {
 			workColor = "#00FF00";
 		}
 		
@@ -1748,9 +1842,9 @@ function openConditionsWindow() {
 				g_conditionsWindowHandle.setMinimumSize(490, 270);
 				g_conditionsWindowHandle.setMaximumSize(490, 270);
 				
-				g_conditionsWindowHandle.window.initWindowState("GT-Conditions");
 				g_conditionsWindowHandle.setResizable(false);
 				g_conditionsWindowHandle.window.document.getElementById("conditionsDataDiv").style.display = "inline-block";
+				g_conditionsWindowHandle.show();
 			});
 			new_win.on('close', function () {
 
@@ -1800,7 +1894,7 @@ function insertMessageInRoster(newMessage, msgDEcallsign, msgDXcallsign, callObj
 
 }
 
-function openCallRosterWindow()  {
+function openCallRosterWindow( show = true )  {
 
 	if (g_callRosterWindowHandle == null) {
 
@@ -1814,10 +1908,18 @@ function openCallRosterWindow()  {
 			new_win.on('loaded', function () {
 				g_callRosterWindowHandle.setMinimumSize(390, 250);
 				g_callRosterWindowHandle.setResizable(true);
-				g_callRosterWindowHandle.window.initWindowState("GT-roster");
-				g_callRosterWindowHandle.window.g_isShowing = true;
-				goProcessRoster();
-
+				setRosterTop();
+				if ( show )
+				{
+					g_callRosterWindowHandle.show();
+					g_callRosterWindowHandle.window.g_isShowing = true;
+				}
+				else
+				{
+					g_callRosterWindowHandle.window.g_isShowing = false;
+					g_callRosterWindowHandle.hide();
+				}
+				
 			});
 			new_win.on('close', function () {
 
@@ -1828,14 +1930,27 @@ function openCallRosterWindow()  {
 		lockNewWindows();
 	} else {
 		try {
-		g_callRosterWindowHandle.show();
-		g_callRosterWindowHandle.window.g_isShowing = true;
-		g_callRosterWindowHandle.focus();
-		goProcessRoster();
+			g_callRosterWindowHandle.show();
+			g_callRosterWindowHandle.window.g_isShowing = true;
+			g_callRosterWindowHandle.focus();
+			goProcessRoster();
 		}
 		catch (e){}
 	}
 }
+
+
+function updateRosterWorked()
+{
+	if (g_callRosterWindowHandle) {
+		try {
+			g_callRosterWindowHandle.window.updateWorked();
+		} catch (e) {
+
+		}
+	}
+}
+
 
 function updateRosterInstances()
 {
@@ -1910,9 +2025,9 @@ function showMessaging(cid) {
 			g_chatWindowHandle.on('loaded', function () {
 				g_chatWindowHandle.setMinimumSize(450,140);
 				g_chatWindowHandle.setResizable(true);
-				g_chatWindowHandle.window.initWindowState("GT-chat");
 				if (typeof cid != "undefined")
 					g_chatWindowHandle.window.openId(cid);
+				g_chatWindowHandle.show();
 
 			});
 			g_chatWindowHandle.on('close', function () {
@@ -1954,7 +2069,7 @@ function onRightClickGridSquare(feature) {
 					g_popupWindowHandle = new_win;
 					new_win.on('loaded', function () {
 
-						g_popupWindowHandle.window.initWindowState("GT-popup");
+						g_popupWindowHandle.show();
 						renderTooltipWindow(feature);
 					});
 					new_win.on('close', function () {
@@ -2089,6 +2204,20 @@ function onMyKeyDown(event) {
 			else
 				g_hotKeys[event.code].func();
 		}
+		else if ( event.key in g_hotKeys) {
+				if (typeof g_hotKeys[event.key].param1 != 'undefined')
+			{
+				var param2 = null;
+				if ( typeof g_hotKeys[event.key].param2 != 'undefined' )
+				{
+					if ( typeof event[g_hotKeys[event.key].param2] != 'undefined' )
+						param2 =  event[g_hotKeys[event.key].param2]
+				}
+				g_hotKeys[event.key].func(g_hotKeys[event.key].param1, param2);
+			}
+			else
+				g_hotKeys[event.key].func();
+		}
 
 	}
 }
@@ -2139,27 +2268,17 @@ function registerHotKey(key, func, param1,param2) {
 }
 
 function registerHotKeys() {
-	registerHotKey("Digit1", setTrophyOverlay, 0);
-	registerHotKey("Digit2", setTrophyOverlay, 1);
-	registerHotKey("Digit3", setTrophyOverlay, 2);
-	registerHotKey("Digit4", setTrophyOverlay, 3);
-	registerHotKey("Digit5", setTrophyOverlay, 4);
-	registerHotKey("Digit6", setTrophyOverlay, 5);
-	registerHotKey("Digit7", setTrophyOverlay, 6);
-	registerHotKey("Digit8", setTrophyOverlay, 7);
-	registerHotKey("Digit9", toggleTimezones );
-	registerHotKey("Digit0", toggleNexrad );
+	registerHotKey("1", setTrophyOverlay, 0);
+	registerHotKey("2", setTrophyOverlay, 1);
+	registerHotKey("3", setTrophyOverlay, 2);
+	registerHotKey("4", setTrophyOverlay, 3);
+	registerHotKey("5", setTrophyOverlay, 4);
+	registerHotKey("6", setTrophyOverlay, 5);
+	registerHotKey("7", setTrophyOverlay, 6);
+	registerHotKey("8", setTrophyOverlay, 7);
+	registerHotKey("9", toggleTimezones );
+	registerHotKey("0", toggleNexrad );
 
-	registerHotKey("Numpad1", setTrophyOverlay, 0);
-	registerHotKey("Numpad2", setTrophyOverlay, 1);
-	registerHotKey("Numpad3", setTrophyOverlay, 2);
-	registerHotKey("Numpad4", setTrophyOverlay, 3);
-	registerHotKey("Numpad5", setTrophyOverlay, 4);
-	registerHotKey("Numpad6", setTrophyOverlay, 5);
-	registerHotKey("Numpad7", setTrophyOverlay, 6);
-	registerHotKey("Numpad8", setTrophyOverlay, 7);
-	registerHotKey("Numpad9", toggleTimezones );
-	registerHotKey("Numpad0", toggleNexrad );
 	
 	registerHotKey("KeyA", toggleAnimate);
 	registerHotKey("KeyB", toggleAllGrids);
@@ -2197,6 +2316,7 @@ function registerHotKeys() {
 	registerHotKey("F11", toggleFullscreen);
 	registerHotKey("F12", toggleMenu );
 	registerHotKey("F1", toggleHelp);
+	registerHotKey("?", toggleHelp);
 	registerHotKey("Equal", cycleTrophyOverlay);
 }
 
@@ -2977,7 +3097,7 @@ function mouseOutOfDataItem(mouseEvent) {
 
 function reloadInfo( bandOrMode ) {
 
-	if ( g_statsWindowHandle )
+	if ( g_statsWindowHandle != null )
 	{
 		g_statsWindowHandle.window.reloadInfo();
 	}
@@ -3118,12 +3238,12 @@ function qthToQsoBox(iQTH, iHash, iCQ, iNew, locked, DE, worked, confirmed, band
 	var myDEbox = false;
 	if (worked) {
 		boxColor = '#FFFF00' + g_gridAlpha;
-		borderColor = g_workedBorderColor;
+		borderColor = g_qsoWorkedBorderColor;
 
 	}
 	if (confirmed) {
 		boxColor = '#FF0000' + g_gridAlpha;
-		borderColor = g_workedBorderColor;
+		borderColor = g_qsoWorkedBorderColor;
 
 	}
 	if (wspr != null) {
@@ -3242,7 +3362,7 @@ function qthToQsoBox(iQTH, iHash, iCQ, iNew, locked, DE, worked, confirmed, band
 			rect.rectangle.worked = worked;
 		if (confirmed && !rect.rectangle.confirmed)
 			rect.rectangle.confirmed = confirmed;
-		borderColor = g_workedBorderColor;
+		borderColor = g_qsoWorkedBorderColor;
 		if (myDEbox)
 			borderWeight = 1;
 		zIndex = 2;
@@ -3795,10 +3915,10 @@ function dimGridsquare() {
 
 function updateCountStats() {
 
-	callsignCount.innerHTML = Object.keys(g_liveCallsigns).length-1;
+	callsignCount.innerHTML = Object.keys(g_liveCallsigns).length;
 
-	qsoCount.innerHTML = Object.keys(g_QSOhash).length;
-	qslCount.innerHTML = Object.keys(g_QSLhash).length;
+	qsoCount.innerHTML = g_QSOcount;
+	qslCount.innerHTML = g_QSLcount;
 
 	countryCount.innerHTML = Object.keys(g_dxccCount).length;
 	
@@ -3941,6 +4061,7 @@ function clearLive() {
 	setHomeGridsquare();
 	redrawGrids();
 	updateCountStats();
+	updateRosterWorked();
 	goProcessRoster();
 }
 
@@ -3960,6 +4081,7 @@ function clearAll() {
 	redrawGrids();
 	updateCountStats();
 	g_callRoster = {};
+	updateRosterWorked();
 	goProcessRoster();
 
 }
@@ -3977,15 +4099,17 @@ function clearOrLoadQSOs()
 }
 
 function clearQSOs() {
-	g_workedCallsigns = {};
-	g_confirmedCallsigns = {};
+
 	initQSOdata();
 	g_QSOhash = {};
-	g_QSLhash = {};
+	g_QSLcount = 0;
+	g_QSOcount = 0;
 	setTrophyOverlay(g_currentOverlay);
 	redrawGrids();
 	updateCountStats();
 	updateLogbook();
+	updateRosterWorked();
+	goProcessRoster();
 	clearLogFilesAndCounts();
 }
 
@@ -4232,7 +4356,7 @@ function toggleStrikeGlobal()
 	g_mapSettings.strikesGlobal = (g_mapSettings.strikesGlobal == false? true:false);
 	saveMapSettings();
 	
-	setStrikeDistance();
+	
 	var msg = "Local Strikes";
 	if ( g_mapSettings.strikesGlobal == true )
 		msg = "Global Strikes";
@@ -4259,13 +4383,7 @@ function setStrikeDistance()
 		if ( g_mapSettings.strikesGlobal == true )
 			distance = 1000;
 
-
-		var west = Math.max(-180,g_myLon-distance);
-		var east = Math.min(180,g_myLon+distance);
-		var north = Math.min(90,g_myLat+distance);
-		var south = Math.max(-90,g_myLat-distance);
-
-		var send = '{"west":'+(west)+',"east":'+(east)+',"north":'+(north)+',"south":'+(south)+'}';
+		var send = '{"west":-180,"east":180,"north":-90,"south":-90}';
 		
 		if ( g_strikeInterval == null )
 			g_strikeInterval = setInterval(setStrikeDistance, 300000);
@@ -4299,10 +4417,23 @@ function loadStrikes ()
 	if ( g_strikeWebSocket )
 		return;
 	
-	var rnd = parseInt (Math.random()*40)+50;
+	var rnd= parseInt (Math.random()*4);
+	var ws_server = "";
+	if (rnd < 1) {
+		ws_server= "ws7.blitzortung.org";
+	}
+	else if (rnd < 2) {
+		ws_server= "ws6.blitzortung.org";
+	}
+	else if (rnd < 3) {
+		ws_server= "ws5.blitzortung.org";
+	}
+	else {
+		ws_server= "ws1.blitzortung.org";
+	}
 
 	try {
-		g_strikeWebSocket = new WebSocket('ws://ws1.blitzortung.org:80'+rnd);
+		g_strikeWebSocket = new WebSocket("wss:///"+ws_server+":3000");
 	}
 	catch (e) {
 		g_strikeWebSocket = null;
@@ -5345,10 +5476,10 @@ function handleWsjtxStatus(newMessage) {
 
 		var hash = DXcall + myBand + myMode;
 		
-		if (hash in g_worked.call) {
+		if (hash in g_tracker.worked.call) {
 			dxCallBoxDiv.className = "DXCallBoxWorked";
 		}
-		if (hash in g_confirmed.call) {
+		if (hash in g_tracker.confirmed.call) {
 			dxCallBoxDiv.className = "DXCallBoxConfirmed";
 		}
 
@@ -5762,12 +5893,25 @@ function handleWsjtxDecode(newMessage) {
 			newCallsign.confirmed = false;
 			newCallsign.qso = false;
 			newCallsign.dxcc = callsignToDxcc(newCallsign.DEcall);
-			newCallsign.wpx = null;
+			newCallsign.px = null;
+			newCallsign.zone = null;
 			newCallsign.vucc_grids = [];
 			newCallsign.propMode = "";
+			newCallsign.digital = true;
+			newCallsign.phone = false;
+			newCallsign.IOTA = "";
+			newCallsign.satName = "";
 			if ( newCallsign.dxcc != -1 )
-				newCallsign.wpx = getWpx(newCallsign.DEcall);
-			
+			{
+				newCallsign.px = getWpx(newCallsign.DEcall);
+				if ( newCallsign.px )
+					newCallsign.zone = Number(newCallsign.px.charAt(newCallsign.px.length-1));
+				
+				newCallsign.cont = g_worldGeoData[g_dxccToGeoData[newCallsign.dxcc]].continent;
+				if ( newCallsign.dxcc == 390 && newCallsign.zone == 1 )
+					details.cont = "EU";
+			}
+
 			newCallsign.ituza = Array();
 			newCallsign.cqza = Array();
 			newCallsign.distance = 0;
@@ -5780,6 +5924,8 @@ function handleWsjtxDecode(newMessage) {
 				g_dxccCount[newCallsign.dxcc]++;
 			else
 				g_dxccCount[newCallsign.dxcc] = 1;
+			
+			
 			newCallsign.alerted = false;
 			newCallsign.shouldAlert = false;
 			g_liveCallsigns[hash] = newCallsign;
@@ -6095,7 +6241,7 @@ function goProcessRoster(isRealtime = false) {
 				if ( g_callRosterWindowHandle.window.g_rosterSettings.realtime == false )
 					return;
 			}
-			g_callRosterWindowHandle.window.processRoster(g_callRoster, g_worked, g_confirmed);
+			g_callRosterWindowHandle.window.processRoster(g_callRoster);
 		} catch (e) {
 
 		}
@@ -6311,7 +6457,7 @@ function showCallsignBox(redraw) {
 					worker +=
 					"<td align='center' style='margin:0;padding:0'><img style='padding-top:4px' src='./img/flags/16/" +
 					geo.flag + "'></td>";
-					worker += "<td>" + (thisCall in g_workedCallsigns ? "&#10004;" : "") + "</td><td>" + (thisCall in g_confirmedCallsigns ?
+					worker += "<td>" + (thisCall in g_tracker.worked.call ? "&#10004;" : "") + "</td><td>" + (thisCall in g_tracker.confirmed.call ?
 						"&#10004;" : "") + "</td>";
 					var ageString = "";
 					if (timeNowSec() - newCallList[x].time < 3601)
@@ -6363,7 +6509,7 @@ function showCallsignBox(redraw) {
 
 function setStatsDiv( div, worker )
 {
-	if ( g_statsWindowHandle )
+	if ( g_statsWindowHandle != null )
 	{
 		g_statsWindowHandle.window[div].innerHTML = worker;
 	}
@@ -6371,14 +6517,14 @@ function setStatsDiv( div, worker )
 
 function setStatsDivHeight ( div, heightWithPx )
 {
-	if ( g_statsWindowHandle )
+	if ( g_statsWindowHandle != null)
 	{
 		g_statsWindowHandle.window[div].style.height = heightWithPx;
 	}
 }
 function getStatsWindowHeight()
 {
-	if ( g_statsWindowHandle )
+	if ( g_statsWindowHandle != null )
 	{
 		return g_statsWindowHandle.window.window.innerHeight - 63;
 	}
@@ -6848,14 +6994,14 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 
 function statsValidateCallByElement( elementString )
 {
-	if ( g_statsWindowHandle )
+	if ( g_statsWindowHandle != null)
 	{
 		g_statsWindowHandle.window.validateCallByElement( elementString );
 	}
 }
 function statsFocus( selection )
 {
-	if ( g_statsWindowHandle )
+	if ( g_statsWindowHandle != null )
 	{
 		g_statsWindowHandle.window.statsFocus( selection );
 	}
@@ -6863,14 +7009,14 @@ function statsFocus( selection )
 
 function lookupValidateCallByElement( elementString )
 {
-	if ( g_lookupWindowHandle )
+	if ( g_lookupWindowHandle != null)
 	{
 		g_lookupWindowHandle.window.validateCallByElement( elementString );
 	}
 }
 function lookupFocus( selection )
 {
-	if ( g_lookupWindowHandle )
+	if ( g_lookupWindowHandle != null )
 	{
 		g_lookupWindowHandle.window.statsFocus( selection );
 	}
@@ -6878,7 +7024,7 @@ function lookupFocus( selection )
 
 function statsAppendChild( elementString , object, onInputString, defaultValue )
 {
-	if ( g_statsWindowHandle )
+	if ( g_statsWindowHandle != null )
 	{
 		g_statsWindowHandle.window.appendToChild(elementString, object, onInputString, defaultValue);
 	}
@@ -7258,15 +7404,15 @@ function showWPXBox() {
 	var List = {};
 	var ListConfirmed = {};
 	
-	for (var key in g_worked.wpx) { 
-		if ( typeof g_worked.wpx[key] == "string" && key+modifier in g_worked.wpx )
+	for (var key in g_tracker.worked.px) { 
+		if ( typeof g_tracker.worked.px[key] == "string" && key+modifier in g_tracker.worked.px )
 		{
 			List[key] = key;
 		}
 	}
 	
-	for (var key in g_confirmed.wpx) { 
-		if ( typeof g_confirmed.wpx[key] == "string" && key+modifier in g_confirmed.wpx )
+	for (var key in g_tracker.confirmed.px) { 
+		if ( typeof g_tracker.confirmed.px[key] == "string" && key+modifier in g_tracker.confirmed.px )
 		{
 			ListConfirmed[key] = key;	
 		}
@@ -7282,7 +7428,7 @@ function showWPXBox() {
 						"px;'><table class='darkTable' align=center>";
 		Object.keys(List).sort().forEach(function (key, i) 
 		{			
-			worker += "<tr><td align=left style='color:#ff0;' >" + key.formatCallsign() + "</td><td style='color:#0ff;'>"+ g_QSOhash[g_worked.wpx[key]].DEcall.formatCallsign() + "</td></tr>";
+			worker += "<tr><td align=left style='color:#ff0;' >" + key.formatCallsign() + "</td><td style='color:#0ff;'>"+ g_QSOhash[g_tracker.worked.px[key]].DEcall.formatCallsign() + "</td></tr>";
 		});
 		
 		worker += "</table></div>";
@@ -7296,7 +7442,7 @@ function showWPXBox() {
 						"px;'><table class='darkTable' align=center>";
 		Object.keys(ListConfirmed).sort().forEach(function (key, i) 
 		{				
-			worker += "<tr><td align=left style='color:#ff0;' >" + key.formatCallsign() + "</td><td style='color:#0ff;'>"+ g_QSOhash[g_confirmed.wpx[key]].DEcall.formatCallsign() + "</td></tr>";
+			worker += "<tr><td align=left style='color:#ff0;' >" + key.formatCallsign() + "</td><td style='color:#0ff;'>"+ g_QSOhash[g_tracker.confirmed.px[key]].DEcall.formatCallsign() + "</td></tr>";
 		});
 		
 		worker += "</table></div>";
@@ -7714,7 +7860,7 @@ function renderStatsBox()
 			var cnty = g_QSOhash[i].cnty;
 			var ituz = g_QSOhash[i].ituz;
 			var cqz = g_QSOhash[i].cqz;
-			var wpx = g_QSOhash[i].wpx;
+			var wpx = g_QSOhash[i].px;
 			var call = g_QSOhash[i].DXcall;
 			var who = g_QSOhash[i].DEcall;
 			var type = getTypeFromMode(mode);
@@ -8489,6 +8635,8 @@ function redrawGrids() {
 	clearGrids();
 	clearQsoGrids();
 
+	g_QSLcount = 0;
+	g_QSOcount = 0;
 
 	for (var i in g_QSOhash) 
 	{
@@ -8497,6 +8645,10 @@ function redrawGrids() {
 		var didConfirm = g_QSOhash[i].confirmed;
 		var band = g_QSOhash[i].band;
 		var mode = g_QSOhash[i].mode;
+		g_QSOcount++;
+		if ( didConfirm )
+			g_QSLcount++;
+		
 		if (finalGrid.length > 0 ) 
 		{
 			var gridCheck = finalGrid.substr(0, 4);
@@ -8853,7 +9005,7 @@ function redrawGrids() {
 	setHomeGridsquare();
 	setTrophyOverlay(g_currentOverlay);
 	updateCountStats();
-	goProcessRoster();
+	
 }
 
 function toggleAlertMute() {
@@ -9647,7 +9799,7 @@ function callsignToDxcc(insign) {
 	}
 	
 	if ( callsign in g_directCallToDXCC )
-		return g_directCallToDXCC[callsign];
+		return Number(g_directCallToDXCC[callsign]);
 	
 	if ( callsign.includes("/") )
 	{
@@ -9681,13 +9833,13 @@ function callsignToDxcc(insign) {
 			callsign = parts[0];
 		
 		if ( callsign in g_directCallToDXCC )
-			return g_directCallToDXCC[callsign];
+			return Number(g_directCallToDXCC[callsign]);
 		
 	}
 	
 	for (var x = callsign.length; x > 0; x--) {
 		if (callsign.substr(0, x)in g_prefixToMap) {
-			return g_worldGeoData[g_prefixToMap[callsign.substr(0, x)]].dxcc;
+			return Number(g_worldGeoData[g_prefixToMap[callsign.substr(0, x)]].dxcc);
 		}
 	}
 	return -1;
@@ -9724,6 +9876,9 @@ function loadMaidenHeadData() {
 					g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array();
 				g_gridToDXCC[g_worldGeoData[key].mh[x]].push(g_worldGeoData[key].dxcc);
 			}
+			
+			if ( g_worldGeoData[key].dxcc != 291 && g_worldGeoData[key].dxcc != 110 && g_worldGeoData[key].dxcc != 6 )
+				delete g_worldGeoData[key].mh;
 			
 		}
 		
@@ -9898,7 +10053,7 @@ function loadMaidenHeadData() {
 					g_gmaaData[sqr].confirmed_modes = {};
 				}
 			}
-			delete g_worldGeoData[key].mh;
+			
 		}
 
 		fileBuf = fs.readFileSync("./data/cqzone.json");
@@ -9989,6 +10144,8 @@ function loadMaidenHeadData() {
 		
 		delete fileBuf;
 
+		
+		
 	}
 
 }
@@ -10922,6 +11079,8 @@ function startupButtonsAndInputs() {
 
 	alertMuteImg.src = g_alertImageArray[g_appSettings.alertMute];
 	modeImg.src = g_maidenheadModeImageArray[g_appSettings.sixWideMode];
+	
+	rosterAlwaysOnTop.checked = g_appSettings.rosterAlwaysOnTop;
 
 	if (g_appSettings.centerGridsquare.length > 0) {
 		homeQTHInput.value = g_appSettings.centerGridsquare.substr(0, 6);
@@ -10980,12 +11139,10 @@ function postInit() {
 	}
 	toggleNexrad();
 
-	updateText.innerHTML = fs.readFileSync("./gt_update.txt");
+	updateText.innerHTML = fs.readFileSync("./gt_update.html");
 
 	if ( String(gtVersion) != String(g_startVersion) )
 	{
-		console.log(gtVersion);
-		console.log(g_startVersion);
 		generalbut.className = "settingsTablinks";
 		showSettingsBox();
 		openSettingsTab('updatebut', 'updateSettingsDiv');
@@ -11051,6 +11208,7 @@ function init()
 		openStatsWindow(false);
 		openLookupWindow(false);
 		openBaWindow(false);
+		openCallRosterWindow(false);
 	}
 }
 
@@ -12352,18 +12510,20 @@ function searchLogForCallsign( call )
 		if ( Object.keys(work).length > 0 )
 		{
 			worker += "<tr><th style='color:yellow'>Worked</th><td>";
-			for (var x in work )
+			var k = Object.keys(work).sort();
+			for (var key in k )
 			{
-				worker += "<font color='#"+work[x]+"'>" + x + " </font>";
+				worker += "<font color='#"+work[k[key]]+"'>" + k[key] + " </font>";
 			}
 			worker += "</td></tr>";
 		}
 		if ( Object.keys(conf).length > 0 )
 		{
 			worker += "<tr><th style='color:lightgreen'>Confirmed</th><td>";
-			for (var x in conf )
+			var k = Object.keys(conf).sort();
+			for (var key in k )
 			{
-				worker += "<font color='#"+conf[x]+"'>" + x + " </font>";
+				worker += "<font color='#"+conf[k[key]]+"'>" + k[key] + " </font>";
 			}
 			worker += "</td></tr>";
 		}
@@ -12570,11 +12730,11 @@ function mediaCheck() {
 	modeData = fs.readFileSync("./data/modes-phone.json");
 	g_modes_phone = JSON.parse(modeData);
 
-	g_workedCallsigns = {};
-	g_confirmedCallsigns = {};
+
 	initQSOdata();
 	g_QSOhash = {};
-	g_QSLhash = {};
+	g_QSLcount = 0;
+	g_QSOcount = 0;
 	
 	// Old log filename, no longer referenced
 	tryToDeleteLog("lotw.adif");
@@ -12586,38 +12746,33 @@ function mediaCheck() {
 			
 			if ( typeof data.version != "undefined" && data.version == gtVersion )
 			{
-				g_workedCallsigns = data.g_workedCallsigns;
-				g_confirmedCallsigns = data.g_confirmedCallsigns;
-				g_worked = data.g_worked;
-				g_confirmed = data.g_confirmed;
-				if ( typeof g_worked.wpx == "undefined" )
+				g_tracker = data.tracker;
+
+				if ( typeof g_tracker.worked.px == "undefined" )
 				{
-					g_worked.wpx = {};
-					g_confirmed.wpx = {};
+					g_tracker.worked.px = {};
+					g_tracker.confirmed.px = {};
 				}
 				
 				g_QSOhash = data.g_QSOhash;
 			
 				for ( var i in g_QSOhash )
 				{
-					if ( typeof g_QSOhash[i].wpx == "undefined" || g_QSOhash[i].wpx == null )
+					if ( typeof g_QSOhash[i].px == "undefined" || g_QSOhash[i].px == null )
 					{
 						if ( g_QSOhash[i].dxcc != -1 )
-							g_QSOhash[i].wpx = getWpx(g_QSOhash[i].DEcall);
+							g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall);
 						else
-							g_QSOhash[i].wpx = null;
+							g_QSOhash[i].px = null;
 					}
-					if ( typeof g_QSOhash[i].vucc_grids == "undefined"  )
-					{
-						g_QSOhash[i].vucc_grids = [];
-					}
-					if ( typeof g_QSOhash[i].propMode == "undefined"  )
-					{
-						g_QSOhash[i].propMode = "";
-					}
+					g_QSOcount++;
 					if ( g_QSOhash[i].confirmed )
-						g_QSLhash[i] = true;
+						g_QSLcount++;
 				}
+			}
+			else
+			{
+				clearLogFilesAndCounts();
 			}
 			
 			delete data;
@@ -13008,6 +13163,23 @@ function changeRosterTime() {
 	goProcessRoster();
 }
 
+function changeRosterTop( butt )
+{
+	g_appSettings.rosterAlwaysOnTop = butt.checked;
+	setRosterTop();
+}
+
+function setRosterTop()
+{
+	if (g_callRosterWindowHandle) {
+		try {
+			g_callRosterWindowHandle.setAlwaysOnTop(g_appSettings.rosterAlwaysOnTop);
+		} catch (e) {
+
+		}
+	}
+}
+
 function setRosterTimeView() {
 	rosterTime.value = g_mapSettings.rosterTime;
 	rosterTimeTd.innerHTML = Number(rosterTime.value).toDHMS();
@@ -13017,10 +13189,10 @@ function getSpotTime( hash )
 {
 	if (hash in g_receptionReports) 
 	{
-		return g_receptionReports[hash].when;
+		return g_receptionReports[hash];
 	}
 	else 
-		return 0;
+		return null;
 }
 
 
@@ -13054,11 +13226,8 @@ function showNativeFolder( fn )
 	nw.Shell.showItemInFolder(decodeURI(fn));
 }
 
-
-
 function makeScreenshots()
 {
-	
 	var win = gui.Window.get();
 
 	win.capturePage(function(buffer)
@@ -13080,6 +13249,7 @@ function makeScreenshots()
 			addLastTraffic("<font style='color:red'>Screenshot write failed</font>");
 		}
 	}, { format : 'png', datatype : 'buffer'} );
-	
 
 }
+
+

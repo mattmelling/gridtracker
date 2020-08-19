@@ -1,6 +1,6 @@
 
 table, th, td {
-	color:#FFF;
+	color:#EEE;
 	white-space: nowrap;
 	font-family:Sans-Serif;
 	text-align:auto;
@@ -8,13 +8,19 @@ table, th, td {
 	margin:0px;
 }
 
-table, th, td, select {font-size: 12px;}
+table, th, td, select, .compact {font-size: 12px;}
 
 th,td {
 	padding-bottom:2px;
+	padding-right:1px;
+	margin-right:2px;
+	padding-left:2px;
 }
 
 
+th {
+	font-weight:normal;
+}
 
 
 input[type="checkbox"] 
@@ -22,16 +28,187 @@ input[type="checkbox"]
     -webkit-appearance: checkbox !important;
     appearance: checkbox !important;
 	margin:0;
-	margin-right:2px;
+	margin-right:1px;
 	vertical-align: middle;
 	position: relative;
 	top: 0px;
+
 }
 
 input[type="checkbox"]:checked 
 {
-    -webkit-appearance: checkbox !important;
-    appearance: checkbox !important;
+   // -webkit-appearance: checkbox !important;
+   // appearance: checkbox !important;
+
 }
 
 
+select {
+    -webkit-appearance: none;
+    -webkit-border-radius:6px;
+    text-indent: 0.20px;
+    text-overflow: '';
+    padding: 2px;
+	padding-right: 3px;
+	background-color:darkgreen;
+    color:#ff0;
+	cursor:pointer;
+
+} 
+select:focus 
+{
+	outline:none;
+}
+
+select:hover
+{
+	border-color:#FFF;
+}
+
+select:disabled
+{
+	border:1px solid #333;
+	background-color:#000;
+	color:#AAA;
+	outline:none;
+	
+}
+
+select option {
+    margin: 40px;
+    background: #000;
+    color: #EEE;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    border-radius:8px;
+    text-indent: 0.20px;
+    text-overflow: '';
+    text-align:right;
+    padding: 5px;
+}
+
+select option:focus 
+{
+	color: #F00;
+}
+
+option:disabled 
+{
+	color: #666;
+}
+
+.controlItem
+{
+	-webkit-appearance: none;
+	margin:2px;
+	padding:2px;
+	border-width:1px;
+	border-color:#AAA;
+	border-style:inset;
+	-webkit-border-radius:4px; 
+	display:inline-block;
+	-webkit-transition:border-color;
+	vertical-align:top;
+}
+
+
+table.awardTableCSS {
+  border-collapse: collapse;
+  border: 0px solid #888;
+  background-color: black;
+  text-align: center;
+}
+table.awardTableCSS td, table.awardTableCSS th {
+  border: 1px solid #888;
+  padding:2px 4px;
+    border-left: none;
+    border-right: none;
+}
+
+table.awardTableCSS thead {
+  border-bottom: 0px solid #888;
+
+}
+table.awardTableCSS thead th {
+  font-weight: bold;
+  text-align: center;
+  border-left: none;
+}
+table.awardTableCSS thead th:first-child {
+  border-left: none;
+ 
+}
+
+.awardTableCSS tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888; }
+
+
+
+table.darkTable {
+  border-collapse: collapse;
+  border: 1px solid #555;
+  background-color: black;
+  text-align: center;
+}
+table.darkTable td, table.darkTable th {
+  border: 1px solid #555;
+  padding:2px 4px;
+  
+}
+
+table.darkTable thead {
+  border-bottom: 2px solid #555;
+
+}
+table.darkTable thead th {
+  font-weight: bold;
+  text-align: center;
+  border-left: 2px solid #555;
+}
+table.darkTable thead th:first-child {
+  border-left: none;
+ 
+}
+
+.darkTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #555, inset 0px -11px 6px -8px #555; }
+
+.oneByOne {
+	background-clip:content-box;box-shadow: 0 0 8px 3px inset #FFF;background-color:#000;color:#FF0;
+}
+
+.dxCaller {
+	background-clip:content-box;box-shadow: 0 0 8px 3px inset lightgreen;background-color:#000;color:#FF0;
+}
+
+.dxCalling {
+	background-clip:content-box;box-shadow: 0 0 8px 3px inset #F00;background-color:#000;color:#FF0;
+}
+
+
+.compact
+{
+	cursor:pointer;
+	margin:0px;
+	padding:0px;
+	margin-right:1px;
+	margin-bottom:1px;
+	border-width:1px;
+	border-color:#999;
+	border-style:outset;
+	min-width: 5.5em;
+
+	display:inline-block;
+	color:#EEE;
+	-webkit-transition: border-style;
+}
+
+.compact:active
+{
+	border-style:inset;
+}
+
+.compact:hover {
+	border-color:#FFF;
+}

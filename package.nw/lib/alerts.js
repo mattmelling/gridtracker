@@ -522,7 +522,7 @@ function checkAlerts( DEcallsign,  grid,  originalMessage, callsignRecord, band,
 		else if ( grid && nalert.type == 2 ) // gridsquare
 		{
 
-			if (  !(DEcallsign + band + mode  in g_worked.call) && grid.indexOf(nalert.value) == 0  )
+			if (  !(DEcallsign + band + mode  in g_tracker.worked.call) && grid.indexOf(nalert.value) == 0  )
 			{
 				handleAlert(nalert, DEcallsign, originalMessage, callsignRecord, grid);
 				hadAlert = true;
@@ -538,7 +538,7 @@ function checkAlerts( DEcallsign,  grid,  originalMessage, callsignRecord, band,
 		}
 		else if ( nalert.type == 5 )   // callsign partial
 		{
-			if (   !(DEcallsign + band + mode  in g_worked.call) && DEcallsign.indexOf(nalert.value) == 0  )
+			if (   !(DEcallsign + band + mode  in g_tracker.worked.call) && DEcallsign.indexOf(nalert.value) == 0  )
 			{
 				handleAlert(nalert, DEcallsign, originalMessage, callsignRecord);
 				hadAlert = true;
@@ -548,7 +548,7 @@ function checkAlerts( DEcallsign,  grid,  originalMessage, callsignRecord, band,
 		{
 			try
 			{
-				if ( !(DEcallsign + band + mode  in g_worked.call) && DEcallsign.match(nalert.value) )
+				if ( !(DEcallsign + band + mode  in g_tracker.worked.call) && DEcallsign.match(nalert.value) )
 				{
 					handleAlert(nalert, DEcallsign, originalMessage, callsignRecord);
 					hadAlert = true;
@@ -1109,7 +1109,7 @@ function checkClassicAlerts(  CQ,  callObj, message, DXcall )
 	if ( DXcall == "CQ DX" && callObj.dxcc == g_myDXCC )
 		return didAlert;
 	
-	if ( callObj.DEcall + hashMaker(callObj.band , callObj.mode) in g_worked.call  )
+	if ( callObj.DEcall + hashMaker(callObj.band , callObj.mode) in g_tracker.worked.call  )
 		return didAlert;
 		
 				
@@ -1132,9 +1132,9 @@ function alertCheckCallsign( key, callObj )
 {
 	var status = document.getElementById(key+"Need").value;
 	
-	if ( status == "worked" && callObj.DEcall + hashMaker(callObj.band , callObj.mode) in g_worked.call )
+	if ( status == "worked" && callObj.DEcall + hashMaker(callObj.band , callObj.mode) in g_tracker.worked.call )
 		return 0;
-	if ( status == "confirmed" && callObj.DEcall + hashMaker(callObj.band , callObj.mode) in g_confirmed.call )
+	if ( status == "confirmed" && callObj.DEcall + hashMaker(callObj.band , callObj.mode) in g_tracker.confirmed.call )
 		return 0;
 	
 	return 1;
@@ -1146,9 +1146,9 @@ function alertCheckGrid( key, callObj )
 	if ( callObj.grid.length == 0 )
 		return 0;
 	
-	if ( status == "worked" && callObj.grid + hashMaker(callObj.band , callObj.mode) in g_worked.grid )
+	if ( status == "worked" && callObj.grid + hashMaker(callObj.band , callObj.mode) in g_tracker.worked.grid )
 		return 0;
-	if ( status == "confirmed" && callObj.grid + hashMaker(callObj.band , callObj.mode) in g_confirmed.grid )
+	if ( status == "confirmed" && callObj.grid + hashMaker(callObj.band , callObj.mode) in g_tracker.confirmed.grid )
 		return 0;
 	
 	return 1;
@@ -1158,9 +1158,9 @@ function alertCheckDXCC( key, callObj )
 {
 	var status = document.getElementById(key+"Need").value;
 	
-	if ( status == "worked" && String(callObj.dxcc) +  hashMaker(callObj.band , callObj.mode) in g_worked.dxcc )
+	if ( status == "worked" && String(callObj.dxcc) +  hashMaker(callObj.band , callObj.mode) in g_tracker.worked.dxcc )
 		return 0;
-	if ( status == "confirmed" && String(callObj.dxcc) + hashMaker(callObj.band , callObj.mode) in g_confirmed.dxcc )
+	if ( status == "confirmed" && String(callObj.dxcc) + hashMaker(callObj.band , callObj.mode) in g_tracker.confirmed.dxcc )
 		return 0;
 
 	return 1;
@@ -1176,10 +1176,10 @@ function alertCheckCQz(key, callObj )
 	for ( index in callObj.cqza )
 	{
 		var hash = callObj.cqza[index] + hashMaker(callObj.band , callObj.mode);
-		if (  hash in g_worked.cqz  )
+		if (  hash in g_tracker.worked.cqz  )
 			workedFound++;
 			
-		if ( hash in g_confirmed.cqz )
+		if ( hash in g_tracker.confirmed.cqz )
 			confirmedFound++;
 	}
 	
@@ -1204,10 +1204,10 @@ function alertCheckITUz( key, callObj )
 	for ( index in callObj.ituza )
 	{
 		var hash = callObj.ituza[index] + hashMaker(callObj.band , callObj.mode);
-		if (  hash in g_worked.ituz  )
+		if (  hash in g_tracker.worked.ituz  )
 			workedFound++;
 			
-		if ( hash in g_confirmed.ituz )
+		if ( hash in g_tracker.confirmed.ituz )
 			confirmedFound++;
 	}
 	
@@ -1230,10 +1230,10 @@ function alertCheckStates( key, callObj )
 			var hash =  callObj.state + hashMaker(callObj.band , callObj.mode);
 			var status = document.getElementById(key+"Need").value;
 			
-			if (  status == "worked" && hash in g_worked.state )
+			if (  status == "worked" && hash in g_tracker.worked.state )
 				return 0;
 			
-			if ( status == "confirmed" && hash in g_confirmed.state )
+			if ( status == "confirmed" && hash in g_tracker.confirmed.state )
 				return 0;
 
 			return 1;

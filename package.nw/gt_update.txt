@@ -1,0 +1,143 @@
+*** BREAK BREAK BREAK ***
+
+***IMPORTANT***
+
+	General, Lookup and Log settings may have reset in this release!
+	
+	Confirm *ALL* of your settings before operating!!!
+		
+***IMPORTANT***
+
+[v1.20.0806]
+
+Logging
+	If "Settings -> Lookups -> Add Lookup Data to QSO Log Event" is enabled
+		Add additional 2 or more characters from Lookup grid to Log grid if present
+			eg1:  QSO == DM79  : Lookup == DM79rt : Log = DM79rt
+			eg2:  QSO == FN20  : Lookup == CM45al : Log = FN20
+			
+	New Settings "Add Lookup Grid if QSO Grid missing"
+		If QSO Log record is missing grid then use the Lookup grid (default disabled)
+		(excercise caution using this feature, the wrong grid is worse than no grid)
+
+"Map View Panel" and "Logbook Tab"
+	Band and Mode Selectors
+		"All" option renamed to "Mixed"
+		
+	Mode Selector
+		Added "Digital" "Phone" option
+		
+[v1.20.0805]
+
+Map
+	Fixed map zoom-out issue
+	
+Buttons
+	Moved [Callable Roster] button down with other buttons
+	Moved mute button from audio settings back to main button panel 
+		(by popular demand)
+
+ADIF logs
+	Properly recognize and display VUCC_GRIDS fields
+	
+Award Layers
+	AMSAT GridMaster Award
+		New "GMA" layer (Hotkey J)
+		
+[v1.20.0804]
+
+Award Layers
+	Fred Fish Memorial Award
+		New "FFMA" layer (Hotkey 8)
+
+[v1.20.0803]
+
+Main App
+	Fixed user-defined App and User Data(~Documents\GridTracker) 
+		folder from not saving to disk on exit
+	
+Lookups
+	Fixed issue If "Open Lookup On Transmit" enabled where Lookup Window opened on calling CQ
+	
+	New Feature
+		If "Open Lookup On Transmit" enabled
+			option to "Close Lookup Window After Logging" default enabled
+			(It won't close if you've changed the lookup to another call during your QSO)
+		
+
+[v1.20.0801]
+
+Raspberry Pi/ARM
+	Updated core engine
+	Shadows in the "Callable Roster" now work
+
+Band Activity Pop-out
+	Now works on Mac!
+	
+Lookups
+	"Open Lookup On Transmit" behavior fixed!
+	
+[v1.20.0731]
+		
+WSJT-X v2.2.2 compatibility
+	This corrects the QSX path issue where they would disappear too fast
+	Fixed the pause on animation between decode rounds
+
+Callable Roster
+	CQ ignores... just like the Callsign and DXCC ignore
+	Right click a station calling "CQ DX", "CQ US", "CQ JA" ... and you can select to:
+		"Ignore CQ from All" 
+		  (CR will ignore any world-wide station calling "CQ DX")
+	or
+		"Ignore CQ from DXCC" 
+		  (CR will ignore any station from the DXCC of the station calling "CQ DX")
+
+System
+	All table rows now highlight on mouseover for easy viewing
+
+English, Welsh, Northern Ireland and Scottish flags per DXCC code
+	They were all the "UK" flag in error
+
+Off-Air Message Service (OAMS) formerly known as "Messaging"
+	Messaging now shared with Log4OM users
+	Font size increased for easier viewing
+	Separated list of previous messages window at lower right with the option to clear
+	List of callsigns improved as we are growing in numbers, 650+ at peak!
+	
+Settings 
+	Map and RX Spots setting tabs now transparent
+	Fixed Audio -> QSO Log Event Notification not showing selected media file
+
+Main right-hand controls
+	"Button Array" icon order updated
+	"Callable Roster" now its own panel button
+	New "Open Lookup Window" button (Eye)
+	Removed irrelevant data items in the "Stats Quick View" panel
+	Legend button (the cyan key) moved to Settings -> Map
+	Audio Mute button moved to Settings -> Audio
+	"QSO/Live View" panel renamed to "Map View"
+	Moved "QSO/Live" button into "Map View" panel and now labeled properly
+	
+All "action buttons"
+	Replaced old grey buttons with proper styled buttons to match rest of GT theme
+
+Map Engine
+	Speed and Memory usage improved
+	Map no longer allows you to go past the north and south poles
+	
+Lookups
+	Now in own window
+	"DX Call" population will cause a lookup
+	"Lookup Callsign on Tx Enable" has been renamed "Open Lookup On Transmit" 
+	New Option "Add Lookup Data to QSO Log Event" default enabled
+		The following fields are looked for and added to the ADIF record
+			NAME, IOTA, SOTA_REF, CONT, CNTY, EMAIL, CQZ, ITUZ
+	US Callsign database now read in segments
+		Reduced memory usage and will now work on Raspberry Pi 3
+	
+PSK-Reporter Band Activity
+	Right-click to toggle popup of a moveable copy of the graph
+		Hold Left-Click on copy to move it around
+		Tooltips do not function in the copy
+		The position is not saved across app starts 
+			(limitation of window style)

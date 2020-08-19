@@ -1,0 +1,55 @@
+ <!DOCTYPE html>
+<html  lang="en" xml:lang="en">
+   <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>GridTracker Statistics</title>
+		<link rel="stylesheet" href="./lib/style.css"/>
+		<script src="./lib/winstate.js" type="text/javascript" ></script>
+		<script src="./lib/protos.js" type="text/javascript" ></script>
+		<script src="./lib/stats.js"></script>
+   </head>
+  
+<body id='mainBody'  onresize="Resize();" onload="init();" >
+	<div id="rootInfoDiv"style="margin:0px;right:0px;left:0px;bottom:0px;top:3px;display:block;background-color:black;padding:0px;text-align:center;vertical-align:middle;position:absolute;z-index:600;border:1px green;" class="roundBorder" >
+		<div class="infotab">
+		   <button id="qsobox" class="infoTablinks active" onclick="resetSearch(); openInfoTab(event, 'workedBoxDiv', 'showWorkedBox')">Logbook</button>
+		   <button id="stabox" class="infoTablinks" onclick="openInfoTab(event, 'statBoxDiv', 'showStatBox');">Scores</button>
+		   <button id="dxcbox" class="infoTablinks" onclick="openInfoTab(event, 'dxccBoxDiv', 'showDXCCsBox')">DXCCs</button>
+		   <button id="cqzbox" class="infoTablinks" onclick="openInfoTab(event, 'cqzoneBoxDiv', 'showCQzoneBox')">CQ Zones</button>
+		   <button id="itubox" class="infoTablinks" onclick="openInfoTab(event, 'ituzoneBoxDiv', 'showITUzoneBox')">ITU Zones</button>
+		   <button id="waswacbox" class="infoTablinks" onclick="openInfoTab(event, 'waswaczoneBoxDiv', 'showWASWACzoneBox')">WAC / WAS</button>
+		   <button id="wpxbox" class="infoTablinks" onclick="openInfoTab(event, 'wpxBoxDiv', 'showWPXBox')">WPX</button>
+		   <button id="calbox" class="infoTablinks" onclick="openInfoTab(event, 'callsignBoxDiv', 'showCallsignBox')">Live</button>
+		   <button id="ldrbox" class="infoTablinks" onclick="openInfoTab(event, 'decodeLastDiv', null)">Decodes</button>
+		</div>
+		<div id="statBoxDiv" class="infoTabcontent" >
+		   <div id="statViewDiv" style="margin:2px;padding:2px;overflow:auto;" ></div>
+		</div>
+		<div id="dxccBoxDiv" class="infoTabcontent"  >
+		   <div id="dxccListDiv" style="margin:2px;padding:2px;bottom:5px;" ></div>
+		</div>
+		<div id="cqzoneBoxDiv" class="infoTabcontent"  >
+		   <div id="cqzoneListDiv" style="margin:2px;padding:2px" ></div>
+		</div>
+		<div id="ituzoneBoxDiv" class="infoTabcontent"  >
+		   <div id="ituzoneListDiv" style="margin:2px;padding:2px" ></div>
+		</div>
+		<div id="waswaczoneBoxDiv" class="infoTabcontent"  >
+		   <div id="waswacListDiv" style="margin:2px;padding:2px" ></div>
+		</div>
+		<div id="wpxBoxDiv" class="infoTabcontent"  >
+		   <div id="wpxListDiv" style="margin:2px;padding:2px" ></div>
+		</div>
+		<div id="workedBoxDiv" class="infoTabcontent">
+		   <div id="workedHeadDiv"  ></div>
+		   <div id="workedListDiv" style="margin:2px;padding:2px;overflow:auto;"  ></div>
+		</div>
+		<div id="callsignBoxDiv" class="infoTabcontent">
+		   <div id="callsignListDiv" style="margin:2px;padding:2px" ></div>
+		</div>
+		<div id="decodeLastDiv" class="infoTabcontent">
+		   <div id="decodeLastListDiv" style="margin:2px;padding:2px;overflow:auto;overflow-x:hidden;" >No decodes yet</div>
+		</div>
+    </div>
+</body>
+</html>

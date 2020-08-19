@@ -1,0 +1,52 @@
+ <!DOCTYPE html>
+<html  lang="en" xml:lang="en">
+   <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Band Activity</title>
+		<link rel="stylesheet" href="./lib/style.css"/>
+		<script src="./lib/winstate.js" type="text/javascript" ></script>
+		<script src="./lib/protos.js" type="text/javascript" ></script>
+		<script>
+var g_isShowing = true;
+
+
+document.addEventListener("dragover", function (event) {
+	event.preventDefault();
+});
+
+document.addEventListener("drop", function (event) {
+	event.preventDefault();
+});
+
+var g_menu = null;
+
+	g_menu = new nw.Menu();
+	// Bind a callback to item
+	var item = new nw.MenuItem({
+	 type: "normal", 
+	  label: "Close Widget",
+	  click: function() {
+		window.opener.openBaWindow(false);
+	  }
+	});
+	g_menu.append(item);
+
+
+document.body.addEventListener('contextmenu', function(ev) { 
+		ev.preventDefault();	
+		window.opener.openBaWindow(false);
+		return false;
+	});
+	
+		</script>
+   </head>
+  
+<body id='mainBody'  style="-webkit-app-region:drag;margin:0px;right:0px;left:0px;bottom:0px;top:0px;display:block;background-color:#000000FF;padding:0px;text-align:center;vertical-align:middle;position:absolute;z-index:600;" oncontextmenu="window.opener.showBaWindow(false)" >
+<div id="pskReporterBandActivityDiv" style="position:relative;background-color:#000;border:1px solid purple;margin:1px;height:49px;margin-bottom:1px;padding:0px" title="PSK-Reporter Band Activity">
+        <div id="graphDiv" style="bottom:0;position: absolute;width:100%;padding:0px;margin-bottom:2px">
+                  <br />...no data yet...<br />
+                  &nbsp;
+               </div>
+		</div>
+</body>
+</html>

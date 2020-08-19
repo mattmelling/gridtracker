@@ -1,0 +1,16 @@
+{
+  "name": "GridTracker",
+  "product_string": "GridTracker",
+  "window" : {
+    "id" : "mainWindow",
+	"icon" : "gridview.png",
+	"toolbar" : false,
+	"show" : false,
+	"width" : 800,
+	"height" : 640
+	},
+ "webkit": {
+    "plugin": true
+  },
+  "main": "GridTracker.html"
+}

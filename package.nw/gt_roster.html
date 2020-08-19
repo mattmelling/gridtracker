@@ -1,0 +1,217 @@
+<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%;width:100%">
+<head >
+<title>GridTracker : Callable Roster</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="./lib/style.css">
+<link id="roster" rel="stylesheet" href="./lib/style_roster.css">
+<script src="./lib/winstate.js" type="text/javascript" ></script>
+<script src="./lib/protos.js" type="text/javascript" ></script>
+<script src="./lib/third-party.js" type="text/javascript" ></script>
+<script src="./lib/roster.js" type="text/javascript" ></script>
+</head>
+<body onload="init();" onresize="resize();">
+<div id="main" style="margin:1px;top:0px;left:0px;width:100%;background-color:black;position:absolute;white-space:nowrap;overflow:auto;" >
+	<div id="mainCallRoster" style="display:block">
+	<div id="rosterHead">
+	 
+	  <table id="masterTable" style="width:100%;height:167px;border:2px solid #444;" class="roundBorder" >
+	  <tr  valign="top">
+	  <td align="left">
+		<table  class="roundBorder"  style="height:100%;border:1px solid #006;margin:auto;padding:1px;text-align:center">
+			<tr>
+			<td colspan=2><div id="txrxdec" style="background-color:Green;border-style:outset;border-color:yellow;border-width:3px" class="roundBorder">waiting for message</div></td>
+			</tr>
+			<tr>
+			<td colspan=2>
+			<div  class="button"  onclick="window.opener.haltAllTx(true);">Halt Tx</div>
+			</tr>
+			
+			<tr title="Log file reference">
+			 <td align='right'>Reference</td>
+			 <td align='left' colspan=2>
+			 	<select id="referenceNeed"  onchange="valuesChanged();">
+					<option value="0">Current Band and Mode</option>
+					<option value="1">Current Band, Mixed Modes</option>
+					<option value="2">Current Band, Digital Modes</option>
+					<option value="3">Current Mode, Mixed Bands</option>
+					<option value="4">Mixed Bands and Modes</option>
+					<option value="5">Mixed Bands and Digital Modes</option>		
+				</select>
+				</td>
+		  </tr>
+		  <tr>
+			 <td align='right'>Callsigns</td>
+			 <td align='left' colspan=2>
+			 	<select id="callsignNeed"  onchange="valuesChanged();">
+				<option value="worked">New</option>
+				<option value="confirmed">New+Unconfirmed</option>
+				<option value="all">All Traffic</option>
+				<option value="hits">All Traffic (Only Hits)</option>
+				</select>
+				</td>
+			</tr>
+		    <tr  >
+			 <td align='right'>Hunting</td>
+			 <td align='left'>
+			 <div id="huntModeTd" style="display:block" >
+			 	<select id="huntMode"  onchange="valuesChanged();" value="callsign">
+				<option value="callsign">Callsign</option>
+				<option value="grid">Grid</option>
+				<option value="dxcc">DXCC</option>
+				<option value="dxccs">DXCC (Single)</option>
+				<option value="cq">CQ Zone</option>
+				<option value="itu">ITU Zone</option>
+				<option value="usstates">US States (WAS)</option>
+				<option value="usstate">US State (Single)</option>
+				<option value="wpx">Prefix (WPX)</option>
+				</select>	
+				</div>
+			<div id="huntNeedTd" style="display:block" >
+			 	<select id="huntNeed"  onchange="valuesChanged();">
+				<option value="worked">New</option>
+				<option value="confirmed">New+Unconfirmed</option>
+				</select>
+				</div>
+			<div id="huntStateTd" style="display:none" >
+			 	<select id="stateSelect"  >
+				<option value="" selected=true>Select Territory</option>
+				</select>
+				</div>
+			<div id="huntDXCCsTd" style="display:none" >
+			 	<select id="DXCCsSelect"  >
+				<option value="-1" selected=true>Select DXCC</option>
+				</select>
+				</div>
+			</tr>
+			<tr style="padding:0;margin:0"><td colspan=2 style="padding:0;margin:0"><div id="scriptIcon" style="display:none;padding:0;margin:0"></div></td></tr>
+		</table>
+	  </td>
+	  <td align="center" >
+		<div id="huntingMatrixDiv" class="roundBorder" style="border:1px solid #066;padding:1px;">
+		<table  style="border-collapse:collapse;" >
+			<tr><th colspan=2>Wanted</th></tr>
+			<tr>
+				<td colspan=1 ><label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);">Callsign</label></td><td colspan=1 ><label><input type="checkbox" id="huntCqZone" onchange="wantedChanged(this);">CQ Zone</label></td>
+			</tr>
+			<tr>
+				<td colspan=1 ><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);">Grid</td>	<td colspan=1 ><input type="checkbox" id="huntItuZone" onchange="wantedChanged(this);">ITU Zone</td>
+			</tr>
+			<tr>
+				<td colspan=1 ><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);">DXCC</td> <td colspan=1 ><input type="checkbox" id="huntUsState" onchange="wantedChanged(this);">US State</td>
+			</tr>
+			<tr>
+				<td colspan=1 title='Stations calling *you*'><input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);">QRZ</td><td colspan=1 ><input type="checkbox" id="huntWPX" onchange="wantedChanged(this);">WPX</td>
+			</tr>
+			<tr>
+				<td colspan=1 title='Off-Air Message Service Users'><input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);">OAMS</td>
+			</tr>
+		</table>
+		</div>
+	  </td>
+
+	  	  <td align="center">
+		  <div  class="roundBorder"  style="height:100%;border:1px solid #622;margin:auto;padding:2px;" >
+		  
+		<table  style="border-collapse:collapse;" >
+		    <tr><th colspan=6>Exceptions</th></tr>
+			<tr>
+				<td>
+					<table style="border-collapse:collapse;" >
+					<tr>
+					 <td colspan=2 ><label><input type="checkbox" id="cqOnly" onchange="valuesChanged();">CQ Only</label></td>
+					</tr>
+					<tr>
+					 <td colspan=2 ><label><input type="checkbox" id="wantGrid" onchange="valuesChanged();">Require Grid</label></td>
+					</tr>
+					<tr>
+					 <td  ><input type="checkbox" id="wantMinDB" onchange="valuesChanged();">Min dB</td>
+					 <td  ><input type="range" min="-25" max="0"  step="1" class="slider" id="minDb" oninput="valuesChanged();" style="width:75px"/></td>
+					 <td align="center"  id="minDbView" class="roundBorderValue">-24</td>
+					</tr>
+					<tr>
+					 <td ><input type="checkbox" id="wantMaxDT" onchange="valuesChanged();">Max DT</td>
+					 <td  ><input type="range" min="0.1" max="2"  step="0.1" class="slider" id="maxDT" oninput="valuesChanged();" style="width:75px"/></td>
+					 <td align="center" id="maxDTView" class="roundBorderValue">.5</td>
+					</tr>
+					<tr>
+					 <td ><input type="checkbox" id="wantMinFreq" onchange="valuesChanged();">Min freq</td>
+					 <td  ><input type="range" min="0" max="2500"  step="10" class="slider" id="minFreq" oninput="valuesChanged();" style="width:75px"/></td>
+					 <td align="center"  id="minFreqView"  class="roundBorderValue">400</td>
+					</tr>
+					<tr>
+					 <td  ><input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();">Max freq</td>
+					 <td ><input type="range" min="500" max="3500"  step="10" class="slider" id="maxFreq" oninput="valuesChanged();" style="width:75px"/></td>
+					 <td  align="center" id="maxFreqView"  class="roundBorderValue">3500</td>
+					</tr>
+					<tr>
+					 <td  id="usesLoTWDiv" ><input type="checkbox" id="usesLoTW" onchange="valuesChanged();">Uses LoTW</td>
+					 <td ><input title="Max time since their last upload" type="range" min="3" max="27"  step="3" class="slider" id="maxLoTW" oninput="valuesChanged();" style="width:75px"/></td>
+					 <td title="Max time since their last upload" align="center" id="maxLoTWView"  class="roundBorderValue" style="width:35px">3</td>
+					</tr>
+					<tr>
+					 <td colspan=2 id="onlySpotDiv" style='display:none' ><input type="checkbox" id="onlySpot" onchange="valuesChanged();">Spotted Me</td>
+					</tr>
+					</table>
+				</td>
+				<td>
+					<table style="border-collapse:collapse;">
+					<tr>
+					 <td colspan=2 ><input type="checkbox" id="noMyDxcc" onchange="onlyMyDxcc.checked=false; valuesChanged();">Not My DXCC</td>
+					</tr>
+					<tr>
+					 <td colspan=2 ><input type="checkbox" id="onlyMyDxcc" onchange="noMyDxcc.checked=false; valuesChanged();">Only My DXCC</td>
+					</tr>
+					<tr>
+					 <td colspan=2 ><input type="checkbox" id="noRoundUp" onchange="onlyRoundUp.checked=false;valuesChanged();">No Round-Up</td>
+					</tr>
+					<tr>
+					 <td colspan=2 ><input type="checkbox" id="onlyRoundUp" onchange="noRoundUp.checked=false;valuesChanged();">Only Round-Up</td>
+					</tr>
+					<tr >
+					 <td colspan=2  id="useseQSLDiv" style='display:none' ><input type="checkbox" id="useseQSL" onchange="valuesChanged();">Uses eQSL</td>
+					</tr>
+					<tr >
+					 <td colspan=2  id="usesOQRSDiv" style='display:none' ><input type="checkbox" id="usesOQRS" onchange="valuesChanged();">Uses OQRS</td>
+					</tr>
+					<tr >
+					 <td colspan=2 id="allOnlyNewDiv" style='display:none' ><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();">Only New Calls</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+			<tr >
+				<td colspan=6 align=center >
+				<table >
+				<tr >
+				<td >
+				<input type="checkbox" id="useRegex" title="Callsign Regular Expression" onchange="valuesChanged();"> <a title="Regular Expressions 101" href="https://regex101.com/?flavor=javascript" target='_blank'>Regex</a></input>
+				<input type="text" class="inputTextValue" size="12" id="callsignRegex" onfocus="g_regFocus=true;" onblur="g_regFocus=false;" oninput="valuesChanged();" style='display:none;background-color:green;color:yellow' onkeydown="checkForEnter(this);" />
+				</td>
+				</tr>
+				</table>
+				</td>
+			</tr>
+		</table>
+		</div>
+	  </td>
+	  </tr>
+		<tr>
+		<td colspan=3><div id="usCallsignInfoDiv"></div><td>
+		</tr>
+	  </table>
+	  	<div id="instancesDiv" style="display:none" >Test</div>
+	</div>
+	<!--div id="slotDiv" class='roundBorder' style='display:inline-block;border:1px solid #262;margin:2px;padding:2px;' ></div-->
+	<div id="rosterTable" style="left:0px;overflow:auto;overflow-x:hidden;float:left" ></div>
+	</div>
+	
+	
+	<div id="editView" class="roundBorder"  style="height:100%;border:3px solid #066;padding:10px;margin:10px;display:none;">
+		<div style='display:block;font-size:larger'>Callsign, CQ and DXCC Ignores</div><br/>
+		<div id="editTables">
+		</div>
+		<div class="button"  style="margin-top:5px" onclick="closeEditIgnores()">Close</div>
+	</div>
+</div>
+</body>
+</html>

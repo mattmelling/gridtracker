@@ -2052,7 +2052,10 @@ function setVisual()
 	else
 	{
 		for ( key in g_rosterSettings.wanted )
-			document.getElementById(key).checked = g_rosterSettings.wanted[key];
+		{
+			if ( document.getElementById(key) )
+				document.getElementById(key).checked = g_rosterSettings.wanted[key];
+		}
 		
 		awardHunterTr.style.display = "none";
 		awardWantedDiv.style.display = "none";
@@ -2633,7 +2636,10 @@ function init()
 	window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 	
 	for ( key in g_rosterSettings.wanted )
-		document.getElementById(key).checked = g_rosterSettings.wanted[key];
+	{
+		if ( document.getElementById(key) )
+			document.getElementById(key).checked = g_rosterSettings.wanted[key];
+	}
 	
 
 	g_menu = new nw.Menu();

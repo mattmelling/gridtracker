@@ -22,6 +22,7 @@ var g_menu = null;
 var g_callMenu = null;
 var g_ageMenu = null;
 var g_callingMenu = null;
+var g_compactMenu = null;
 var g_targetHash = "";
 var g_clearIgnores = null;
 var g_clearIgnoresCall = null;
@@ -434,7 +435,7 @@ function viewRoster()
 	if ( referenceNeed.value == 6 )
 	{
 		callMode = "all";
-		onlyHits = true;
+		onlyHits = false;
 		isAwardTracker = true;
 		g_rosterSettings.huntNeed = "confirmed";
 	}
@@ -487,6 +488,7 @@ function viewRoster()
 	for ( callHash in callRoster )
 	{
 		var call = callRoster[callHash].DEcall;
+
 		callRoster[callHash].tx = true;
 		callRoster[callHash].callObj.shouldAlert = false;
 		callRoster[callHash].callObj.reason = Array();
@@ -851,7 +853,7 @@ function viewRoster()
 				if ( g_awardTracker[award].enable )
 				{
 					tx = testAward(award, callRoster[callHash].callObj, baseHash );
-					if ( tx ) 
+					if ( tx  ) 
 						break;
 				}
 
@@ -873,6 +875,8 @@ function viewRoster()
 	var unconf = "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
 	for (var callHash in callRoster)
 	{
+
+		
 		// Special case check for called station
 		if ( callRoster[callHash].callObj.qrz == true  &&  callRoster[callHash].tx == false )
 		{
@@ -927,6 +931,11 @@ function viewRoster()
 				didWork = true;
 						
 				callConf = unconf + callsign + inversionAlpha + ";";
+				if ( testHash in g_confirmed.call )
+				{
+					callPointer =  "text-decoration: line-through; ";
+					callConf = "";
+				}
 					
 			}
 		
@@ -952,13 +961,13 @@ function viewRoster()
 					
 					if ( g_rosterSettings.huntNeed == "worked" &&  didWork )
 					{
-						callRoster[testHash].callObj.reason.push("call");
+						callRoster[callHash].callObj.reason.push("call");
 						callConf = unconf + callsign + inversionAlpha + ";"; 
 					}
 					if ( didWork && (g_rosterSettings.huntNeed == "confirmed" &&  !(testHash in g_confirmed.call) ) )
 					{
 						shouldAlert = true; 
-						callRoster[testHash].callObj.reason.push("call");
+						callRoster[callHash].callObj.reason.push("call");
 						callConf = unconf + callsign + inversionAlpha + ";"; 
 					}
 					else if ( didWork && (g_rosterSettings.huntNeed == "confirmed" &&  (testHash in g_confirmed.call) ) )
@@ -1221,10 +1230,18 @@ function viewRoster()
 		}
 	}
 
-	newCallList.sort(r_sortFunction[g_rosterSettings.lastSortIndex]);
-	if ( g_rosterSettings.lastSortReverse == 1 )
+	if ( g_rosterSettings.compact == false ) 
 	{
-		newCallList.reverse();
+		newCallList.sort(r_sortFunction[g_rosterSettings.lastSortIndex]);
+		if ( g_rosterSettings.lastSortReverse == 1 )
+		{
+			newCallList.reverse();
+		}
+	}
+	else
+	{
+		// Age sort for now... make this happen Tag
+		newCallList.sort(r_sortFunction[6]).reverse();
 	}
 			
 		
@@ -1331,7 +1348,7 @@ function viewRoster()
 		var ituzone = (grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-");
 		var thisCall = newCallList[x].DEcall;
 
-		var thisClass = "";
+	
 		if ( thisCall.match("^[A-Z][0-9][A-Z](\/\w+)?$") )
 			newCallList[x].style.callsign = "class='oneByOne'";
 		if ( thisCall == window.opener.g_instances[newCallList[x].instance].status.DXcall )
@@ -1353,7 +1370,7 @@ function viewRoster()
 
 		
 		worker += "<tr id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
-		worker += "<td "+thisClass+" title='Callsign' align=left " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
+		worker += "<td name='Callsign' align=left " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
 			 thisCall + newCallList[x].band+newCallList[x].mode + "\")'>" + thisCall.formatCallsign() + "</td>";
 
 		if ( showBands )
@@ -1371,14 +1388,14 @@ function viewRoster()
 		worker += "<td  "+newCallList[x].style.grid+" onClick='centerOn(\"" + grid + "\")' >" + grid + "</td>";
 		if ( g_rosterSettings.columns.Calling )
 		{
-			var lookString = (newCallList[x].CQ?"title='CQ'":"title='Calling'");
+			var lookString = (newCallList[x].CQ?"name='CQ'":"name='Calling'");
 			worker += 	"<td "+newCallList[x].style.calling+" "+lookString+">"+newCallList[x].DXcall.formatCallsign() + "</td>";
 		}
 		if ( g_rosterSettings.columns.Msg )
 			worker += 	"<td>"+newCallList[x].msg+ "</td>";
 
 		if ( g_rosterSettings.columns.DXCC )
-			worker += "<td title='DXCC ("+newCallList[x].dxcc+")' "+newCallList[x].style.dxcc+">" + window.opener.g_dxccToAltName[newCallList[x].dxcc] +
+			worker += "<td name='DXCC ("+newCallList[x].dxcc+")' "+newCallList[x].style.dxcc+">" + window.opener.g_dxccToAltName[newCallList[x].dxcc] +
 				" (" + window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[newCallList[x].dxcc]].pp  + ")</td>";
 		if ( g_rosterSettings.columns.Flag )
 			worker += "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" + geo.flag + "'></td>";
@@ -1462,9 +1479,13 @@ function viewRoster()
 		}
 		else
 		{
-			worker += "<div class='compact'  id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
-		worker += "<div "+thisClass+" title='Callsign' " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
-			 thisCall + newCallList[x].band+newCallList[x].mode + "\")'>" + thisCall.formatCallsign() + "</div></div>";
+			var tt = newCallList[x].RSTsent + "&#13256;, " + parseInt(newCallList[x].dt*100) +"ms, " + newCallList[x].delta + "hz" + (newCallList[x].grid.length? ", " + newCallList[x].grid:"") +", " + (timeNowSec() - newCallList[x].age).toDHMS();
+			worker += "<div class='compact' onClick='initiateQso(\"" + thisCall + newCallList[x].band+newCallList[x].mode + "\")' "
+			worker +=  "id='" + thisCall + newCallList[x].band+newCallList[x].mode + "' title='"+tt+"'>";
+			worker += "<div class='compactCallsign' name='Callsign' " +newCallList[x].style.callsign + " >"+ thisCall.formatCallsign() +"</div>";
+			worker += "<div class='compactDXCC' name='DXCC ("+newCallList[x].dxcc+")' "+newCallList[x].style.dxcc+">" + window.opener.g_dxccToAltName[newCallList[x].dxcc] + "</div>";
+			worker += "</div>";
+			
 		}
 
 		if (  g_rosterSettings.realtime == false )
@@ -1870,7 +1891,7 @@ function updateAwardList( target = null )
 		var allEndorse = false;
 		
 		var tooltip = g_awards[award.sponsor].awards[award.name].tooltip+ " (" + g_awards[award.sponsor].sponsor + ")\n";
-		tooltip += toTitleCase(award.test.look) + " QSO\n";
+		tooltip += toTitleCase(award.test.qsl_req) + " QSO\n";
 		for ( var mode in award.comp.counts )
 		{
 			tooltip +=  mode + "\n";
@@ -1910,7 +1931,7 @@ function updateAwardList( target = null )
 		if ( baseCount > 0 && endorseCount == endorseTotal )
 			allEndorse = true;
 		
-		var cell = createCellHtml(row, "<p style='font-size:smaller;'>" +  g_awards[award.sponsor].awards[award.name].tooltip +" - "+award.sponsor );
+		var cell = createCellHtml(row, "<p style='font-size:smaller;'>" +  award.name +" - "+award.sponsor );
 		cell.style.textAlign = "left";
 		cell.style.color = "lightblue";
 				
@@ -2044,9 +2065,9 @@ function setVisual()
 	
 		huntingTr.style.display = "none";
 		callsignsTr.style.display = "none";
-		huntingMatrixDiv.style.display = "none";
 		awardHunterTr.style.display = "";
 		awardWantedDiv.style.display = "";
+		huntingMatrixDiv.style.display = "";
 		updateAwardList();
 	}
 	else
@@ -2199,6 +2220,12 @@ function wantedChanged(element)
 		if ( t in g_rosterSettings.columns )
 		{
 			g_rosterSettings.columns[t] = true;
+
+			for (var i = 0; i < g_menu.items.length; ++i) {
+				if ( typeof g_menu.items[i].checked != "undefined" && g_menu.items[i].label == t )
+					g_menu.items[i].checked = true;
+			}
+			
 		}
 	}
 			
@@ -2643,6 +2670,8 @@ function init()
 	
 
 	g_menu = new nw.Menu();
+	g_compactMenu = new nw.Menu();
+	
 	// Bind a callback to item
 	var item = new nw.MenuItem({
 	 type: "normal", 
@@ -2665,26 +2694,30 @@ function init()
 	  }
 	});
 	g_menu.append(item);
+	g_compactMenu.append(item);
 	
 	item = new nw.MenuItem({
 	 type: "normal", 
-	  label: g_rosterSettings.compact? "Roster Mode":"Compact Mode",
+	  label: "Compact Mode",
 	  click: function() {
-		if ( this.label == "Compact Mode" )
-		{
-			this.label = "Roster Mode";
 			g_rosterSettings.compact = true;
-		}
-		else
-		{
-			this.label = "Compact Mode";
-			g_rosterSettings.compact = false;
-		}
 		localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
 		resize();
 	  }
 	});
 	g_menu.append(item);
+	
+	item = new nw.MenuItem({
+	 type: "normal", 
+	  label: "Roster Mode",
+	  click: function() {
+
+			g_rosterSettings.compact = false;
+			localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
+		resize();
+	  }
+	});
+	g_compactMenu.append(item);
 	
 	
 	rosterHead.style.display =  g_rosterSettings.controls?"block":"none";
@@ -2756,6 +2789,7 @@ function init()
 	
 	item = new nw.MenuItem({ type: 'separator' });
 	g_menu.append(item);
+	g_compactMenu.append(item);
 	
 	item = new nw.MenuItem({
 	 type: "checkbox", 
@@ -2808,6 +2842,7 @@ function init()
 	  }
 	});
 	g_menu.append(g_clearIgnores);
+	g_compactMenu.append(g_clearIgnores);
 	
 	g_clearIgnoresCall = new nw.MenuItem({
 	 type: "normal", 
@@ -2861,6 +2896,7 @@ function init()
 	  }
 	});
 	g_menu.append(g_clearCQIgnoreMainMenu);
+	g_compactMenu.append(g_clearCQIgnoreMainMenu);
 	
 	g_clearCQIgnore = new nw.MenuItem({
 	 type: "normal", 
@@ -2913,6 +2949,7 @@ function init()
 	  }
 	});
 	g_menu.append(g_clearDxccIgnoreMainMenu);
+	g_compactMenu.append(g_clearDxccIgnoreMainMenu);
 	
 	g_clearDxccIgnore = new nw.MenuItem({
 	 type: "normal", 
@@ -2935,6 +2972,7 @@ function init()
 	  }
 	});
 	g_menu.append(item);
+	g_compactMenu.append(item);
 	
 	
 	item = new nw.MenuItem({
@@ -3006,35 +3044,60 @@ function init()
 			g_clearCQIgnore.label = "Clear Ignore";
 			g_clearCQIgnore.enabled = false;
 		}
-		if ( typeof ev.target != 'undefined' && typeof ev.target.title != 'undefined' && ev.target.title == "Callsign" )
-		{	
-			g_targetHash =  ev.target.parentNode.id;
-			g_callMenu.popup(ev.x, ev.y);
-		}
-		else if ( typeof ev.target != 'undefined' && typeof ev.target.title != 'undefined' && ev.target.title == "Calling" )
-		{	
-			g_targetHash =  ev.target.parentNode.id;
-			g_callingMenu.popup(ev.x, ev.y);
-		}
-		else if ( typeof ev.target != 'undefined' && typeof ev.target.title != 'undefined' && ev.target.title == "CQ" )
-		{	
-			if (  callRoster[ev.target.parentNode.id].DXcall != "CQ" )
+		if ( typeof ev.target != 'undefined' )
+		{
+			var name = ev.target.getAttribute("name");
+			if ( name == "Callsign" )
 			{
-				g_targetCQ =  ev.target.parentNode.id;
-				g_CQMenu.popup(ev.x, ev.y);
+				g_targetHash =  ev.target.parentNode.id;
+				g_callMenu.popup(ev.x, ev.y);
 			}
-		}
-		else if ( typeof ev.target != 'undefined' && typeof ev.target.title != 'undefined' && ev.target.title.startsWith("DXCC") )
-		{	
-			var dxcca = ev.target.title.split("(");
-			var dxcc = parseInt(dxcca[1]);
-			g_targetDxcc = dxcc;
-			g_dxccMenu.popup(ev.x, ev.y);
+			else if ( name == "Calling" )
+			{
+				g_targetHash =  ev.target.parentNode.id;
+				g_callingMenu.popup(ev.x, ev.y);
+			}
+			else if ( name == "CQ" )
+			{
+				if (  callRoster[ev.target.parentNode.id].DXcall != "CQ" )
+				{
+					g_targetCQ =  ev.target.parentNode.id;
+					g_CQMenu.popup(ev.x, ev.y);
+				}
+			}
+			else if ( name && name.startsWith("DXCC")  )
+			{
+				var dxcca = name.split("(");
+				var dxcc = parseInt(dxcca[1]);
+				g_targetDxcc = dxcc;
+				g_dxccMenu.popup(ev.x, ev.y);
+			}
+			else
+			{
+				if ( g_rosterSettings.compact == false )
+				{
+					g_menu.popup(ev.x, ev.y);
+				}
+				else
+				{
+					g_compactMenu.popup(ev.x, ev.y);
+				}
+			}
 		}
 		else
 		{
-			g_menu.popup(ev.x, ev.y);
+			if ( g_rosterSettings.compact == false )
+			{
+				g_menu.popup(ev.x, ev.y);
+			}
+			else
+			{
+				g_compactMenu.popup(ev.x, ev.y);
+			}
 		}
+
+
+
 		return false;
 	});
 
@@ -3103,37 +3166,31 @@ function getTypeFromMode(mode)
 }
 
 function testAward( awardName, obj, baseHash )
-{
-	var rule = g_awardTracker[awardName].rule;
-	var test = g_awardTracker[awardName].test;
-	
-	if ( obj.dxcc < 1 )
-		return false;
-	
-	if ( test.dxcc && rule.dxcc.indexOf(obj.dxcc) == -1 )
+{	
+	if ( g_awardTracker[awardName].test.dxcc && g_awardTracker[awardName].rule.dxcc.indexOf(obj.dxcc) == -1 )
 		return false;
 
-	if ( test.mode && rule.mode.indexOf(obj.mode) == -1 )
+	if ( g_awardTracker[awardName].test.mode && g_awardTracker[awardName].rule.mode.indexOf(obj.mode) == -1 )
 		return false;
 	
-	if ( test.band && rule.band.indexOf(obj.band) == -1 )
+	if ( g_awardTracker[awardName].test.band && g_awardTracker[awardName].rule.band.indexOf(obj.band) == -1 )
 		return false;
 	
-	if ( test.DEcall && rule.call.indexOf(obj.DEcall) == -1 )
+	if ( g_awardTracker[awardName].test.DEcall && g_awardTracker[awardName].rule.call.indexOf(obj.DEcall) == -1 )
 		return false;
 
-	if ( test.cont && rule.cont.indexOf(obj.cont) == -1 )
+	if ( g_awardTracker[awardName].test.cont && g_awardTracker[awardName].rule.cont.indexOf(obj.cont) == -1 )
 		return false;
 	
-	if ( test.prop && rule.propMode != obj.propMode )
+	if ( g_awardTracker[awardName].test.prop && g_awardTracker[awardName].rule.propMode != obj.propMode )
 		return false;
 	
-	if ( test.sat && rule.satName.indexOf(obj.satName) == -1)
+	if ( g_awardTracker[awardName].test.sat && g_awardTracker[awardName].rule.satName.indexOf(obj.satName) == -1)
 		return false;
 
-	return g_awardTypes[rule.type].test(g_awardTracker[awardName], obj, baseHash);
-	
+	return g_awardTypes[g_awardTracker[awardName].rule.type].test(g_awardTracker[awardName], obj, baseHash);	
 }
+
 function processAward( awardName )
 {
 	var award = g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name];
@@ -3159,7 +3216,9 @@ function processAward( awardName )
 				g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req == "confirmed" : 
 				g_awards[g_awardTracker[awardName].sponsor].qsl_req == "confirmed");
 				
-	test.look = ( ("qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule)? 
+	test.look = "confirmed";
+	
+	test.qsl_req = ( ("qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule)? 
 				g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req  : 
 				g_awards[g_awardTracker[awardName].sponsor].qsl_req );
 				

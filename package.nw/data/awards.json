@@ -7511,7 +7511,7 @@
   },
     "ARRL": {
     "compiledBy": "N0TTL",
-    "sponsor": "Amatuer Radio Relay League",
+    "sponsor": "Amateur Radio Relay League",
     "website": "https://arrl.org/",
     "qsl_req": "confirmed",
 	"mixed" : [ "160m", "80m",  "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m",  "2m", "1.5m", "70cm" , "23cm"],
@@ -7654,7 +7654,7 @@
 				291
 			  ],
 			  "endorse": [
-				"160m",  "6m", "2m", "1.5m", "70cm", "23cm"
+				"Mixed"
 			  ],
 			  "mode": [
 				"Mixed",

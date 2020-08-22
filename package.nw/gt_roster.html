@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%;width:100%">
 <head >
-<title>GridTracker : Callable Roster</title>
+<title>GridTracker : Call Roster</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="./lib/style.css">
 <link id="roster" rel="stylesheet" href="./lib/style_roster.css">
@@ -11,7 +11,7 @@
 <body onload="init();" onresize="resize();">
 	<div id="main" style="margin:0px;top:0;left:0;width:100%;background-color:black;position:absolute;white-space:nowrap;overflow:auto;" >
 		<div id="mainCallRoster" >
-			<div id="rosterHead" style="width:100%">
+			<div id="rosterHead" style="width:100%;padding:0;margin:0">
 				<div id="viewDiv" class="controlItem"  style="border:1px solid #006;vertical-align:middle;">
 				<table  style="text-align:center;border-collapse:collapse;">
 					<tr><td colspan=3 >
@@ -88,24 +88,24 @@
 					<tr style="padding:0;margin:0"><td colspan=2 style="padding:0;margin:0"><div id="scriptIcon" style="display:none;padding:0;margin:0"></div></td></tr>
 				</table>
 				</div>
-				<div id="awardWantedDiv" class="controlItem" style="border:none;overflow:auto;overflow-x:hidden;" ></div>
-				<div id="huntingMatrixDiv" class="controlItem" style="border:1px solid #066;margin:0:padding:0">
-					<table  style="border-collapse:collapse;" >
+				<div id="awardWantedDiv" class="controlItem" style="border:none;overflow:auto;overflow-x:hidden" ></div>
+				<div id="huntingMatrixDiv" class="controlItem" style="border:1px solid #066">
+					<table  style="border-collapse:collapse;" title="Wanted" >
 						<tr><th colspan=2>Wanted</th></tr>
 						<tr>
-							<td colspan=1 ><label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);">Callsign</label></td><td colspan=1 ><label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);">CQ Zone</label></td>
+							<td colspan=1 ><label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);">Callsign</label></td><td colspan=1 ><label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);">CQz</label></td>
 						</tr>
 						<tr>
-							<td colspan=1 ><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);">Grid</td>	<td colspan=1 ><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);">ITU Zone</td>
+							<td colspan=1 ><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);">Grid</td>	<td colspan=1 ><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);">ITUz</td>
 						</tr>
 						<tr>
-							<td colspan=1 ><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);">DXCC</td> <td colspan=1 ><input type="checkbox" id="huntState" onchange="wantedChanged(this);">US State</td>
+							<td colspan=1 ><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);">DXCC</td> <td colspan=1 ><input type="checkbox" id="huntState" onchange="wantedChanged(this);">State</td>
 						</tr>
 						<tr>
-							<td colspan=1 title='Stations calling *you*'><input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);">QRZ</td><td colspan=1 ><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);">US County</td>
+							<td colspan=1 title='Stations calling *you*'><input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);">QRZ</td><td colspan=1 ><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);">County</td>
 						</tr>
 						<tr>
-							<td colspan=1 ><input type="checkbox" id="huntPX" onchange="wantedChanged(this);">WPX</td><td colspan=1 ><input type="checkbox" id="huntCont" onchange="wantedChanged(this);">Continent</td>
+							<td colspan=1 ><input type="checkbox" id="huntPX" onchange="wantedChanged(this);">WPX</td><td colspan=1 ><input type="checkbox" id="huntCont" onchange="wantedChanged(this);">Cont</td>
 						</tr>
 						<tr>
 							<td colspan=1 title='Off-Air Message Service Users'><input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);">OAMS</td>
@@ -113,7 +113,7 @@
 					</table>
 				</div>
 				<div id="exceptionDiv" class="controlItem"  style="border:1px solid #622;" > 
-					<table  style="border-collapse:collapse" title="Exceptions">
+					<table  style="border-collapse:collapse;margin:0;padding:0;" title="Exceptions">
 						<tr>
 							<td>
 								<table style="border-collapse:collapse;" >
@@ -121,7 +121,7 @@
 								 <td colspan=2 ><label><input type="checkbox" id="cqOnly" onchange="valuesChanged();">CQ Only</label></td>
 								</tr>
 								<tr>
-								 <td colspan=2 ><label><input type="checkbox" id="wantGrid" onchange="valuesChanged();">Require Grid</label></td>
+								 <td colspan=2 ><label><input type="checkbox" id="wantGrid" onchange="valuesChanged();">Has Grid</label></td>
 								</tr>
 								<tr>
 								 <td  ><input type="checkbox" id="wantMinDB" onchange="valuesChanged();"/>Min dB</td>

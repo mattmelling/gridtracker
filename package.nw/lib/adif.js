@@ -1177,7 +1177,7 @@ function setAdifStartup(checkbox)
 			worker += "<table class='darkTable'>";
 			for ( var i in g_startupLogs )
 			{
-				worker += "<tr><td>"+ g_startupLogs[i].name + "</td><td onclick='removeStartupLog("+i+")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px;cursor:pointer'></td></tr>";
+				worker += "<tr title='"+g_startupLogs[i].file+"'><td>"+ g_startupLogs[i].name + "</td><td onclick='removeStartupLog("+i+")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px;cursor:pointer'></td></tr>";
 			}
 			worker += "</table>";
 		}

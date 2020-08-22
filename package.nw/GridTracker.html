@@ -181,7 +181,7 @@
 		<div id="filterDiv" class="roundBorder" style="position:relative;background-color:#000;border:1px solid cyan;margin:1px;margin-bottom:1px;" title="Map View Control Panel">
 			
 			 <table align="center">
-				<tr><td colspan=2>Map View</td></tr>
+				<tr><td colspan=2>Map View Filters</td></tr>
 			
 				<tr title="Select Band&#10;(Auto tracks WSJT-X)"><td><font color="lightgreen">Band</font></td>
 				<td >
@@ -225,6 +225,35 @@
 			</select>
 			</td>
 			</tr>
+			<tr title="Select Propagation Mode">
+			<td><font color="yellow">Prop</font></td>
+			<td>
+			<select id="gtPropFilter"  onkeypress="return false;" onchange="gtPropFilterChanged(this);">
+				<option value="mixed">Mixed</option>
+				<option value="xx" disabled>----------</option>
+				<option value="">Unknown</option>
+				<option value="xx" disabled>----------</option>
+				<option value="AS">Aircraft Scatter</option>
+				<option value="AUE">Aurora-E</option>
+				<option value="AUR">Aurora</option>
+				<option value="BS">Back Scatter</option>
+				<option value="ECH">EchoLink</option>
+				<option value="EME">EME</option>
+				<option value="ES">Sporadic E</option>
+				<option value="F2">F2 Reflection</option>
+				<option value="FAI">Field Aligned I</option>
+				<option value="INTERNET">Inet-assist</option>
+				<option value="ION">Ionoscatter</option>
+				<option value="IRL">IRLP</option>
+				<option value="MS">Meteor Scatter</option>
+				<option value="RPT">Repeater</option>
+				<option value="RS">Rain Scatter</option>
+				<option value="SAT">Satellite</option>
+				<option value="TEP">Trans-equatorial</option>
+				<option value="TR">Tropo-ducting</option>
+			</select>
+			</td>
+			</tr>
 				<tr>
 				<td><font color="cyan">Data</font></td>
 					<td>
@@ -233,7 +262,7 @@
 			</table>
 			</div>
 			<div id="buttonsDiv" style="margin-left:0px;white-space:normal;">
-				<div id="callRosterButton" style="width:190px;color:yellow;font-weight:bold;border-width:2px;margin-bottom:0px" class="button" onclick="openCallRosterWindow();" title="Open Callalable Roster" >Callable Roster</div>
+				<div id="callRosterButton" style="color:#EEE;font-weight:bold;border-width:2px;margin:0px;padding-left:2px;padding-right:2px;text-align:center" class="button" onclick="openCallRosterWindow();" title="Open Call Roster" >Call Roster + Award Tracker</div>
 				<div id="modeModeDiv" onclick="toggleOffline()"  class="iconButton" title="Toggle Online/Offline Mode"><img id="offlineImg" src="" class="buttonImg" /></div>
 				<div id="earthShadow" onclick="toggleEarth()"  class="iconButton" title="Toggle Grayline"><img id="earthImg" src="" class="buttonImg" /></div>
 				<div id="pushPinButton" onclick="togglePushPinMode();" class="iconButton" title="Toggle Push-Pin Mode"><img  id="pinImg" src="" class="buttonImg" /></div>

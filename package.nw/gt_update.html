@@ -1,74 +1,83 @@
-<center>
+<!--center>
 <img style=" display: inline-block;" src="./img/award-medal.svg" width="75px">
 <div style=" display: inline-block;font-size:36px;font-weight:bold;vertical-align:top;padding-top:15px;">
 Award Tracker is here! &nbsp;
 </div>
 <img  style=" display: inline-block;" src="./img/award-trophy.svg" width="75px">
-</center>
+</center-->
 <pre>
-[v1.20.0819] August 19th, 2020
+[v1.20.0821] August 21st, 2020
 
-Callable Roster:
+GridTracker Main Window:
+	Update:
+		"Map View" renamed "Map View Filters"
+		"Callable Roster" renamed "Call Roster + Award Tracker"
+		Minimum width now 200 pixels (you can hide the map now)
+		
 	New:
-		"Window Always On Top" option in Settings -> "Call Roster"
-			default disabled
+		"Prop" added to "Map View Filters"
+			Propagation Mode for filtering Logbook data *only* 
+				Live data view is unaffected
 			
-		Award Tracker!
-			Click on "Logbook" and select "Award Tracker"
-			Click "Add Awards" and select your sponsor and award name
-			
-			Hover over the award indicator to get quick-stats
-			quick-stats is a place holder until I get the stats tab built
-			
-			Award Tracking is 'best guess'. confirm with your award sponsor the
-			validity of your logbooks, GridTracker will try its best but could
-			be wrong
-			
-			Award tally may be incorrect or incomplete, we are working on it
-			
-			Not every award is available yet for tracking
-			
-			Special thanks to NR0Q and KB2YSI for compiling awards definitions
-			
-			At this time IOTA is processed but not a trackable field (yet)
-		
-		US County (Wanted , Column, Right-Click Menu)
-			If US callsign database is enabled, best guess on stations county
-		
-		Continent (Wanted , Column, Right-Click Menu)
-			Why did I not have this sooner?!
-	
-		Changed "No Round-up and "Only Round-up" to "No" and "Only" Decode Message
-			If "No" or "Only" are checked, then the decoded message is checked
-			You can enter any thing you want (Grid, Callsign, CQ target)
-			The fields also support regex, but not required
-			
-		Compact Mode - Great for Contesting!!!
-			Right-click menu, "Compact Mode" only shows callsigns
-			The order is the order of the last column sorted in "Roster Mode"
-			I *will* be improving this in future releases!
-		
-		Text Sizing
-			Ctrl-0(zero) resets text size to default value
-				
 	Update:
-		"Reference" renamed "Logbook" with "Logbook Reference" tooltip
-		Added Spot report to tooltip in Spot column
-	
-Logbook Reference:
+		Removed "FFMA" and "GMA" award layers and replaced with "US48" layer
+			To view your Fred Fish Memorial "FFMA" Award:
+				Select "US48" hotkey (8) then;
+					Set your Band filter to "6m"
+			
+			To view your AMSAT GridMaster "GMA" Award:
+				Select "US48" hotkey (8) then;
+					Set your Band & Mode filters to "Mixed"
+					Set your Prop filter to "Satellite"
+		
+Call Roster:
+	Update:
+		Callable Roster renamed to "Call Roster"
+		
 	Fixed:
-		Turkey Region 1 now in Europe
+		Award Tracking:
+			"Wanted" box remains as it's needed
+			Fix bad filtering flags
+			
+		When enabling "Wanted" entities; right-click menu now tracks correctly 
 		
-Lookups:
-	Update:
-		Display previous worked and confirmed by band
-	
-Legend:
-	Update:
-		Button moved from map settings back to the button panel
+		Issue with New/Unconfirmed callsigns not showing up at all
+		
+		Return of the "strikeout" on callsigns that have been confirmed
+			by popular demand
+			
+	Compact Mode:
+		Sorted by "Age" for now 
+			(Will add a right-click menu to select sort type later on)
+			
+		Added "DXCC" under "Callsign"
+		
+		Tooltip(mouse-over) added with decode details
+			(Will add Worked/Confirmed status by band/mode later on)
+			
+				
+PSK-Spots:
+	Fixed: 
+		Memory issue when 1500 spots in 24 hours
+			Thanks to mister "I get out" NR0Q for finding this one
+			
+Logging:
+	Local Files(s)
+		Details:
+			Filename now has a tooltip with the full file path
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 
 Thank you for reading the entire update! 
+
 
 
 
@@ -83,6 +92,9 @@ Mention "phone-sofa" in any forum I read and I'll send you a GridTracker token
 to the address associated with your callsign lookup
 
 Please don't mention this easter-egg to anyone. I want to see who reads the update
-</pre>
 
+To the 21 of you out of 650-ish, who downloaded and read the update in v1.20.0819: 
+	I salute you! And I'll be shipping out tokens when I get a chance! Thank you!
+
+</pre>
 <center><img class="button" src="./img/tokens.jpg" width="400px"></center>

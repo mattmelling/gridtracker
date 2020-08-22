@@ -1,8 +1,8 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200819;
-var gtBeta = "r4";
+var gtVersion = 1200821;
+var gtBeta = "";
 
 var g_startVersion = 0;
 
@@ -95,8 +95,6 @@ function loadAllSettings()
 	g_callsignLookups = loadDefaultsAndMerge("callsignLookups", def_callsignLookups);
 	g_bandActivity =  loadDefaultsAndMerge("bandActivity", def_bandActivity);
 	
-	g_receptionReports = loadObjectIfExists("receptionReports");	
-
 	g_startupLogs = loadArrayIfExists("startupLogs");
 	g_mapMemory = loadArrayIfExists("mapMemory");
 
@@ -111,7 +109,7 @@ function loadAllSettings()
 		}
 		g_appSettings.mapMemory = JSON.stringify(g_mapMemory);
 	}
-
+	
 }
 
 loadAllSettings();
@@ -205,6 +203,8 @@ function saveAndCloseApp()
 {
 		g_closing = true;
 
+		saveReceptionReports();
+
 		try 
 		{
 			var data = {};
@@ -218,6 +218,8 @@ function saveAndCloseApp()
 			data.version = gtVersion;
 
 			fs.writeFileSync(g_jsonDir + "internal_qso.json", JSON.stringify(data) );	
+			
+			
 		}
 		catch (e) 
 		{
@@ -280,11 +282,12 @@ function clearAndReload() {
 
 {
 	win.hide();
-	win.setMinimumSize(400, 600);
+	
 	win.on('close', function () {
 		saveAndCloseApp();
 	});
 	win.show();
+	win.setMinimumSize(200, 600);
 }
 
 
@@ -431,8 +434,8 @@ var g_countyData = {};
 var g_zipToCounty = {};
 var g_stateToCounty = {};
 var g_cntyToCounty = {};
-var g_ffmaData = {};
-var g_gmaaData = {};
+var g_us48Data = {};
+
 
 
 var g_startupFunctions = Array();
@@ -531,19 +534,19 @@ g_trophyImageArray[3] = "./img/wac_trophy.png";
 g_trophyImageArray[4] = "./img/was_trophy.png";
 g_trophyImageArray[5] = "./img/dxcc_trophy.png";
 g_trophyImageArray[6] = "./img/usc_trophy.png";
-g_trophyImageArray[7] = "./img/ffma_trophy.png";
-g_trophyImageArray[8] = "./img/gma_trophy.png";
+g_trophyImageArray[7] = "./img/us48_trophy.png";
+
 		
 var g_viewInfo = {};
 g_viewInfo[0] = ["g_qsoGrids","Grids",0,0,0];
 g_viewInfo[1] = ["g_cqZones","CQ Zones",0,0,40];
 g_viewInfo[2] = ["g_ituZones","ITU Zones",0,0,90];
 g_viewInfo[3] = ["g_wacZones","Continents",0,0,7];
-g_viewInfo[4] = ["g_wasZones","U.S. States",0,0,50];
+g_viewInfo[4] = ["g_wasZones","US States",0,0,50];
 g_viewInfo[5] = ["g_worldGeoData","DXCCs",0,0,340];
-g_viewInfo[6] = ["g_countyData", "U.S. Counties",0,0,3220];
-g_viewInfo[7] = ["g_ffmaData", "Fred Fish Memorial Award",0,0,488];
-g_viewInfo[8] = ["g_gmaaData", " AMSAT GridMaster Award",0,0,488];
+g_viewInfo[6] = ["g_countyData", "US Counties",0,0,3220];
+g_viewInfo[7] = ["g_us48Data", "US Continental Grids",0,0,488];
+
 
 var g_spotImageArray = Array();
 g_spotImageArray[0] = "./img/psk_spots_off.png";
@@ -575,6 +578,13 @@ function gtBandFilterChanged(selector) {
 
 function gtModeFilterChanged(selector) {
 	g_appSettings.gtModeFilter = selector.value;
+
+	redrawGrids();
+	redrawSpots();
+}
+
+function gtPropFilterChanged(selector) {
+	g_appSettings.gtPropFilter = selector.value;
 
 	redrawGrids();
 	redrawSpots();
@@ -1206,7 +1216,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		if (
 			(g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' ? myBand ==
 					band : g_appSettings.gtBandFilter == band)) &&
-			(validateMapMode(mode))) {
+			(validateMapMode(mode)) && validatePropMode(finalPropMode)) {
 			details.rect = qthToQsoBox(finalGrid, hash, cq, cqdx, locked, finalDEcall, worked, didConfirm, band,
 					wspr);
 		}
@@ -1618,9 +1628,9 @@ function createSpotTipTable(toolElement) {
 	var now = timeNowSec();
 	var myTooltip = document.getElementById("myTooltip");
 	var worker = "";
-	if (toolElement.spot in g_receptionReports) {
+	if (toolElement.spot in g_receptionReports.spots) {
 		g_layerSources["psk-hop"].clear();
-		var report = g_receptionReports[toolElement.spot];
+		var report = g_receptionReports.spots[toolElement.spot];
 
 		var LL = squareToLatLongAll(myRawGrid);
 		var Lat = LL.la2 - ((LL.la2 - LL.la1) / 2);
@@ -2289,7 +2299,7 @@ function registerHotKeys() {
 	registerHotKey("KeyG", toggleGtMap);
 	registerHotKey("KeyH", toggleHeatSpots);
 	registerHotKey("KeyI", showRootInfoBox);
-	registerHotKey("KeyJ", setTrophyOverlay, 8);
+	//registerHotKey("KeyJ", setTrophyOverlay, 8);
 	registerHotKey("KeyK", makeScreenshots);
 	registerHotKey("KeyL", adifLoadDialog);
 	registerHotKey("KeyM", toggleAlertMute);
@@ -2381,7 +2391,7 @@ var g_currentOverlay = 0;
 
 function cycleTrophyOverlay() {
 	g_currentOverlay++;
-	g_currentOverlay %= 9;
+	g_currentOverlay %= 8;
 
 	setTrophyOverlay(g_currentOverlay);
 }
@@ -2593,7 +2603,7 @@ function setTrophyOverlay(which) {
 		}
 	}
 	if (which == 7) {
-		for (key in g_ffmaData) 
+		for (key in g_us48Data) 
 		{
 			var	LL = squareToLatLong(key);
 			var bounds = [
@@ -2604,48 +2614,22 @@ function setTrophyOverlay(which) {
 			var boxColor = "#FF000015"
 			var borderColor = "#0000FFFF";
 			var borderWeight = 0.1;
-			if (g_ffmaData[key].confirmed) 
+			if (g_us48Data[key].confirmed) 
 			{
 				boxColor = '#00FF0066';
 				borderWeight = 0.2;
 			} 
-			else if (g_ffmaData[key].worked) 
+			else if (g_us48Data[key].worked) 
 			{
 				boxColor = '#FFFF0066';
 				borderWeight = 0.2;
 			}
 
-			g_currentShapes[key] = gridFeature(key, rectangle(bounds), "ffma", boxColor, borderColor, borderWeight);
+			g_currentShapes[key] = gridFeature(key, rectangle(bounds), "us48", boxColor, borderColor, borderWeight);
 			g_layerSources["award"].addFeature(g_currentShapes[key]);
 		}
 	}
-	if (which == 8) {
-		for (key in g_gmaaData) 
-		{
-			var	LL = squareToLatLong(key);
-			var bounds = [
-				[LL.lo1, LL.la1],
-				[LL.lo2, LL.la2]
-			];
-				
-			var boxColor = "#FF000020"
-			var borderColor = "#0000FFFF";
-			var borderWeight = 0.1;
-			if (g_gmaaData[key].confirmed) 
-			{
-				boxColor = '#00FF0066';
-				borderWeight = 0.2;
-			} 
-			else if (g_gmaaData[key].worked) 
-			{
-				boxColor = '#FFFF0066';
-				borderWeight = 0.2;
-			}
 
-			g_currentShapes[key] = gridFeature(key, rectangle(bounds), "gmaa", boxColor, borderColor, borderWeight);
-			g_layerSources["award"].addFeature(g_currentShapes[key]);
-		}
-	}
 	updateSpotView(true);
 
 }
@@ -2763,28 +2747,9 @@ function trophyOver(feature) {
 		infoObject = g_countyData[name];
 		name = infoObject.geo.properties.n + ", " + infoObject.geo.properties.st;
 	}
-	if (key == "ffma") {
-		trophy = "Fred Fish Memorial Award";
-		infoObject = g_ffmaData[feature.get('grid')];
-		name = feature.get('grid');
-		
-		if (name in g_gridToState) {
-			zone = "";
-			for (var x = 0; x < g_gridToDXCC[name].length; x++) {
-				if (name in g_gridToState) {
-					for (var y = 0; y < g_gridToState[name].length; y++) {
-						if (g_gridToDXCC[name][x] == g_StateData[g_gridToState[name][y]].dxcc && g_gridToDXCC[name][x] == 291) {
-							zone += g_StateData[g_gridToState[name][y]].name + ", ";
-						}
-					}
-				}
-			}
-			zone = zone.substr(0,zone.length-2);7
-		}	
-	}
-	if (key == "gmaa") {
-		trophy = "AMSAT GridMaster Award";
-		infoObject = g_gmaaData[feature.get('grid')];
+	if (key == "us48") {
+		trophy = "US Continental Grids";
+		infoObject = g_us48Data[feature.get('grid')];
 		name = feature.get('grid');
 		
 		if (name in g_gridToState) {
@@ -2801,6 +2766,7 @@ function trophyOver(feature) {
 			zone = zone.substr(0,zone.length-2);
 		}	
 	}
+
 
 	var worker = "<table>";
 	worker += "<tr><th colspan=2 >" + trophy + "</th></tr>";
@@ -3031,7 +2997,7 @@ function mouseOverDataItem(mouseEvent, fromHover) {
 	var top = 0;
 	var noRoomLeft = false;
 	var noRoomRight = false;
-	if (typeof mouseEvent.spot != "undefined" && g_receptionReports[mouseEvent.spot].bearing > 180)
+	if (typeof mouseEvent.spot != "undefined" && g_receptionReports.spots[mouseEvent.spot].bearing > 180)
 		noRoomRight = true;
 	myTooltip.style.left = (getMouseX() + 15) + 'px';
 	top = parseInt((getMouseY() - 20 - ((callListLength / 2) * 25)));
@@ -3061,7 +3027,7 @@ function mouseMoveDataItem(mouseEvent) {
 	var top = 0;
 	var noRoomLeft = false;
 	var noRoomRight = false;
-	if (typeof mouseEvent.spot != "undefined" && g_receptionReports[mouseEvent.spot].bearing > 180)
+	if (typeof mouseEvent.spot != "undefined" && g_receptionReports.spots[mouseEvent.spot].bearing > 180)
 		noRoomRight = true;
 	myTooltip.style.left = (getMouseX() + 15) + 'px';
 	top = Number(myTooltip.style.top);
@@ -4010,22 +3976,15 @@ function clearQsoGrids() {
 		g_countyData[key].worked_modes = {};
 		g_countyData[key].confirmed_modes = {};
 	}
-	for (var key in g_ffmaData) {
-		g_ffmaData[key].worked = false;
-		g_ffmaData[key].confirmed = false;
-		g_ffmaData[key].worked_bands = {};
-		g_ffmaData[key].confirmed_bands = {};
-		g_ffmaData[key].worked_modes = {};
-		g_ffmaData[key].confirmed_modes = {};
+	for (var key in g_us48Data) {
+		g_us48Data[key].worked = false;
+		g_us48Data[key].confirmed = false;
+		g_us48Data[key].worked_bands = {};
+		g_us48Data[key].confirmed_bands = {};
+		g_us48Data[key].worked_modes = {};
+		g_us48Data[key].confirmed_modes = {};
 	}
-	for (var key in g_gmaaData) {
-		g_gmaaData[key].worked = false;
-		g_gmaaData[key].confirmed = false;
-		g_gmaaData[key].worked_bands = {};
-		g_gmaaData[key].confirmed_bands = {};
-		g_gmaaData[key].worked_modes = {};
-		g_gmaaData[key].confirmed_modes = {};
-	}
+
 }
 
 function clearCalls() {
@@ -5179,10 +5138,10 @@ function initiateQso(thisCall) {
 
 function spotLookupAndSetCall( spot )
 {
-	var call =  g_receptionReports[spot].call;
-	var grid =  g_receptionReports[spot].grid;
-	var band =  g_receptionReports[spot].band;
-	var mode =  g_receptionReports[spot].mode;
+	var call =  g_receptionReports.spots[spot].call;
+	var grid =  g_receptionReports.spots[spot].grid;
+	var band =  g_receptionReports.spots[spot].band;
+	var mode =  g_receptionReports.spots[spot].mode;
 	for ( var instance in g_instances )
 	{
 		if (  g_instances[instance].valid && g_instances[instance].status.Band == band && g_instances[instance].status.MO == mode ) 
@@ -8601,6 +8560,14 @@ function createStatTable(title, infoObject, awardName)
 	return wc1Table;
 }
 
+function validatePropMode( propMode )
+{
+	if ( g_appSettings.gtPropFilter == "mixed"  )
+		return true;
+	
+	return (g_appSettings.gtPropFilter == propMode);
+}
+
 function validateMapMode( mode )
 {
 	if ( g_appSettings.gtModeFilter.length == 0  )
@@ -8649,118 +8616,10 @@ function redrawGrids() {
 		if ( didConfirm )
 			g_QSLcount++;
 		
-		if (finalGrid.length > 0 ) 
-		{
-			var gridCheck = finalGrid.substr(0, 4);
-			if ( band == "6m" )
-			{
-				if ( gridCheck in g_ffmaData )
-				{
-					if ( g_ffmaData[gridCheck].worked == false  )
-					{
-						g_ffmaData[gridCheck].worked = worked;
-					}
-					if (worked)
-					{
-						g_ffmaData[gridCheck].worked_bands["6m"] = ~~g_ffmaData[gridCheck].worked_bands["6m"] + 1;
-						g_ffmaData[gridCheck].worked_modes[mode] = ~~g_ffmaData[gridCheck].worked_modes[mode] + 1;
-					}
-					if ( g_ffmaData[gridCheck].confirmed == false  )
-					{
-						g_ffmaData[gridCheck].confirmed = didConfirm;
-					}
-					if (didConfirm)
-					{
-						g_ffmaData[gridCheck].confirmed_bands["6m"] = ~~g_ffmaData[gridCheck].confirmed_bands["6m"] + 1;
-						g_ffmaData[gridCheck].confirmed_modes[mode] = ~~g_ffmaData[gridCheck].confirmed_modes[mode] + 1;
-					}
-					
-				}
-				for ( var key in g_QSOhash[i].vucc_grids )
-				{
-					var grid = g_QSOhash[i].vucc_grids[key].substr(0, 4);
-					if ( grid in g_ffmaData )
-					{
-						if ( g_ffmaData[grid].worked == false  )
-						{
-							g_ffmaData[grid].worked = worked;
-						}
-						if (worked)
-						{
-							g_ffmaData[grid].worked_bands["6m"] = ~~g_ffmaData[grid].worked_bands["6m"] + 1;
-							g_ffmaData[grid].worked_modes[mode] = ~~g_ffmaData[grid].worked_modes[mode] + 1;
-						}
-						if ( g_ffmaData[grid].confirmed == false  )
-						{
-							g_ffmaData[grid].confirmed = didConfirm;
-						}
-						if (didConfirm)
-						{
-							g_ffmaData[grid].confirmed_bands["6m"] = ~~g_ffmaData[grid].confirmed_bands["6m"] + 1;
-							g_ffmaData[grid].confirmed_modes[mode] = ~~g_ffmaData[grid].confirmed_modes[mode] + 1;
-						}
-						
-					}
-				}
-			}
-			if ( g_QSOhash[i].propMode == "SAT" )
-			{
-				if ( gridCheck in g_gmaaData )
-				{
-					if ( g_gmaaData[gridCheck].worked == false  )
-					{
-						g_gmaaData[gridCheck].worked = worked;
-					}
-					if (worked)
-					{
-						g_gmaaData[gridCheck].worked_bands[band] = ~~g_gmaaData[gridCheck].worked_bands[band] + 1;
-						g_gmaaData[gridCheck].worked_modes[mode] = ~~g_gmaaData[gridCheck].worked_modes[mode] + 1;
-					}
-					if ( g_gmaaData[gridCheck].confirmed == false  )
-					{
-						g_gmaaData[gridCheck].confirmed = didConfirm;
-					}
-					if (didConfirm)
-					{
-						g_gmaaData[gridCheck].confirmed_bands[band] = ~~g_gmaaData[gridCheck].confirmed_bands[band] + 1;
-						g_gmaaData[gridCheck].confirmed_modes[mode] = ~~g_gmaaData[gridCheck].confirmed_modes[mode] + 1;
-					}
-					
-				}
-				for ( var key in g_QSOhash[i].vucc_grids )
-				{
-					var grid = g_QSOhash[i].vucc_grids[key].substr(0, 4);
-					if ( grid in g_gmaaData )
-					{
-						if ( g_gmaaData[grid].worked == false  )
-						{
-							g_gmaaData[grid].worked = worked;
-						}
-						if (worked)
-						{
-							g_gmaaData[grid].worked_bands[band] = ~~g_gmaaData[grid].worked_bands[band] + 1;
-							g_gmaaData[grid].worked_modes[mode] = ~~g_gmaaData[grid].worked_modes[mode] + 1;
-						}
-						if ( g_gmaaData[grid].confirmed == false  )
-						{
-							g_gmaaData[grid].confirmed = didConfirm;
-						}
-						if (didConfirm)
-						{
-							g_gmaaData[grid].confirmed_bands[band] = ~~g_gmaaData[grid].confirmed_bands[band] + 1;
-							g_gmaaData[grid].confirmed_modes[mode] = ~~g_gmaaData[grid].confirmed_modes[mode] + 1;
-						}
-						
-					}
-				}
-			}
-		}
-			
-
 				
 		if ((g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' ? myBand ==
 					g_QSOhash[i].band : g_appSettings.gtBandFilter == g_QSOhash[i].band)) &&
-					validateMapMode(g_QSOhash[i].mode) ) 
+					validateMapMode(g_QSOhash[i].mode) && validatePropMode(g_QSOhash[i].propMode)) 
 			{
 				
 			
@@ -8871,6 +8730,29 @@ function redrawGrids() {
 			{
 				var gridCheck = finalGrid.substr(0, 4);
 
+				if ( finalDxcc == 291 && gridCheck in g_us48Data )
+				{
+					if ( g_us48Data[gridCheck].worked == false  )
+					{
+						g_us48Data[gridCheck].worked = worked;
+					}
+					if (worked)
+					{
+						g_us48Data[gridCheck].worked_bands[band] = ~~g_us48Data[gridCheck].worked_bands[band] + 1;
+						g_us48Data[gridCheck].worked_modes[mode] = ~~g_us48Data[gridCheck].worked_modes[mode] + 1;
+					}
+					if ( g_us48Data[gridCheck].confirmed == false  )
+					{
+						g_us48Data[gridCheck].confirmed = didConfirm;
+					}
+					if (didConfirm)
+					{
+						g_us48Data[gridCheck].confirmed_bands[band] = ~~g_us48Data[gridCheck].confirmed_bands[band] + 1;
+						g_us48Data[gridCheck].confirmed_modes[mode] = ~~g_us48Data[gridCheck].confirmed_modes[mode] + 1;
+					}
+					
+				}
+				
 				if (cqz.length > 0) {
 
 					if (g_cqZones[cqz].worked == false) {
@@ -8939,6 +8821,36 @@ function redrawGrids() {
 							g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_bands[band] = ~~g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_bands[band] + 1;
 							g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_modes[mode] = ~~g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_modes[mode] + 1;
 						}
+					}
+				}
+			}
+			
+			if ( finalDxcc == 291 )
+			{
+				for ( var key in g_QSOhash[i].vucc_grids )
+				{
+					var grid = g_QSOhash[i].vucc_grids[key].substr(0, 4);
+					if ( grid in g_us48Data )
+					{
+						if ( g_us48Data[grid].worked == false  )
+						{
+							g_us48Data[grid].worked = worked;
+						}
+						if (worked)
+						{
+							g_us48Data[grid].worked_bands[band] = ~~g_us48Data[grid].worked_bands[band] + 1;
+							g_us48Data[grid].worked_modes[mode] = ~~g_us48Data[grid].worked_modes[mode] + 1;
+						}
+						if ( g_us48Data[grid].confirmed == false  )
+						{
+							g_us48Data[grid].confirmed = didConfirm;
+						}
+						if (didConfirm)
+						{
+							g_us48Data[grid].confirmed_bands[band] = ~~g_us48Data[grid].confirmed_bands[band] + 1;
+							g_us48Data[grid].confirmed_modes[mode] = ~~g_us48Data[grid].confirmed_modes[mode] + 1;
+						}
+						
 					}
 				}
 			}
@@ -10034,23 +9946,14 @@ function loadMaidenHeadData() {
 				{
 					var sqr = g_worldGeoData[key].mh[mh];
 				
-					g_ffmaData[sqr] = {};
-					g_ffmaData[sqr].name = sqr;
-					g_ffmaData[sqr].worked = false;
-					g_ffmaData[sqr].confirmed = false;
-					g_ffmaData[sqr].worked_bands = {};
-					g_ffmaData[sqr].confirmed_bands = {};
-					g_ffmaData[sqr].worked_modes = {};
-					g_ffmaData[sqr].confirmed_modes = {};
-					
-					g_gmaaData[sqr] = {};
-					g_gmaaData[sqr].name = sqr;
-					g_gmaaData[sqr].worked = false;
-					g_gmaaData[sqr].confirmed = false;
-					g_gmaaData[sqr].worked_bands = {};
-					g_gmaaData[sqr].confirmed_bands = {};
-					g_gmaaData[sqr].worked_modes = {};
-					g_gmaaData[sqr].confirmed_modes = {};
+					g_us48Data[sqr] = {};
+					g_us48Data[sqr].name = sqr;
+					g_us48Data[sqr].worked = false;
+					g_us48Data[sqr].confirmed = false;
+					g_us48Data[sqr].worked_bands = {};
+					g_us48Data[sqr].confirmed_bands = {};
+					g_us48Data[sqr].worked_modes = {};
+					g_us48Data[sqr].confirmed_modes = {};
 				}
 			}
 			
@@ -10846,6 +10749,7 @@ function setPins() {
 function loadViewSettings() {
 	gtBandFilter.value = g_appSettings.gtBandFilter;
 	gtModeFilter.value = g_appSettings.gtModeFilter;
+	gtPropFilter.value = g_appSettings.gtPropFilter;
 	distanceUnit.value = g_appSettings.distanceUnit;
 	N1MMIpInput.value = g_N1MMSettings.ip;
 	N1MMPortInput.value = g_N1MMSettings.port;
@@ -11204,11 +11108,11 @@ function init()
 		documentsDiv.style.display = "none";
 		startupDiv.style.display = "block";
 		startupStatusDiv.innerHTML = "Starting...";
-		setTimeout(startupEngine, 50);
 		openStatsWindow(false);
 		openLookupWindow(false);
 		openBaWindow(false);
 		openCallRosterWindow(false);
+		setTimeout(startupEngine, 10);
 	}
 }
 
@@ -11218,7 +11122,7 @@ function startupEngine()
 		var funcInfo = g_startupTable.shift();
 		funcInfo[0]();
 		startupStatusDiv.innerHTML = funcInfo[1];
-		setTimeout(startupEngine, 50);
+		setTimeout(startupEngine, 10);
 	} else {
 		startupStatusDiv.innerHTML = "Completed";
 		startupAdifLoadCheck();
@@ -12778,10 +12682,12 @@ function mediaCheck() {
 			delete data;
 			fs.unlinkSync(g_jsonDir + "internal_qso.json");
 		}
+		loadReceptionReports();
 	}
 	catch (e)
 	{
 	}
+	
 	return true;
 }
 
@@ -12800,6 +12706,49 @@ function setRosterSpot( enabled )
 	g_rosterSpot = enabled;
 }
 
+function saveReceptionReports()
+{
+	try {
+		fs.writeFileSync(g_jsonDir + "spots.json", JSON.stringify(g_receptionReports) );	
+	}
+	catch (e)
+	{
+	}	
+}
+
+function loadReceptionReports()
+{
+	
+	try {
+		var clear = true;
+		if (fs.existsSync(g_jsonDir + "spots.json") )
+		{
+			g_receptionReports = JSON.parse(fs.readFileSync(g_jsonDir + "spots.json"));
+			if ( timeNowSec() - g_receptionReports.lastDownloadTimeSec <= 86400 )
+				clear = false;
+		}
+		
+		if ( clear == true )
+		{
+			g_receptionReports = 
+			{
+				"lastDownloadTimeSec" : 0,
+				"lastSequenceNumber" : "0",
+				"spots" : {}
+			};
+		}
+	}
+	catch (e)
+	{
+		g_receptionReports = 
+		{
+			"lastDownloadTimeSec" : 0,
+			"lastSequenceNumber" : "0",
+			"spots" : {}
+		};
+	}
+}
+
 function pskSpotCheck(timeSec) {
 	if (g_mapSettings.offlineMode == true)
 		return;
@@ -12807,28 +12756,27 @@ function pskSpotCheck(timeSec) {
 	if (myDEcall == null || myDEcall == "NOCALL" || myDEcall == "")
 		return;
 
-	if (timeSec - g_receptionSettings.lastDownloadTimeSec > 120 && (g_spotsEnabled || g_rosterSpot) ) {
-		g_receptionSettings.lastDownloadTimeSec = timeSec;
+	if (timeSec - g_receptionReports.lastDownloadTimeSec > 120 && (g_spotsEnabled || g_rosterSpot) ) {
+		g_receptionReports.lastDownloadTimeSec = timeSec;
 		localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
 		spotRefreshDiv.innerHTML = "..refreshing..";
-		getBuffer("https://retrieve.pskreporter.info/query?rronly=1&lastseqno=" + g_receptionSettings.lastSequenceNumber + "&senderCallsign=" + encodeURIComponent(myRawCall) + "&appcontact=" + encodeURIComponent("tag.loomis@gmail.com"),
+		getBuffer("https://retrieve.pskreporter.info/query?rronly=1&lastseqno=" + g_receptionReports.lastSequenceNumber + "&senderCallsign=" + encodeURIComponent(myRawCall) + "&appcontact=" + encodeURIComponent("tag.loomis@gmail.com"),
 			pskSpotResults, null, "https", 443);
 	} else if (g_spotsEnabled) {
 
-		spotRefreshDiv.innerHTML = "Refresh: " + Number(120 - (timeSec - g_receptionSettings.lastDownloadTimeSec)).toDHMS();
+		spotRefreshDiv.innerHTML = "Refresh: " + Number(120 - (timeSec - g_receptionReports.lastDownloadTimeSec)).toDHMS();
 	}
 
 }
 
 function pskSpotResults(buffer, flag) {
-	var shouldSave = false;
 	var oParser = new DOMParser();
 	var oDOM = oParser.parseFromString(buffer, "text/xml");
 	var result = "";
 	if (oDOM != null) {
 		var json = XML2jsobj(oDOM.documentElement);
 		if (typeof json.lastSequenceNumber != "undefined") {
-			g_receptionSettings.lastSequenceNumber = json.lastSequenceNumber.value;
+			g_receptionReports.lastSequenceNumber = json.lastSequenceNumber.value;
 	
 			if (typeof json.receptionReport != "undefined") {
 				for (var key in json.receptionReport) {
@@ -12840,20 +12788,20 @@ function pskSpotResults(buffer, flag) {
 						var band = Number(parseInt(json.receptionReport[key].frequency) / 1000000).formatBand();
 						var hash = call + mode + band + grid.substr(0,4);
 
-						if (hash in g_receptionReports) {
-							report = g_receptionReports[hash];
+						if (hash in g_receptionReports.spots) {
+							report = g_receptionReports.spots[hash];
 							if (parseInt(json.receptionReport[key].flowStartSeconds) < report.when)
 								continue;
 						} else {
-							report = g_receptionReports[hash] = {};
+							report = g_receptionReports.spots[hash] = {};
 							report.call = call;
 							report.band = band;
 							report.grid = grid;
 							report.mode = mode;
 
 						}
-						if (typeof json.receptionReport[key].receiverDXCCCode != "undefined")
-							report.dxcc = callsignToDxcc(json.receptionReport[key].receiverDXCCCode);
+						if (typeof json.receptionReport[key].receiverCallsign != "undefined")
+							report.dxcc = callsignToDxcc(json.receptionReport[key].receiverCallsign);
 						else
 							report.dxcc = -1;
 						report.when = parseInt(json.receptionReport[key].flowStartSeconds);
@@ -12867,7 +12815,7 @@ function pskSpotResults(buffer, flag) {
 							SNR = 0;
 						report.color = SNR;
 
-						shouldSave = true;
+
 					}
 				}
 			}
@@ -12875,12 +12823,10 @@ function pskSpotResults(buffer, flag) {
 		}
 	}
 
-	g_receptionSettings.lastDownloadTimeSec = timeNowSec();
+	g_receptionReports.lastDownloadTimeSec = timeNowSec();
 
 	localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
-	if (shouldSave) {
-		localStorage.receptionReports = JSON.stringify(g_receptionReports);
-	}
+
 	redrawSpots();
 	if ( g_rosterSpot )
 		goProcessRoster();
@@ -12909,11 +12855,11 @@ function redrawSpots() {
 		g_layerSources["psk-heat"].addFeature(spot);
 	}
 
-	for (var key in g_receptionReports) {
-		report = g_receptionReports[key];
+	for (var key in g_receptionReports.spots) {
+		report = g_receptionReports.spots[key];
 
 		if (now - report.when > 86400) {
-			delete g_receptionReports[key];
+			delete g_receptionReports.spots[key];
 			shouldSave = true;
 			continue;
 		}
@@ -12988,7 +12934,7 @@ function redrawSpots() {
 			}
 	}
 	if (shouldSave) {
-		localStorage.receptionReports = JSON.stringify(g_receptionReports);
+		saveReceptionReports();
 	}
 	spotCountDiv.innerHTML = "Spots: " + count;
 }
@@ -13187,9 +13133,9 @@ function setRosterTimeView() {
 
 function getSpotTime( hash )
 {
-	if (hash in g_receptionReports) 
+	if (hash in g_receptionReports.spots) 
 	{
-		return g_receptionReports[hash];
+		return g_receptionReports.spots[hash];
 	}
 	else 
 		return null;

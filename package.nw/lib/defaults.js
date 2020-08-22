@@ -7,9 +7,11 @@ var validSettings =
 	"alertSettings",
 	"appSettings",
 	"audioSettings",
+	"awardTracker",
+	"bandActivity",
+	"blockedCQ",
 	"blockedCalls",
 	"blockedDxcc",
-	"blockedCQ",
 	"callsignLookups",
 	"classicAlerts",
 	"classicAlertsVersion",
@@ -19,15 +21,12 @@ var validSettings =
 	"mapMemory",
 	"mapSettings",
 	"msgSettings",
-	"receptionReports",
 	"receptionSettings",
 	"rosterSettings",
 	"savedAlerts",
 	"speechSettings",
 	"startupLogs",
 	"trustedQslSettings",
-	"bandActivity",
-	"awardTracker"
 ];
 
 var def_appSettings = 
@@ -46,6 +45,7 @@ var def_appSettings =
 	"gtBandFilter" : "auto",
 	"gtFlagImgSrc" : 0,
 	"gtModeFilter" : "auto",
+	"gtPropFilter" : "mixed",
 	"gtMsgEnable" : true,
 	"gtShareEnable" : true,
 	"heatEnabled" : 0,
@@ -185,6 +185,7 @@ var def_msgSettings =
 	"msgAwayText" :  "I am away from the shack at the moment"
 
 };
+
 var def_receptionSettings = 
 {
 	"lastSequenceNumber" :  "0", // Treat as a string, it's friggin big
@@ -240,11 +241,11 @@ var def_trustedQslSettings =
 };
 var def_callsignLookups = 
 {
-	"lotwUseEnable" :  false,
-	"lotwWeeklyEnable" :  false,
+	"lotwUseEnable" :  true,
+	"lotwWeeklyEnable" :  true,
 	"lotwLastUpdate" :  0,
-	"eqslUseEnable" :  false,
-	"eqslWeeklyEnable" :  false,
+	"eqslUseEnable" :  true,
+	"eqslWeeklyEnable" :  true,
 	"eqslLastUpdate" :  0,
 	"ulsUseEnable" :  true,
 	"ulsWeeklyEnable" :  true,

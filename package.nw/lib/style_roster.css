@@ -103,8 +103,11 @@ option:disabled
 .controlItem
 {
 	-webkit-appearance: none;
-	margin:2px;
-	padding:2px;
+	margin:0;
+	padding:0;
+	padding-top:1px;
+	margin-top:1px;
+	margin-bottom:1px;
 	border-width:1px;
 	border-color:#AAA;
 	border-style:inset;
@@ -179,11 +182,11 @@ table.darkTable thead th:first-child {
 }
 
 .dxCaller {
-	background-clip:content-box;box-shadow: 0 0 8px 3px inset lightgreen;background-color:#000;color:#FF0;
+	background-clip:content-box;box-shadow: 0 0 4px 4px inset #0F0;background-color:#000;color:#FF0;
 }
 
 .dxCalling {
-	background-clip:content-box;box-shadow: 0 0 8px 3px inset #F00;background-color:#000;color:#FF0;
+	background-clip:content-box;box-shadow: 0 0 4px 4px inset #F00;background-color:#000;color:#FF0;
 }
 
 
@@ -192,16 +195,17 @@ table.darkTable thead th:first-child {
 	cursor:pointer;
 	margin:0px;
 	padding:0px;
-	margin-right:1px;
-	margin-bottom:1px;
-	border-width:1px;
+	margin-right:2px;
+	margin-bottom:2px;
+	border-width:2px;
 	border-color:#999;
 	border-style:outset;
-	min-width: 5.5em;
-
+	min-width: 9em;
+	min-height: 2em;
 	display:inline-block;
 	color:#EEE;
 	-webkit-transition: border-style;
+	-webkit-border-radius:4px; 
 }
 
 .compact:active
@@ -211,4 +215,18 @@ table.darkTable thead th:first-child {
 
 .compact:hover {
 	border-color:#FFF;
+}
+
+.compactCallsign {
+	padding:3px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.compactDXCC {
+	padding:3px;
+	max-width: 9em;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }

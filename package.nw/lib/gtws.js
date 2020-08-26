@@ -390,7 +390,7 @@ function makeGtPin( obj )
 		obj.pin = null;
 	}
 
-	if (typeof obj.grid == 'undefined' || typeof obj.grid == null )
+	if (typeof obj.grid == 'undefined' ||  obj.grid == null )
 		return;
 	
 	if ( obj.grid.length != 4 && obj.grid.length != 6 )

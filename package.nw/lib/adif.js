@@ -95,6 +95,11 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 				var finalVucc = [];
 				var finalDXcall = findAdiField(activeAdifArray[x], "CALL").replace("_","/");
 				var finalDEcall = findAdiField(activeAdifArray[x], "STATION_CALLSIGN").replace("_","/");
+				
+				if ( finalDEcall == "" )
+					finalDEcall = myDEcall;
+				if ( g_appSettings.workingCallsignEnable && !(finalDEcall in g_appSettings.workingCallsigns) )
+					continue;
 				var finalRSTsent = findAdiField(activeAdifArray[x], "RST_SENT");
 				var finalRSTrecv = findAdiField(activeAdifArray[x], "RST_RCVD");
 				var finalBand = findAdiField(activeAdifArray[x], "BAND").toLowerCase();
@@ -147,9 +152,7 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 					finalDxcc = Number(callsignToDxcc( finalDXcall ));
 				
 				// If my callsign isn't present, it must be for me anyway
-				if ( finalDEcall == "" )
-					finalDEcall = myDEcall;
-				
+
 				var finalCqZone = findAdiField(activeAdifArray[x], "CQZ");
 				if ( finalCqZone.length == 1 )
 					finalCqZone = "0" + finalCqZone;
@@ -177,6 +180,10 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 				var dateTime = new Date(Date.UTC(dateVal.substr(0,4), parseInt(dateVal.substr(4,2))-1,dateVal.substr(6,2), timeVal.substr(0,2), timeVal.substr(2,2),timeVal.substr(4,2)));
 				
 				var finalTime = parseInt(dateTime.getTime()/1000);
+				
+				if ( g_appSettings.workingDateEnable && finalTime < g_appSettings.workingDate )
+					continue;
+				
 				finalGrid = finalGrid.substr(0,6);
 				if (  !validateGridFromString(finalGrid) )
 					finalGrid = "";

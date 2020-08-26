@@ -7,7 +7,7 @@
 	"toolbar" : false,
 	"show" : false,
 	"width" : 800,
-	"height" : 640
+	"height" : 652
 	},
  "webkit": {
     "plugin": true

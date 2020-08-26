@@ -41,6 +41,9 @@ var g_regFocus = false;
 var g_awards = {};
 var g_awardTypes = {};
 var g_awardTracker = {};
+var g_callsignDatabaseDXCC = {};
+var g_callsignDatabaseUS = {}
+var g_callsignDatabaseUSplus = {};
 
 
 var g_modeColors = {};
@@ -197,6 +200,30 @@ function writeRosterSettings()
 	localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
 }
 	
+function isKnownCallsignDXCC(dxcc)
+{
+	if ( dxcc in g_callsignDatabaseDXCC ) 
+		return true;
+	return false;
+	
+}
+
+function isKnownCallsignUS(dxcc)
+{
+	if ( dxcc in g_callsignDatabaseUS ) 
+		return true;
+	return false;
+	
+}
+
+function isKnownCallsignUSplus(dxcc)
+{
+	if ( dxcc in g_callsignDatabaseUSplus ) 
+		return true;
+	return false;
+	
+}
+
 function timeNowSec()
 {
     return parseInt(Date.now() / 1000);
@@ -427,6 +454,7 @@ function viewRoster()
 	var callMode = g_rosterSettings.callsign;
 	var onlyHits = false;
 	var isAwardTracker = false;
+
 	if ( callMode == "hits" )
 	{
 		callMode = "all";
@@ -438,6 +466,7 @@ function viewRoster()
 		onlyHits = false;
 		isAwardTracker = true;
 		g_rosterSettings.huntNeed = "confirmed";
+		
 	}
 	
 	var canMsg = (window.opener.g_mapSettings.offlineMode == false && window.opener.g_appSettings.gtShareEnable == "true" && window.opener.g_appSettings.gtMsgEnable == "true" );
@@ -859,7 +888,6 @@ function viewRoster()
 
 			}
 			callRoster[callHash].tx = tx;
-
 		}
 	}
 	
@@ -1067,7 +1095,7 @@ function viewRoster()
 				if ( huntCounty.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true )
 				{
 					var finalDxcc = callRoster[callHash].callObj.dxcc;
-					if ( callRoster[callHash].callObj.cnty && ( finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6) && callRoster[callHash].callObj.cnty.length > 0 )
+					if ( callRoster[callHash].callObj.cnty && ( finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6 || finalDxcc == 202) && callRoster[callHash].callObj.cnty.length > 0 )
 					{
 
 						var hash = callRoster[callHash].callObj.cnty + workHash;
@@ -2643,6 +2671,10 @@ function resize()
 
 function init()
 {
+	g_callsignDatabaseDXCC = window.opener.g_callsignDatabaseDXCC;
+	g_callsignDatabaseUS = window.opener.g_callsignDatabaseUS
+	g_callsignDatabaseUSplus = window.opener.g_callsignDatabaseUSplus;
+	
 	loadAwardJson();
 	
 	updateWorked();
@@ -2689,11 +2721,34 @@ function init()
 			rosterHead.style.display = "block";
 			g_rosterSettings.controls = true;
 		}
+		g_compactMenu.items[0].label = g_rosterSettings.controls? "Hide Controls":"Show Controls";
 		localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
 		resize();
 	  }
 	});
 	g_menu.append(item);
+	
+	item = new nw.MenuItem({
+	 type: "normal", 
+	  label: g_rosterSettings.controls? "Hide Controls":"Show Controls",
+	  click: function() {
+		if ( this.label == "Hide Controls" )
+		{
+			this.label = "Show Controls";
+			rosterHead.style.display = "none";
+			g_rosterSettings.controls = false;
+		}
+		else
+		{
+			this.label = "Hide Controls";
+			rosterHead.style.display = "block";
+			g_rosterSettings.controls = true;
+		}
+		g_menu.items[0].label = g_rosterSettings.controls? "Hide Controls":"Show Controls";
+		localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
+		resize();
+	  }
+	});
 	g_compactMenu.append(item);
 	
 	item = new nw.MenuItem({
@@ -2789,7 +2844,7 @@ function init()
 	
 	item = new nw.MenuItem({ type: 'separator' });
 	g_menu.append(item);
-	g_compactMenu.append(item);
+
 	
 	item = new nw.MenuItem({
 	 type: "checkbox", 
@@ -2842,7 +2897,7 @@ function init()
 	  }
 	});
 	g_menu.append(g_clearIgnores);
-	g_compactMenu.append(g_clearIgnores);
+
 	
 	g_clearIgnoresCall = new nw.MenuItem({
 	 type: "normal", 
@@ -2896,7 +2951,7 @@ function init()
 	  }
 	});
 	g_menu.append(g_clearCQIgnoreMainMenu);
-	g_compactMenu.append(g_clearCQIgnoreMainMenu);
+
 	
 	g_clearCQIgnore = new nw.MenuItem({
 	 type: "normal", 
@@ -2949,7 +3004,7 @@ function init()
 	  }
 	});
 	g_menu.append(g_clearDxccIgnoreMainMenu);
-	g_compactMenu.append(g_clearDxccIgnoreMainMenu);
+
 	
 	g_clearDxccIgnore = new nw.MenuItem({
 	 type: "normal", 
@@ -2972,7 +3027,7 @@ function init()
 	  }
 	});
 	g_menu.append(item);
-	g_compactMenu.append(item);
+
 	
 	
 	item = new nw.MenuItem({
@@ -3799,16 +3854,18 @@ function testApxa(award, obj, baseHash)
 		{
 			if ( test.rule.pxa[i].indexOf(obj.px) > -1 )
 			{
-				return false;														
+				if ( String(obj.px)+baseHash in g_tracker[award.test.look].px )
+				{
+					return false;																
+				}	
+				else
+				{
+					return true;
+				}
 			}
 		}
-		
-		if ( String(obj.px)+baseHash in g_tracker[award.test.look].px )
-		{
-			return false;																
-		}
 	}
-	return true;
+	return false;
 }
 
 function scoreAsfx(award, obj) 

@@ -3,6 +3,7 @@
    <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>GridTracker &copy;2020 N0TTL</title>
+		<link rel="stylesheet" href="./lib/dp-dark.css">
 		<link rel="stylesheet" href="./lib/ol.css" />
 		<link rel="stylesheet" href="./lib/style.css"/>
 		<script src="./lib/defaults.js" type="text/javascript" ></script>
@@ -14,6 +15,7 @@
 		<script src="./lib/arc.js" type="text/javascript"></script>
 		<script src="./lib/moment-with-locales.js"  type="text/javascript"></script>
 		<script src="./lib/moment-timezone-with-data.js"  type="text/javascript"></script>
+		<script src="./lib/datepicker.js"></script>
 		<script src="./lib/callsigns.js"  type="text/javascript"></script>
 		<script src="./lib/shadow.js"  type="text/javascript"></script>
 		<script src="./lib/gtws.js"  type="text/javascript"></script>
@@ -173,8 +175,7 @@
          
                   <tr>
                      <td colspan=2 ><div class="button"  onclick="clearLive();" title="Clear Live Data from GridTracker">Clear Live</div></td>
-                     <td colspan=2 ><div style="min-width:58px" id="clearOrLoadButton" class="button"  onclick="clearOrLoadQSOs();updateCountStats();" title="Clear or Reload Log Data
-   (does not delete files)">Clear Log</div></td>
+                     <td colspan=2 ><div style="min-width:58px" id="clearOrLoadButton" class="button"  onclick="clearOrLoadQSOs();updateCountStats();" title="Clear or Reload Log Data&10;(does not delete files)">Clear Log</div></td>
                   </tr>
                </table>
             </div>
@@ -262,12 +263,15 @@
 			</table>
 			</div>
 			<div id="buttonsDiv" style="margin-left:0px;white-space:normal;">
-				<div id="callRosterButton" style="color:#EEE;font-weight:bold;border-width:2px;margin:0px;padding-left:2px;padding-right:2px;text-align:center" class="button" onclick="openCallRosterWindow();" title="Open Call Roster" >Call Roster + Award Tracker</div>
+				<div id="callRosterButton"  class="iconButton" style="padding:0px;" onclick="openCallRosterWindow();" title="Open Call Roster" ><img  src="./img/roster-button.svg" class="buttonImgWide" /></div>
+				<div id="pushPinButton" onclick="togglePushPinMode();" class="iconButton" title="Toggle Push-Pin Mode"><img  id="pinImg" src="" class="buttonImg" /></div>
+				<div id="lookupButton" onclick="openLookupWindow()" class="iconButton" title="Open Lookup Window" ><img style="" src="./img/lookup.svg" class="buttonImg" /></div>		
+				<div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats"><img src="./img/stats.png" class="buttonImg" /></div> 
 				<div id="modeModeDiv" onclick="toggleOffline()"  class="iconButton" title="Toggle Online/Offline Mode"><img id="offlineImg" src="" class="buttonImg" /></div>
 				<div id="earthShadow" onclick="toggleEarth()"  class="iconButton" title="Toggle Grayline"><img id="earthImg" src="" class="buttonImg" /></div>
-				<div id="pushPinButton" onclick="togglePushPinMode();" class="iconButton" title="Toggle Push-Pin Mode"><img  id="pinImg" src="" class="buttonImg" /></div>
-				<div id="lookupButton" onclick="openLookupWindow()" class="iconButton" title="Open Lookup Window" ><img style="" src="./img/eye2.png" class="buttonImg" /></div>		
-				<div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats"><img src="./img/stats.png" class="buttonImg" /></div>       
+				<div id="legendToggleDiv" onclick="toggleLegend()" class="iconButton" title="Toggle Map Legend"><img id="legendImg" src="./img/gt_key.png" class="buttonImg" /></div>
+				<div id="gtShareButton" onclick="toggleGtShareEnable();" class="iconButton" title="Share your On-Air Status with other GridTracker users"><img id="gtShareFlagImg" src="./img/share-off.png" class="buttonImg" /></div>	
+				<div id="helpButton" onclick="toggleHelp();" class="iconButton" title="Toggle Hotkey List"><img  src="./img/help.svg" class="buttonImg" /></div>	
 				<div id="trophyButton" onclick="cycleTrophyOverlay();" class="iconButton" title="Cycle Award Overlays"><img id="trophyImg" src="./img/blank_trophy.png" class="buttonImg"  /></div>
 				<div id="buttonStrikesDiv" onclick="toggleStrikesValue()" class="iconButton" title="Toggle Lightning Strikes" ><img id="strikesImg" src="./img/lw.png"  class="buttonImg"  /></div>
 				<div id="lunaButton" onclick="toggleMoon();" class="iconButton" title="Toggle Moon" ><img id="lunaButonImg" src="./img/luna.png" class="buttonImg" /></div>
@@ -282,11 +286,12 @@
 				<div id="buttonQRZCheckBoxDiv" onclick="if ( ValidateQrzApi(qrzApiKey ) ) grabQrzComLog()" class="iconButton" title="Download log from QRZ.com" ><img id="qrzLogImg" src="./img/log_QRZ.png"   class="buttonImg"  /></div>
 				<div id="buttonLOTWCheckBoxDiv" onclick="if ( ValidateText(lotwLogin) && ValidateText(lotwPassword) ) {  grabLOtWLogQSO(false); grabLOtWLog(false); } " class="iconButton" title="Download log from Logbook of the World" ><img id="lotwLogImg"  src="./img/log_LoTW.png"  class="buttonImg"  /></div>
 				<div id="buttonClubCheckBoxDiv" onclick="if ( ValidateText(clubEmail) && ValidateText(clubPassword) ) grabClubLog()" class="iconButton" title="Download log from ClubLog" ><img id="ClubLogImg"  src="./img/log_club.png"  class="buttonImg"  /></div>	
-				<div id="buttonAdifCheckBoxDiv" onclick="startupAdifLoadFunction()" class="iconButton" title="Reload Local ADIF Files" ><img  src="./img/log_local.png"  class="buttonImg"  /></div>
-				<div id="gtShareButton" onclick="toggleGtShareEnable();" class="iconButton" title="Share your On-Air Status with other GridTracker users"><img id="gtShareFlagImg" src="./img/share-off.png" class="buttonImg" /></div>				
+				<div id="buttonAdifCheckBoxDiv" onclick="startupAdifLoadFunction()" class="iconButton" title="Reload Local ADIF Files" ><img  src="./img/log_local.png"  class="buttonImg"  /></div>	
+				<div id="timezoneButton" onclick="toggleTimezones()"  class="iconButton" title="Toggle Timezone Layer"><img src="./img/timezone-button.svg" class="buttonImg" /></div>
+				<div id="radarButton" onclick="toggleNexrad()"  class="iconButton" title="Toggle US Nexrad"><img src="./img/radar-button.svg" class="buttonImg" /></div>
 				<div id="gtFlagButton" onclick="toggleGtMap();" class="iconButton" title="Toggle View GridTracker Users"><img id="gtFlagImg" src="" class="buttonImg" /></div>	
 				<div id="msgButton" onclick="showMessaging();" class="iconButton" title="Messaging Window" ><img id="msgImg" src="./img/gt_chat.png" class="buttonImg" /></div>	
-				<div id="legendToggleDiv" onclick="toggleLegend()" class="iconButton" title="Toggle Map Legend"><img id="legendImg" src="./img/gt_key.png" class="buttonImg" /></div>
+
 		   </div>
 			<div id="SpotsDiv" style="display:none;border:1px solid yellow;margin:1px;margin-bottom:1px;margin-top:2px;" class="roundBorder" >
 			   <table align="center">
@@ -305,36 +310,36 @@
 		<div id="myMoonTooltip" style="background-color:black;padding:5px;text-align:center;display:block;position:absolute;z-index:-499;left:50px;top:50px;border:2px solid white;white-space: nowrap;overflow:hidden" class="roundBorder"></div>
 		<div id="helpDiv"style="animation: fadeInEffect .1s;margin: 2px;left:30px;top:20px;display:none;background-color:black;padding:5px;text-align:center;vertical-align:middle;position:absolute;z-index:600;border:1px cyan;" class="roundBorder" >
 			<div id="printHotKeyDiv" style="border:1px solid cyan;color:white;text-align:auto;" >
-	<table align=center class="darkTable" >
-<tr><th  colspan=6 >Hot Key List</th>
+<table align=center class="darkTable" >
+<tr><th  colspan=6 >Hot Key List (v1.20.0825+)</th>
 <tr><th>Key</th><th align='left'>Action</th><th>Condition</th><th>Key</th><th align='left'>Action</th><th>Condition</th>
-<tr><td>1</td><td align='left' >Show General Map Layer</td> <td></td><td>Q</td><td align='left' >Cycle QSO/LIVE view</td> <td></td></tr>
-<tr><td>2</td><td align='left' >Show CQ Zones Award Layer</td><td></td><td>R</td><td align='left' >Open Call Roster Window</td><td></td></tr>
-<tr><td>3</td><td align='left' >Show ITU Zones Award Layer</td><td></td><td>S</td><td align='left' >Open Settings</td> <td></td></tr>
-<tr><td>4</td><td align='left' >Show Continents Award Layer</td><td></td><td>T</td><td align='left' >Add TTS Alert</td><td>right-click<br>empty grid</td></tr>
-<tr><td>5</td><td align='left' >Show US States Award Layer</td><td></td><td>T</td><td align='left' >Toggle RX Spots over Grids</td><td></td></tr>
-<tr><td>6</td><td align='left' >Show DXCC Award Layer</td><td></td><td>U</td><td align='left' >Toggle Award Layer Merge</td><td></td></tr>
-<tr><td>7</td><td align='left' >Show US Counties Award Layer</td><td></td><td>V</td><td align='left' >Add PopUp Alert</td><td>right-click<br>empty grid</td></tr>
-<tr><td>A</td><td align='left' >Toggle Active Path Animation</td><td></td><td>W</td><td align='left' >Toggle Maidenhead Grid Size</td> <td></td></tr>
-<tr><td>B</td><td align='left' >Toggle All Grid Overlay</td><td></td><td>Z</td><td align='left' >Center Map on QTH Grid</td><td></td></tr>
-<tr><td>C</td><td align='left' >Open Conditions Windows</td><td></td><td>F1</td><td align='left' >Hot Key List (This List)</td><td></td></tr>
-<tr><td>D</td><td align='left' >Toggle Moon Tracking</td><td></td><td>F5</td><td align='left' >Recall Map Position 1</td><td></td></tr>
-<tr><td>E</td><td align='left' >Toggle 24h Moon Trajectory</td><td></td><td>F5</td><td align='left' >Store Map Position 1</td><td>Shift-Key</td></tr>
-<tr><td>F</td><td align='left' >Toggle RX Spots Flight</td><td></td><td>F6</td><td align='left' >Recall Map Position 2</td><td></td></tr>
-<tr><td>G</td><td align='left' >Toggle GridTracker Flags</td><td></td><td>F6</td><td align='left' >Store Map Position 2</td><td>Shift-Key</td></tr>
-<tr><td>H</td><td align='left' >Toggle RX Spots Heatmap</td><td></td><td>F7</td><td align='left' >Recall Map Position 3</td><td></td></tr>
-<tr><td>I</td><td align='left' >Open Stats/Info </td><td></td><td>F7</td><td align='left' >Store Map Position 3</td><td>Shift-Key</td></tr>
-<tr><td>=</td><td align='left' >Cycle Award Layers</td><td></td><td>F8</td><td align='left' >Recall Map Position 4</td><td></td></tr>
-<tr><td>K</td><td align='left' >Capture Screenshot</td><td></td><td>F8</td><td align='left' >Store Map Position 4</td><td>Shift-Key</td></tr>
-<tr><td>L</td><td align='left' >Open ADIF file</td><td></td><td>F9</td><td align='left' >Recall Map Position 5</td><td></td></tr>
-<tr><td>M</td><td align='left' >Add MapCenter Alert</td><td>right-click<br>empty grid</td><td>F9</td><td align='left' >Store Map Position 5</td><td>Shift-Key</td></tr>
-<tr><td>M</td><td align='left' >Toggle Audio Mute</td><td></td><td>F10</td><td align='left' >Recall Map Position 6</td><td></td></tr>
-<tr><td>N</td><td align='left' >Toggle Grayline</td><td></td><td>F10</td><td align='left' >Store Map Position 6</td><td>Shift-Key</td></tr>
-<tr><td>O</td><td align='left' >Toggle RX Spots</td><td></td><td>F11</td><td align='left' >Toggle Fullscreen</td><td></td></tr>
-<tr><td>P</td><td align='left' >Toggle Grid/PushPin Mode</td><td></td><td>F12</td><td align='left' >Toggle Sidebar Menu</td><td></td>
-<tr><td>Y</td><td align='left' >Toggle Global Lightning</td><td></td><td>X</td><td align='left' >Toggle Map Position Info</td><td></td>
-<tr><td>&Oslash;</td><td align='left' >Toggle US Nexrad Overlay</td><td></td><td>9</td><td align='left' >Toggle Timezone Overlay</td><td></td>
-<tr><td>8</td><td align='left' >Show FFMA Award Layer</td><td></td><td>J</td><td align='left' >Show GMA Award Layer</td><td></td>
+<tr><td>1</td><td align='left' >Show General Map Layer</td><td></td>                                        <td>Q</td><td align='left' >Cycle Logbook/Live View</td> <td></td></tr>
+<tr><td>2</td><td align='left' >Show CQ Zones Award Layer</td><td></td>                                     <td>R</td><td align='left' >Open Call Roster Window</td><td></td></tr>
+<tr><td>3</td><td align='left' >Show ITU Zones Award Layer</td><td></td>                                    <td>S</td><td align='left' >Open Settings</td> <td></td></tr>
+<tr><td>4</td><td align='left' >Show Continents Award Layer</td><td></td>                                   <td>T</td><td align='left' >Toggle RX Spots over Grids</td><td></td></tr>
+<tr><td>5</td><td align='left' >Show US States Award Layer</td><td></td>                                    <td>T</td><td align='left' >Add TTS Alert</td><td>right-click<br>empty grid</td></tr>
+<tr><td>6</td><td align='left' >Show DXCC Award Layer</td><td></td>                                         <td>U</td><td align='left' >Toggle Award Layer Merge</td><td></td></tr>
+<tr><td>7</td><td align='left' >Show US Counties Award Layer</td><td></td>                                  <td>V</td><td align='left' >Add PopUp Alert</td><td>right-click<br>empty grid</td></tr>
+<tr><td>8</td><td align='left' >Show US Continental Grids Award Layer</td><td></td>                         <td>W</td><td align='left' >Toggle Maidenhead Grid Size</td> <td></td></tr>
+<tr><td>9</td><td align='left' >Toggle Timezone Overlay</td><td></td>                                       <td>X</td><td align='left' >Toggle Map Position Info</td><td></td></tr>
+<tr><td>0</td><td align='left' >Toggle US Nexrad Overlay</td><td></td>                                      <td>Y</td><td align='left' >Toggle Global Lightning</td><td></td></tr>
+<tr><td>=</td><td align='left' >Cycle Award Layers</td><td></td>                                            <td>Z</td><td align='left' >Center Map on QTH Grid</td><td></td></tr>
+<tr><td>A</td><td align='left' >Toggle Active Path Animation</td><td></td>                                  <td>F1</td><td align='left' >Hot Key List (This List)</td><td></td></tr>
+<tr><td>B</td><td align='left' >Toggle All Grid Overlay</td><td></td>                                       <td>F5</td><td align='left' >Recall Map Position 1</td><td></td></tr>
+<tr><td>C</td><td align='left' >Open Conditions Windows</td><td></td>                                       <td>F5</td><td align='left' >Store Map Position 1</td><td>Shift-Key</td></tr>
+<tr><td>D</td><td align='left' >Toggle Moon Tracking</td><td></td>                                          <td>F6</td><td align='left' >Recall Map Position 2</td><td></td></tr>
+<tr><td>E</td><td align='left' >Toggle 24h Moon Trajectory</td><td></td>                                    <td>F6</td><td align='left' >Store Map Position 2</td><td>Shift-Key</td></tr>
+<tr><td>F</td><td align='left' >Toggle RX Spots Flight</td><td></td>                                        <td>F7</td><td align='left' >Recall Map Position 3</td><td></td></tr>
+<tr><td>G</td><td align='left' >Toggle GridTracker Flags</td><td></td>                                      <td>F7</td><td align='left' >Store Map Position 3</td><td>Shift-Key</td></tr>
+<tr><td>H</td><td align='left' >Toggle RX Spots Heatmap</td><td></td>                                       <td>F8</td><td align='left' >Recall Map Position 4</td><td></td></tr>
+<tr><td>I</td><td align='left' >Open Stats/Info </td><td></td>                                              <td>F8</td><td align='left' >Store Map Position 4</td><td>Shift-Key</td></tr>
+<tr><td>K</td><td align='left' >Capture Screenshot</td><td></td>                                            <td>F9</td><td align='left' >Recall Map Position 5</td><td></td></tr>
+<tr><td>L</td><td align='left' >Open ADIF file</td><td></td>                                                <td>F9</td><td align='left' >Store Map Position 5</td><td>Shift-Key</td></tr>
+<tr><td>M</td><td align='left' >Toggle Audio Mute</td><td></td>                                             <td>F10</td><td align='left' >Recall Map Position 6</td><td></td></tr>
+<tr><td>M</td><td align='left' >Add MapCenter Alert</td><td>right-click<br>empty grid</td>                  <td>F10</td><td align='left' >Store Map Position 6</td><td>Shift-Key</td></tr>
+<tr><td>N</td><td align='left' >Toggle Grayline</td><td></td>                                               <td>F11</td><td align='left' >Toggle Fullscreen</td><td></td></tr>
+<tr><td>O</td><td align='left' >Toggle RX Spots</td><td></td>                                               <td>F12</td><td align='left' >Toggle Sidebar Menu</td><td></td></tr>
+<tr><td>P</td><td align='left' >Toggle Grid/PushPin Mode</td><td></td></tr>
 </table>
 			</div>
 			<div>
@@ -348,10 +353,10 @@
          <div id="rootSettingsDiv"  style="margin:0;top:1px;display:none;background-color:#00000000;padding:0px;text-align:center;vertical-align:middle;position:relative;z-index:600;" class="roundBorder" >
             <div class="settingstab">
                <button id="generalbut" class="settingsTablinks active" onclick="openSettingsTab(event, 'udpSettingsDiv')">General</button>
+			   <button id="logbut" class="settingsTablinks" onclick="openSettingsTab(event, 'logbookSettingsDiv')">Logbook</button>
 			   <button id="lookupbut" class="settingsTablinks" onclick="openSettingsTab(event, 'lookupsSettingsDiv')">Lookups</button>
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'SpeechSettingsDiv')">Audio</button>
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'mapSettingsDiv')">Map</button>
-			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'spotSettingsDiv')">RX Spots</button>
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'logSettingsDiv');">Logging</button>
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'alertsDiv')">Alerts</button>
 			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'callRosterDiv')">Call Roster</button>
@@ -589,134 +594,47 @@
                   </table>
                </div>
 			   <br/>
-			
-				<table align=center  style="display:inline-table">
-				<tr>
-				  <td>
-                  <div id="ulsLoadDiv" class="mapItem" >
-                     <table align=center>
-                        <tr>
-                           <td colspan=2  style="font-weight:bold;color:yellow">US Callsign Database</td>
-                        </tr>
-						<tr>
-						<td colspan=2>Use?<input title="Display US callsign status in Call Roster" type="checkbox"  id="ulsUseEnable" onclick="ulsValuesChanged();" /></td>
-						</tr>
-                        <tr  >
-                           <td  id="ulsWeeklyTd" style="display:none"  colspan=2>Download Weekly?<input title="Download US callsigns weekly" type="checkbox"  id="ulsWeeklyEnable" onclick="ulsValuesChanged();" /></td>
-                        </tr>
-						<tr >
-						  <td id="ulsNowTd" style="display:none"  colspan=2><div class="button"  onclick="ulsDownload(true);">Download Now!</div></td>
-						</tr>
-						<tr id="ulsLastTr"> 
-							<td align=right>Last Update:</td><td id="ulsUpdatedTd" align=left><b>Never<b></td>
-						</tr>
-						<tr id="ulsWhenTr">
-							<td align=right>Next Update:</td><td align=left id="ulsWhenTd"></td>
-						</tr>
-						<tr> 
-							<td align=center colspan=2 id="ulsCountTd"></td>
-						</tr>
-                     </table>
-                  </div>
-				  </td>
-				  </tr>
-				</table>
-				<table align=center  style="display:inline-table">
-				<tr>
-				  <td>
-                  <div id="lotwLoadDiv" class="mapItem" >
-                     <table align=center>
-                        <tr>
-                           <td colspan=2  style="font-weight:bold;color:yellow">Logbook of The World Callsigns</td>
-                        </tr>
-						<tr>
-						<td colspan=2>Use?<input title="Display LoTW callsign status in Call Roster" type="checkbox"  id="lotwUseEnable" onclick="lotwValuesChanged();" /></td>
-						</tr>
-                        <tr  >
-                           <td  id="lotwWeeklyTd" style="display:none"  colspan=2>Download Weekly?<input title="Download LoTW callsigns weekly" type="checkbox"  id="lotwWeeklyEnable" onclick="lotwValuesChanged();" /></td>
-                        </tr>
-						<tr >
-						  <td id="lotwNowTd" style="display:none"  colspan=2><div class="button"  onclick="lotwDownload(true);">Download Now!</div></td>
-						</tr>
-						<tr id="lotwLastTr"> 
-							<td align=right>Last Update:</td><td id="lotwUpdatedTd" align=left><b>Never<b></td>
-						</tr>
-						<tr id="lotwWhenTr">
-							<td align=right>Next Update:</td><td align=left id="lotwWhenTd"></td>
-						</tr>
-						<tr> 
-							<td align=center colspan=2 id="lotwCountTd"></td>
-						</tr>
+			        
+					
+				<div id="callsignDatabaseDiv" class="mapItem" >
 
-                     </table>
-                  </div>
-				  </td>
-				  </tr>
-				</table><br/>
-				<table align=center  style="display:inline-table">
-				<tr>
-				  <td>
-                  <div id="eqslLoadDiv" class="mapItem" >
-                     <table align=center>
-                        <tr>
-                           <td colspan=2  style="font-weight:bold;color:yellow">eQSL Callsigns</td>
-                        </tr>
+					<table align=center  class="darkTable" >
+						<tr><th colspan=6 style="font-weight:bold;color:yellow" >Callsign Databases</th></tr>
+						<tr><th>Database</th><th>Enabled</th><th>Last Download</th><th>Count</th></tr>
 						<tr>
-						<td colspan=2>Use?<input title="Display eqsl callsign status in Call Roster" type="checkbox"  id="eqslUseEnable" onclick="eqslValuesChanged();" /></td>
+							<td>United States ULS</td>
+							<td>
+								<input type="checkbox"  id="ulsUseEnable" onclick="ulsValuesChanged();" >
+							</td>
+							<td id="ulsUpdatedTd" >Never</td>
+							<td id="ulsCountTd">0</td>
 						</tr>
-                        <tr  >
-                           <td  id="eqslWeeklyTd" style="display:none"  colspan=2>Download Weekly?<input title="Download eqsl callsigns weekly" type="checkbox"  id="eqslWeeklyEnable" onclick="eqslValuesChanged();" /></td>
-                        </tr>
-						<tr >
-						  <td id="eqslNowTd" style="display:none"  colspan=2><div class="button"  onclick="eqslDownload(true);">Download Now!</div></td>
-						</tr>
-						<tr id="eqslLastTr"> 
-							<td align=right>Last Update:</td><td id="eqslUpdatedTd" align=left><b>Never<b></td>
-						</tr>
-						<tr id="eqslWhenTr">
-							<td align=right>Next Update:</td><td align=left id="eqslWhenTd"></td>
-						</tr>
-						<tr> 
-							<td align=center colspan=2 id="eqslCountTd"></td>
-						</tr>
-
-                     </table>
-                  </div>
-				  </td>
-				  </tr>
-				</table>
-				<table align=center  style="display:inline-table">
-				<tr>
-				  <td>
-                  <div id="orqsLoadDiv" class="mapItem" >
-                     <table align=center>
-                        <tr>
-                           <td colspan=2  style="font-weight:bold;color:yellow">ClubLog OQRS Callsigns</td>
-                        </tr>
 						<tr>
-						<td colspan=2>Use?<input title="Display Clublog OQRS Status in Call Roster?" type="checkbox"  id="oqrsUseEnable" onclick="oqrsValuesChanged();" /></td>
+							<td>Logbook of The World</td>
+							<td>
+								<input type="checkbox"  id="lotwUseEnable" onclick="lotwValuesChanged();" >
+							</td>
+							<td id="lotwUpdatedTd" >Never</td>
+							<td id="lotwCountTd">0</td>            
 						</tr>
-                        <tr  >
-                           <td  id="oqrsWeeklyTd" style="display:none"  colspan=2>Download Weekly?<input title="Download oqrs callsigns weekly" type="checkbox"  id="oqrsWeeklyEnable" onclick="oqrsValuesChanged();" /></td>
-                        </tr>
-						<tr >
-						  <td id="oqrsNowTd" style="display:none"  colspan=2><div class="button"  onclick="oqrsDownload(true);">Download Now!</div></td>
+						<tr>
+							<td>eQSL</td>
+							<td>
+								<input type="checkbox"  id="eqslUseEnable" onclick="eqslValuesChanged();" >
+							</td>
+							<td id="eqslUpdatedTd" >Never</td>
+							<td id="eqslCountTd">0</td> 
 						</tr>
-						<tr id="oqrsLastTr"> 
-							<td align=right>Last Update:</td><td id="oqrsUpdatedTd" align=left><b>Never<b></td>
+						<tr>
+							<td>ClubLog OQRS</td>
+							<td>
+								<input type="checkbox"  id="oqrsUseEnable" onclick="oqrsValuesChanged();" >
+							</td>
+								<td id="oqrsUpdatedTd" >Never</td>
+							<td id="oqrsCountTd">0</td> 
 						</tr>
-						<tr id="oqrsWhenTr">
-							<td align=right>Next Update:</td><td align=left id="oqrsWhenTd"></td>
-						</tr>
-						<tr> 
-							<td align=center colspan=2 id="oqrsCountTd"></td>
-						</tr>
-
-                     </table>
-                  </div>
-				  </td>
-				  </tr>
-				</table>
+					</table>
+				</div>
 			</div>
 		   <div id="SpeechSettingsDiv" class="settingsTabcontent">
                <div  class="roundBorder" style="border:1px solid #666;margin:2px;padding:5px">		
@@ -830,6 +748,46 @@
                   </table>
                </div>
             </div>
+			<div id="logbookSettingsDiv" 	class="settingsTabcontent" style="padding:5px;">
+				<div style="padding:5px;" class="mapItem">
+					<div style="padding:5px;"  class="mapItem" title="Filter Logbook QSO To These Callsigns Only&#10;(comma seperated)">
+						 <table align=center>
+							<tr>
+							   <td><b>Working Callsign(s)</b></td>
+							</tr>
+							<tr>
+							   <td>Enable? <input title="Enable Filtering" type="checkbox"  id="workingCallsignEnable" onclick="workingCallsignEnableChanged(this);" /></td>
+							</tr>
+							<tr>
+							   <td id="workingCallsignsTd" style="" >Callsign(s)<input id="workingCallsignsValue" type="text" class="inputTextValue"  size="15" onkeypress='return validCallsignsKeys(event.charCode);'  oninput="if ( ValidateCallsigns(this) ) workingCallsignsChanged(this);"/></td>
+							</tr>
+						 </table>
+					</div>
+					<div style="padding:5px;"  class="mapItem" title="Filter Logbook QSO From This Date And After">
+						 <table align=center>
+							<tr>
+							   <td><b>Working Date</b></td>
+							</tr>
+							<tr>
+							   <td>Enable? <input title="Enable Filtering" type="checkbox"  id="workingDateEnable" onclick="workingDateEnableChanged(this);" /></td>
+							</tr>
+							<tr>
+								<td>
+									<div class="roundBorderValue" style="width:auto;font-size:larger;font-weight:bold;" id="workingDateString">No Date</div>
+								<td>
+							</tr>
+							<tr>
+							   <td id="workingDateTd" title="Date is UTC">	
+									<input style="display:none" type="text" id="workingDateValue" />
+									<div id="pick-inline"></div>
+							   </td>
+							</tr>
+						 </table>
+					</div>
+					<br/>
+					<div  style="padding:5px;display:none;font-size:larger:font-weight:bold:color:cyan;" id="applyCallsignsAndDateDiv" class="button"  onclick="applyCallsignsAndDates();" title="Apply Changes and Re-Import Logbook(s)">Apply Changes</div>
+				</div>
+			</div>
             <div id="mapSettingsDiv" 	class="settingsTabcontent" style="background-color:#00000044;text-shadow: 0 0 5px #000000FF;">
                <div class="mapItem"   >
                   <table align="center">
@@ -844,7 +802,6 @@
                      </tr>
                   </table>
                </div>	  
-			   <br/>
 			   <div class="mapItem">
                   <table align="center">
                      <tr>
@@ -870,28 +827,7 @@
                         <td colspan=2><input type="range" min="0" max="86400" value="600" step="60" class="slider" id="gridDecay" oninput="changeGridDecay()"  onkeyup="redrawGrids()" onmouseup="redrawGrids()" /></td>
                      </tr>
                   </table>
-               </div>
-			   <div class="mapItem">
-                  <table align="center">
-                     <tr>
-                        <td align="center">Split QSL Grids</td>
-                     </tr>
-                     <tr align="center">
-                        <td title="Toggle Split QSL Grids with Live Grids"><input  type="checkbox"  id="splitQSLValue" onclick="changeSplitQSL()" /></td>
-                     </tr>
-                  </table>
-               </div>
-			   <div class="mapItem">
-                  <table align="center">
-                     <tr>
-                        <td align="center">Grid Mouse-Over Tables</td>
-                     </tr>
-                     <tr align="center">
-                        <td title="Toggle Grid Mouse-Over Tables"><input  type="checkbox"  id="mouseOverValue" onclick="changeMouseOverValue()" /></td>
-                     </tr>
-                  </table>
-               </div>
-			   <br/>
+               </div><br/>
                <div class="mapItem">
                   <table align="center">
                      <tr>
@@ -935,17 +871,8 @@
                   </table>
                </div>
 			   <br/>
-			   	<div class="mapItem">
-                  <table align="center">
-                     <tr>
-                        <td align="center">Merge Award Overlay</td>
-                     </tr>
-                     <tr align="center">
-                        <td title="Toggle Merge Award Overlay"><input  type="checkbox"  id="mergeOverlayValue" onclick="changeMergeOverlayValue()" /></td>
-                     </tr>
-                  </table>
-               </div>
-			   <div class="mapItem">
+			   
+			    <div class="mapItem">
                   <table align="center">
                      <tr>
                         <td align="center">Grayline Darkness</td>
@@ -977,7 +904,37 @@
                      </tr>
                   </table>
                </div>
-			   <br/>
+			   
+			   	<div class="mapItem">
+                  <table align="center">
+                     <tr>
+                        <td align="center">Split QSL Grids</td>
+                     </tr>
+                     <tr align="center">
+                        <td title="Toggle Split QSL Grids with Live Grids"><input  type="checkbox"  id="splitQSLValue" onclick="changeSplitQSL()" /></td>
+                     </tr>
+                  </table>
+               </div><br/>
+			   <div class="mapItem">
+                  <table align="center">
+                     <tr>
+                        <td align="center">Grid Mouse-Over Tables</td>
+                     </tr>
+                     <tr align="center">
+                        <td title="Toggle Grid Mouse-Over Tables"><input  type="checkbox"  id="mouseOverValue" onclick="changeMouseOverValue()" /></td>
+                     </tr>
+                  </table>
+               </div>
+			   	<div class="mapItem">
+                  <table align="center">
+                     <tr>
+                        <td align="center">Merge Award Overlay</td>
+                     </tr>
+                     <tr align="center">
+                        <td title="Toggle Merge Award Overlay"><input  type="checkbox"  id="mergeOverlayValue" onclick="changeMergeOverlayValue()" /></td>
+                     </tr>
+                  </table>
+               </div>
 			   <div class="mapItem">
                   <table align="center">
                      <tr>
@@ -997,18 +954,7 @@
                         <td title="Toggle 'CQ XX' Highlighting"><input  type="checkbox"  id="CqHiliteValue" onclick="changeCqHiliteValue(this);" /></td>
                      </tr>
                   </table>
-               </div>
-			   	<div class="mapItem">
-                  <table align="center">
-                     <tr>
-                        <td align="center">US Weather Radar</td>
-                     </tr>
-                     <tr align="center">
-                        <td title="Toggle U.S. Weather Radar Overlay"><input  type="checkbox"  id="UsNexradValue" onclick="toggleNexrad();" /></td>
-                     </tr>
-                  </table>
-               </div>
-
+               </div><br/>
 			   	<div class="mapItem">
                   <table align="center">
                      <tr>
@@ -1018,7 +964,40 @@
                         <td title="If a station grid is not known use the DXCC"><input  type="checkbox"  id="qrzDxccFallbackValue" onclick="changeQrzDxccFallbackValue();" /></td>
                      </tr>
                   </table>
-               </div><br/>
+               </div>
+			   		<div  class="mapItem" id="spotPathColorDiv">
+                  <table align="center">
+                     <tr align="center">
+                        <td align="center" ><b>PSK-Spot Color</b></td>
+                     </tr>
+                     <tr align="center" >
+                        <td colspan=2><input type="range" min="-1" max="361" value="-1" class="slider" id="spotPathColorValue" oninput="spotPathChange();" onkeyup="redrawSpots();" onmouseup="redrawSpots();"/></td>
+                     </tr>
+					 <tr align="center">
+						<td id="spotPathInfoTd">PSK-Reporter Palette</td>
+					 </tr>
+                  </table>
+               </div>
+				<div class="mapItem"  >
+				  <table align="center">
+					 <tr>
+						<td title="Place RX Spots over Grid Layer">PSK-Spots Over Grids</td>
+					 </tr>
+					 <tr>
+						<td title="Place RX Spots over Grid Layer"><input  type="checkbox"  id="spotMergeValue" onclick="changeSpotValues();redrawSpots();" /></td>
+					 </tr>
+				  </table>
+				</div>
+			  	<div class="mapItem" id="spotPathsDiv">
+				  <table align="center">
+					 <tr>
+						<td title="Toggle flight paths to spots">PSK-Spot Paths</td>
+					 </tr>
+					 <tr>
+						<td title="Toggle flight paths to spots"><input  type="checkbox"  id="spotPathsValue" onclick="changeSpotValues();redrawSpots();" /></td>
+					 </tr>
+				  </table>
+				</div><br/>
 			   <div class="mapItem">
                   <table align="center">
                      <tr >
@@ -1063,6 +1042,19 @@
 							</tr>
 						</table>
 				   </div>
+				   	<div  class="mapItem" id="spotNightPathColorDiv" style="display:none">
+                  <table align="center">
+                     <tr align="center">
+                        <td align="center" ><b>Night PSK-Spot Color</b></td>
+                     </tr>
+                     <tr align="center" >
+                        <td colspan=2><input type="range" min="-1" max="361" value="-1" class="slider" id="spotNightPathColorValue" oninput="spotPathChange();" onkeyup="redrawSpots();" onmouseup="redrawSpots();"/></td>
+                     </tr>
+					 <tr align="center">
+						<td id="spotNightPathInfoTd">PSK-Reporter Palette</td>
+					 </tr>
+                  </table>
+               </div>
 				   <br/>
 				   <div  class="mapItem"   >
 					  <table align="center">
@@ -1078,73 +1070,21 @@
 				   </tr>
 				   </table>
 				</div>	 
-        
-            
-			   
-            </div>
-			<div id="spotSettingsDiv" 	class="settingsTabcontent" style="background-color:#00000044;text-shadow: 0 0 5px #000000FF;">
-				<div  class="mapItem" id="spotPathColorDiv">
-                  <table align="center">
-                     <tr align="center">
-                        <td align="center" ><b>Spot Color</b></td>
-                     </tr>
-                     <tr align="center" >
-                        <td colspan=2><input type="range" min="-1" max="361" value="-1" class="slider" id="spotPathColorValue" oninput="spotPathChange();" onkeyup="redrawSpots();" onmouseup="redrawSpots();"/></td>
-                     </tr>
-					 <tr align="center">
-						<td id="spotPathInfoTd">PSK-Reporter Palette</td>
-					 </tr>
-                  </table>
-               </div>
-			   	<div  class="mapItem" id="spotNightPathColorDiv" style="display:none">
-                  <table align="center">
-                     <tr align="center">
-                        <td align="center" ><b>Night Spot Color</b></td>
-                     </tr>
-                     <tr align="center" >
-                        <td colspan=2><input type="range" min="-1" max="361" value="-1" class="slider" id="spotNightPathColorValue" oninput="spotPathChange();" onkeyup="redrawSpots();" onmouseup="redrawSpots();"/></td>
-                     </tr>
-					 <tr align="center">
-						<td id="spotNightPathInfoTd">PSK-Reporter Palette</td>
-					 </tr>
-                  </table>
-               </div>
-			   <br/>
-				<div class="mapItem" id="spotPathsDiv">
-				  <table align="center">
-					 <tr>
-						<td title="Toggle flight paths to spots">PSK-Reporter Spot Paths</td>
-					 </tr>
-					 <tr>
-						<td title="Toggle flight paths to spots"><input  type="checkbox"  id="spotPathsValue" onclick="changeSpotValues();redrawSpots();" /></td>
-					 </tr>
-				  </table>
-				</div>
-			   <div  class="mapItem" id="spotPathWidthDiv">
-              
+				 <div  class="mapItem" id="spotPathWidthDiv">
                   <table align="center">
                      <tr>
-                        <td align="center">Spot Path Width</td>
+                        <td align="center">PSK-Spot Path Width</td>
                         <td align="left" id="spotWidthTd">1.5</td>
                      </tr>
                      <tr align="center">
                         <td colspan=2><input type="range" min="0.0" max="5" value="1.5" step="0.05" class="slider" id="spotWidthValue" oninput="spotPathChange();" onkeyup="redrawSpots();" onmouseup="redrawSpots();"/></td>
                      </tr>
                   </table>
-              
                </div>
-				<br/>
-				<div class="mapItem"  >
-				  <table align="center">
-					 <tr>
-						<td title="Place RX Spots over Grid Layer">Spots over Grids</td>
-					 </tr>
-					 <tr>
-						<td title="Place RX Spots over Grid Layer"><input  type="checkbox"  id="spotMergeValue" onclick="changeSpotValues();redrawSpots();" /></td>
-					 </tr>
-				  </table>
-				</div>
-			</div>
+        
+            
+			   
+            </div>
             <div id="logSettingsDiv" class="settingsTabcontent">
                <div id="LoadAdifOnStartupDiv" style="left:0;padding:1px;overflow:auto;overflow-x:hidden;display:inline-block;height:602px" class="roundBorder">
                   <table class='darkTable' align=center>
@@ -1318,7 +1258,7 @@
                         <td></td>
                      </tr>
 					 <tr>
-                        <td>N3FJP ACLog</td>
+                        <td>N3FJP Loggers</td>
                         <td></td>
                         <td></td>
                         <td><input type="checkbox" checked="false" class="inputTextValue" id="buttonacLogCheckBox" onclick=" ValidateIPaddress(acLogIpInput,this); ValidatePort(acLogPortInput,this, null ); acLogLoggerChanged(); " /></td>
@@ -1805,7 +1745,9 @@
                   &copy;2020 Stephen "Tag" Loomis / N&Oslash;TTL<br />
 				  <br />
 				  &copy;2020 Henry "atouk" Forte / N2VFL<br/>                 
-                  <br />
+                  <p>
+				  <H3>Contributors</H3>
+				  <b>NR&Oslash;Q</b> - "d3jake" KE&Oslash;RIY - "Don" KB2YSI - K4KPW
                   <br />
                   <img src="./gridview.png" /> <br />
 				 

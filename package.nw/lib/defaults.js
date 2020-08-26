@@ -36,15 +36,15 @@ var def_appSettings =
 	"rosterAlwaysOnTop": false,
 	"centerGridsquare" : "",
 	"chatUUID" : "",
-	"crScript" : 1,
-	"distanceUnit" : "KM",
+	"crScript" : 0,
+	"distanceUnit" : "MI",
 	"earthImgSrc" : 0,
 	"gridViewMode" : 3,
 	"gridsquareDecayTime" : 300,
 	"gtAgree" : "",
-	"gtBandFilter" : "auto",
+	"gtBandFilter" : "",
 	"gtFlagImgSrc" : 0,
-	"gtModeFilter" : "auto",
+	"gtModeFilter" : "",
 	"gtPropFilter" : "mixed",
 	"gtMsgEnable" : true,
 	"gtShareEnable" : true,
@@ -85,7 +85,11 @@ var def_appSettings =
 	"wsjtForwardUdpIp" : "127.0.0.1",
 	"wsjtForwardUdpPort" : 2238,
 	"wsjtIP" : "",
-	"wsjtUdpPort" : 2237
+	"wsjtUdpPort" : 0,
+	"workingCallsignEnable" : false,
+	"workingCallsigns" : {},
+	"workingDateEnable": false,
+	"workingDate" : 0
 };
 
 var def_mapSettings = 

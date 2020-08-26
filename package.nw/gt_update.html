@@ -1,100 +1,108 @@
-<!--center>
-<img style=" display: inline-block;" src="./img/award-medal.svg" width="75px">
-<div style=" display: inline-block;font-size:36px;font-weight:bold;vertical-align:top;padding-top:15px;">
-Award Tracker is here! &nbsp;
-</div>
-<img  style=" display: inline-block;" src="./img/award-trophy.svg" width="75px">
-</center-->
+<center>
+<img  src="./img/roster-button.svg" width="120px"><br/>
+<font size="larger">
+This is the last release until we have documentation ready or there is a bug.<p>
+All feature requests will be added to the backlog.<p>
+We will prioritize them in our public #Round-Table room on our Discord server.<p>
+Here is a link to our Discord server. <a href="https://discord.gg/j9Cv9XU" target="_blank" style="font-weight:bold;color:cyan">Link</a><p>
+</font>
+<i>We recommend downloading the Discord app instead of using the browser.</i>
+</center>
 <pre>
-[v1.20.0821] August 21st, 2020
+GridTracker:
+  I have improved the UI/UX (User interface/User Experience) in this release
+  I have moved buttons around &amp; items are labeled for clarity
+  Most items/buttons that you can interact with have a tooltip
+  Simply hover your mouse-pointer over an item/field/button &amp; it will describe it
 
-GridTracker Main Window:
-	Update:
-		"Map View" renamed "Map View Filters"
-		"Callable Roster" renamed "Call Roster + Award Tracker"
-		Minimum width now 200 pixels (you can hide the map now)
-		
-	New:
-		"Prop" added to "Map View Filters"
-			Propagation Mode for filtering Logbook data *only* 
-				Live data view is unaffected
-			
-	Update:
-		Removed "FFMA" and "GMA" award layers and replaced with "US48" layer
-			To view your Fred Fish Memorial "FFMA" Award:
-				Select "US48" hotkey (8) then;
-					Set your Band filter to "6m"
-			
-			To view your AMSAT GridMaster "GMA" Award:
-				Select "US48" hotkey (8) then;
-					Set your Band & Mode filters to "Mixed"
-					Set your Prop filter to "Satellite"
-		
+Main Window:
+  Update:
+    "Call Roster + Award Tracker" Text button now a 
+      "Call Roster + Award" Icon button
+      
+    "Lookup" Icon button less creepy
+    
+  New:
+    "?" Icon button toggles the Hotkey List
+      In the next release it will open documentation
+      
+    "Timezone" Icon button toggles Timezone layer
+    
+    "Radar" Icon button toggles US Nexrad Weather layer
+
+Hotkey List:
+  Ordered by Key for clarity
+  Added Version to header
+  
+Map:  
+  Fixed:
+    "Timezone" layer very slow to react 
+  
+Settings:
+  Update:
+    Merged Spots Tab with Map Tab to make room for Logbook Tab
+      
+  Logbook:
+    New Tab!:
+      "Working Callsign(s)"
+        When enabled, filter your logbooks by callsigns
+          eg:  "N0TTL,N0OAW,KE0PEA" 
+    
+      "Working Date"
+        When enabled, filter your logbooks by anything on or after date
+    
+  Lookups:
+    Update:
+      Callsign Database now list instead of boxes
+        Making room for more callsign databases
+          NR0Q found the Canadian call-db and will be in a future release
+          
+      Downloads are now automatic and weekly when enabled
+        The US Database is only 10mb
+        
+    US Callsign Database:
+      Fixed:
+        Corrupt/Incomplete database due to program close while downloading
+
 Call Roster:
-	Update:
-		Callable Roster renamed to "Call Roster"
-		
-	Fixed:
-		Award Tracking:
-			"Wanted" box remains as it's needed
-			Fix bad filtering flags
-			
-		When enabling "Wanted" entities; right-click menu now tracks correctly 
-		
-		Issue with New/Unconfirmed callsigns not showing up at all
-		
-		Return of the "strikeout" on callsigns that have been confirmed
-			by popular demand
-			
-	Compact Mode:
-		Sorted by "Age" for now 
-			(Will add a right-click menu to select sort type later on)
-			
-		Added "DXCC" under "Callsign"
-		
-		Tooltip(mouse-over) added with decode details
-			(Will add Worked/Confirmed status by band/mode later on)
-			
-				
-PSK-Spots:
-	Fixed: 
-		Memory issue when 1500 spots in 24 hours
-			Thanks to mister "I get out" NR0Q for finding this one
-			
-Logging:
-	Local Files(s)
-		Details:
-			Filename now has a tooltip with the full file path
-		
-		
-		
-		
-		
-		
-		
-		
-		
+  Fixed:
+    Hide Controls/Show Controls getting out of sync when switching views
+
+
+
+
+
+Below is the backlog of features that have been prioritized for the next
+release *after* we get our first update to documentation in over 2 years!
+
+Output from the most recent Round-Table discussion on new features...
+
+Ordered by priority:
+
+DX Logbook, HRD Logbook , N3FJP ACLog, Log4OM..  QSL Import and  Synchronization
+
+Create Award Tracker Stats Tab
+
+Add Settings Window To Call Roster
+
+Add New Ignores in "new settings window" in Call Roster
+
+Add Callsign and DXCC right-click "Add Call/DXCC Watcher" + "Edit Watcher"
+
+Add Lighting alert volume .. and mute override and media selector
+
+Audio Alerts fix up
+
+
+
+
+
+
+
+
 
 
 Thank you for reading the entire update! 
-
-
-
-
-
-
-
-
-
-
-
-Mention "phone-sofa" in any forum I read and I'll send you a GridTracker token
-to the address associated with your callsign lookup
-
-Please don't mention this easter-egg to anyone. I want to see who reads the update
-
-To the 21 of you out of 650-ish, who downloaded and read the update in v1.20.0819: 
-	I salute you! And I'll be shipping out tokens when I get a chance! Thank you!
-
 </pre>
 <center><img class="button" src="./img/tokens.jpg" width="400px"></center>
+

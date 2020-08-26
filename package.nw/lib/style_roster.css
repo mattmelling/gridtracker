@@ -218,13 +218,13 @@ table.darkTable thead th:first-child {
 }
 
 .compactCallsign {
-	padding:3px;
+	padding:1px;
 	overflow: hidden;
 	white-space: nowrap;
 }
 
 .compactDXCC {
-	padding:3px;
+	padding:2px;
 	max-width: 9em;
 	overflow: hidden;
 	white-space: nowrap;

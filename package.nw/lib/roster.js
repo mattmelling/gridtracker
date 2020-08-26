@@ -1459,14 +1459,14 @@ function viewRoster()
 			{
 				if ( g_rosterSettings.maxLoTW < 27 )
 				{
-					var months = (g_day -  window.opener.g_lotwCallsigns[thisCall]) / 30;
+					var months = (g_day -  window.opener.g_lotwCallsigns[thisCall]) / 30 ;
 					if ( months > g_rosterSettings.maxLoTW )
 						worker += "<td  style='color:yellow' align='center' title='Has not uploaded a QSO in "+Number(months).toYM()+"'>?</td>";
 					else
-						worker += "<td  style='color:#0F0' align='center'>&#10004;</td>";
+						worker += "<td  style='color:#0F0' align='center' title='  Last Upload&#10;" + window.opener.userDayString(window.opener.g_lotwCallsigns[thisCall] * 86400000 ) + "'>&#10004;</td>";
 				}
 				else
-					worker += "<td  style='color:#0F0' align='center'>&#10004;</td>";
+					worker += "<td  style='color:#0F0' align='center' title='  Last Upload&#10;" + window.opener.userDayString(window.opener.g_lotwCallsigns[thisCall] * 86400000 ) + "'>&#10004;</td>";
 			}
 			else 
 				worker += "<td></td>";

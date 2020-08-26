@@ -580,7 +580,7 @@ function getChunkedBuffer(file_url, callback, flag, mode, port, cookie, errorHan
 var g_ulsDatabase = openDatabase('ulsDB', '1.0', 'US Callsigns', 40 * 1024 * 1024);
 
 g_ulsDatabase.transaction(function (tx) {
-	tx.executeSql('CREATE TABLE IF NOT EXISTS calls (callsign PRIMARY KEY, zip, state)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS calls (callsign TEXT PRIMARY KEY, zip, state)');
 });
 
 
@@ -621,7 +621,7 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 					saveCallsignSettings();
 					ulsUpdatedTd.innerHTML = "<b><i>Processing...</i></b>";
 					tx.executeSql('drop table calls');
-					tx.executeSql('CREATE TABLE IF NOT EXISTS calls (callsign PRIMARY KEY, zip, state)');
+					tx.executeSql('CREATE TABLE IF NOT EXISTS calls (callsign TEXT PRIMARY KEY, zip, state)');
 				}
 				for (var x in lines )
 				{

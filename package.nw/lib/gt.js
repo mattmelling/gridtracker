@@ -1,8 +1,8 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200825;
-var gtBeta = "Betamax";
+var gtVersion = 1200826;
+var gtBeta = "";
 
 var g_startVersion = 0;
 
@@ -4549,6 +4549,7 @@ function loadStrikes ()
 				
 			
 				var worker = "<font style='color:yellow;font-weight:bold'>Lighting Strike Detected!</font><br/>";
+				worker += "<font style='color:white'>"+userTimeString(null)+"</font><br/>";
 				worker += "<font style='color:orange'>Distance: </font><font style='color:lightblue;font-weight:bold'>"+dist+"</font><br/>";
 				worker += "<font style='color:cyan'>Bearing: </font><font style='color:lightgreen;font-weight:bold'>"+azim+"</font>";
 
@@ -9411,7 +9412,7 @@ function updateBasedOnIni() {
 	if ( g_jtdxProcessRunning )
 		count++;
 	// UdpPortNotSet
-	if (g_appSettings.wsjtUdpPort == 0 || count == 1) {
+	if (g_appSettings.wsjtUdpPort == 0 && count == 1) {
 		if (g_wsjtxProcessRunning)
 			which = g_wsjtxIni;
 		else if (g_jtdxProcessRunning)
@@ -9517,9 +9518,10 @@ function validateNumAndLetter( input )
 
 function validCallsignsKeys( value )
 {
+	console.log(value);
 	if (value == 44)
 		return true;
-	if ( value >= 48 && value <= 57 )
+	if ( value >= 47 && value <= 57 )
 		return true;
 	if ( value >= 65 && value <= 90 )
 		return true;
@@ -11069,14 +11071,11 @@ function setMsgSettingsView() {
 		msgAwayTextDiv.style.display = "none";
 }
 
-function loadAdifSettings() {
-	
+function loadAdifSettings() 
+{
 	workingCallsignEnable.checked = g_appSettings.workingCallsignEnable;
 	workingCallsignsValue.value = (Object.keys(g_appSettings.workingCallsigns).join(","));
 	
-	if ( workingCallsignsValue.value.length == 0 )
-		 workingCallsignsValue.value = myDEcall;
-	 
 	ValidateCallsigns(workingCallsignsValue);
 	
 	workingDateEnable.checked = g_appSettings.workingDateEnable ;
@@ -11220,7 +11219,7 @@ function startupButtonsAndInputs() {
 	}
 	catch (e)
 	{
-		alert(e.message);
+		//alert(e.message);
 	}
 }
 
@@ -13415,7 +13414,6 @@ window.addEventListener("load", function(){
 });
 
 process.on('uncaughtException', function (e) {
-	alert(e);
 	console.error('uncaughtException:', e);
 	console.error(e.stack);
 });

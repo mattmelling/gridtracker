@@ -36,7 +36,7 @@
 		</div>
 		<div id="documentsDiv" style="display:none" >
 		<div  >
-			<div>Your documents folder ( <text id="searchedDocFolder"></text> ) could not be located.</div><br/>
+			<div>Your documents folder ( <div id="searchedDocFolder"></div> ) could not be located.</div><br/>
 			<div>GridTracker can not continue without it.</div><br/>
 			<div>Please select a directory so that GridTracker can store important files.</div><br/>
 			<input id="documentDirectoryInput" type="file" nwdirectory onchange="directoryInput(this)"/>
@@ -308,7 +308,7 @@
          <div id="myGridTooltip" style="background-color:black;padding:5px;text-align:center;display:block;position:absolute;z-index:-499;left:50px;top:50px;border:2px solid white;white-space: nowrap;overflow:hidden" class="roundBorder"></div>
 		 <div id="myTrophyTooltip" style="background-color:black;padding:5px;text-align:center;display:block;position:absolute;z-index:-499;left:50px;top:50px;border:2px solid white;white-space: nowrap;overflow:hidden" class="roundBorder"></div>
 		<div id="myMoonTooltip" style="background-color:black;padding:5px;text-align:center;display:block;position:absolute;z-index:-499;left:50px;top:50px;border:2px solid white;white-space: nowrap;overflow:hidden" class="roundBorder"></div>
-		<div id="helpDiv"style="animation: fadeInEffect .1s;margin: 2px;left:30px;top:20px;display:none;background-color:black;padding:5px;text-align:center;vertical-align:middle;position:absolute;z-index:600;border:1px cyan;" class="roundBorder" >
+		<div id="helpDiv" style="animation: fadeInEffect .1s;margin: 2px;left:30px;top:20px;display:none;background-color:black;padding:5px;text-align:center;vertical-align:middle;position:absolute;z-index:600;border:1px cyan;" class="roundBorder" >
 			<div id="printHotKeyDiv" style="border:1px solid cyan;color:white;text-align:auto;" >
 <table align=center class="darkTable" >
 <tr><th  colspan=6 >Hot Key List (v1.20.0825+)</th>
@@ -750,7 +750,7 @@
             </div>
 			<div id="logbookSettingsDiv" 	class="settingsTabcontent" style="padding:5px;">
 				<div style="padding:5px;" class="mapItem">
-					<div style="padding:5px;"  class="mapItem" title="Filter Logbook QSO To These Callsigns Only&#10;(comma seperated)">
+					<div style="padding:5px;"  class="mapItem" title="Filter Logbook QSOs to include these Callsigns only&#10;(comma separated)">
 						 <table align=center>
 							<tr>
 							   <td><b>Working Callsign(s)</b></td>
@@ -763,7 +763,7 @@
 							</tr>
 						 </table>
 					</div>
-					<div style="padding:5px;"  class="mapItem" title="Filter Logbook QSO From This Date And After">
+					<div style="padding:5px;"  class="mapItem" title="Filter Logbook QSOs from before this Date">
 						 <table align=center>
 							<tr>
 							   <td><b>Working Date</b></td>
@@ -785,7 +785,7 @@
 						 </table>
 					</div>
 					<br/>
-					<div  style="padding:5px;display:none;font-size:larger:font-weight:bold:color:cyan;" id="applyCallsignsAndDateDiv" class="button"  onclick="applyCallsignsAndDates();" title="Apply Changes and Re-Import Logbook(s)">Apply Changes</div>
+					<div  style="padding:5px;display:none;font-size:larger;font-weight:bold;color:cyan;" id="applyCallsignsAndDateDiv" class="button"  onclick="applyCallsignsAndDates();" title="Apply Changes and Re-Import Logbook(s)">Apply Changes</div>
 				</div>
 			</div>
             <div id="mapSettingsDiv" 	class="settingsTabcontent" style="background-color:#00000044;text-shadow: 0 0 5px #000000FF;">
@@ -1747,7 +1747,8 @@
 				  &copy;2020 Henry "atouk" Forte / N2VFL<br/>                 
                   <p>
 				  <H3>Contributors</H3>
-				  <b>NR&Oslash;Q</b> - "d3jake" KE&Oslash;RIY - "Don" KB2YSI - K4KPW
+				  <b>NR&Oslash;Q</b><p>
+				  "d3jake" KE&Oslash;RIY - "Don" KB2YSI - K4KPW - "Paul" K6PST
                   <br />
                   <img src="./gridview.png" /> <br />
 				 

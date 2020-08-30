@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <filter id="brightness-filter-0" x="-500%" y="-500%" width="1000%" height="1000%" bx:preset="brightness 1 0.9">
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="0.9"/>
+        <feFuncG type="linear" slope="0.9"/>
+        <feFuncB type="linear" slope="0.9"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect style="fill: rgb(255, 175, 51); paint-order: fill; filter: url(#brightness-filter-0);" width="41.258" height="82.655" y="14.682" x="231.021"/>
+  <g transform="matrix(0.913275, 0, 0, 0.914797, 17.852058, 14.681866)" style="filter: url(#brightness-filter-0);">
+    <rect x="84.347" y="61.757" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 258.1618 106.9313)" style="fill: rgb(255, 219, 45); paint-order: fill;" width="45.176" height="90.352"/>
+    <rect y="233.412" style="fill: rgb(255, 219, 45); paint-order: fill;" width="90.353" height="45.176"/>
+    <rect x="84.335" y="359.89" transform="matrix(0.7071 0.7071 -0.7071 0.7071 317.7418 43.0348)" style="fill: rgb(255, 219, 45); paint-order: fill;" width="45.176" height="90.352"/>
+    <rect x="233.412" y="421.647" style="fill: rgb(255, 219, 45); paint-order: fill;" width="45.176" height="90.353"/>
+  </g>
+  <g transform="matrix(0.913275, 0, 0, 0.914797, 17.852058, 14.681866)" style="filter: url(#brightness-filter-0);">
+    <rect x="382.48" y="359.906" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -167.7949 405.0719)" style="fill: rgb(255, 175, 51); paint-order: fill;" width="45.176" height="90.352"/>
+    <rect x="421.647" y="233.412" style="fill: rgb(255, 175, 51); paint-order: fill;" width="90.353" height="45.176"/>
+    <rect x="382.477" y="61.758" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 615.8759 468.9727)" style="fill: rgb(255, 175, 51); paint-order: fill;" width="45.176" height="90.352"/>
+  </g>
+  <circle style="fill: rgb(255, 234, 138); paint-order: fill; filter: url(#brightness-filter-0);" cx="273.852" cy="270.682" r="180.706" transform="matrix(0.913275, 0, 0, 0.914797, 1.548213, 1.250953)"/>
+  <path style="fill: rgb(255, 219, 45); paint-order: fill; filter: url(#brightness-filter-0);" d="M 251.65 83.561 L 251.65 414.179 C 342.796 414.179 416.685 340.168 416.685 248.87 C 416.685 157.572 342.796 83.561 251.65 83.561 Z"/>
+  <polygon style="fill: rgb(255, 175, 51); paint-order: fill; filter: url(#brightness-filter-0);" points="252.039 347.351 252.039 277.868 163.921 277.868 252.039 148.831 252.039 218.314 340.159 218.314"/>
+</svg>

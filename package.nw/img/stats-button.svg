@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <g style="" transform="matrix(0.885304, 0, 0, 0.837636, 28.462866, 39.920879)">
+    <g>
+      <line style="stroke-linecap: round; stroke-linejoin: round; stroke: rgb(0, 227, 227); fill: rgb(0, 227, 227); stroke-width: 53.9299px;" x1="443.945" y1="213.831" x2="431.207" y2="110.487"/>
+      <line style="stroke-linecap: round; stroke-linejoin: round; stroke: rgb(0, 227, 227); fill: rgb(0, 227, 227); stroke-width: 53.9299px;" x1="376.819" y1="169.25" x2="390.205" y2="65.906" transform="matrix(-0.270065, -1.017635, 0.910999, -0.270065, 379.971717, 539.607005)"/>
+      <line style="stroke-linecap: round; stroke-linejoin: round; stroke: rgb(0, 227, 227); fill: rgb(0, 227, 227); stroke-width: 53.9299px;" x1="74.86" y1="412.98" x2="181.188" y2="234.026"/>
+      <line style="stroke-linecap: round; stroke-linejoin: round; stroke: rgb(0, 227, 227); fill: rgb(0, 227, 227); stroke-width: 53.9299px;" x1="181.367" y1="232.296" x2="296.17" y2="311.08"/>
+      <line style="stroke-linecap: round; stroke-linejoin: round; stroke: rgb(0, 227, 227); fill: rgb(0, 227, 227); stroke-width: 53.9299px;" x1="296.817" y1="310.897" x2="431.068" y2="109.21"/>
+    </g>
+    <g style="" transform="matrix(0.959502, 0, 0, 1, 0.3546, 0)">
+      <line style="stroke-linejoin: round; stroke-linecap: round; stroke: rgb(189, 0, 180); stroke-width: 40.6282px;" x1="8.756" y1="3.226" x2="8.756" y2="503.226"/>
+      <line style="stroke-linejoin: round; stroke-linecap: round; stroke: rgb(189, 0, 180); stroke-width: 40.6282px;" x1="12.742" y1="502.865" x2="508.234" y2="502.865"/>
+    </g>
+  </g>
+</svg>

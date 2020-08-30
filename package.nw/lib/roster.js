@@ -1273,7 +1273,7 @@ function viewRoster()
 	}
 			
 		
-	var showBands = (window.opener.g_instancesIndex.length > 1?true:false);
+	var showBands = (Object.keys(bands).length > 1?true:false);
 	var showModes = (Object.keys(modes).length > 1?true:false);
 	
 
@@ -1282,18 +1282,18 @@ function viewRoster()
 	
 	if ( g_rosterSettings.compact == false )
 	{
-		worker = "<table id='callTable' class='darkTable' align=left>";
+		worker = "<table id='callTable' class='rosterTable' align=left>";
 		
 
-		worker += "<th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
+		worker += "<thead><th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
 
 		if ( showBands )
 		{
-			worker += "<th style='' onclick='' >Band</th>";
+			worker += "<th onclick='' >Band</th>";
 		}
 		if ( showModes )
 		{
-			worker += "<th style='' onclick='' >Mode</th>";
+			worker += "<th onclick='' >Mode</th>";
 		}
 		
 		worker += "<th style='cursor:pointer;' onclick='showRosterBox(1);'  >Grid</th>";
@@ -1345,7 +1345,7 @@ function viewRoster()
 			worker += "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAM</th>";
 
 		if ( g_rosterSettings.columns.Age )
-			worker += "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th>";
+			worker += "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th></thead>";
 	}
 	else
 	{
@@ -1397,7 +1397,7 @@ function viewRoster()
 
 
 		
-		worker += "<tr id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
+		worker += "<tbody><tr id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
 		worker += "<td name='Callsign' align=left " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
 			 thisCall + newCallList[x].band+newCallList[x].mode + "\")'>" + thisCall.formatCallsign() + "</td>";
 
@@ -1503,7 +1503,7 @@ function viewRoster()
 		if ( g_rosterSettings.columns.Age )
 			worker += "<td style='color:#EEE' class='timeCol' id='tm"+thisCall+newCallList[x].band+newCallList[x].mode+"'>"+  (timeNowSec() - newCallList[x].age).toDHMS() +"</td>";
 		
-		worker += "</tr>";
+		worker += "</tr></tbody>";
 		}
 		else
 		{
@@ -2105,7 +2105,7 @@ function setVisual()
 			if ( document.getElementById(key) )
 				document.getElementById(key).checked = g_rosterSettings.wanted[key];
 		}
-		
+
 		awardHunterTr.style.display = "none";
 		awardWantedDiv.style.display = "none";
 		huntingTr.style.display = "";
@@ -2120,7 +2120,7 @@ function setVisual()
 		}
 		else
 		{
-			huntingMatrixDiv.style.display = "";
+			huntingMatrixDiv.style.display = "none";
 			huntModeTd.style.display = "block";
 			
 			if (   huntMode.value != "callsign" &&  huntMode.value != "usstate" &&  huntMode.value != "dxccs" )	

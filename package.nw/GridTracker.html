@@ -175,7 +175,7 @@
          
                   <tr>
                      <td colspan=2 ><div class="button"  onclick="clearLive();" title="Clear Live Data from GridTracker">Clear Live</div></td>
-                     <td colspan=2 ><div style="min-width:58px" id="clearOrLoadButton" class="button"  onclick="clearOrLoadQSOs();updateCountStats();" title="Clear or Reload Log Data&10;(does not delete files)">Clear Log</div></td>
+                     <td colspan=2 ><div style="min-width:58px" id="clearOrLoadButton" class="button"  onclick="clearOrLoadQSOs();updateCountStats();" title="Clear or Reload Log Data&#10;(does not delete files)">Clear Log</div></td>
                   </tr>
                </table>
             </div>
@@ -266,7 +266,7 @@
 				<div id="callRosterButton"  class="iconButton" style="padding:0px;" onclick="openCallRosterWindow();" title="Open Call Roster" ><img  src="./img/roster-button.svg" class="buttonImgWide" /></div>
 				<div id="pushPinButton" onclick="togglePushPinMode();" class="iconButton" title="Toggle Push-Pin Mode"><img  id="pinImg" src="" class="buttonImg" /></div>
 				<div id="lookupButton" onclick="openLookupWindow()" class="iconButton" title="Open Lookup Window" ><img style="" src="./img/lookup.svg" class="buttonImg" /></div>		
-				<div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats"><img src="./img/stats.png" class="buttonImg" /></div> 
+				<div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats"><img src="./img/stats-button.svg" class="buttonImg" /></div> 
 				<div id="modeModeDiv" onclick="toggleOffline()"  class="iconButton" title="Toggle Online/Offline Mode"><img id="offlineImg" src="" class="buttonImg" /></div>
 				<div id="earthShadow" onclick="toggleEarth()"  class="iconButton" title="Toggle Grayline"><img id="earthImg" src="" class="buttonImg" /></div>
 				<div id="legendToggleDiv" onclick="toggleLegend()" class="iconButton" title="Toggle Map Legend"><img id="legendImg" src="./img/gt_key.png" class="buttonImg" /></div>
@@ -276,11 +276,11 @@
 				<div id="buttonStrikesDiv" onclick="toggleStrikesValue()" class="iconButton" title="Toggle Lightning Strikes" ><img id="strikesImg" src="./img/lw.png"  class="buttonImg"  /></div>
 				<div id="lunaButton" onclick="toggleMoon();" class="iconButton" title="Toggle Moon" ><img id="lunaButonImg" src="./img/luna.png" class="buttonImg" /></div>
 				<div id="gridModeDiv" onclick="toggleGridMode()"  class="iconButton" title="Toggle Maidenhead Width"><img id="modeImg" src="" class="buttonImg" /></div>
-				<div id="settingsButton" onclick="showSettingsBox();" class="iconButton" title="Settings"><img  src="./img/settings_32.png" class="buttonImg" /></div>
+				<div id="settingsButton" onclick="showSettingsBox();" class="iconButton" title="Settings"><img  src="./img/settings-button.svg" class="buttonImg" /></div>
 				<div id="adifLoadDiv" onclick="adifLoadDialog()" class="iconButton" title="Load ADIF Log"><img src="./img/adif.png" class="buttonImg" /></div>
-				<div id="conditionsButton" onclick="showConditionsBox();" class="iconButton" title="View Current Conditions" ><img  src="./img/sun_info.png" class="buttonImg" /></div>
+				<div id="conditionsButton" onclick="showConditionsBox();" class="iconButton" title="View Current Conditions" ><img  src="./img/conditions.svg" class="buttonImg" /></div>
 				<div id="donateButton" onclick="gotoDonate();" class="iconButton" title="Donate with PayPal"><img style="-webkit-filter: invert(1) brightness(50%);" src="./img/heart.png" class="buttonImg" /></div>
-				<div id="alterMuteDiv" onclick="toggleAlertMute()" class="iconButton" title="Toggle Audio Mute" ><img style="-webkit-filter:brightness(80%);" id="alertMuteImg" src="" class="buttonImg" /></div>		
+				<div id="alterMuteDiv" onclick="toggleAlertMute()" class="iconButton" title="Toggle Audio Mute" ><img id="alertMuteImg" src="" class="buttonImg" /></div>		
 				<div id="buttonPSKSpotsBoxDiv" onClick="togglePskSpots();" class="iconButton" title="View PSK-Reporter Reception Reports"><img id="pskSpotsImg" src="./img/psk_spots_off.png" class="buttonImg" /></div>				
 				<div id="buttonPsk24CheckBoxDiv" onclick="grabPsk24()" class="iconButton" title="Your PSK 24hour report"><img  id="pskImg" src="./img/psk_24_32.png" class="buttonImg" /></div>
 				<div id="buttonQRZCheckBoxDiv" onclick="if ( ValidateQrzApi(qrzApiKey ) ) grabQrzComLog()" class="iconButton" title="Download log from QRZ.com" ><img id="qrzLogImg" src="./img/log_QRZ.png"   class="buttonImg"  /></div>
@@ -353,7 +353,6 @@
          <div id="rootSettingsDiv"  style="margin:0;top:1px;display:none;background-color:#00000000;padding:0px;text-align:center;vertical-align:middle;position:relative;z-index:600;" class="roundBorder" >
             <div class="settingstab">
                <button id="generalbut" class="settingsTablinks active" onclick="openSettingsTab(event, 'udpSettingsDiv')">General</button>
-			   <button id="logbut" class="settingsTablinks" onclick="openSettingsTab(event, 'logbookSettingsDiv')">Logbook</button>
 			   <button id="lookupbut" class="settingsTablinks" onclick="openSettingsTab(event, 'lookupsSettingsDiv')">Lookups</button>
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'SpeechSettingsDiv')">Audio</button>
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'mapSettingsDiv')">Map</button>
@@ -361,6 +360,7 @@
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'alertsDiv')">Alerts</button>
 			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'callRosterDiv')">Call Roster</button>
 			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'chatSettingsDiv')">Messaging</button>
+			   <button id="logbut" class="settingsTablinks" onclick="openSettingsTab(event, 'logbookSettingsDiv')">Logbook</button>
 			   <button id="update" class="settingsTablinks" onclick="openSettingsTab(event, 'updateSettingsDiv')">Update</button>
                <button class="settingsTablinks"  style="margin-right:25px;"  onclick="openSettingsTab(event, 'aboutDiv')">About</button>
             </div>

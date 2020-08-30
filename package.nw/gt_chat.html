@@ -158,24 +158,12 @@ function userAgrees()
 	wrapperDiv.style.display = "block";
 }
 
-function init()
-{
-	lockNewWindows();
+document.addEventListener('keyup', handleKey, false);
 
-	if (window.opener.g_appSettings.gtAgree != "user agrees to messaging")
+function handleKey( event )
+{
+    if (event.key === "Enter") 
 	{
-		noticeDiv.style.display = "block";
-		wrapperDiv.style.display = "none";
-	}
-	else
-	{
-		noticeDiv.style.display = "none";
-		wrapperDiv.style.display = "inline-block";
-		Resize();
-	}
-	showAllCallsigns();
-	messageInput.addEventListener("keyup", function(event) {
-    if (event.key === "Enter") {
         // Do work
 		var msg = messageInput.value.trim();
 		if ( msg.length > 0 && g_currentId != 0 && g_currentId in window.opener.g_gtFlagPins && window.opener.g_gtFlagPins[g_currentId].canmsg == true )
@@ -204,8 +192,25 @@ function init()
 			scrollDown(messageTextDiv);
 		}
 		messageInput.value = "";
-    }
-	});
+    };
+}
+
+function init()
+{
+	lockNewWindows();
+
+	if (window.opener.g_appSettings.gtAgree != "user agrees to messaging")
+	{
+		noticeDiv.style.display = "block";
+		wrapperDiv.style.display = "none";
+	}
+	else
+	{
+		noticeDiv.style.display = "none";
+		wrapperDiv.style.display = "inline-block";
+		Resize();
+	}
+	showAllCallsigns();
 	
 }
 

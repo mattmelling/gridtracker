@@ -105,7 +105,7 @@ var def_mapSettings =
 	"longitude" :  0.0,
 	"latitude" :  0.0,
 	"loudness" :  1,
-	"mapIndex" :  0,
+	"mapIndex" :  19,
 	"mergeOverlay" :  false,
 	"mouseOver" :  true,
 	"nightLoudness" :  0.8,

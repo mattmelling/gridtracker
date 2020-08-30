@@ -1602,9 +1602,7 @@ function oldSendToLogger()
 	sendToLogger(report);
 	
 	
-	if (g_ignoreMessages == 0) {
-		onAdiLoadComplete(report);
-	}
+
 	updateCountStats();
 }
 
@@ -1714,6 +1712,8 @@ function sendToLogger(ADIF)
 	
 	if ( reportHash != lastReportHash )
 	{
+		onAdiLoadComplete(report);
+		
 		// Log worthy
 		if ( logGTqsoCheckBox.checked == true )
 		{

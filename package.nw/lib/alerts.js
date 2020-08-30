@@ -104,7 +104,21 @@ function loadAlerts()
 	
 	if ( typeof localStorage.savedAlerts == 'undefined' )
 	{
-		g_alerts = Object();
+		g_alerts = {
+			"popup" : {
+				"value": "QRZ",
+				"type": "4",
+				"notify": "2",
+				"repeat": "2",
+				"filename": "",
+				"shortname": "",
+				"lastMessage": "",
+				"lastTime": 0,
+				"fired": 0,
+				"needAck": 0
+			}
+		};
+		
 		g_speechSettings =  Object();
 		g_audioSettings = Object();
 		g_speechSettings.rate = 1;
@@ -530,7 +544,7 @@ function checkAlerts( DEcallsign,  grid,  originalMessage, callsignRecord, band,
 		}
 		else if (  nalert.type == 4 ) // QRZ
 		{
-			if ( originalMessage.indexOf(nalert.value + " ") == 0 )
+			if ( myDEcall.length > 0 && originalMessage.indexOf(myDEcall + " ") == 0 )
 			{
 				handleAlert(nalert, DEcallsign, originalMessage, callsignRecord);
 				hadAlert = true;
@@ -615,7 +629,7 @@ function handleAlert( nAlert, target, lastMessage , callsignRecord, grid)
 		if ( nAlert.notify == 0 )
 			playAlertMediaFile( nAlert.filename );
 		if ( nAlert.notify == 1 )
-			speakQRZString( target, "Calling", nAlert.value );
+			speakQRZString( target, "Calling", myDEcall );
 		if ( nAlert.notify == 2 )
 			displayAlertPopUp( "QRZ", null , null );
 	}
@@ -755,7 +769,7 @@ function unflashAlertPopUp()
 				if ( g_alerts[key].type == 2 )
 					worker += "<td style='color:red'>" + g_alerts[key].value + "</td>";
 				if ( g_alerts[key].type == 4  )
-					worker += "<td style='color:cyan'>" + g_alerts[key].value + "</td>";
+					worker += "<td style='color:cyan'>" + myDEcall + "</td>";
 				if ( g_alerts[key].type == 5 )
 					worker += "<td style='color:lightgreen'>" + g_alerts[key].value + "*</td>";
 				if ( g_alerts[key].type == 6 )
@@ -905,7 +919,7 @@ function displayAlerts()
 			if ( g_alerts[key].type == 2 )
 				worker += "<td style='color:red'>" + g_alerts[key].value + "</td>";
 			if ( g_alerts[key].type == 4 )
-				worker += "<td style='color:cyan'>" + g_alerts[key].value + "</td>";		
+				worker += "<td style='color:cyan'>" + myDEcall + "</td>";		
 			if ( g_alerts[key].type == 5 )
 				worker += "<td style='color:lightgreen'>" + g_alerts[key].value + "*</td>";
 			if ( g_alerts[key].type == 6 )

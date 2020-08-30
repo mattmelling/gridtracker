@@ -6,6 +6,8 @@ table, th, td {
 	text-align:auto;
 	padding:0px;
 	margin:0px;
+	top:0;
+	
 }
 
 table, th, td, select, .compact {font-size: 12px;}
@@ -17,10 +19,6 @@ th,td {
 	padding-left:2px;
 }
 
-
-th {
-	font-weight:normal;
-}
 
 
 input[type="checkbox"] 
@@ -149,33 +147,39 @@ table.awardTableCSS thead th:first-child {
 
 
 
-table.darkTable {
+table.rosterTable {
   border-collapse: collapse;
   border: 1px solid #555;
   background-color: black;
   text-align: center;
 }
-table.darkTable td, table.darkTable th {
+
+table.rosterTable td, table.rosterTable th {
   border: 1px solid #555;
   padding:2px 4px;
   
 }
 
-table.darkTable thead {
-  border-bottom: 2px solid #555;
+table.rosterTable thead {
+  border-bottom: 1px solid #555;
 
 }
-table.darkTable thead th {
-  font-weight: bold;
-  text-align: center;
-  border-left: 2px solid #555;
+table.rosterTable thead th {
+	font-weight: bold;
+	text-align: center;
+	border-left:1px solid #555;
+	top:-1px;
+	position:sticky;
+	background-color: #000000FF;
 }
-table.darkTable thead th:first-child {
+
+
+table.rosterTable thead th:first-child {
   border-left: none;
  
 }
 
-.darkTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #555, inset 0px -11px 6px -8px #555; }
+.rosterTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #555, inset 0px -11px 6px -8px #555; }
 
 .oneByOne {
 	background-clip:content-box;box-shadow: 0 0 8px 3px inset #FFF;background-color:#000;color:#FF0;
@@ -230,3 +234,7 @@ table.darkTable thead th:first-child {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+
+
+
+.rosterTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888; }

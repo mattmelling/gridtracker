@@ -1,7 +1,7 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200826;
+var gtVersion = 1200830;
 var gtBeta = "";
 
 var g_startVersion = 0;
@@ -21,9 +21,6 @@ var vers = String(gtVersion);
 var gtShortVersion = "v" + vers.substr(0,1) + "." + vers.substr(1,2) + "." + vers.substr(3,4) + " " + gtBeta;
 var gtVersionString = "GridTracker ©2020 N0TTL " + gtShortVersion;
 
-document.oncontextmenu = function() {
- return false;
-};
 
 var g_windowName = "GT-main";
 var os = require('os');
@@ -140,7 +137,7 @@ var myBand = 	g_appSettings.myBand;
 var myRawFreq = g_appSettings.myRawFreq;
 var myRawCall = g_appSettings.myRawCall;
 var myRawGrid = g_appSettings.myRawGrid;
-var myDXcall = "";
+
 
 var g_flightDuration = 30;
 
@@ -540,8 +537,8 @@ var g_gtShareFlagImageArray = Array();
 g_gtShareFlagImageArray[1] = "./img/share-on.png";
 g_gtShareFlagImageArray[0] = "./img/share-off.png";
 var g_mapImageArray = Array();
-g_mapImageArray[1] = "./img/online_map3_32.png";
-g_mapImageArray[0] = "./img/offline_map_32.png";
+g_mapImageArray[1] = "./img/online_map.svg";
+g_mapImageArray[0] = "./img/offline_map.svg";
 var g_pinImageArray = Array();
 g_pinImageArray[1] = "./img/red_pin_32.png";
 g_pinImageArray[0] = "./img/gt_grid.png";
@@ -552,8 +549,8 @@ var g_qslLockImageArray = Array();
 g_qslLockImageArray[0] = "./img/qsl_unlocked_32.png";
 g_qslLockImageArray[1] = "./img/qsl_locked_32.png";
 var g_alertImageArray = Array();
-g_alertImageArray[0] = "./img/audio_alerts_32.png";
-g_alertImageArray[1] = "./img/audio_alerts_off_32.png";
+g_alertImageArray[0] = "./img/unmuted-button.svg";
+g_alertImageArray[1] = "./img/muted-button.svg";
 var g_maidenheadModeImageArray = Array();
 g_maidenheadModeImageArray[0] = "./img/mh4_32.png";
 g_maidenheadModeImageArray[1] = "./img/mh6_32.png";
@@ -4299,9 +4296,12 @@ function createGlobalMapLayer(name, maxResolution, minResolution) {
 	g_layerSources[name] = new ol.source.Vector({});
 	if ( typeof maxResolution == "undefined" && typeof minResolution == "undefined" )
 	{
+		var zIndex = Object.keys(g_layerVectors).length + 1;
+		if ( name == "strikes" )
+			zIndex = 2000;
 		g_layerVectors[name] = new ol.layer.Vector({
 			source: g_layerSources[name],
-			zIndex: Object.keys(g_layerVectors).length + 1
+			zIndex: zIndex
 			});
 	}
 	else if ( typeof minResolution == "undefined" )
@@ -4345,7 +4345,7 @@ function createGeoJsonLayer(name, url, color, stroke) {
 			source: layerSource,
 			style: style,
 			visible: true,
-			Index: 1000
+			zIndex: 1
 		
 		});
 	layerVector.set("name", name);
@@ -4575,14 +4575,12 @@ function loadStrikes ()
  
 }
 
-
 function toggleMouseTrack()
 {
 	g_appSettings.mouseTrack ^= 1;
 	if ( g_appSettings.mouseTrack == 0 )
 		mouseTrackDiv.style.display = "none";
 }
-
 
 function myGmapNameCompare(a, b) {
 	return g_maps[a].name.localeCompare(g_maps[b].name);
@@ -4664,10 +4662,11 @@ function initMap() {
 	createGlobalMapLayer("flight");
 	createGlobalMapLayer("transmit");
 	createGlobalMapLayer("gtflags");
-
 	createGlobalMapLayer("temp");
-	createGlobalMapLayer("strikes");
 	createGlobalMapLayer("tz");
+	createGlobalMapLayer("radar");
+	createGlobalMapLayer("strikes");
+
 
 	g_mapView = new ol.View({
 			center: [g_myLon, g_myLat],
@@ -4697,9 +4696,9 @@ function initMap() {
 				g_layerVectors["transmit"],
 				g_layerVectors["gtflags"],
 				g_layerVectors["temp"],
-				g_layerVectors["strikes"],
-				g_layerVectors["tz"]
-				
+				g_layerVectors["tz"],
+				g_layerVectors["radar"],
+				g_layerVectors["strikes"]
 			],
 			controls: g_mapControl,
 			loadTilesWhileInteracting: false,
@@ -4905,42 +4904,28 @@ var g_nexradEnable = 0;
 
 function createNexRad()
 {
-	
-//http://kmi.dpaw.wa.gov.au/geoserver/gwc/service/wms?SERVICE=WMS&
-	
 
-	
-	/*g_Nexrad =  new ol.layer.Tile({
-			source: new ol.source.TileWMS({
-			  url: 'http://kmi.dpaw.wa.gov.au/geoserver/gwc/service/wms',
-			  params: {'LAYERS': 'bom:IDR00006'}
-			})
-		  });*/
-		 
-	/*g_Nexrad =  new ol.layer.Tile({
-			source: new ol.source.TileWMS({
-			  url: 'http://openwms.fmi.fi/geoserver/wms',
-			  params: {'LAYERS': 'Radar:suomi_dbz_eureffin'}
-			})
-		  });*/
-		  
-	/*g_Nexrad = new ol.layer.Image({
-      source: new ol.source.ImageWMS({
-        format: 'image/png',
-        url: 'https://geo.weather.gc.ca/geomet/',
-        params: {'LAYERS': 'RADAR_1KM_RRAI', 'TILED': true},
-      })
-    });*/
-
-	g_Nexrad =  new ol.layer.Tile({
-			source: new ol.source.TileWMS({
+	var layerSource = new ol.source.TileWMS({
 			  url: 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi',
-			  params: {'LAYERS': 'nexrad-n0q'}
-			})
-		  });
-		  
-	g_map.addLayer(g_Nexrad);
+			  params: {'LAYERS': 'nexrad-n0q'},
+			  transition: 0
+			});
+	
+	var layerVector = new ol.layer.Tile({
+			source: layerSource,
+			visible: true,
+			zIndex: 900
+		
+		});
+		
+	layerVector.set("name", "radar");
+	
+	return layerVector;
+	
 }
+
+	
+
 function toggleNexrad()
 {
 	g_nexradEnable ^= 1;
@@ -4948,11 +4933,14 @@ function toggleNexrad()
 	{
 		if ( g_Nexrad != null )
 		{
+			g_map.removeLayer(g_Nexrad);
 			delete g_Nexrad;
-			g_Nexrad = null;
+			
 		}
-  
-		createNexRad();
+
+
+		g_Nexrad = createNexRad();
+		g_map.addLayer(g_Nexrad);
 
 		if ( g_nexradInterval == null )
 			g_nexradInterval = setInterval(nexradRefresh,600000);
@@ -4984,9 +4972,9 @@ function nexradRefresh()
 	{
 		g_map.removeLayer(g_Nexrad);
 		delete g_Nexrad;
-		g_Nexrad = null;
 		
-		createNexRad();
+
+		g_Nexrad = createNexRad();;
 	}
 }
 
@@ -5421,7 +5409,7 @@ function activeRig( instance )
 }
 
 var g_lastDecodeCallsign = "";
-var g_lastTranmitCallsign = "";
+var g_lastTranmitCallsign = {};
 
 function handleWsjtxStatus(newMessage) {
 	
@@ -5450,7 +5438,25 @@ function handleWsjtxStatus(newMessage) {
 	{
 		rigWrap.style.display= "none";
 	}
+
+	var DXcall = newMessage.DXcall.trim();
 	
+	if ( DXcall.length > 1 )
+	{
+		if ( !(newMessage.instance in g_lastTranmitCallsign ) )
+			g_lastTranmitCallsign[newMessage.instance] = "";
+		
+		if ( lookupOnTx.checked == true && newMessage.Transmitting == 1  )
+		{
+			openLookupWindow(true);
+		}
+		if (  g_lastTranmitCallsign[newMessage.instance]  != DXcall )
+		{
+			lookupCallsign(DXcall, newMessage.DXgrid.trim() );
+			g_lastTranmitCallsign[newMessage.instance]  = DXcall;
+		}
+	}
+
 	if ( g_activeInstance == newMessage.instance )
 	{
 		var sp = newMessage.Id.split(" - ");
@@ -5501,7 +5507,8 @@ function handleWsjtxStatus(newMessage) {
 			" Hz </font><font color='yellow'>(" + myBand + ")</font>";
 		myRawCall = newMessage.DEcall.trim();
 
-		myRawGrid = theDEGrid = newMessage.DEgrid.trim().substr(0, 6);
+		myRawGrid = newMessage.DEgrid.trim().substr(0, 6);
+		
 		var LL = squareToLatLongAll(myRawGrid);
 		g_mapSettings.latitude = g_myLat = LL.la2 - ((LL.la2 - LL.la1) / 2);
 		g_mapSettings.longitude = g_myLon = LL.lo2 - ((LL.lo2 - LL.lo1) / 2);
@@ -5510,8 +5517,6 @@ function handleWsjtxStatus(newMessage) {
 			g_lastRawGrid = myRawGrid;
 		}
 
-	
-		myDXcall = DXcall = newMessage.DXcall.trim();
 
 		dxCallBoxDiv.className = "DXCallBox";
 
@@ -5533,19 +5538,7 @@ function handleWsjtxStatus(newMessage) {
 		}
 		localDXGrid.innerHTML = myDXGrid = newMessage.DXgrid.trim();
 
-		if ( myDXcall.length > 1 )
-		{
-			if ( lookupOnTx.checked == true && newMessage.Transmitting == 1 && g_lastTranmitCallsign != myDXcall )
-			{
-				openLookupWindow(true);
-				g_lastTranmitCallsign = myDXcall;
-			}
-			if (  g_lastDecodeCallsign != myDXcall )
-			{
-				lookupCallsign(DXcall, myDXGrid);
-				g_lastDecodeCallsign = myDXcall;
-			}
-		}
+
 
 		if (myDXGrid.length == 0 && hash in g_liveCallsigns) {
 			localDXGrid.innerHTML = myDXGrid = g_liveCallsigns[hash].grid.substr(0, 4);
@@ -6253,15 +6246,22 @@ function shapeFeature(key, geoJsonData, propname, fillColor, borderColor, border
 	return feature;
 
 }
-function handleWsjtxClear(newMessage) {
-	g_lastMessages = Array();
-	g_lastTraffic = Array();
-	clearGrids();
-	clearCalls();
-	setHomeGridsquare();
+function handleWsjtxClear(newMessage) 
+{
+	for ( var hash in g_liveCallsigns )
+	{
+		if ( g_liveCallsigns[hash].instance == newMessage.instance )
+			delete g_liveCallsigns[hash];
+	}
+	for (var call in g_callRoster) {
+		if ( g_callRoster[call].callObj.instance == newMessage.instance )
+			delete g_callRoster[call];
+	}
+	
+	redrawGrids();
+	redrawPins();
+	
 	updateCountStats();
-	trafficDiv.innerHTML = "";
-	g_callRoster = {};
 	goProcessRoster();
 }
 
@@ -9518,7 +9518,6 @@ function validateNumAndLetter( input )
 
 function validCallsignsKeys( value )
 {
-	console.log(value);
 	if (value == 44)
 		return true;
 	if ( value >= 47 && value <= 57 )
@@ -11583,8 +11582,9 @@ function updateWsjtxListener(port) {
 		g_wsjtUdpSocketError = true;
 	});
 	g_wsjtUdpServer.on('message', function (message, remote) {
-
-		if (udpForwardEnable.checked == true) {
+		if ( g_closing == true ) 
+			true;
+		if (typeof udpForwardEnable != "undefined" && udpForwardEnable.checked == true) {
 			sendForwardUdpMessage(message, message.length, udpForwardPortInput.value, udpForwardIpInput.value);
 		}
 		

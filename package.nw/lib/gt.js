@@ -2,7 +2,7 @@
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
 var gtVersion = 1200830;
-var gtBeta = "";
+var gtBeta = "VHS";
 
 var g_startVersion = 0;
 
@@ -353,7 +353,7 @@ var g_showAllGrids = false;
 var g_maps = Array();
 var g_modes = {};
 var g_modes_phone = {};
-var g_colorBands = ["OOB", "4000m", "2200m", "600m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "11m", "10m", "6m", "4m", "2m", "1.25m", "70cm", "23cm"];
+var g_colorBands = ["OOB", "4000m", "2200m", "630m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "11m", "10m", "6m", "4m", "2m", "1.25m", "70cm", "23cm"];
 
 var g_pathIgnore = {};
 g_pathIgnore["RU"] = true;
@@ -478,7 +478,7 @@ var g_pskColors = {};
 g_pskColors["OOB"] = '888888';
 g_pskColors["4000m"] = '45E0FF';
 g_pskColors["2200m"] = 'FF4500';
-g_pskColors["600m"] = '1E90FF';
+g_pskColors["630m"] = '1E90FF';
 g_pskColors["160m"] = '7CFC00';
 g_pskColors["80m"] = 'E550E5';
 g_pskColors["60m"] = '0000FF';
@@ -4652,7 +4652,7 @@ function initMap() {
 	createGlobalMapLayer("qso-pins");
 	createGlobalMapLayer("live");
 	createGlobalMapLayer("live-pins");
-	createGlobalMapLayer("line-grids",50000,0);
+	createGlobalMapLayer("line-grids");
 	createGlobalMapLayer("long-grids",3000);
 	createGlobalMapLayer("short-grids",8000,3001);
 	createGlobalMapLayer("big-grids",50000,3001);
@@ -5409,7 +5409,8 @@ function activeRig( instance )
 }
 
 var g_lastDecodeCallsign = "";
-var g_lastTranmitCallsign = {};
+var g_lastTransmitCallsign = {};
+var g_lastStatusCallsign = {};
 
 function handleWsjtxStatus(newMessage) {
 	
@@ -5443,17 +5444,22 @@ function handleWsjtxStatus(newMessage) {
 	
 	if ( DXcall.length > 1 )
 	{
-		if ( !(newMessage.instance in g_lastTranmitCallsign ) )
-			g_lastTranmitCallsign[newMessage.instance] = "";
+		if ( !(newMessage.instance in g_lastTransmitCallsign ) )
+			g_lastTransmitCallsign[newMessage.instance] = "";
 		
-		if ( lookupOnTx.checked == true && newMessage.Transmitting == 1  )
+		if ( !(newMessage.instance in g_lastStatusCallsign ) )
+			g_lastStatusCallsign[newMessage.instance] = "";
+		
+		if ( lookupOnTx.checked == true && newMessage.Transmitting == 1 && g_lastTransmitCallsign[newMessage.instance]  != DXcall )
 		{
 			openLookupWindow(true);
+			g_lastTransmitCallsign[newMessage.instance]  = DXcall;
 		}
-		if (  g_lastTranmitCallsign[newMessage.instance]  != DXcall )
+
+		if ( g_lastStatusCallsign[newMessage.instance]  != DXcall )
 		{
+			g_lastStatusCallsign[newMessage.instance] = DXcall;
 			lookupCallsign(DXcall, newMessage.DXgrid.trim() );
-			g_lastTranmitCallsign[newMessage.instance]  = DXcall;
 		}
 	}
 
@@ -6394,14 +6400,7 @@ function changeLookupMerge() {
 function changelookupOnTx() {
 	g_appSettings.lookupOnTx = lookupOnTx.checked;
 	g_appSettings.lookupCloseLog = lookupCloseLog.checked;
-	if ( g_appSettings.lookupOnTx == true )
-	{
-		lookupCloseLogDiv.style.display = "inline-block";
-	}
-	else
-	{
-		lookupCloseLogDiv.style.display = "none";
-	}
+
 }
 
 function exportSettings() {
@@ -6433,13 +6432,14 @@ function checkForSettings()
 
 function importSettings()
 {
-
+	checkForSettings();
+	
 	var filename = g_appData + g_dirSeperator + "gt_settings.json";
 	if ( fs.existsSync(filename) )
 	{
 		var data = fs.readFileSync(filename);
 		data = JSON.parse(data);
-		if ( typeof data.appSettings != 'undefined' )
+		if ( typeof data.appSettings != 'undefined' && data.currentVersion == localStorage.currentVersion )
 		{
 			localStorage.clear();
 			for (var key in data )
@@ -6449,9 +6449,20 @@ function importSettings()
 			fs.unlinkSync(filename);
 			chrome.runtime.reload();
 		}
+		else
+		{
+			if ( typeof data.appSettings == 'undefined' )
+			{
+				importSettingsFile.innerHTML = "<font style='color:red'>Settings File Corrupt!</font>";
+			}
+			else if ( data.currentVersion != localStorage.currentVersion )
+			{
+				importSettingsFile.innerHTML = "<font style='color:red'>Settings Version Mismatch!</font>";
+			}
+		}
 	}
 	
-	checkForSettings();
+
 		
 }
 
@@ -9142,7 +9153,9 @@ function renderBandActivity()
 	{
 		var lines = g_bandActivity.lines[myMode];
 		
-		var bands = [ "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "4m","2m"];
+		var bands = [ "630m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "4m","2m"];
+		if ( g_myDXCC in g_callsignDatabaseUSplus )
+			bands = [ "630m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m"];
 		var bandData = Array();
 		var maxValue = 0;
 		for (var i = 0; i < bands.length; i++) {
@@ -9186,7 +9199,7 @@ function renderBandActivity()
 			{
 				var title = "Score: " + bandData[x].score + " Spots: " + bandData[x].spots + "\nTx: " + bandData[
 						x].tx + "\tRx: " + bandData[x].rx;
-				buffer += "<div title='" + title + "' style='display:inline-block' class='aBand'>";
+				buffer += "<div title='" + title + "' style='display:inline-block;margin:1px;' class='aBand'>";
 				buffer += "<div style='height: " + ((bandData[x].score * scaleFactor) + 1) +
 				"px;' class='barTx'></div>";
 				buffer += "<div style='height: " + ((bandData[x].spots * scaleFactor) + 1) +

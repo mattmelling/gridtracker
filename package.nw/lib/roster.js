@@ -521,7 +521,8 @@ function viewRoster()
 		callRoster[callHash].tx = true;
 		callRoster[callHash].callObj.shouldAlert = false;
 		callRoster[callHash].callObj.reason = Array();
-
+		callRoster[callHash].callObj.awardReason = "Callsign";
+		
 		if ( now - callRoster[callHash].callObj.age > window.opener.g_mapSettings.rosterTime )
 		{
 			callRoster[callHash].tx = false;
@@ -883,7 +884,12 @@ function viewRoster()
 				{
 					tx = testAward(award, callRoster[callHash].callObj, baseHash );
 					if ( tx  ) 
+					{
+						var x = g_awardTracker[award];
+						callRoster[callHash].callObj.awardReason = g_awards[x.sponsor].awards[x.name].tooltip+ " (" + g_awards[x.sponsor].sponsor + ")";
+
 						break;
+					}
 				}
 
 			}
@@ -1398,7 +1404,7 @@ function viewRoster()
 
 		
 		worker += "<tbody><tr id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
-		worker += "<td name='Callsign' align=left " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
+		worker += "<td title='"+ newCallList[x].awardReason +"' name='Callsign' align=left " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
 			 thisCall + newCallList[x].band+newCallList[x].mode + "\")'>" + thisCall.formatCallsign() + "</td>";
 
 		if ( showBands )

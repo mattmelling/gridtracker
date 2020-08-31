@@ -620,14 +620,13 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 					g_callsignLookups.ulsLastUpdate = 0;
 					saveCallsignSettings();
 					ulsUpdatedTd.innerHTML = "<b><i>Processing...</i></b>";
-					tx.executeSql('drop table calls');
 					tx.executeSql('CREATE TABLE IF NOT EXISTS calls (callsign TEXT PRIMARY KEY, zip, state)');
 				}
 				for (var x in lines )
 				{
 					if ( lines[x].length )
 					{
-						tx.executeSql( 'INSERT INTO calls (callsign, zip, state) VALUES ("'+lines[x].substr(7)+'","'+lines[x].substr(0,5)+'","'+lines[x].substr(5,2)+'")');
+						tx.executeSql( 'INSERT OR REPLACE INTO calls (callsign, zip, state) VALUES ("'+lines[x].substr(7)+'","'+lines[x].substr(0,5)+'","'+lines[x].substr(5,2)+'")');
 						++g_ulsCallsignsCount;
 						if ( g_ulsCallsignsCount % 7969 == 0 )
 							ulsCountTd.innerHTML = g_ulsCallsignsCount;
@@ -698,7 +697,15 @@ function lookupUsCallsign( object , writeState = false)
 			{
 				if ( object.zipcode in g_zipToCounty )
 				{
-					object.cnty = g_countyData[g_zipToCounty[object.zipcode][0]].geo["properties"]["st"]+","+ g_countyData[g_zipToCounty[object.zipcode][0]].geo["properties"]["n"].toUpperCase();
+					var counties = g_zipToCounty[object.zipcode];
+					var cntyString = g_countyData[counties[0]].geo["properties"]["st"]+","+ g_countyData[counties[0]].geo["properties"]["n"].toUpperCase();
+					for ( var county in counties )
+					{
+						cntyString = g_countyData[counties[county]].geo["properties"]["st"]+","+ g_countyData[counties[county]].geo["properties"]["n"].toUpperCase();
+						if ( !(cntyString in g_tracker.worked.cnty) )
+							break;
+					}
+					object.cnty = cntyString;
 				}
 			}
 			if ( writeState )

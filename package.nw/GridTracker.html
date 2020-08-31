@@ -192,7 +192,7 @@
 				<option value="">Mixed</option>
 				<option value="4000m">4000m</option>
 				<option value="2200m">2200m</option>
-				<option value="600m">600m</option>
+				<option value="630m">630m</option>
 				<option value="160m">160m</option>
 				<option value="80m">80m</option>
 				<option value="60m">60m</option>
@@ -286,12 +286,12 @@
 				<div id="buttonQRZCheckBoxDiv" onclick="if ( ValidateQrzApi(qrzApiKey ) ) grabQrzComLog()" class="iconButton" title="Download log from QRZ.com" ><img id="qrzLogImg" src="./img/log_QRZ.png"   class="buttonImg"  /></div>
 				<div id="buttonLOTWCheckBoxDiv" onclick="if ( ValidateText(lotwLogin) && ValidateText(lotwPassword) ) {  grabLOtWLogQSO(false); grabLOtWLog(false); } " class="iconButton" title="Download log from Logbook of the World" ><img id="lotwLogImg"  src="./img/log_LoTW.png"  class="buttonImg"  /></div>
 				<div id="buttonClubCheckBoxDiv" onclick="if ( ValidateText(clubEmail) && ValidateText(clubPassword) ) grabClubLog()" class="iconButton" title="Download log from ClubLog" ><img id="ClubLogImg"  src="./img/log_club.png"  class="buttonImg"  /></div>	
-				<div id="buttonAdifCheckBoxDiv" onclick="startupAdifLoadFunction()" class="iconButton" title="Reload Local ADIF Files" ><img  src="./img/log_local.png"  class="buttonImg"  /></div>	
+				<div id="buttonAdifCheckBoxDiv" onclick="startupAdifLoadFunction()" class="iconButton" title="Reload Local ADIF Files" ><img  src="./img/log_local.png"  class="buttonImg"  /></div>
 				<div id="timezoneButton" onclick="toggleTimezones()"  class="iconButton" title="Toggle Timezone Layer"><img src="./img/timezone-button.svg" class="buttonImg" /></div>
 				<div id="radarButton" onclick="toggleNexrad()"  class="iconButton" title="Toggle US Nexrad"><img src="./img/radar-button.svg" class="buttonImg" /></div>
+				<div id="gridOverlayButton" onclick="toggleAllGrids()"  class="iconButton" title="Toggle All Grid Overlay"><img src="./img/grid-overlay.svg" class="buttonImg" /></div>				
 				<div id="gtFlagButton" onclick="toggleGtMap();" class="iconButton" title="Toggle View GridTracker Users"><img id="gtFlagImg" src="" class="buttonImg" /></div>	
 				<div id="msgButton" onclick="showMessaging();" class="iconButton" title="Messaging Window" ><img id="msgImg" src="./img/gt_chat.png" class="buttonImg" /></div>	
-
 		   </div>
 			<div id="SpotsDiv" style="display:none;border:1px solid yellow;margin:1px;margin-bottom:1px;margin-top:2px;" class="roundBorder" >
 			   <table align="center">
@@ -583,7 +583,7 @@
                      </tr>
                   </table>
                </div>
-			   	<div class="mapItem" id="lookupCloseLogDiv" style="display:none" >
+			   	<div class="mapItem" id="lookupCloseLogDiv"  >
                   <table align="center">
                      <tr>
                         <td align="center">Close Lookup After Logging</td>

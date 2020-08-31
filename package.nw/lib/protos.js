@@ -15,8 +15,8 @@ Number.prototype.formatBand = function()
 		return "33cm";
 	else if ( newFreq >= 1240 && newFreq <= 1300 )
 		return "23cm";
-	else if ( freq >= 0.4720 && freq <= 0.4790 )
-		return "600m";
+	else if ( freq >= 0.472 && freq <= 0.479 )
+		return "630m";
 	else if ( freq >= 0.1357 && freq <= 0.1485 )
 		return "2200m";
 	else if ( freq >= 0.0090 && freq <= 0.0200 )

@@ -1229,7 +1229,6 @@ function startupAdifLoadCheck()
 	if ( loadAdifCheckBox.checked == true &&  g_startupLogs.length > 0 )
 		startupAdifLoadFunction();
 		
-	
 	if ( g_mapSettings.offlineMode == false  )
 	{
 		if (g_appSettings.gtFlagImgSrc == 1)
@@ -1251,7 +1250,6 @@ function startupAdifLoadCheck()
 			grabClubLog(false);
 		
 	}
-
 }
 
 function getABuffer(file_url,  callback, flag, mode, port, imgToGray, stringOfFlag , timeoutX, stringOfCounter = null )
@@ -1712,7 +1710,7 @@ function sendToLogger(ADIF)
 	
 	if ( reportHash != lastReportHash )
 	{
-		onAdiLoadComplete(report);
+		onAdiLoadComplete( "GT<EOH>" + report);
 		
 		// Log worthy
 		if ( logGTqsoCheckBox.checked == true )
@@ -1766,7 +1764,7 @@ function sendToLogger(ADIF)
 	
 		alertLogMessage();
 		
-		if ( lookupOnTx.checked == true && lookupCloseLog.checked == true && g_lastTranmitCallsign == g_lastLookupCallsign )
+		if ( lookupCloseLog.checked == true  )
 		{
 			openLookupWindow(false);
 		}

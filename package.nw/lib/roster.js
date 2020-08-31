@@ -648,16 +648,6 @@ function viewRoster()
 				callRoster[callHash].tx = false;
 				continue;
 			}
-			if ( g_rosterSettings.maxLoTW < 27 )
-			{
-				debugger;
-				var months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
-				if ( months > g_rosterSettings.maxLoTW )
-				{
-					callRoster[callHash].tx = false;
-					continue;
-				}
-			}
 		}
 		
 		if ( window.opener.g_callsignLookups.eqslUseEnable == true && g_rosterSettings.useseQSL == true )

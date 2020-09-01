@@ -2,7 +2,7 @@
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
 var gtVersion = 1200830;
-var gtBeta = "VHS";
+var gtBeta = "BASF";
 
 var g_startVersion = 0;
 
@@ -1116,13 +1116,14 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			details.cqz = g_gridToCQZone[fourGrid][0];
 		}
 		if (details.cqz.length > 0) {
-			g_tracker.worked.cqz[details.cqz + band + mode] = true;
-			g_tracker.worked.cqz[details.cqz] = true;
-			g_tracker.worked.cqz[details.cqz + mode] = true;
-			g_tracker.worked.cqz[details.cqz + band] = true;
+			var sCQZ = String(details.cqz);
+			g_tracker.worked.cqz[details.sCQZ + band + mode] = true;
+			g_tracker.worked.cqz[details.sCQZ] = true;
+			g_tracker.worked.cqz[details.sCQZ + mode] = true;
+			g_tracker.worked.cqz[details.sCQZ + band] = true;
 			if (isDigi == true) {
-				g_tracker.worked.cqz[details.cqz + "dg"] = true;
-				g_tracker.worked.cqz[details.cqz + band + "dg"] = true;
+				g_tracker.worked.cqz[details.sCQZ + "dg"] = true;
+				g_tracker.worked.cqz[details.sCQZ + band + "dg"] = true;
 			}
 		}
 
@@ -11015,14 +11016,7 @@ function loadViewSettings() {
 	{
 		lookupMissingGridDiv.style.display = "none";
 	}
-	if ( g_appSettings.lookupOnTx == true )
-	{
-		lookupCloseLogDiv.style.display = "inline-block";
-	}
-	else
-	{
-		lookupCloseLogDiv.style.display = "none";
-	}
+
 	
 	if (g_receptionSettings.viewPaths)
 	{
@@ -11344,8 +11338,8 @@ function startupEngine()
 		setTimeout(startupEngine, 10);
 	} else {
 		startupStatusDiv.innerHTML = "Completed";
-		startupAdifLoadCheck();
 		setTimeout(endStartup,2000);
+		startupAdifLoadCheck();
 	}
 }
 

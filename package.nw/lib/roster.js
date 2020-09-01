@@ -3980,9 +3980,16 @@ function scoreAcqz(award, obj)
 
 function testAcqz(award, obj, baseHash )
 { 
-	if ( obj.cqz && obj.cqz + baseHash in g_tracker[award.test.look].cqz )
+	if ( obj.cqza   )
 	{
-			return false;																															
+		var x = 0;
+		for ( var z in obj.cqza )
+		{
+			if ( obj.cqza[z] + baseHash in g_tracker[award.test.look].cqz )
+				x++;
+		}
+		if ( obj.cqza.length == x )
+				return false;
 	}
 	return true; 
 }

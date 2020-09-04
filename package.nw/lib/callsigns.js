@@ -705,6 +705,8 @@ function lookupUsCallsign( object , writeState = false)
 						cntyString = g_countyData[counties[county]].geo["properties"]["st"]+","+ g_countyData[counties[county]].geo["properties"]["n"].toUpperCase();
 						if ( !(cntyString in g_tracker.worked.cnty) )
 							break;
+						if ( !(cntyString in g_tracker.confirmed.cnty) )
+							break;
 					}
 					object.cnty = cntyString;
 				}

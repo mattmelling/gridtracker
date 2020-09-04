@@ -1,5 +1,5 @@
 <center>
-<img  src="./img/grid-overlay.svg" width="150px">
+<img  src="./img/energy-star.svg" width="100px">
 <font size="larger">
 <p>
 <b>This is a bug fix and look-and-feel update.</b><p> 
@@ -14,24 +14,30 @@ Here is a link to our Discord server. <a href="https://discord.gg/j9Cv9XU" targe
 </center>
 <pre>
 Fixes:
-  QSO Log Event:
-    When a QSO was completed in WSJT-X:
-      the map was not updating with the new QSO data
-	    fixed again
+  Right-click on empty grid flickering
   
-  Lookups:
-    Open lookup window on transmit working properly when enabled
-	  fixed again
-	
-  Close Lookup window after QSO working correctly
-  
-  US Callsign Database:
-	truncation of incomplete loads due to program restart, revisted
-	
-  630m band properly recognized and added to "Band Activity Graph"
-    
 Update:
-  "All Grid Overlay" hotkey "B" has a new panel button
+  Call Roster:
+    Band and Mode columns added to the right-click menu
+     when enabled columns remain sticky
+     when not enabled columns appear automatically as needed 
+
+    US Counties:
+      Counties are "best guess" based on the zipcode of the station
+       the roster will rotate in unworked then unconfirmed counties as needed
+        until I can get a database of US Callsigns with county info
+   
+  Window(s):
+    For "Energy Star" complaint monitors that shutdown to save power
+      position of window(s) restored on return of display
+        does not work if you close GridTracker when a display is off
+
+  Lookups:
+    Added "DXCC" worked/confirmed status by band below last "QSO" date
+  
+  Lookup and Chat windows now scale too!
+    ctrl-minus / ctrl-plus / reset with ctrl-zero
+  
 
 
 
@@ -48,7 +54,7 @@ Update:
 
 
 
-Thank you for reading the entire update! limbo-fish
+Thank you for reading the entire update! 
 
 
 
@@ -56,6 +62,14 @@ Thank you for reading the entire update! limbo-fish
 
 
 
+
+
+
+
+
+
+
+crab-pot
 </pre>
 <center><img class="button" src="./img/tokens.jpg" width="400px"></center>
 

@@ -1,7 +1,7 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200831;
+var gtVersion = 1200903;
 var gtBeta = "";
 
 var g_startVersion = 0;
@@ -294,6 +294,7 @@ function saveAndCloseApp()
 			if ( g_statsWindowHandle        )    g_statsWindowHandle.close(true);
 			if ( g_lookupWindowHandle       )    g_lookupWindowHandle.close(true);
 			if ( g_baWindowHandle           )   g_baWindowHandle.close(true);
+			nw.App.closeAllWindows();
 		}
 		catch (e) {
 			console.log(e);
@@ -3967,8 +3968,13 @@ function dimGridsquare() {
 
 function updateCountStats() {
 
-	callsignCount.innerHTML = Object.keys(g_liveCallsigns).length;
-
+	var count = Object.keys(g_liveCallsigns).length;
+	
+	if ( myDEcall in g_liveCallsigns )
+		count--;
+	
+	callsignCount.innerHTML = count;
+	
 	qsoCount.innerHTML = g_QSOcount;
 	qslCount.innerHTML = g_QSLcount;
 
@@ -4002,7 +4008,7 @@ function clearGrids() {
 	
 	g_liveGrids = {};
 
-	updateCountStats();
+
 }
 
 function clearQsoGrids() {
@@ -4085,7 +4091,7 @@ function clearCalls() {
 	g_liveCallsigns = {};
 	g_dxccCount = {};
 	redrawGrids();
-	updateCountStats();
+
 }
 
 function clearLive() {
@@ -4105,7 +4111,7 @@ function clearLive() {
 	clearTempGrids();
 	setHomeGridsquare();
 	redrawGrids();
-	updateCountStats();
+
 	updateRosterWorked();
 	goProcessRoster();
 }
@@ -4124,7 +4130,7 @@ function clearAll() {
 
 
 	redrawGrids();
-	updateCountStats();
+
 	g_callRoster = {};
 	updateRosterWorked();
 	goProcessRoster();
@@ -4151,11 +4157,11 @@ function clearAndLoadQSOs()
 	g_QSOcount = 0;
 	setTrophyOverlay(g_currentOverlay);
 	redrawGrids();
-	updateCountStats();
+
 	updateLogbook();
 	updateRosterWorked();
 	goProcessRoster();
-	updateCountStats();
+
 	startupAdifLoadCheck();
 }
 
@@ -4167,7 +4173,7 @@ function clearQSOs() {
 	g_QSOcount = 0;
 	setTrophyOverlay(g_currentOverlay);
 	redrawGrids();
-	updateCountStats();
+
 	updateLogbook();
 	updateRosterWorked();
 	goProcessRoster();
@@ -4798,7 +4804,7 @@ function initMap() {
 
 	});
 
-	mapDiv.addEventListener('mouseout', mapLoseFocus, false);
+	//mapDiv.addEventListener('mouseout', mapLoseFocus, false);
 	mapDiv.addEventListener('mouseleave', mapLoseFocus, false);
 
 	g_map.on('pointerdown', function (event) {
@@ -11171,6 +11177,11 @@ function loadAdifSettings()
 }
 
 function startupVersionInit() {
+	
+	document.body.addEventListener('contextmenu', function(ev) { 
+		ev.preventDefault();
+	});
+		
 	imSureCheck.checked = false;
 	stopAskingCheckbox.checked = g_appSettings.stopAskingVersion;
 	if (stopAskingCheckbox.checked == false) {
@@ -11233,8 +11244,6 @@ function startupEventsAndTimers() {
 
 	document.addEventListener('keydown', onMyKeyDown, true);
 	document.addEventListener('keyup', onMyKeyUp, false);
-
-	mapDiv.addEventListener('mouseleave', mapLoseFocus, false);
 
 	displayTimeInterval = setInterval(displayTime, 1000);
 }
@@ -12606,6 +12615,7 @@ function searchLogForCallsign( call )
 		var conf = {};
 		var lastTime = 0;
 		var lastRow = null;
+		var dxcc = list[0].dxcc;
 		
 		for ( row in list )
 		{
@@ -12652,7 +12662,20 @@ function searchLogForCallsign( call )
 			worker += "</td></tr>";
 		}
 		
-		worker += "</table></div>";
+		worker += "<tr><th style='color:orange'>"+ g_dxccToAltName[dxcc] + " (" + g_worldGeoData[g_dxccToGeoData[dxcc]].pp  +")</th><td>";
+		for ( var band in g_colorBands )
+		{
+			if ( String(dxcc) + g_colorBands[band] in  g_tracker.worked.dxcc )
+			{
+				var strike = "";
+				if ( String(dxcc) + g_colorBands[band] in  g_tracker.confirmed.dxcc )
+					strike = "text-decoration: line-through;";
+				worker += "<div style='"+strike+"display:inline-block;color:#"+g_pskColors[g_colorBands[band]]+"'>" + g_colorBands[band] + "</div>&nbsp;"  ;
+			}
+
+		}
+			
+		worker += "</td></tr></table></div>";
 		setLookupDiv("lookupLocalDiv", worker);
 	}
 
@@ -13420,8 +13443,9 @@ window.addEventListener("load", function(){
   });
 });
 
-process.on('uncaughtException', function (e) {
-	console.error('uncaughtException:', e);
-	console.error(e.stack);
+var g_process = require('process');
+
+g_process.on('uncaughtException', function (e) {
 });
+
 

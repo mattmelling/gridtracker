@@ -5,6 +5,7 @@
 		<title>GridTracker Callsign Lookup</title>
 		<link rel="stylesheet" href="./lib/style.css"/>
 		<script src="./lib/protos.js" type="text/javascript" ></script>
+		<script src="./lib/screens.js"></script>
 		<script>
 var g_isShowing = true;
 
@@ -72,6 +73,7 @@ function validateCallByElement( elementString )
 function init()
 {
 	ValidateCallsign(lookupCallsignInput, null);
+	document.addEventListener('keydown', onMyKeyDown, false);
 }
 
 function addTextToClipboard(data)
@@ -91,6 +93,36 @@ function Resize()
 {
 	lookupBoxDiv.style.height = (window.innerHeight) + "px" ;
 }
+
+
+var g_hotKeys = { "NumpadSubtract":reduceFont , "Minus":reduceFont , "NumpadAdd":increaseFont, "Equal":increaseFont, "Numpad0":resetFont , "Digit0":resetFont };
+
+function onMyKeyDown(event)
+{
+	if ( event.ctrlKey )
+	{
+		if ( event.code in g_hotKeys )
+		{
+			g_hotKeys[event.code]();
+		}
+	}
+}
+
+function reduceFont()
+{
+	nw.Window.get().zoomLevel-=0.1;
+}
+
+function increaseFont()
+{
+	nw.Window.get().zoomLevel+=0.1;
+}
+
+function resetFont()
+{
+	nw.Window.get().zoomLevel = 0;
+}
+
 		</script>
    </head>
   

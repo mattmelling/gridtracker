@@ -99,6 +99,8 @@ var g_defaultSettings =
 		"huntOAMS":false
 	},
 	"columns":{
+		"Band": false,
+		"Mode" : false,
 		"Calling":true,
 		"Msg":false,
 		"DXCC":true,
@@ -125,7 +127,8 @@ var g_defaultSettings =
 	"reference":0,
 	"controls":true,
 	"compact": false,
-	"fontSize":12,
+	"screenScale":12,
+	"screenScale":0.0,
 	"settingProfiles":false,
 	"lastSortIndex":6,
 	"lastSortReverse":1
@@ -1279,8 +1282,8 @@ function viewRoster()
 	}
 			
 		
-	var showBands = (Object.keys(bands).length > 1?true:false);
-	var showModes = (Object.keys(modes).length > 1?true:false);
+	var showBands = (Object.keys(bands).length > 1?true:false)||g_rosterSettings.columns.Band;
+	var showModes = (Object.keys(modes).length > 1?true:false)||g_rosterSettings.columns.Mode;
 	
 
 		
@@ -2598,45 +2601,30 @@ function openIgnoreEdit()
 	
 }
 
-function setFontSize()
+function setScreenScale()
 {
-	if ( g_styleFont )
-	{
-		g_styleFont.parentNode.removeChild(g_styleFont);
-		g_styleFont = null;
-	}
-	g_styleFont = document.createElement('style');
-	g_styleFont.innerHTML = "table, th, td, select, .compact {font-size: "+g_rosterSettings.fontSize+"px;}";
-	document.body.appendChild(g_styleFont);
-	resize();
+	nw.Window.get().zoomLevel = g_rosterSettings.screenScale;
 }
 
 function reduceFont()
 {
-	if ( g_rosterSettings.fontSize > 10 )
-	{
-		g_rosterSettings.fontSize--;
-		writeRosterSettings();
-		setFontSize();
-	}
+	g_rosterSettings.screenScale-=0.1;
+	writeRosterSettings();
+	setScreenScale();
 }
 
 function increaseFont()
 {
-	if ( g_rosterSettings.fontSize < 50 )
-	{
-		g_rosterSettings.fontSize++;
-		writeRosterSettings();
-		setFontSize();
-	}
+	g_rosterSettings.screenScale+= 0.1;
+	writeRosterSettings();
+	setScreenScale();
 }
 
 function resetFont()
 {
-
-	g_rosterSettings.fontSize = g_defaultSettings.fontSize;
+	g_rosterSettings.screenScale = g_defaultSettings.screenScale;
 	writeRosterSettings();
-	setFontSize();
+	setScreenScale();
 }
 
 function onMyKeyDown(event)
@@ -3209,7 +3197,7 @@ function init()
     g_timerInterval = setInterval(realtimeRoster,1000);
 	
 	updateInstances();
-	setFontSize();
+	setScreenScale();
 
 }
 
@@ -4301,3 +4289,9 @@ function doubleCompile(award, firstLevel)
 	
 	return singleCompile(award,firstLevel);
 }
+
+var g_process = require('process');
+
+g_process.on('uncaughtException', function (e) {
+	console.error(e.stack);
+});

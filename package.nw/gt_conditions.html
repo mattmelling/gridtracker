@@ -1,23 +1,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head >
-<title>GridTracker - Current Conditions</title>
+<title>Current Conditions</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="./lib/style.css">
 <style type="text/css">
 body,html {
-	-webkit-appearance: none;
-	-webkit-user-select: none;
-	height: 100%;
-	overflow: hidden;
+-webkit-appearance: none;
+-webkit-user-select: none;
+height: 100%;
+overflow: hidden;
 
 }
 
 table, th, td {
-      	color:#FFF;
-      	white-space: nowrap;
-      	font-family:Sans-Serif;
-      	font-size: 12px;
- 	    text-align:center;
+      color:#FFF;
+      white-space: nowrap;
+      font-family:Sans-Serif;
+      font-size: 12px;
+     text-align:center;
 }
 </style>
 <script>
@@ -27,11 +27,11 @@ document.oncontextmenu = function() {
 }
 
 document.addEventListener("dragover", function (event) {
-	event.preventDefault();
+event.preventDefault();
 });
 
 document.addEventListener("drop", function (event) {
-	event.preventDefault();
+event.preventDefault();
 });
 
 function lockNewWindows()
@@ -55,64 +55,17 @@ function timeNowSec()
 function showConditionsBox()
 {
 	var now = timeNowSec() % 86400;
-	conditionsDataDiv.innerHTML =
-		"<div> \
-		<a target='_blank' href='http://www.hamqsl.com' title='Visit www.hamqsl.net'><img src='http://www.hamqsl.com/solar101vhf.php?cb=" +
-		now +
-		"'></a> \
-		</div> \
-		<div > \
-			<table align='center'>\
-				<tr>\
-					<td>\
-						<img src='https://sohowww.nascom.nasa.gov/data/realtime/eit_304/512/latest.jpg?cb=" +
-		now +
-		"' class='solarImg'>\
-					</td>\
-					<td>\
-						<img  src='https://sohowww.nascom.nasa.gov/data/realtime/eit_171/512/latest.jpg?cb=" +
-		now +
-		"' class='solarImg'>\
-					</td>\
-					<td>\
-						<img  src='https://sohowww.nascom.nasa.gov/data/realtime/eit_195/512/latest.jpg?cb=" +
-		now +
-		"' class='solarImg'>\
-					</td>\
-					<td>\
-					<img  src='https://sohowww.nascom.nasa.gov/data/realtime/eit_284/512/latest.jpg?cb=" +
-						 +
-		now +
-		"' class='solarImg'>\
-					</td>\
-					<td>\
-					<img  src='https://sdo.gsfc.nasa.gov/assets/img/latest/f_304_211_171_256.jpg?cb=" +
-		now +
-		"' class='solarImg'>\
-					</td>\
-				</tr>\
-				<tr>\
-					<td>\
-						30.4nm\
-					</td>\
-					<td>\
-						17.1nm\
-					</td>\
-					<td>\
-						19.5nm\
-					</td>\
-					<td>\
-						28.4nm\
-					</td>\
-					<td>\
-						304/211/171\
-					</td>\
-				</tr>\
-			</table>		\
-		</div>\
-	</div>";
-    
+
+
+	var images = document.getElementsByTagName('img'); 
+
+	for(var i = 0; i < images.length; i++) {
+		var parts = images[i].src.split("t=");
+		images[i].src = parts[0] + "t=" + now;
+	}
+	
 	setTimeout(showConditionsBox,1800000);
+
 }
 
 function init()
@@ -121,19 +74,61 @@ function init()
 	showConditionsBox();
 
     document.addEventListener('keydown', onMyKeyDown, false);
+			
 }
 
 function onMyKeyDown(event)
 {
-	window.opener.onMyKeyDown(event);
+window.opener.onMyKeyDown(event);
 }
 </script>
 <script src="./lib/screens.js"></script>
 </head>
 <body   style="margin:0;top:3px" onload="init();" >
-<div id="main" style="margin:0;top:0;min-height:60px;width:auto;background-color:black;padding:0px;text-align:center;vertical-align:middle;position:relative;white-space:nowrap;overflow:hidden;" >
-     <div id="conditionsDataDiv" style="width:auto;display:none;background-color:black;padding:0px;text-align:center;vertical-align:middle;position:relative;z-index:600;white-space:nowrap;overflow:hidden;">
-
+<div id="main" style="margin:0;top:0;min-height:60px;background-color:black;padding:0px;text-align:center;vertical-align:middle;position:relative;white-space:nowrap;overflow:hidden;" >
+<div id="conditionsDataDiv" >
+<div> 
+<a target='_blank' href='http://www.hamqsl.com' title='Visit www.hamqsl.net'><img src='http://www.hamqsl.com/solar101vhf.php?t='></a> 
+</div> 
+<div > 
+<table align='center'>
+<tr>
+<td>
+<img src='https://sohowww.nascom.nasa.gov/data/realtime/eit_304/512/latest.jpg?t=' class='solarImg'>
+</td>
+<td>
+<img  src='https://sohowww.nascom.nasa.gov/data/realtime/eit_171/512/latest.jpg?t=' class='solarImg'>
+</td>
+<td>
+<img  src='https://sohowww.nascom.nasa.gov/data/realtime/eit_195/512/latest.jpg?t=' class='solarImg'>
+</td>
+<td>
+<img  src='https://sohowww.nascom.nasa.gov/data/realtime/eit_284/512/latest.jpg?t=' class='solarImg'>
+</td>
+<td>
+<img  src='https://sdo.gsfc.nasa.gov/assets/img/latest/f_304_211_171_256.jpg?t=' class='solarImg'>
+</td>
+</tr>
+<tr>
+<td>
+30.4nm
+</td>
+<td>
+17.1nm
+</td>
+<td>
+19.5nm
+</td>
+<td>
+28.4nm
+</td>
+<td>
+304/211/171
+</td>
+</tr>
+</table>
+</div>
+</div>
     </div>
 </div>
 </body>

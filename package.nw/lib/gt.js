@@ -1,10 +1,10 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200903;
+var gtVersion = 1200906;
 var gtBeta = "";
-
 var g_startVersion = 0;
+
 
 if ( typeof localStorage.currentVersion != "undefined" )
 	g_startVersion = localStorage.currentVersion;
@@ -233,12 +233,13 @@ function saveAndCloseApp()
 			data.g_QSOhash = g_QSOhash;
 			data.version = gtVersion;
 
-			fs.writeFileSync(g_jsonDir + "internal_qso.json", JSON.stringify(data) );	
+			fs.writeFileSync(g_NWappData + "internal_qso.json", JSON.stringify(data) );	
 			
 			
 		}
 		catch (e) 
 		{
+			console.log(e);
 		}
 
 		if (g_map) {
@@ -248,53 +249,42 @@ function saveAndCloseApp()
 		}
 
 		if (g_wsjtUdpServer != null) {
-			if (multicastEnable.checked == true && g_appSettings.wsjtIP != "") 
-			{
-				try 
+			try {
+				if (multicastEnable.checked == true && g_appSettings.wsjtIP != "") 
 				{
-					g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
+						g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
 				}
-				catch (e) {}
+				g_wsjtUdpServer.close();
 			}
-			g_wsjtUdpServer.close();
+			catch (e) {
+				console.log(e);
+			}
 		}
 		
 		if (g_forwardUdpServer != null) {
 			g_forwardUdpServer.close();
 		}
 		
-		if (g_callRosterWindowHandle != null) 
-		{
-			try 
-			{
-				if ( g_callRosterWindowHandle.window.g_isShowing == true )
-					g_appSettings.callRosterOpen = true;
-				else
-					g_appSettings.callRosterOpen = false;
-			}
-			catch (e) {}
-		}
-		else
-			g_appSettings.callRosterOpen = false;
+
 		
 		saveAppSettings();
 		saveMapSettings();
 
 		try 
 		{
-			
 			if ( g_callRosterWindowHandle   ) 
 			{
 				g_callRosterWindowHandle.window.writeRosterSettings();
-				g_callRosterWindowHandle.close(true);
 			}
-			if ( g_popupWindowHandle 		)	g_popupWindowHandle.close(true);
-			if ( g_conditionsWindowHandle   )    g_conditionsWindowHandle.close(true);
-			if ( g_chatWindowHandle         )    g_chatWindowHandle.close(true);
-			if ( g_statsWindowHandle        )    g_statsWindowHandle.close(true);
-			if ( g_lookupWindowHandle       )    g_lookupWindowHandle.close(true);
-			if ( g_baWindowHandle           )   g_baWindowHandle.close(true);
-			nw.App.closeAllWindows();
+			if ( g_popupWindowHandle != null )
+				g_popupWindowHandle.window.close(true);
+			
+			g_conditionsWindowHandle.window.close(true);
+			g_chatWindowHandle.window.close(true);
+			g_statsWindowHandle.window.close(true);
+			g_lookupWindowHandle.window.close(true);
+			g_baWindowHandle.window.close(true);
+			g_callRosterWindowHandle.window.close(true);
 		}
 		catch (e) {
 			console.log(e);
@@ -454,6 +444,7 @@ var g_mouseY = 0;
 
 var g_appData = "";
 var g_jsonDir = "";
+var g_NWappData = "";
 var g_screenshotDir = "";
 var g_scriptDir = "";
 var g_qsoLogFile = "";
@@ -898,6 +889,7 @@ function setState( details )
 					g_tracker.confirmed.cnty[details.cnty + details.band + "dg"] = true;
 				}
 		}
+		
 	}
 }
 
@@ -1041,7 +1033,11 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		}
 
 		details.cnty = finalCnty;
-
+		if ( details.cnty )
+		{
+			details.qual = true;
+		}
+		
 		if ( isKnownCallsignUSplus(finalDxcc) )
 		{
 			if (details.cnty == null )
@@ -1052,22 +1048,9 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			{
 				if (!(details.cnty in g_cntyToCounty)) 
 				{
-					if (details.cnty.indexOf(",") == -1) 
-					{
-						if (!(details.state + "," + details.cnty in g_cntyToCounty))
-							lookupCall = true;
-					} 
-					else
-						lookupCall = true;
+					lookupCall = true;
 				}
 			}		
-		}
-
-
-		if (lookupCall) {
-			if (g_callsignLookups.ulsUseEnable) {
-				lookupUsCallsign(details, true);
-			}
 		}
 
 		var isDigi = details.digital;
@@ -1184,6 +1167,13 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		}
 
 		g_QSOhash[hash] = details;
+		
+		if (lookupCall) {
+			if (g_callsignLookups.ulsUseEnable) {
+				lookupUsCallsign(details, true);
+			}
+		}
+		
 		if (confirmed == true) {
 			
 			if (fourGrid != "") {
@@ -1266,7 +1256,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			didConfirm = true;
 		} 
 		
-		setState(details);
+		
 
 	}
 
@@ -1321,7 +1311,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		newCallsign.distance = 0;
 		newCallsign.px = null;
 		newCallsign.zone = null;
-		newCallsign.finalCnty = finalCnty;
+		newCallsign.cnty = finalCnty;
 		newCallsign.cont = finalCont;
 		if ( finalDxcc > -1 )
 		{
@@ -1890,8 +1880,8 @@ function renderTooltipWindow(feature) {
 		g_popupWindowHandle.show();
 		g_popupWindowHandle.focus();
 		
-		g_popupWindowHandle.width = positionInfo.width + 20
-		g_popupWindowHandle.height = positionInfo.height + 50;
+		g_popupWindowHandle.width = parseInt(positionInfo.width) + 20
+		g_popupWindowHandle.height = parseInt(positionInfo.height) + 50;
 		}
 		catch (e)
 		{
@@ -1917,23 +1907,21 @@ function openConditionsWindow() {
 		}, function (new_win) {
 			g_conditionsWindowHandle = new_win;
 			new_win.on('loaded', function () {
-				g_conditionsWindowHandle.setMinimumSize(490, 270);
-				g_conditionsWindowHandle.setMaximumSize(490, 270);
-				
-				g_conditionsWindowHandle.setResizable(false);
-				g_conditionsWindowHandle.window.document.getElementById("conditionsDataDiv").style.display = "inline-block";
-				g_conditionsWindowHandle.show();
+				g_conditionsWindowHandle.setMinimumSize(490,290);
 			});
 			new_win.on('close', function () {
-
+				g_conditionsWindowHandle.window.g_isShowing = false;
+				g_conditionsWindowHandle.window.saveScreenSettings();
 				g_conditionsWindowHandle.hide();
-
 			});
 		});
 		lockNewWindows();
 	} else {
 		try {
-		g_conditionsWindowHandle.show();
+			g_conditionsWindowHandle.window.g_isShowing = true;
+			g_conditionsWindowHandle.window.saveScreenSettings();
+			g_conditionsWindowHandle.show();
+			g_conditionsWindowHandle.focus();
 
 		}
 		catch (e)
@@ -1987,22 +1975,11 @@ function openCallRosterWindow( show = true )  {
 			new_win.on('loaded', function () {
 				g_callRosterWindowHandle.setMinimumSize(390, 250);
 				g_callRosterWindowHandle.setResizable(true);
-				setRosterTop();
-				if ( show )
-				{
-					g_callRosterWindowHandle.show();
-					g_callRosterWindowHandle.window.g_isShowing = true;
-				}
-				else
-				{
-					g_callRosterWindowHandle.window.g_isShowing = false;
-					g_callRosterWindowHandle.hide();
-				}
-				
+				setRosterTop();			
 			});
 			new_win.on('close', function () {
-
 				g_callRosterWindowHandle.window.g_isShowing = false;
+				g_callRosterWindowHandle.window.saveScreenSettings();
 				g_callRosterWindowHandle.hide();
 			});
 		});
@@ -2011,6 +1988,7 @@ function openCallRosterWindow( show = true )  {
 		try {
 			g_callRosterWindowHandle.show();
 			g_callRosterWindowHandle.window.g_isShowing = true;
+			g_callRosterWindowHandle.window.saveScreenSettings();
 			g_callRosterWindowHandle.focus();
 			goProcessRoster();
 		}
@@ -2064,20 +2042,10 @@ function openStatsWindow( show = true )  {
 			new_win.on('loaded', function () {
 				g_statsWindowHandle.setMinimumSize(620, 200);
 				g_statsWindowHandle.setResizable(true);
-				
-				if ( show )
-				{
-					g_statsWindowHandle.show();
-					g_statsWindowHandle.window.g_isShowing = true;
-				}
-				else
-				{
-					g_statsWindowHandle.window.g_isShowing = false;
-					g_statsWindowHandle.hide();
-				}
 			});
 			new_win.on('close', function () {
 				g_statsWindowHandle.window.g_isShowing = false;
+				g_statsWindowHandle.window.saveScreenSettings();
 				g_statsWindowHandle.hide();
 			});
 		});
@@ -2086,13 +2054,14 @@ function openStatsWindow( show = true )  {
 		try {
 			g_statsWindowHandle.show();
 			g_statsWindowHandle.window.g_isShowing = true;
+			g_statsWindowHandle.window.saveScreenSettings();
 			g_statsWindowHandle.focus();
 		}
 		catch (e){}
 	}
 }
 
-function showMessaging(cid) {
+function showMessaging(show = true, cid) {
 	if (g_chatWindowHandle == null) {
 		popupNewWindows();
 		var gui = require('nw.gui');
@@ -2104,14 +2073,11 @@ function showMessaging(cid) {
 			g_chatWindowHandle.on('loaded', function () {
 				g_chatWindowHandle.setMinimumSize(450,140);
 				g_chatWindowHandle.setResizable(true);
-				if (typeof cid != "undefined")
-					g_chatWindowHandle.window.openId(cid);
-				g_chatWindowHandle.show();
-
 			});
 			g_chatWindowHandle.on('close', function () {
 				g_chatWindowHandle.window.closeMessageArea();
-
+				g_chatWindowHandle.window.g_isShowing = false;
+				g_chatWindowHandle.window.saveScreenSettings();
 				g_chatWindowHandle.hide();
 
 			});
@@ -2119,13 +2085,15 @@ function showMessaging(cid) {
 		lockNewWindows();
 	} else {
 		try {
-		g_chatWindowHandle.show();
-		g_chatWindowHandle.focus();
-		if (typeof cid != "undefined")
-			g_chatWindowHandle.window.openId(cid);
+				g_chatWindowHandle.window.g_isShowing = true;
+				g_chatWindowHandle.window.saveScreenSettings();
+				g_chatWindowHandle.show();
+				g_chatWindowHandle.focus();
+				if (typeof cid != "undefined")
+					g_chatWindowHandle.window.openId(cid);
+				}
+			catch (e) {}
 		}
-		catch (e) {}
-	}
 }
 
 function onRightClickGridSquare(feature) {
@@ -2281,7 +2249,10 @@ function onMyKeyDown(event) {
 				g_hotKeys[event.code].func(g_hotKeys[event.code].param1, param2);
 			}
 			else
-				g_hotKeys[event.code].func();
+			{
+				if ( event.ctrlKey == false )
+					g_hotKeys[event.code].func();
+			}
 		}
 		else if ( event.key in g_hotKeys) {
 				if (typeof g_hotKeys[event.key].param1 != 'undefined')
@@ -2295,7 +2266,10 @@ function onMyKeyDown(event) {
 				g_hotKeys[event.key].func(g_hotKeys[event.key].param1, param2);
 			}
 			else
-				g_hotKeys[event.key].func();
+			{
+				if ( event.ctrlKey == false )
+					g_hotKeys[event.key].func();
+			}
 		}
 
 	}
@@ -2663,10 +2637,11 @@ function setTrophyOverlay(which) {
 				boxColor = '#00FF0066';
 				borderWeight = 1;
 			} else if (didWork(g_countyData[key])) {
+				
 				boxColor = '#FFFF0066';
 				borderWeight = 1;
 			}
-
+		
 			g_currentShapes[key] = shapeFeature(key, g_countyData[key].geo, "usc", boxColor, borderColor, borderWeight);
 			g_layerSources["award"].addFeature(g_currentShapes[key]);
 		}
@@ -3152,7 +3127,12 @@ function reloadInfo( bandOrMode ) {
 
 	if ( g_statsWindowHandle != null )
 	{
-		g_statsWindowHandle.window.reloadInfo();
+		try {
+			g_statsWindowHandle.window.reloadInfo();
+		}
+		catch (e)
+		{
+		}
 	}
 }
 
@@ -3856,10 +3836,14 @@ function changeAnimateSpeedValue()
 var g_animateFrame = 0;
 
 var g_nextDimTime = 0;
-
+var g_last = 0;
 function animatePaths() {
 	requestAnimationFrame(animatePaths);
-		
+	
+	g_last ^= g_last;
+	if ( g_last == 1)
+		return;
+	
 	g_animateFrame++;
 	g_animateFrame %= g_mapSettings.animateSpeed;
 
@@ -4625,20 +4609,20 @@ function initMap() {
 		g_mapsLayer[0] = new ol.source.OSM();
 
 	g_offlineLayer = new ol.source.XYZ({
-			url: '/map/toner-background/{z}/{x}/{y}.png'
+			url: '/map/sat/{z}/{x}/{y}.png'
 		})
 
 		if (g_mapSettings.offlineMode)
 			g_tileLayer = new ol.layer.Tile({
 					source: g_offlineLayer,
-					loadTilesWhileInteracting: false,
-					loadTilesWhileAnimating: false
+					loadTilesWhileInteracting: true,
+					loadTilesWhileAnimating: true
 				});
 		else
 			g_tileLayer = new ol.layer.Tile({
 					source: g_mapsLayer[mapSelect.value],
-					loadTilesWhileInteracting: false,
-					loadTilesWhileAnimating: false
+					loadTilesWhileInteracting: true,
+					loadTilesWhileAnimating: true
 				});
 
 
@@ -4914,8 +4898,7 @@ function createNexRad()
 
 	var layerSource = new ol.source.TileWMS({
 			  url: 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi',
-			  params: {'LAYERS': 'nexrad-n0q'},
-			  transition: 0
+			  params: {'LAYERS': 'nexrad-n0q'}
 			});
 	
 	var layerVector = new ol.layer.Tile({
@@ -4977,11 +4960,7 @@ function nexradRefresh()
 {
 	if ( g_Nexrad != null )
 	{
-		g_map.removeLayer(g_Nexrad);
-		delete g_Nexrad;
-		
-
-		g_Nexrad = createNexRad();;
+		g_Nexrad.getSource().refresh();
 	}
 }
 
@@ -5139,6 +5118,7 @@ function setHomeGridsquare() {
 		newCallsign.state = null;
 		newCallsign.zipcode = null;
 		newCallsign.cnty = null;
+		newCallsign.qual = false;
 		newCallsign.instance = null;
 		newCallsign.alerted = false;
 		newCallsign.shouldAlert = false;
@@ -5323,9 +5303,8 @@ function handleWsjtxADIF(newMessage) {
 		onAdiLoadComplete(newMessage.ADIF);
 	}
 
-	adifLog = sendToLogger(newMessage.ADIF);
+	sendToLogger(newMessage.ADIF);
 	
-	updateCountStats();
 }
 
 function handleWsjtxQSO(newMessage) 
@@ -5963,8 +5942,15 @@ function handleWsjtxDecode(newMessage) {
 			newCallsign.cqza = Array();
 			newCallsign.distance = 0;
 			newCallsign.heading = 0;
+			
+			newCallsign.cnty = null;
+			newCallsign.qual = false;
+			
+			getLookupCachedObject(msgDEcallsign , null, null ,null, newCallsign);
+
+			
 			if (g_callsignLookups.ulsUseEnable == true && isKnownCallsignDXCC(newCallsign.dxcc) ) {
-				lookupUsCallsign(newCallsign);
+				lookupUsCallsign(newCallsign, false);
 			}
 
 			if (newCallsign.dxcc in g_dxccCount)
@@ -5978,10 +5964,22 @@ function handleWsjtxDecode(newMessage) {
 			g_liveCallsigns[hash] = newCallsign;
 			callsign = newCallsign;
 		} else {
-			if (callsign.grid == "" && rect != null)
-				callsign.grid = rect.qth;
-			if (callsign.grid == "" && validQTH )
+			if ( validQTH )
+			{
 				callsign.grid = theirQTH;
+			
+				if ( rect != null && callsign.grid != rect.qth )
+				{
+					if (
+					(g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' &&  newMessage.OB == myBand) || newMessage.OB == g_appSettings.gtBandFilter) &&
+					(g_appSettings.gtModeFilter.length == 0 || (g_appSettings.gtModeFilter == 'auto' &&  newMessage.OM == myMode) || newMessage.OM == g_appSettings.gtModeFilter || g_appSettings.gtModeFilter == "Digital")) 
+					{
+						rect = qthToBox(theirQTH, msgDEcallsign, CQ, newMessage.NW, false, msgDXcallsign, newMessage.OB, null, hash);
+						canPath = true;
+					}
+				}
+			}
+
 			callsign.time = theTimeStamp;
 			callsign.age = g_timeNow;
 
@@ -6641,6 +6639,10 @@ function myDxccCompare(a, b) {
 }
 
 function myDxccIntCompare(a, b) {
+	if ( !a in g_dxccToAltName )
+		return 0;
+	if ( !b in g_dxccToAltName )
+		
 	return g_dxccToAltName[a].localeCompare(g_dxccToAltName[b]);
 }
 
@@ -6672,7 +6674,7 @@ var g_lastSortIndex = 4;
 
 var g_qsoPages = 1;
 var g_qsoPage = 0;
-var g_qsoItemsPerPage = 500;
+var g_qsoItemsPerPage = 100;
 var g_lastSortType = 0;
 var g_searchWB = "";
 var g_gridSearch = "";
@@ -6688,7 +6690,7 @@ function resetSearch()
 	g_lastSortIndex = 4;
 	g_qsoPages = 1;
 	g_qsoPage = 0;
-	g_qsoItemsPerPage = 500;
+	g_qsoItemsPerPage = 100;
 	g_lastSortType = 2;
 	g_searchWB = "";
 	g_gridSearch = "";
@@ -6797,7 +6799,8 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 	{
 		bands[list[key].band] = list[key].band;
 		modes[list[key].mode] = list[key].mode;
-		dxccs[list[key].dxcc] = g_dxccToAltName[list[key].dxcc] + " ("+g_worldGeoData[g_dxccToGeoData[list[key].dxcc]].pp+")";
+		var pp = ( g_dxccToGeoData[list[key].dxcc] in  g_worldGeoData ? g_worldGeoData[g_dxccToGeoData[list[key].dxcc]].pp : "?");
+		dxccs[list[key].dxcc] = g_dxccToAltName[list[key].dxcc] + " ("+pp+")";
 	}
 	
 	if (g_filterBand != "Mixed" )
@@ -6939,10 +6942,10 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 				worker += "<td>" + key.RSTsent + "</td>";
 				worker += "<td>" + key.RSTrecv + "</td>";
 				worker += "<td style='color:orange'>" + g_dxccToAltName[key.dxcc] +
-				" <font color='lightgreen'>(" + g_worldGeoData[g_dxccToGeoData[key.dxcc]].pp + ")</font></td>";
+				" <font color='lightgreen'>(" + ( g_dxccToGeoData[key.dxcc] in g_worldGeoData ?g_worldGeoData[g_dxccToGeoData[key.dxcc]].pp:"?" )+ ")</font></td>";
 				worker +=
 				"<td align=center style='margin:0;padding:0' ><img style='padding-top:4px' src='./img/flags/16/" +
-				g_worldGeoData[g_dxccToGeoData[key.dxcc]].flag + "'></td>";
+				 (g_dxccToGeoData[key.dxcc] in g_worldGeoData ? g_worldGeoData[g_dxccToGeoData[key.dxcc]].flag : "_United Nations.png") + "'></td>";
 				worker += "<td style='color:lightblue'>" + userTimeString(key.time * 1000) +
 				"</td>";
 				if (g_callsignLookups.lotwUseEnable == true)
@@ -7554,31 +7557,16 @@ function openBaWindow( show = true )
 			"show": false,
 			"id": "GT-baac",
 			"frame":false,
-			"height":53,
-			"width":198,
-			"resizable":false,
-			"always_on_top":true,
-			"position":"center"
+			"resizable":true,
+			"always_on_top":true
 		}, function (new_win) {
 			g_baWindowHandle = new_win;
 			new_win.on('loaded', function () {
-				if ( show )
-				{
-					g_baWindowHandle.show();
-					g_baWindowHandle.window.g_isShowing = true;
-				}
-				else
-				{
-					g_baWindowHandle.window.g_isShowing = false;
-					g_baWindowHandle.hide();
-				}
+				g_baWindowHandle.setMinimumSize(198,52);
 			});
 			new_win.on('close', function () {
 				g_baWindowHandle.window.g_isShowing = false;
-				g_baWindowHandle.hide();
-			});
-			new_win.on('minimize', function () {
-				g_baWindowHandle.window.g_isShowing = false;
+				g_baWindowHandle.window.saveScreenSettings();
 				g_baWindowHandle.hide();
 			});
 		});
@@ -7589,10 +7577,13 @@ function openBaWindow( show = true )
 			{
 				g_baWindowHandle.show();
 				g_baWindowHandle.window.g_isShowing = true;
+				g_baWindowHandle.window.saveScreenSettings();
+
 			}
 			else
 			{
 				g_baWindowHandle.window.g_isShowing = false;
+				g_baWindowHandle.window.saveScreenSettings();
 				g_baWindowHandle.hide();
 			}
 		}
@@ -7601,7 +7592,7 @@ function openBaWindow( show = true )
 }
 
 
-function openLookupWindow( show = true )  {
+function openLookupWindow( show = false )  {
 
 	if (g_lookupWindowHandle == null) {
 
@@ -7616,20 +7607,10 @@ function openLookupWindow( show = true )  {
 			new_win.on('loaded', function () {
 				g_lookupWindowHandle.setMinimumSize(680, 200);
 				g_lookupWindowHandle.setResizable(true);
-				
-				if ( show )
-				{
-					g_lookupWindowHandle.show();
-					g_lookupWindowHandle.window.g_isShowing = true;
-				}
-				else
-				{
-					g_lookupWindowHandle.window.g_isShowing = false;
-					g_lookupWindowHandle.hide();
-				}
 			});
 			new_win.on('close', function () {
 				g_lookupWindowHandle.window.g_isShowing = false;
+				g_lookupWindowHandle.window.saveScreenSettings();
 				g_lookupWindowHandle.hide();
 			});
 		});
@@ -7640,11 +7621,7 @@ function openLookupWindow( show = true )  {
 			{
 				g_lookupWindowHandle.show();
 				g_lookupWindowHandle.window.g_isShowing = true;
-			}
-			else
-			{
-				g_lookupWindowHandle.window.g_isShowing = false;
-				g_lookupWindowHandle.hide();
+				g_lookupWindowHandle.window.saveScreenSettings();
 			}
 		}
 		catch (e){}
@@ -7720,6 +7697,7 @@ function openSettingsTab(evt, tabName) {
 		evt.currentTarget.className += " active";
 	else
 		evt.className += " active";
+	
 }
 
 function setGridMode(mode) {
@@ -8772,21 +8750,20 @@ function redrawGrids() {
 			if (cnty != null) {
 
 				if (cnty in g_cntyToCounty) {
-					var name = g_cntyToCounty[cnty];
-
-					if (g_countyData[name].worked == false) {
-						g_countyData[name].worked = worked;
+				
+					if (g_countyData[cnty].worked == false) {
+						g_countyData[cnty].worked = worked;
 					}
 					if (worked) {
-						g_countyData[name].worked_bands[band] = ~~g_countyData[name].worked_bands[band] + 1;
-						g_countyData[name].worked_modes[mode] = ~~g_countyData[name].worked_modes[mode] + 1;
+						g_countyData[cnty].worked_bands[band] = ~~g_countyData[cnty].worked_bands[band] + 1;
+						g_countyData[cnty].worked_modes[mode] = ~~g_countyData[cnty].worked_modes[mode] + 1;
 					}
-					if (g_countyData[name].confirmed == false) {
-						g_countyData[name].confirmed = didConfirm;
+					if (g_countyData[cnty].confirmed == false) {
+						g_countyData[cnty].confirmed = didConfirm;
 					}
 					if (didConfirm) {
-						g_countyData[name].confirmed_bands[band] = ~~g_countyData[name].confirmed_bands[band] + 1;
-						g_countyData[name].confirmed_modes[mode] = ~~g_countyData[name].confirmed_modes[mode] + 1;
+						g_countyData[cnty].confirmed_bands[band] = ~~g_countyData[cnty].confirmed_bands[band] + 1;
+						g_countyData[cnty].confirmed_modes[mode] = ~~g_countyData[cnty].confirmed_modes[mode] + 1;
 					}
 				}
 			}
@@ -8831,7 +8808,7 @@ function redrawGrids() {
 			{
 				var gridCheck = finalGrid.substr(0, 4);
 
-				if ( finalDxcc == 291 && gridCheck in g_us48Data )
+				if ( gridCheck in g_us48Data )
 				{
 					if ( g_us48Data[gridCheck].worked == false  )
 					{
@@ -8926,35 +8903,34 @@ function redrawGrids() {
 				}
 			}
 			
-			if ( finalDxcc == 291 )
+
+			for ( var key in g_QSOhash[i].vucc_grids )
 			{
-				for ( var key in g_QSOhash[i].vucc_grids )
+				var grid = g_QSOhash[i].vucc_grids[key].substr(0, 4);
+				if ( grid in g_us48Data )
 				{
-					var grid = g_QSOhash[i].vucc_grids[key].substr(0, 4);
-					if ( grid in g_us48Data )
+					if ( g_us48Data[grid].worked == false  )
 					{
-						if ( g_us48Data[grid].worked == false  )
-						{
-							g_us48Data[grid].worked = worked;
-						}
-						if (worked)
-						{
-							g_us48Data[grid].worked_bands[band] = ~~g_us48Data[grid].worked_bands[band] + 1;
-							g_us48Data[grid].worked_modes[mode] = ~~g_us48Data[grid].worked_modes[mode] + 1;
-						}
-						if ( g_us48Data[grid].confirmed == false  )
-						{
-							g_us48Data[grid].confirmed = didConfirm;
-						}
-						if (didConfirm)
-						{
-							g_us48Data[grid].confirmed_bands[band] = ~~g_us48Data[grid].confirmed_bands[band] + 1;
-							g_us48Data[grid].confirmed_modes[mode] = ~~g_us48Data[grid].confirmed_modes[mode] + 1;
-						}
-						
+						g_us48Data[grid].worked = worked;
 					}
+					if (worked)
+					{
+						g_us48Data[grid].worked_bands[band] = ~~g_us48Data[grid].worked_bands[band] + 1;
+						g_us48Data[grid].worked_modes[mode] = ~~g_us48Data[grid].worked_modes[mode] + 1;
+					}
+					if ( g_us48Data[grid].confirmed == false  )
+					{
+						g_us48Data[grid].confirmed = didConfirm;
+					}
+					if (didConfirm)
+					{
+						g_us48Data[grid].confirmed_bands[band] = ~~g_us48Data[grid].confirmed_bands[band] + 1;
+						g_us48Data[grid].confirmed_modes[mode] = ~~g_us48Data[grid].confirmed_modes[mode] + 1;
+					}
+					
 				}
 			}
+		
 		}
 	}
 	
@@ -10029,31 +10005,35 @@ function loadMaidenHeadData() {
 
 		for (var id in countyData) 
 		{
-			for ( var x in countyData[id].properties.z ) {
-				if ( !(countyData[id].properties.z[x] in g_zipToCounty) )
-					g_zipToCounty[countyData[id].properties.z[x]] = Array();
-				g_zipToCounty[countyData[id].properties.z[x]].push(id);
-			}
 
-			delete countyData[id].properties.z;
-			
 			if ( !(countyData[id].properties.st in g_stateToCounty) )
 				g_stateToCounty[countyData[id].properties.st] = Array();
 			g_stateToCounty[countyData[id].properties.st].push(id);
 			
-			var cnty = countyData[id].properties.st + "," + countyData[id].properties.n.toUpperCase();
+			var cnty = countyData[id].properties.st + "," + countyData[id].properties.n.toUpperCase().replaceAll(" ","");
 			if (!(cnty in g_cntyToCounty))
-				g_cntyToCounty[cnty] = id;
+				g_cntyToCounty[cnty] = countyData[id].properties.n.toProperCase();
 
-			g_countyData[id] = {};
-			g_countyData[id].geo =  countyData[id];
-			g_countyData[id].worked = false;
-			g_countyData[id].confirmed = false;
+			g_countyData[cnty] = {};
+			g_countyData[cnty].geo =  countyData[id];
+			g_countyData[cnty].worked = false;
+			g_countyData[cnty].confirmed = false;
 
-			g_countyData[id].worked_bands = {};
-			g_countyData[id].confirmed_bands = {};
-			g_countyData[id].worked_modes = {};
-			g_countyData[id].confirmed_modes = {};
+			g_countyData[cnty].worked_bands = {};
+			g_countyData[cnty].confirmed_bands = {};
+			g_countyData[cnty].worked_modes = {};
+			g_countyData[cnty].confirmed_modes = {};
+			
+			for ( var x in countyData[id].properties.z ) {
+				var zipS = String(countyData[id].properties.z[x]);
+				if ( !(zipS in g_zipToCounty) )
+				{
+					g_zipToCounty[zipS] = Array();
+				}
+				g_zipToCounty[zipS].push(cnty);
+			}
+
+			
 		}
 		files = null;
 		countyData = null;
@@ -10458,19 +10438,33 @@ function versionCheck(buffer, flag) {
 		var versionArray = version.split(":");
 		if (versionArray.length == 3) // Good, there are 3 parts
 		{
-			var newVersion = Number(versionArray[1]);
-			var minVersion = Number(versionArray[2]);
-			var verString = String(newVersion);
-			if (gtVersion < newVersion) {
+			var stableVersion = Number(versionArray[1]);
+			var betaVersion = Number(versionArray[2]);
+			
+			if (gtVersion < stableVersion) {
+				var verString = String(stableVersion);
 				main.style.display = "none";
 				newVersionMustDownloadDiv.innerHTML = "New Version v" + verString.substr(0, 1) + "." +
 					verString.substr(1, 2) + "." + verString.substr(3) +
 					" available for download.<br />Go there now?<br /><br />";
 				versionDiv.style.display = "block";
 			} else {
-				if (flag) {
-					main.style.display = "none";
-					upToDateDiv.style.display = "block";
+				if (flag) 
+				{
+					if (gtVersion < betaVersion) 
+					{
+						var verString = String(betaVersion);
+						main.style.display = "none";
+						newVersionMustDownloadDiv.innerHTML = "New <b><i>Beta</i></b> Version v" + verString.substr(0, 1) + "." +
+							verString.substr(1, 2) + "." + verString.substr(3) +
+							" available for download.<br />Go there now?<br /><br />";
+						versionDiv.style.display = "block";
+					}
+					else
+					{
+						main.style.display = "none";
+						upToDateDiv.style.display = "block";
+					}
 				}
 			}
 		}
@@ -10504,29 +10498,19 @@ function cancelVersion() {
 	versionDiv.style.display = "none";
 }
 
-function getBuffer(file_url, callback, flag, mode, port, cookie, errorHandler) {
+function getBuffer(file_url, callback, flag, mode, port, cache = null) {
 	var url = require('url');
 	var http = require(mode);
 	var fileBuffer = null;
 	var options = null;
-	if (cookie != null) {
-		options = {
-			host: url.parse(file_url).host,
-			port: port,
-			followAllRedirects: true,
-			path: url.parse(file_url).path,
-			headers: {
-				'Cookie': cookie
-			}
-		};
-	} else {
-		options = {
-			host: url.parse(file_url).host,
-			port: port,
-			followAllRedirects: true,
-			path: url.parse(file_url).path
-		};
-	}
+
+	options = {
+		host: url.parse(file_url).host,
+		port: port,
+		followAllRedirects: true,
+		path: url.parse(file_url).path
+	};
+	
 	http.get(options, function (res) {
 		var fsize = res.headers['content-length'];
 		var cookies = null;
@@ -10540,7 +10524,7 @@ function getBuffer(file_url, callback, flag, mode, port, cookie, errorHandler) {
 		}).on('end', function () {
 			if (typeof callback === "function") {
 				// Call it, since we have confirmed it is callable
-				callback(fileBuffer, flag, cookies);
+				callback(fileBuffer, flag, cache);
 			}
 		}).on('error', function (e) {
 			console.error('Got error: ' + e.message);
@@ -11236,15 +11220,13 @@ function startupButtonsAndInputs() {
 	}
 	catch (e)
 	{
-		//alert(e.message);
+	
 	}
 }
 
 function startupEventsAndTimers() {
-
 	document.addEventListener('keydown', onMyKeyDown, true);
 	document.addEventListener('keyup', onMyKeyUp, false);
-
 	displayTimeInterval = setInterval(displayTime, 1000);
 }
 
@@ -11258,13 +11240,12 @@ function postInit() {
 	g_nexradEnable = g_mapSettings.usNexrad?0:1;
 	toggleNexrad();
 
-	updateText.innerHTML = fs.readFileSync("./gt_update.html");
-
 	if ( String(gtVersion) != String(g_startVersion) )
 	{
-		generalbut.className = "settingsTablinks";
+		//generalbut.className = "settingsTablinks";
 		showSettingsBox();
-		openSettingsTab('updatebut', 'updateSettingsDiv');
+		
+		openSettingsTab(updatebut, 'updateSettingsDiv');
 	}
 	g_finishedLoading = true;
 	//tagme
@@ -11275,6 +11256,11 @@ function postInit() {
 	  x[i].title += "(Use Arrow Keys For Smaller Increments)";
 	}
 
+	openLookupWindow(false);
+	openBaWindow(false);
+	openCallRosterWindow(false);
+	openConditionsWindow(false);
+	showMessaging(false);
 }
 
 
@@ -11330,10 +11316,6 @@ function init()
 		documentsDiv.style.display = "none";
 		startupDiv.style.display = "block";
 		startupStatusDiv.innerHTML = "Starting...";
-		openStatsWindow(false);
-		openLookupWindow(false);
-		openBaWindow(false);
-		openCallRosterWindow(false);
 		setTimeout(startupEngine, 10);
 	}
 }
@@ -11349,6 +11331,7 @@ function startupEngine()
 		startupStatusDiv.innerHTML = "Completed";
 		setTimeout(endStartup,2000);
 		startupAdifLoadCheck();
+		openStatsWindow(false);
 	}
 }
 
@@ -11363,9 +11346,7 @@ function endStartup()
 	startupDiv.style.display = "none";
 	main.style.display = "block";
 	g_map.updateSize();
-	var openCallRoster = g_appSettings.callRosterOpen || false;
-	if ( openCallRoster )
-		openCallRosterWindow();
+
 	
 }
 
@@ -11426,7 +11407,6 @@ function decodeQUINT64(byteArray) {
 	}
 	g_qtToSplice = 8;
 	return value;
-	v
 }
 
 function encodeQUINT64(byteArray, offset, value) {
@@ -11941,11 +11921,12 @@ function lookupValueChanged(what) {
 }
 var g_lastLookupCallsign = "";
 var g_lookupTimeout = null;
-function lookupCallsign(callsign, gridPass) {
-	g_lastLookupCallsign = callsign;
-		
-	if (g_mapSettings.offlineMode == true)
+
+function lookupCallsign(callsign, gridPass, useCache = true) {
+	
+	if (g_mapSettings.offlineMode == true && useCache == false)
 		return;
+	g_lastLookupCallsign = callsign;
 	
 	if ( g_lookupWindowHandle )
 	{
@@ -11960,7 +11941,16 @@ function lookupCallsign(callsign, gridPass) {
 	g_lookupTimeout = setTimeout(searchLogForCallsign,500,callsign);
 
 
+	if ( useCache )
+		getLookupCachedObject(callsign, gridPass, cacheLookupObject, continueWithLookup);
+	else
+		continueWithLookup( callsign, gridPass );
 
+	
+}
+
+function continueWithLookup( callsign, gridPass )
+{
 	setLookupDiv("lookupInfoDiv","Looking up <font color='cyan'>" + callsign + "</font>, please wait...");
 	if (g_appSettings.lookupService != "CALLOOK") {
 		g_qrzLookupCallsign = callsign;
@@ -11968,10 +11958,10 @@ function lookupCallsign(callsign, gridPass) {
 		if (g_qrzLookupSessionId == null || timeNowSec() - g_sinceLastLookup > 3600) {
 			g_qrzLookupSessionId = null;
 			g_sinceLastLookup = timeNowSec();
-			GetSessionID(null);
+			GetSessionID(null, true);
 		} else {
 			g_sinceLastLookup = timeNowSec();
-			GetLookup();
+			GetLookup(true);
 		}
 	} else {
 		var dxcc = callsignToDxcc(callsign);
@@ -11983,7 +11973,7 @@ function lookupCallsign(callsign, gridPass) {
 		} else
 			where = "Unknown";
 		if (ccode == 840) {
-			getBuffer("https://callook.info/" + callsign + "/json", callookResults, gridPass, "https", 443);
+			getBuffer("https://callook.info/" + callsign + "/json", callookResults, gridPass, "https", 443, true);
 		} else {
 			var worker =
 				"<center>C A L L O O K<br/>NO-NONSENSE AMATEUR RADIO U.S.A. CALLSIGN LOOKUPS<br/>are limited to United States and United States Territories Only<br/>";
@@ -11997,7 +11987,6 @@ function lookupCallsign(callsign, gridPass) {
 		}
 	}
 }
-
 function callookResults(buffer, gridPass) {
 	var results = JSON.parse(buffer);
 	if (typeof results.status != undefined) {
@@ -12032,7 +12021,7 @@ function callookResults(buffer, gridPass) {
 				callObject["gtGrid"] = gridPass;
 			callObject["source"] =
 				"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://callook.info/"+results.current.callsign+"\");'>C A L L O O K</div></b></font></td></tr>";
-			displayLookupObject(callObject, gridPass);
+			cacheLookupObject(callObject, gridPass,true);
 		} else if (results.status == "INVALID") {
 			setLookupDiv("lookupInfoDiv", "Invalid Lookup");
 		} else {
@@ -12046,7 +12035,7 @@ var g_qrzLookupCallsign = "";
 var g_qrzLookupGrid = "";
 var g_sinceLastLookup = 0;
 
-function GetSessionID(resultTd) {
+function GetSessionID(resultTd, useCache) {
 	if (g_mapSettings.offlineMode == true)
 		return;
 	if (resultTd != null)
@@ -12054,13 +12043,13 @@ function GetSessionID(resultTd) {
 	if (g_appSettings.lookupService == "QRZCQ")
 		getBuffer("https://ssl.qrzcq.com/xml?username=" + g_appSettings.lookupLoginCq + "&password=" +
 			encodeURIComponent(g_appSettings.lookupPasswordCq )+ "&agent=GridTracker1.18", qrzGetSessionCallback, resultTd,
-			"https", 443);
+			"https", 443, useCache);
 	else if (g_appSettings.lookupService == "QRZ")
 		getBuffer("https://xmldata.qrz.com/xml/current/?username=" + g_appSettings.lookupLoginQrz +
-			";password=" + encodeURIComponent(g_appSettings.lookupPasswordQrz), qrzGetSessionCallback, resultTd, "https", 443);
+			";password=" + encodeURIComponent(g_appSettings.lookupPasswordQrz), qrzGetSessionCallback, resultTd, "https", 443, useCache);
 	else
 		getBuffer("https://www.hamqth.com/xml.php?u=" + g_appSettings.lookupLoginQth + "&p=" + encodeURIComponent(g_appSettings.lookupPasswordQth),
-			hamQthGetSessionCallback, resultTd, "https", 443);
+			hamQthGetSessionCallback, resultTd, "https", 443, useCache);
 }
 
 function hamQthGetSessionCallback(buffer, resultTd) {
@@ -12094,7 +12083,7 @@ function hamQthGetSessionCallback(buffer, resultTd) {
 	}
 }
 
-function qrzGetSessionCallback(buffer, resultTd) {
+function qrzGetSessionCallback(buffer, resultTd, useCache) {
 	var oParser = new DOMParser();
 	var oDOM = oParser.parseFromString(buffer, "text/xml");
 	var result = "";
@@ -12118,44 +12107,42 @@ function qrzGetSessionCallback(buffer, resultTd) {
 	}
 	if (resultTd == null) // It's a true session Request
 	{
-		SessionResponse(g_qrzLookupSessionId, result);
+		SessionResponse(g_qrzLookupSessionId, result, useCache);
 	} else
 		resultTd.innerHTML = result;
 }
 
-function SessionResponse(newKey, result) // for QRZCQ.com as well
+function SessionResponse(newKey, result, useCache) // for QRZCQ.com as well
 {
 	if (newKey == null) {
-		setLookupDiv("lookupInfoDiv", result);
+		setLookupDiv("lookupInfoDiv", result, useCache);
 	} else {
-		GetLookup();
+		GetLookup(useCache);
 	}
 }
 
-function GetLookup() {
+function GetLookup(useCache) {
 	if (g_appSettings.lookupService == "QRZCQ")
 		getBuffer("https://ssl.qrzcq.com/xml?s=" + g_qrzLookupSessionId + "&callsign=" + g_qrzLookupCallsign +
-			"&agent=GridTracker", qrzLookupResults, g_qrzLookupGrid, "https", 443);
+			"&agent=GridTracker", qrzLookupResults, g_qrzLookupGrid, "https", 443,useCache);
 	else if (g_appSettings.lookupService == "QRZ")
 		getBuffer("http://xmldata.qrz.com/xml/current/?s=" + g_qrzLookupSessionId + ";callsign=" +
-			g_qrzLookupCallsign, qrzLookupResults, g_qrzLookupGrid, "http", 80);
+			g_qrzLookupCallsign, qrzLookupResults, g_qrzLookupGrid, "http", 80,useCache);
 	else
 		getBuffer("https://www.hamqth.com/xml.php?id=" + g_qrzLookupSessionId + "&callsign=" +
-			g_qrzLookupCallsign + "&prg=GridTracker", qthHamLookupResults, g_qrzLookupGrid, "https", 443);
+			g_qrzLookupCallsign + "&prg=GridTracker", qthHamLookupResults, g_qrzLookupGrid, "https", 443,useCache);
 }
 
-function qthHamLookupResults(buffer, gridPass) {
+function qthHamLookupResults(buffer, gridPass,useCache) {
 	var oParser = new DOMParser();
 	var oDOM = oParser.parseFromString(buffer, "text/xml");
 	var result = "";
 	if (oDOM != null) {
 		var json = XML2jsobj(oDOM.documentElement);
 		if (json.hasOwnProperty("search")) {
-			json.search.source =
-				"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.hamqth.com/"+json.search.callsign.toUpperCase()+"\");'>HamQTH</div></b></font></td></tr>";
 			if (gridPass)
 				json.search.gtGrid = gridPass;
-			displayLookupObject(json.search, gridPass);
+			cacheLookupObject(json.search, gridPass, true);
 		} else {
 			g_qrzLookupSessionId = null;
 			setLookupDiv("lookupInfoDiv", "<br/><b>No result for callsign</b><br/><br/>");
@@ -12166,7 +12153,7 @@ function qthHamLookupResults(buffer, gridPass) {
 	}
 }
 
-function qrzLookupResults(buffer, gridPass) {
+function qrzLookupResults(buffer, gridPass, useCache) {
 	var oParser = new DOMParser();
 	var oDOM = oParser.parseFromString(buffer, "text/xml");
 	var result = "";
@@ -12180,15 +12167,9 @@ function qrzLookupResults(buffer, gridPass) {
 			}
 			if ( json.Callsign.hasOwnProperty("call") )
 				call = json.Callsign.call;
-			if (g_appSettings.lookupService == "QRZ")
-				json.Callsign.source =
-					"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrz.com/lookup?callsign="+call+"\");'>QRZ.com</div></b></font></td></tr>";
-			else
-				json.Callsign.source =
-					"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrzcq.com/call/"+call+"\");'>QRZCQ.com</div></b></font></td></tr>";
 			if (gridPass)
 				json.Callsign.gtGrid = gridPass;
-			displayLookupObject(json.Callsign, gridPass);
+			cacheLookupObject(json.Callsign, gridPass, true);
 		} else {
 			setLookupDiv("lookupInfoDiv","<br/><b>No result for callsign</b><br/><br/>");
 			g_qrzLookupSessionId = null;
@@ -12201,16 +12182,103 @@ function qrzLookupResults(buffer, gridPass) {
 
 var g_lastLookupAddress = null;
 
-var g_lookupObjects = Object();
 
-function displayLookupObject(lookup, gridPass) {
-	var worker = "";
+	
+	
+var g_Idb = null;
+var g_Irequest = null;
+
+
+function initialDatabases()
+{
+	g_Irequest = window.indexedDB.open("GridTracker", 1 );
+         
+	g_Irequest.onerror = function(event) {
+		alert("Database error: " + event.target.errorCode + " : GridTracker will have issues");
+	};
+
+	g_Irequest.onsuccess = function(event) {
+		g_Idb = g_Irequest.result;
+		if (!g_Idb.objectStoreNames.contains('lookups')) 
+		{ 
+			g_Idb.createObjectStore('lookups', {keyPath: 'call'}); 
+		}
+		init();
+	};
+		 
+	g_Irequest.onupgradeneeded = function(event) {
+		g_Idb = g_Irequest.result;
+		if (!g_Idb.objectStoreNames.contains('lookups')) 
+		{ 
+			g_Idb.createObjectStore('lookups', {keyPath: 'call'}); 
+		}
+		init();
+	}
+}
+		 
+	
+function addLookupObjectToIndexedDB( lookupObject ) {
+   let request = g_Idb.transaction(["lookups"], "readwrite")
+   .objectStore("lookups")
+   .put(lookupObject);
+      
+   request.onerror = function(event) {
+		addLastTraffic("<font style='color:orange'>Lookup Write Issue</font>");
+   }
+}
+
+function getLookupCachedObject( call, gridPass, resultFunction = null, noResultFunction = null, callObject = null )
+{
+	let request = g_Idb.transaction(["lookups"], "readwrite")
+   .objectStore("lookups")
+   .get(call);
+   
+   request.onsuccess = function(event) {
+		if ( request.result && parseInt(request.result.cached) + 604800 > timeNowSec() ) // 7 days, should an option Tag! I know right?!
+		{
+			delete request.result;
+		}
+		if ( callObject != null )
+		{
+			if ( request.result )
+			{
+				callObject.cnty = request.result.cnty;
+				
+				if ( callObject.cnty in g_countyData  )
+					callObject.qual = true;
+				else
+				{
+					callObject.cnty = null;
+					callObject.qual = false;
+				}
+			}
+			return;
+		}
+		if ( request.result && resultFunction )
+			resultFunction(request.result, gridPass, false);
+		else if (  noResultFunction )
+			noResultFunction(call, gridPass);
+   };
+   
+   request.onerror = function(event) {
+		if ( noResultFunction )
+			noResultFunction(call, gridPass);
+   }
+}
+
+
+function cacheLookupObject(lookup, gridPass, cacheable = false) {
+	
+	if ( !("cnty" in lookup ) )
+		lookup.cnty = null;
 
 	if (lookup.hasOwnProperty("callsign")) {
 		lookup.call = lookup.callsign;
 		delete lookup.callsign;
 	}
-
+	
+	lookup.call = lookup.call.toUpperCase();
+	
 	if (lookup.hasOwnProperty("latitude")) {
 		lookup.lat = lookup.latitude;
 		delete lookup.latitude;
@@ -12316,16 +12384,52 @@ function displayLookupObject(lookup, gridPass) {
 		delete lookup.land;
 	}
 			
-	if ( lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county") )
+	if ( lookup.cnty == null && lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county") )
 	{
 			lookup.county = lookup.state + ", " + lookup.county;
+			var finalCnty = lookup.county.toUpperCase();
+			finalCnty = finalCnty.replaceAll(" ","");
+			lookup.cnty = finalCnty;  // use .cnty bcause that's how we know it internally.
+			var foundCounty = false;
+			if ( lookup.cnty in g_countyData  )
+			{
+				for ( var hash in g_liveCallsigns )
+				{
+					if ( g_liveCallsigns[hash].DEcall == lookup.call && g_liveCallsigns[hash].state == "US-" + lookup.state )
+					{
+						g_liveCallsigns[hash].cnty = finalCnty;
+						g_liveCallsigns[hash].qual = true;
+						foundCounty = true;
+					}
+				}
+				if ( foundCounty )
+				{
+					goProcessRoster();
+				}
+			}
+			else
+			{
+				//console.log( "bad county: " + lookup.cnty);
+				lookup.cnty = null;
+			}
 	}
 				
 	lookup.name = joinSpaceIf(getLookProp(lookup, "fname"), getLookProp(lookup, "name"));
 
-	g_lookupObjects[lookup.call] = lookup;
+	if ( cacheable )
+	{
+		lookup.cached = timeNowSec();
+		addLookupObjectToIndexedDB( lookup );
+	}
 	
-	//saveToCsv(lookup);
+	displayLookupObject(lookup, gridPass, cacheable);
+
+}
+
+function displayLookupObject(lookup, gridPass, fromCache = false)
+{
+	var worker = "";
+	
 	var thisCall =  getLookProp(lookup, "call").toUpperCase();
 		
 	worker += "<table title='Click to copy address to clipboard' onclick='setClipboardFromLookup();' style='cursor:pointer' >";
@@ -12398,12 +12502,12 @@ function displayLookupObject(lookup, gridPass) {
 	worker += "</table>";
 	var card = "<div class='mapItem' id='callCard' style='top:0;padding:4px;'>" + worker + "</div>";
 	worker = "";
-	worker += "<table align='center' class='darkTable'>";
+	worker += "<table align='center' class='bioTable' >";
 	worker += "<tr><th colspan=2>Details</th></tr>";
 	if (getLookProp(lookup, "url").length > 0) {
 		worker += "<tr>";
 		worker += "<td>Website</td>";
-		worker += "<td>";
+		worker += "<td  >";
 		worker += "<font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"" + getLookProp(
 			lookup, "url") + "\");' >Link</div></b></font>";
 		worker += "</td>";
@@ -12427,9 +12531,9 @@ function displayLookupObject(lookup, gridPass) {
 	if (dates.length > 0) {
 		worker += "<tr><td>Effective Dates</td><td>" + dates + "</td></tr>";
 	}
-	var aliaes = joinCommaIf(getLookProp(lookup, "aliases"), getLookProp(lookup, "p_call"));
-	if (aliaes.length > 0) {
-		worker += "<tr><td>Aliases</td><td>" + aliaes + "</td></tr>";
+	var Aliases = joinCommaIf(getLookProp(lookup, "aliases"), getLookProp(lookup, "p_call"));
+	if (Aliases.length > 0) {
+		worker += "<tr title='"+Aliases+"' ><td>Aliases</td><td>" + Aliases + "</td></tr>";
 	}
 	worker += makeRow("Polish OT", lookup, "plot");
 	worker += makeRow("German DOK", lookup, "dok");
@@ -12459,7 +12563,7 @@ function displayLookupObject(lookup, gridPass) {
 	worker += makeRow("QSL Via", lookup, "qsl_via");
 	worker += makeRow("QRZ Admin", lookup, "user");
 	worker += makeRow("Prefix", lookup, "prefix");
-	worker += lookup.source;
+	
 	
 	
 	if (g_callsignLookups.lotwUseEnable == true && thisCall in g_lotwCallsigns)
@@ -12478,7 +12582,10 @@ function displayLookupObject(lookup, gridPass) {
 		worker += makeRow("ClubLog OQRS", lookup, "uoqrs");
 	}
 	
-	
+	if ( fromCache )
+	{
+		worker += "<tr><td>Cached Record</td><td>"+userTimeString(lookup["cached"]*1000)+"</td></tr>";
+	}
 	
 	worker += "</table>";
 	var details = "<div class='mapItem' id='callDetails' style='padding:4px;'>" + worker + "</div>";
@@ -12597,7 +12704,7 @@ function startLookup(call, grid) {
 		grid = "";
 
 
-	openLookupWindow();
+	openLookupWindow(true);
 	
 	lookupCallsign(call, grid);	
 }
@@ -12669,7 +12776,7 @@ function searchLogForCallsign( call )
 			{
 				var strike = "";
 				if ( String(dxcc) + g_colorBands[band] in  g_tracker.confirmed.dxcc )
-					strike = "text-decoration: line-through;";
+					strike = "text-decoration: underline overline;";
 				worker += "<div style='"+strike+"display:inline-block;color:#"+g_pskColors[g_colorBands[band]]+"'>" + g_colorBands[band] + "</div>&nbsp;"  ;
 			}
 
@@ -12723,6 +12830,7 @@ function mediaCheck() {
 		g_appData += "\\GridTracker";
 		g_mediaDir = g_appData + "\\media";
 		g_jsonDir = g_appData + "\\data";
+		g_NWappData = nw.App.dataPath + "\\Ginternal";
 		g_screenshotDir = g_appData + "\\screenshots";
 		g_scriptDir = g_appData + "\\scripts";
 		
@@ -12731,9 +12839,11 @@ function mediaCheck() {
 			if (!fs.existsSync(g_appData)) {
 				fs.mkdirSync(g_appData);
 			}
-			if (!fs.existsSync(g_jsonDir)) {
-				fs.mkdirSync(g_jsonDir);
+			
+			if (!fs.existsSync(g_NWappData)) {
+				fs.mkdirSync(g_NWappData);
 			}
+
 			if (!fs.existsSync(g_screenshotDir)) {
 				fs.mkdirSync(g_screenshotDir);
 			}
@@ -12743,6 +12853,7 @@ function mediaCheck() {
 		
 		
 			g_jsonDir += g_dirSeperator;
+			g_NWappData += g_dirSeperator;
 			g_screenshotDir += g_dirSeperator;
 			g_scriptDir += g_dirSeperator;
 			if (!fs.existsSync(g_mediaDir + g_dirSeperator + "long-strike.mp3")) {
@@ -12787,6 +12898,7 @@ function mediaCheck() {
 
 		var mediaDir = g_appData + "/media";
 		g_jsonDir = g_appData + "/data";
+		g_NWappData = nw.App.dataPath + "/Ginternal";
 		g_screenshotDir = g_appData + "/screenshots";
 		g_scriptDir = g_appData + "/scripts";
 		try 
@@ -12794,9 +12906,10 @@ function mediaCheck() {
 			if (!fs.existsSync(g_appData)) {
 				fs.mkdirSync(g_appData);
 			}
-			if (!fs.existsSync(g_jsonDir)) {
-				fs.mkdirSync(g_jsonDir);
+			if (!fs.existsSync(g_NWappData)) {
+				fs.mkdirSync(g_NWappData);
 			}
+
 			if (!fs.existsSync(g_screenshotDir)) {
 				fs.mkdirSync(g_screenshotDir);
 			}
@@ -12826,6 +12939,7 @@ function mediaCheck() {
 		}
 		
 		g_jsonDir += g_dirSeperator;
+		g_NWappData += g_dirSeperator;
 		g_screenshotDir +=g_dirSeperator;
 		g_scriptDir += g_dirSeperator;
 		g_mediaDir = mediaDir;
@@ -12881,9 +12995,9 @@ function mediaCheck() {
 	tryToDeleteLog("lotw.adif");
 	
 	try {
-		if (fs.existsSync(g_jsonDir + "internal_qso.json") )
+		if (fs.existsSync(g_NWappData + "internal_qso.json") )
 		{
-			var data = JSON.parse(fs.readFileSync(g_jsonDir + "internal_qso.json"));
+			var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
 			
 			if ( typeof data.version != "undefined" && data.version == gtVersion )
 			{
@@ -12917,7 +13031,7 @@ function mediaCheck() {
 			}
 			
 			delete data;
-			fs.unlinkSync(g_jsonDir + "internal_qso.json");
+			fs.unlinkSync(g_NWappData + "internal_qso.json");
 		}
 		loadReceptionReports();
 	}
@@ -12946,7 +13060,7 @@ function setRosterSpot( enabled )
 function saveReceptionReports()
 {
 	try {
-		fs.writeFileSync(g_jsonDir + "spots.json", JSON.stringify(g_receptionReports) );	
+		fs.writeFileSync(g_NWappData + "spots.json", JSON.stringify(g_receptionReports) );	
 	}
 	catch (e)
 	{
@@ -12958,9 +13072,9 @@ function loadReceptionReports()
 	
 	try {
 		var clear = true;
-		if (fs.existsSync(g_jsonDir + "spots.json") )
+		if (fs.existsSync(g_NWappData + "spots.json") )
 		{
-			g_receptionReports = JSON.parse(fs.readFileSync(g_jsonDir + "spots.json"));
+			g_receptionReports = JSON.parse(fs.readFileSync(g_NWappData + "spots.json"));
 			if ( timeNowSec() - g_receptionReports.lastDownloadTimeSec <= 86400 )
 				clear = false;
 		}
@@ -13204,6 +13318,15 @@ function changeSpotValues() {
 		goProcessRoster();
 }
 
+function mapTransChange()
+{
+	g_mapSettings.mapTrans = mapTransValue.value;
+	
+	mapTransTd.innerHTML = String( 100-parseInt(((g_mapSettings.mapTrans*255)/255)*100) )+ "%";
+	mapSettingsDiv.style.backgroundColor = "rgba(0,0,0, " + g_mapSettings.mapTrans + ")";
+	
+}
+
 function spotPathChange()
 {
 	g_receptionSettings.pathColor = spotPathColorValue.value;
@@ -13443,9 +13566,5 @@ window.addEventListener("load", function(){
   });
 });
 
-var g_process = require('process');
-
-g_process.on('uncaughtException', function (e) {
-});
 
 

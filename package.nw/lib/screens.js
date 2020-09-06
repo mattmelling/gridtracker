@@ -1,3 +1,7 @@
+var s_title = null;
+var s_screenSettings = {};
+var s_zoomLevel = 0;
+
 
 nw.Screen.Init();
 
@@ -60,14 +64,54 @@ var screenCB = {
   }
 };
 
+function saveScreenSettings()
+{
+	var setting = { "showing" : g_isShowing , "zoomLevel" : s_zoomLevel };
+	
+	s_screenSettings = JSON.parse(localStorage.screenSettings);
+	
+	s_screenSettings[s_title] = setting;
+
+	localStorage.screenSettings = JSON.stringify(s_screenSettings);
+}
 // listen to screen events
 nw.Screen.on('displayAdded', screenCB.onDisplayAdded);
 nw.Screen.on('displayRemoved', screenCB.onDisplayRemoved);
 
+var g_isShowing = false;
+
 nw.Window.get().on('loaded', function () {
+		s_title = document.title.substr(0,16).trim();
+		g_isShowing = false;
+		if ( typeof localStorage.screenSettings == "undefined" )
+		{
+			localStorage.screenSettings = "{}";
+			
+		}
+		s_screenSettings = JSON.parse(localStorage.screenSettings);
+	
+		if ( !(s_title in s_screenSettings) )
+		{
+			saveScreenSettings();
+		}
+		if ( !("zoomLevel" in s_screenSettings[s_title]) )
+		{
+			saveScreenSettings();
+		}
+		g_isShowing = s_screenSettings[s_title].showing;
+		nw.Window.get().zoomLevel = s_zoomLevel = s_screenSettings[s_title].zoomLevel;
+		
+		if ( g_isShowing || s_title == "GridTracker ©202" )
+			this.show();
+		else
+			this.hide();
+		
 		g_initialScreenCount = nw.Screen.screens.length;
 		setWindowInfo();
+
+		document.addEventListener('keydown', onZoomControlDown, true);
   });
+  
   
 var g_windowMoveTimer = null;
 nw.Window.get().on('move', function (x,y) {
@@ -87,3 +131,46 @@ nw.Window.get().on('resize', function (w,h) {
 		g_windowResizeTimer = setTimeout(setWindowInfo,1000);
   });
   
+  
+var g_zoomKeys = { "NumpadSubtract":reduceZoom , "Minus":reduceZoom , "NumpadAdd":increaseZoom, "Equal":increaseZoom, "Numpad0":resetZoom , "Digit0":resetZoom };
+
+function onZoomControlDown(event)
+{
+	if ( event.ctrlKey )
+	{
+		if ( event.code in g_zoomKeys )
+		{
+			g_zoomKeys[event.code]();
+		}
+	}
+}
+
+function reduceZoom()
+{
+	s_zoomLevel -= 0.20;
+	nw.Window.get().zoomLevel = s_zoomLevel;
+	saveScreenSettings();	
+}
+
+function increaseZoom()
+{
+	s_zoomLevel += 0.20;
+	nw.Window.get().zoomLevel = s_zoomLevel;
+	
+	saveScreenSettings();
+}
+
+function resetZoom()
+{
+	s_zoomLevel = 0;	
+	nw.Window.get().zoomLevel = s_zoomLevel;
+	saveScreenSettings();	
+}
+
+var g_process = require('process');
+
+g_process.on('uncaughtException', function (e) {
+	
+});
+
+

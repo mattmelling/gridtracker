@@ -125,3 +125,7 @@ Number.prototype.pad = function(size) {
     return s;
 }
 
+String.prototype.replaceAll = function(str1, str2) 
+{
+    return this.split(str1).join(str2);
+} 

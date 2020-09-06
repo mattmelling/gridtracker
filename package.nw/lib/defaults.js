@@ -27,12 +27,12 @@ var validSettings =
 	"speechSettings",
 	"startupLogs",
 	"trustedQslSettings",
+	"screenSettings"
 ];
 
 var def_appSettings = 
 {
 	"alertMute" : 0,
-	"callRosterOpen" : false,
 	"rosterAlwaysOnTop": false,
 	"centerGridsquare" : "",
 	"chatUUID" : "",
@@ -126,7 +126,8 @@ var def_mapSettings =
 	"strikesNotify" :  false,
 	"trafficDecode" :  true,
 	"usNexrad" :  false,
-	"zoom" :  4
+	"zoom" :  4,
+	"mapTrans" : 0.5
 };
 
 var def_adifLogSettings = 

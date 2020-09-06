@@ -31,16 +31,34 @@ function dumpFile(file)
 	}
 }
 
+function dumpDir(dir)
+{
+	try
+	{
+		if ( fs.existsSync(dir) )
+			fs.rmdirSync(dir);
+	}
+	catch (e)
+	{
+	}
+}
+
 function callsignServicesInit()
 {
 	// Dump old data files we no longer reference
 	dumpFile(g_jsonDir + "uls-callsigns.json");
 	dumpFile(g_jsonDir + "us-callsigns.json");
 	dumpFile(g_jsonDir + "lotw-callsigns.json");
+	dumpFile(g_jsonDir + "lotw-ts-callsigns.json");
+	dumpFile(g_jsonDir + "eqsl-callsigns.json");
+	dumpFile(g_jsonDir + "cloqrs-callsigns.json");
+	dumpFile(g_jsonDir + "internal_qso.json");
+	dumpFile(g_jsonDir + "spots.json");
+	dumpDir(g_jsonDir);
 	
-	g_lotwFile = g_jsonDir + "lotw-ts-callsigns.json";
-	g_eqslFile = g_jsonDir + "eqsl-callsigns.json";
-	g_oqrsFile = g_jsonDir + "cloqrs-callsigns.json";
+	g_lotwFile = g_NWappData + "lotw-ts-callsigns.json";
+	g_eqslFile = g_NWappData + "eqsl-callsigns.json";
+	g_oqrsFile = g_NWappData + "cloqrs-callsigns.json";
 
 	if ( g_callsignLookups.lotwUseEnable )
 	{
@@ -435,7 +453,7 @@ function updateQSO()
 				{
 					if (details.cnty.indexOf(",") == -1) 
 					{
-						if (!(details.state + "," + details.cnty in g_cntyToCounty))
+						if (!(details.state + "," + details.cnty in  g_cntyToCounty[details.cnty]))
 							lookupCall = true;
 					} 
 					else
@@ -447,7 +465,7 @@ function updateQSO()
 			{
 				if (g_callsignLookups.ulsUseEnable) 
 				{
-					lookupUsCallsign(details);
+					lookupUsCallsign(details,true );
 				}
 			}
 		}
@@ -577,10 +595,11 @@ function getChunkedBuffer(file_url, callback, flag, mode, port, cookie, errorHan
 }
 
 
-var g_ulsDatabase = openDatabase('ulsDB', '1.0', 'US Callsigns', 40 * 1024 * 1024);
+var g_ulsDatabase = openDatabase('ulsDB', '1.0', 'US Callsigns', 50 * 1024 * 1024);
+
 
 g_ulsDatabase.transaction(function (tx) {
-	tx.executeSql('CREATE TABLE IF NOT EXISTS calls (callsign TEXT PRIMARY KEY, zip, state)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS calls ( callsign TEXT PRIMARY KEY, zip, state)');
 });
 
 
@@ -588,6 +607,7 @@ function resetULSDatabase()
 {
 	g_callsignLookups.ulsLastUpdate = 0;
 	g_ulsCallsignsCount = 0;	
+
 }
 
 function processulsCallsigns(data, flag, cookies, starting, finished)
@@ -616,21 +636,32 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 			g_ulsDatabase.transaction(function (tx) {
 				if ( starting == true )
 				{
+					if ( g_ulsLoadTimer != null )
+						clearTimeout(g_ulsLoadTimer);
+					g_ulsLoadTimer = null;
+					g_ulsWhenDate = 0;
 					g_ulsCallsignsCount = 0;
-					g_callsignLookups.ulsLastUpdate = 0;
-					saveCallsignSettings();
 					ulsUpdatedTd.innerHTML = "<b><i>Processing...</i></b>";
-					tx.executeSql('DROP TABLE calls');
-					tx.executeSql('CREATE TABLE IF NOT EXISTS calls (callsign TEXT PRIMARY KEY, zip, state)');
+					tx.executeSql('CREATE TABLE IF NOT EXISTS calls ( callsign TEXT PRIMARY KEY, zip, state)');
+					
 				}
 				for (var x in lines )
 				{
 					if ( lines[x].length )
 					{
-						tx.executeSql( 'INSERT INTO calls (callsign, zip, state) VALUES ("'+lines[x].substr(7)+'","'+lines[x].substr(0,5)+'","'+lines[x].substr(5,2)+'")');
 						++g_ulsCallsignsCount;
-						if ( g_ulsCallsignsCount % 7969 == 0 )
-							ulsCountTd.innerHTML = g_ulsCallsignsCount;
+						tx.executeSql( 'INSERT INTO calls (rowid, callsign, zip, state) VALUES ('+g_ulsCallsignsCount+',"'+lines[x].substr(7)+'","'+lines[x].substr(0,5)+'","'+lines[x].substr(5,2)+'")');
+						if ( g_ulsCallsignsCount % 10000 == 0 )
+						{
+							tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (rx, results) 
+							{ 
+								var len = results.rows.length, i; 
+								if ( len == 1 )
+								{ 
+									ulsCountTd.innerHTML = results.rows[0]["cnt"];
+								}
+							});
+						}	
 					}
 				}
 				delete lines;
@@ -692,29 +723,53 @@ function lookupUsCallsign( object , writeState = false)
 				{
 					object.state  = "US-"+results.rows[0]["state"];
 				}
+				if ( writeState )
+					setState(object)
 			}
-			object.zipcode = results.rows[0]["zip"];
+			object.zipcode = String(results.rows[0]["zip"]);
 			if ( object.cnty == null )
 			{
-				if ( object.zipcode in g_zipToCounty )
+				let request = g_Idb.transaction(["lookups"], "readwrite")
+			   .objectStore("lookups")
+			   .get(object.DEcall);
+			   
+				request.onsuccess = function(event) 
 				{
-					var counties = g_zipToCounty[object.zipcode];
-					var cntyString = g_countyData[counties[0]].geo["properties"]["st"]+","+ g_countyData[counties[0]].geo["properties"]["n"].toUpperCase();
-					for ( var county in counties )
+					if ( request.result )
 					{
-						cntyString = g_countyData[counties[county]].geo["properties"]["st"]+","+ g_countyData[counties[county]].geo["properties"]["n"].toUpperCase();
-						if ( !(cntyString in g_tracker.worked.cnty) )
-							break;
-						if ( !(cntyString in g_tracker.confirmed.cnty) )
-							break;
+						object.cnty = request.result.cnty;
+						object.qual = true;
 					}
-					object.cnty = cntyString;
+						
+					if ( object.cnty == null && object.zipcode in g_zipToCounty )
+					{
+						var counties = g_zipToCounty[object.zipcode];
+						if ( counties.length > 1 )
+							object.qual = false;
+						else
+							object.qual = true;
+						object.cnty = counties[0];
+					}
+					else
+						object.qual = false;
+					if ( writeState )
+						setState(object);
+				};
+		   
+				request.onerror = function(event) 
+				{	
+					object.qual = false;
+					if ( writeState )
+						setState(object);
 				}
+
 			}
 			if ( writeState )
 				setState(object);
+
 		 }
 
+					
 		}, null); 
 });	
 }

@@ -1,7 +1,7 @@
 // GridTracker ©2020 N0TTL
 
 var fs = require('fs');
-var g_isShowing = false;
+
 var callRoster = {};
 var g_blockedCalls =  {};
 var g_blockedCQ =  {};
@@ -17,7 +17,6 @@ var r_currentDXCCs = -1;
 var r_callsignManifest = null;
 var g_rosterSettings = {};
 var g_day = 0;
-var r_jsonDir = "";
 var g_menu = null;
 var g_callMenu = null;
 var g_ageMenu = null;
@@ -127,8 +126,6 @@ var g_defaultSettings =
 	"reference":0,
 	"controls":true,
 	"compact": false,
-	"screenScale":12,
-	"screenScale":0.0,
 	"settingProfiles":false,
 	"lastSortIndex":6,
 	"lastSortReverse":1
@@ -1106,21 +1103,50 @@ function viewRoster()
 					var finalDxcc = callRoster[callHash].callObj.dxcc;
 					if ( callRoster[callHash].callObj.cnty && ( finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6 || finalDxcc == 202) && callRoster[callHash].callObj.cnty.length > 0 )
 					{
-
 						var hash = callRoster[callHash].callObj.cnty + workHash;
-						if ( (g_rosterSettings.huntNeed == "worked" && !(hash in g_worked.cnty)) || ( g_rosterSettings.huntNeed == "confirmed" && !(hash in g_confirmed.cnty)))
+											
+						if ( (g_rosterSettings.huntNeed == "worked" && !(hash in g_worked.cnty)) || ( g_rosterSettings.huntNeed == "confirmed" && !(hash in g_confirmed.cnty)) || callRoster[callHash].callObj.qual == false)
 						{ 
-							shouldAlert = true; 
-							callRoster[callHash].callObj.reason.push("uscnty");
-
-							if ( g_rosterSettings.huntNeed == "confirmed" &&  (hash in g_worked.cnty) )
+							if ( callRoster[callHash].callObj.qual == false )
 							{
-								cntyConf = unconf + cnty + inversionAlpha + ";";
+								let counties = window.opener.g_zipToCounty[callRoster[callHash].callObj.zipcode];
+								var foundHit = false;
+								for ( let cnt in counties )
+								{
+									let hh = counties[cnt] + workHash;
+									callRoster[callHash].callObj.cnty = counties[cnt];
+									if ( g_rosterSettings.huntNeed == "worked" && !(hh in g_worked.cnty) )
+									{
+										foundHit = true;
+										break;
+									}
+									if ( g_rosterSettings.huntNeed == "confirmed" && !(hh in g_confirmed.cnty))
+									{
+										foundHit = true;
+										break;
+									}
+								}
+								if ( foundHit )
+									shouldAlert = true;
 							}
-							else
+							else 
 							{
-								cntyBg = cnty + inversionAlpha ; 
-								cnty = bold; 
+								shouldAlert = true; 								
+							}
+							
+							if ( shouldAlert )
+							{
+								callRoster[callHash].callObj.reason.push("uscnty");
+
+								if ( g_rosterSettings.huntNeed == "confirmed" &&  (hash in g_worked.cnty)  )
+								{
+									cntyConf = unconf + cnty + inversionAlpha + ";";
+								}
+								else
+								{
+									cntyBg = cnty + inversionAlpha ; 
+									cnty = bold; 
+								}
 							}
 						}
 					}
@@ -1404,9 +1430,9 @@ function viewRoster()
 		{
 		
 
-
+		var thisHash = thisCall + newCallList[x].band+newCallList[x].mode;
 		
-		worker += "<tbody><tr id='" + thisCall + newCallList[x].band+newCallList[x].mode + "'>";
+		worker += "<tbody><tr id='" + thisHash + "'>";
 		worker += "<td title='"+ newCallList[x].awardReason +"' name='Callsign' align=left " +newCallList[x].style.callsign + " onClick='initiateQso(\"" +
 			 thisCall + newCallList[x].band+newCallList[x].mode + "\")'>" + thisCall.formatCallsign() + "</td>";
 
@@ -1439,7 +1465,7 @@ function viewRoster()
 		if ( g_rosterSettings.columns.State )
 			worker += "<td align='center' "+newCallList[x].style.state+" >"+ (newCallList[x].state ? newCallList[x].state.substr(3) : "")+"</td>";
 		if ( g_rosterSettings.columns.County )
-			worker += "<td align='center' "+newCallList[x].style.cnty+" >"+ (newCallList[x].cnty ? toTitleCase(newCallList[x].cnty.substr(3)) : "")+"</td>";
+			worker += "<td align='center' "+newCallList[x].style.cnty+" "+ (newCallList[x].cnty ? (newCallList[x].qual?"": "onClick='window.opener.lookupCallsign(\""+thisCall + "\",\""+ grid+"\")'") :"" )+">"+  (newCallList[x].cnty ?  (newCallList[x].qual?"":"~ ") + window.opener.g_cntyToCounty[newCallList[x].cnty] + (newCallList[x].qual?"":" ~") : "")+"</td>";
 		if ( g_rosterSettings.columns.Cont )
 			worker += "<td align='center' "+newCallList[x].style.cont+" >"+ (newCallList[x].cont ?  newCallList[x].cont:"")+"</td>";
 	
@@ -1712,7 +1738,7 @@ function getSpotString(callObj)
 
 function openChatToCid(cid)
 {
-	window.opener.showMessaging(cid);
+	window.opener.showMessaging(true, cid);
 	
 }
 
@@ -1723,8 +1749,7 @@ function initiateQso(thisHash)
 
 function callLookup(thisHash, grid)
 {
-	var thisCall = callRoster[thisHash].DEcall;
-	window.opener.startLookup(thisCall,grid);
+	window.opener.startLookup(callRoster[thisHash].DEcall, callRoster[thisHash].grid);
 }
 
 function callingLookup(thisHash, grid)
@@ -2679,7 +2704,6 @@ function init()
 
 	lockNewWindows();
 	
-	r_jsonDir = window.opener.g_jsonDir;
 
 	if ( window.opener.g_mapSettings.offlineMode == false )
 		getBuffer("https://tagloomis.com/gt/callsigns/manifest.json", manifestResult, null, "https", 443);
@@ -2780,7 +2804,7 @@ function init()
 			callLookup(g_targetHash,"");
 	  }
 	});
-
+	
 	g_callMenu.append(item);
 	
 	item = new nw.MenuItem({
@@ -4290,8 +4314,4 @@ function doubleCompile(award, firstLevel)
 	return singleCompile(award,firstLevel);
 }
 
-var g_process = require('process');
 
-g_process.on('uncaughtException', function (e) {
-	console.error(e.stack);
-});

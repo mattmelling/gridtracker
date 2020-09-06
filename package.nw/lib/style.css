@@ -269,12 +269,18 @@
       .inputTextValue 
       {
       	-webkit-border-radius:6px;
+		border:1px solid #999;
 		outline:none;
-		margin:4px;
+		margin:1px;
 		padding:2px;
-		padding-left:3px;
-		padding-right:2px;
+		padding-bottom:1px;
+
+		border-style:inset;
       }
+	  .inputTextValue:hover {
+			border-color:#FFF;
+			border-style:outset;
+		}
       .roundBorderValue
       {
       	border:1px solid white;
@@ -328,7 +334,7 @@
 .button
 {
 
-	-webkit-border-radius:4px;  
+	border-radius:4px;  
 	cursor:pointer;
 	margin:0px;
 
@@ -341,7 +347,7 @@
 	display:inline-block;
 	color:#EEE;
 	
-	-webkit-transition: border-style;
+	transition: border-style;
 }
 
 .button:active
@@ -432,8 +438,8 @@
 {
 	margin:2px;
 	padding:0px;
-	min-height:60px;
-	min-width:170px;
+	min-height:40px;
+	min-width:150px;
 	border-width:1px;
 	border-color:#AAA;
 	border-style:inset;
@@ -441,6 +447,11 @@
 	-webkit-border-radius:4px; 
 	display:inline-block;
 	-webkit-transition:border-color;
+}
+
+.mapItem table
+{
+	border-collapse: collapse;
 }
 
 .mapItemNoSize
@@ -942,3 +953,35 @@ table.subtable tr:hover td {  box-shadow: none; }
 	
 }
 
+table.bioTable {
+  border-collapse: collapse;
+  border: 1px solid #888;
+  background-color: black;
+  text-align: center;
+  table-layout: fixed;
+  width: 300px;
+}
+table.bioTable td, table.bioTable th {
+  border: 1px solid #888;
+  padding:2px 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+table.bioTable thead {
+  border-bottom: 2px solid #888;
+
+}
+table.bioTable thead th {
+  font-weight: bold;
+  text-align: center;
+  border-left: 2px solid #888;
+}
+table.bioTable thead th:first-child {
+  border-left: none;
+ 
+}
+
+
+.bioTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888; }

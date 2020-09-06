@@ -118,11 +118,7 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 					finalCnty = null;
 				else
 				{
-					finalCnty = finalCnty.replace(", ",",");
-					finalCnty = finalCnty.replace("DEKALB","DE KALB");
-					finalCnty = finalCnty.replace("DESOTO","DE SOTO");
-					finalCnty = finalCnty.replace("LAPORTE","LA PORTE");
-					finalCnty = finalCnty.replace("DU PAGE","DUPAGE");
+					finalCnty = finalCnty.replaceAll(" ","");
 				}
 				var finalMode = findAdiField(activeAdifArray[x], "MODE").toUpperCase();
 				var subMode = findAdiField(activeAdifArray[x], "SUBMODE");
@@ -1448,14 +1444,12 @@ function sendTcpMessage( msg, length, port, address)
 {
 	var net = require('net');
 	var client = new net.Socket();
+	client.setTimeout(30000);
 	client.connect(port, address , function() {
-
 		client.write(msg);
-		client.close();
 	});
 
 	client.on('close', function() {
-		
 	});
 }
 
@@ -1599,9 +1593,6 @@ function oldSendToLogger()
 		
 	sendToLogger(report);
 	
-	
-
-	updateCountStats();
 }
 
 var g_adifLookupMap = 
@@ -1618,10 +1609,10 @@ var g_adifLookupMap =
 
 function sendToLogger(ADIF)
 {
-	var report = "";
-	var regex = new RegExp( "<EOH>", 'i');
-	var record = parseADIFRecord( ADIF.split(regex)[1] );
-	var localMode = record["MODE"];
+	
+	let regex = new RegExp( "<EOH>", 'i');
+	let record = parseADIFRecord( ADIF.split(regex)[1] );
+	let localMode = record["MODE"];
 	
 	if ( localMode == "MFSK" && "SUBMODE" in record )
 	{
@@ -1650,7 +1641,7 @@ function sendToLogger(ADIF)
 	
 	if ( !("DXCC" in record) )
 	{
-		var dxcc = callsignToDxcc(record["CALL"]);
+		let dxcc = callsignToDxcc(record["CALL"]);
 		if ( dxcc == -1 ) 
 			dxcc = 0;
 		record["DXCC"] = String(dxcc);
@@ -1661,93 +1652,179 @@ function sendToLogger(ADIF)
 		record["COUNTRY"] = g_dxccToAltName[Number(record["DXCC"])];
 	}
 	
-	if ( g_appSettings.lookupMerge == true && record["CALL"] in g_lookupObjects )
-	{
-		var lookup = g_lookupObjects[record["CALL"]];
-		for ( var key in lookup )
+	if ( g_appSettings.lookupMerge == true )
+	{	
+		let request = g_Idb.transaction(["lookups"], "readwrite")
+	   .objectStore("lookups")
+	   .get(record["CALL"]);
+	   
+		request.onsuccess = function(event) 
 		{
-			if ( key in g_adifLookupMap )
+			if ( request.result )
 			{
-				record[g_adifLookupMap[key]] = lookup[key];
+				let lookup = request.result;
+				for ( let key in lookup )
+				{
+					if ( key in g_adifLookupMap )
+					{
+						record[g_adifLookupMap[key]] = lookup[key];
+					}
+				}
+				if  ( "GRIDSQUARE" in record && "grid" in lookup )
+				{
+					if ( record["GRIDSQUARE"].substr(0, 4) == lookup["grid"].substr(0, 4) )
+					{
+						record["GRIDSQUARE"] = lookup["grid"];
+					}
+				}
+				if ( g_appSettings.lookupMissingGrid && "grid" in lookup && ( !("GRIDSQUARE" in record) || record["GRIDSQUARE"].length == 0 ))
+				{
+					record["GRIDSQUARE"] = lookup["grid"];
+				}
 			}
-		}
-		
-		if  ( "GRIDSQUARE" in record && "grid" in lookup )
+			finishSendingReport(record, localMode);
+		};
+   
+		request.onerror = function(event) 
 		{
-			if ( record["GRIDSQUARE"].substr(0, 4) == lookup["grid"].substr(0, 4) )
-			{
-				record["GRIDSQUARE"] = lookup["grid"];
-			}
-		}
-		if ( g_appSettings.lookupMissingGrid && "grid" in lookup && ( !("GRIDSQUARE" in record) || record["GRIDSQUARE"].length == 0 ))
-		{
-			record["GRIDSQUARE"] = lookup["grid"];
+			finishSendingReport(record,  localMode);
 		}
 	}
+	else
+	{
+		finishSendingReport(record,  localMode);
+	}
+
+}
+
+function finishSendingReport(record,  localMode)
+{	
+	let report = "";
 	
-	for (var  key in record )
+	let reportHash = record["CALL"] + record["MODE"] + localMode;
+	
+	for (let key in record )
 	{
 		report += "<" +key+ ":" +record[key].length+ ">"+record[key]+" ";
 	}
 	report += "<EOR>";
-
-
-	if ( g_N1MMSettings.enable == true && g_N1MMSettings.port > 1024 && g_N1MMSettings.ip.length > 4 )
-	{
-		sendUdpMessage( report, report.length, parseInt(g_N1MMSettings.port), g_N1MMSettings.ip);
-		addLastTraffic("<font style='color:white'>Logged to N1MM</font>");
-	}
-	
-	
-	if ( g_log4OMSettings.enable == true && g_log4OMSettings.port > 1024 && g_log4OMSettings.ip.length > 4 )
-	{
-		sendUdpMessage( "ADD " + report, report.length+4, parseInt(g_log4OMSettings.port), g_log4OMSettings.ip);
-		addLastTraffic("<font style='color:white'>Logged to Log4OM</font>");
-	}
-
-	
-	var reportHash = unique(report);
 	
 	if ( reportHash != lastReportHash )
 	{
-		onAdiLoadComplete( "GT<EOH>" + report);
+		lastReportHash = reportHash;
 		
-		// Log worthy
-		if ( logGTqsoCheckBox.checked == true )
+		if ( g_N1MMSettings.enable == true && g_N1MMSettings.port > 1024 && g_N1MMSettings.ip.length > 4 )
 		{
-			var fs = require('fs');
-			fs.appendFileSync( g_qsoLogFile , report + "\r\n");
-			addLastTraffic("<font style='color:white'>Logged to GridTracker backup</font>");
+			sendUdpMessage( report, report.length, parseInt(g_N1MMSettings.port), g_N1MMSettings.ip);
+			addLastTraffic("<font style='color:white'>Logged to N1MM</font>");
+		}
+	
+	
+		if ( g_log4OMSettings.enable == true && g_log4OMSettings.port > 1024 && g_log4OMSettings.ip.length > 4 )
+		{
+			sendUdpMessage( "ADD " + report, report.length+4, parseInt(g_log4OMSettings.port), g_log4OMSettings.ip);
+			addLastTraffic("<font style='color:white'>Logged to Log4OM</font>");
+		}
+	
+		try {
+			onAdiLoadComplete( "GT<EOH>" + report);
+		}
+		catch (e) 
+		{
+			addLastTraffic("<font style='color:red'>Exception Internal Log</font>");
+		}
+		try {
+			// Log worthy
+			if ( logGTqsoCheckBox.checked == true )
+			{
+				var fs = require('fs');
+				fs.appendFileSync( g_qsoLogFile , report + "\r\n");
+				addLastTraffic("<font style='color:white'>Logged to GridTracker backup</font>");
+			}
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception GridTracker backup</font>");
 		}
 
-		sendQrzLogEntry(report);
+		try {
+			sendQrzLogEntry(report);
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception QRZ Log</font>");
+		}
 		
-		sendClubLogEntry(report);
+		try {
+			sendClubLogEntry(report);
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception ClubLog Log</font>");
+		}
 		
-		sendHrdLogEntry(report);
+		try {
+			sendHrdLogEntry(report);
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception HrdLog.net Log</font>");
+		}
 		
-		sendCloudlogEntry(report);
+		try {
+			sendCloudlogEntry(report);
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception Cloudlog Log</font>");
+		}
+	
 		
 		
 		if ( g_acLogSettings.enable == true && g_acLogSettings.port > 0 && g_acLogSettings.ip.length > 4 )
 		{
-			sendACLogMessage(record,g_acLogSettings.port,g_acLogSettings.ip);
-			addLastTraffic("<font style='color:white'>Logged to N3FJP</font>");
+			try {
+				sendACLogMessage(record,g_acLogSettings.port,g_acLogSettings.ip);
+				addLastTraffic("<font style='color:white'>Logged to N3FJP</font>");
+			}
+			catch (e)
+			{
+				addLastTraffic("<font style='color:red'>Exception N3FJP Log</font>");
+			}
+		
 		}
 		
 		if ( g_dxkLogSettings.enable == true && g_dxkLogSettings.port > 0 && g_dxkLogSettings.ip.length > 4 )
 		{
-			sendDXKeeperLogMessage(report,  g_dxkLogSettings.port ,  g_dxkLogSettings.ip);
-			addLastTraffic("<font style='color:white'>Logged to DXKeeper</font>");
+			try {
+				sendDXKeeperLogMessage(report,  g_dxkLogSettings.port ,  g_dxkLogSettings.ip);
+				addLastTraffic("<font style='color:white'>Logged to DXKeeper</font>");
+			}
+			catch (e)
+			{
+				addLastTraffic("<font style='color:red'>Exception DXKeeper Log</font>");
+			}
 		}
 		
 		if ( g_HRDLogbookLogSettings.enable == true && g_HRDLogbookLogSettings.port > 0 && g_HRDLogbookLogSettings.ip.length > 4 )
 		{
-			sendHRDLogbookEntry(record,  g_HRDLogbookLogSettings.port ,  g_HRDLogbookLogSettings.ip);
-			addLastTraffic("<font style='color:white'>Logged to HRD Logbook</font>");
+			try {
+				sendHRDLogbookEntry(record,  g_HRDLogbookLogSettings.port ,  g_HRDLogbookLogSettings.ip);
+				addLastTraffic("<font style='color:white'>Logged to HRD Logbook</font>");
+			}
+			catch (e)
+			{
+				addLastTraffic("<font style='color:red'>Exception HRD Log</font>");
+			}
 		}
 
-		sendLotwLogEntry(report);
+		try {
+			sendLotwLogEntry(report);
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception LoTW Log</font>");
+		}
 		
 		if ( logeQSLQSOCheckBox.checked == true && nicknameeQSLCheckBox.checked == true && eQSLNickname.value.trim().length > 0 )
 		{
@@ -1760,16 +1837,36 @@ function sendToLogger(ADIF)
 			report += "<EOR>";
 		}
 	
-		sendeQSLEntry(report);
+		
+		try {
+			sendeQSLEntry(report);
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception LoTW Log</font>");
+		}		
 	
-		alertLogMessage();
+		try {
+			alertLogMessage();
+		}
+		catch (e)
+		{
+			addLastTraffic("<font style='color:red'>Exception Alert Log</font>");
+		}		
+		
 		
 		if ( lookupCloseLog.checked == true  )
 		{
-			openLookupWindow(false);
+			try {
+				openLookupWindow(false);
+			}
+			catch (e)
+			{
+				addLastTraffic("<font style='color:red'>Exception Hide Lookup</font>");
+			}
 		}
 	}
-	lastReportHash = reportHash;
+	
 	return report;
 }
 

@@ -22,7 +22,7 @@
 		<script src="./lib/gt.js"  type="text/javascript"></script>
 		<script src="./lib/screens.js"></script>
    </head>
-   <body id='mainBody'  onload="init();"  >
+   <body id='mainBody'  onload="initialDatabases();"  >
 		<div id="startupDiv">
 		<div  class="fill">
 			<img src="gridview.png" alt="" />
@@ -266,7 +266,7 @@
 			<div id="buttonsDiv" style="margin-left:0px;white-space:normal;">
 				<div id="callRosterButton"  class="iconButton" style="padding:0px;" onclick="openCallRosterWindow();" title="Open Call Roster" ><img  src="./img/roster-button.svg" class="buttonImgWide" /></div>
 				<div id="pushPinButton" onclick="togglePushPinMode();" class="iconButton" title="Toggle Push-Pin Mode"><img  id="pinImg" src="" class="buttonImg" /></div>
-				<div id="lookupButton" onclick="openLookupWindow()" class="iconButton" title="Open Lookup Window" ><img style="" src="./img/lookup.svg" class="buttonImg" /></div>		
+				<div id="lookupButton" onclick="openLookupWindow(true)" class="iconButton" title="Open Lookup Window" ><img style="" src="./img/lookup.svg" class="buttonImg" /></div>		
 				<div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats"><img src="./img/stats-button.svg" class="buttonImg" /></div> 
 				<div id="modeModeDiv" onclick="toggleOffline()"  class="iconButton" title="Toggle Online/Offline Mode"><img id="offlineImg" src="" class="buttonImg" /></div>
 				<div id="earthShadow" onclick="toggleEarth()"  class="iconButton" title="Toggle Grayline"><img id="earthImg" src="" class="buttonImg" /></div>
@@ -280,7 +280,7 @@
 				<div id="settingsButton" onclick="showSettingsBox();" class="iconButton" title="Settings"><img  src="./img/settings-button.svg" class="buttonImg" /></div>
 				<div id="adifLoadDiv" onclick="adifLoadDialog()" class="iconButton" title="Load ADIF Log"><img src="./img/adif.png" class="buttonImg" /></div>
 				<div id="conditionsButton" onclick="showConditionsBox();" class="iconButton" title="View Current Conditions" ><img  src="./img/conditions.svg" class="buttonImg" /></div>
-				<div id="donateButton" onclick="gotoDonate();" class="iconButton" title="Donate with PayPal"><img style="-webkit-filter: invert(1) brightness(50%);" src="./img/heart.png" class="buttonImg" /></div>
+				<div id="donateButton" onclick="gotoDonate();" class="iconButton" title="Donate with PayPal"><img style="-webkit-filter: brightness(50%);" src="./img/donate.svg" class="buttonImg" /></div>
 				<div id="alterMuteDiv" onclick="toggleAlertMute()" class="iconButton" title="Toggle Audio Mute" ><img id="alertMuteImg" src="" class="buttonImg" /></div>		
 				<div id="buttonPSKSpotsBoxDiv" onClick="togglePskSpots();" class="iconButton" title="View PSK-Reporter Reception Reports"><img id="pskSpotsImg" src="./img/psk_spots_off.png" class="buttonImg" /></div>				
 				<div id="buttonPsk24CheckBoxDiv" onclick="grabPsk24()" class="iconButton" title="Your PSK 24hour report"><img  id="pskImg" src="./img/psk_24_32.png" class="buttonImg" /></div>
@@ -362,7 +362,7 @@
 			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'callRosterDiv')">Call Roster</button>
 			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'chatSettingsDiv')">Messaging</button>
 			   <button id="logbut" class="settingsTablinks" onclick="openSettingsTab(event, 'logbookSettingsDiv')">Logbook</button>
-			   <button id="update" class="settingsTablinks" onclick="openSettingsTab(event, 'updateSettingsDiv')">Update</button>
+			   <button id="updatebut" class="settingsTablinks" onclick="openSettingsTab(event, 'updateSettingsDiv')">Update</button>
                <button class="settingsTablinks"  style="margin-right:25px;"  onclick="openSettingsTab(event, 'aboutDiv')">About</button>
             </div>
             <div id="udpSettingsDiv" class="settingsTabcontent" style="display:block;vertical-align:top">
@@ -999,6 +999,30 @@
 					 </tr>
 				  </table>
 				</div><br/>
+				<div  class="mapItem" id="spotPathWidthDiv">
+                  <table align="center">
+                     <tr>
+                        <td align="center">PSK-Spot Path Width</td>
+                        <td align="left" id="spotWidthTd">1.5</td>
+                     </tr>
+                     <tr align="center">
+                        <td colspan=2><input type="range" min="0.0" max="5" value="1.5" step="0.05" class="slider" id="spotWidthValue" oninput="spotPathChange();" onkeyup="redrawSpots();" onmouseup="redrawSpots();"/></td>
+                     </tr>
+                  </table>
+               </div>
+			   	<div  class="mapItem" >
+                  <table align="center">
+                     <tr>
+                        <td align="center" colspan=2>Map Settings Transparency</td>
+                     </tr>
+					  <tr>
+					 <td align="center" id="mapTransTd">50%</td>
+					  </tr>
+                     <tr align="center">
+                        <td colspan=2><input type="range" min="0" max="1" value="0.5" step="0.01" class="slider" id="mapTransValue" oninput="mapTransChange();" /></td>
+                     </tr>
+                  </table>
+               </div>
 			   <div class="mapItem">
                   <table align="center">
                      <tr >
@@ -1071,17 +1095,7 @@
 				   </tr>
 				   </table>
 				</div>	 
-				 <div  class="mapItem" id="spotPathWidthDiv">
-                  <table align="center">
-                     <tr>
-                        <td align="center">PSK-Spot Path Width</td>
-                        <td align="left" id="spotWidthTd">1.5</td>
-                     </tr>
-                     <tr align="center">
-                        <td colspan=2><input type="range" min="0.0" max="5" value="1.5" step="0.05" class="slider" id="spotWidthValue" oninput="spotPathChange();" onkeyup="redrawSpots();" onmouseup="redrawSpots();"/></td>
-                     </tr>
-                  </table>
-               </div>
+
         
             
 			   
@@ -1354,8 +1368,8 @@
 				</div>
 				<br/>
 				<div  class="mapItem">
-					<table align="center">
-						<tr><td colspan=2>Audio Alert On New Hits</td></td>
+					<table align="center" title="Alert when new 'Wanted Row(s)' appear in the Call Roster">
+						<tr><td colspan=2>Audio Alert On <b>New Wanted</b></td></td>
 						<tr>
 							<td colspan=2>
 								<input type="checkbox" id="huntRoster" onchange="wantedChanged(this);"/>
@@ -1756,7 +1770,8 @@
                </div>
             </div>
 			<div id="updateSettingsDiv"	class="settingsTabcontent">
-               <div style="left:0;overflow:auto;display:inline-block;height:510px;width:740px;padding:4px;text-align:left;font-size:14px;" id="updateText" >
+               <div style="left:0;display:inline-block;height:510px;width:740px;" id="updateText" >
+				<embed  src="./gt_update.pdf" style="width: 100%; height: 100%;" frameborder="0" scrolling="yes" />
                </div>
             </div>
             <div style="top:0;right:1px;position:absolute">

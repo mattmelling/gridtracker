@@ -68,7 +68,8 @@
 	"url": "/map/toner-background/{z}/{x}/{y}.png",
 	"attributions": "Stamen Design",
 	"minZoom": 0,
-	"maxZoom": 6
+	"maxZoom": 5,
+	"offline": true
 }
 ,
 {
@@ -256,5 +257,14 @@
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
 	
+},
+{
+	"name": "Satellite by MapTiler (No Labels)(Offline)",
+	"url": "/map/sat/{z}/{x}/{y}.png",
+	"attributions": "MapTiler",
+	"minZoom": 0,
+	"maxZoom": 5,
+	"offline": true
 }
+
 ]

@@ -1,7 +1,5 @@
 // GridTracker ©2020 N0TTL
 
-var g_isShowing = true;
-
 
 document.oncontextmenu = function() {
  return false;

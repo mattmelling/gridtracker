@@ -2,12 +2,11 @@
 <html  lang="en" xml:lang="en">
    <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>GridTracker Callsign Lookup</title>
+		<title>Callsign Lookup</title>
 		<link rel="stylesheet" href="./lib/style.css"/>
 		<script src="./lib/protos.js" type="text/javascript" ></script>
 		<script src="./lib/screens.js"></script>
 		<script>
-var g_isShowing = true;
 
 document.oncontextmenu = function() {
  return false;
@@ -21,9 +20,9 @@ document.addEventListener("drop", function (event) {
 	event.preventDefault();
 });
 
-function lookupCallsign( callsign )
+function lookupCallsign( callsign, grid, cache )
 {
-	window.opener.lookupCallsign(callsign);
+	window.opener.lookupCallsign(callsign, grid, cache);
 }
 
 function statsFocus( selection )
@@ -73,7 +72,6 @@ function validateCallByElement( elementString )
 function init()
 {
 	ValidateCallsign(lookupCallsignInput, null);
-	document.addEventListener('keydown', onMyKeyDown, false);
 }
 
 function addTextToClipboard(data)
@@ -95,33 +93,7 @@ function Resize()
 }
 
 
-var g_hotKeys = { "NumpadSubtract":reduceFont , "Minus":reduceFont , "NumpadAdd":increaseFont, "Equal":increaseFont, "Numpad0":resetFont , "Digit0":resetFont };
 
-function onMyKeyDown(event)
-{
-	if ( event.ctrlKey )
-	{
-		if ( event.code in g_hotKeys )
-		{
-			g_hotKeys[event.code]();
-		}
-	}
-}
-
-function reduceFont()
-{
-	nw.Window.get().zoomLevel-=0.1;
-}
-
-function increaseFont()
-{
-	nw.Window.get().zoomLevel+=0.1;
-}
-
-function resetFont()
-{
-	nw.Window.get().zoomLevel = 0;
-}
 
 		</script>
    </head>
@@ -130,7 +102,7 @@ function resetFont()
 	<div id="rootInfoDiv"style="margin:0px;right:0px;left:0px;bottom:0px;top:3px;display:block;background-color:black;padding:0px;text-align:center;vertical-align:middle;position:absolute;z-index:600;" class="roundBorder" >
 		<div id="lookupBoxDiv" class="lookupContent" style="display:block;overflow:auto;overflow-x:hidden">
 			<div  >Callsign<input id="lookupCallsignInput" type="text" class="inputTextValue"  size="12" onkeyup="if (event.keyCode === 13) lookupButtonID.click();"  oninput="ValidateCallsign(this,null);" />
-			<div  id="lookupButtonID" title="Lookup Callsign" class="button" onclick="if ( ValidateCallsign(lookupCallsignInput,null) ) { lookupCallsign(lookupCallsignInput.value);}">Lookup</div>
+			<div  id="lookupButtonID" title="Lookup Callsign" class="button" onclick="if ( ValidateCallsign(lookupCallsignInput,null) ) { lookupCallsign(lookupCallsignInput.value, null, false);}">Lookup</div>
 			</div>
 			<div id="lookupLocalDiv"></div>
 			<div id="lookupInfoDiv">No Callsign information to display<br/>try a lookup!</div>

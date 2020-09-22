@@ -271,10 +271,8 @@
       	-webkit-border-radius:6px;
 		border:1px solid #999;
 		outline:none;
-		margin:1px;
-		padding:2px;
-		padding-bottom:1px;
-
+		margin:2px;
+		padding:1px;
 		border-style:inset;
       }
 	  .inputTextValue:hover {

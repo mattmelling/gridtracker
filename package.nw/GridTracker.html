@@ -282,10 +282,10 @@
 				<div id="conditionsButton" onclick="showConditionsBox();" class="iconButton" title="View Current Conditions" ><img  src="./img/conditions.svg" class="buttonImg" /></div>
 				<div id="donateButton" onclick="gotoDonate();" class="iconButton" title="Donate with PayPal"><img style="-webkit-filter: brightness(50%);" src="./img/donate.svg" class="buttonImg" /></div>
 				<div id="alterMuteDiv" onclick="toggleAlertMute()" class="iconButton" title="Toggle Audio Mute" ><img id="alertMuteImg" src="" class="buttonImg" /></div>		
-				<div id="buttonPSKSpotsBoxDiv" onClick="togglePskSpots();" class="iconButton" title="View PSK-Reporter Reception Reports"><img id="pskSpotsImg" src="./img/psk_spots_off.png" class="buttonImg" /></div>				
+				<div id="buttonPSKSpotsBoxDiv" onClick="togglePskSpots();" class="iconButton" title="View Spot Reports"><img id="pskSpotsImg" src="./img/spots.svg" class="buttonImg" /></div>				
 				<div id="buttonPsk24CheckBoxDiv" onclick="grabPsk24()" class="iconButton" title="Your PSK 24hour report"><img  id="pskImg" src="./img/psk_24_32.png" class="buttonImg" /></div>
 				<div id="buttonQRZCheckBoxDiv" onclick="if ( ValidateQrzApi(qrzApiKey ) ) grabQrzComLog()" class="iconButton" title="Download log from QRZ.com" ><img id="qrzLogImg" src="./img/log_QRZ.png"   class="buttonImg"  /></div>
-				<div id="buttonLOTWCheckBoxDiv" onclick="if ( ValidateText(lotwLogin) && ValidateText(lotwPassword) ) {  grabLOtWLogQSO(false); grabLOtWLog(false); } " class="iconButton" title="Download log from Logbook of the World" ><img id="lotwLogImg"  src="./img/log_LoTW.png"  class="buttonImg"  /></div>
+				<div id="buttonLOTWCheckBoxDiv" onclick="if ( ValidateText(lotwLogin) && ValidateText(lotwPassword) ) {  grabLOtWLog(false); } " class="iconButton" title="Download log from Logbook of the World" ><img id="lotwLogImg"  src="./img/log_LoTW.png"  class="buttonImg"  /></div>
 				<div id="buttonClubCheckBoxDiv" onclick="if ( ValidateText(clubEmail) && ValidateText(clubPassword) ) grabClubLog()" class="iconButton" title="Download log from ClubLog" ><img id="ClubLogImg"  src="./img/log_club.png"  class="buttonImg"  /></div>	
 				<div id="buttonAdifCheckBoxDiv" onclick="startupAdifLoadFunction()" class="iconButton" title="Reload Local ADIF Files" ><img  src="./img/log_local.png"  class="buttonImg"  /></div>
 				<div id="timezoneButton" onclick="toggleTimezones()"  class="iconButton" title="Toggle Timezone Layer"><img src="./img/timezone-button.svg" class="buttonImg" /></div>
@@ -360,7 +360,7 @@
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'logSettingsDiv');">Logging</button>
                <button class="settingsTablinks" onclick="openSettingsTab(event, 'alertsDiv')">Alerts</button>
 			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'callRosterDiv')">Call Roster</button>
-			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'chatSettingsDiv')">Messaging</button>
+			   <button class="settingsTablinks" onclick="openSettingsTab(event, 'chatSettingsDiv')">OAMS</button>
 			   <button id="logbut" class="settingsTablinks" onclick="openSettingsTab(event, 'logbookSettingsDiv')">Logbook</button>
 			   <button id="updatebut" class="settingsTablinks" onclick="openSettingsTab(event, 'updateSettingsDiv')">Update</button>
                <button class="settingsTablinks"  style="margin-right:25px;"  onclick="openSettingsTab(event, 'aboutDiv')">About</button>
@@ -1660,7 +1660,20 @@
 						</td>
 					 </tr>
 				  </table>
-				</div><br/>
+				</div>
+				<div class="mapItem" id="GTspotDiv" >
+				  <table align="center">
+					 <tr >
+						<td title="Send and Recieve Spot Reports through the OAMS network">Spotting</td>
+					 </tr>
+					 <tr>
+						<td>
+							<input title="Enable / Disable Spotting" type="checkbox"  id="GTspotEnable" onclick="setGTspotEnable(this);" />
+						</td>
+					 </tr>
+				  </table>
+				</div>
+				<br/>
 				<div  id="msgSettingsDiv" class="mapItem" style="padding:5px">
 					<div class="mapItem">
 					  <table align="center">

@@ -1,8 +1,8 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200906;
-var gtBeta = "";
+var gtVersion = 1200922;
+var gtBeta = "Elsa";
 var g_startVersion = 0;
 
 
@@ -287,7 +287,7 @@ function saveAndCloseApp()
 			g_callRosterWindowHandle.window.close(true);
 		}
 		catch (e) {
-			console.log(e);
+			
 		}
 		nw.App.quit();
 }
@@ -387,16 +387,19 @@ var g_cqZones = {};
 var g_wacZones = {};
 var g_wasZones = {};
 var g_ituZones = {};
-var g_gtFlagPins = {};
-
 var g_dxccCount = {};
+
+var g_tracker = {};
+
 
 initQSOdata();
 
-var g_tracker = { "worked": {} , "confirmed": {} };
+
 
 function initQSOdata() {
-	g_tracker = { "worked": {} , "confirmed": {} };
+	
+	g_tracker.worked = {};
+	g_tracker.confirmed  = {};
 	
 	g_tracker.worked.band = {};
 	g_tracker.worked.call = {};
@@ -574,9 +577,7 @@ g_viewInfo[6] = ["g_countyData", "US Counties",0,0,3220];
 g_viewInfo[7] = ["g_us48Data", "US Continental Grids",0,0,488];
 
 
-var g_spotImageArray = Array();
-g_spotImageArray[0] = "./img/psk_spots_off.png";
-g_spotImageArray[1] = "./img/psk_spots.png";
+
 
 var g_soundCard = g_appSettings.soundCard;
 
@@ -1263,7 +1264,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 	if (finalDxcc < 1)
 		finalDxcc = callsignToDxcc(finalDXcall);
 
-	var hash = finalDXcall + band + mode;
+	hash = finalDXcall + band + mode;
 	if (notQso) {
 		if (hash in g_liveCallsigns)
 			callsign = g_liveCallsigns[hash];
@@ -1645,10 +1646,10 @@ function remove_duplicates(arr) {
 }
 
 function splitNoParen(s){
-  let results = [];
-  let next;
-  let str = '';
-  let left = 0, right = 0;
+  var results = [];
+  var next;
+  var str = '';
+  var left = 0, right = 0;
 
   function keepResult() {
     results.push(str.trim());
@@ -2835,7 +2836,7 @@ function trophyOver(feature) {
 		wc1Table += "<tr>";
 		wc1Table += "<td align=right><font color='orange'>Mode</font></td>";
 		wc1Table += "<td align=left><table class='subtable'>";
-		var keys = Object.keys(infoObject.worked_modes).sort();
+		keys = Object.keys(infoObject.worked_modes).sort();
 		for (key in keys) {
 			wc1Table += "<tr><td align=right>" + keys[key] + "</td><td align=left> <font color='white'>(" + infoObject.worked_modes[keys[key]] + ") " + "</font></td></tr>";
 		}
@@ -2860,7 +2861,7 @@ function trophyOver(feature) {
 		wcTable += "<tr>";
 		wcTable += "<td align=right><font color='orange'>Mode</font></td>";
 		wcTable += "<td align=left><table class='subtable'>";
-		var keys = Object.keys(infoObject.confirmed_modes).sort();
+		keys = Object.keys(infoObject.confirmed_modes).sort();
 		for (key in keys) {
 			wcTable += "<tr><td align=right>" + keys[key] + "</td><td align=left> <font color='white'>(" + infoObject.confirmed_modes[keys[key]] + ") " + "</font></td></tr>";
 		}
@@ -3140,7 +3141,7 @@ function reloadInfo( bandOrMode ) {
 
 function twoWideToLatLong(qth)
 {
-	var qth = qth.toUpperCase();
+	qth = qth.toUpperCase();
 	var a = qth.charCodeAt(0) - 65;
 	var b = qth.charCodeAt(1) - 65;
 
@@ -3162,7 +3163,7 @@ function twoWideToLatLong(qth)
 }
 
 function squareToLatLongAll(qth) {
-	var qth = qth.toUpperCase();
+	qth = qth.toUpperCase();
 	var a = qth.charCodeAt(0) - 65;
 	var b = qth.charCodeAt(1) - 65;
 	var c = qth.charCodeAt(2) - 48;
@@ -3204,7 +3205,7 @@ function squareToLatLongAll(qth) {
 }
 
 function squareToLatLong(qth) {
-	var qth = qth.toUpperCase();
+	qth = qth.toUpperCase();
 	var a = qth.charCodeAt(0) - 65;
 	var b = qth.charCodeAt(1) - 65;
 	var c = qth.charCodeAt(2) - 48;
@@ -4168,6 +4169,7 @@ function clearLogFilesAndCounts()
 {
 	tryToDeleteLog("lotw_QSL.adif");
 	tryToDeleteLog("lotw_QSO.adif");
+	tryToDeleteLog("lotw.adif");
 	tryToDeleteLog("qrz.adif");
 	tryToDeleteLog("clublog.adif");
 	g_adifLogSettings.downloads = {};
@@ -5606,14 +5608,17 @@ function handleWsjtxStatus(newMessage) {
 
 					setStatsDiv("decodeLastListDiv", worker);
 					setStatsDivHeight("decodeLastListDiv", ( getStatsWindowHeight() + 26 ) + "px" );
-				
+					
+					if ( g_appSettings.gtShareEnable === true && Object.keys(g_spotCollector).length > 0)
+					{
+						gtChatSendSpots( g_spotCollector );
+						g_spotCollector = {};
+					}
 				}
-
 
 				txrxdec.style.backgroundColor = 'Green';
 				txrxdec.style.borderColor = 'GreenYellow';
 				txrxdec.innerHTML = "RECEIVE";
-
 			}
 
 		if (newMessage.TxEnabled == 1)
@@ -5791,6 +5796,8 @@ function fitViewBetweenPoints( points, maxZoom = 20) {
 	delete line;
 }
 
+var g_spotCollector = {};
+
 function handleWsjtxDecode(newMessage) {
 	if (g_ignoreMessages == 1 || g_map == null)
 		return;
@@ -5879,6 +5886,12 @@ function handleWsjtxDecode(newMessage) {
 		if (hash in g_liveCallsigns)
 			callsign = g_liveCallsigns[hash];
 
+		if ( validQTH == "" && msgDEcallsign in g_gtCallsigns )
+		{
+			if ( g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0 )
+				validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid;
+		}
+		
 		var canPath = false;
 		if (
 			(g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' &&  newMessage.OB == myBand) || newMessage.OB == g_appSettings.gtBandFilter) &&
@@ -6040,6 +6053,10 @@ function handleWsjtxDecode(newMessage) {
 				lastMessageWasInfo = true;
 			}
 			
+			if ( g_appSettings.gtSpotEnable === true &&  callsign.DEcall in g_gtCallsigns ) 
+			{
+				g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent;
+			}
 		}
 	
 		if (callsign.dxcc != -1)
@@ -6261,7 +6278,7 @@ function handleWsjtxClear(newMessage)
 {
 	for ( var hash in g_liveCallsigns )
 	{
-		if ( g_liveCallsigns[hash].instance == newMessage.instance )
+		if ( g_liveCallsigns[hash].instance == newMessage.instance || g_liveCallsigns[hash].mode == g_instances[ newMessage.instance].status.MO )
 			delete g_liveCallsigns[hash];
 	}
 	for (var call in g_callRoster) {
@@ -6800,7 +6817,7 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 		bands[list[key].band] = list[key].band;
 		modes[list[key].mode] = list[key].mode;
 		var pp = ( g_dxccToGeoData[list[key].dxcc] in  g_worldGeoData ? g_worldGeoData[g_dxccToGeoData[list[key].dxcc]].pp : "?");
-		dxccs[list[key].dxcc] = g_dxccToAltName[list[key].dxcc] + " ("+pp+")";
+		dxccs[g_dxccToAltName[list[key].dxcc] + " ("+pp+")"] = list[key].dxcc;
 	}
 	
 	if (g_filterBand != "Mixed" )
@@ -6866,13 +6883,8 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 		}
 	}
 
-
-	
-
-			
-
-			
-	var ObjectCount = list.length;
+		
+	ObjectCount = list.length;
 
 	var g_qsoPages = parseInt(ObjectCount / g_qsoItemsPerPage) + 1;
 
@@ -6971,7 +6983,7 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 				option.value = "Mixed";
 				option.text = "Mixed";
 				newSelect.appendChild(option);
-			Object.keys(bands).sort().forEach(function(key) {
+			Object.keys(bands).sort(function(a, b) { return parseInt(a) - parseInt(b); }).forEach(function(key) {
 				var option = document.createElement("option");
 				option.value = key;
 				option.text = key;
@@ -6982,17 +6994,17 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 			newSelect = document.createElement("select");
 			newSelect.id = "modeFilter";
 			newSelect.title = "Mode Filter";
-			var option = document.createElement("option");
+			option = document.createElement("option");
 				option.value = "Mixed";
 				option.text = "Mixed";
 			newSelect.appendChild(option);
 			
-			var option = document.createElement("option");
+			option = document.createElement("option");
 				option.value = "Phone";
 				option.text = "Phone";
 			newSelect.appendChild(option);
 			
-			var option = document.createElement("option");
+			option = document.createElement("option");
 				option.value = "Digital";
 				option.text = "Digital";
 			newSelect.appendChild(option);
@@ -7009,15 +7021,16 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 			newSelect = document.createElement("select");
 			newSelect.id = "dxccFilter";
 			newSelect.title = "DXCC Filter";
-			var option = document.createElement("option");
+			option = document.createElement("option");
 				option.value = 0;
 				option.text = "All";
 				newSelect.appendChild(option);
 				
-			Object.keys(dxccs).sort(myDxccIntCompare).forEach(function(key) {
+			
+			Object.keys(dxccs).sort().forEach(function(key) {
 				var option = document.createElement("option");
-				option.value = key;
-				option.text = dxccs[key];
+				option.value = dxccs[key];
+				option.text = key;
 				newSelect.appendChild(option);
 			});
 			
@@ -7026,17 +7039,17 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 			newSelect = document.createElement("select");
 			newSelect.id = "qslFilter";
 			newSelect.title = "QSL Filter";
-			var option = document.createElement("option");
+			option = document.createElement("option");
 				option.value = "All";
 				option.text = "All";
 				newSelect.appendChild(option);
 		
-			var option = document.createElement("option");
+			option = document.createElement("option");
 			option.value = true;
 			option.text = "Yes";
 			newSelect.appendChild(option);
 			
-			var option = document.createElement("option");
+			option = document.createElement("option");
 			option.value = false;
 			option.text = "No";
 			newSelect.appendChild(option);
@@ -7621,6 +7634,12 @@ function openLookupWindow( show = false )  {
 			{
 				g_lookupWindowHandle.show();
 				g_lookupWindowHandle.window.g_isShowing = true;
+				g_lookupWindowHandle.window.saveScreenSettings();
+			}
+			else
+			{
+				g_lookupWindowHandle.hide();
+				g_lookupWindowHandle.window.g_isShowing = false;
 				g_lookupWindowHandle.window.saveScreenSettings();
 			}
 		}
@@ -8584,7 +8603,7 @@ function createStatTable(title, infoObject, awardName)
 		wc1Table += "<tr>";
 		wc1Table += "<td align=center><font color='orange'>Modes</font></td>";
 		wc1Table += "<td align=left><table class='subtable'>";
-		var keys = Object.keys(infoObject.worked_modes).sort();
+		keys = Object.keys(infoObject.worked_modes).sort();
 		for (var key in keys) {
 			wc1Table += "<tr><td align=right>" + keys[key] + "</td><td align=left> <font color='white'>(" + infoObject.worked_modes[keys[key]] + ")</font></td></tr>";
 		}
@@ -9093,6 +9112,13 @@ function setUdpForwardEnable(checkbox) {
 	g_appSettings.wsjtForwardUdpEnable = checkbox.checked;
 }
 
+function setGTspotEnable(checkbox) {
+	g_appSettings.gtSpotEnable = checkbox.checked;
+
+	g_gtLiveStatusUpdate = true;
+	
+}
+
 function setMsgEnable(checkbox) {
 	g_appSettings.gtMsgEnable = checkbox.checked;
 	if (g_appSettings.gtShareEnable == true) {
@@ -9124,9 +9150,7 @@ function checkForNewVersion(showUptoDate) {
 			"https", 443);
 }
 
-function findBandInBandArray(obj) {
-	return (obj.band == g_searchBand);
-}
+
 
 
 function renderBandActivity()
@@ -9139,15 +9163,15 @@ function renderBandActivity()
 		var bands = [ "630m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "4m","2m"];
 		if ( g_myDXCC in g_callsignDatabaseUSplus )
 			bands = [ "630m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m"];
-		var bandData = Array();
+		var bandData = {};
 		var maxValue = 0;
 		for (var i = 0; i < bands.length; i++) {
-			bandData[bandData.length] = Array();
-			bandData[bandData.length - 1].band = bands[i];
-			bandData[bandData.length - 1].score = 0;
-			bandData[bandData.length - 1].spots = 0;
-			bandData[bandData.length - 1].tx = 0;
-			bandData[bandData.length - 1].rx = 0;
+			bandData[bands[i]] = {};
+			
+			bandData[bands[i]].score = 0;
+			bandData[bands[i]].spots = 0;
+			bandData[bands[i]].tx = 0;
+			bandData[bands[i]].rx = 0;
 		}
 		for (var x = 0; x < lines.length; x++) {
 			var firstChar = lines[x].charCodeAt(0);
@@ -9155,9 +9179,11 @@ function renderBandActivity()
 			{
 				var values = lines[x].trim().split(" ");
 				var band = Number(Number(values[0]) / 1000000).formatBand();
-				g_searchBand = band;
-				var place = bandData.find(findBandInBandArray);
-				if (typeof place != 'undefined') {
+				
+				if ( band in bandData )
+				{
+					var place = bandData[band];
+
 					place.score += Number(values[1]);
 					place.spots += Number(values[2]);
 					place.tx += Number(values[3]);
@@ -9166,7 +9192,9 @@ function renderBandActivity()
 						maxValue = place.score;
 					if (maxValue < place.spots)
 						maxValue = place.spots;
+					
 				}
+
 			}
 		}
 
@@ -9174,21 +9202,20 @@ function renderBandActivity()
 		if (maxValue > 26) {
 			scaleFactor = 26 / maxValue;
 		}
-		for (var x = 0; x < bandData.length; x++) {
+		for (var band in bandData ) {
 			var blockMyBand = "";
-			if (bandData[x].band == myBand)
+			if (band == myBand)
 				blockMyBand = " class='myBand' ";
 			
 			{
-				var title = "Score: " + bandData[x].score + " Spots: " + bandData[x].spots + "\nTx: " + bandData[
-						x].tx + "\tRx: " + bandData[x].rx;
+				var title = "Score: " + bandData[band].score + " Spots: " + bandData[band].spots + "\nTx: " + bandData[
+						band].tx + "\tRx: " + bandData[band].rx;
 				buffer += "<div title='" + title + "' style='display:inline-block;margin:1px;' class='aBand'>";
-				buffer += "<div style='height: " + ((bandData[x].score * scaleFactor) + 1) +
+				buffer += "<div style='height: " + ((bandData[band].score * scaleFactor) + 1) +
 				"px;' class='barTx'></div>";
-				buffer += "<div style='height: " + ((bandData[x].spots * scaleFactor) + 1) +
+				buffer += "<div style='height: " + ((bandData[band].spots * scaleFactor) + 1) +
 				"px;' class='barRx'></div>";
-				buffer += "<div style='font-size:10px' " + blockMyBand + ">" + bandData[x].band.substr(0,
-					bandData[x].band.length - 1) + "</div>";
+				buffer += "<div style='font-size:10px' " + blockMyBand + ">" + parseInt(band) + "</div>";
 				buffer += "</div>";
 			}
 		}
@@ -9259,8 +9286,9 @@ function getIniFromApp(appName) {
 	result.appName = appName;
 	var wsjtxCfgPath = "";
 	var data = String(nw.App.dataPath);
+	var end = 0;
 	if (g_platform == "windows") {
-		var end = data.indexOf("GridTracker\\User Data\\Default");
+		end = data.indexOf("GridTracker\\User Data\\Default");
 		if (end > -1) {
 			wsjtxCfgPath = data.substr(0, end) + appName + "\\" + appName + ".ini";
 		}
@@ -9960,7 +9988,7 @@ function loadMaidenHeadData() {
 		var fileBuf = fs.readFileSync(file, "UTF-8");
 		g_worldGeoData = JSON.parse(fileBuf);
 	
-		//fs.writeFileSync( file, JSON.stringify(g_worldGeoData) );
+		
 
 		for (var key in g_worldGeoData) {
 			g_worldGeoData[key].geo = "deleted";
@@ -9989,7 +10017,7 @@ function loadMaidenHeadData() {
 			
 		}
 		
-		var file = "./data/dxcc.json";
+		file = "./data/dxcc.json";
 
 		var files = fs.readFileSync(file);
 		var dxccGeo = JSON.parse(files);
@@ -10647,7 +10675,9 @@ function loadMapSettings() {
 	setStrikesButton();
 	
 	trafficDecode.checked = g_mapSettings.trafficDecode;
-	pskSpotsImg.src = g_spotImageArray[g_spotsEnabled];
+	
+
+	pskSpotsImg.style.filter = (g_spotsEnabled==1?"":"grayscale(1);");
 
 	g_bandToColor = JSON.parse(JSON.stringify(g_pskColors));
 
@@ -11025,7 +11055,10 @@ function loadViewSettings() {
 
 function loadMsgSettings() {
 	msgEnable.checked = g_appSettings.gtMsgEnable;
-
+	GTspotEnable.checked = g_appSettings.gtSpotEnable;
+	
+	pskSpotsImg.style.filter = (g_spotsEnabled==1?"":"grayscale(1)");
+	
 	for (var key in g_msgSettings) {
 		document.getElementById(key).value = g_msgSettings[key];
 	}
@@ -11366,7 +11399,6 @@ function loadPortSettings()
 }
 
 var g_wsjtCurrentPort = -1;
-var g_wsjtCurrentPort = "none";
 var g_wsjtUdpServer = null;
 var g_wsjtUdpSocketReady = false;
 var g_wsjtUdpSocketError = false;
@@ -12142,6 +12174,9 @@ function qthHamLookupResults(buffer, gridPass,useCache) {
 		if (json.hasOwnProperty("search")) {
 			if (gridPass)
 				json.search.gtGrid = gridPass;
+			json.search.source =
+				"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.hamqth.com/"+json.search.callsign.toUpperCase()+"\");'>HamQTH</div></b></font></td></tr>";
+			
 			cacheLookupObject(json.search, gridPass, true);
 		} else {
 			g_qrzLookupSessionId = null;
@@ -12167,6 +12202,12 @@ function qrzLookupResults(buffer, gridPass, useCache) {
 			}
 			if ( json.Callsign.hasOwnProperty("call") )
 				call = json.Callsign.call;
+			if (g_appSettings.lookupService == "QRZ")
+				json.Callsign.source =
+					"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrz.com/lookup?callsign="+call+"\");'>QRZ.com</div></b></font></td></tr>";
+			else
+				json.Callsign.source =
+					"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrzcq.com/call/"+call+"\");'>QRZCQ.com</div></b></font></td></tr>";			
 			if (gridPass)
 				json.Callsign.gtGrid = gridPass;
 			cacheLookupObject(json.Callsign, gridPass, true);
@@ -12218,7 +12259,7 @@ function initialDatabases()
 		 
 	
 function addLookupObjectToIndexedDB( lookupObject ) {
-   let request = g_Idb.transaction(["lookups"], "readwrite")
+   var request = g_Idb.transaction(["lookups"], "readwrite")
    .objectStore("lookups")
    .put(lookupObject);
       
@@ -12229,7 +12270,7 @@ function addLookupObjectToIndexedDB( lookupObject ) {
 
 function getLookupCachedObject( call, gridPass, resultFunction = null, noResultFunction = null, callObject = null )
 {
-	let request = g_Idb.transaction(["lookups"], "readwrite")
+	var request = g_Idb.transaction(["lookups"], "readwrite")
    .objectStore("lookups")
    .get(call);
    
@@ -12384,7 +12425,10 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
 		delete lookup.land;
 	}
 			
-	if ( lookup.cnty == null && lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county") )
+	if ( "grid" in lookup )
+		lookup.grid = lookup.grid.toUpperCase();
+	
+	if ( lookup.cnty === null && lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county") )
 	{
 			lookup.county = lookup.state + ", " + lookup.county;
 			var finalCnty = lookup.county.toUpperCase();
@@ -12563,7 +12607,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 	worker += makeRow("QSL Via", lookup, "qsl_via");
 	worker += makeRow("QRZ Admin", lookup, "user");
 	worker += makeRow("Prefix", lookup, "prefix");
-	
+	worker += lookup.source;
 	
 	
 	if (g_callsignLookups.lotwUseEnable == true && thisCall in g_lotwCallsigns)
@@ -13107,13 +13151,13 @@ function pskSpotCheck(timeSec) {
 	if (myDEcall == null || myDEcall == "NOCALL" || myDEcall == "")
 		return;
 
-	if (timeSec - g_receptionReports.lastDownloadTimeSec > 120 && (g_spotsEnabled || g_rosterSpot) ) {
+	if (timeSec - g_receptionReports.lastDownloadTimeSec > 120 && (g_spotsEnabled==1 || g_rosterSpot) ) {
 		g_receptionReports.lastDownloadTimeSec = timeSec;
 		localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
 		spotRefreshDiv.innerHTML = "..refreshing..";
 		getBuffer("https://retrieve.pskreporter.info/query?rronly=1&lastseqno=" + g_receptionReports.lastSequenceNumber + "&senderCallsign=" + encodeURIComponent(myRawCall) + "&appcontact=" + encodeURIComponent("tag.loomis@gmail.com"),
 			pskSpotResults, null, "https", 443);
-	} else if (g_spotsEnabled) {
+	} else if (g_spotsEnabled==1) {
 
 		spotRefreshDiv.innerHTML = "Refresh: " + Number(120 - (timeSec - g_receptionReports.lastDownloadTimeSec)).toDHMS();
 	}
@@ -13147,7 +13191,7 @@ function pskSpotResults(buffer, flag) {
 							report = g_receptionReports.spots[hash] = {};
 							report.call = call;
 							report.band = band;
-							report.grid = grid;
+							report.grid = grid.toUpperCase();
 							report.mode = mode;
 
 						}
@@ -13183,14 +13227,125 @@ function pskSpotResults(buffer, flag) {
 		goProcessRoster();
 }
 
+var g_oamsSpotTimeout = null;
+
+function addNewOAMSSpot( cid, db)
+{
+	if ( cid in g_gtFlagPins )
+	{
+		if ( g_oamsSpotTimeout !== null )
+		{
+			clearTimeout(g_oamsSpotTimeout);
+			g_oamsSpotTimeout = null;
+		}
+		var report;	
+		var call = g_gtFlagPins[cid].call;
+		var mode = g_gtFlagPins[cid].mode;
+		var grid = g_gtFlagPins[cid].grid.substr(0, 6);
+		var band = g_gtFlagPins[cid].band;
+		var hash = call + mode + band + grid.substr(0,4);
+		
+		if (hash in g_receptionReports.spots) {
+			report = g_receptionReports.spots[hash];
+
+		} else {
+			report = g_receptionReports.spots[hash] = {};
+			report.call = call;
+			report.band = band;
+			report.grid = grid;
+			report.mode = mode;
+		}
+
+		report.dxcc = g_gtFlagPins[cid].dxcc;
+		report.when = timeNowSec();
+		report.snr = Number(db);
+		report.freq = g_gtFlagPins[cid].freq;
+
+		var SNR = parseInt((parseInt(report.snr) + 25) * 9);
+		if (SNR > 255)
+			SNR = 255;
+		if (SNR < 0)
+			SNR = 0;
+		report.color = SNR;
+	
+		g_oamsSpotTimeout = setTimeout(redrawSpots,500);
+	}
+}
+
 function spotFeature(center) {
 	return new ol.Feature(ol.geom.Polygon.circular(center, 30000, 63).transform('EPSG:4326', 'EPSG:3857'));
 }
 
+var g_spotTotalCount = 0;
+
+function createSpot( report , key, fromPoint, addToLayer = true)
+{
+	var LL = squareToLatLongAll(report.grid);
+
+	var Lat = LL.la2 - ((LL.la2 - LL.la1) / 2);
+	var Lon = LL.lo2 - ((LL.lo2 - LL.lo1) / 2);
+
+	var spot = spotFeature([Lon, Lat]);
+
+	
+	var colorNoAlpha = "#" + g_bandToColor[report.band];
+	var colorAlpha = intAlphaToRGB(colorNoAlpha, report.color);
+	var spotColor =  colorAlpha;
+	
+	var workingColor = (g_mapSettings.nightMapEnable && g_nightTime) ?  g_receptionSettings.pathNightColor : g_receptionSettings.pathColor;
+	
+	if ( workingColor != -1 )
+	{
+		var testColor = (workingColor < 1 ? "#0000000" : (workingColor == 361 ? "#FFFFFF" : "hsla(" + workingColor + ", 100%, 50%,"+  report.color / 255 +")"));
+		if ( workingColor < 1  || workingColor == 361 )
+			spotColor = intAlphaToRGB(testColor.substr(0,7), report.color);
+		else
+			spotColor = testColor;
+	}
+
+	featureStyle = new ol.style.Style({
+			fill: new ol.style.Fill({
+				color: spotColor
+			}),
+			stroke: new ol.style.Stroke({
+				color: "#000000FF",
+				width: 0.25
+			}),
+		});
+	spot.setStyle(featureStyle);
+	spot.spot = key;
+	spot.size = 6; // Mouseover detection
+	g_layerSources["psk-spots"].addFeature(spot);
+
+	var toPoint = ol.proj.fromLonLat([Lon, Lat]);
+
+	var lonLat = new ol.geom.Point(toPoint);
+
+	var pointFeature = new ol.Feature({
+			geometry: lonLat,
+			weight: report.color / 255 // e.g. temperature
+		});
+
+	g_layerSources["psk-heat"].addFeature(pointFeature);
+
+	if (g_receptionSettings.viewPaths &&  g_receptionSettings.spotWidth > 0) {
+		var strokeWeight = g_receptionSettings.spotWidth;
+
+		var flightColor = workingColor == -1 ? colorNoAlpha + "BB" : (g_mapSettings.nightMapEnable && g_nightTime) ? g_spotNightFlightColor : g_spotFlightColor;
+
+		var feature = flightFeature([fromPoint, toPoint], {
+				weight: strokeWeight,
+				color: flightColor,
+				steps: 75
+			}, "psk-flights", false);
+
+	}
+	
+}
 function redrawSpots() {
 	var shouldSave = false;
 	var now = timeNowSec();
-	var count = 0;
+	g_spotTotalCount = 0;
 	g_layerSources["psk-spots"].clear();
 	g_layerSources["psk-flights"].clear();
 	g_layerSources["psk-hop"].clear();
@@ -13220,74 +13375,21 @@ function redrawSpots() {
 			( validateMapMode(report.mode) )) 
 			{
 				if (now - report.when <= g_receptionSettings.viewHistoryTimeSec) {
-					var LL = squareToLatLongAll(report.grid);
-
-					var Lat = LL.la2 - ((LL.la2 - LL.la1) / 2);
-					var Lon = LL.lo2 - ((LL.lo2 - LL.lo1) / 2);
-
-					spot = spotFeature([Lon, Lat]);
-
-					
-					var colorNoAlpha = "#" + g_bandToColor[report.band];
-					var colorAlpha = intAlphaToRGB(colorNoAlpha, report.color);
-					var spotColor =  colorAlpha;
-					
-					var workingColor = (g_mapSettings.nightMapEnable && g_nightTime) ?  g_receptionSettings.pathNightColor : g_receptionSettings.pathColor;
-					
-					if ( workingColor != -1 )
-					{
-						var testColor = (workingColor < 1 ? "#0000000" : (workingColor == 361 ? "#FFFFFF" : "hsla(" + workingColor + ", 100%, 50%,"+  report.color / 255 +")"));
-						if ( workingColor < 1  || workingColor == 361 )
-							spotColor = intAlphaToRGB(testColor.substr(0,7), report.color);
-						else
-							spotColor = testColor;
-					}
-
-					featureStyle = new ol.style.Style({
-							fill: new ol.style.Fill({
-								color: spotColor
-							}),
-							stroke: new ol.style.Stroke({
-								color: "#000000FF",
-								width: 0.25
-							}),
-						});
-					spot.setStyle(featureStyle);
-					spot.spot = key;
-					spot.size = 6; // Mouseover detection
-					g_layerSources["psk-spots"].addFeature(spot);
-
-					var toPoint = ol.proj.fromLonLat([Lon, Lat]);
-
-					var lonLat = new ol.geom.Point(toPoint);
-
-					var pointFeature = new ol.Feature({
-							geometry: lonLat,
-							weight: report.color / 255 // e.g. temperature
-						});
-
-					g_layerSources["psk-heat"].addFeature(pointFeature);
-
-					if (g_receptionSettings.viewPaths &&  g_receptionSettings.spotWidth > 0) {
-						var strokeWeight = g_receptionSettings.spotWidth;
-
-						var flightColor = workingColor == -1 ? colorNoAlpha + "BB" : (g_mapSettings.nightMapEnable && g_nightTime) ? g_spotNightFlightColor : g_spotFlightColor;
-
-						var feature = flightFeature([fromPoint, toPoint], {
-								weight: strokeWeight,
-								color: flightColor,
-								steps: 75
-							}, "psk-flights", false);
-
-					}
-					count++;
+					createSpot(report, key, fromPoint );
+					g_spotTotalCount++;
 				}
 			}
 	}
 	if (shouldSave) {
 		saveReceptionReports();
 	}
-	spotCountDiv.innerHTML = "Spots: " + count;
+	
+	updateSpotCountDiv();
+}
+
+function updateSpotCountDiv()
+{
+	spotCountDiv.innerHTML = "Spots: " + g_spotTotalCount;
 }
 
 var g_spotFlightColor = "#FFFFFFBB";
@@ -13406,7 +13508,7 @@ function toggleHeatSpots() {
 function togglePskSpots() {
 	g_spotsEnabled ^= 1;
 	g_appSettings.spotsEnabled =  g_spotsEnabled;
-	pskSpotsImg.src = g_spotImageArray[g_spotsEnabled];
+	pskSpotsImg.style.filter = (g_spotsEnabled==1?"":"grayscale(1)");
 	setTrophyOverlay(g_currentOverlay);
 	updateSpotView();
 }

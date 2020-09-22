@@ -34,8 +34,6 @@ var g_targetCQ = "";
 var g_clearCQIgnore = null;
 var g_clearCQIgnoreMainMenu = null;
 var g_timerInterval = null;
-var g_styleFont = null;
-var g_hotKeys = { "NumpadSubtract":reduceFont , "Minus":reduceFont , "NumpadAdd":increaseFont, "Equal":increaseFont, "Numpad0":resetFont , "Digit0":resetFont };
 var g_regFocus = false;
 var g_awards = {};
 var g_awardTypes = {};
@@ -918,7 +916,7 @@ function viewRoster()
 			if (  window.opener.g_instances[callRoster[callHash].callObj.instance].crEnable == true )
 			{
 				// Calling us, but we wouldn't normally display
-				// If they are not ignored or we're in a QSO with them, let it through
+				// If they are not ignored or we're in a QSO with them, var it through
 			
 				if ( ( !( callRoster[callHash].DEcall in g_blockedCalls) && !( callRoster[callHash].callObj.dxcc in g_blockedDxcc) ) || 
 					window.opener.g_instances[callRoster[callHash].callObj.instance].status.DXcall == callRoster[callHash].DEcall )
@@ -1109,11 +1107,11 @@ function viewRoster()
 						{ 
 							if ( callRoster[callHash].callObj.qual == false )
 							{
-								let counties = window.opener.g_zipToCounty[callRoster[callHash].callObj.zipcode];
+								var counties = window.opener.g_zipToCounty[callRoster[callHash].callObj.zipcode];
 								var foundHit = false;
-								for ( let cnt in counties )
+								for ( var cnt in counties )
 								{
-									let hh = counties[cnt] + workHash;
+									var hh = counties[cnt] + workHash;
 									callRoster[callHash].callObj.cnty = counties[cnt];
 									if ( g_rosterSettings.huntNeed == "worked" && !(hh in g_worked.cnty) )
 									{
@@ -2626,42 +2624,12 @@ function openIgnoreEdit()
 	
 }
 
-function setScreenScale()
-{
-	nw.Window.get().zoomLevel = g_rosterSettings.screenScale;
-}
 
-function reduceFont()
-{
-	g_rosterSettings.screenScale-=0.1;
-	writeRosterSettings();
-	setScreenScale();
-}
 
-function increaseFont()
-{
-	g_rosterSettings.screenScale+= 0.1;
-	writeRosterSettings();
-	setScreenScale();
-}
-
-function resetFont()
-{
-	g_rosterSettings.screenScale = g_defaultSettings.screenScale;
-	writeRosterSettings();
-	setScreenScale();
-}
 
 function onMyKeyDown(event)
 {
-	if ( event.ctrlKey )
-	{
-		if ( event.code in g_hotKeys )
-		{
-			g_hotKeys[event.code]();
-		}
-	}
-	else if ( !g_regFocus )
+	if ( !g_regFocus )
 	{
 		window.opener.onMyKeyDown(event);
 	}
@@ -3221,7 +3189,6 @@ function init()
     g_timerInterval = setInterval(realtimeRoster,1000);
 	
 	updateInstances();
-	setScreenScale();
 
 }
 

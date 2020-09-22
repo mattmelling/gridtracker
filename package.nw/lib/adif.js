@@ -90,8 +90,8 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 			if ( activeAdifLogMode )
 			{
 				var confirmed = false;
-				var finalGrid = findAdiField(activeAdifArray[x], "GRIDSQUARE");   
-				var vuccGrids =  findAdiField(activeAdifArray[x], "VUCC_GRIDS");
+				var finalGrid = findAdiField(activeAdifArray[x], "GRIDSQUARE").toUpperCase();   
+				var vuccGrids =  findAdiField(activeAdifArray[x], "VUCC_GRIDS").toUpperCase();
 				var finalVucc = [];
 				var finalDXcall = findAdiField(activeAdifArray[x], "CALL").replace("_","/");
 				var finalDEcall = findAdiField(activeAdifArray[x], "STATION_CALLSIGN").replace("_","/");
@@ -205,8 +205,8 @@ function onAdiLoadComplete( adiBuffer, saveAdifFile, adifFileName, newFile)
 			}
 			else
 			{
-				var finalMyGrid = findAdiField(activeAdifArray[x], "MY_GRIDSQUARE");
-				var finalGrid = findAdiField(activeAdifArray[x], "GRIDSQUARE");
+				var finalMyGrid = findAdiField(activeAdifArray[x], "MY_GRIDSQUARE").toUpperCase();
+				var finalGrid = findAdiField(activeAdifArray[x], "GRIDSQUARE").toUpperCase();
 				var finalDXcall = findAdiField(activeAdifArray[x], "CALL");
 				var finalDEcall = findAdiField(activeAdifArray[x], "OPERATOR");
 				var finalRSTsent = findAdiField(activeAdifArray[x], "APP_PSKREP_SNR");
@@ -425,76 +425,17 @@ function lotwCallback(buffer, flag)
 			var shouldAppend = false;
 			g_fromDirectCallNoFileDialog = true;
 			
-			var lastQsl =  findAdiField(rawAdiBuffer, "APP_LoTW_LASTQSL");    
-			
-			if ( lastQsl.length > 0 )
-			{
-				var dateTime = new Date(Date.UTC(lastQsl.substr(0,4), parseInt(lastQsl.substr(5,2))-1,lastQsl.substr(8,2), lastQsl.substr(11,2), lastQsl.substr(14,2),lastQsl.substr(17,2)));
-				dateTime.setSeconds( dateTime.getSeconds() + 1 );
-				var newQsl = getUTCString(dateTime);
-				if ( !("lotw_qsl" in g_adifLogSettings.downloads ) )
-				{
-					g_adifLogSettings.downloads["lotw_qsl"] = Object();
-				}
-				g_adifLogSettings.downloads["lotw_qsl"][lotwLogin.value] = newQsl;
-				localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
-			}
-			
-			shouldAppend = shouldWeAppendInsteadOfCreate("lotw_QSL.adif");
-			
-			rawAdiBuffer = cleanAndPrepADIF("lotw_QSL.adif",rawAdiBuffer, true,shouldAppend);
-			
-			rawAdiBuffer = tryToWriteAdifToDocFolder("lotw_QSL.adif",rawAdiBuffer, shouldAppend);
-			
-			onAdiLoadComplete(rawAdiBuffer, true, "lotw_QSL.adif", true);
-		}
-	}
-}
-
-function lotwQsoCallback(buffer, flag)
-{
-	var rawAdiBuffer = String(buffer);
-	if ( rawAdiBuffer.indexOf("password incorrect") > -1 )
-	{
 		
-		if ( flag )
-			lotwTestResult.innerHTML = "Invalid";
-
-	}
-	else
-	{
-		if ( flag )
-			lotwTestResult.innerHTML = "Passed";
-		else
-		{		
-			var shouldAppend = false;
-			g_fromDirectCallNoFileDialog = true;
+			rawAdiBuffer = cleanAndPrepADIF("lotw.adif",rawAdiBuffer, true,shouldAppend);
 			
-			var lastQsl =  findAdiField(rawAdiBuffer, "APP_LoTW_LASTQSORX");    
+			rawAdiBuffer = tryToWriteAdifToDocFolder("lotw.adif",rawAdiBuffer, shouldAppend);
 			
-			if ( lastQsl.length > 0 )
-			{
-				var dateTime = new Date(Date.UTC(lastQsl.substr(0,4), parseInt(lastQsl.substr(5,2))-1,lastQsl.substr(8,2), lastQsl.substr(11,2), lastQsl.substr(14,2),lastQsl.substr(17,2)));
-				dateTime.setSeconds( dateTime.getSeconds() + 1 );
-				var newQsl = getUTCString(dateTime);
-				if ( !("lotw_qso" in g_adifLogSettings.downloads ) )
-				{
-					g_adifLogSettings.downloads["lotw_qso"] = Object();
-				}
-				g_adifLogSettings.downloads["lotw_qso"][lotwLogin.value] = newQsl;
-				localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
-			}
-			
-			shouldAppend = shouldWeAppendInsteadOfCreate("lotw_QSO.adif");
-			
-			rawAdiBuffer = cleanAndPrepADIF("lotw_QSO.adif",rawAdiBuffer, true,shouldAppend);
-			
-			rawAdiBuffer = tryToWriteAdifToDocFolder("lotw_QSO.adif",rawAdiBuffer, shouldAppend);
-			
-			onAdiLoadComplete(rawAdiBuffer, true, "lotw_QSO.adif", true);
+			onAdiLoadComplete(rawAdiBuffer, true, "lotw.adif", true);
 		}
 	}
 }
+
+
 
 
 function shouldWeAppendInsteadOfCreate( filename  )
@@ -545,51 +486,13 @@ function grabLOtWLog(test)
 			lotwTestResult.innerHTML = "Testing";
 			lastQSLDateString = "&qso_qslsince=2100-01-01";
 		}
-		else
-		{
-			if ( !("lotw_qsl" in g_adifLogSettings.downloads ) )
-			{
-				g_adifLogSettings.downloads["lotw_qsl"] = Object();
-				localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
-			}
-			if ( lotwLogin.value in g_adifLogSettings.downloads["lotw_qsl"] && shouldWeAppendInsteadOfCreate("lotw_QSL.adif") )
-			{
-				lastQSLDateString="&qso_qslsince="+g_adifLogSettings.downloads["lotw_qsl"][lotwLogin.value];
-			}
-		}
-		getABuffer("https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" + lotwLogin.value + "&password=" + encodeURIComponent(lotwPassword.value) +"&qso_query=1&qso_qsldetail=yes&qso_withown=yes&qso_qsl=yes"+lastQSLDateString, lotwCallback, test,"https",443, lotwLogImg,"g_isGettingLOTW", 120000, "g_lotwCount");	
+
+		getABuffer("https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" + lotwLogin.value + "&password=" + encodeURIComponent(lotwPassword.value) +"&qso_query=1&qso_qsldetail=yes&qso_withown=yes&qso_qsl=yes"+lastQSLDateString, lotwCallback, test,"https",443, lotwLogImg,"g_isGettingLOTW", 120000);	
 	}
 }
 
 
-var g_isGettingLOTWQSO = false;
 
-function grabLOtWLogQSO(test)
-{
-    if ( g_isGettingLOTWQSO == false )
-    {
-		var lastQSODateString = "&qso_qsorxsince=1900-01-01";
-		if ( test )
-		{
-			lotwTestResult.innerHTML = "Testing";
-			lastQSODateString = "&qso_qsorxsince=2100-01-01";
-		}
-		else
-		{
-			if ( !("lotw_qso" in g_adifLogSettings.downloads ) )
-			{
-				g_adifLogSettings.downloads["lotw_qso"] = Object();
-				localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
-			}
-			if ( lotwLogin.value in g_adifLogSettings.downloads["lotw_qso"] && shouldWeAppendInsteadOfCreate("lotw_QSO.adif") )
-			{
-				lastQSODateString="&qso_qsorxsince="+g_adifLogSettings.downloads["lotw_qso"][lotwLogin.value];
-			}
-		}
-		
-		getABuffer("https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" + lotwLogin.value + "&password=" + encodeURIComponent(lotwPassword.value) +"&qso_query=1&qso_qsldetail=yes&qso_withown=yes&qso_qsl=no"+lastQSODateString, lotwQsoCallback, test,"https",443, lotwLogImg,"g_isGettingLOTWQSO", 120000, "g_lotwCount");	
-	}
-}
 
 
 function qrzCallback(buffer, flag)
@@ -1230,14 +1133,8 @@ function startupAdifLoadCheck()
 		if (g_appSettings.gtFlagImgSrc == 1)
 			showGtFlags();
 	
-		if ( loadPsk24CheckBox.checked == true )
-			grabPsk24();
-	
 		if ( loadLOTWCheckBox.checked == true )
-		{	
-			grabLOtWLogQSO(false);
 			grabLOtWLog(false);
-		}
 		
 		if ( loadQRZCheckBox.checked == true )
 			grabQrzComLog(false);
@@ -1245,10 +1142,13 @@ function startupAdifLoadCheck()
 		if ( loadClubCheckBox.checked == true )
 			grabClubLog(false);
 		
+		if ( loadPsk24CheckBox.checked == true )
+			grabPsk24();
+		
 	}
 }
 
-function getABuffer(file_url,  callback, flag, mode, port, imgToGray, stringOfFlag , timeoutX, stringOfCounter = null )
+function getABuffer(file_url,  callback, flag, mode, port, imgToGray, stringOfFlag , timeoutX )
 {
     var url = require('url');
     var http = require(mode);
@@ -1265,12 +1165,12 @@ function getABuffer(file_url,  callback, flag, mode, port, imgToGray, stringOfFl
 	}
 	if ( typeof stringOfFlag != "undefined" )
 		window[stringOfFlag] = true;
-	if ( typeof imgToGray != "undefined" && imgToGray.style.webkitFilter == "" )
-		imgToGray.style.webkitFilter = "invert(100%) grayscale(1)";
-	if (  stringOfCounter !=  null )
+	if ( typeof imgToGray != "undefined"  )
 	{
-		window[stringOfCounter]++;
+		imgToGray.parentNode.style.background = "linear-gradient(grey 0%, black 0% 100% )";
+		imgToGray.style.webkitFilter = "invert(100%) grayscale(1)";
 	}
+
 	
     var req = http.request(options, function(res) {
         var fsize = res.headers['content-length'];
@@ -1284,6 +1184,17 @@ function getABuffer(file_url,  callback, flag, mode, port, imgToGray, stringOfFl
                     fileBuffer = data;
                 else
                     fileBuffer += data;
+				
+				if ( typeof imgToGray != "undefined"  )
+				{
+					var percent = 0;
+					if ( fsize > 0 )
+						percent = parseInt( (fileBuffer.length/fsize) * 100 ) ;
+					else
+						percent = parseInt( (( fileBuffer.length  / 100000 ) * 100 ) % 100 );
+					
+					imgToGray.parentNode.style.background = "linear-gradient(grey "+percent+"%, black "+Number(percent+10)+"% 100% )";
+				}
                       
             }).on('end', function() {
                     if (typeof callback === "function") {
@@ -1293,44 +1204,24 @@ function getABuffer(file_url,  callback, flag, mode, port, imgToGray, stringOfFl
 					{
 						window[stringOfFlag] = false;
 					}
-					if ( stringOfCounter == null && typeof imgToGray != "undefined")
+					if ( typeof imgToGray != "undefined")
 					{
+						imgToGray.parentNode.style.background = "";
 						imgToGray.style.webkitFilter = "";
 					}
-					if ( stringOfCounter != null && typeof imgToGray != "undefined" )
-					{
-						window[stringOfCounter]--;
-						if ( window[stringOfCounter] == 0 )
-						{
-							imgToGray.style.webkitFilter = "";
-						}
-						if (  window[stringOfCounter] < 0 )
-						{
-							 window[stringOfCounter] = 0;
-						}
-					}
+
                      }
             }).on('error', function() {
 					if ( typeof stringOfFlag != "undefined" )
 					{
 						window[stringOfFlag] = false;
 					}
-					if ( stringOfCounter == null && typeof imgToGray != "undefined")
+					if ( typeof imgToGray != "undefined")
 					{
+						imgToGray.parentNode.style.background = "";
 						imgToGray.style.webkitFilter = "";
 					}
-					if (  stringOfCounter != null && typeof imgToGray != "undefined" )
-					{
-						window[stringOfCounter]--;
-						if ( window[stringOfCounter] == 0 )
-						{
-							imgToGray.style.webkitFilter = "";
-						}
-						if (  window[stringOfCounter] < 0 )
-						{
-							 window[stringOfCounter] = 0;
-						}
-					}
+
             });
         });
 		
@@ -1342,23 +1233,17 @@ function getABuffer(file_url,  callback, flag, mode, port, imgToGray, stringOfFl
 			});
 		});
 		
-	req.on('error', function(err) {
+	req.on('error', function() {
 			if ( typeof stringOfFlag != "undefined" )
 			{
 				window[stringOfFlag] = false;
 			}
-			if (  stringOfCounter == null && typeof imgToGray != "undefined")
+			if (  typeof imgToGray != "undefined")
 			{
+				imgToGray.parentNode.style.background = "";
 				imgToGray.style.webkitFilter = "";
 			}
-			if (  stringOfCounter != null && typeof imgToGray != "undefined" )
-			{
-				window[stringOfCounter]--;
-				if ( window[stringOfCounter] == 0 )
-				{
-					imgToGray.style.webkitFilter = "";
-				}
-			}
+
 				
 		});
 	
@@ -1386,7 +1271,11 @@ function getAPostBuffer(file_url,  callback, flag, mode, port, theData, imgToGra
 	
 	window[stringOfFlag] = true;
 
-	imgToGray.style.webkitFilter = "invert(100%) grayscale(1)";
+	if ( typeof imgToGray != "undefined"  )
+	{
+		imgToGray.parentNode.style.background = "linear-gradient(grey 0%, black 0% 100% )";
+		imgToGray.style.webkitFilter = "invert(100%) grayscale(1)";
+	}
 	
     var req = http.request(options, function(res) {
         var fsize = res.headers['content-length'];
@@ -1401,23 +1290,41 @@ function getAPostBuffer(file_url,  callback, flag, mode, port, theData, imgToGra
                     fileBuffer = data;
                 else
                     fileBuffer += data;
+				
+				if ( typeof imgToGray != "undefined"  )
+				{
+					var percent = 0;
+					if ( fsize > 0 )
+						percent = parseInt( (fileBuffer.length/fsize) * 100 ) ;
+					else
+						percent = parseInt( (( fileBuffer.length  / 100000 ) * 100 ) % 100 );
+					
+					imgToGray.parentNode.style.background = "linear-gradient(grey "+percent+"%, black "+Number(percent+10)+"% 100% )";
+				}
                       
             }).on('end', function() {
                     if (typeof callback === "function") {
                         // Call it, since we have confirmed it is callable
                         callback(fileBuffer, flag, cookies);
 						window[stringOfFlag] = false;
-						imgToGray.style.webkitFilter = "";
+						if ( typeof imgToGray != "undefined")
+						{
+							imgToGray.parentNode.style.background = "";
+							imgToGray.style.webkitFilter = "";
+						}
                      }
             }).on('error', function() {
 				window[stringOfFlag] = false;
-				imgToGray.style.webkitFilter = "";
+				if ( typeof imgToGray != "undefined")
+				{
+					imgToGray.parentNode.style.background = "";
+					imgToGray.style.webkitFilter = "";
+				}
             });
         });
 
 	req.on('socket', function (socket) 
 		{
-			socket.setTimeout(60000);  
 			socket.on('timeout', function() 
 			{
 				req.abort();
@@ -1426,7 +1333,11 @@ function getAPostBuffer(file_url,  callback, flag, mode, port, theData, imgToGra
 		
 	req.on('error', function(err) {
 			window[stringOfFlag] = false;
-			imgToGray.style.webkitFilter = "";
+			if ( typeof imgToGray != "undefined")
+			{
+				imgToGray.parentNode.style.background = "";
+				imgToGray.style.webkitFilter = "";
+			}
 		});
 	
 	req.write(postData);

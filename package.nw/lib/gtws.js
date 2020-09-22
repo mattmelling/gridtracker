@@ -6,7 +6,7 @@ var g_chatRecvFunctions = {
     "info" : gtChatUpdateCall,
     "drop" : gtChatRemoveCall,
     "mesg" : gtChatMessage,
-    "spam" : gtSpamMessage
+	"o"	   : gtSpotMessage
 };
 
 var ChatState = Object();
@@ -40,7 +40,7 @@ var g_gtSentAwayToCid = Object();
 
 var g_gtState = ChatState.none;
 var g_gtStatusCount = 0;
-var g_gtStatusTime = 300;
+var g_gtStatusTime = 500;
 var g_gtMaxChatMessages = 100;
 var g_gtNeedUsersList = true;
 
@@ -254,6 +254,7 @@ function gtChatSendStatus()
 	msg.mode = myMode;
 	msg.band = myBand;
 	msg.canmsg = (g_appSettings.gtMsgEnable == true);
+	msg.o = (g_appSettings.gtSpotEnable == true ? 1:0);
 	msg = JSON.stringify(msg);
 	
 	if ( msg != g_lastGtStatus )
@@ -263,6 +264,16 @@ function gtChatSendStatus()
 	}
 }
 
+function gtChatSendSpots( spotsObject )
+{	
+	var msg = Object();
+	msg.type = "o";
+	msg.uuid = g_appSettings.chatUUID;
+	msg.o = spotsObject;
+	msg = JSON.stringify(msg);
+	sendGtJson(msg);
+
+}
 
 function gtChatRemoveCall(jsmesg)
 {
@@ -334,6 +345,7 @@ function gtChatUpdateCall(jsmesg)
 	g_gtFlagPins[cid].band = jsmesg.band;
 	g_gtFlagPins[cid].mode = jsmesg.mode;
 	g_gtFlagPins[cid].canmsg = jsmesg.canmsg;
+	g_gtFlagPins[cid].o = jsmesg.o;
 	g_gtFlagPins[cid].dxcc = callsignToDxcc(jsmesg.call);
 	g_gtFlagPins[cid].live = true;
 	// Make a pin here
@@ -600,10 +612,13 @@ function gtChatStateMachine()
 }
 
 
-function gtSpamMessage (jsmesg)
-{
 
+
+function gtSpotMessage (jsmesg)
+{
+	addNewOAMSSpot( jsmesg.cid, jsmesg.db);
 }
+
 function gtChatSystemInit()
 {
 	g_gtEngineInterval = setInterval(gtChatStateMachine, 1000);

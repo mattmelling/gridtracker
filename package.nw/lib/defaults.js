@@ -89,7 +89,8 @@ var def_appSettings =
 	"workingCallsignEnable" : false,
 	"workingCallsigns" : {},
 	"workingDateEnable": false,
-	"workingDate" : 0
+	"workingDate" : 0,
+	"gtSpotEnable" : true
 };
 
 var def_mapSettings = 

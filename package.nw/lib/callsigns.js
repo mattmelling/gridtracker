@@ -642,7 +642,7 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 					g_ulsWhenDate = 0;
 					g_ulsCallsignsCount = 0;
 					ulsUpdatedTd.innerHTML = "<b><i>Processing...</i></b>";
-					tx.executeSql('CREATE TABLE IF NOT EXISTS calls ( callsign TEXT PRIMARY KEY, zip, state)');
+					tx.executeSql('delete from calls');
 					
 				}
 				for (var x in lines )

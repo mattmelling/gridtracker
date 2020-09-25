@@ -480,19 +480,16 @@ function grabLOtWLog(test)
 {
     if ( g_isGettingLOTW == false )
     {
-		var lastQSLDateString = "&qso_qslsince=1900-01-01";
-		if ( test )
+		var lastQSLDateString = "&qso_qsorxsince=1945-01-01&qso_qslsince=1945-01-01";
+		if ( test == true )
 		{
 			lotwTestResult.innerHTML = "Testing";
-			lastQSLDateString = "&qso_qslsince=2100-01-01";
+			lastQSLDateString = "&qso_qsosince=2100-01-01";
 		}
-
-		getABuffer("https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" + lotwLogin.value + "&password=" + encodeURIComponent(lotwPassword.value) +"&qso_query=1&qso_qsldetail=yes&qso_withown=yes&qso_qsl=yes"+lastQSLDateString, lotwCallback, test,"https",443, lotwLogImg,"g_isGettingLOTW", 120000);	
+																																						
+		getABuffer("https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" + lotwLogin.value + "&password=" + encodeURIComponent(lotwPassword.value) +"&qso_query=1&qso_qsl=no&qso_qsldetail=yes&qso_withown=yes"+lastQSLDateString, lotwCallback, test,"https",443, lotwLogImg,"g_isGettingLOTW", 120000);	
 	}
 }
-
-
-
 
 
 function qrzCallback(buffer, flag)

@@ -1,8 +1,8 @@
 // GridTracker ©2020 N0TTL
 var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
 var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200922;
-var gtBeta = "Elsa";
+var gtVersion = 1200923;
+var gtBeta = "Elsa II";
 var g_startVersion = 0;
 
 
@@ -6053,9 +6053,10 @@ function handleWsjtxDecode(newMessage) {
 				lastMessageWasInfo = true;
 			}
 			
-			if ( g_appSettings.gtSpotEnable === true &&  callsign.DEcall in g_gtCallsigns ) 
+			if ( g_appSettings.gtSpotEnable === true && g_appSettings.gtSpotEnable === true &&  callsign.DEcall in g_gtCallsigns ) 
 			{
-				g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent;
+				if (  g_gtCallsigns[callsign.DEcall] in  g_gtFlagPins && g_gtFlagPins[g_gtCallsigns[callsign.DEcall]].o == 1)
+					g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent;
 			}
 		}
 	

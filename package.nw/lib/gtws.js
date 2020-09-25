@@ -470,6 +470,7 @@ function gtChatNewList(jsmesg)
 			g_gtFlagPins[cid].mode = jsmesg.data.mode[key];
 			g_gtFlagPins[cid].cid = cid;
 			g_gtFlagPins[cid].canmsg = jsmesg.data.canmsg[key];
+			g_gtFlagPins[cid].o = jsmesg.data.o[key];
 			g_gtFlagPins[cid].dxcc = callsignToDxcc(g_gtFlagPins[cid].call);
 			g_gtFlagPins[cid].live = true;
 			g_gtCallsigns[g_gtFlagPins[cid].call] = cid;	

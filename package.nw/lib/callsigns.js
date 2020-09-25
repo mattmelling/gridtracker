@@ -453,7 +453,7 @@ function updateQSO()
 				{
 					if (details.cnty.indexOf(",") == -1) 
 					{
-						if (!(details.state + "," + details.cnty in  g_cntyToCounty[details.cnty]))
+						if (!(details.state + "," + details.cnty in  g_cntyToCounty))
 							lookupCall = true;
 					} 
 					else

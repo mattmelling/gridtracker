@@ -1,4 +1,4 @@
-// GridTracker ©2020 N0TTL
+// GridTracker ©2020 N0TTL 
 
 var fs = require('fs');
 

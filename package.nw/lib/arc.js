@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; 
 
 var D2R = Math.PI / 180;
 var R2D = 180 / Math.PI;

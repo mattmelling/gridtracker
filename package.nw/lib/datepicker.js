@@ -1,4 +1,4 @@
-var picker = {
+var picker = { 
   attach : function (opt) {
   // attach() : attach datepicker to target
   //   opt : options (object)

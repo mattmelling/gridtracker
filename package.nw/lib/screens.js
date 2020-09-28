@@ -1,4 +1,4 @@
-var s_title = null;
+var s_title = null; 
 var s_screenSettings = {};
 var s_zoomLevel = 0;
 

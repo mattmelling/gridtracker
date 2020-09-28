@@ -1,4 +1,4 @@
-// GridTracker ©2020 N0TTL
+// GridTracker ©2020 N0TTL 
 var g_gtEngineInterval = null;
 var g_chatRecvFunctions = {
     "uuid" : gtChatSetUUID,

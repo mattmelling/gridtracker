@@ -1,3 +1,18 @@
+<!--
+    This file is part of GridTracker.
+
+    GridTracker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, version 3 of the License.
+
+    GridTracker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with GridTracker.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%;width:100%">
 <head >
 <title>Call Roster</title>
@@ -31,12 +46,12 @@
 							<option value="2">Live Band, Digi Modes</option>
 							<option value="3">Live Mode, Mix Band</option>
 							<option value="4">Mix Band &amp; Modes</option>
-							<option value="5">Mix Band &amp; Digi Modes</option>	
+							<option value="5">Mix Band &amp; Digi Modes</option>
 						</select>
 						</td>
 				  </tr>
 				  <tr id="awardHunterTr" style="display:none">
-				  
+
 					 <td colspan=2 ><div  class="button"  style="margin:5px" onclick="openAwardPopup()">Add Awards</div></td>
 					 <!--td><div  class="button"  style="margin:5px" onclick="addAllAwards()">Add All!</div></td>
 					 <td><div  class="button"  style="margin:5px" onclick="delAllAwards()">Del All!</div></td-->
@@ -66,7 +81,7 @@
 										<option value="usstates">US States (WAS)</option>
 										<option value="usstate">US State (Single)</option>
 										<option value="wpx">Prefix (WPX)</option>
-									</select>	
+									</select>
 								</div>
 								<div id="huntNeedTd" style="display:block" >
 									<select id="huntNeed"  onchange="valuesChanged();">
@@ -113,7 +128,7 @@
 						</tr>
 					</table>
 				</div>
-				<div id="exceptionDiv" class="controlItem"  style="border:1px solid #622;" > 
+				<div id="exceptionDiv" class="controlItem"  style="border:1px solid #622;" >
 					<table  style="border-collapse:collapse;margin:0;padding:0;" title="Exceptions">
 						<tr>
 							<td>
@@ -205,7 +220,7 @@
 			</div>
 			<div class="button"  style="margin-top:5px" onclick="closeEditIgnores()">Close</div>
 		</div>
-		
+
 
 		  <div id="awardHunterDiv" class="mapItem" style="background-color:black;display:block;position:absolute;z-index:-499;top:10px;left:10px;margin:auto;">
 			<table style="padding:15px;">
@@ -226,12 +241,12 @@
 						</select>
 					</td>
 				</tr>
-				<tr> 
+				<tr>
 					<td align='center'><div  class="button"  style="margin:3px" onclick="closeAwardPopup()">Done</div></td>
 				</tr>
 			</table >
-		  </div>			
-	
+		  </div>
+
 	</div>
 </body>
 </html>

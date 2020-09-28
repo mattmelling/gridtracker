@@ -1,15 +1,13 @@
 // GridTracker ©2020 N0TTL
-var gtComment1 = "GridTracker is not open source, you may not change, modify or 'borrow' code for your needs that is redistributed in any form without first asking and receiving permission from N0TTL *and* N2VFL";
-var gtComment2 = "Third party libraries and functions used are seperated to third-party.js or their respective lib .js files, the GT close-source directive does not apply to these files of course";
-var gtVersion = 1200923;
-var gtBeta = "Elsa II";
+var gtVersion = 1200927;
+var gtBeta = "Elsa III";
 var g_startVersion = 0;
 
 
 if ( typeof localStorage.currentVersion != "undefined" )
 	g_startVersion = localStorage.currentVersion;
-	
-if (typeof localStorage.currentVersion == "undefined" || localStorage.currentVersion != String(gtVersion)) 
+
+if (typeof localStorage.currentVersion == "undefined" || localStorage.currentVersion != String(gtVersion))
 {
 	localStorage.currentVersion = String(gtVersion);
 	var gui = require('nw.gui');
@@ -37,7 +35,7 @@ if (g_platform.indexOf("darwin") > -1)
 var g_dirSeperator = "/";
 if (g_platform == "windows")
 	g_dirSeperator = "\\";
-			
+
 var gui = require('nw.gui');
 var win = gui.Window.get();
 
@@ -95,7 +93,7 @@ function loadAllSettings()
 			delete localStorage[x];
 		}
 	}
-	
+
 	g_appSettings = loadDefaultsAndMerge("appSettings", def_appSettings);
 	g_mapSettings = loadDefaultsAndMerge("mapSettings", def_mapSettings);
 	g_adifLogSettings = loadDefaultsAndMerge("adifLogSettings",def_adifLogSettings);
@@ -107,10 +105,10 @@ function loadAllSettings()
 	g_HRDLogbookLogSettings = loadDefaultsAndMerge("HRDLogbookLogSettings", def_HRDLogbookLogSettings);
 	g_acLogSettings = loadDefaultsAndMerge("acLogSettings", def_acLogSettings);
 	g_trustedQslSettings = loadDefaultsAndMerge("trustedQslSettings", def_trustedQslSettings);
-	
+
 	g_callsignLookups = loadDefaultsAndMerge("callsignLookups", def_callsignLookups);
 	g_bandActivity =  loadDefaultsAndMerge("bandActivity", def_bandActivity);
-	
+
 	g_startupLogs = loadArrayIfExists("startupLogs");
 	g_mapMemory = loadArrayIfExists("mapMemory");
 
@@ -125,7 +123,7 @@ function loadAllSettings()
 		}
 		g_appSettings.mapMemory = JSON.stringify(g_mapMemory);
 	}
-	
+
 }
 
 loadAllSettings();
@@ -221,7 +219,7 @@ function saveAndCloseApp()
 
 		saveReceptionReports();
 
-		try 
+		try
 		{
 			var data = {};
 
@@ -233,11 +231,11 @@ function saveAndCloseApp()
 			data.g_QSOhash = g_QSOhash;
 			data.version = gtVersion;
 
-			fs.writeFileSync(g_NWappData + "internal_qso.json", JSON.stringify(data) );	
-			
-			
+			fs.writeFileSync(g_NWappData + "internal_qso.json", JSON.stringify(data) );
+
+
 		}
-		catch (e) 
+		catch (e)
 		{
 			console.log(e);
 		}
@@ -250,7 +248,7 @@ function saveAndCloseApp()
 
 		if (g_wsjtUdpServer != null) {
 			try {
-				if (multicastEnable.checked == true && g_appSettings.wsjtIP != "") 
+				if (multicastEnable.checked == true && g_appSettings.wsjtIP != "")
 				{
 						g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
 				}
@@ -260,25 +258,25 @@ function saveAndCloseApp()
 				console.log(e);
 			}
 		}
-		
+
 		if (g_forwardUdpServer != null) {
 			g_forwardUdpServer.close();
 		}
-		
 
-		
+
+
 		saveAppSettings();
 		saveMapSettings();
 
-		try 
+		try
 		{
-			if ( g_callRosterWindowHandle   ) 
+			if ( g_callRosterWindowHandle   )
 			{
 				g_callRosterWindowHandle.window.writeRosterSettings();
 			}
 			if ( g_popupWindowHandle != null )
 				g_popupWindowHandle.window.close(true);
-			
+
 			g_conditionsWindowHandle.window.close(true);
 			g_chatWindowHandle.window.close(true);
 			g_statsWindowHandle.window.close(true);
@@ -287,7 +285,7 @@ function saveAndCloseApp()
 			g_callRosterWindowHandle.window.close(true);
 		}
 		catch (e) {
-			
+
 		}
 		nw.App.quit();
 }
@@ -307,7 +305,7 @@ function clearAndReload() {
 
 {
 	win.hide();
-	
+
 	win.on('close', function () {
 		saveAndCloseApp();
 	});
@@ -397,10 +395,10 @@ initQSOdata();
 
 
 function initQSOdata() {
-	
+
 	g_tracker.worked = {};
 	g_tracker.confirmed  = {};
-	
+
 	g_tracker.worked.band = {};
 	g_tracker.worked.call = {};
 	g_tracker.worked.grid = {};
@@ -565,7 +563,7 @@ g_trophyImageArray[5] = "./img/dxcc_trophy.png";
 g_trophyImageArray[6] = "./img/usc_trophy.png";
 g_trophyImageArray[7] = "./img/us48_trophy.png";
 
-		
+
 var g_viewInfo = {};
 g_viewInfo[0] = ["g_qsoGrids","Grids",0,0,0];
 g_viewInfo[1] = ["g_cqZones","CQ Zones",0,0,40];
@@ -587,7 +585,7 @@ var g_gridAlpha = "88";
 if ( typeof g_mapMemory[6] == "undefined" )
 	g_mapMemory[6] = g_mapMemory[0];
 
-		
+
 function qsoBackupFileInit() {
 	var adifHeader = "GridTracker by N0TTL v" + gtVersion + " <EOH>\r\n";
 	if (!fs.existsSync(g_qsoLogFile)) {
@@ -791,7 +789,7 @@ function userDayString(Msec)
 	dra.pop();
 	return dra.join(" ");
 }
- 
+
 function userTimeString(Msec) {
 	var dateTime;
 	if (Msec != null)
@@ -804,24 +802,24 @@ function userTimeString(Msec) {
 function getWpx(callsign)
 {
 	var prefix = null;
-	
+
 	if ( callsign.includes("/") ) // Handle in the future?
 		return null;
     if ( !(/\d/.test(callsign)) ) // Insert 0, never seen this
 		return null;
-	
+
 	var end = callsign.length;
 	var foundPrefix = false;
     var prefixEnd = 1; 
-  
+ 
 	while ( prefixEnd != end )
-	{    
-		if ( /\d/.test(callsign.charAt(prefixEnd))   )    
+	{   
+		if ( /\d/.test(callsign.charAt(prefixEnd))   )   
 		{       
-			while ( prefixEnd+1 != end  && /\d/.test(callsign.charAt(prefixEnd+1)) )     
+			while ( prefixEnd+1 != end  && /\d/.test(callsign.charAt(prefixEnd+1)) )   
  	           prefixEnd++;       
    
- 			foundPrefix = true;     
+ 			foundPrefix = true;    
 			break;
 		}   
 		prefixEnd++;
@@ -829,14 +827,14 @@ function getWpx(callsign)
 
 	if ( foundPrefix )
 		prefix = callsign.substr(0,prefixEnd+1);
-	
+
 	return prefix;
 }
 
 function setState( details )
 {
 	if (details.state != null && details.state.length > 0) {
-		
+
 		var isDigi = details.digital;
 
 		if (details.state.substr(0, 2) != "US")
@@ -851,7 +849,7 @@ function setState( details )
 			g_tracker.worked.state[details.state + details.band + "dg"] = true;
 		}
 
-		
+
 		if ( details.confirmed )
 		{
 				g_tracker.confirmed.state[details.state + details.band + details.mode] = true;
@@ -864,9 +862,9 @@ function setState( details )
 				}
 		}
 	}
-	
+
 	if (details.cnty != null && details.cnty.length > 0) {
-		
+
 		var isDigi = details.digital;
 
 		g_tracker.worked.cnty[details.cnty + details.band + details.mode] = true;
@@ -878,7 +876,7 @@ function setState( details )
 			g_tracker.worked.cnty[details.cnty + details.band + "dg"] = true;
 		}
 
-		
+
 		if ( details.confirmed )
 		{
 				g_tracker.confirmed.cnty[details.cnty + details.band + details.mode] = true;
@@ -890,38 +888,38 @@ function setState( details )
 					g_tracker.confirmed.cnty[details.cnty + details.band + "dg"] = true;
 				}
 		}
-		
+
 	}
 }
 
 function isKnownCallsignDXCC(dxcc)
 {
-	if ( dxcc in g_callsignDatabaseDXCC ) 
+	if ( dxcc in g_callsignDatabaseDXCC )
 		return true;
 	return false;
-	
+
 }
 
 function isKnownCallsignUS(dxcc)
 {
-	if ( dxcc in g_callsignDatabaseUS ) 
+	if ( dxcc in g_callsignDatabaseUS )
 		return true;
 	return false;
-	
+
 }
 
 function isKnownCallsignUSplus(dxcc)
 {
-	if ( dxcc in g_callsignDatabaseUSplus ) 
+	if ( dxcc in g_callsignDatabaseUSplus )
 		return true;
 	return false;
-	
+
 }
 
 
 
 function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRSTsent, finalTime, ifinalMsg,
-	mode, band, confirmed, notQso, finalRSTrecv, finalDxcc, finalState, finalCont, finalCnty, finalCqZone, finalItuZone, 
+	mode, band, confirmed, notQso, finalRSTrecv, finalDxcc, finalState, finalCont, finalCnty, finalCqZone, finalItuZone,
 	finalVucc = [], finalPropMode = "", finalDigital = false, finalPhone = false, finalIOTA = "", finalSatName = "") {
 	var callsign = null;
 	var rect = null;
@@ -974,7 +972,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 				details.IOTA = finalIOTA;
 			if (finalSatName.length > 0 )
 				details.satName = finalSatName;
-			
+
 		} else {
 			details = {};
 			details.grid = finalGrid;
@@ -995,7 +993,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			details.px = null;
 			details.zone = null;
 			details.cont = null;
-			
+
 			details.vucc_grids = finalVucc;
 			details.propMode = finalPropMode;
 			details.digital = finalDigital;
@@ -1007,7 +1005,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		if (finalDxcc < 1)
 			finalDxcc = callsignToDxcc(finalDXcall);
 		details.dxcc = finalDxcc;
-		
+
 		if ( details.dxcc > 0 && details.px == null )
 		{
 			details.px = getWpx(finalDXcall);
@@ -1015,7 +1013,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 				details.zone = Number(details.px.charAt(details.px.length-1));
 		}
 
-		
+
 		if (details.state == null && isKnownCallsignUSplus(finalDxcc) && finalGrid.length > 0) {
 			var fourGrid = finalGrid.substr(0, 4);
 			if ((fourGrid in g_gridToState) && g_gridToState[fourGrid].length == 1 )
@@ -1038,7 +1036,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		{
 			details.qual = true;
 		}
-		
+
 		if ( isKnownCallsignUSplus(finalDxcc) )
 		{
 			if (details.cnty == null )
@@ -1047,11 +1045,11 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			}
 			else
 			{
-				if (!(details.cnty in g_cntyToCounty)) 
+				if (!(details.cnty in g_cntyToCounty))
 				{
 					lookupCall = true;
 				}
-			}		
+			}
 		}
 
 		var isDigi = details.digital;
@@ -1101,14 +1099,14 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			details.cqz = g_gridToCQZone[fourGrid][0];
 		}
 		if (details.cqz.length > 0) {
-			var sCQZ = String(details.cqz);
-			g_tracker.worked.cqz[details.sCQZ + band + mode] = true;
-			g_tracker.worked.cqz[details.sCQZ] = true;
-			g_tracker.worked.cqz[details.sCQZ + mode] = true;
-			g_tracker.worked.cqz[details.sCQZ + band] = true;
+
+			g_tracker.worked.cqz[details.cqz + band + mode] = true;
+			g_tracker.worked.cqz[details.cqz] = true;
+			g_tracker.worked.cqz[details.cqz + mode] = true;
+			g_tracker.worked.cqz[details.cqz + band] = true;
 			if (isDigi == true) {
-				g_tracker.worked.cqz[details.sCQZ + "dg"] = true;
-				g_tracker.worked.cqz[details.sCQZ + band + "dg"] = true;
+				g_tracker.worked.cqz[details.cqz + "dg"] = true;
+				g_tracker.worked.cqz[details.cqz + band + "dg"] = true;
 			}
 		}
 
@@ -1130,36 +1128,36 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			g_tracker.worked.px[details.px] = hash;
 			g_tracker.worked.px[details.px + mode] = true;
 			g_tracker.worked.px[details.px + band] = true;
-			if (isDigi == true) 
+			if (isDigi == true)
 			{
 				g_tracker.worked.px[details.px + "dg"] = true;
 				g_tracker.worked.px[details.px + band + "dg"] = true;
-			}	
-			if (isPhone == true) 
+			}
+			if (isPhone == true)
 			{
 				g_tracker.worked.px[details.px + "ph"] = true;
 				g_tracker.worked.px[details.px + band + "ph"] = true;
-			}	
+			}
 		}
-		
+
 		if ( details.cont  )
 		{
 			g_tracker.worked.cont[details.cont + band + mode] = true;
 			g_tracker.worked.cont[details.cont] = hash;
 			g_tracker.worked.cont[details.cont + mode] = true;
 			g_tracker.worked.cont[details.cont + band] = true;
-			if (isDigi == true) 
+			if (isDigi == true)
 			{
 				g_tracker.worked.cont[details.cont + "dg"] = true;
 				g_tracker.worked.cont[details.cont + band + "dg"] = true;
-			}	
-			if (isPhone == true) 
+			}
+			if (isPhone == true)
 			{
 				g_tracker.worked.cont[details.cont + "ph"] = true;
 				g_tracker.worked.cont[details.cont + band + "ph"] = true;
-			}	
+			}
 		}
-			
+
 		worked = true;
 		locked = true;
 		details.worked = worked;
@@ -1168,15 +1166,17 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		}
 
 		g_QSOhash[hash] = details;
-		
+
+		setState(details);
+
 		if (lookupCall) {
 			if (g_callsignLookups.ulsUseEnable) {
 				lookupUsCallsign(details, true);
 			}
 		}
-		
+
 		if (confirmed == true) {
-			
+
 			if (fourGrid != "") {
 				g_tracker.confirmed.grid[fourGrid + band + mode] = true;
 				g_tracker.confirmed.grid[fourGrid] = true;
@@ -1219,33 +1219,33 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 					g_tracker.confirmed.dxcc[sDXCC + band + "dg"] = true;
 				}
 			}
-			
+
 			if ( details.px )
 			{
 				g_tracker.confirmed.px[details.px + band + mode] = true;
 				g_tracker.confirmed.px[details.px] = hash;
 				g_tracker.confirmed.px[details.px + mode] = true;
 				g_tracker.confirmed.px[details.px + band] = true;
-				if (isDigi == true) 
+				if (isDigi == true)
 				{
 					g_tracker.confirmed.px[details.px + "dg"] = true;
 					g_tracker.confirmed.px[details.px + band + "dg"] = true;
-				}	
+				}
 			}
-		
+
 			if ( details.cont )
 			{
 				g_tracker.confirmed.cont[details.cont + band + mode] = true;
 				g_tracker.confirmed.cont[details.cont] = hash;
 				g_tracker.confirmed.cont[details.cont + mode] = true;
 				g_tracker.confirmed.cont[details.cont + band] = true;
-				if (isDigi == true) 
+				if (isDigi == true)
 				{
 					g_tracker.confirmed.cont[details.cont + "dg"] = true;
 					g_tracker.confirmed.cont[details.cont + band + "dg"] = true;
-				}	
+				}
 			}
-			
+
 			g_tracker.confirmed.call[finalDXcall + band + mode] = true;
 			g_tracker.confirmed.call[finalDXcall] = true;
 			g_tracker.confirmed.call[finalDXcall + mode] = true;
@@ -1255,9 +1255,9 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 				g_tracker.confirmed.call[finalDXcall + band + "dg"] = true;
 			}
 			didConfirm = true;
-		} 
-		
-		
+		}
+
+
 
 	}
 
@@ -1319,8 +1319,8 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 			newCallsign.px = getWpx(finalDXcall);
 			if ( newCallsign.px )
 				newCallsign.zone = Number(newCallsign.px.charAt(newCallsign.px.length-1));
-			
-			if (newCallsign.cont == null ) 
+
+			if (newCallsign.cont == null )
 			{
 				newCallsign.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
 				if ( newCallsign.dxcc == 390 && newCallsign.zone == 1 )
@@ -1350,7 +1350,7 @@ function addDeDx(finalGrid, finalDXcall, cq, cqdx, locked, finalDEcall, finalRST
 		newCallsign.phone = finalPhone;
 		newCallsign.IOTA = finalIOTA;
 		newCallsign.satName = finalSatName;
-		
+
 		if (newCallsign.state == null && isKnownCallsignDXCC(finalDxcc) && finalGrid.length > 0) {
 			if (g_callsignLookups.ulsUseEnable) {
 				lookupUsCallsign(newCallsign);
@@ -1444,7 +1444,7 @@ function getPathColor() {
 
 
 function getQrzPathColor() {
-	
+
 	if ( g_mapSettings.nightMapEnable && g_nightTime )
 	{
 		if (g_mapSettings.nightQrzPathColor == 0)
@@ -1473,19 +1473,19 @@ function changeShadow() {
 function changePathWidth() {
 	g_appSettings.pathWidthWeight = pathWidthValue.value;
 	g_appSettings.qrzPathWidthWeight = qrzPathWidthValue.value;
-	
+
 	pathWidthTd.innerHTML = pathWidthValue.value;
 	qrzPathWidthTd.innerHTML = qrzPathWidthValue.value;
-	
-	
+
+
 
 	for (var i = g_flightPaths.length - 1; i >= 0; i--) {
 		var featureStyle = g_flightPaths[i].getStyle();
 		var featureStroke = featureStyle.getStroke();
-		
+
 		var color = (g_flightPaths[i].isQRZ)?getQrzPathColor():getPathColor();
 		var width = (g_flightPaths[i].isQRZ)?qrzPathWidthValue.value:pathWidthValue.value;
-		
+
 		if ( width == 0 )
 		{
 			if (typeof g_flightPaths[i].Arrow != "undefined")
@@ -1497,9 +1497,9 @@ function changePathWidth() {
 			g_flightPaths.splice(i, 1);
 			continue;
 		}
-		
+
 		featureStroke.setWidth(width);
-		
+
 		if (g_flightPaths[i].isShapeFlight == 0)
 			featureStroke.setColor(color);
 
@@ -1574,18 +1574,18 @@ function createFlagTipTable(toolElement) {
 		var dxcc = callsignToDxcc(g_gtFlagPins[key].call);
 		var dxccName = g_dxccToAltName[dxcc];
 		var workColor = "cyan";
-		
+
 		if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.worked.call) {
 			workColor = "yellow";
 		}
 		if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.confirmed.call) {
 			workColor = "#00FF00";
 		}
-		
+
 		worker +=
 		"<div style='background-color:"+workColor+";color:#000;font-weight:bold;font-size:18px;border:2px solid gray;margin:0px' class='roundBorder'>" +
 		g_gtFlagPins[key].call.formatCallsign() + "</div>";
-		
+
 		worker += "<table id='tooltipTable' class='darkTable' >";
 
 		worker += "<tr><td>DXCC</td><td style='color:orange;'>" + dxccName +
@@ -1594,7 +1594,7 @@ function createFlagTipTable(toolElement) {
 		worker += "<tr><td>Grid</td><td style='color:cyan;' >" + g_gtFlagPins[key].grid + "</td></tr>";
 
 		worker += "<tr><td>Freq</td><td style='color:lightgreen' >" +
-				Number(g_gtFlagPins[key].freq / 1000).formatMhz(3, 3) + 
+				Number(g_gtFlagPins[key].freq / 1000).formatMhz(3, 3) +
 				" <font color='yellow'>(" + Number(g_gtFlagPins[key].freq / 1000000).formatBand() + ")</font></td></tr>";
 
 		worker += "<tr><td>Mode</td><td style='color:orange' >" +  g_gtFlagPins[key].mode + "</td></tr>";
@@ -1610,22 +1610,22 @@ function createFlagTipTable(toolElement) {
 	else if ( toolElement.size == 73 )
 	{
 		var props = toolElement.getProperties();
-	
+
 		moment.locale(navigator.languages[0]);
 		var m = moment().tz(props.tzid);
-			
+
 		worker += "<div style='background-color:cyan;color:#000;font-weight:bold;font-size:16px;border:2px solid gray;margin:0px;padding:1px' class='roundBorder'>" + props.tzid + "</div>";
 		worker += "<table id='tooltipTable' class='darkTable' align=center>";
-	
+
 		var abbr = m.format('zz');
 		var zone = m.format('Z');
 		if ( zone.indexOf(abbr) > -1 )
 			abbr = "";
 		else
-			abbr = " <font color='orange'>(" +abbr+")</font>"; 
+			abbr = " <font color='orange'>(" +abbr+")</font>";
 		worker += "<tr><td style='color:yellow;font-weight:bold'>"+m.format("LLLL")+"</td></tr>";
 		worker += "<tr><td style='color:#00FF00;font-weight:bold'>"+zone+abbr+"</td></tr>";
-	
+
 		worker += "</table>";
 	}
 
@@ -1658,7 +1658,7 @@ function splitNoParen(s){
 
   for(var i = 0; i<s.length; i++) {
     switch(s[i]) {
-    case ',': 
+    case ',':
       if((left === right)) {
         keepResult();
         left = right = 0;
@@ -1674,7 +1674,7 @@ function splitNoParen(s){
       right++;
       str += s[i];
       break;
-    default: 
+    default:
       str += s[i];
     }
   }
@@ -1880,7 +1880,7 @@ function renderTooltipWindow(feature) {
 		var positionInfo = myTooltip.getBoundingClientRect();
 		g_popupWindowHandle.show();
 		g_popupWindowHandle.focus();
-		
+
 		g_popupWindowHandle.width = parseInt(positionInfo.width) + 20
 		g_popupWindowHandle.height = parseInt(positionInfo.height) + 50;
 		}
@@ -1946,13 +1946,13 @@ function insertMessageInRoster(newMessage, msgDEcallsign, msgDXcallsign, callObj
 		callObj.life = now;
 		callObj.reset = false;
 	}
-	
+
 	if ( typeof callObj.life == "undefined" )
 	{
 		callObj.life = now;
 		callObj.reset = false;
 	}
-	
+
 	g_callRoster[hash].message = newMessage;
 	g_callRoster[hash].callObj = callObj;
 	g_callRoster[hash].DXcall = msgDXcallsign;
@@ -1976,7 +1976,7 @@ function openCallRosterWindow( show = true )  {
 			new_win.on('loaded', function () {
 				g_callRosterWindowHandle.setMinimumSize(390, 250);
 				g_callRosterWindowHandle.setResizable(true);
-				setRosterTop();			
+				setRosterTop();
 			});
 			new_win.on('close', function () {
 				g_callRosterWindowHandle.window.g_isShowing = false;
@@ -2023,10 +2023,7 @@ function updateRosterInstances()
 
 function updateLogbook()
 {
-	if (g_statsWindowHandle )
-	{
-		g_statsWindowHandle.window.updateLogbook();
-	}
+	showWorkedBox( 0, 0, true);
 }
 
 function openStatsWindow( show = true )  {
@@ -2232,7 +2229,7 @@ function onMyKeyDown(event) {
 	if (event.keyCode == 27) {
 		alertsPopDiv.style.display = "none";
 		rootSettingsDiv.style.display = "none";
-		
+
 		helpDiv.style.display = "none";
 		g_helpShow = false;
 	}
@@ -2333,7 +2330,7 @@ function registerHotKeys() {
 	registerHotKey("9", toggleTimezones );
 	registerHotKey("0", toggleNexrad );
 
-	
+
 	registerHotKey("KeyA", toggleAnimate);
 	registerHotKey("KeyB", toggleAllGrids);
 	registerHotKey("KeyC", showConditionsBox);
@@ -2360,7 +2357,7 @@ function registerHotKeys() {
 	registerHotKey("KeyY", toggleStrikeGlobal);
 	registerHotKey("KeyZ", setCenterQTH);
 	registerHotKey("Minus",toggleCRScript);
-	
+
 	registerHotKey("F5", mapMemory,0,"shiftKey");
 	registerHotKey("F6", mapMemory,1,"shiftKey");
 	registerHotKey("F7", mapMemory,2,"shiftKey");
@@ -2379,19 +2376,19 @@ function registerHotKeys() {
 function toggleMoon()
 {
 	g_appSettings.moonTrack ^= 1;
-	
+
 	if (g_appSettings.moonTrack == 1) {
 		moonLayer.show();
 	} else {
 		moonLayer.hide();
 	}
-	
+
 }
 
 function toggleMoonTrack()
 {
 	g_appSettings.moonPath ^= 1;
-	
+
 	moonLayer.refresh();
 }
 
@@ -2456,9 +2453,9 @@ function drawTitleInfo()
 	var band = (g_appSettings.gtBandFilter.length == 0) ? 'Mixed' : g_appSettings.gtBandFilter == 'auto' ? myBand : g_appSettings.gtBandFilter;
 	var mode = (g_appSettings.gtModeFilter.length == 0) ? 'Mixed' : g_appSettings.gtModeFilter == 'auto' ? myMode : g_appSettings.gtModeFilter;
 	var space = " ";
-	var news = gtVersionString + " [" + " Band: " + band + " Mode: "+mode + " Layer: "+g_viewInfo[g_currentOverlay][1]; 
+	var news = gtVersionString + " [" + " Band: " + band + " Mode: "+mode + " Layer: "+g_viewInfo[g_currentOverlay][1];
 		var end = " ]";
-		
+
 	if ( g_currentOverlay == 0 && g_appSettings.gridViewMode == 1 )
 	{
 		window.document.title =  news +  end;
@@ -2471,9 +2468,9 @@ function drawTitleInfo()
 		window.document.title =  news + workline +  end;
 	}
 
-		
-	
-	
+
+
+
 }
 
 function setTrophyOverlay(which) {
@@ -2502,7 +2499,7 @@ function setTrophyOverlay(which) {
 			g_layerVectors["short-grids"].setVisible(false);
 			g_layerVectors["long-grids"].setVisible(false);
 		}
-		if ( g_timezoneLayer ) 
+		if ( g_timezoneLayer )
 		{
 			if ( g_timezonesEnable == 1 ) {
 				g_timezoneLayer.setVisible(true);
@@ -2537,15 +2534,15 @@ function setTrophyOverlay(which) {
 			}
 		}
 		g_layerVectors["award"].setVisible(true);
-		if ( g_timezoneLayer ) 
+		if ( g_timezoneLayer )
 		{
 			g_timezoneLayer.setVisible(false);
 		}
 		mapLoseFocus();
 	}
-	
+
 	g_layerVectors["strikes"].setVisible(true);
-	
+
 	if (which == 1) {
 		for (key in g_cqZones) {
 			var boxColor = "#FF000015";
@@ -2629,7 +2626,7 @@ function setTrophyOverlay(which) {
 		}
 	}
 	if (which == 6) {
-	
+
 		for (key in g_countyData) {
 			var boxColor = "#00000000"
 				var borderColor = "#0000FFFF";
@@ -2638,33 +2635,33 @@ function setTrophyOverlay(which) {
 				boxColor = '#00FF0066';
 				borderWeight = 1;
 			} else if (didWork(g_countyData[key])) {
-				
+
 				boxColor = '#FFFF0066';
 				borderWeight = 1;
 			}
-		
+
 			g_currentShapes[key] = shapeFeature(key, g_countyData[key].geo, "usc", boxColor, borderColor, borderWeight);
 			g_layerSources["award"].addFeature(g_currentShapes[key]);
 		}
 	}
 	if (which == 7) {
-		for (key in g_us48Data) 
+		for (key in g_us48Data)
 		{
 			var	LL = squareToLatLong(key);
 			var bounds = [
 				[LL.lo1, LL.la1],
 				[LL.lo2, LL.la2]
 			];
-				
+
 			var boxColor = "#FF000015"
 			var borderColor = "#0000FFFF";
 			var borderWeight = 0.1;
-			if (g_us48Data[key].confirmed) 
+			if (g_us48Data[key].confirmed)
 			{
 				boxColor = '#00FF0066';
 				borderWeight = 0.2;
-			} 
-			else if (g_us48Data[key].worked) 
+			}
+			else if (g_us48Data[key].worked)
 			{
 				boxColor = '#FFFF0066';
 				borderWeight = 0.2;
@@ -2702,7 +2699,7 @@ var g_lastMoon = null;
 
 function moonOver(feature) {
 	var data = subLunar(timeNowSec());
-	
+
 	var object = doRAconvert(g_myLon, g_myLat, data.RA, data.Dec);
 	var elevation = object.elevation.toFixed(1);
 	var elColor="yellow";
@@ -2715,16 +2712,16 @@ function moonOver(feature) {
 	worker += "<tr><th >Azimuth</th><td  style='color:lightgreen'>"+object.azimuth.toFixed(1)+"&deg;</td></tr>";
 	worker += "<tr><th >Elevation</th><td  style='color:"+elColor+"'>"+elevation+"</td></tr>";
 	worker += "</table>";
-	
+
 	myMoonTooltip.innerHTML = worker;
-		
-	if (g_lastMoon ) 
+
+	if (g_lastMoon )
 	{
 		moonMove();
 		return;
 	}
 	g_lastMoon = feature;
-	
+
 
 	var positionInfo = myMoonTooltip.getBoundingClientRect();
 	myMoonTooltip.style.left = (getMouseX() - (positionInfo.width / 2)) + 'px';
@@ -2745,7 +2742,7 @@ function moonMove() {
 	myMoonTooltip.style.top = (getMouseY() + 22 ) + 'px';
 }
 
-	
+
 var g_lastTrophy = null;
 
 function trophyOver(feature) {
@@ -2796,7 +2793,7 @@ function trophyOver(feature) {
 		trophy = "US Continental Grids";
 		infoObject = g_us48Data[feature.get('grid')];
 		name = feature.get('grid');
-		
+
 		if (name in g_gridToState) {
 			zone = "";
 			for (var x = 0; x < g_gridToDXCC[name].length; x++) {
@@ -2809,7 +2806,7 @@ function trophyOver(feature) {
 				}
 			}
 			zone = zone.substr(0,zone.length-2);
-		}	
+		}
 	}
 
 
@@ -2934,8 +2931,8 @@ function mouseDownGrid(longlat, event) {
 		}
 		worker += "</tr></table>";
 	}
-	
-	
+
+
 	g_tempGridBox = tempGridToBox(grid, g_tempGridBox, '#000000FF', '#00000000');
 	myGridTooltip.innerHTML =
 		"<div style='font-size:14px;font-weight:bold;color:cyan;margin:0 auto' class='roundBorder'>" + grid + "</div>" +
@@ -2974,24 +2971,24 @@ function mouseUpGrid() {
 var g_lastGtFlag = null;
 function mouseOverGtFlag(feature)
 {
-	if (g_lastGtFlag && g_lastGtFlag == feature) 
+	if (g_lastGtFlag && g_lastGtFlag == feature)
 	{
 		gtFlagMove();
 		return;
 	}
 	g_lastGtFlag = feature;
-	
-	createFlagTipTable(feature); 
 
-	
+	createFlagTipTable(feature);
+
+
 	var positionInfo = myFlagtip.getBoundingClientRect();
 	myFlagtip.style.left = (getMouseX() + 15) + 'px';
 	myFlagtip.style.top =  (getMouseY() - positionInfo.height - 5 ) + 'px';
-	
+
 	myFlagtip.style.zIndex = 499;
 	myFlagtip.style.display = "block";
-	
-	
+
+
 	if (feature.size == 73 &&  feature != g_lasttimezone )
 	{
 		if ( g_lasttimezone != null )
@@ -3004,7 +3001,7 @@ function mouseOverGtFlag(feature)
 					color: "#FFFF0088"
 				})
 			});
-		
+
 		feature.setStyle(style);
 		g_lasttimezone = feature;
 	}
@@ -3263,7 +3260,7 @@ function iconFeature(center, iconObj, zIndex) {
 function qthToQsoBox(iQTH, iHash, iCQ, iNew, locked, DE, worked, confirmed, band, wspr) {
 	if (g_appSettings.gridViewMode == 1)
 		return null;
-	
+
 	var borderColor = '#222288FF';
 	var boxColor = '#0000FF' + g_gridAlpha;
 	var borderWeight = 0.5;
@@ -3471,20 +3468,20 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
 	else
 		iQTH = iQTH.substr(0, 6);
 	var rect = null;
-	if (iQTH == "") 
+	if (iQTH == "")
 	{
-		for (var key in g_liveGrids) 
+		for (var key in g_liveGrids)
 		{
-			if (hash in g_liveGrids[key].rectangle.liveHash) 
+			if (hash in g_liveGrids[key].rectangle.liveHash)
 			{
 				rect = g_liveGrids[key];
 				break;
 			}
 		}
-	} 
+	}
 	else
 	{
-		if (iQTH in g_liveGrids) 
+		if (iQTH in g_liveGrids)
 		{
 			rect = g_liveGrids[iQTH];
 		}
@@ -3495,7 +3492,7 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
 			var entityVisibility = true;
 			var triangleView = false;
 			if (Number(g_appSettings.gridViewMode) == 3 && (iQTH in g_qsoGrids) && g_pushPinMode == false) {
-				if ( g_mapSettings.splitQSL || g_qsoGrids[iQTH].rectangle.confirmed == false) 
+				if ( g_mapSettings.splitQSL || g_qsoGrids[iQTH].rectangle.confirmed == false)
 				{
 					qsoTriangleGrid(iQTH);
 					triangleView = true;
@@ -3638,15 +3635,15 @@ function dimFunction(qthObj) {
 			var strokeColor = featureStroke.getColor();
 			var percent = 1.0 - ((g_timeNow - qthObj.age)/gridDecay.value);
 			var alpha = Math.max(0.06, (g_mapSettings.gridAlpha/255) * percent);
-		
+
 			fillColor = alphaTo(fillColor, alpha);
 			featureFill.setColor(fillColor);
 			featureStyle.setFill(featureFill);
-			
+
 			strokeColor = alphaTo(strokeColor, alpha);
 			featureStroke.setColor(strokeColor);
 			featureStyle.setStroke(featureStroke);
-		
+
 			qthObj.rectangle.setStyle(featureStyle);
 	}
 }
@@ -3721,14 +3718,14 @@ function playStrikeAlert()
 			filename += "long-strike.mp3";
 		if ( g_mapSettings.strikesAlert == 3 )
 			filename += "strike-detected.mp3";
-		
+
 		var audio = document.createElement('audio');
 		audio.src = "file://" + filename;
 		audio.setSinkId(g_soundCard);
 		audio.volume = g_audioSettings.volume;
-		audio.play();	
+		audio.play();
 	}
-	
+
 }
 
 function setStrikesButton()
@@ -3759,7 +3756,7 @@ function toggleStrikesValue()
 	}
 	g_mapSettings.strikes = (g_mapSettings.strikes == true ? false : true);
 	setStrikesButton();
-	
+
 	saveMapSettings();
 }
 
@@ -3840,17 +3837,17 @@ var g_nextDimTime = 0;
 var g_last = 0;
 function animatePaths() {
 	requestAnimationFrame(animatePaths);
-	
+
 	g_last ^= g_last;
 	if ( g_last == 1)
 		return;
-	
+
 	g_animateFrame++;
 	g_animateFrame %= g_mapSettings.animateSpeed;
 
 	if (g_animateFrame > 0 )
 		return;
-	
+
 	for (var i = g_flightPaths.length - 1; i >= 0; i--) {
 		if (g_flightPaths[i].age < g_timeNow ) {
 			if (typeof g_flightPaths[i].Arrow != "undefined")
@@ -3860,17 +3857,17 @@ function animatePaths() {
 			g_flightPaths[i] = null;
 
 			g_flightPaths.splice(i, 1);
-		} 
+		}
 	}
 
 	if ( g_timeNow > g_nextDimTime )
 	{
 		dimGridsquare();
 	}
-	
+
 	if (g_mapSettings.animate == false)
 		return;
-	
+
 	g_flightPathOffset += 1;
 	g_flightPathOffset %= g_flightPathTotal;
 
@@ -3895,7 +3892,7 @@ function animatePaths() {
 		featureStyle.setStroke(featureStroke);
 		g_transmitFlightPath.setStyle(featureStyle);
 	}
-	
+
 
 }
 
@@ -3954,17 +3951,17 @@ function dimGridsquare() {
 function updateCountStats() {
 
 	var count = Object.keys(g_liveCallsigns).length;
-	
+
 	if ( myDEcall in g_liveCallsigns )
 		count--;
-	
+
 	callsignCount.innerHTML = count;
-	
+
 	qsoCount.innerHTML = g_QSOcount;
 	qslCount.innerHTML = g_QSLcount;
 
 	countryCount.innerHTML = Object.keys(g_dxccCount).length;
-	
+
 	if ( Object.keys(g_QSOhash).length > 0 )
 	{
 		clearOrLoadButton.innerHTML = "Clear Log";
@@ -3990,7 +3987,7 @@ function clearGrids() {
 		}
 
 	}
-	
+
 	g_liveGrids = {};
 
 
@@ -4081,14 +4078,14 @@ function clearCalls() {
 
 function clearLive() {
 	g_Decodes = 0;
-	
+
 
 	g_lastMessages = Array();
 	g_lastTraffic = Array();
 	g_callRoster = {};
 	g_dxccCount = {};
 
-	
+
 	removePaths();
 	removePaths();
 	clearGrids();
@@ -4122,7 +4119,7 @@ function clearAll() {
 
 }
 
-function clearOrLoadQSOs() 
+function clearOrLoadQSOs()
 {
 	if ( g_loadQSOs == true )
 	{
@@ -4226,12 +4223,12 @@ function displayTime() {
 	}
 
 	pskSpotCheck(g_timeNow);
-	
+
 	if ( g_mapSettings.strikes && g_mapSettings.offlineMode == false )
 	{
 		if ( g_strikeWebSocket == null )
 			loadStrikes();
-		
+
 		var now = Date.now();
 		for ( var time in g_bolts )
 		{
@@ -4240,7 +4237,7 @@ function displayTime() {
 				if ( g_layerSources["strikes"].hasFeature(g_bolts[time]) )
 					g_layerSources["strikes"].removeFeature(g_bolts[time]);
 				delete g_bolts[time];
-			}		
+			}
 		}
 	}
 	else
@@ -4251,17 +4248,17 @@ function displayTime() {
 			try {
 				g_strikeWebSocket.close();
 			}
-			catch (e) 
+			catch (e)
 			{
 				g_strikeWebSocket = null;
 			}
 		}
 	}
-	
+
 	if ( g_currentNightState != g_nightTime )
 	{
 		changeMapLayer();
-		g_currentNightState = g_nightTime;	
+		g_currentNightState = g_nightTime;
 	}
 }
 
@@ -4328,22 +4325,22 @@ function createGeoJsonLayer(name, url, color, stroke) {
 				color: "#00000000"
 			})
 		});
-	
+
 	var layerSource = new ol.source.Vector({
 			url: url,
 			format: (new ol.format.GeoJSON({geometryName: name})),
 			overlaps:false});
-	
+
 	var layerVector = new ol.layer.Vector({
 			source: layerSource,
 			style: style,
 			visible: true,
 			zIndex: 1
-		
+
 		});
 	layerVector.set("name", name);
 	return layerVector;
-	
+
 }
 
 var g_gtFlagIcon = new ol.style.Icon({
@@ -4360,7 +4357,7 @@ var g_pushPinIconOff = new ol.style.Icon({
 		anchor: [5, 18]
 	});
 
- function panTo(location) 
+ function panTo(location)
  {
         var duration = 1000;
 
@@ -4381,7 +4378,7 @@ var	g_lightningBolt = new ol.style.Icon(
 		anchor: [9,58],
 		scale: 0.75
 	});
-	
+
 var g_lightningGlobal = Array();
 
 g_lightningGlobal[0] = new ol.style.Icon(
@@ -4392,7 +4389,7 @@ g_lightningGlobal[0] = new ol.style.Icon(
 		opacity: 0.20,
 		anchor: [2,31]
 	});
-	
+
 g_lightningGlobal[1] = new ol.style.Icon(
 	{
 		src: './img/l6.png',
@@ -4401,7 +4398,7 @@ g_lightningGlobal[1] = new ol.style.Icon(
 		opacity: 0.2,
 		anchor: [1,34]
 	});
-	
+
 var g_bolts = {};
 var g_strikeWebSocket = null;
 var g_strikeInterval = null;
@@ -4411,17 +4408,17 @@ function toggleStrikeGlobal()
 {
 	g_mapSettings.strikesGlobal = (g_mapSettings.strikesGlobal == false? true:false);
 	saveMapSettings();
-	
-	
+
+
 	var msg = "Local Strikes";
 	if ( g_mapSettings.strikesGlobal == true )
 		msg = "Global Strikes";
-	
+
 	var worker = "<font color='yellow'>Strike Distance Changed<br/>"+msg+"</font>";
 	if ( g_mapSettings.strikes == false )
 		worker += "<br/><font color='red'>Detection is not enabled!</font>";
 	addLastTraffic(worker);
-	
+
 	g_layerSources["strikes"].clear();
 }
 
@@ -4432,7 +4429,7 @@ function setStrikeDistance()
 		g_strikeWebSocket.close();
 		return;
 	}
-	
+
 	if ( g_strikeWebSocket != null )
 	{
 		var distance = g_strikeRange;
@@ -4440,10 +4437,10 @@ function setStrikeDistance()
 			distance = 1000;
 
 		var send = '{"west":-180,"east":180,"north":-90,"south":-90}';
-		
+
 		if ( g_strikeInterval == null )
 			g_strikeInterval = setInterval(setStrikeDistance, 300000);
-		
+
 		try {
 			g_strikeWebSocket.send(send);
 		}
@@ -4452,7 +4449,7 @@ function setStrikeDistance()
 			delete g_strikeWebSocket;
 			g_strikeWebSocket = null;
 		}
-		
+
 
 	}
 	else
@@ -4463,7 +4460,7 @@ function setStrikeDistance()
 			g_strikeInterval = null;
 		}
 	}
-	  
+
 }
 
 
@@ -4472,7 +4469,7 @@ function loadStrikes ()
 {
 	if ( g_strikeWebSocket )
 		return;
-	
+
 	var rnd= parseInt (Math.random()*4);
 	var ws_server = "";
 	if (rnd < 1) {
@@ -4501,46 +4498,46 @@ function loadStrikes ()
 		setStrikeDistance();
 	};
 
-	g_strikeWebSocket.onmessage = function (evt) 
-	{ 
-		
+	g_strikeWebSocket.onmessage = function (evt)
+	{
+
 		var Strikes = JSON.parse(evt.data);
 		Strikes.sig = null;
 
 		if ( ('delay' in Strikes) &&
 			 ('time' in Strikes) &&
 			 ('lat' in Strikes) &&
-			 ('lon' in Strikes) ) 
+			 ('lon' in Strikes) )
 		{
 			var index = Date.now();
 			while ( index in g_bolts )
 				index++;
-			
+
 			var inRange = true;
-			
+
 			if ( Math.abs(Strikes.lon - g_myLon) > g_strikeRange )
 				inRange = false;
-			
+
 			if ( Math.abs(Strikes.lat - g_myLat) > g_strikeRange )
 				inRange = false;
-			
+
 			if ( g_mapSettings.strikesGlobal || (  g_mapSettings.strikesGlobal == false && inRange ) )
 			{
 				g_bolts[index] = iconFeature( ol.proj.fromLonLat([Strikes.lon,Strikes.lat]),
 						(inRange ? g_lightningBolt : g_lightningGlobal[0] ), 1);
-						
+
 				g_layerSources["strikes"].addFeature(g_bolts[index]);
 			}
 
-				
+
 			if ( inRange == true )
 			{
 				playStrikeAlert();
-			
+
 				var dist = parseInt(MyCircle.distance(g_myLat,g_myLon, Strikes.lat, Strikes.lon,distanceUnit.value)*MyCircle.validateRadius(distanceUnit.value)).toLocaleString()+" "+distanceUnit.value.toLowerCase();
 				var azim = parseInt(MyCircle.bearing(g_myLat,g_myLon, Strikes.lat,Strikes.lon)).toLocaleString() +"&deg;";
-				
-			
+
+
 				var worker = "<font style='color:yellow;font-weight:bold'>Lighting Strike Detected!</font><br/>";
 				worker += "<font style='color:white'>"+userTimeString(null)+"</font><br/>";
 				worker += "<font style='color:orange'>Distance: </font><font style='color:lightblue;font-weight:bold'>"+dist+"</font><br/>";
@@ -4554,18 +4551,18 @@ function loadStrikes ()
 	};
 
 	g_strikeWebSocket.onerror = function()
-	{ 
+	{
 		delete g_strikeWebSocket;
 		g_strikeWebSocket = null;
 	};
 
 	g_strikeWebSocket.onclose = function()
-	{ 
+	{
 		delete g_strikeWebSocket;
 		g_strikeWebSocket = null;
 	};
-   
- 
+
+
 }
 
 function toggleMouseTrack()
@@ -4589,7 +4586,7 @@ function initMap() {
 
 	if (g_maps) {
 		var entries = Object.keys(g_maps).sort(myGmapNameCompare);
-		
+
 		for (var lmap in entries) {
 			var key = entries[lmap];
 			g_mapsLayer[key] = new ol.source.XYZ(g_maps[key]);
@@ -4597,11 +4594,11 @@ function initMap() {
 			option.value = key;
 			option.text = g_maps[key].name;
 			mapSelect.appendChild(option);
-			
+
 			option = document.createElement("option");
 			option.value = key;
 			option.text = g_maps[key].name;
-			mapNightSelect.appendChild(option); 
+			mapNightSelect.appendChild(option);
 
 		}
 		mapSelect.value = g_mapSettings.mapIndex;
@@ -4697,12 +4694,12 @@ function initMap() {
 			loadTilesWhileInteracting: false,
 			loadTilesWhileAnimating: false,
 			view: g_mapView
-			
+
 		});
 
 	mapDiv.addEventListener('mousemove', function (event) {
 		onMouseUpdate(event);
-		
+
 		var mousePosition = g_map.getEventPixel(event);
 		if ( g_appSettings.mouseTrack == 1 )
 		{
@@ -4725,7 +4722,7 @@ function initMap() {
 
 		if (g_map.hasFeatureAtPixel(mousePosition)) {
 			var features = g_map.getFeaturesAtPixel(mousePosition);
-			
+
 			if (features != null) {
 				features = features.reverse();
 				var finalGridFeature = null;
@@ -4738,7 +4735,7 @@ function initMap() {
 						continue;
 					if (features[index].size == 99 && finalGridFeature == null)
 					{
-						moonOver(features[index]); 
+						moonOver(features[index]);
 						noMoon = false;
 						break;
 					}
@@ -4754,7 +4751,7 @@ function initMap() {
 						noFeature = true;
 						break;
 					}
-					
+
 					if (features[index].size == 6) {
 						noFeature = false;
 						finalGridFeature = features[index];
@@ -4839,7 +4836,7 @@ function initMap() {
 			mouseOutOfDataItem();
 	});
 
-	
+
 	document.getElementById("menuDiv").style.display = "block";
 
 	dayNight.init(g_map);
@@ -4848,7 +4845,7 @@ function initMap() {
 	} else {
 		g_nightTime = dayNight.show();
 	}
-	
+
 	moonLayer.init(g_map);
 	if (g_appSettings.moonTrack == 1) {
 		moonLayer.show();
@@ -4857,13 +4854,13 @@ function initMap() {
 	}
 
 	g_tileLayer.setOpacity(Number(g_mapSettings.loudness));
-	
+
 	requestAnimationFrame(animatePaths);
 
-	
+
 	nightMapEnable.checked = g_mapSettings.nightMapEnable;
 	changeNightMapEnable(nightMapEnable);
-	
+
 
 
 
@@ -4902,21 +4899,21 @@ function createNexRad()
 			  url: 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi',
 			  params: {'LAYERS': 'nexrad-n0q'}
 			});
-	
+
 	var layerVector = new ol.layer.Tile({
 			source: layerSource,
 			visible: true,
 			zIndex: 900
-		
+
 		});
-		
+
 	layerVector.set("name", "radar");
-	
+
 	return layerVector;
-	
+
 }
 
-	
+
 
 function toggleNexrad()
 {
@@ -4927,7 +4924,7 @@ function toggleNexrad()
 		{
 			g_map.removeLayer(g_Nexrad);
 			delete g_Nexrad;
-			
+
 		}
 
 
@@ -4952,10 +4949,10 @@ function toggleNexrad()
 		}
 	}
 
-	
+
 	g_mapSettings.usNexrad = (g_nexradEnable==1?true:false);
 
-	
+
 }
 
 function nexradRefresh()
@@ -4997,7 +4994,7 @@ function lineString( points )
 			geometry: thing
 		});
 	return rect;
-	
+
 }
 
 function rectangle(bounds, options) {
@@ -5093,11 +5090,11 @@ function setHomeGridsquare() {
 		homeQTHInput.value = g_appSettings.centerGridsquare;
 	}
 	var hash =  myDEcall;
-	
+
 	var rect = qthToBox(myDEGrid, myDEcall, false, false, true, "", myBand, null, hash);
 	if (typeof rect != 'undefined' && rect != null) {
 		var push = false;
-		
+
 		if (!(hash in g_liveCallsigns)) {
 			newCallsign = {};
 			push = true;
@@ -5135,7 +5132,7 @@ function setHomeGridsquare() {
 
 var g_transmitFlightPath = null;
 
-function haltAllTx( allTx = false ) 
+function haltAllTx( allTx = false )
 {
 	for ( var instance in g_instances )
 	{
@@ -5143,10 +5140,10 @@ function haltAllTx( allTx = false )
 		{
 			var responseArray = Buffer.alloc(1024);
 			var length = 0;
-			
+
 			var port = g_instances[instance].remote.port;
 			var address = g_instances[instance].remote.address;
-			
+
 			length = encodeQUINT32(responseArray, length, 0xadbccbda);
 			length = encodeQUINT32(responseArray, length, 2);
 			length = encodeQUINT32(responseArray, length, 8);
@@ -5160,7 +5157,7 @@ function haltAllTx( allTx = false )
 }
 
 function initiateQso(thisCall) {
-	if (thisCall in g_callRoster && g_callRoster[thisCall].message.instance in g_instances) 
+	if (thisCall in g_callRoster && g_callRoster[thisCall].message.instance in g_instances)
 	{
 		if ( g_mapSettings.focusRig && g_activeInstance != g_callRoster[thisCall].message.instance )
 		{
@@ -5170,7 +5167,7 @@ function initiateQso(thisCall) {
 		{
 			haltAllTx();
 		}
-		
+
 		var newMessage = g_callRoster[thisCall].message;
 		var responseArray = Buffer.alloc(1024);
 		var length = 0;
@@ -5192,7 +5189,7 @@ function initiateQso(thisCall) {
 
 		responseArray = responseArray.slice(0, length);
 		wsjtUdpMessage(responseArray, responseArray.length, port, address);
-	} 
+	}
 }
 
 function spotLookupAndSetCall( spot )
@@ -5203,7 +5200,7 @@ function spotLookupAndSetCall( spot )
 	var mode =  g_receptionReports.spots[spot].mode;
 	for ( var instance in g_instances )
 	{
-		if (  g_instances[instance].valid && g_instances[instance].status.Band == band && g_instances[instance].status.MO == mode ) 
+		if (  g_instances[instance].valid && g_instances[instance].status.Band == band && g_instances[instance].status.MO == mode )
 		{
 			setCallAndGrid(call , grid, instance);
 			return;
@@ -5252,14 +5249,14 @@ function setCallAndGrid( callsign, grid, instance = null)
 		length = encodeQUINT32(responseArray, length, thisInstance.TRP);
 		length = encodeQUINT32(responseArray, length, thisInstance.RxDF);
 		length = encodeQUTF8(responseArray, length, callsign);
-		
+
 		var hash = liveHash(callsign, thisInstance.Band, thisInstance.MO);
 		if ( hash in g_liveCallsigns && g_liveCallsigns[hash].grid.length > 1 )
 			grid = g_liveCallsigns[hash].grid;
-		
+
 		if ( grid.length == 0 )
 			grid = " ";
-			
+
 		length = encodeQUTF8(responseArray, length, grid);
 		length = encodeQBOOL(responseArray, length, 1);
 
@@ -5300,25 +5297,25 @@ function handleWsjtxADIF(newMessage) {
 		clearTimeout(g_oldQSOTimer);
 		g_oldQSOTimer = null;
 	}
-	
+
 	if (g_ignoreMessages == 0) {
 		onAdiLoadComplete(newMessage.ADIF);
 	}
 
 	sendToLogger(newMessage.ADIF);
-	
+
 }
 
-function handleWsjtxQSO(newMessage) 
+function handleWsjtxQSO(newMessage)
 {
 	if ( g_oldQSOTimer )
 	{
 		clearTimeout(g_oldQSOTimer);
 		g_oldQSOTimer = null;
 	}
-	
+
 	g_oldStyleLogMessage = Object.assign({},  newMessage );
-	
+
 	g_oldQSOTimer = setTimeout(oldSendToLogger, 3000);
 }
 
@@ -5342,7 +5339,7 @@ function rigChange( up )
 {
 	if ( g_activeInstance == "" )
 		return;
-	
+
 	var targetInstance = 0;
 	if ( up )
 	{
@@ -5351,12 +5348,12 @@ function rigChange( up )
 	else
 	{
 		targetInstance = g_instances[g_activeInstance].intId-1;
-		if ( targetInstance < 0 ) 
+		if ( targetInstance < 0 )
 			targetInstance = g_instancesIndex.length-1;
 	}
 
 	targetInstance %= g_instancesIndex.length;
-	
+
 	setRig(targetInstance);
 }
 
@@ -5370,9 +5367,9 @@ function setRig(instanceId)
 			g_mapView.animate( { center: g_lastMapView.LoLa, duration:100} );
 			g_lastMapView = null;
 		}
-		
+
 		g_activeInstance = g_instancesIndex[instanceId];
-		
+
 		handleWsjtxStatus( g_instances[g_activeInstance].status );
 		handleClosed( g_instances[g_activeInstance].status );
 	}
@@ -5388,9 +5385,9 @@ function activeRig( instance )
 			g_mapView.animate( { center: g_lastMapView.LoLa, duration:100} );
 			g_lastMapView = null;
 		}
-			
+
 		g_activeInstance = instance;
-		
+
 		handleWsjtxStatus( g_instances[g_activeInstance].status );
 		handleClosed( g_instances[g_activeInstance].status );
 	}
@@ -5401,7 +5398,7 @@ var g_lastTransmitCallsign = {};
 var g_lastStatusCallsign = {};
 
 function handleWsjtxStatus(newMessage) {
-	
+
 	if (g_ignoreMessages == 1)
 		return;
 
@@ -5412,13 +5409,13 @@ function handleWsjtxStatus(newMessage) {
 		}
 		catch (e) {}
 	}
-	
-	
+
+
 	if ( g_activeInstance == "" )
 	{
 		g_activeInstance  = newMessage.instance;
 	}
-					
+
 	if ( Object.keys(g_instances).length > 1 )
 	{
 		rigWrap.style.display= "block";
@@ -5429,15 +5426,15 @@ function handleWsjtxStatus(newMessage) {
 	}
 
 	var DXcall = newMessage.DXcall.trim();
-	
+
 	if ( DXcall.length > 1 )
 	{
 		if ( !(newMessage.instance in g_lastTransmitCallsign ) )
 			g_lastTransmitCallsign[newMessage.instance] = "";
-		
+
 		if ( !(newMessage.instance in g_lastStatusCallsign ) )
 			g_lastStatusCallsign[newMessage.instance] = "";
-		
+
 		if ( lookupOnTx.checked == true && newMessage.Transmitting == 1 && g_lastTransmitCallsign[newMessage.instance]  != DXcall )
 		{
 			openLookupWindow(true);
@@ -5455,7 +5452,7 @@ function handleWsjtxStatus(newMessage) {
 	{
 		var sp = newMessage.Id.split(" - ");
 		rigDiv.innerHTML = sp[sp.length-1].substring(0,18);
-		
+
 		var bandChange = false;
 		var modeChange = false;
 		var origMode = g_lastMode;
@@ -5487,13 +5484,13 @@ function handleWsjtxStatus(newMessage) {
 			redrawGrids();
 			redrawSpots();
 			redrawPins();
-		
+
 			var msg = "";
-	
+
 			msg += "<font color='yellow'>"+myBand+"</font> / ";
 			msg += "<font color='orange'>"+myMode+"</font>";
-			addLastTraffic(msg);	
-			ackAlerts();		
+			addLastTraffic(msg);
+			ackAlerts();
 			updateChatWindow();
 		}
 		myRawFreq = newMessage.Frequency;
@@ -5502,7 +5499,7 @@ function handleWsjtxStatus(newMessage) {
 		myRawCall = newMessage.DEcall.trim();
 
 		myRawGrid = newMessage.DEgrid.trim().substr(0, 6);
-		
+
 		var LL = squareToLatLongAll(myRawGrid);
 		g_mapSettings.latitude = g_myLat = LL.la2 - ((LL.la2 - LL.la1) / 2);
 		g_mapSettings.longitude = g_myLon = LL.lo2 - ((LL.lo2 - LL.lo1) / 2);
@@ -5515,7 +5512,7 @@ function handleWsjtxStatus(newMessage) {
 		dxCallBoxDiv.className = "DXCallBox";
 
 		var hash = DXcall + myBand + myMode;
-		
+
 		if (hash in g_tracker.worked.call) {
 			dxCallBoxDiv.className = "DXCallBoxWorked";
 		}
@@ -5563,7 +5560,7 @@ function handleWsjtxStatus(newMessage) {
 			setHomeGridsquare();
 		if (myDEGrid.length > 0)
 			g_appSettings.centerGridsquare = myDEGrid;
-		
+
 		if (newMessage.Decoding == 1) // Decoding
 			{
 				dimGridsquare();
@@ -5575,15 +5572,15 @@ function handleWsjtxStatus(newMessage) {
 				g_weAreDecoding = true;
 			} else {
 				g_weAreDecoding = false;
-				
-				
+
+
 				if ( g_countIndex != g_lastCountIndex )
 				{
 
 					g_lastCountIndex = g_countIndex;
-					
+
 					updateCountStats();
-					
+
 					if (g_appSettings.gtShareEnable == "true") {
 
 					g_gtLiveStatusUpdate = true;
@@ -5608,7 +5605,7 @@ function handleWsjtxStatus(newMessage) {
 
 					setStatsDiv("decodeLastListDiv", worker);
 					setStatsDivHeight("decodeLastListDiv", ( getStatsWindowHeight() + 26 ) + "px" );
-					
+
 					if ( g_appSettings.gtShareEnable === true && Object.keys(g_spotCollector).length > 0)
 					{
 						gtChatSendSpots( g_spotCollector );
@@ -5633,15 +5630,15 @@ function handleWsjtxStatus(newMessage) {
 				}
 				if ( myDXGrid.length > 0  )
 				{
-					fitViewBetweenPoints([getPoint(myRawGrid), getPoint(myDXGrid)]);	
-				}			
+					fitViewBetweenPoints([getPoint(myRawGrid), getPoint(myDXGrid)]);
+				}
 				else if ( g_mapSettings.qrzDxccFallback && DXcall.length > 0 && callsignToDxcc(DXcall) > 0 )
 				{
 					var dxcc = callsignToDxcc(DXcall);
 					var Lat = g_worldGeoData[g_dxccToGeoData[dxcc]].lat;
 					var Lon = g_worldGeoData[g_dxccToGeoData[dxcc]].lon;
 					fitViewBetweenPoints([getPoint(myRawGrid), ol.proj.fromLonLat([Lon, Lat])], 15);
-				}					
+				}
 			}
 		}
 		else
@@ -5653,12 +5650,12 @@ function handleWsjtxStatus(newMessage) {
 				g_lastMapView = null;
 			}
 		}
-		
+
 		if (newMessage.Transmitting == 0) // Not Transmitting
 		{
 			g_layerSources["transmit"].clear();
 			g_transmitFlightPath = null;
-			
+
 		} else {
 			txrxdec.style.backgroundColor = 'Red';
 			txrxdec.style.borderColor = 'Orange';
@@ -5674,8 +5671,8 @@ function handleWsjtxStatus(newMessage) {
 				var Lon = LL.lo2 - ((LL.lo2 - LL.lo1) / 2);
 				var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
 				var toPoint = null;
-				
-				if ( validateGridFromString(myDXGrid) ) 
+
+				if ( validateGridFromString(myDXGrid) )
 				{
 
 					LL = squareToLatLongAll(myDXGrid);
@@ -5689,19 +5686,19 @@ function handleWsjtxStatus(newMessage) {
 					var dxcc = callsignToDxcc(DXcall);
 					Lat = g_worldGeoData[g_dxccToGeoData[dxcc]].lat;
 					Lon = g_worldGeoData[g_dxccToGeoData[dxcc]].lon;
-					
+
 					toPoint = ol.proj.fromLonLat([Lon, Lat]);
-					
+
 					var	locality = g_worldGeoData[g_dxccToGeoData[dxcc]].geo;
 					if (locality == "deleted")
 						locality = null;
-				
+
 					if (locality != null) {
 						var feature = shapeFeature("qrz", locality, "qrz",  '#FFFF0010' , "#FF0000FF", 1.0);
 						g_layerSources["transmit"].addFeature(feature);
-					}	
+					}
 				}
-				
+
 				if ( toPoint )
 				{
 					g_transmitFlightPath = flightFeature([fromPoint, toPoint], {
@@ -5711,11 +5708,11 @@ function handleWsjtxStatus(newMessage) {
 							zIndex: 90
 						}, "transmit", true);
 				}
-			
+
 
 			}
 			g_weAreDecoding = false;
-			
+
 
 		}
 
@@ -5726,16 +5723,16 @@ function handleWsjtxStatus(newMessage) {
 		g_appSettings.myRawFreq = myRawFreq;
 		g_appSettings.myRawCall = myRawCall;
 		g_appSettings.myRawGrid = myRawGrid;
-		
+
 	}
-	
+
 	if ( newMessage.Decoding == 0 )
 	{
 		goProcessRoster();
 		processClassicAlerts();
 	}
-	
-				
+
+
 }
 
 
@@ -5747,12 +5744,12 @@ function drawTraffic()
 {
 	while (g_lastTraffic.length > 60)
 		g_lastTraffic.pop();
-		
+
 	var worker = g_lastTraffic.join("<br/>");
 	worker = worker.split("80%'><br/>").join("80%'>");
 	if (g_localDXcall.length > 1 )
 		worker = worker.split(g_localDXcall).join("<font style='color:cyan'>" + g_localDXcall + "</font>");
-	if ( myRawCall.length > 1 )	
+	if ( myRawCall.length > 1 )
 		worker = worker.split(myRawCall).join("<font style='color:yellow'>" + myRawCall + "</font>");
 	trafficDiv.innerHTML = worker;
 }
@@ -5762,7 +5759,7 @@ function getPoint( grid )
 	var Lat = LL.la2 - ((LL.la2 - LL.la1) / 2);
 	var Lon = LL.lo2 - ((LL.lo2 - LL.lo1) / 2);
 	return ol.proj.fromLonLat([Lon, Lat]);
-			
+
 }
 var g_showCQRU = true;
 
@@ -5771,19 +5768,19 @@ function fitViewBetweenPoints( points, maxZoom = 20) {
 	var start = ol.proj.toLonLat(points[0]);
 	var end = ol.proj.toLonLat(points[1]);
 
-	if (Math.abs(start[0] - end[0]) > 180) 
+	if (Math.abs(start[0] - end[0]) > 180)
 	{
 		// Wrapped
-		if (end[0] < start[0]) 
+		if (end[0] < start[0])
 		{
 			start[0] -= 360;
-		} 
-		else 
+		}
+		else
 		{
 			end[0] -= 360;
 		}
 	}
-	
+
 	start = ol.proj.fromLonLat(start);
 	end = ol.proj.fromLonLat(end);
 	var line = new ol.geom.LineString([start,end]);
@@ -5791,7 +5788,7 @@ function fitViewBetweenPoints( points, maxZoom = 20) {
     var extent = feature.getGeometry().getExtent();
 
 	g_mapView.fit(extent, {duration: 500, maxZoom: maxZoom, padding: [75,75,75,75] } );
-	
+
 	delete feature;
 	delete line;
 }
@@ -5873,13 +5870,13 @@ function handleWsjtxDecode(newMessage) {
 			else
 				msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
 		}
-		
+
 		if (decodeWords.length >= 4 && CQ == false)
 		{
 			msgDXcallsign = decodeWords[0];
 			msgDEcallsign = decodeWords[1];
 		}
-				
+
 		var callsign = null;
 
 		var hash = msgDEcallsign + newMessage.OB + newMessage.OM;
@@ -5891,13 +5888,13 @@ function handleWsjtxDecode(newMessage) {
 			if ( g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0 )
 				validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid;
 		}
-		
+
 		var canPath = false;
 		if (
 			(g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' &&  newMessage.OB == myBand) || newMessage.OB == g_appSettings.gtBandFilter) &&
 			(g_appSettings.gtModeFilter.length == 0 || (g_appSettings.gtModeFilter == 'auto' &&  newMessage.OM == myMode) || newMessage.OM == g_appSettings.gtModeFilter || g_appSettings.gtModeFilter == "Digital")) {
 			rect = qthToBox(theirQTH, msgDEcallsign, CQ, newMessage.NW, false, msgDXcallsign, newMessage.OB, null, hash);
-			
+
 
 			canPath = true;
 		}
@@ -5945,7 +5942,7 @@ function handleWsjtxDecode(newMessage) {
 				newCallsign.px = getWpx(newCallsign.DEcall);
 				if ( newCallsign.px )
 					newCallsign.zone = Number(newCallsign.px.charAt(newCallsign.px.length-1));
-				
+
 				newCallsign.cont = g_worldGeoData[g_dxccToGeoData[newCallsign.dxcc]].continent;
 				if ( newCallsign.dxcc == 390 && newCallsign.zone == 1 )
 					details.cont = "EU";
@@ -5955,13 +5952,13 @@ function handleWsjtxDecode(newMessage) {
 			newCallsign.cqza = Array();
 			newCallsign.distance = 0;
 			newCallsign.heading = 0;
-			
+
 			newCallsign.cnty = null;
 			newCallsign.qual = false;
-			
+
 			getLookupCachedObject(msgDEcallsign , null, null ,null, newCallsign);
 
-			
+
 			if (g_callsignLookups.ulsUseEnable == true && isKnownCallsignDXCC(newCallsign.dxcc) ) {
 				lookupUsCallsign(newCallsign, false);
 			}
@@ -5970,8 +5967,8 @@ function handleWsjtxDecode(newMessage) {
 				g_dxccCount[newCallsign.dxcc]++;
 			else
 				g_dxccCount[newCallsign.dxcc] = 1;
-			
-			
+
+
 			newCallsign.alerted = false;
 			newCallsign.shouldAlert = false;
 			g_liveCallsigns[hash] = newCallsign;
@@ -5980,12 +5977,12 @@ function handleWsjtxDecode(newMessage) {
 			if ( validQTH )
 			{
 				callsign.grid = theirQTH;
-			
+
 				if ( rect != null && callsign.grid != rect.qth )
 				{
 					if (
 					(g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' &&  newMessage.OB == myBand) || newMessage.OB == g_appSettings.gtBandFilter) &&
-					(g_appSettings.gtModeFilter.length == 0 || (g_appSettings.gtModeFilter == 'auto' &&  newMessage.OM == myMode) || newMessage.OM == g_appSettings.gtModeFilter || g_appSettings.gtModeFilter == "Digital")) 
+					(g_appSettings.gtModeFilter.length == 0 || (g_appSettings.gtModeFilter == 'auto' &&  newMessage.OM == myMode) || newMessage.OM == g_appSettings.gtModeFilter || g_appSettings.gtModeFilter == "Digital"))
 					{
 						rect = qthToBox(theirQTH, msgDEcallsign, CQ, newMessage.NW, false, msgDXcallsign, newMessage.OB, null, hash);
 						canPath = true;
@@ -6008,7 +6005,7 @@ function handleWsjtxDecode(newMessage) {
 		callsign.instance = newMessage.instance;
 		callsign.grid = callsign.grid.substr(0, 4);
 		callsign.CQ = CQ;
-		
+
 		if ( msgDXcallsign == myDEcall )
 			callsign.qrz = true;
 		else
@@ -6034,7 +6031,7 @@ function handleWsjtxDecode(newMessage) {
 
 			insertMessageInRoster(newMessage, msgDEcallsign, msgDXcallsign, callsign, hash);
 
-			if (g_mapSettings.trafficDecode && (didAlert == true || didCustomAlert == true ) ) 
+			if (g_mapSettings.trafficDecode && (didAlert == true || didCustomAlert == true ) )
 			{
 				var traffic = htmlEntities(newMessage.Msg);
 				if ( didAlert == true )
@@ -6052,19 +6049,19 @@ function handleWsjtxDecode(newMessage) {
 				drawTraffic();
 				lastMessageWasInfo = true;
 			}
-			
-			if ( g_appSettings.gtSpotEnable === true && g_appSettings.gtSpotEnable === true &&  callsign.DEcall in g_gtCallsigns ) 
+
+			if ( g_appSettings.gtSpotEnable === true && g_appSettings.gtSpotEnable === true &&  callsign.DEcall in g_gtCallsigns )
 			{
 				if (  g_gtCallsigns[callsign.DEcall] in  g_gtFlagPins && g_gtFlagPins[g_gtCallsigns[callsign.DEcall]].o == 1)
 					g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent;
 			}
 		}
-	
+
 		if (callsign.dxcc != -1)
 			countryName = g_dxccToAltName[callsign.dxcc];
 		if ( canPath == true  )
 		{
-			if (callsign.DXcall.indexOf("CQ") < 0 && g_appSettings.gridViewMode != 2 ) 
+			if (callsign.DXcall.indexOf("CQ") < 0 && g_appSettings.gridViewMode != 2 )
 			{
 				// Nothing special, we know the callers grid
 				if ( callsign.grid != "" )
@@ -6080,8 +6077,8 @@ function handleWsjtxDecode(newMessage) {
 					{
 						DEcallsign =  g_liveCallsigns[callsign.DXcall];
 					}
-						
-					if (DEcallsign != null && DEcallsign.grid != "" ) 
+
+					if (DEcallsign != null && DEcallsign.grid != "" )
 					{
 						var strokeColor = getPathColor();
 						var strokeWeight = pathWidthValue.value;
@@ -6110,12 +6107,12 @@ function handleWsjtxDecode(newMessage) {
 							flightPath.isShapeFlight = 0;
 							flightPath.isQRZ = isQRZ;
 
-							
+
 							g_flightPaths.push(flightPath);
 						}
 					}
 
-				} 
+				}
 				else if ( g_mapSettings.qrzDxccFallback && msgDXcallsign == myDEcall && callsign.dxcc > 0 )
 				{
 					// the caller is calling us, but they don't have a grid, so lookup the DXCC and show it
@@ -6124,11 +6121,11 @@ function handleWsjtxDecode(newMessage) {
 					var flightPath = null;
 					var isQRZ = true;
 					var DEcallsign =  g_liveCallsigns[myDEcall];
-					
+
 					if ( strokeWeight != 0 )
 					{
 						var toPoint =  getPoint(DEcallsign.grid);
-						
+
 						var Lat = g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].lat;
 						var Lon = g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].lon;
 						var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
@@ -6144,22 +6141,22 @@ function handleWsjtxDecode(newMessage) {
 						flightPath.isShapeFlight = 0;
 						flightPath.isQRZ = isQRZ;
 
-							
+
 						g_flightPaths.push(flightPath);
-						
-						
+
+
 						var feature = shapeFeature("qrz", g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].geo, "qrz",  '#FFFF0010' , "#FF0000FF", 1.0);
 						feature.age = g_timeNow + g_flightDuration;
 						feature.isShapeFlight = 1;
 						feature.isQRZ = isQRZ;
 						g_layerSources["flight"].addFeature(feature);
 						g_flightPaths.push(feature);
-						
+
 					}
-					
+
 				}
-			} 
-			else if (g_mapSettings.CQhilite && msgDXcallsign.indexOf("CQ ") == 0 && callsign.grid != ""  &&	g_appSettings.gridViewMode != 2 && pathWidthValue.value != 0) 
+			}
+			else if (g_mapSettings.CQhilite && msgDXcallsign.indexOf("CQ ") == 0 && callsign.grid != ""  &&	g_appSettings.gridViewMode != 2 && pathWidthValue.value != 0)
 			{
 				var CCd = msgDXcallsign.replace("CQ ", "").split(" ")[0];
 				if ( CCd.length < 5 && !(CCd in g_pathIgnore) ) {
@@ -6167,7 +6164,7 @@ function handleWsjtxDecode(newMessage) {
 					// Direct lookup US states, Continents, possibly
 					if ( CCd in g_replaceCQ )
 						CCd = g_replaceCQ[CCd];
-					
+
 					if (CCd.length == 2 && CCd in g_shapeData) {
 						locality = g_shapeData[CCd];
 					} else if (CCd.length == 3) {
@@ -6224,14 +6221,14 @@ function handleWsjtxDecode(newMessage) {
 	var bgColor = "black";
 	if (newMessage.LC > 0)
 		bgColor = "#880000";
-	
+
 	g_lastMessages.unshift("<tr style='background-color:" + bgColor + "'><td style='color:lightblue'>" +
 		userTimeString(theTimeStamp*1000) + "</td><td style='color:orange'>" + newMessage.SR +
 		"</td><td style='color:gray'>" + newMessage.DT.toFixed(1) +
 		"</td><td style='color:lightgreen'>" + newF + "</td><td>" + newMessage.MO +
 		"</td><td style='color:" + messageColor + "'>" + htmlEntities(newMessage.Msg) +
 		"</td><td style='color:yellow'>" + countryName + "</td></tr>");
-	
+
 	while (g_lastMessages.length > 100)
 		g_lastMessages.pop();
 
@@ -6275,7 +6272,7 @@ function shapeFeature(key, geoJsonData, propname, fillColor, borderColor, border
 	return feature;
 
 }
-function handleWsjtxClear(newMessage) 
+function handleWsjtxClear(newMessage)
 {
 	for ( var hash in g_liveCallsigns )
 	{
@@ -6286,10 +6283,10 @@ function handleWsjtxClear(newMessage)
 		if ( g_callRoster[call].callObj.instance == newMessage.instance )
 			delete g_callRoster[call];
 	}
-	
+
 	redrawGrids();
 	redrawPins();
-	
+
 	updateCountStats();
 	goProcessRoster();
 }
@@ -6383,7 +6380,7 @@ function setCenterQTH()
 		g_appSettings.centerGridsquare = homeQTHInput.value;
 		// Grab home QTH Gridsquare from Center QTH
 		var LL = squareToLatLong(homeQTHInput.value);
-		
+
 		//panTo(ol.proj.fromLonLat([LL.lo2 - (LL.lo2 - LL.lo1) / 2, LL.la2 - ((LL.la2 - LL.la1) / 2)]));
 
 		g_map.getView().setCenter(ol.proj.fromLonLat([LL.lo2 - (LL.lo2 - LL.lo1) / 2, LL.la2 - ((LL.la2 - LL.la1) / 2)]));
@@ -6392,7 +6389,7 @@ function setCenterQTH()
 		homeQTHInput.value = "";
 		return;
 	}
-	
+
 }
 function setCenterGridsquare() {
 	if (g_mapMemory[6].zoom != -1 )
@@ -6400,7 +6397,7 @@ function setCenterGridsquare() {
 		mapMemory(6,false);
 		return;
 	}
-	
+
 	setCenterQTH();
 }
 
@@ -6429,10 +6426,10 @@ function changelookupOnTx() {
 function exportSettings() {
 
 	var filename = g_appData + g_dirSeperator + "gt_settings.json";
-	
+
 	var toWrite = JSON.stringify(localStorage);
 	fs.writeFileSync(filename, toWrite);
-	
+
 	checkForSettings();
 }
 
@@ -6456,7 +6453,7 @@ function checkForSettings()
 function importSettings()
 {
 	checkForSettings();
-	
+
 	var filename = g_appData + g_dirSeperator + "gt_settings.json";
 	if ( fs.existsSync(filename) )
 	{
@@ -6484,9 +6481,9 @@ function importSettings()
 			}
 		}
 	}
-	
 
-		
+
+
 }
 
 
@@ -6494,10 +6491,10 @@ function importSettings()
 function showCallsignBox(redraw) {
 	var worker = "<div style='vertical-align:top;display:inline-block;margin:2px;color:cyan;font-weight:bold'>Callsigns and DXCC Heard</div><br/>";
 
-		
+
 	g_newCallsignCount = Object.keys(g_liveCallsigns).length;
 		if (g_newCallsignCount > 0) {
-			
+
 				var newCallList = Array();
 
 				worker += "<div  style='display:inline-block;padding-right:8px;overflow:auto;overflow-x:hidden;height:" + Math.min(
@@ -6550,10 +6547,10 @@ function showCallsignBox(redraw) {
 					worker += "</tr>";
 				}
 				worker += "</table></div>";
-				
-			
+
+
 		}
-		
+
 		var heard = 0;
 	var List = {};
 	if (Object.keys(g_dxccCount).length > 0) {
@@ -6584,7 +6581,7 @@ function showCallsignBox(redraw) {
 
 function setStatsDiv( div, worker )
 {
-	if ( g_statsWindowHandle != null )
+	if ( g_statsWindowHandle != null &&  typeof g_statsWindowHandle.window[div] !== "undefined" )
 	{
 		g_statsWindowHandle.window[div].innerHTML = worker;
 	}
@@ -6592,14 +6589,14 @@ function setStatsDiv( div, worker )
 
 function setStatsDivHeight ( div, heightWithPx )
 {
-	if ( g_statsWindowHandle != null)
+	if ( g_statsWindowHandle != null &&  typeof g_statsWindowHandle.window[div] !== "undefined")
 	{
 		g_statsWindowHandle.window[div].style.height = heightWithPx;
 	}
 }
 function getStatsWindowHeight()
 {
-	if ( g_statsWindowHandle != null )
+	if ( g_statsWindowHandle != null &&  typeof g_statsWindowHandle.window.window !== "undefined" )
 	{
 		return g_statsWindowHandle.window.window.innerHeight - 63;
 	}
@@ -6608,7 +6605,7 @@ function getStatsWindowHeight()
 
 function setLookupDiv( div, worker )
 {
-	if ( g_lookupWindowHandle )
+	if ( g_lookupWindowHandle &&  typeof g_lookupWindowHandle.window[div].innerHTML !== "undefined" )
 	{
 		g_lookupWindowHandle.window[div].innerHTML = worker;
 	}
@@ -6616,14 +6613,14 @@ function setLookupDiv( div, worker )
 
 function setLookupDivHeight ( div, heightWithPx )
 {
-	if ( g_lookupWindowHandle )
+	if ( g_lookupWindowHandle &&  typeof g_lookupWindowHandle.window[div].style !== "undefined" )
 	{
 		g_lookupWindowHandle.window[div].style.height = heightWithPx;
 	}
 }
 function getLookupWindowHeight()
 {
-	if ( g_lookupWindowHandle )
+	if ( g_lookupWindowHandle &&  typeof g_lookupWindowHandle.window.window !== "undefined" )
 	{
 		return g_lookupWindowHandle.window.window.innerHeight;
 	}
@@ -6660,7 +6657,7 @@ function myDxccIntCompare(a, b) {
 	if ( !a in g_dxccToAltName )
 		return 0;
 	if ( !b in g_dxccToAltName )
-		
+
 	return g_dxccToAltName[a].localeCompare(g_dxccToAltName[b]);
 }
 
@@ -6728,7 +6725,7 @@ function showWorkedByCall(callsign, evt)
 	if ( event.shiftKey == true )
 		g_filterQSL = "true";
 	openInfoTab('qsobox', 'workedBoxDiv', showWorkedBox);
-	
+
 }
 
 function showWorkedSearchChanged(object, index) {
@@ -6736,7 +6733,7 @@ function showWorkedSearchChanged(object, index) {
 	g_searchWB = object.value.toUpperCase();
 	g_lastSearchSelection = object.id;
 	showWorkedBox( index, 0);
-	
+
 }
 
 function showWorkedSearchGrid(object, index) {
@@ -6775,6 +6772,7 @@ function filterQSLFunction(event,index)
 }
 
 function showWorkedBox(  sortIndex, nextPage, redraw) {
+	try {
 	var myObjects = null;
 	var mySort = sortIndex;
 	var bandOptions;
@@ -6811,7 +6809,7 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 				var y = value.vucc_grids.indexOf(g_gridSearch);
 				return ( x == 0 || y == 0);
 			});
-			
+
 
 	for (var  key in list )
 	{
@@ -6820,12 +6818,12 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 		var pp = ( g_dxccToGeoData[list[key].dxcc] in  g_worldGeoData ? g_worldGeoData[g_dxccToGeoData[list[key].dxcc]].pp : "?");
 		dxccs[g_dxccToAltName[list[key].dxcc] + " ("+pp+")"] = list[key].dxcc;
 	}
-	
+
 	if (g_filterBand != "Mixed" )
 		list = list.filter(function (value) {
 				return (value.band == g_filterBand);
 			});
-	
+
 	if (g_filterMode != "Mixed" )
 		list = list.filter(function (value) {
 				if ( g_filterMode == "Phone" && value.mode in g_modes_phone && g_modes_phone[value.mode] )
@@ -6834,19 +6832,19 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 					return true;
 				return (value.mode == g_filterMode);
 			});
-			
+
 	if (g_filterDxcc != 0 )
 		list = list.filter(function (value) {
 				return (value.dxcc == g_filterDxcc);
 			});
-			
-	if (g_filterQSL != "All" ) 
+
+	if (g_filterQSL != "All" )
 	{
 			list = list.filter(function (value) {
 				return (value.confirmed == (g_filterQSL == "true" ? true : false ));
 			});
 	}
-	
+
 	if ( typeof redraw == 'undefined' )
 	{
 		if (typeof nextPage == 'undefined') {
@@ -6876,7 +6874,7 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 		mySort = g_lastSortIndex;
 		if ( mySort == -1 )
 			mySort = 4;
-		
+
 		if (g_lastSortType == 1) {
 			list = list.sort(g_sortFunction[mySort]);
 		} else {
@@ -6884,7 +6882,7 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 		}
 	}
 
-		
+
 	ObjectCount = list.length;
 
 	var g_qsoPages = parseInt(ObjectCount / g_qsoItemsPerPage) + 1;
@@ -6900,7 +6898,7 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 		endIndex = ObjectCount; {
 
 		var workHead = "<b> Entries (" + ObjectCount + ")</b>";
-		
+
 
 		if (g_qsoPages > 1) {
 			workHead += "<br/><font  style='font-size:15px;' color='cyan' onClick='window.opener.showWorkedBox(" + mySort + ", -1);'>&#8678;&nbsp;</font>";
@@ -6908,9 +6906,9 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 			workHead += "<font  style='font-size:16px;' color='cyan' onClick='window.opener.showWorkedBox(" + mySort + ", 1);'>&nbsp;&#8680;</font>";
 		}
 		setStatsDiv("workedHeadDiv", workHead);
-		
+
 		if (myObjects != null) {
-	
+
 			var worker = "";
 			worker += "<table  id='logTable' style='white-space:nowrap;overflow:auto;overflow-x;hidden;' class='darkTable' align=center>";
 			worker += "<tr>";
@@ -6971,9 +6969,9 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 			}
 
 			worker += "</table>";
-			
+
 			setStatsDiv("workedListDiv", worker);
-			
+
 			statsValidateCallByElement("searchWB");
 			statsValidateCallByElement("searchGrid");
 
@@ -6999,24 +6997,24 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 				option.value = "Mixed";
 				option.text = "Mixed";
 			newSelect.appendChild(option);
-			
+
 			option = document.createElement("option");
 				option.value = "Phone";
 				option.text = "Phone";
 			newSelect.appendChild(option);
-			
+
 			option = document.createElement("option");
 				option.value = "Digital";
 				option.text = "Digital";
 			newSelect.appendChild(option);
-			
+
 			Object.keys(modes).sort().forEach(function(key) {
 				var option = document.createElement("option");
 				option.value = key;
 				option.text = key;
 				newSelect.appendChild(option);
 			});
-			
+
 			statsAppendChild("modeFilterDiv", newSelect, "filterModeFunction", g_filterMode, true);
 
 			newSelect = document.createElement("select");
@@ -7026,15 +7024,15 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 				option.value = 0;
 				option.text = "All";
 				newSelect.appendChild(option);
-				
-			
+
+
 			Object.keys(dxccs).sort().forEach(function(key) {
 				var option = document.createElement("option");
 				option.value = dxccs[key];
 				option.text = key;
 				newSelect.appendChild(option);
 			});
-			
+
 			statsAppendChild("dxccFilterDiv", newSelect, "filterDxccFunction", g_filterDxcc, true);
 
 			newSelect = document.createElement("select");
@@ -7044,40 +7042,45 @@ function showWorkedBox(  sortIndex, nextPage, redraw) {
 				option.value = "All";
 				option.text = "All";
 				newSelect.appendChild(option);
-		
+
 			option = document.createElement("option");
 			option.value = true;
 			option.text = "Yes";
 			newSelect.appendChild(option);
-			
+
 			option = document.createElement("option");
 			option.value = false;
 			option.text = "No";
 			newSelect.appendChild(option);
 
-			
+
 			statsAppendChild("qslFilterDiv", newSelect, "filterQSLFunction", g_filterQSL, true);
-			
+
 			statsFocus(g_lastSearchSelection);
 
 			setStatsDivHeight("workedListDiv", (getStatsWindowHeight() - 6 ) + "px" );
-			
+
 		} else
 			setStatsDiv("workedListDiv", "None");
 	}
 	myObjects = null;
+	}
+	catch (e)
+	{
+		console.log(e);
+	}
 }
 
 function statsValidateCallByElement( elementString )
 {
-	if ( g_statsWindowHandle != null)
+	if ( g_statsWindowHandle != null && typeof g_statsWindowHandle.window.validateCallByElement !== "undefined" )
 	{
 		g_statsWindowHandle.window.validateCallByElement( elementString );
 	}
 }
 function statsFocus( selection )
 {
-	if ( g_statsWindowHandle != null )
+	if ( g_statsWindowHandle != null && typeof g_statsWindowHandle.window.statsFocus !== "undefined" )
 	{
 		g_statsWindowHandle.window.statsFocus( selection );
 	}
@@ -7085,14 +7088,14 @@ function statsFocus( selection )
 
 function lookupValidateCallByElement( elementString )
 {
-	if ( g_lookupWindowHandle != null)
+	if ( g_lookupWindowHandle != null && typeof g_statsWindowHandle.window.validateCallByElement !== "undefined")
 	{
 		g_lookupWindowHandle.window.validateCallByElement( elementString );
 	}
 }
 function lookupFocus( selection )
 {
-	if ( g_lookupWindowHandle != null )
+	if ( g_lookupWindowHandle != null && typeof g_statsWindowHandle.window.statsFocus !== "undefined" )
 	{
 		g_lookupWindowHandle.window.statsFocus( selection );
 	}
@@ -7100,7 +7103,7 @@ function lookupFocus( selection )
 
 function statsAppendChild( elementString , object, onInputString, defaultValue )
 {
-	if ( g_statsWindowHandle != null )
+	if ( g_statsWindowHandle != null && typeof g_statsWindowHandle.window.appendToChild !== "undefined")
 	{
 		g_statsWindowHandle.window.appendToChild(elementString, object, onInputString, defaultValue);
 	}
@@ -7473,27 +7476,27 @@ function showWPXBox() {
 		mode = "dg";
 	if ( mode == "Phone" )
 		mode = "ph";
-	
+
 	var modifier = String(band)+String(mode);
 	var worked = 0;
 	var confirmed = 0;
 	var List = {};
 	var ListConfirmed = {};
-	
-	for (var key in g_tracker.worked.px) { 
+
+	for (var key in g_tracker.worked.px) {
 		if ( typeof g_tracker.worked.px[key] == "string" && key+modifier in g_tracker.worked.px )
 		{
 			List[key] = key;
 		}
 	}
-	
-	for (var key in g_tracker.confirmed.px) { 
+
+	for (var key in g_tracker.confirmed.px) {
 		if ( typeof g_tracker.confirmed.px[key] == "string" && key+modifier in g_tracker.confirmed.px )
 		{
-			ListConfirmed[key] = key;	
+			ListConfirmed[key] = key;
 		}
 	}
-	
+
 	worked = Object.keys(List).length;
 	confirmed = Object.keys(ListConfirmed).length;
 
@@ -7502,34 +7505,34 @@ function showWPXBox() {
 		worker += "<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
 						Math.min((worked * 23) + 45, getStatsWindowHeight() - 6 ) +
 						"px;'><table class='darkTable' align=center>";
-		Object.keys(List).sort().forEach(function (key, i) 
-		{			
+		Object.keys(List).sort().forEach(function (key, i)
+		{
 			worker += "<tr><td align=left style='color:#ff0;' >" + key.formatCallsign() + "</td><td style='color:#0ff;'>"+ g_QSOhash[g_tracker.worked.px[key]].DEcall.formatCallsign() + "</td></tr>";
 		});
-		
+
 		worker += "</table></div>";
 		worker += "</div>";
 	}
 
-	if (confirmed>0 ) {	
+	if (confirmed>0 ) {
 		worker += "<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Confirmed Prefixes (<font color='#fff'>"+confirmed+"</font>)</b><br/>";
 		worker += "<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
 						Math.min((confirmed * 23) + 45, getStatsWindowHeight() - 6 ) +
 						"px;'><table class='darkTable' align=center>";
-		Object.keys(ListConfirmed).sort().forEach(function (key, i) 
-		{				
+		Object.keys(ListConfirmed).sort().forEach(function (key, i)
+		{
 			worker += "<tr><td align=left style='color:#ff0;' >" + key.formatCallsign() + "</td><td style='color:#0ff;'>"+ g_QSOhash[g_tracker.confirmed.px[key]].DEcall.formatCallsign() + "</td></tr>";
 		});
-		
+
 		worker += "</table></div>";
 		worker += "</div>";
 	}
-	
+
 	setStatsDiv("wpxListDiv", worker);
 }
 
 function showRootInfoBox() {
-	
+
 	openStatsWindow();
 	return;
 }
@@ -7562,7 +7565,7 @@ function toggleBaWindow()
 	}
 }
 
-function openBaWindow( show = true )  
+function openBaWindow( show = true )
 {
 	if (g_baWindowHandle == null) {
 		popupNewWindows();
@@ -7648,7 +7651,7 @@ function openLookupWindow( show = false )  {
 	}
 }
 
-function openInfoTab(evt, tabName, callFunc, callObj) 
+function openInfoTab(evt, tabName, callFunc, callObj)
 {
 		openStatsWindow();
 
@@ -7671,7 +7674,7 @@ function openInfoTab(evt, tabName, callFunc, callObj)
 			// Show the current tab, and add an "active" class to the button that opened the tab
 
 			g_statsWindowHandle.window.document.getElementById(tabName).style.display = "block";
-			
+
 			if ( evt )
 			{
 				evt = g_statsWindowHandle.window.document.getElementById(evt);
@@ -7683,8 +7686,8 @@ function openInfoTab(evt, tabName, callFunc, callObj)
 				else
 					evt.className += " active";
 			}
-		
-			
+
+
 			if (callFunc) {
 				if (callObj)
 					callFunc(callObj);
@@ -7717,7 +7720,7 @@ function openSettingsTab(evt, tabName) {
 		evt.currentTarget.className += " active";
 	else
 		evt.className += " active";
-	
+
 }
 
 function setGridMode(mode) {
@@ -7766,7 +7769,7 @@ function newStatCountObject(  )
 	statCountObject.confirmed_high = 0;
 	statCountObject.worked_high_key = null;
 	statCountObject.confirmed_high_key = null;
-	
+
 	return statCountObject;
 }
 
@@ -7787,7 +7790,7 @@ function newModeType(  )
 	var modeType = {};
 	modeType.worked = 0;
 	modeType.confirmed = 0;
-	
+
 	return modeType;
 }
 
@@ -7797,7 +7800,7 @@ var g_statBoxTimer = null;
 function showStatBox(resize)
 {
 	var count = Object.keys(g_QSOhash).length;
-	
+
 	if ( typeof resize != "undefined" && resize )
 	{
 		setStatsDivHeight("statViewDiv", (getStatsWindowHeight() + 29) + "px" );
@@ -7839,21 +7842,21 @@ function workObject(obj, count, band, mode, type, didConfirm)
 	obj.worked++;
 	obj.worked_bands[band] = ~~obj.worked_bands[band] + 1;
 	obj.worked_modes[mode] = ~~obj.worked_modes[mode] + 1;
-	
+
 	if ( !count )
 	{
 		obj.worked_types["Mixed"] = ~~obj.worked_modes["Mixed"] + 1;
-	
+
 		if ( type )
 			obj.worked_types[type] = ~~obj.worked_modes[type] + 1;
 	}
-	
+
 	if ( didConfirm )
 	{
 		obj.confirmed++;
 		obj.confirmed_bands[band] = ~~obj.confirmed_bands[band] + 1;
 		obj.confirmed_modes[mode] = ~~obj.confirmed_modes[mode] + 1;
-		
+
 		if ( !count )
 		{
 			obj.confirmed_types["Mixed"] = ~~obj.confirmed_types["Mixed"] + 1;
@@ -7866,7 +7869,7 @@ function workObject(obj, count, band, mode, type, didConfirm)
 
 function renderStatsBox()
 {
-	
+
 	var worker = "";
 	var scoreSection = "Initial";
 	try
@@ -7890,23 +7893,23 @@ function renderStatsBox()
 	short_distance.band = {};
 	short_distance.mode = {};
 	short_distance.type = {};
-	
+
 	var modet = {};
 	modet.Mixed = newStatCountObject();
 	modet.Digital = newStatCountObject();
 	modet.Phone = newStatCountObject();
 	modet.CW = newStatCountObject();
 	modet.Other = newStatCountObject();
-	
+
 	var details = {};
 	details.callsigns = {};
-	
+
 	details.oldest = timeNowSec() + 86400;
 	details.newest = 0;
-	
+
 	scoreSection = "QSO";
-	
-	for (var i in g_QSOhash) 
+
+	for (var i in g_QSOhash)
 	{
 			var finalGrid = g_QSOhash[i].grid;
 			var didConfirm = g_QSOhash[i].confirmed;
@@ -7925,11 +7928,11 @@ function renderStatsBox()
 
 			if ( !(who in callData) )
 					callData[who] = newStatObject();
-					
+
 			workObject(callData[who], false, band, mode, type, didConfirm);
-			
+
 			details.callsigns[call] = ~~details.callsigns[call] + 1;
-			
+
 			if ( g_QSOhash[i].time < details.oldest )
 				details.oldest = g_QSOhash[i].time;
 			if ( g_QSOhash[i].time > details.newest )
@@ -7946,7 +7949,7 @@ function renderStatsBox()
 				else if ( g_modes_phone[mode] == true )
 				{
 					workObject(modet.Phone, true, band, mode, type, didConfirm);
-				} 
+				}
 				else if ( mode == "CW" )
 				{
 					workObject(modet.CW, true, band, mode, type, didConfirm);
@@ -7956,7 +7959,7 @@ function renderStatsBox()
 			}
 			else
 				workObject(modet.Other, true, band, mode, type, didConfirm);
-	
+
 			if (state != null && isKnownCallsignUS(finalDxcc) ) {
 				if (state.substr(0, 2) != "US")
 					state = "US-" + state;
@@ -7967,7 +7970,7 @@ function renderStatsBox()
 					if (name in g_wasZones) {
 						if ( !(name in wasZones ) )
 							wasZones[name] = newStatObject();
-		
+
 						workObject(wasZones[name], false, band, mode, type, didConfirm);
 					}
 				}
@@ -7976,79 +7979,79 @@ function renderStatsBox()
 			if (wpx != null) {
 				if ( !(wpx in wpxData) )
 					wpxData[wpx] = newStatObject();
-					
+
 				workObject(wpxData[wpx], false, band, mode, type, didConfirm);
 			}
-			
+
 			if ( who in  g_gtCallsigns )
 			{
 				if ( !(i in gtData) )
 					gtData[i] = newStatObject();
-					
+
 				gtData[i] = true;
 			}
-			
+
 			if (cnty != null) {
 
-				if (cnty in g_cntyToCounty) 
+				if (cnty in g_cntyToCounty)
 				{
 					if ( !(cnty in countyData) )
 						countyData[cnty] = newStatObject();
-					
+
 					workObject(countyData[cnty], false, band, mode, type, didConfirm);
 				}
 			}
 			if (cont != null) {
-				if (cont in g_shapeData) 
+				if (cont in g_shapeData)
 				{
 					var name = g_shapeData[cont].properties.name;
-					if (name in g_wacZones) 
+					if (name in g_wacZones)
 					{
 						if ( !(name in wacZones) )
 							wacZones[name] = newStatObject();
-	
+
 						workObject(wacZones[name], false, band, mode, type, didConfirm);
 					}
 				}
 			}
 
-			if (finalGrid.length > 0) 
+			if (finalGrid.length > 0)
 			{
-				
+
 				LL = squareToLatLongAll(finalGrid);
 				unit = (parseInt(MyCircle.distance(g_myLat, g_myLon, LL.la2 - ((LL.la2 - LL.la1) / 2), LL.lo2 - (LL.lo2 - LL.lo1) / 2, distanceUnit.value) * MyCircle.validateRadius(distanceUnit.value)));
-				
+
 				if ( unit > long_distance.worked_unit )
 				{
 					long_distance.worked_unit = unit;
 					long_distance.worked_hash = i;
 				}
-				
+
 				if ( !(band in long_distance.band) )
 					long_distance.band[band] = newDistanceObject();
 				if ( !(mode in long_distance.mode) )
 					long_distance.mode[mode] = newDistanceObject();
 				if ( !(type in long_distance.type) )
 					long_distance.type[type] = newDistanceObject();
-				
+
 				if ( unit > long_distance.mode[mode].worked_unit )
 				{
 					long_distance.mode[mode].worked_unit = unit;
 					long_distance.mode[mode].worked_hash = i;
 				}
-				
+
 				if ( unit > long_distance.band[band].worked_unit )
 				{
 					long_distance.band[band].worked_unit = unit;
 					long_distance.band[band].worked_hash = i;
 				}
-				
+
 				if ( unit > long_distance.type[type].worked_unit )
 				{
 					long_distance.type[type].worked_unit = unit;
 					long_distance.type[type].worked_hash = i;
 				}
-				
+
 				if ( didConfirm)
 				{
 					if ( unit > long_distance.confirmed_unit )
@@ -8072,7 +8075,7 @@ function renderStatsBox()
 						long_distance.type[type].confirmed_hash = i;
 					}
 				}
-				
+
 				if ( unit > 0 )
 				{
 					if ( unit < short_distance.worked_unit )
@@ -8080,14 +8083,14 @@ function renderStatsBox()
 						short_distance.worked_unit = unit;
 						short_distance.worked_hash = i;
 					}
-					
+
 					if ( !(band in short_distance.band) )
 						short_distance.band[band] = newDistanceObject(100000);
 					if ( !(mode in short_distance.mode) )
 						short_distance.mode[mode] = newDistanceObject(100000);
 					if ( !(type in short_distance.type) )
 						short_distance.type[type] = newDistanceObject(100000);
-					
+
 					if ( unit < short_distance.mode[mode].worked_unit )
 					{
 						short_distance.mode[mode].worked_unit = unit;
@@ -8128,12 +8131,12 @@ function renderStatsBox()
 					}
 				}
 			}
-			
+
 			if ( !(g_dxccToAltName[finalDxcc] in worldGeoData ) )
 				worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject();
-			
+
 			workObject(worldGeoData[g_dxccToAltName[finalDxcc]], false, band, mode, type, didConfirm);
-			
+
 			if (finalGrid.length > 0) {
 				var gridCheck = finalGrid.substr(0, 4);
 
@@ -8141,7 +8144,7 @@ function renderStatsBox()
 					var name = g_cqZones[cqz].name;
 					if ( !(name in cqZones ) )
 						cqZones[name] = newStatObject();
-					
+
 					workObject(cqZones[name], false, band, mode, type, didConfirm);
 
 
@@ -8150,33 +8153,33 @@ function renderStatsBox()
 						var name = g_cqZones[g_gridToCQZone[gridCheck][0]].name;
 						if ( !(name in cqZones) )
 							cqZones[name] = newStatObject();
-						
+
 						workObject(cqZones[name], false, band, mode, type, didConfirm);
 					}
 				}
 
-				if (ituz.length > 0) 
+				if (ituz.length > 0)
 				{
 					if ( !(ituz in ituZones ) )
 						ituZones[ituz] = newStatObject();
 
 					workObject(ituZones[ituz], false, band, mode, type, didConfirm);
-				} 
+				}
 				else if (gridCheck in g_gridToITUZone)
 				{
 					if (g_gridToITUZone[gridCheck].length == 1) {
 						if ( !(g_gridToITUZone[gridCheck][0] in ituZones ) )
 							ituZones[g_gridToITUZone[gridCheck][0]] = newStatObject();
-					
+
 						workObject(ituZones[g_gridToITUZone[gridCheck][0]], false, band, mode, type, didConfirm);
 					}
 				}
-				
+
 				if ( !(gridCheck in gridData) )
 					gridData[gridCheck] = newStatObject();
-				
-				workObject(gridData[gridCheck], false, band, mode, type, didConfirm);	
-			}					
+
+				workObject(gridData[gridCheck], false, band, mode, type, didConfirm);
+			}
 	}
 
 
@@ -8184,7 +8187,7 @@ function renderStatsBox()
 
 	var stats = {};
 	var output = {};
-	
+
 	worldGeoData.order = 1;
 	stats["DXCC"] = worldGeoData;
 	stats["GRID"] = gridData;
@@ -8213,24 +8216,24 @@ function renderStatsBox()
 			}
 			if ( stats[i][key].confirmed )
 			{
-				output[i].confirmed++; 
+				output[i].confirmed++;
 				if ( stats[i][key].confirmed > output[i].confirmed_high )
 				{
 					output[i].confirmed_high =  stats[i][key].confirmed;
 					output[i].confirmed_high_key = key;
 				}
 			}
-			
+
 			for ( var band in stats[i][key].worked_bands )
 			{
 				output[i].worked_bands[band] = ~~output[i].worked_bands[band] + 1;
 			}
-	
+
 			for (var  band in stats[i][key].confirmed_bands )
 			{
 				output[i].confirmed_bands[band] = ~~output[i].confirmed_bands[band] + 1;
 			}
-			
+
 			for (var mode in stats[i][key].worked_modes )
 			{
 				output[i].worked_modes[mode] = ~~output[i].worked_modes[mode] + 1;
@@ -8240,30 +8243,30 @@ function renderStatsBox()
 			{
 				output[i].confirmed_modes[mode] = ~~output[i].confirmed_modes[mode] + 1;
 			}
-			
+
 			for (var type  in stats[i][key].worked_types )
 			{
 				output[i].worked_types[type] = ~~output[i].worked_types[type] + 1;
 			}
-			
+
 			for (var type  in stats[i][key].confirmed_types )
 			{
 				output[i].confirmed_types[type] = ~~output[i].confirmed_types[type] + 1;
-			} 
+			}
 		}
-		
+
 		stats[i] = null;
 	}
-	
-	
+
+
     scoreSection = "Modes";
-	
+
 	output["MIXED"] = modet.Mixed;
 	output["DIGITAL"] = modet.Digital;
 	output["PHONE"] = modet.Phone;
 	output["CW"] = modet.CW;
 	output["Other"] = modet.Other;
-	
+
 	for (var i in output )
 	{
 		output[i].worked_band_count = Object.keys(output[i].worked_bands).length;
@@ -8281,8 +8284,8 @@ function renderStatsBox()
 					3:  ["CW", "CW",""],
 					4:  ["Other", "Other",""]
 				};
-				
-	var AwardNames = { 
+
+	var AwardNames = {
 					0:  ["WRFA", "Callsigns", "WRFA",'yellow'],
 					1:	["GRID", "Grids","GSA",  'cyan'],
 					2:  ["DXCC","DXCCs","DXWA",  'orange'],
@@ -8293,13 +8296,13 @@ function renderStatsBox()
 					7:	["USC", "US Counties","USA-CA", 'orange'],
 					8:  ["WPX", "Prefixes","WPX", 'yellow']
 				};
-	
+
 	worker = "<font color='cyan'>";
 
 	worker += "<h1>Logbook</h1>";
-	
+
 	worker += "<table style='display:inline-table;margin:5px;' class='darkTable'>";
-	
+
 	var ws = "";
 	if ( Object.keys(details.callsigns).length > 1 )
 		ws = "s";
@@ -8311,90 +8314,90 @@ function renderStatsBox()
 	worker += "<h1>Score Card</h1>";
 	worker += "<table style='display:inline-table;margin:5px;' class='darkTable'>";
 	worker += "<tr><th>Top Score</th><th style='color:yellow'>Worked</th><th style='color:lightgreen'>Confirmed</th></tr>";
-	
+
 	for (var key in AwardNames )
 	{
 		scoreSection = "Award "+ AwardNames[key][1];
 		var infoObject = output[AwardNames[key][0]];
 		worker += "<tr><td style='color:white'>"+AwardNames[key][1] +"</td>";
 		worker += "<td style='color:"+AwardNames[key][3]+"'>"+ infoObject.worked_high_key +"<font color='white'> (" + infoObject.worked_high + ")</font></td>";
-		
+
 		if ( infoObject.confirmed_high_key )
 		{
 			worker += "<td style='color:"+AwardNames[key][3]+"'>"+ infoObject.confirmed_high_key +"<font color='white'> (" + infoObject.confirmed_high + ")</font></td>";
 		}
 		else
 			worker += "<td></td>";
-		
-		worker +="</tr>";	
+
+		worker +="</tr>";
 	}
 
     scoreSection = "Long Distance";
-	
+
 	worker += "<tr><td style='color:white'>Long Distance</td>";
 	worker += "<td style='color:lightgreen'>"+ long_distance.worked_unit + " "+ distanceUnit.value.toLowerCase() ;
 	worker += "<font style='color:yellow' > "+ g_QSOhash[long_distance.worked_hash].DEcall +"</font>";
 	worker += "<font style='color:orange' > "+ g_QSOhash[long_distance.worked_hash].grid +"</font></td>"
-				
+
 	if ( long_distance.confirmed_hash && long_distance.confirmed_unit > 0 )
 	{
 		worker += "<td style='color:lightgreen'>"+ long_distance.confirmed_unit + " " + distanceUnit.value.toLowerCase();
 		worker += "<font style='color:yellow' > "+ g_QSOhash[long_distance.confirmed_hash].DEcall +"</font>";
 	    worker += "<font style='color:orange' > "+ g_QSOhash[long_distance.confirmed_hash].grid +"</font></td>"
 	}
-	else 
+	else
 		worker += "<td></td>";
-	
+
 	scoreSection = "Short Distance";
-	
+
 	worker += "<tr><td style='color:white' >Short Distance</td>";
 	worker += "<td style='color:lightblue'>"+ short_distance.worked_unit + " "+ distanceUnit.value.toLowerCase();
 	worker += "<font style='color:yellow' > "+ g_QSOhash[short_distance.worked_hash].DEcall +"</font>";
 	worker += "<font style='color:orange' > "+ g_QSOhash[short_distance.worked_hash].grid +"</font></td>"
-	
+
 	if ( short_distance.confirmed_hash && short_distance.confirmed_unit > 0 )
 	{
 		worker += "<td style='color:lightblue'>"+ short_distance.confirmed_unit + " " + distanceUnit.value.toLowerCase();
 		worker += "<font style='color:yellow' > "+ g_QSOhash[short_distance.confirmed_hash].DEcall +"</font>";
 	    worker += "<font style='color:orange' > "+ g_QSOhash[short_distance.confirmed_hash].grid +"</font></td>"
 	}
-	else 
+	else
 		worker += "<td></td>";
-	
+
 	worker +="</tr>";
 	worker += "</table>";
 	worker += "</br>";
 	worker += "<h1>Award Types</h1>";
-	
+
 	scoreSection = "Award Types";
 	for (var key in AwardNames )
 		worker += createStatTable( AwardNames[key][1],  output[AwardNames[key][0]], AwardNames[key][2]);
-	
+
 	worker += "<br/>";
-	
+
 	scoreSection = "Mode Types";
-		
+
 	worker += "<h1>Mode Types</h1>";
 	for (var key in TypeNames )
 		worker += createStatTable( TypeNames[key][1],  output[TypeNames[key][0]],  TypeNames[key][2] );
 
-	worker += "<br/>";		
-	
-	
+	worker += "<br/>";
+
+
 	worker += "<h1>Distances</h1>";
 	scoreSection = "Distances";
 	worker += createDistanceTable(long_distance, "Longest Distance");
-	worker += createDistanceTable(short_distance, "Shortest Distance");	
-	worker += "<br/>";		
-	
+	worker += createDistanceTable(short_distance, "Shortest Distance");
+	worker += "<br/>";
+
 	if ( g_appSettings.gtShareEnable == true )
 	{
 		scoreSection = "GT Users";
-		worker += "<h1>Worked GridTracker Stations<br/>Online Now</h1>";	
-		worker += "</font>";		
-		worker += "<font color='white'>";		
+		worker += "<h1>Worked GridTracker Stations<br/>Online Now</h1>";
+		worker += "</font>";
+		worker += "<font color='white'>";
 		worker += createGtStationsTable( gtData );
-		worker += "<br/>";						
+		worker += "<br/>";
 		worker += "</font>"
 	}
 	worker += "</font>";
@@ -8411,9 +8414,9 @@ function renderStatsBox()
 
 function hashNameSort(a , b )
 {
-	if ( g_QSOhash[a].DEcall > g_QSOhash[b].DEcall ) 
+	if ( g_QSOhash[a].DEcall > g_QSOhash[b].DEcall )
 		return 1;
-	if ( g_QSOhash[b].DEcall > g_QSOhash[a].DEcall ) 
+	if ( g_QSOhash[b].DEcall > g_QSOhash[a].DEcall )
 		return -1;
 	return 0;
 }
@@ -8425,7 +8428,7 @@ function createGtStationsTable( obj )
 
 	var keys = Object.keys(obj).sort(hashNameSort);
 	for (var key in keys) {
-				
+
 		var callsign = g_QSOhash[keys[key]];
 		var bgDX = " style='font-weight:bold;color:cyan;' ";
 		var bgDE = " style='font-weight:bold;color:yellow;' ";
@@ -8450,7 +8453,7 @@ function createGtStationsTable( obj )
 		"<td style='color:lightgreen'>" + callsign.band + "</td>";
 
 		worker += "<td align='center'>" + (callsign.confirmed ? "&#10004;" : "") + "</td>";
-		
+
 		worker += "<td>" + callsign.msg +
 		"</td><td style='color:yellow'>" + g_dxccToAltName[callsign.dxcc] + " <font color='lightgreen'>(" + g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].pp + ")</font></td>" + "<td align='center' style='color:lightblue' >" + ageString +
 		"</td>";
@@ -8466,7 +8469,7 @@ function createDistanceTable( obj, name )
 	worker += "<tr><th colspan = 3 align=left style='font-size:15px;color:cyan;'>"+name+"</th></tr>";
 	worker += "<tr><td></td><td><font  color='yellow'>Worked</font></td><td colspan=2 ><font color='lightgreen'>Confirmed</font></td></tr>";
 	worker += "<tr><td align=center><font color='lightgreen'>Bands</font></td>";
-	worker += "<td align=left><table class='subtable'>";	
+	worker += "<td align=left><table class='subtable'>";
 	var keys = Object.keys(obj.band).sort(numberSort);
 	for (var key in keys) {
 		var grid = g_QSOhash[obj.band[keys[key]].worked_hash].grid;
@@ -8491,15 +8494,15 @@ function createDistanceTable( obj, name )
 		else
 				worker += "<tr><td>&nbsp;</td></tr>";
 	}
-		
+
 	worker += "</table></td>";
 	worker += "</tr>";
 	worker += "<tr><td align=center><font color='orange'>Modes</font></td>";
-	worker += "<td align=left><table class='subtable'>";	
+	worker += "<td align=left><table class='subtable'>";
 	keys = Object.keys(obj.mode).sort();
 	for (var key in keys) {
 		var grid = g_QSOhash[obj.mode[keys[key]].worked_hash].grid;
-		var call = g_QSOhash[obj.mode[keys[key]].worked_hash].DEcall;		
+		var call = g_QSOhash[obj.mode[keys[key]].worked_hash].DEcall;
 		worker += "<tr><td align=right>" + keys[key] + "</td><td style='color:lightgreen' align=left>("+ obj.mode[keys[key]].worked_unit + " "+ distanceUnit.value.toLowerCase() +")</td>";
 		worker += "<td style='color:yellow;cursor:pointer' align=left  onclick='window.opener.startLookup(\"" + call +"\",\"" + grid + "\");' >"+ call +"</td>";
 		worker += "<td style='color:orange' align=left>"+ grid +"</td>";
@@ -8511,7 +8514,7 @@ function createDistanceTable( obj, name )
 		if ( keys[key]  in obj.mode && obj.mode[keys[key]].confirmed_hash  )
 		{
 				var grid = g_QSOhash[obj.mode[keys[key]].confirmed_hash].grid;
-				var call = g_QSOhash[obj.mode[keys[key]].confirmed_hash].DEcall;	
+				var call = g_QSOhash[obj.mode[keys[key]].confirmed_hash].DEcall;
 				worker += "<tr><td align=right>" + keys[key] + "</td><td style='color:lightgreen' align=left>("+ obj.mode[keys[key]].confirmed_unit + " " + distanceUnit.value.toLowerCase() +")</td>";
 				worker += "<td style='color:yellow;cursor:pointer' align=left onclick='window.opener.startLookup(\"" + call +"\",\"" + grid + "\");' >"+ call  +"</td>";
 				worker += "<td style='color:orange' align=left>"+ grid +"</td>";
@@ -8519,15 +8522,15 @@ function createDistanceTable( obj, name )
 		}
 		else
 				worker += "<tr><td>&nbsp;</td></tr>";
-	}	
+	}
 	worker += "</table></td>";
 	worker += "</tr>";
 	worker += "<tr><td align=center><font color='#DD44DD'>Types</font></td>";
-	worker += "<td align=left><table class='subtable'>";	
+	worker += "<td align=left><table class='subtable'>";
 	keys = Object.keys(obj.type).sort();
 	for (var key in keys) {
 		var grid = g_QSOhash[obj.type[keys[key]].worked_hash].grid;
-		var call = g_QSOhash[obj.type[keys[key]].worked_hash].DEcall;			
+		var call = g_QSOhash[obj.type[keys[key]].worked_hash].DEcall;
 		worker += "<tr><td align=right>" + keys[key] + "</td><td style='color:lightgreen' align=left>("+ obj.type[keys[key]].worked_unit + " "+ distanceUnit.value.toLowerCase() +")</td>";
 		worker += "<td style='color:yellow;cursor:pointer' align=left onclick='window.opener.startLookup(\"" + call +"\",\"" + grid + "\");' >"+ call  +"</td>";
 		worker += "<td style='color:orange' align=left>"+ grid +"</td>";
@@ -8547,19 +8550,19 @@ function createDistanceTable( obj, name )
 		}
 		else
 				worker += "<tr><td>&nbsp;</td></tr>";
-	}	
+	}
 	worker += "</table></td>";
 	worker += "</tr>";
 	worker += "</table>";
 	return worker;
-	
+
 }
 
 function numberSort(a , b )
 {
-	if ( parseInt(a) > parseInt(b) ) 
+	if ( parseInt(a) > parseInt(b) )
 		return 1;
-	if ( parseInt(b) > parseInt(a) ) 
+	if ( parseInt(b) > parseInt(a) )
 		return -1;
 	return 0;
 }
@@ -8567,8 +8570,8 @@ function numberSort(a , b )
 function createStatTable(title, infoObject, awardName)
 {
 	var wc1Table = "";
-	
-	if (infoObject.worked) 
+
+	if (infoObject.worked)
 	{
 
 	    wc1Table = "<table style='display:inline-table;margin:5px;' class='darkTable'>";
@@ -8578,17 +8581,17 @@ function createStatTable(title, infoObject, awardName)
 		wc1Table += "<tr>"+award+"<td><font  color='yellow'>Worked</font> <font color='white'>(" + infoObject.worked + ")</font></td><td colspan=2 ><font  color='lightgreen'>Confirmed</font> <font color='white'>(" + infoObject.confirmed + ")</font></td></tr>";
 
 		wc1Table += "<tr><td align=center><font color='lightgreen'>Bands</font></td>";
-		
+
 		wc1Table += "<td align=left><table class='subtable'>";
 		var keys = Object.keys(infoObject.worked_bands).sort(numberSort);
 		for (var key in keys) {
 			wc1Table += "<tr><td align=right>" + keys[key] + "</td><td align=left> <font color='white'>(" + infoObject.worked_bands[keys[key]] + ")</font></td></tr>";
 
 		}
-			
+
 		wc1Table += "</table></td>";
 		wc1Table += "<td align=left><table class='subtable'>";
-		
+
 		for (var key in keys) {
 			if ( keys[key]  in infoObject.confirmed_bands )
 			{
@@ -8599,8 +8602,8 @@ function createStatTable(title, infoObject, awardName)
 		}
 		wc1Table += "</table></td>";
 		wc1Table += "</tr>";
-		
-		
+
+
 		wc1Table += "<tr>";
 		wc1Table += "<td align=center><font color='orange'>Modes</font></td>";
 		wc1Table += "<td align=left><table class='subtable'>";
@@ -8610,9 +8613,9 @@ function createStatTable(title, infoObject, awardName)
 		}
 
 		wc1Table += "</table></td>";
-		
+
 		wc1Table += "<td align=left><table class='subtable'>";
-		
+
 		for (var key in keys) {
 			if ( keys[key]  in infoObject.confirmed_modes )
 			{
@@ -8621,11 +8624,11 @@ function createStatTable(title, infoObject, awardName)
 			else
 				wc1Table += "<tr><td>&nbsp;</td></tr>";
 		}
-		
+
 		wc1Table += "</table></td>";
 		wc1Table += "</tr>";
-			
-		
+
+
 		if ( infoObject.worked_type_count > 0 )
 		{
 			wc1Table += "<tr>";
@@ -8637,7 +8640,7 @@ function createStatTable(title, infoObject, awardName)
 			}
 
 			wc1Table += "</table></td>";
-			
+
 			wc1Table += "<td align=left><table class='subtable'>";
 
 			for (var key in keys) {
@@ -8652,7 +8655,7 @@ function createStatTable(title, infoObject, awardName)
 			wc1Table += "</table></td>";
 			wc1Table += "</tr>";
 		}
-		
+
 		wc1Table += "</table>";
 	}
 
@@ -8663,7 +8666,7 @@ function validatePropMode( propMode )
 {
 	if ( g_appSettings.gtPropFilter == "mixed"  )
 		return true;
-	
+
 	return (g_appSettings.gtPropFilter == propMode);
 }
 
@@ -8671,10 +8674,10 @@ function validateMapMode( mode )
 {
 	if ( g_appSettings.gtModeFilter.length == 0  )
 		return true;
-	
+
 	if (g_appSettings.gtModeFilter == 'auto' )
 		return ( myMode == mode );
-	
+
 	if ( g_appSettings.gtModeFilter == 'Digital' )
 	{
 		 if ( mode in g_modes && g_modes[mode] )
@@ -8687,12 +8690,12 @@ function validateMapMode( mode )
 			 return true;
 		 return false;
 	}
-		
+
 	if ( g_appSettings.gtModeFilter == 'CW' &&  mode == "CW" )
 		return true;
-	
+
 	return (g_appSettings.gtModeFilter == mode);
-			
+
 }
 
 function redrawGrids() {
@@ -8704,7 +8707,7 @@ function redrawGrids() {
 	g_QSLcount = 0;
 	g_QSOcount = 0;
 
-	for (var i in g_QSOhash) 
+	for (var i in g_QSOhash)
 	{
 		var finalGrid = g_QSOhash[i].grid;
 		var worked = g_QSOhash[i].worked;
@@ -8714,15 +8717,15 @@ function redrawGrids() {
 		g_QSOcount++;
 		if ( didConfirm )
 			g_QSLcount++;
-		
-				
+
+
 		if ((g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' ? myBand ==
 					g_QSOhash[i].band : g_appSettings.gtBandFilter == g_QSOhash[i].band)) &&
-					validateMapMode(g_QSOhash[i].mode) && validatePropMode(g_QSOhash[i].propMode)) 
+					validateMapMode(g_QSOhash[i].mode) && validatePropMode(g_QSOhash[i].propMode))
 			{
-				
-			
-			if (g_appSettings.gridViewMode > 1) 
+
+
+			if (g_appSettings.gridViewMode > 1)
 			{
 				g_QSOhash[i].rect = qthToQsoBox(g_QSOhash[i].grid, i, false, false, false, g_QSOhash[i].DXcall,
 					g_QSOhash[i].worked, g_QSOhash[i].confirmed, g_QSOhash[i].band, g_QSOhash[i].wspr);
@@ -8732,7 +8735,7 @@ function redrawGrids() {
 						g_QSOhash[i].worked, g_QSOhash[i].confirmed, g_QSOhash[i].band, g_QSOhash[i].wspr);
 				}
 			}
-			
+
 
 			var state = g_QSOhash[i].state;
 			var cont = g_QSOhash[i].cont;
@@ -8770,7 +8773,7 @@ function redrawGrids() {
 			if (cnty != null) {
 
 				if (cnty in g_cntyToCounty) {
-				
+
 					if (g_countyData[cnty].worked == false) {
 						g_countyData[cnty].worked = worked;
 					}
@@ -8824,7 +8827,7 @@ function redrawGrids() {
 				g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_bands[band] = ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_bands[band] + 1;
 				g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_modes[mode] = ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_modes[mode] + 1;
 			}
-			if (finalGrid.length > 0) 
+			if (finalGrid.length > 0)
 			{
 				var gridCheck = finalGrid.substr(0, 4);
 
@@ -8848,9 +8851,9 @@ function redrawGrids() {
 						g_us48Data[gridCheck].confirmed_bands[band] = ~~g_us48Data[gridCheck].confirmed_bands[band] + 1;
 						g_us48Data[gridCheck].confirmed_modes[mode] = ~~g_us48Data[gridCheck].confirmed_modes[mode] + 1;
 					}
-					
+
 				}
-				
+
 				if (cqz.length > 0) {
 
 					if (g_cqZones[cqz].worked == false) {
@@ -8922,7 +8925,7 @@ function redrawGrids() {
 					}
 				}
 			}
-			
+
 
 			for ( var key in g_QSOhash[i].vucc_grids )
 			{
@@ -8947,18 +8950,18 @@ function redrawGrids() {
 						g_us48Data[grid].confirmed_bands[band] = ~~g_us48Data[grid].confirmed_bands[band] + 1;
 						g_us48Data[grid].confirmed_modes[mode] = ~~g_us48Data[grid].confirmed_modes[mode] + 1;
 					}
-					
+
 				}
 			}
-		
+
 		}
 	}
-	
+
 	for (var layer in g_viewInfo )
 	{
 		var search = window[g_viewInfo[layer][0]];
 		var worked = confirmed = 0;
-	
+
 		if ( layer == 0 )
 	    {
 			for ( var key in search )
@@ -8998,10 +9001,10 @@ function redrawGrids() {
 		if ((g_appSettings.gridViewMode != 2) &&
 			(g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' ? myBand ==
 					g_liveCallsigns[i].band : g_appSettings.gtBandFilter == g_liveCallsigns[i].band)) &&
-			( validateMapMode(g_liveCallsigns[i].mode) )) 
+			( validateMapMode(g_liveCallsigns[i].mode) ))
 			{
 
-				if ((g_appSettings.gridViewMode == 1) || (g_appSettings.gridViewMode == 3)) 
+				if ((g_appSettings.gridViewMode == 1) || (g_appSettings.gridViewMode == 3))
 				{
 					g_liveCallsigns[i].rect = qthToBox(g_liveCallsigns[i].grid, g_liveCallsigns[i].DEcall, false,
 							false, false, g_liveCallsigns[i].DXcall, g_liveCallsigns[i].band, g_liveCallsigns[i].wspr, i);
@@ -9009,12 +9012,12 @@ function redrawGrids() {
 				}
 			}
 	}
-	
+
 	reloadInfo( false );
 	setHomeGridsquare();
 	setTrophyOverlay(g_currentOverlay);
 	updateCountStats();
-	
+
 }
 
 function toggleAlertMute() {
@@ -9117,7 +9120,7 @@ function setGTspotEnable(checkbox) {
 	g_appSettings.gtSpotEnable = checkbox.checked;
 
 	g_gtLiveStatusUpdate = true;
-	
+
 }
 
 function setMsgEnable(checkbox) {
@@ -9160,7 +9163,7 @@ function renderBandActivity()
 	if ( typeof g_bandActivity.lines[myMode] != "undefined" )
 	{
 		var lines = g_bandActivity.lines[myMode];
-		
+
 		var bands = [ "630m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "4m","2m"];
 		if ( g_myDXCC in g_callsignDatabaseUSplus )
 			bands = [ "630m", "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m", "2m"];
@@ -9168,7 +9171,7 @@ function renderBandActivity()
 		var maxValue = 0;
 		for (var i = 0; i < bands.length; i++) {
 			bandData[bands[i]] = {};
-			
+
 			bandData[bands[i]].score = 0;
 			bandData[bands[i]].spots = 0;
 			bandData[bands[i]].tx = 0;
@@ -9180,7 +9183,7 @@ function renderBandActivity()
 			{
 				var values = lines[x].trim().split(" ");
 				var band = Number(Number(values[0]) / 1000000).formatBand();
-				
+
 				if ( band in bandData )
 				{
 					var place = bandData[band];
@@ -9193,7 +9196,7 @@ function renderBandActivity()
 						maxValue = place.score;
 					if (maxValue < place.spots)
 						maxValue = place.spots;
-					
+
 				}
 
 			}
@@ -9207,7 +9210,7 @@ function renderBandActivity()
 			var blockMyBand = "";
 			if (band == myBand)
 				blockMyBand = " class='myBand' ";
-			
+
 			{
 				var title = "Score: " + bandData[band].score + " Spots: " + bandData[band].spots + "\nTx: " + bandData[
 						band].tx + "\tRx: " + bandData[band].rx;
@@ -9240,7 +9243,7 @@ function pskBandActivityCallback(buffer, flag) {
 		g_bandActivity.lines[myMode] = result.split("\n");
 		g_bandActivity.lastUpdate[myMode] = g_timeNow+600;
 		localStorage.bandActivity = JSON.stringify(g_bandActivity);
-	} 
+	}
 
 	renderBandActivity();
 }
@@ -9254,18 +9257,18 @@ function pskGetBandActivity() {
 		g_bandActivity.lastUpdate[myMode] = 0;
 	}
 
-	if (myMode.length > 0 && myDEGrid.length > 0 && (  g_timeNow > g_bandActivity.lastUpdate[myMode] )) 
+	if (myMode.length > 0 && myDEGrid.length > 0 && (  g_timeNow > g_bandActivity.lastUpdate[myMode] ))
 	{
 		getBuffer("https://pskreporter.info/cgi-bin/psk-freq.pl?mode=" + myMode + "&grid=" + myDEGrid.substr(
 				0, 4), pskBandActivityCallback, null, "https", 443);
 	}
-		
+
 	renderBandActivity();
-	
+
 	if (g_pskBandActivityTimerHandle != null) {
 		clearInterval(g_pskBandActivityTimerHandle);
 	}
-	
+
 	g_pskBandActivityTimerHandle = setInterval(function () {
 			pskGetBandActivity();
 		}, 601000); // every 20 minutes, 1 second
@@ -9400,7 +9403,7 @@ function checkRunningProcesses() {
 function updateRunningProcesses() {
 	try {
 		checkRunningProcesses();
-	} catch (e) 
+	} catch (e)
 	{
 		g_wsjtxProcessRunning = false;
 		g_jtdxProcessRunning = false;
@@ -9535,10 +9538,10 @@ function validNumberKeys(value) {
 
 function validateNumAndLetter( input )
 {
-	if (/\d/.test(input) && /[A-Z]/.test(input)) 
+	if (/\d/.test(input) && /[A-Z]/.test(input))
 		return true;
 	else
-		return false;	
+		return false;
 }
 
 function validCallsignsKeys( value )
@@ -9552,14 +9555,14 @@ function validCallsignsKeys( value )
 	return (value >=97 && value <= 122);
 }
 
-function ValidateCallsigns(inputText, validDiv) 
+function ValidateCallsigns(inputText, validDiv)
 {
 	inputText.value = inputText.value.toUpperCase();
 	var callsigns = inputText.value.split(",");
 	var passed = false;
 	for ( var call in callsigns )
 	{
-		if (callsigns[call].length > 0) 
+		if (callsigns[call].length > 0)
 		{
 			if (/\d/.test(callsigns[call]) && /[A-Z]/.test(callsigns[call]) )
 			{
@@ -9570,20 +9573,20 @@ function ValidateCallsigns(inputText, validDiv)
 				passed = false;
 				break;
 			}
-		} 
-		else 
+		}
+		else
 		{
 			passed = false;
 			break;
 		}
 	}
-	
-	if (passed) 
+
+	if (passed)
 	{
 		inputText.style.color = "#FF0";
 		inputText.style.backgroundColor = "green";
-	} 
-	else 
+	}
+	else
 	{
 		inputText.style.color = "#000";
 		inputText.style.backgroundColor = "yellow";
@@ -9815,7 +9818,7 @@ function workingDateEnableChanged(ele)
 {
 	g_appSettings.workingDateEnable = ele.checked;
 	applyCallsignsAndDateDiv.style.display = "";
-	
+
 }
 
 function workingDateChanged()
@@ -9904,7 +9907,7 @@ function popupNewWindows() {
 var g_lastUrl = "";
 function lockNewWindows() {
 	if (typeof nw != 'undefined') {
-		win.on('new-win-policy', function (frame, url, policy) {	
+		win.on('new-win-policy', function (frame, url, policy) {
 			if ( url != g_lastUrl )
 			{
 				nw.Shell.openExternal(url);
@@ -9928,15 +9931,15 @@ var ancPrefixes = [ "P" , "M" , "MM", "AM", "A" , "NWS"];
 
 function callsignToDxcc(insign) {
 	var callsign = insign;
-	
+
 	if ( !(/\d/.test(callsign)) || !(/[a-zA-Z]/.test(callsign)) )
 	{
 		return -1;
 	}
-	
+
 	if ( callsign in g_directCallToDXCC )
 		return Number(g_directCallToDXCC[callsign]);
-	
+
 	if ( callsign.includes("/") )
 	{
 		var parts = callsign.split("/");
@@ -9948,7 +9951,7 @@ function callsignToDxcc(insign) {
 		}
 		if (end)
 		{
-			if ( isNaN(parts[end]) )  
+			if ( isNaN(parts[end]) )
 			{
 				if (parts[1].length > parts[0].length)
 				{
@@ -9961,18 +9964,18 @@ function callsignToDxcc(insign) {
 					else
 						callsign = parts[0];
 				}
-			}	
+			}
 			else
 				callsign = parts[0];
 		}
 		else
 			callsign = parts[0];
-		
+
 		if ( callsign in g_directCallToDXCC )
 			return Number(g_directCallToDXCC[callsign]);
-		
+
 	}
-	
+
 	for (var x = callsign.length; x > 0; x--) {
 		if (callsign.substr(0, x)in g_prefixToMap) {
 			return Number(g_worldGeoData[g_prefixToMap[callsign.substr(0, x)]].dxcc);
@@ -9983,13 +9986,13 @@ function callsignToDxcc(insign) {
 
 function loadMaidenHeadData() {
 
-	
+
 	var file = "./data/mh-root-prefixed.json";
 	if (fs.existsSync(file)) {
 		var fileBuf = fs.readFileSync(file, "UTF-8");
 		g_worldGeoData = JSON.parse(fileBuf);
-	
-		
+
+
 
 		for (var key in g_worldGeoData) {
 			g_worldGeoData[key].geo = "deleted";
@@ -10012,12 +10015,12 @@ function loadMaidenHeadData() {
 					g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array();
 				g_gridToDXCC[g_worldGeoData[key].mh[x]].push(g_worldGeoData[key].dxcc);
 			}
-			
+
 			if ( g_worldGeoData[key].dxcc != 291 && g_worldGeoData[key].dxcc != 110 && g_worldGeoData[key].dxcc != 6 )
 				delete g_worldGeoData[key].mh;
-			
+
 		}
-		
+
 		file = "./data/dxcc.json";
 
 		var files = fs.readFileSync(file);
@@ -10025,20 +10028,20 @@ function loadMaidenHeadData() {
 		for (var key in dxccGeo.features) {
 			var dxcc = dxccGeo.features[key].properties.dxcc_entity_code;
 			g_worldGeoData[g_dxccToGeoData[dxcc]].geo = dxccGeo.features[key];
-			
+
 		}
 		delete dxccGeo;
 		file = "./data/counties.json";
 		files = fs.readFileSync(file);
 		var countyData = JSON.parse(files);
 
-		for (var id in countyData) 
+		for (var id in countyData)
 		{
 
 			if ( !(countyData[id].properties.st in g_stateToCounty) )
 				g_stateToCounty[countyData[id].properties.st] = Array();
 			g_stateToCounty[countyData[id].properties.st].push(id);
-			
+
 			var cnty = countyData[id].properties.st + "," + countyData[id].properties.n.toUpperCase().replaceAll(" ","");
 			if (!(cnty in g_cntyToCounty))
 				g_cntyToCounty[cnty] = countyData[id].properties.n.toProperCase();
@@ -10052,7 +10055,7 @@ function loadMaidenHeadData() {
 			g_countyData[cnty].confirmed_bands = {};
 			g_countyData[cnty].worked_modes = {};
 			g_countyData[cnty].confirmed_modes = {};
-			
+
 			for ( var x in countyData[id].properties.z ) {
 				var zipS = String(countyData[id].properties.z[x]);
 				if ( !(zipS in g_zipToCounty) )
@@ -10062,13 +10065,13 @@ function loadMaidenHeadData() {
 				g_zipToCounty[zipS].push(cnty);
 			}
 
-			
+
 		}
 		files = null;
 		countyData = null;
 
 		g_shapeData = JSON.parse(fs.readFileSync(g_shapeFile));
-		for (var key in g_shapeData) 
+		for (var key in g_shapeData)
 		{
 			if (g_shapeData[key].properties.alias == key)
 				g_shapeData[key].properties.alias = null;
@@ -10110,11 +10113,11 @@ function loadMaidenHeadData() {
 			}
 		};
 		g_shapeData["US"] = feature;
-		
+
 		y = g_shapeData["OC"].geometry;
 		z = g_shapeData["AU"].geometry;
 		q = g_shapeData["AN"].geometry;
-		
+
 		feature = {
 			"type": "Feature",
 			"geometry": {
@@ -10130,7 +10133,7 @@ function loadMaidenHeadData() {
 		};
 		g_shapeData["OC"] = feature;
 		g_shapeData["AU"].properties.type = "Country";
-		
+
 		g_StateData = JSON.parse(fs.readFileSync("./data/state.json"));
 
 		g_StateData["US-AK"] = {};
@@ -10164,7 +10167,7 @@ function loadMaidenHeadData() {
 		g_enums = JSON.parse(fileBuf);
 
 		for (var key in g_worldGeoData) {
-			if (g_worldGeoData[key].pp != "" && g_worldGeoData[key].geo != 'deleted') 
+			if (g_worldGeoData[key].pp != "" && g_worldGeoData[key].geo != 'deleted')
 			{
 				g_enums[g_worldGeoData[key].dxcc] = g_worldGeoData[key].name;
 			}
@@ -10173,7 +10176,7 @@ function loadMaidenHeadData() {
 				for (var mh in g_worldGeoData[key].mh )
 				{
 					var sqr = g_worldGeoData[key].mh[mh];
-				
+
 					g_us48Data[sqr] = {};
 					g_us48Data[sqr].name = sqr;
 					g_us48Data[sqr].worked = false;
@@ -10184,7 +10187,7 @@ function loadMaidenHeadData() {
 					g_us48Data[sqr].confirmed_modes = {};
 				}
 			}
-			
+
 		}
 
 		fileBuf = fs.readFileSync("./data/cqzone.json");
@@ -10194,25 +10197,25 @@ function loadMaidenHeadData() {
 			for (var x = 0; x < g_cqZones[key].mh.length; x++) {
 				if (!(g_cqZones[key].mh[x] in g_gridToCQZone))
 					g_gridToCQZone[g_cqZones[key].mh[x]] = Array();
-				g_gridToCQZone[g_cqZones[key].mh[x]].push(key);
+				g_gridToCQZone[g_cqZones[key].mh[x]].push(String(key));
 			}
 			delete g_cqZones[key].mh;
-		
+
 		}
-		
+
 		fileBuf = fs.readFileSync("./data/ituzone.json");
 		g_ituZones = JSON.parse(fileBuf);
 
-			
+
 		for (var key in g_ituZones) {
 			for (var x = 0; x < g_ituZones[key].mh.length; x++) {
 				if (!(g_ituZones[key].mh[x] in g_gridToITUZone))
 					g_gridToITUZone[g_ituZones[key].mh[x]] = Array();
-				g_gridToITUZone[g_ituZones[key].mh[x]].push(key);
+				g_gridToITUZone[g_ituZones[key].mh[x]].push(String(key));
 			}
 			delete g_ituZones[key].mh;
 		}
-		
+
 		for (var key in g_StateData) {
 			if (key.substr(0, 3) == "US-") {
 				var shapeKey = key.substr(3, 2);
@@ -10272,11 +10275,11 @@ function loadMaidenHeadData() {
 				g_wacZones[name].confirmed_modes = {};
 			}
 		}
-		
+
 		delete fileBuf;
 
-		
-		
+
+
 	}
 
 }
@@ -10298,17 +10301,17 @@ function toggleTimezones()
 {
 	if ( g_currentOverlay != 0 )
 		return;
-	
+
 	g_timezonesEnable ^= 1;
-	
+
 	mouseOutGtFlag();
-		
+
 	if ( g_timezonesEnable == 1 )
-	{			
+	{
 		if ( g_timezoneLayer == null )
 		{
 			createZoneLayer();
-		}				
+		}
 		g_timezoneLayer.setVisible(true);
 	}
 	else
@@ -10326,7 +10329,7 @@ function drawAllGrids()
 {
 	var borderColor = "#000";
 	var borderWeight = .5;
-	
+
 	for ( var x = -178 ; x < 181 ; x+= 2)
 	{
 			var fromPoint = ol.proj.fromLonLat([x, -90]);
@@ -10336,12 +10339,12 @@ function drawAllGrids()
 				fromPoint,
 				toPoint
 			];
-			
+
 			if ( x % 20  == 0 )
 				borderWeight = .75;
 			else
 				borderWeight = .25;
-					
+
 			var newGridBox = lineString(points);
 
 			var featureStyle = new ol.style.Style({
@@ -10354,7 +10357,7 @@ function drawAllGrids()
 
 			g_layerSources["line-grids"].addFeature(newGridBox);
 	}
-	
+
 	for ( var x = -90 ; x < 91 ; x++ )
 	{
 			var fromPoint = ol.proj.fromLonLat([-180, x]);
@@ -10364,12 +10367,12 @@ function drawAllGrids()
 				fromPoint,
 				toPoint
 			];
-			
+
 			if ( x % 10  == 0 )
 				borderWeight = .75;
 			else
 				borderWeight = .25;
-			
+
 			var newGridBox = lineString(points);
 
 			var featureStyle = new ol.style.Style({
@@ -10382,7 +10385,7 @@ function drawAllGrids()
 
 			g_layerSources["line-grids"].addFeature(newGridBox);
 	}
-	
+
 	for ( var x = 65; x < 83; x++ )
 		for ( var y = 65; y < 83; y++ )
 		{
@@ -10410,17 +10413,17 @@ function drawAllGrids()
 								text: String(a) + String(b),
 								offsetY: 1
 							}),
-							
+
 						});
 					feature.setStyle(featureStyle);
 					g_layerSources["short-grids"].addFeature(feature);
-					
+
 					feature = new ol.Feature(
 					{
 						geometry: new ol.geom.Point(point),
 						name: String(a) + String(b)
 					});
-					
+
 					featureStyle = new ol.style.Style({
 							text:  new ol.style.Text({
 								fill: new ol.style.Fill({color: "#000"}),
@@ -10432,18 +10435,18 @@ function drawAllGrids()
 								text: String.fromCharCode(x) + String.fromCharCode(y) + String(a) + String(b),
 								offsetY: 1
 							}),
-							
+
 						});
 					feature.setStyle(featureStyle);
 					g_layerSources["long-grids"].addFeature(feature);
 				}
-				
+
 			var LL = twoWideToLatLong( String.fromCharCode(x) + String.fromCharCode(y) );
 			var Lat = LL.la2 - ((LL.la2 - LL.la1) / 2);
 			var Lon = LL.lo2 - ((LL.lo2 - LL.lo1) / 2);
 			var point = ol.proj.fromLonLat([Lon, Lat]);
 			feature = new ol.Feature(new ol.geom.Point(point));
-			
+
 			featureStyle = new ol.style.Style({
 					text:  new ol.style.Text({
 						fill: new ol.style.Fill({color: "#000"}),
@@ -10456,7 +10459,7 @@ function drawAllGrids()
 					})
 				});
 			feature.setStyle(featureStyle);
-			g_layerSources["big-grids"].addFeature(feature);		
+			g_layerSources["big-grids"].addFeature(feature);
 		}
 }
 
@@ -10469,7 +10472,7 @@ function versionCheck(buffer, flag) {
 		{
 			var stableVersion = Number(versionArray[1]);
 			var betaVersion = Number(versionArray[2]);
-			
+
 			if (gtVersion < stableVersion) {
 				var verString = String(stableVersion);
 				main.style.display = "none";
@@ -10478,9 +10481,9 @@ function versionCheck(buffer, flag) {
 					" available for download.<br />Go there now?<br /><br />";
 				versionDiv.style.display = "block";
 			} else {
-				if (flag) 
+				if (flag)
 				{
-					if (gtVersion < betaVersion) 
+					if (gtVersion < betaVersion)
 					{
 						var verString = String(betaVersion);
 						main.style.display = "none";
@@ -10539,7 +10542,7 @@ function getBuffer(file_url, callback, flag, mode, port, cache = null) {
 		followAllRedirects: true,
 		path: url.parse(file_url).path
 	};
-	
+
 	http.get(options, function (res) {
 		var fsize = res.headers['content-length'];
 		var cookies = null;
@@ -10639,7 +10642,7 @@ function loadMapSettings() {
 	showDarknessTd.innerHTML = parseInt(shadowValue.value * 100) + "%";
 	pathWidthTd.innerHTML = pathWidthValue.value = g_appSettings.pathWidthWeight;
 	qrzPathWidthTd.innerHTML = qrzPathWidthValue.value = g_appSettings.qrzPathWidthWeight;
-	
+
 	gridDecay.value = g_appSettings.gridsquareDecayTime;
 	changeGridDecay();
 
@@ -10647,19 +10650,19 @@ function loadMapSettings() {
 	qrzPathColorValue.value = g_mapSettings.qrzPathColor;
 	brightnessValue.value = g_mapSettings.loudness;
 	nightBrightnessValue.value = g_mapSettings.nightLoudness;
-	
+
 	nightPathColorValue.value = g_mapSettings.nightPathColor;
 	nightQrzPathColorValue.value = g_mapSettings.nightQrzPathColor;
-	
+
 	mouseOverValue.checked = g_mapSettings.mouseOver;
 	mergeOverlayValue.checked = g_mapSettings.mergeOverlay;
 
 	offlineImg.src = g_mapImageArray[(g_mapSettings.offlineMode ? 0 : 1)];
-	
-	
+
+
 	mapSelect.value = g_mapSettings.mapIndex;
 	mapNightSelect.value = g_mapSettings.nightMapIndex;
-	
+
 	animateValue.checked = g_mapSettings.animate;
 	animateSpeedValue.value = 21 - g_mapSettings.animateSpeed;
 	setAnimateView();
@@ -10667,16 +10670,16 @@ function loadMapSettings() {
 	fitQRZvalue.checked = g_mapSettings.fitQRZ;
 	qrzDxccFallbackValue.checked =  g_mapSettings.qrzDxccFallback;
 	CqHiliteValue.checked = g_mapSettings.CQhilite;
-	
+
 	focusRigValue.checked = g_mapSettings.focusRig;
 	haltAllOnTxValue.checked = g_mapSettings.haltAllOnTx;
 	strikesAlert.value = g_mapSettings.strikesAlert;
 
-	
+
 	setStrikesButton();
-	
+
 	trafficDecode.checked = g_mapSettings.trafficDecode;
-	
+
 
 	pskSpotsImg.style.filter = (g_spotsEnabled==1?"":"grayscale(1);");
 
@@ -10701,7 +10704,7 @@ function loadMapSettings() {
 		qrzPathColorDiv.style.color = "#FFF";
 		qrzPathColorDiv.style.backgroundColor = pathColor;
 	}
-	
+
 	setNightHtml();
 
 	displayLegend();
@@ -10868,7 +10871,7 @@ function changeMapLayer() {
 		}
 	}
 
-	
+
 	changePathWidth();
 	redrawSpots();
 }
@@ -10897,16 +10900,16 @@ function timedGetVoices()
 		}
 		newSelect.oninput = voiceChangedValue;
 		voicesDiv.appendChild(newSelect);
-	}	
+	}
 	g_speechAvailable = true;
 	loadAlerts();
 }
 
-function initSpeech() {		
+function initSpeech() {
 	window.speechSynthesis.onvoiceschanged = function () {
 		setTimeout(timedGetVoices, 500);
 	};
-	var msg = new SpeechSynthesisUtterance(".");	
+	var msg = new SpeechSynthesisUtterance(".");
 	msg.lang = g_localeString;
 	window.speechSynthesis.speak(msg);
 }
@@ -11000,19 +11003,19 @@ function loadViewSettings() {
 	buttonacLogCheckBox.checked = g_acLogSettings.enable;
 	ValidatePort(acLogPortInput, buttonacLogCheckBox, null);
 	ValidateIPaddress(acLogIpInput, buttonacLogCheckBox, null);
-	
+
 	dxkLogIpInput.value = g_dxkLogSettings.ip;
 	dxkLogPortInput.value = g_dxkLogSettings.port;
 	buttondxkLogCheckBox.checked = g_dxkLogSettings.enable;
 	ValidatePort(dxkLogPortInput, buttondxkLogCheckBox, null);
 	ValidateIPaddress(dxkLogIpInput, buttondxkLogCheckBox, null);
-	
+
 	hrdLogbookIpInput.value = g_HRDLogbookLogSettings.ip;
 	hrdLogbookPortInput.value = g_HRDLogbookLogSettings.port;
 	buttonHrdLogbookCheckBox.checked = g_HRDLogbookLogSettings.enable;
 	ValidatePort(hrdLogbookPortInput, buttonHrdLogbookCheckBox, null);
 	ValidateIPaddress(hrdLogbookIpInput, buttonHrdLogbookCheckBox, null);
-	
+
 
 	spotHistoryTimeValue.value = parseInt(g_receptionSettings.viewHistoryTimeSec / 60);
 	spotHistoryTimeTd.innerHTML = "Max Age: " + Number(g_receptionSettings.viewHistoryTimeSec).toDHM();
@@ -11021,10 +11024,10 @@ function loadViewSettings() {
 	spotPathColorValue.value = g_receptionSettings.pathColor;
 	spotNightPathColorValue.value = g_receptionSettings.pathNightColor;
 	spotWidthTd.innerHTML = spotWidthValue.value = g_receptionSettings.spotWidth;
-	
+
 	spotMergeValue.checked = g_receptionSettings.mergeSpots;
 
-	lookupOnTx.checked = g_appSettings.lookupOnTx; 
+	lookupOnTx.checked = g_appSettings.lookupOnTx;
 	lookupCloseLog.checked = g_appSettings.lookupCloseLog;
 	lookupMerge.checked =  g_appSettings.lookupMerge;
 	lookupMissingGrid.checked = g_appSettings.lookupMissingGrid;
@@ -11038,10 +11041,10 @@ function loadViewSettings() {
 		lookupMissingGridDiv.style.display = "none";
 	}
 
-	
+
 	if (g_receptionSettings.viewPaths)
 	{
-	
+
 		spotPathWidthDiv.style.display = "inline-block";
 	}
 	else
@@ -11057,9 +11060,9 @@ function loadViewSettings() {
 function loadMsgSettings() {
 	msgEnable.checked = g_appSettings.gtMsgEnable;
 	GTspotEnable.checked = g_appSettings.gtSpotEnable;
-	
+
 	pskSpotsImg.style.filter = (g_spotsEnabled==1?"":"grayscale(1)");
-	
+
 	for (var key in g_msgSettings) {
 		document.getElementById(key).value = g_msgSettings[key];
 	}
@@ -11101,21 +11104,21 @@ function setMsgSettingsView() {
 		msgAwayTextDiv.style.display = "none";
 }
 
-function loadAdifSettings() 
+function loadAdifSettings()
 {
 	workingCallsignEnable.checked = g_appSettings.workingCallsignEnable;
 	workingCallsignsValue.value = (Object.keys(g_appSettings.workingCallsigns).join(","));
-	
+
 	ValidateCallsigns(workingCallsignsValue);
-	
+
 	workingDateEnable.checked = g_appSettings.workingDateEnable ;
 	displayWorkingDate();
-	
+
 	if ( g_platform == "mac" )
 	{
 		selectTQSLButton.style.display = "none";
 	}
-				
+
 	for (var key in g_adifLogSettings.menu) {
 		var value = g_adifLogSettings.menu[key];
 		var where = key + "Div";
@@ -11137,7 +11140,7 @@ function loadAdifSettings()
 		{
 			document.getElementById(key).checked = g_adifLogSettings.nickname[key];
 			if (key == "nicknameeQSLCheckBox") {
-					
+
 				if (document.getElementById(key).checked == true) {
 					eQSLNickname.style.display = "inline-block";
 
@@ -11158,7 +11161,7 @@ function loadAdifSettings()
 		if (document.getElementById(key) != null) {
 			document.getElementById(key).checked = g_adifLogSettings.qsolog[key];
 			if (key == "logLOTWqsoCheckBox") {
-					
+
 				if (document.getElementById(key).checked == true) {
 					lotwUpload.style.display = "inline-block";
 					trustedTestButton.style.display = "inline-block";
@@ -11176,12 +11179,12 @@ function loadAdifSettings()
 		ValidateText(clubCall);
 		localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 	}
-	
-	try 
+
+	try
 	{
 		findTrustedQSLPaths();
 	}
-	catch (e) 
+	catch (e)
 	{
 		if ( logLOTWqsoCheckBox.checked == true )
 		{
@@ -11191,15 +11194,15 @@ function loadAdifSettings()
 	}
 	setAdifStartup(loadAdifCheckBox);
 	ValidateQrzApi(qrzApiKey);
-	
+
 }
 
 function startupVersionInit() {
-	
-	document.body.addEventListener('contextmenu', function(ev) { 
+
+	document.body.addEventListener('contextmenu', function(ev) {
 		ev.preventDefault();
 	});
-		
+
 	imSureCheck.checked = false;
 	stopAskingCheckbox.checked = g_appSettings.stopAskingVersion;
 	if (stopAskingCheckbox.checked == false) {
@@ -11211,7 +11214,7 @@ function startupVersionInit() {
 }
 
 function startupButtonsAndInputs() {
-	try 
+	try
 	{
 	g_pushPinMode = !(g_appSettings.pushPinMode == true);
 	togglePushPinMode();
@@ -11225,7 +11228,7 @@ function startupButtonsAndInputs() {
 
 	alertMuteImg.src = g_alertImageArray[g_appSettings.alertMute];
 	modeImg.src = g_maidenheadModeImageArray[g_appSettings.sixWideMode];
-	
+
 	rosterAlwaysOnTop.checked = g_appSettings.rosterAlwaysOnTop;
 
 	if (g_appSettings.centerGridsquare.length > 0) {
@@ -11254,7 +11257,7 @@ function startupButtonsAndInputs() {
 	}
 	catch (e)
 	{
-	
+
 	}
 }
 
@@ -11270,7 +11273,7 @@ function postInit() {
 	checkForSettings();
 	updateForwardListener();
 	addLastTraffic("GridTracker</br>" + gtShortVersion );
-	
+
 	g_nexradEnable = g_mapSettings.usNexrad?0:1;
 	toggleNexrad();
 
@@ -11278,7 +11281,7 @@ function postInit() {
 	{
 		//generalbut.className = "settingsTablinks";
 		showSettingsBox();
-		
+
 		openSettingsTab(updatebut, 'updateSettingsDiv');
 	}
 	g_finishedLoading = true;
@@ -11338,7 +11341,7 @@ var g_startupTable = [
 
 
 
-function init() 
+function init()
 {
 	window.document.title = gtVersionString;
 	g_currentDay = parseInt(timeNowSec() / 86400);
@@ -11354,7 +11357,7 @@ function init()
 	}
 }
 
-function startupEngine() 
+function startupEngine()
 {
 	if (g_startupTable.length > 0) {
 		var funcInfo = g_startupTable.shift();
@@ -11369,22 +11372,22 @@ function startupEngine()
 	}
 }
 
-function directoryInput(what) 
+function directoryInput(what)
 {
 	g_appSettings.savedAppData = what.files[0].path;
 	init();
 }
 
-function endStartup() 
+function endStartup()
 {
 	startupDiv.style.display = "none";
 	main.style.display = "block";
 	g_map.updateSize();
 
-	
+
 }
 
-function loadPortSettings() 
+function loadPortSettings()
 {
 	multicastEnable.checked = g_appSettings.multicast;
 	multicastIpInput.value = g_appSettings.wsjtIP;
@@ -11491,7 +11494,7 @@ function updateForwardListener()
 	}
 	if (g_closing == true)
 		return;
-	
+
 	var dgram = require('dgram');
 	g_forwardUdpServer = dgram.createSocket({
 			type: 'udp4',
@@ -11504,7 +11507,7 @@ function updateForwardListener()
 		g_forwardUdpServer.on('error', function () {
 		g_forwardUdpServer.close();
 		g_forwardUdpServer = null;
-	
+
 	});
 	g_forwardUdpServer.on('message', function (originalMessage, remote) {
 		// Decode enough to get the rig-name, so we know who to send to
@@ -11512,7 +11515,7 @@ function updateForwardListener()
 		var newMessage = {};
 		newMessage.magic_key = decodeQUINT32(message);
 		message = message.slice(g_qtToSplice);
-		if (newMessage.magic_key == 0xadbccbda) 
+		if (newMessage.magic_key == 0xadbccbda)
 		 {
 
 			newMessage.schema_number = decodeQUINT32(message);
@@ -11521,7 +11524,7 @@ function updateForwardListener()
 			message = message.slice(g_qtToSplice);
 			newMessage.Id = decodeQUTF8(message);
 			message = message.slice(g_qtToSplice);
-			
+
 			var instanceId = newMessage.Id;
 			if ( instanceId in g_instances )
 			{
@@ -11536,7 +11539,7 @@ function sendForwardUdpMessage( msg, length, port, address)
 {
 	if ( g_forwardUdpServer )
 	{
-		g_forwardUdpServer.send( msg, 0, length, port, address);	
+		g_forwardUdpServer.send( msg, 0, length, port, address);
 	}
 }
 
@@ -11544,7 +11547,7 @@ function wsjtUdpMessage( msg, length, port, address)
 {
 	if ( g_wsjtUdpServer )
 	{
-		g_wsjtUdpServer.send( msg, 0, length, port, address);	
+		g_wsjtUdpServer.send( msg, 0, length, port, address);
 	}
 }
 
@@ -11570,7 +11573,7 @@ function updateWsjtxListener(port) {
 		return;
 	if (g_wsjtUdpServer != null) {
 		if (multicastEnable.checked == true && g_appSettings.wsjtIP != "") {
-			try 
+			try
 			{
 				g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
 			}
@@ -11611,12 +11614,12 @@ function updateWsjtxListener(port) {
 		g_wsjtUdpSocketError = true;
 	});
 	g_wsjtUdpServer.on('message', function (message, remote) {
-		if ( g_closing == true ) 
+		if ( g_closing == true )
 			true;
 		if (typeof udpForwardEnable != "undefined" && udpForwardEnable.checked == true) {
 			sendForwardUdpMessage(message, message.length, udpForwardPortInput.value, udpForwardIpInput.value);
 		}
-		
+
 		var newMessage = {};
 		newMessage.magic_key = decodeQUINT32(message);
 		message = message.slice(g_qtToSplice);
@@ -11628,7 +11631,7 @@ function updateWsjtxListener(port) {
 			message = message.slice(g_qtToSplice);
 			newMessage.Id = decodeQUTF8(message);
 			message = message.slice(g_qtToSplice);
-			
+
 			var instanceId = newMessage.Id;
 			if ( !(instanceId in g_instances ) )
 			{
@@ -11649,10 +11652,10 @@ function updateWsjtxListener(port) {
 				notify = true;
 			g_instances[instanceId].open = true;
 			g_instances[instanceId].remote = remote;
-			
+
 			if ( notify )
 				updateRosterInstances();
-			
+
 			if (newMessage.type == 1) {
 				newMessage.event = "Status";
 				newMessage.Frequency = decodeQUINT64(message);
@@ -11689,7 +11692,7 @@ function updateWsjtxListener(port) {
 				newMessage.Fastmode = decodeQUINT8(message);
 				message = message.slice(g_qtToSplice);
 
-				if (message.length > 0) 
+				if (message.length > 0)
 				{
 					newMessage.SopMode = decodeQUINT8(message);
 					message = message.slice(g_qtToSplice)
@@ -11698,7 +11701,7 @@ function updateWsjtxListener(port) {
 				{
 					newMessage.SopMode = -1;
 				}
-				if (message.length > 0) 
+				if (message.length > 0)
 				{
 					newMessage.FreqTol = decodeQINT32(message);
 					message = message.slice(g_qtToSplice)
@@ -11707,7 +11710,7 @@ function updateWsjtxListener(port) {
 				{
 					newMessage.FreqTol = -1;
 				}
-				if (message.length > 0) 
+				if (message.length > 0)
 				{
 					newMessage.TRP = decodeQINT32(message);
 					message = message.slice(g_qtToSplice)
@@ -11725,11 +11728,11 @@ function updateWsjtxListener(port) {
 				{
 					newMessage.ConfName = null;
 				}
-				
-		
+
+
 				g_instances[instanceId].status = newMessage;
 				g_instances[instanceId].valid = true;
-				
+
 			}
 			if ( g_instances[instanceId].valid  == true )
 			{
@@ -11820,19 +11823,19 @@ function updateWsjtxListener(port) {
 						message = message.slice(g_qtToSplice);
 					} else
 						newMessage.Mygrid = "";
-					 
+
 					if (message.length > 0) {
 						newMessage.ExchangeSent = decodeQUTF8(message);
 						message = message.slice(g_qtToSplice);
 					} else
 						newMessage.ExchangeSent = "";
-					
+
 					if (message.length > 0) {
 						newMessage.ExchangeReceived = decodeQUTF8(message);
 						message = message.slice(g_qtToSplice);
 					} else
 						newMessage.ExchangeReceived = "";
-	 
+
 
 				}
 				if (newMessage.type == 6) {
@@ -11875,13 +11878,13 @@ function updateWsjtxListener(port) {
 				if (newMessage.type in g_wsjtHandlers) {
 					newMessage.remote = remote;
 					newMessage.instance = instanceId;
-							
+
 
 					lastMsgTimeDiv.innerHTML = "Received from " + newMessage.Id;
-					
+
 					g_wsjtHandlers[newMessage.type](newMessage);
 					g_lastTimeSinceMessageInSeconds = parseInt(Date.now() / 1000);
-					
+
 				}
 			}
 		}
@@ -11956,11 +11959,11 @@ var g_lastLookupCallsign = "";
 var g_lookupTimeout = null;
 
 function lookupCallsign(callsign, gridPass, useCache = true) {
-	
+
 	if (g_mapSettings.offlineMode == true && useCache == false)
 		return;
 	g_lastLookupCallsign = callsign;
-	
+
 	if ( g_lookupWindowHandle )
 	{
 		g_lookupWindowHandle.window.lookupCallsignInput.value = callsign;
@@ -11979,7 +11982,7 @@ function lookupCallsign(callsign, gridPass, useCache = true) {
 	else
 		continueWithLookup( callsign, gridPass );
 
-	
+
 }
 
 function continueWithLookup( callsign, gridPass )
@@ -12015,7 +12018,7 @@ function continueWithLookup( callsign, gridPass )
 			worker +=
 			"<br/><br/>You might want to consider using QRZ.com, they have a free membership that provides limited data for most callsigns<br/>";
 			worker += "and they have full details available for paid members<br/></center>";
-			
+
 			setLookupDiv("lookupInfoDiv", worker);
 		}
 	}
@@ -12177,7 +12180,7 @@ function qthHamLookupResults(buffer, gridPass,useCache) {
 				json.search.gtGrid = gridPass;
 			json.search.source =
 				"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.hamqth.com/"+json.search.callsign.toUpperCase()+"\");'>HamQTH</div></b></font></td></tr>";
-			
+
 			cacheLookupObject(json.search, gridPass, true);
 		} else {
 			g_qrzLookupSessionId = null;
@@ -12208,7 +12211,7 @@ function qrzLookupResults(buffer, gridPass, useCache) {
 					"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrz.com/lookup?callsign="+call+"\");'>QRZ.com</div></b></font></td></tr>";
 			else
 				json.Callsign.source =
-					"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrzcq.com/call/"+call+"\");'>QRZCQ.com</div></b></font></td></tr>";			
+					"<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrzcq.com/call/"+call+"\");'>QRZCQ.com</div></b></font></td></tr>";
 			if (gridPass)
 				json.Callsign.gtGrid = gridPass;
 			cacheLookupObject(json.Callsign, gridPass, true);
@@ -12225,8 +12228,8 @@ function qrzLookupResults(buffer, gridPass, useCache) {
 var g_lastLookupAddress = null;
 
 
-	
-	
+
+
 var g_Idb = null;
 var g_Irequest = null;
 
@@ -12234,36 +12237,36 @@ var g_Irequest = null;
 function initialDatabases()
 {
 	g_Irequest = window.indexedDB.open("GridTracker", 1 );
-         
+
 	g_Irequest.onerror = function(event) {
 		alert("Database error: " + event.target.errorCode + " : GridTracker will have issues");
 	};
 
 	g_Irequest.onsuccess = function(event) {
 		g_Idb = g_Irequest.result;
-		if (!g_Idb.objectStoreNames.contains('lookups')) 
-		{ 
-			g_Idb.createObjectStore('lookups', {keyPath: 'call'}); 
+		if (!g_Idb.objectStoreNames.contains('lookups'))
+		{
+			g_Idb.createObjectStore('lookups', {keyPath: 'call'});
 		}
 		init();
 	};
-		 
+
 	g_Irequest.onupgradeneeded = function(event) {
 		g_Idb = g_Irequest.result;
-		if (!g_Idb.objectStoreNames.contains('lookups')) 
-		{ 
-			g_Idb.createObjectStore('lookups', {keyPath: 'call'}); 
+		if (!g_Idb.objectStoreNames.contains('lookups'))
+		{
+			g_Idb.createObjectStore('lookups', {keyPath: 'call'});
 		}
 		init();
 	}
 }
-		 
-	
+
+
 function addLookupObjectToIndexedDB( lookupObject ) {
    var request = g_Idb.transaction(["lookups"], "readwrite")
    .objectStore("lookups")
    .put(lookupObject);
-      
+
    request.onerror = function(event) {
 		addLastTraffic("<font style='color:orange'>Lookup Write Issue</font>");
    }
@@ -12274,18 +12277,20 @@ function getLookupCachedObject( call, gridPass, resultFunction = null, noResultF
 	var request = g_Idb.transaction(["lookups"], "readwrite")
    .objectStore("lookups")
    .get(call);
-   
+
    request.onsuccess = function(event) {
 		if ( request.result && parseInt(request.result.cached) + 604800 > timeNowSec() ) // 7 days, should an option Tag! I know right?!
 		{
 			delete request.result;
+      request.result = null;
+      g_Idb.transaction(["lookups"], "readwrite").objectStore("lookups").delete(call);
 		}
 		if ( callObject != null )
 		{
-			if ( request.result )
+			if ( request.result != null )
 			{
 				callObject.cnty = request.result.cnty;
-				
+
 				if ( callObject.cnty in g_countyData  )
 					callObject.qual = true;
 				else
@@ -12296,12 +12301,12 @@ function getLookupCachedObject( call, gridPass, resultFunction = null, noResultF
 			}
 			return;
 		}
-		if ( request.result && resultFunction )
+		if ( request.result != null && resultFunction )
 			resultFunction(request.result, gridPass, false);
 		else if (  noResultFunction )
 			noResultFunction(call, gridPass);
    };
-   
+
    request.onerror = function(event) {
 		if ( noResultFunction )
 			noResultFunction(call, gridPass);
@@ -12310,7 +12315,7 @@ function getLookupCachedObject( call, gridPass, resultFunction = null, noResultF
 
 
 function cacheLookupObject(lookup, gridPass, cacheable = false) {
-	
+
 	if ( !("cnty" in lookup ) )
 		lookup.cnty = null;
 
@@ -12318,9 +12323,9 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
 		lookup.call = lookup.callsign;
 		delete lookup.callsign;
 	}
-	
+
 	lookup.call = lookup.call.toUpperCase();
-	
+
 	if (lookup.hasOwnProperty("latitude")) {
 		lookup.lat = lookup.latitude;
 		delete lookup.latitude;
@@ -12420,29 +12425,32 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
 		lookup.GMTOffset = lookup.utc_offset;
 		delete lookup.utc_offset;
 	}
-	
+
 	if (lookup.hasOwnProperty("land")) {
 		lookup.country = lookup.land;
 		delete lookup.land;
 	}
-			
+
 	if ( "grid" in lookup )
 		lookup.grid = lookup.grid.toUpperCase();
-	
-	if ( lookup.cnty === null && lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county") )
+
+	if ( lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county") )
 	{
-			lookup.county = lookup.state + ", " + lookup.county;
-			var finalCnty = lookup.county.toUpperCase();
-			finalCnty = finalCnty.replaceAll(" ","");
-			lookup.cnty = finalCnty;  // use .cnty bcause that's how we know it internally.
-			var foundCounty = false;
+      var foundCounty = false;
+
+      if ( lookup.cnty == null )
+      {
+          lookup.county = lookup.state + ", " + lookup.county;
+          lookup.cnty = lookup.county.toUpperCase().replaceAll(" ","");
+      }
+
 			if ( lookup.cnty in g_countyData  )
 			{
 				for ( var hash in g_liveCallsigns )
 				{
 					if ( g_liveCallsigns[hash].DEcall == lookup.call && g_liveCallsigns[hash].state == "US-" + lookup.state )
 					{
-						g_liveCallsigns[hash].cnty = finalCnty;
+						g_liveCallsigns[hash].cnty = lookup.cnty;
 						g_liveCallsigns[hash].qual = true;
 						foundCounty = true;
 					}
@@ -12458,7 +12466,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
 				lookup.cnty = null;
 			}
 	}
-				
+
 	lookup.name = joinSpaceIf(getLookProp(lookup, "fname"), getLookProp(lookup, "name"));
 
 	if ( cacheable )
@@ -12466,7 +12474,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
 		lookup.cached = timeNowSec();
 		addLookupObjectToIndexedDB( lookup );
 	}
-	
+
 	displayLookupObject(lookup, gridPass, cacheable);
 
 }
@@ -12474,9 +12482,9 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
 function displayLookupObject(lookup, gridPass, fromCache = false)
 {
 	var worker = "";
-	
+
 	var thisCall =  getLookProp(lookup, "call").toUpperCase();
-		
+
 	worker += "<table title='Click to copy address to clipboard' onclick='setClipboardFromLookup();' style='cursor:pointer' >";
 	worker += "<tr>";
 	worker += "<td style='font-size:36pt;color:cyan;font-weight:bold'>";
@@ -12527,8 +12535,8 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 	var country = getLookProp(lookup, "country");
 	worker += country;
 	g_lastLookupAddress += country + "\n";
-	
-	
+
+
 
 	worker += "</td>";
 	worker += "</tr>";
@@ -12541,7 +12549,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 		email + "\");'>" + email + "</div>";
 		g_lastLookupAddress += email + "\n";
 	}
-	
+
 	worker += "</td>";
 	worker += "</tr>";
 	worker += "</table>";
@@ -12599,7 +12607,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 		getLookProp(lookup, "grid").toUpperCase()) {
 		worker += makeRow("GT Grid", lookup, "gtGrid");
 	}
-	
+
 	worker += makeRow("Born", lookup, "born");
 	worker += makeYesNoRow("LoTW", lookup, "lotw");
 	worker += makeYesNoRow("eQSL", lookup, "eqsl");
@@ -12609,8 +12617,8 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 	worker += makeRow("QRZ Admin", lookup, "user");
 	worker += makeRow("Prefix", lookup, "prefix");
 	worker += lookup.source;
-	
-	
+
+
 	if (g_callsignLookups.lotwUseEnable == true && thisCall in g_lotwCallsigns)
 	{
 		lookup["ulotw"] = "&#10004; ("+userDayString((g_lotwCallsigns[thisCall] * 86400)*1000)+")";
@@ -12626,12 +12634,12 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 		lookup["uoqrs"] = "&#10004;";
 		worker += makeRow("ClubLog OQRS", lookup, "uoqrs");
 	}
-	
+
 	if ( fromCache )
 	{
 		worker += "<tr><td>Cached Record</td><td>"+userTimeString(lookup["cached"]*1000)+"</td></tr>";
 	}
-	
+
 	worker += "</table>";
 	var details = "<div class='mapItem' id='callDetails' style='padding:4px;'>" + worker + "</div>";
 
@@ -12673,7 +12681,7 @@ function saveToCsv(lookup)
 		country = getLookProp(lookup, "land");
 	if ( country == "United States" )
 		country = "";
-	
+
 	tryToWriteAdifToDocFolder( "thanks.csv",  name + "," + addr1 + "," + addr2 + "," + country + "\r\n", true);
 
 }
@@ -12750,8 +12758,8 @@ function startLookup(call, grid) {
 
 
 	openLookupWindow(true);
-	
-	lookupCallsign(call, grid);	
+
+	lookupCallsign(call, grid);
 }
 
 function searchLogForCallsign( call )
@@ -12760,7 +12768,7 @@ function searchLogForCallsign( call )
 	var	list = Object.values(g_QSOhash).filter(function (value) {
 			return (value.DEcall == call);
 		}).sort(myBandCompare);
-	
+
 	if ( list.length > 0 )
 	{
 		var work = {};
@@ -12768,7 +12776,7 @@ function searchLogForCallsign( call )
 		var lastTime = 0;
 		var lastRow = null;
 		var dxcc = list[0].dxcc;
-		
+
 		for ( row in list )
 		{
 			var what = list[row].band + "," + list[row].mode;
@@ -12813,7 +12821,7 @@ function searchLogForCallsign( call )
 			worker += "<font color='#"+g_pskColors[list[lastRow].band]+"'>" + list[lastRow].band + "," + list[lastRow].mode + " </font> " +userTimeString(list[lastRow].time * 1000) ;
 			worker += "</td></tr>";
 		}
-		
+
 		worker += "<tr><th style='color:orange'>"+ g_dxccToAltName[dxcc] + " (" + g_worldGeoData[g_dxccToGeoData[dxcc]].pp  +")</th><td>";
 		for ( var band in g_colorBands )
 		{
@@ -12826,7 +12834,7 @@ function searchLogForCallsign( call )
 			}
 
 		}
-			
+
 		worker += "</td></tr></table></div>";
 		setLookupDiv("lookupLocalDiv", worker);
 	}
@@ -12841,7 +12849,7 @@ function startGenMessages(call, grid, instance = null) {
 		return;
 	if (grid == "-")
 		grid = "";
-	
+
 	setCallAndGrid(call,grid, instance);
 }
 
@@ -12878,13 +12886,13 @@ function mediaCheck() {
 		g_NWappData = nw.App.dataPath + "\\Ginternal";
 		g_screenshotDir = g_appData + "\\screenshots";
 		g_scriptDir = g_appData + "\\scripts";
-		
-		try 
+
+		try
 		{
 			if (!fs.existsSync(g_appData)) {
 				fs.mkdirSync(g_appData);
 			}
-			
+
 			if (!fs.existsSync(g_NWappData)) {
 				fs.mkdirSync(g_NWappData);
 			}
@@ -12895,8 +12903,8 @@ function mediaCheck() {
 			if (!fs.existsSync(g_scriptDir)) {
 				fs.mkdirSync(g_scriptDir);
 			}
-		
-		
+
+
 			g_jsonDir += g_dirSeperator;
 			g_NWappData += g_dirSeperator;
 			g_screenshotDir += g_dirSeperator;
@@ -12920,7 +12928,7 @@ function mediaCheck() {
 			alert("Unable to create or access " + g_appData + " folder.\r\nPermission violation, GT cannot continue");
 			nw.App.quit();
 		}
-		
+
 		g_qsoLogFile = g_appData + "\\GridTracker_QSO.adif";
 	}
 	if (g_platform == "mac" || g_platform == "linux") {
@@ -12946,7 +12954,7 @@ function mediaCheck() {
 		g_NWappData = nw.App.dataPath + "/Ginternal";
 		g_screenshotDir = g_appData + "/screenshots";
 		g_scriptDir = g_appData + "/scripts";
-		try 
+		try
 		{
 			if (!fs.existsSync(g_appData)) {
 				fs.mkdirSync(g_appData);
@@ -12961,7 +12969,7 @@ function mediaCheck() {
 			if (!fs.existsSync(g_scriptDir)) {
 				fs.mkdirSync(g_scriptDir);
 			}
-		
+
 
 			if (!fs.existsSync(mediaDir + g_dirSeperator + "long-strike.mp3")) {
 				if (!fs.existsSync(mediaDir))
@@ -12982,7 +12990,7 @@ function mediaCheck() {
 			alert("Unable to create or access " + g_appData + " folder.\r\nPermission violation, GT cannot continue");
 			nw.App.quit();
 		}
-		
+
 		g_jsonDir += g_dirSeperator;
 		g_NWappData += g_dirSeperator;
 		g_screenshotDir +=g_dirSeperator;
@@ -13002,8 +13010,8 @@ function mediaCheck() {
 	huntStatesNotifyMedia.appendChild(newOption("none", "Select File"));
 	huntRosterNotifyMedia.appendChild(newOption("none", "Select File"));
 
-	
-	
+
+
 	var mediaFiles = fs.readdirSync(g_mediaDir);
 	var path = g_mediaDir + g_dirSeperator;
 
@@ -13035,15 +13043,15 @@ function mediaCheck() {
 	g_QSOhash = {};
 	g_QSLcount = 0;
 	g_QSOcount = 0;
-	
+
 	// Old log filename, no longer referenced
 	tryToDeleteLog("lotw.adif");
-	
+
 	try {
 		if (fs.existsSync(g_NWappData + "internal_qso.json") )
 		{
 			var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
-			
+
 			if ( typeof data.version != "undefined" && data.version == gtVersion )
 			{
 				g_tracker = data.tracker;
@@ -13053,9 +13061,9 @@ function mediaCheck() {
 					g_tracker.worked.px = {};
 					g_tracker.confirmed.px = {};
 				}
-				
+
 				g_QSOhash = data.g_QSOhash;
-			
+
 				for ( var i in g_QSOhash )
 				{
 					if ( typeof g_QSOhash[i].px == "undefined" || g_QSOhash[i].px == null )
@@ -13074,7 +13082,7 @@ function mediaCheck() {
 			{
 				clearLogFilesAndCounts();
 			}
-			
+
 			delete data;
 			fs.unlinkSync(g_NWappData + "internal_qso.json");
 		}
@@ -13083,7 +13091,7 @@ function mediaCheck() {
 	catch (e)
 	{
 	}
-	
+
 	return true;
 }
 
@@ -13105,16 +13113,16 @@ function setRosterSpot( enabled )
 function saveReceptionReports()
 {
 	try {
-		fs.writeFileSync(g_NWappData + "spots.json", JSON.stringify(g_receptionReports) );	
+		fs.writeFileSync(g_NWappData + "spots.json", JSON.stringify(g_receptionReports) );
 	}
 	catch (e)
 	{
-	}	
+	}
 }
 
 function loadReceptionReports()
 {
-	
+
 	try {
 		var clear = true;
 		if (fs.existsSync(g_NWappData + "spots.json") )
@@ -13123,10 +13131,10 @@ function loadReceptionReports()
 			if ( timeNowSec() - g_receptionReports.lastDownloadTimeSec <= 86400 )
 				clear = false;
 		}
-		
+
 		if ( clear == true )
 		{
-			g_receptionReports = 
+			g_receptionReports =
 			{
 				"lastDownloadTimeSec" : 0,
 				"lastSequenceNumber" : "0",
@@ -13136,7 +13144,7 @@ function loadReceptionReports()
 	}
 	catch (e)
 	{
-		g_receptionReports = 
+		g_receptionReports =
 		{
 			"lastDownloadTimeSec" : 0,
 			"lastSequenceNumber" : "0",
@@ -13173,7 +13181,7 @@ function pskSpotResults(buffer, flag) {
 		var json = XML2jsobj(oDOM.documentElement);
 		if (typeof json.lastSequenceNumber != "undefined") {
 			g_receptionReports.lastSequenceNumber = json.lastSequenceNumber.value;
-	
+
 			if (typeof json.receptionReport != "undefined") {
 				for (var key in json.receptionReport) {
 					if (typeof json.receptionReport[key].frequency != 'undefined' && typeof json.receptionReport[key].sNR != 'undefined') {
@@ -13215,7 +13223,7 @@ function pskSpotResults(buffer, flag) {
 					}
 				}
 			}
-		
+
 		}
 	}
 
@@ -13239,13 +13247,13 @@ function addNewOAMSSpot( cid, db)
 			clearTimeout(g_oamsSpotTimeout);
 			g_oamsSpotTimeout = null;
 		}
-		var report;	
+		var report;
 		var call = g_gtFlagPins[cid].call;
 		var mode = g_gtFlagPins[cid].mode;
 		var grid = g_gtFlagPins[cid].grid.substr(0, 6);
 		var band = g_gtFlagPins[cid].band;
 		var hash = call + mode + band + grid.substr(0,4);
-		
+
 		if (hash in g_receptionReports.spots) {
 			report = g_receptionReports.spots[hash];
 
@@ -13268,7 +13276,7 @@ function addNewOAMSSpot( cid, db)
 		if (SNR < 0)
 			SNR = 0;
 		report.color = SNR;
-	
+
 		g_oamsSpotTimeout = setTimeout(redrawSpots,500);
 	}
 }
@@ -13288,13 +13296,13 @@ function createSpot( report , key, fromPoint, addToLayer = true)
 
 	var spot = spotFeature([Lon, Lat]);
 
-	
+
 	var colorNoAlpha = "#" + g_bandToColor[report.band];
 	var colorAlpha = intAlphaToRGB(colorNoAlpha, report.color);
 	var spotColor =  colorAlpha;
-	
+
 	var workingColor = (g_mapSettings.nightMapEnable && g_nightTime) ?  g_receptionSettings.pathNightColor : g_receptionSettings.pathColor;
-	
+
 	if ( workingColor != -1 )
 	{
 		var testColor = (workingColor < 1 ? "#0000000" : (workingColor == 361 ? "#FFFFFF" : "hsla(" + workingColor + ", 100%, 50%,"+  report.color / 255 +")"));
@@ -13341,7 +13349,7 @@ function createSpot( report , key, fromPoint, addToLayer = true)
 			}, "psk-flights", false);
 
 	}
-	
+
 }
 function redrawSpots() {
 	var shouldSave = false;
@@ -13373,7 +13381,7 @@ function redrawSpots() {
 
 		if ((g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == 'auto' ? myBand ==
 					report.band : g_appSettings.gtBandFilter == report.band)) &&
-			( validateMapMode(report.mode) )) 
+			( validateMapMode(report.mode) ))
 			{
 				if (now - report.when <= g_receptionSettings.viewHistoryTimeSec) {
 					createSpot(report, key, fromPoint );
@@ -13384,7 +13392,7 @@ function redrawSpots() {
 	if (shouldSave) {
 		saveReceptionReports();
 	}
-	
+
 	updateSpotCountDiv();
 }
 
@@ -13411,7 +13419,7 @@ function changeSpotValues() {
 
 		spotPathWidthDiv.style.display = "none";
 	}
-	
+
 	g_receptionSettings.mergeSpots = spotMergeValue.checked;
 	localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
 
@@ -13424,10 +13432,10 @@ function changeSpotValues() {
 function mapTransChange()
 {
 	g_mapSettings.mapTrans = mapTransValue.value;
-	
+
 	mapTransTd.innerHTML = String( 100-parseInt(((g_mapSettings.mapTrans*255)/255)*100) )+ "%";
 	mapSettingsDiv.style.backgroundColor = "rgba(0,0,0, " + g_mapSettings.mapTrans + ")";
-	
+
 }
 
 function spotPathChange()
@@ -13445,10 +13453,10 @@ function spotPathChange()
 		spotPathInfoTd.innerHTML = "PSK-Reporter Palette";
 	else
 		spotPathInfoTd.innerHTML = "";
-	
+
 	g_spotFlightColor = (g_receptionSettings.pathColor < 1 ? "#0000000BB" : (g_receptionSettings.pathColor == 361 ? "#FFFFFFBB" : "hsla(" + g_receptionSettings.pathColor + ", 100%, 50%,0.73)"));
-	
-	
+
+
 	g_receptionSettings.pathNightColor = spotNightPathColorValue.value;
 	var pathNightColor = (g_receptionSettings.pathNightColor < 1 ? "#000" : (g_receptionSettings.pathNightColor == 361 ? "#FFF" : "hsl(" + g_receptionSettings.pathNightColor + ", 100%, 50%)"));
 	if (g_receptionSettings.pathNightColor > 0) {
@@ -13462,12 +13470,12 @@ function spotPathChange()
 		spotNightPathInfoTd.innerHTML = "PSK-Reporter Palette";
 	else
 		spotNightPathInfoTd.innerHTML = "";
-	
+
 	g_spotNightFlightColor = (g_receptionSettings.pathNightColor < 1 ? "#0000000BB" : (g_receptionSettings.pathNightColor == 361 ? "#FFFFFFBB" : "hsla(" + g_receptionSettings.pathNightColor + ", 100%, 50%,0.73)"));
-	
-	
+
+
 	spotWidthTd.innerHTML = g_receptionSettings.spotWidth = spotWidthValue.value;
-	
+
 	localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
 }
 
@@ -13596,11 +13604,11 @@ function setRosterTimeView() {
 
 function getSpotTime( hash )
 {
-	if (hash in g_receptionReports.spots) 
+	if (hash in g_receptionReports.spots)
 	{
 		return g_receptionReports.spots[hash];
 	}
-	else 
+	else
 		return null;
 }
 
@@ -13624,10 +13632,10 @@ function changeGridOpacity()
 
 function currentTimeStampString()
 {
-	
+
 	var now = new Date();
 	return now.getFullYear() + "-" + (now.getMonth()+1) + "-"  + now.getDate() + " " + now.getHours().pad() + "." + now.getMinutes().pad() + "."  + now.getSeconds().pad();
-	
+
 }
 
 function showNativeFolder( fn )
@@ -13644,10 +13652,10 @@ function makeScreenshots()
 		var clipboard = nw.Clipboard.get();
 		clipboard.set(buffer, 'png', true );
 	}, { format : 'png', datatype : 'raw'} );
-	
+
 	win.capturePage(function(buffer)
 	{
-		try 
+		try
 		{
 			var fn = g_screenshotDir + "Screenshot "+currentTimeStampString()+".png";
 			fs.writeFileSync( fn, buffer);

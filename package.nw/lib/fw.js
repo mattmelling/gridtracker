@@ -1,4 +1,4 @@
-function hooray(){
+function hooray(){ 
 	var SCREEN_WIDTH = window.innerWidth,
     SCREEN_HEIGHT = window.innerHeight,
     mousePos = {

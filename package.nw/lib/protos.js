@@ -1,4 +1,4 @@
-// GridTracker ©2020 N0TTL
+// GridTracker ©2020 N0TTL 
 
 // Incoming is already   float fixed (  14.037 ) for 14,037,000hz
 Number.prototype.formatBand = function()

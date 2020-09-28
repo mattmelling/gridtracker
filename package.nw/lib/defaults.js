@@ -1,4 +1,4 @@
-var validSettings = 
+var validSettings =  
 [
 	"HRDLogbookLogSettings",
 	"N1MMSettings",

@@ -1,4 +1,3 @@
-
 // HamGridSquare.js
 // Copyright 2014 Paul Brewer KI6CQ
 // License:  MIT License http://opensource.org/licenses/MIT

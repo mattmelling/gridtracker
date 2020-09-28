@@ -1,4 +1,4 @@
-// GridTracker ©2020 N0TTL
+// GridTracker ©2020 N0TTL 
 
 
 document.oncontextmenu = function() {
@@ -175,13 +175,7 @@ function Resize() {
 	}
 }
 
-function updateLogbook()
-{
-	if (workedBoxDiv.style.display == "block")
-	{
-		window.opener.showWorkedBox( 0, 0, true);
-	}
-}
+
 
 function reloadInfo( bandOrMode )
 {

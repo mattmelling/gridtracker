@@ -1,0 +1,5 @@
+To build a debian package:
+
+        debchange --upstream -M -D stable -v ${version}
+        EDITOR=/bin/true debchange -r
+        dpkg-buildpackage -b --no-sign

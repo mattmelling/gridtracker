@@ -1,0 +1,15 @@
+Source: gridtracker
+Section: non-free/hamradio
+Priority: optional
+Maintainer: Tag Loomis <n0ttl@tagloomis.com>
+Build-Depends: debhelper (>= 12.1)
+Standards-Version: 4.5.0
+Homepage: http://tagloomis.com/
+
+Package: gridtracker
+Architecture: all
+Depends: nwjs (>= 0.47.4), fonts-noto, ${misc:Depends}
+Recommends: speech-dispatcher-espeak-ng
+Description: Companion program to WSJT-X/JTDX
+ .
+ GridTracker cleans your teeth and freshens your breath.

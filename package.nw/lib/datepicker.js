@@ -1,4 +1,4 @@
-var picker = { 
+var picker = {
   attach : function (opt) {
   // attach() : attach datepicker to target
   //   opt : options (object)
@@ -144,7 +144,7 @@ var picker = {
         // Check if day is disabled
         var disabled = disableday.includes(thisday);
         // Day of month, disabled
-        squares.push([i, disabled]); 
+        squares.push([i, disabled]);
         // Next day
         thisday++;
         if (thisday==8) { thisday = 1; }
@@ -180,10 +180,10 @@ var picker = {
     for (var i=0; i<total; i++) {
       if (i!=total && i%7==0) { row = table.insertRow(); }
       cell = row.insertCell();
-      if (squares[i] == "B") { 
-        cell.classList.add("picker-d-b"); 
-      } else { 
-        cell.innerHTML = squares[i][0]; 
+      if (squares[i] == "B") {
+        cell.classList.add("picker-d-b");
+      } else {
+        cell.innerHTML = squares[i][0];
         // Not allowed to choose this day
         if (squares[i][1]) {
           cell.classList.add("picker-d-dd");
@@ -229,7 +229,7 @@ var picker = {
 	{
 		window[parent.dataset.fire]();
 	}
-	
+
     // (D) Popup only - close the popup
     if (parent.dataset.popup == "1") {
       document.getElementById("picker-" + parent.dataset.dpid).classList.remove("show");

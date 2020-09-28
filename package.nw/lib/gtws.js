@@ -1,4 +1,4 @@
-// GridTracker ©2020 N0TTL 
+// GridTracker ©2020 N0TTL
 var g_gtEngineInterval = null;
 var g_chatRecvFunctions = {
     "uuid" : gtChatSetUUID,
@@ -61,14 +61,14 @@ function gtConnectChat()
 		g_gtState = ChatState.error;
 		return;
 	}
-	
+
 	var rnd= parseInt (Math.random()*10)+18260;
-	try 
+	try
 	{
 		g_gtState = ChatState.connecting;
 		g_gtChatSocket = new WebSocket('wss://tagloomis.com:'+rnd);
 	}
-	catch (e) 
+	catch (e)
 	{
 		g_gtState = ChatState.error;
 		return;
@@ -79,16 +79,16 @@ function gtConnectChat()
 		g_gtState = ChatState.connected;
 	};
 
-	g_gtChatSocket.onmessage = function (evt) 
-    { 
+	g_gtChatSocket.onmessage = function (evt)
+    {
     	if ( g_appSettings.gtShareEnable == true )
     	{
 			var jsmesg = false;
-			try 
+			try
 			{
 				jsmesg = JSON.parse(evt.data);
 			}
-			catch(err) 
+			catch(err)
 			{
 				// bad message, dumping client
 				g_gtState = ChatState.error;
@@ -100,7 +100,7 @@ function gtConnectChat()
 				delete jsmesg;
 				return;
 			}
-		
+
 			if ( jsmesg.type in g_chatRecvFunctions )
 			{
 				g_chatRecvFunctions[jsmesg.type](jsmesg);
@@ -116,12 +116,12 @@ function gtConnectChat()
     };
 
    g_gtChatSocket.onerror = function()
-   { 
+   {
 		g_gtState = ChatState.error;
    };
-   
+
    g_gtChatSocket.onclose = function()
-   { 
+   {
 		g_gtState = ChatState.closed;
    };
 }
@@ -143,7 +143,7 @@ function gtChatSendClose()
 	msg = Object();
 	msg.type = "close";
 	msg.uuid = g_appSettings.chatUUID;
-	
+
 	sendGtJson(JSON.stringify(msg));
 }
 
@@ -152,12 +152,12 @@ function closeGtSocket()
 	if ( g_gtChatSocket != null )
 	{
 		gtChatSendClose();
-		
+
 		if ( g_gtChatSocket.readyState != WebSocket.CLOSED )
 			g_gtChatSocket.close();
 
 		if ( g_gtChatSocket.readyState === WebSocket.CLOSED )
-		{	
+		{
 			delete g_gtChatSocket;
 			g_gtChatSocket = null;
 			g_gtState = ChatState.none;
@@ -232,7 +232,7 @@ function sendGtJson( json )
 			if ( g_gtChatSocket.readyState === WebSocket.CLOSED )
 			{
 				g_gtState = ChatState.closed;
-			}		
+			}
 		}
 	}
 	else
@@ -243,11 +243,11 @@ function sendGtJson( json )
 var g_lastGtStatus = "";
 
 function gtChatSendStatus()
-{	
+{
 	var msg = Object();
 	msg.type = "status";
 	msg.uuid = g_appSettings.chatUUID;
-	
+
 	msg.call = myDEcall;
 	msg.grid = myRawGrid;
 	msg.freq = myRawFreq;
@@ -256,7 +256,7 @@ function gtChatSendStatus()
 	msg.canmsg = (g_appSettings.gtMsgEnable == true);
 	msg.o = (g_appSettings.gtSpotEnable == true ? 1:0);
 	msg = JSON.stringify(msg);
-	
+
 	if ( msg != g_lastGtStatus )
 	{
 		sendGtJson(msg);
@@ -265,7 +265,7 @@ function gtChatSendStatus()
 }
 
 function gtChatSendSpots( spotsObject )
-{	
+{
 	var msg = Object();
 	msg.type = "o";
 	msg.uuid = g_appSettings.chatUUID;
@@ -301,7 +301,7 @@ function gtChatRemoveCall(jsmesg)
 					delete g_gtCallsigns[g_gtFlagPins[cid].call];
 					delete g_gtFlagPins[cid];
 				}
-				
+
 				updateChatWindow();
 			}
 		}
@@ -314,7 +314,7 @@ function gtChatUpdateCall(jsmesg)
 {
 	var id = jsmesg.id;
 	var cid = jsmesg.cid;
-			
+
 	if ( cid in g_gtFlagPins )
 	{
 		g_gtFlagPins[cid].ids[id] = true;
@@ -332,9 +332,9 @@ function gtChatUpdateCall(jsmesg)
 	{
 		g_gtFlagPins[cid] = Object();
 		g_gtFlagPins[cid].pin = null;
-	
+
 		g_gtFlagPins[cid].ids = Object()
-		g_gtFlagPins[cid].ids[id] = true;		
+		g_gtFlagPins[cid].ids[id] = true;
 	}
 	g_gtIdToCid[jsmesg.id] = jsmesg.cid;
 
@@ -368,7 +368,7 @@ function gtChatGetList()
 	msg = Object();
 	msg.type = "list";
 	msg.uuid = g_appSettings.chatUUID;
-	
+
 	sendGtJson(JSON.stringify(msg));
 }
 
@@ -383,9 +383,9 @@ function redrawPins()
 			delete g_gtFlagPins[cid].pin;
 			g_gtFlagPins[cid].pin = null;
 		}
-		
+
 		makeGtPin(g_gtFlagPins[cid]);
-		
+
 		if ( g_gtFlagPins[cid].pin != null )
 			g_layerSources["gtflags"].addFeature(g_gtFlagPins[cid].pin);
 	}
@@ -404,16 +404,16 @@ function makeGtPin( obj )
 
 	if (typeof obj.grid == 'undefined' ||  obj.grid == null )
 		return;
-	
+
 	if ( obj.grid.length != 4 && obj.grid.length != 6 )
 		return;
-	
+
 	if ( validateGridFromString(obj.grid,null) == false )
 		return;
-	
+
 	if ( g_appSettings.gtFlagImgSrc == 2 && ( obj.mode != myMode || obj.band != myBand) )
 		return;
-	
+
 	var LL = squareToLatLongAll(obj.grid);
 	var myLonLat = [
 		LL.lo2 - (LL.lo2 - LL.lo1) / 2,
@@ -428,7 +428,7 @@ function makeGtPin( obj )
 	catch (e)
 	{
 	}
-	
+
 }
 
 function gtChatNewList(jsmesg)
@@ -443,7 +443,7 @@ function gtChatNewList(jsmesg)
 			delete g_gtFlagPins[cid];
 		}
 	}
-	
+
 	for ( key in jsmesg.data.calls )
 	{
 		var cid = jsmesg.data.cid[key];
@@ -473,16 +473,16 @@ function gtChatNewList(jsmesg)
 			g_gtFlagPins[cid].o = jsmesg.data.o[key];
 			g_gtFlagPins[cid].dxcc = callsignToDxcc(g_gtFlagPins[cid].call);
 			g_gtFlagPins[cid].live = true;
-			g_gtCallsigns[g_gtFlagPins[cid].call] = cid;	
+			g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
 			makeGtPin(g_gtFlagPins[cid]);
 			if ( g_gtFlagPins[cid].pin != null )
 				g_layerSources["gtflags"].addFeature(g_gtFlagPins[cid].pin);
 		}
 	}
 	g_gtChatlistChangeCount++;
-	
+
 	updateChatWindow();
-		
+
 
 }
 
@@ -490,10 +490,10 @@ function appendToHistory(cid, jsmesg)
 {
 	if ( !(cid in g_gtMessages) )
 	{
-		g_gtMessages[cid] = Object();	
+		g_gtMessages[cid] = Object();
 		g_gtMessages[cid].history = Array();
 	}
-	
+
 	g_gtMessages[cid].history.push(jsmesg);
 	while ( g_gtMessages[cid].history.length > g_gtMaxChatMessages )
 	{
@@ -504,7 +504,7 @@ function appendToHistory(cid, jsmesg)
 
 function htmlEntities(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-} 
+}
 
 function gtChatMessage(jsmesg)
 {
@@ -512,33 +512,33 @@ function gtChatMessage(jsmesg)
 	{
 		var cid = jsmesg.cid;
 		jsmesg.when = Date.now();
-		try 
+		try
 		{
-			jsmesg.msg =  (new Buffer(jsmesg.msg,'base64').toString('utf8')); 
+			jsmesg.msg =  (new Buffer(jsmesg.msg,'base64').toString('utf8'));
 			jsmesg.msg = htmlEntities(jsmesg.msg);
 		}
-		catch (e) 
+		catch (e)
 		{
 			jsmesg.msg  = "Corrupt message recieved";
 		}
-		
+
 		if ( jsmesg.call != null && jsmesg.call != "" && jsmesg.call != "NOCALL" )
 		{
 			appendToHistory(cid, jsmesg);
 			g_gtUnread[cid] = true;
 			g_gtCurrentMessageCount++;
 
-			
+
 			if ( newChatMessage(cid,jsmesg) == false )
 				alertChatMessage();
-			
+
 			if ( g_msgSettings.msgAwaySelect == 1 && !(cid in g_gtSentAwayToCid) )
 			{
 				g_gtSentAwayToCid[cid] = true;
 				gtSendMessage( "Away message [ " +g_msgSettings.msgAwayText+" ]", cid );
 			}
 		}
-	
+
 	}
 }
 
@@ -549,7 +549,7 @@ function gtSendMessage(message, who)
 	msg.type = "mesg";
 	msg.uuid = g_appSettings.chatUUID;
 	msg.cid = who;
-	msg.msg = (new Buffer(message).toString('base64')); 
+	msg.msg = (new Buffer(message).toString('base64'));
 	sendGtJson(JSON.stringify(msg));
 	msg.msg = htmlEntities(message);
 	msg.id = 0;
@@ -565,7 +565,7 @@ function gtChatSendUUID()
 	if ( g_appSettings.chatUUID != "" )
 		msg.uuid = g_appSettings.chatUUID;
 	msg.call = myDEcall;
-		
+
 	sendGtJson(JSON.stringify(msg));
 }
 
@@ -576,7 +576,7 @@ function gtChatSetUUID(jsmesg)
 	myChatId = jsmesg.id;
 
 	gtChatSendStatus();
-	
+
 	g_gtState = ChatState.status;
 }
 
@@ -587,14 +587,14 @@ function gtChatStateMachine()
 	{
 		var now = timeNowSec();
 		g_gtStateToFunction[g_gtState]();
-		
+
 		if ( Object.keys(g_gtUnread).length > 0 && now % 2 == 0 )
 		{
 			msgImg.style.webkitFilter = "invert(1)";
 		}
 		else
 			msgImg.style.webkitFilter = "";
-		
+
 		if ( g_msgSettings.msgFrequencySelect > 0 && Object.keys(g_gtUnread).length > 0 )
 		{
 			if ( now - g_lastChatMsgAlert > (g_msgSettings.msgFrequencySelect*60) )
@@ -602,7 +602,7 @@ function gtChatStateMachine()
 				alertChatMessage();
 			}
 		}
-		
+
 	}
 	else
 	{
@@ -697,10 +697,10 @@ function newChatMessage(id, jsmesg)
 	var hasFocus= false;
 	if ( g_msgSettings.msgActionSelect == 1 )
 		showMessaging();
-	
+
 	if (g_chatWindowHandle != null )
 	{
-		try 
+		try
 		{
 			hasFocus = g_chatWindowHandle.window.newChatMessage(id,jsmesg);
 		}

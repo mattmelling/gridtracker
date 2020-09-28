@@ -2125,7 +2125,7 @@
     "mh": [
       "QK23"
     ],
-    "dxcc": 103  
+    "dxcc": 103
   },
   "US-MH": {
     "postal": "US-MH",
@@ -2151,7 +2151,7 @@
             "RK41",
             "RK44"
     ],
-    "dxcc": 168  
+    "dxcc": 168
   },
       "US-PR": {
     "postal": "US-PR",
@@ -2179,7 +2179,7 @@
     "mh": [
 		"LH89"
     ],
-    "dxcc": 4  
+    "dxcc": 4
   },
   "US-VT": {
     "postal": "US-VT",

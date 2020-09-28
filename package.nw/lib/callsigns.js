@@ -1,4 +1,4 @@
-// GridTracker ©2020 N0TTL 
+// GridTracker ©2020 N0TTL
 
 var g_lotwCallsigns = Object();
 var g_lotwFile = "";
@@ -18,7 +18,7 @@ var g_oqrsFile = "";
 var g_oqrsWhenDate = 0;
 var g_oqrsLoadTimer = null;
 
- 
+
 function dumpFile(file)
 {
 	try
@@ -55,7 +55,7 @@ function callsignServicesInit()
 	dumpFile(g_jsonDir + "internal_qso.json");
 	dumpFile(g_jsonDir + "spots.json");
 	dumpDir(g_jsonDir);
-	
+
 	g_lotwFile = g_NWappData + "lotw-ts-callsigns.json";
 	g_eqslFile = g_NWappData + "eqsl-callsigns.json";
 	g_oqrsFile = g_NWappData + "cloqrs-callsigns.json";
@@ -76,7 +76,7 @@ function callsignServicesInit()
 	{
 		oqrsLoadCallsigns();
 	}
-	
+
 	lotwSettingsDisplay();
 	eqslSettingsDisplay();
 	ulsSettingsDisplay();
@@ -94,15 +94,15 @@ function lotwLoadCallsigns()
 	var now = timeNowSec();
 	if ( now - g_callsignLookups.lotwLastUpdate  > (86400 * 7) )
 		g_callsignLookups.lotwLastUpdate = 0;
-	else 
+	else
 	{
 		var lotwWhenTimer = (86400 * 7) - (now - g_callsignLookups.lotwLastUpdate);
 		g_lotwWhenDate = now + lotwWhenTimer;
 		g_lotwLoadTimer = setTimeout(lotwDownload,(lotwWhenTimer)*1000);
 	}
-	
 
-			
+
+
 	if (!fs.existsSync(g_lotwFile))
 	{
 		g_callsignLookups.lotwLastUpdate = 0;
@@ -110,11 +110,11 @@ function lotwLoadCallsigns()
 	else
 	{
 		var data = fs.readFileSync(g_lotwFile);
-		g_lotwCallsigns = JSON.parse(data);	
+		g_lotwCallsigns = JSON.parse(data);
 		if ( Object.keys(g_lotwCallsigns).length < 100 )
 		{
 			lotwDownload();
-		}			
+		}
 	}
 	if ( g_callsignLookups.lotwLastUpdate == 0 )
 	{
@@ -125,7 +125,7 @@ function lotwLoadCallsigns()
 function lotwSettingsDisplay()
 {
 	lotwUseEnable.checked = g_callsignLookups.lotwUseEnable;
-	
+
 	if ( g_callsignLookups.lotwLastUpdate == 0 )
 	{
 		lotwUpdatedTd.innerHTML = "Never";
@@ -136,18 +136,18 @@ function lotwSettingsDisplay()
 		lotwUpdatedTd.innerHTML = userTimeString(g_callsignLookups.lotwLastUpdate * 1000);
 
 	}
-	
+
 	if ( !g_callsignLookups.lotwUseEnable )
 	{
-		
+
 		if ( g_lotwLoadTimer != null )
 			clearTimeout(g_lotwLoadTimer);
 		g_lotwLoadTimer = null;
 		g_lotwCallsigns = Object();
 	}
 	lotwCountTd.innerHTML = Object.keys(g_lotwCallsigns).length;
-}					
-				
+}
+
 function lotwValuesChanged()
 {
 	g_callsignLookups.lotwUseEnable = lotwUseEnable.checked;
@@ -163,26 +163,26 @@ function lotwValuesChanged()
 	goProcessRoster();
 	if ( g_callRosterWindowHandle )
 		g_callRosterWindowHandle.window.resize();
-}			
-	
+}
+
 function lotwDownload(fromSettings)
 {
 	lotwUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
-	getBuffer("https://lotw.arrl.org/lotw-user-activity.csv", processLotwCallsigns, null, "https", 443);	
-}						
-					
+	getBuffer("https://lotw.arrl.org/lotw-user-activity.csv", processLotwCallsigns, null, "https", 443);
+}
+
 
 function processLotwCallsigns(result, flag)
 {
-	//var result = String(buffer); 
+	//var result = String(buffer);
 	var lines = Array();
-    lines = result.split("\n");   
+    lines = result.split("\n");
 	delete result;
 	var lotwCallsigns = Object();
 	for ( x in lines )
 	{
 		var breakout = lines[x].split(",");
-		if ( breakout.length == 3 ) 
+		if ( breakout.length == 3 )
 		{
 			var dateTime = new Date(Date.UTC(breakout[1].substr(0,4), parseInt(breakout[1].substr(5,2))-1,breakout[1].substr(8,2), 0, 0, 0));
 			lotwCallsigns[breakout[0]] = parseInt(dateTime.getTime() / 1000)/86400;
@@ -190,21 +190,21 @@ function processLotwCallsigns(result, flag)
 	}
 	delete lines;
 	g_callsignLookups.lotwLastUpdate = timeNowSec();
-	
+
 	var now = timeNowSec();
 	if ( g_lotwLoadTimer != null )
 		clearTimeout(g_lotwLoadTimer);
-	
+
 	var lotwWhenTimer = (86400 * 7) - (now - g_callsignLookups.lotwLastUpdate);
 	g_lotwWhenDate = now + lotwWhenTimer;
 	g_lotwLoadTimer = setTimeout(lotwDownload,(lotwWhenTimer)*1000);
-		
+
 	if ( Object.keys(lotwCallsigns).length > 100 )
 	{
 		g_lotwCallsigns = lotwCallsigns;
-		fs.writeFileSync(g_lotwFile, JSON.stringify(g_lotwCallsigns));	
-	}		
-	
+		fs.writeFileSync(g_lotwFile, JSON.stringify(g_lotwCallsigns));
+	}
+
 	lotwSettingsDisplay();
 }
 
@@ -215,13 +215,13 @@ function oqrsLoadCallsigns()
 	var now = timeNowSec();
 	if ( now - g_callsignLookups.oqrsLastUpdate  > (86400 * 7) )
 		g_callsignLookups.oqrsLastUpdate = 0;
-	else 
+	else
 	{
 		var oqrsWhenTimer = (86400 * 7) - (now - g_callsignLookups.oqrsLastUpdate);
 		g_oqrsWhenDate = now + oqrsWhenTimer;
 		g_oqrsLoadTimer = setTimeout(oqrsDownload,(oqrsWhenTimer)*1000);
 	}
-			
+
 	if (!fs.existsSync(g_oqrsFile))
 	{
 		g_callsignLookups.oqrsLastUpdate = 0;
@@ -229,7 +229,7 @@ function oqrsLoadCallsigns()
 	else
 	{
 		var data = fs.readFileSync(g_oqrsFile);
-		g_oqrsCallsigns = JSON.parse(data);	
+		g_oqrsCallsigns = JSON.parse(data);
 	}
 	if ( g_callsignLookups.oqrsLastUpdate == 0 )
 	{
@@ -241,7 +241,7 @@ function oqrsSettingsDisplay()
 {
 	oqrsUseEnable.checked = g_callsignLookups.oqrsUseEnable;
 
-	
+
 	if ( g_callsignLookups.oqrsLastUpdate == 0 )
 	{
 		oqrsUpdatedTd.innerHTML = "Never";
@@ -252,8 +252,8 @@ function oqrsSettingsDisplay()
 		oqrsUpdatedTd.innerHTML = userTimeString(g_callsignLookups.oqrsLastUpdate * 1000);
 
 	}
-	
-	
+
+
 	if ( !g_callsignLookups.oqrsUseEnable )
 	{
 		if ( g_oqrsLoadTimer != null )
@@ -262,8 +262,8 @@ function oqrsSettingsDisplay()
 		g_oqrsCallsigns = Object();
 	}
 	oqrsCountTd.innerHTML = Object.keys(g_oqrsCallsigns).length;
-}					
-				
+}
+
 function oqrsValuesChanged()
 {
 	g_callsignLookups.oqrsUseEnable = oqrsUseEnable.checked;
@@ -278,31 +278,31 @@ function oqrsValuesChanged()
 	goProcessRoster();
 	if ( g_callRosterWindowHandle )
 		g_callRosterWindowHandle.window.resize();
-}			
-	
+}
+
 function oqrsDownload(fromSettings)
 {
 	oqrsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
-	getBuffer("https://dl.dropboxusercontent.com/s/9nycdpbxx5b3bpp/clublog.json?cb="+timeNowSec(), processoqrsCallsigns, null, "https", 443);	
-}						
-					
+	getBuffer("https://dl.dropboxusercontent.com/s/9nycdpbxx5b3bpp/clublog.json?cb="+timeNowSec(), processoqrsCallsigns, null, "https", 443);
+}
+
 function processoqrsCallsigns(buffer, flag)
 {
-	g_oqrsCallsigns = JSON.parse(buffer); 
+	g_oqrsCallsigns = JSON.parse(buffer);
 
 	g_callsignLookups.oqrsLastUpdate = timeNowSec();
 
 	var now = timeNowSec();
 	if ( g_oqrsLoadTimer != null )
 		clearTimeout(g_oqrsLoadTimer);
-	
+
 	var oqrsWhenTimer = (86400 * 7) - (now - g_callsignLookups.oqrsLastUpdate);
 	g_oqrsWhenDate = now + oqrsWhenTimer;
 	g_oqrsLoadTimer = setTimeout(oqrsDownload,(oqrsWhenTimer)*1000);
-	
-	
+
+
 	fs.writeFileSync(g_oqrsFile, JSON.stringify(g_oqrsCallsigns));
-	oqrsSettingsDisplay();	
+	oqrsSettingsDisplay();
 }
 
 function eqslLoadCallsigns()
@@ -311,14 +311,14 @@ function eqslLoadCallsigns()
 	var now = timeNowSec();
 	if ( now - g_callsignLookups.eqslLastUpdate  > (86400 * 7) )
 		g_callsignLookups.eqslLastUpdate = 0;
-	else 
+	else
 	{
 		var eqslWhenTimer = (86400 * 7) - (now - g_callsignLookups.eqslLastUpdate);
 		g_eqslWhenDate = now + eqslWhenTimer;
 		g_eqslLoadTimer = setTimeout(eqslDownload,(eqslWhenTimer)*1000);
 	}
-	
-			
+
+
 	if (!fs.existsSync(g_eqslFile))
 	{
 		g_callsignLookups.eqslLastUpdate = 0;
@@ -326,7 +326,7 @@ function eqslLoadCallsigns()
 	else
 	{
 		var data = fs.readFileSync(g_eqslFile);
-		g_eqslCallsigns = JSON.parse(data);	
+		g_eqslCallsigns = JSON.parse(data);
 	}
 	if ( g_callsignLookups.eqslLastUpdate == 0 )
 	{
@@ -337,7 +337,7 @@ function eqslLoadCallsigns()
 function eqslSettingsDisplay()
 {
 	eqslUseEnable.checked = g_callsignLookups.eqslUseEnable;
-	
+
 	if ( g_callsignLookups.eqslLastUpdate == 0 )
 	{
 		eqslUpdatedTd.innerHTML = "Never";
@@ -346,10 +346,10 @@ function eqslSettingsDisplay()
 	else
 	{
 		eqslUpdatedTd.innerHTML = userTimeString(g_callsignLookups.eqslLastUpdate * 1000);
-	
+
 	}
-	
-	
+
+
 	if ( !g_callsignLookups.eqslUseEnable )
 	{
 		if ( g_eqslLoadTimer != null )
@@ -358,8 +358,8 @@ function eqslSettingsDisplay()
 		g_eqslCallsigns = Object();
 	}
 	eqslCountTd.innerHTML = Object.keys(g_eqslCallsigns).length;
-}					
-				
+}
+
 function eqslValuesChanged()
 {
 	g_callsignLookups.eqslUseEnable = eqslUseEnable.checked;
@@ -374,19 +374,19 @@ function eqslValuesChanged()
 	goProcessRoster();
 	if ( g_callRosterWindowHandle )
 		g_callRosterWindowHandle.window.resize();
-}			
-	
+}
+
 function eqslDownload(fromSettings)
 {
 	eqslUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
-	getBuffer("https://www.eqsl.cc/qslcard/DownloadedFiles/AGMemberList.txt", processeqslCallsigns, null, "https", 443);	
-}						
-					
+	getBuffer("https://www.eqsl.cc/qslcard/DownloadedFiles/AGMemberList.txt", processeqslCallsigns, null, "https", 443);
+}
+
 function processeqslCallsigns(buffer, flag)
 {
-	var result = String(buffer); 
+	var result = String(buffer);
 	var lines = Array();
-    lines = result.split("\n");          
+    lines = result.split("\n");
 	g_eqslCallsigns = Object();
 	for ( x in lines )
 	{
@@ -397,15 +397,15 @@ function processeqslCallsigns(buffer, flag)
 	var now = timeNowSec();
 	if ( g_eqslLoadTimer != null )
 		clearTimeout(g_eqslLoadTimer);
-	
+
 	var eqslWhenTimer = (86400 * 7) - (now - g_callsignLookups.eqslLastUpdate);
 	g_eqslWhenDate = now + eqslWhenTimer;
 	g_eqslLoadTimer = setTimeout(eqslDownload,(eqslWhenTimer)*1000);
-	
+
 	if ( Object.keys(g_eqslCallsigns).length > 10000 )
 		fs.writeFileSync(g_eqslFile, JSON.stringify(g_eqslCallsigns));
-	
-	eqslSettingsDisplay();	
+
+	eqslSettingsDisplay();
 }
 
 
@@ -417,11 +417,11 @@ function ulsLoadCallsigns()
 		g_ulsLoadTimer = null;
 
 	}
-		
+
 	var now = timeNowSec();
 	if ( now - g_callsignLookups.ulsLastUpdate  > (86400 * 7)  )
 		ulsDownload();
-	else 
+	else
 	{
 		var ulsWhenTimer = (86400 * 7) - (now - g_callsignLookups.ulsLastUpdate);
 		g_ulsWhenDate = now + ulsWhenTimer;
@@ -429,7 +429,7 @@ function ulsLoadCallsigns()
 		updateCallsignCount();
 	}
 
-	
+
 }
 
 function updateQSO()
@@ -440,30 +440,30 @@ function updateQSO()
 		{
 			var details = g_QSOhash[hash];
 			var lookupCall = false;
-			
-			
-			if ( (details.cnty == null || details.state == null) && isKnownCallsignDXCC(details.dxcc)) 
+
+
+			if ( (details.cnty == null || details.state == null) && isKnownCallsignDXCC(details.dxcc))
 			{
 				// Do County Lookup
 				lookupCall = true;
-			} 
-			else if (details.cnty != null && isKnownCallsignUSplus(details.dxcc)) 
+			}
+			else if (details.cnty != null && isKnownCallsignUSplus(details.dxcc))
 			{
-				if (!(details.cnty in g_cntyToCounty)) 
+				if (!(details.cnty in g_cntyToCounty))
 				{
-					if (details.cnty.indexOf(",") == -1) 
+					if (details.cnty.indexOf(",") == -1)
 					{
 						if (!(details.state + "," + details.cnty in  g_cntyToCounty))
 							lookupCall = true;
-					} 
+					}
 					else
 						lookupCall = true;
 
 				}
 			}
-			if (lookupCall) 
+			if (lookupCall)
 			{
-				if (g_callsignLookups.ulsUseEnable) 
+				if (g_callsignLookups.ulsUseEnable)
 				{
 					lookupUsCallsign(details,true );
 				}
@@ -474,20 +474,20 @@ function updateQSO()
 
 function updateCallsignCount()
 {
-	g_ulsDatabase.transaction(function (tx) { 
-	tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (tx, results) 
-	{ 
-		var len = results.rows.length, i; 
+	g_ulsDatabase.transaction(function (tx) {
+	tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (tx, results)
+	{
+		var len = results.rows.length, i;
 		if ( len == 1 )
-		{ 
+		{
 
 			g_ulsCallsignsCount = results.rows[0]["cnt"];
 			ulsCountTd.innerHTML = g_ulsCallsignsCount;
-	
+
 			updateQSO();
 		}
-		  
-	}, null); 
+
+	}, null);
 });
 }
 
@@ -504,8 +504,8 @@ function ulsSettingsDisplay()
 	{
 		ulsUpdatedTd.innerHTML = userTimeString(g_callsignLookups.ulsLastUpdate * 1000);
 	}
-	
-	
+
+
 	if ( !g_callsignLookups.ulsUseEnable )
 	{
 		if ( g_ulsLoadTimer != null )
@@ -514,12 +514,12 @@ function ulsSettingsDisplay()
 		g_ulsCallsignsCount = 0;
 		ulsCountTd.innerHTML = g_ulsCallsignsCount;
 	}
-}					
-				
+}
+
 function ulsValuesChanged()
 {
 	g_callsignLookups.ulsUseEnable = ulsUseEnable.checked;
-	
+
 	if ( g_callsignLookups.ulsUseEnable == true )
 	{
 		ulsLoadCallsigns();
@@ -530,20 +530,20 @@ function ulsValuesChanged()
 		ulsCountTd.innerHTML = 0;
 	}
 	saveCallsignSettings();
-	
+
 	ulsSettingsDisplay();
 	goProcessRoster();
 	if ( g_callRosterWindowHandle )
 		g_callRosterWindowHandle.window.resize();
-}			
-	
+}
+
 function ulsDownload()
 {
 	ulsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
 	ulsCountTd.innerHTML = 0;
-	getChunkedBuffer("https://dl.dropboxusercontent.com/s/91iynrvdse7zcf5/callsigns.txt?cb="+timeNowSec(), processulsCallsigns, null, "https", 443);	
-}							
-			
+	getChunkedBuffer("https://dl.dropboxusercontent.com/s/91iynrvdse7zcf5/callsigns.txt?cb="+timeNowSec(), processulsCallsigns, null, "https", 443);
+}
+
 function getChunkedBuffer(file_url, callback, flag, mode, port, cookie, errorHandler) {
 	var url = require('url');
 	var http = require(mode);
@@ -587,7 +587,7 @@ function getChunkedBuffer(file_url, callback, flag, mode, port, cookie, errorHan
 				fileBuffer = callback(fileBuffer + data, flag, cookies, false, isEnd);
 			}
 		}).on('end', function () {
-			
+
 		}).on('error', function (e) {
 			console.error('Got error: ' + e.message);
 		});
@@ -606,7 +606,7 @@ g_ulsDatabase.transaction(function (tx) {
 function resetULSDatabase()
 {
 	g_callsignLookups.ulsLastUpdate = 0;
-	g_ulsCallsignsCount = 0;	
+	g_ulsCallsignsCount = 0;
 
 }
 
@@ -619,10 +619,10 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 	if ( buffer && buffer.length > 0 )
 	{
 		var lines = null;
-	
+
 		if ( buffer[buffer.length-1] == "\n" )
 		{
-			lines = buffer.split("\n"); 
+			lines = buffer.split("\n");
 		}
 		else
 		{
@@ -630,7 +630,7 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 			returnBuffer = buffer.substring(lastIndex);
 			lines =  buffer.substring(0,lastIndex).split("\n");
 		}
-		
+
 		if ( lines.length > 0 )
 		{
 			g_ulsDatabase.transaction(function (tx) {
@@ -643,7 +643,7 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 					g_ulsCallsignsCount = 0;
 					ulsUpdatedTd.innerHTML = "<b><i>Processing...</i></b>";
 					tx.executeSql('delete from calls');
-					
+
 				}
 				for (var x in lines )
 				{
@@ -653,20 +653,20 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 						tx.executeSql( 'INSERT INTO calls (rowid, callsign, zip, state) VALUES ('+g_ulsCallsignsCount+',"'+lines[x].substr(7)+'","'+lines[x].substr(0,5)+'","'+lines[x].substr(5,2)+'")');
 						if ( g_ulsCallsignsCount % 10000 == 0 )
 						{
-							tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (rx, results) 
-							{ 
-								var len = results.rows.length, i; 
+							tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (rx, results)
+							{
+								var len = results.rows.length, i;
 								if ( len == 1 )
-								{ 
+								{
 									ulsCountTd.innerHTML = results.rows[0]["cnt"];
 								}
 							});
-						}	
+						}
 					}
 				}
 				delete lines;
 				lines = null;
-				
+
 			});
 		}
 	}
@@ -677,17 +677,17 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 
 		if ( g_ulsLoadTimer != null )
 			clearTimeout(g_ulsLoadTimer);
-		
-		var ulsWhenTimer = 86400 * 7; 
+
+		var ulsWhenTimer = 86400 * 7;
 		g_ulsWhenDate = ulsWhenTimer + now;
 		g_ulsLoadTimer = setTimeout(ulsDownload,(ulsWhenTimer)*1000);
-		
+
 		g_ulsDatabase.transaction(function (tx) {
-			tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (rx, results) 
-			{ 
-				var len = results.rows.length, i; 
+			tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (rx, results)
+			{
+				var len = results.rows.length, i;
 				if ( len == 1 )
-				{ 
+				{
 					g_ulsCallsignsCount = results.rows[0]["cnt"];
 					ulsCountTd.innerHTML = g_ulsCallsignsCount;
 					g_callsignLookups.ulsLastUpdate = timeNowSec();
@@ -699,20 +699,20 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
 		});
 	}
 
-					
+
 	return Buffer(returnBuffer);
 }
 
 function lookupUsCallsign( object , writeState = false)
 {
-	g_ulsDatabase.transaction(function (tx) 
-	{ 
+	g_ulsDatabase.transaction(function (tx)
+	{
 		var qry = 'SELECT * FROM calls where callsign = "'+object.DEcall+'"';
-		tx.executeSql(qry, [], function (tx, results) 
-		{ 
-		var len = results.rows.length, i; 
+		tx.executeSql(qry, [], function (tx, results)
+		{
+		var len = results.rows.length, i;
 		if ( len == 1 )
-		{ 
+		{
 			if ( object.state == null )
 			{
 				if ( object.dxcc == 1 )
@@ -732,15 +732,15 @@ function lookupUsCallsign( object , writeState = false)
 				let request = g_Idb.transaction(["lookups"], "readwrite")
 			   .objectStore("lookups")
 			   .get(object.DEcall);
-			   
-				request.onsuccess = function(event) 
+
+				request.onsuccess = function(event)
 				{
 					if ( request.result )
 					{
 						object.cnty = request.result.cnty;
 						object.qual = true;
 					}
-						
+
 					if ( object.cnty == null && object.zipcode in g_zipToCounty )
 					{
 						var counties = g_zipToCounty[object.zipcode];
@@ -755,9 +755,9 @@ function lookupUsCallsign( object , writeState = false)
 					if ( writeState )
 						setState(object);
 				};
-		   
-				request.onerror = function(event) 
-				{	
+
+				request.onerror = function(event)
+				{
 					object.qual = false;
 					if ( writeState )
 						setState(object);
@@ -769,7 +769,7 @@ function lookupUsCallsign( object , writeState = false)
 
 		 }
 
-					
-		}, null); 
-});	
+
+		}, null);
+});
 }

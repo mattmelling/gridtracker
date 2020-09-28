@@ -89,7 +89,7 @@
 }
 ,
 
-{ 
+{
 	"name": "National Geographic by Esri (English)",
 	"url": "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
 	"attributions": "&copy; Esri &mdash; National Geographic",
@@ -97,49 +97,49 @@
 }
 
 ,
-{ 
+{
 	"name": "Street by Esri (English)",
 	"url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
 	"attributions": "&copy; Esri"
 }
 ,
-{ 
+{
 	"name": "Topographical by Esri (English)",
 	"url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
 	"attributions": "&copy; Esri"
 }
 ,
-{ 
+{
 	"name": "Physical by Esri (No Labels)",
 	"url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}",
 	"attributions": "&copy; Esri",
 	"maxZoom": 8
 }
 ,
-{ 
+{
 	"name": "Satellite by Esri (No Labels)",
 	"url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
 	"attributions": "&copy; Esri",
 	"maxZoom": 18
 }
 ,
-{ 
+{
     "name": "Wikimedia (Intl)",
-    "url":"http://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png", 
+    "url":"http://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png",
 	"attributions": "<a target=\"_blank\" href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>",
 	"minZoom": 1,
 	"maxZoom": 19
 }
 ,
-{ 
+{
     "name": "Wikimedia (No Labels)",
-    "url":"http://maps.wikimedia.org/osm/{z}/{x}/{y}.png", 
+    "url":"http://maps.wikimedia.org/osm/{z}/{x}/{y}.png",
 	"attributions": "<a target=\"_blank\" href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>",
 	"minZoom": 1,
 	"maxZoom": 19
 }
 ,
-{ 
+{
     "name": "Watercolor by Stamen (No Labels)",
 	"url": "http://stamen-tiles-{a-d}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png",
 	"attributions": "<a target=\"_blank\" href=\"http://stamen.com\">Stamen Design</a>",
@@ -154,14 +154,14 @@
 	"maxZoom": 19
 }
 ,
-{ 
+{
 	"name": "Dark Gray by Esri (English)",
 	"url": "http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
 	"attributions": "&copy; Esri",
 	"maxZoom": 19
 }
 ,
-{ 
+{
 	"name": "Light Gray by Esri (English)",
 	"url": "http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
 	"attributions": "&copy; Esri",
@@ -178,7 +178,7 @@
 	"url" : "https://cartocdn_{a-d}.global.ssl.fastly.net/base-midnight/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -186,7 +186,7 @@
 	"url" : "https://cartocdn_{a-d}.global.ssl.fastly.net/base-antique/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -194,7 +194,7 @@
 	"url" : "https://cartocdn_{a-d}.global.ssl.fastly.net/base-eco/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -202,7 +202,7 @@
 	"url" : "https://{a-d}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -210,7 +210,7 @@
 	"url" : "https://{a-d}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -218,7 +218,7 @@
 	"url" : "https://{a-d}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -226,7 +226,7 @@
 	"url" : "https://{a-d}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -234,7 +234,7 @@
 	"url" : "https://{a-d}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 }
 ,
 {
@@ -242,7 +242,7 @@
 	"url" : "https://{a-d}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 },
 {
     "name" : "Geography Class by Mapbox (English)",
@@ -256,7 +256,7 @@
 	"url" : "https://cartocdn_{a-d}.global.ssl.fastly.net/base-flatblue/{z}/{x}/{y}.png",
 	"attributions": "&copy; Carto",
 	"maxZoom": 19
-	
+
 },
 {
 	"name": "Satellite by MapTiler (No Labels)(Offline)",

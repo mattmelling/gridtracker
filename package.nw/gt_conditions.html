@@ -1,4 +1,4 @@
-<!-- 
+<!--
     This file is part of GridTracker.
 
     GridTracker is free software: you can redistribute it and/or modify
@@ -72,13 +72,13 @@ function showConditionsBox()
 	var now = timeNowSec() % 86400;
 
 
-	var images = document.getElementsByTagName('img'); 
+	var images = document.getElementsByTagName('img');
 
 	for(var i = 0; i < images.length; i++) {
 		var parts = images[i].src.split("t=");
 		images[i].src = parts[0] + "t=" + now;
 	}
-	
+
 	setTimeout(showConditionsBox,1800000);
 
 }
@@ -89,7 +89,7 @@ function init()
 	showConditionsBox();
 
     document.addEventListener('keydown', onMyKeyDown, false);
-			
+
 }
 
 function onMyKeyDown(event)
@@ -102,10 +102,10 @@ window.opener.onMyKeyDown(event);
 <body   style="margin:0;top:3px" onload="init();" >
 <div id="main" style="margin:0;top:0;min-height:60px;background-color:black;padding:0px;text-align:center;vertical-align:middle;position:relative;white-space:nowrap;overflow:hidden;" >
 <div id="conditionsDataDiv" >
-<div> 
-<a target='_blank' href='http://www.hamqsl.com' title='Visit www.hamqsl.net'><img src='http://www.hamqsl.com/solar101vhf.php?t='></a> 
-</div> 
-<div > 
+<div>
+<a target='_blank' href='http://www.hamqsl.com' title='Visit www.hamqsl.net'><img src='http://www.hamqsl.com/solar101vhf.php?t='></a>
+</div>
+<div >
 <table align='center'>
 <tr>
 <td>

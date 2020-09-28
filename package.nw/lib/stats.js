@@ -1,4 +1,4 @@
-// GridTracker ©2020 N0TTL 
+// GridTracker ©2020 N0TTL
 
 
 document.oncontextmenu = function() {
@@ -37,8 +37,8 @@ function openInfoTab(evt, tabName, callFunc, callObj) {
 			evt.currentTarget.className += " active";
 		else
 			evt.className += " active";
-		
-		
+
+
 		if (callFunc) {
 			if ( typeof  window.opener.window[callFunc] != 'undefined' )
 			{
@@ -52,7 +52,7 @@ function openInfoTab(evt, tabName, callFunc, callObj) {
 				}
 			}
 		}
-	
+
 }
 
 
@@ -143,7 +143,7 @@ function resizeWorked()
 }
 
 function Resize() {
-		
+
 	if ( statBoxDiv.style.display == "block" ) {
 		window.opener.showStatBox(true);
 	}

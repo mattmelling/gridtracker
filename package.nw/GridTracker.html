@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 
+<!--
     This file is part of GridTracker.
 
     GridTracker is free software: you can redistribute it and/or modify
@@ -116,7 +116,7 @@
                   </tr>
                </table>
 			   <div id="currentTime" style="cursor:pointer" title="Toggle Local / UTC Time" onclick="toggleTime();"></div>
-			   
+
 			   <table  align="center" style="border-collapse:collapse;margin-bottom:2px" >
                   <tr id="dxCallBoxDiv" class="DXCallBox" >
                      <td>
@@ -141,8 +141,8 @@
                      </td>
                   </tr>
                </table>
-             
-			      
+
+
             </div>
             <div id="rigWrap" style="display:none;background-color:blue;border-style:inset;border-color:lightblue;border-width:3px;margin:0;margin-bottom:1px;color:yellow;padding:2px;" class="roundBorder">
 			<div style="display:inline-block;padding-top:0px;cursor:pointer;left:0px" onClick="rigChange(false);" >🡄&nbsp;</div>
@@ -152,7 +152,7 @@
 			<div id="operatingMode" style="margin:0;margin-bottom:1px;cursor:pointer" onclick="ignoreMessagesToggle()"  title="Click to ignore incoming messages" >
                <div id="txrxdec" style="background-color:Green;border-style:outset;border-color:yellow;border-width:3px" class="roundBorder">waiting for message</div>
             </div>
-			
+
             <div id="pskReporterBandActivityDiv" class="roundBorder" style="position:relative;background-color:#000;border:1px solid purple;margin:1px;height:49px;margin-bottom:1px;padding:0px" title="PSK-Reporter Band Activity" oncontextmenu="toggleBaWindow()" >
                         <div id="graphDiv" style="bottom:0;position: absolute;width:100%;padding:0px;margin-bottom:2px">
                   <br />...no data yet...<br />
@@ -160,10 +160,10 @@
                </div>
             </div>
 
-           
 
-           
-			
+
+
+
             <div id="actionDiv" style="border:1px solid blue;margin:1px;margin-bottom:1px;padding:3px" class="roundBorder" title="Quick Stats">
                <table align="center">
 	                  <tr>
@@ -175,7 +175,7 @@
                      <td style="cursor:pointer" class="roundBorderValue" onclick="resetSearch(); openInfoTab('qsobox', 'workedBoxDiv', showWorkedBox);" title="Confirmed Stations" align="center" >
                         <div id="qsoCount">0</div>
                      </td>
-       
+
                   </tr>
                   <tr>
                      <td style="cursor:pointer" onclick="openInfoTab('calbox', 'callsignBoxDiv', showCallsignBox);" title="DXCC Heard" align="right" >Rx DXCC</td>
@@ -188,7 +188,7 @@
                      </td>
                   </tr>
 
-         
+
                   <tr>
                      <td colspan=2 ><div class="button"  onclick="clearLive();" title="Clear Live Data from GridTracker">Clear Live</div></td>
                      <td colspan=2 ><div style="min-width:58px" id="clearOrLoadButton" class="button"  onclick="clearOrLoadQSOs();updateCountStats();" title="Clear or Reload Log Data&#10;(does not delete files)">Clear Log</div></td>
@@ -196,15 +196,15 @@
                </table>
             </div>
 		<div id="filterDiv" class="roundBorder" style="position:relative;background-color:#000;border:1px solid cyan;margin:1px;margin-bottom:1px;" title="Map View Control Panel">
-			
+
 			 <table align="center">
 				<tr><td colspan=2>Map View Filters</td></tr>
-			
+
 				<tr title="Select Band&#10;(Auto tracks WSJT-X)"><td><font color="lightgreen">Band</font></td>
 				<td >
 			<select id="gtBandFilter" onkeypress="return false;" onchange="gtBandFilterChanged(this);">
 				<option value="auto">Auto</option>
-				<option value="xx" disabled>--------</option>			
+				<option value="xx" disabled>--------</option>
 				<option value="">Mixed</option>
 				<option value="4000m">4000m</option>
 				<option value="2200m">2200m</option>
@@ -281,13 +281,13 @@
 			<div id="buttonsDiv" style="margin-left:0px;white-space:normal;">
 				<div id="callRosterButton"  class="iconButton" style="padding:0px;" onclick="openCallRosterWindow();" title="Open Call Roster" ><img  src="./img/roster-button.svg" class="buttonImgWide" /></div>
 				<div id="pushPinButton" onclick="togglePushPinMode();" class="iconButton" title="Toggle Push-Pin Mode"><img  id="pinImg" src="" class="buttonImg" /></div>
-				<div id="lookupButton" onclick="openLookupWindow(true)" class="iconButton" title="Open Lookup Window" ><img style="" src="./img/lookup.svg" class="buttonImg" /></div>		
-				<div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats"><img src="./img/stats-button.svg" class="buttonImg" /></div> 
+				<div id="lookupButton" onclick="openLookupWindow(true)" class="iconButton" title="Open Lookup Window" ><img style="" src="./img/lookup.svg" class="buttonImg" /></div>
+				<div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats"><img src="./img/stats-button.svg" class="buttonImg" /></div>
 				<div id="modeModeDiv" onclick="toggleOffline()"  class="iconButton" title="Toggle Online/Offline Mode"><img id="offlineImg" src="" class="buttonImg" /></div>
 				<div id="earthShadow" onclick="toggleEarth()"  class="iconButton" title="Toggle Grayline"><img id="earthImg" src="" class="buttonImg" /></div>
 				<div id="legendToggleDiv" onclick="toggleLegend()" class="iconButton" title="Toggle Map Legend"><img id="legendImg" src="./img/gt_key.png" class="buttonImg" /></div>
-				<div id="gtShareButton" onclick="toggleGtShareEnable();" class="iconButton" title="Share your On-Air Status with other GridTracker users"><img id="gtShareFlagImg" src="./img/share-off.png" class="buttonImg" /></div>	
-				<div id="helpButton" onclick="toggleHelp();" class="iconButton" title="Toggle Hotkey List"><img  src="./img/help.svg" class="buttonImg" /></div>	
+				<div id="gtShareButton" onclick="toggleGtShareEnable();" class="iconButton" title="Share your On-Air Status with other GridTracker users"><img id="gtShareFlagImg" src="./img/share-off.png" class="buttonImg" /></div>
+				<div id="helpButton" onclick="toggleHelp();" class="iconButton" title="Toggle Hotkey List"><img  src="./img/help.svg" class="buttonImg" /></div>
 				<div id="trophyButton" onclick="cycleTrophyOverlay();" class="iconButton" title="Cycle Award Overlays"><img id="trophyImg" src="./img/blank_trophy.png" class="buttonImg"  /></div>
 				<div id="buttonStrikesDiv" onclick="toggleStrikesValue()" class="iconButton" title="Toggle Lightning Strikes" ><img id="strikesImg" src="./img/lw.png"  class="buttonImg"  /></div>
 				<div id="lunaButton" onclick="toggleMoon();" class="iconButton" title="Toggle Moon" ><img id="lunaButonImg" src="./img/luna.png" class="buttonImg" /></div>
@@ -296,18 +296,18 @@
 				<div id="adifLoadDiv" onclick="adifLoadDialog()" class="iconButton" title="Load ADIF Log"><img src="./img/adif.png" class="buttonImg" /></div>
 				<div id="conditionsButton" onclick="showConditionsBox();" class="iconButton" title="View Current Conditions" ><img  src="./img/conditions.svg" class="buttonImg" /></div>
 				<div id="donateButton" onclick="gotoDonate();" class="iconButton" title="Donate with PayPal"><img style="-webkit-filter: brightness(50%);" src="./img/donate.svg" class="buttonImg" /></div>
-				<div id="alterMuteDiv" onclick="toggleAlertMute()" class="iconButton" title="Toggle Audio Mute" ><img id="alertMuteImg" src="" class="buttonImg" /></div>		
-				<div id="buttonPSKSpotsBoxDiv" onClick="togglePskSpots();" class="iconButton" title="View Spot Reports"><img id="pskSpotsImg" src="./img/spots.svg" class="buttonImg" /></div>				
+				<div id="alterMuteDiv" onclick="toggleAlertMute()" class="iconButton" title="Toggle Audio Mute" ><img id="alertMuteImg" src="" class="buttonImg" /></div>
+				<div id="buttonPSKSpotsBoxDiv" onClick="togglePskSpots();" class="iconButton" title="View Spot Reports"><img id="pskSpotsImg" src="./img/spots.svg" class="buttonImg" /></div>
 				<div id="buttonPsk24CheckBoxDiv" onclick="grabPsk24()" class="iconButton" title="Your PSK 24hour report"><img  id="pskImg" src="./img/psk_24_32.png" class="buttonImg" /></div>
 				<div id="buttonQRZCheckBoxDiv" onclick="if ( ValidateQrzApi(qrzApiKey ) ) grabQrzComLog()" class="iconButton" title="Download log from QRZ.com" ><img id="qrzLogImg" src="./img/log_QRZ.png"   class="buttonImg"  /></div>
 				<div id="buttonLOTWCheckBoxDiv" onclick="if ( ValidateText(lotwLogin) && ValidateText(lotwPassword) ) {  grabLOtWLog(false); } " class="iconButton" title="Download log from Logbook of the World" ><img id="lotwLogImg"  src="./img/log_LoTW.png"  class="buttonImg"  /></div>
-				<div id="buttonClubCheckBoxDiv" onclick="if ( ValidateText(clubEmail) && ValidateText(clubPassword) ) grabClubLog()" class="iconButton" title="Download log from ClubLog" ><img id="ClubLogImg"  src="./img/log_club.png"  class="buttonImg"  /></div>	
+				<div id="buttonClubCheckBoxDiv" onclick="if ( ValidateText(clubEmail) && ValidateText(clubPassword) ) grabClubLog()" class="iconButton" title="Download log from ClubLog" ><img id="ClubLogImg"  src="./img/log_club.png"  class="buttonImg"  /></div>
 				<div id="buttonAdifCheckBoxDiv" onclick="startupAdifLoadFunction()" class="iconButton" title="Reload Local ADIF Files" ><img  src="./img/log_local.png"  class="buttonImg"  /></div>
 				<div id="timezoneButton" onclick="toggleTimezones()"  class="iconButton" title="Toggle Timezone Layer"><img src="./img/timezone-button.svg" class="buttonImg" /></div>
 				<div id="radarButton" onclick="toggleNexrad()"  class="iconButton" title="Toggle US Nexrad"><img src="./img/radar-button.svg" class="buttonImg" /></div>
-				<div id="gridOverlayButton" onclick="toggleAllGrids()"  class="iconButton" title="Toggle All Grid Overlay"><img src="./img/grid-overlay.svg" class="buttonImg" /></div>				
-				<div id="gtFlagButton" onclick="toggleGtMap();" class="iconButton" title="Toggle View GridTracker Users"><img id="gtFlagImg" src="" class="buttonImg" /></div>	
-				<div id="msgButton" onclick="showMessaging();" class="iconButton" title="Messaging Window" ><img id="msgImg" src="./img/gt_chat.png" class="buttonImg" /></div>	
+				<div id="gridOverlayButton" onclick="toggleAllGrids()"  class="iconButton" title="Toggle All Grid Overlay"><img src="./img/grid-overlay.svg" class="buttonImg" /></div>
+				<div id="gtFlagButton" onclick="toggleGtMap();" class="iconButton" title="Toggle View GridTracker Users"><img id="gtFlagImg" src="" class="buttonImg" /></div>
+				<div id="msgButton" onclick="showMessaging();" class="iconButton" title="Messaging Window" ><img id="msgImg" src="./img/gt_chat.png" class="buttonImg" /></div>
 		   </div>
 			<div id="SpotsDiv" style="display:none;border:1px solid yellow;margin:1px;margin-bottom:1px;margin-top:2px;" class="roundBorder" >
 			   <table align="center">
@@ -315,9 +315,9 @@
 				  <tr><td colspan=2 align="center" id="spotHistoryTimeTd"></td></tr>
 				  <tr><td colspan=2><input type="range" min="5" max="1440" value="15" step="5" class="slider" id="spotHistoryTimeValue" oninput="changeSpotValues();" onkeyup="redrawSpots();" onmouseup="redrawSpots();" /></td></tr>
 			   </table>
-			</div>	
+			</div>
 			<div id="trafficDiv" class="roundBorder" style="position:relative;background-color:#000;color:#888;border:1px solid black;margin:2px;bottom:2px;right:2px;white-space:no-wrap;overflow:hidden" >
-			</div> 
+			</div>
          </div>
          <div id="myFlagtip" class="myFlagtipEnd"></div>
 		 <div id="myTooltip" style="-webkit-user-select:text;background-color:black;padding:5px;text-align:center;display:block;position:absolute;z-index:-500;left:-1000px;top:-1000px;border:2px solid white;white-space: nowrap;overflow:hidden" class="roundBorder"></div>
@@ -365,7 +365,7 @@
 				<button class="Xbutton"  onclick="g_helpShow=false;helpDiv.style.display='none';">X</button>
 			</div>
 		</div>
-        
+
          <div id="rootSettingsDiv"  style="margin:0;top:1px;display:none;background-color:#00000000;padding:0px;text-align:center;vertical-align:middle;position:relative;z-index:600;" class="roundBorder" >
             <div class="settingstab">
                <button id="generalbut" class="settingsTablinks active" onclick="openSettingsTab(event, 'udpSettingsDiv')">General</button>
@@ -385,7 +385,7 @@
 					 <tr>
 					 <td  colspan=3>
 					 <div  class="mapItem" >
-					  
+
                      <table align=center>
                     <tr>
 						<td >Application Status</td>
@@ -507,7 +507,7 @@
                                 </tr>
                              </table>
                         </div>
-					
+
 				  	</td>
 				  </tr>
 				</table>
@@ -540,7 +540,7 @@
 					</td>
 				  </tr>
 				</table>
-			
+
             </div>
 			<div id="lookupsSettingsDiv" class="settingsTabcontent">
 			      <div  class="mapItem">
@@ -610,8 +610,8 @@
                   </table>
                </div>
 			   <br/>
-			        
-					
+
+
 				<div id="callsignDatabaseDiv" class="mapItem" >
 
 					<table align=center  class="darkTable" >
@@ -631,7 +631,7 @@
 								<input type="checkbox"  id="lotwUseEnable" onclick="lotwValuesChanged();" >
 							</td>
 							<td id="lotwUpdatedTd" >Never</td>
-							<td id="lotwCountTd">0</td>            
+							<td id="lotwCountTd">0</td>
 						</tr>
 						<tr>
 							<td>eQSL</td>
@@ -639,7 +639,7 @@
 								<input type="checkbox"  id="eqslUseEnable" onclick="eqslValuesChanged();" >
 							</td>
 							<td id="eqslUpdatedTd" >Never</td>
-							<td id="eqslCountTd">0</td> 
+							<td id="eqslCountTd">0</td>
 						</tr>
 						<tr>
 							<td>ClubLog OQRS</td>
@@ -647,13 +647,13 @@
 								<input type="checkbox"  id="oqrsUseEnable" onclick="oqrsValuesChanged();" >
 							</td>
 								<td id="oqrsUpdatedTd" >Never</td>
-							<td id="oqrsCountTd">0</td> 
+							<td id="oqrsCountTd">0</td>
 						</tr>
 					</table>
 				</div>
 			</div>
 		   <div id="SpeechSettingsDiv" class="settingsTabcontent">
-               <div  class="roundBorder" style="border:1px solid #666;margin:2px;padding:5px">		
+               <div  class="roundBorder" style="border:1px solid #666;margin:2px;padding:5px">
                   <div  class="mapItem">
                      <table align="center">
                         <tr align="center">
@@ -793,7 +793,7 @@
 								<td>
 							</tr>
 							<tr>
-							   <td id="workingDateTd" title="Date is UTC">	
+							   <td id="workingDateTd" title="Date is UTC">
 									<input style="display:none" type="text" id="workingDateValue" />
 									<div id="pick-inline"></div>
 							   </td>
@@ -817,7 +817,7 @@
                         </td>
                      </tr>
                   </table>
-               </div>	  
+               </div>
 			   <div class="mapItem">
                   <table align="center">
                      <tr>
@@ -887,7 +887,7 @@
                   </table>
                </div>
 			   <br/>
-			   
+
 			    <div class="mapItem">
                   <table align="center">
                      <tr>
@@ -920,7 +920,7 @@
                      </tr>
                   </table>
                </div>
-			   
+
 			   	<div class="mapItem">
                   <table align="center">
                      <tr>
@@ -1046,7 +1046,7 @@
 					 <tr align="center">
                         <td title="Toggle Automatic Night Map Switching"><input  type="checkbox"  id="nightMapEnable" onclick="changeNightMapEnable(this);" /></td>
                      </tr>
-				  
+
 					<tr><td style="display:none" id="nightMapTd" >
 					<div  class="mapItem">
 						<table align="center">
@@ -1109,11 +1109,11 @@
 				   </td>
 				   </tr>
 				   </table>
-				</div>	 
+				</div>
 
-        
-            
-			   
+
+
+
             </div>
             <div id="logSettingsDiv" class="settingsTabcontent">
                <div id="LoadAdifOnStartupDiv" style="left:0;padding:1px;overflow:auto;overflow-x:hidden;display:inline-block;height:602px" class="roundBorder">
@@ -1161,7 +1161,7 @@
                         <td></td>
                         <td>
                             <div id="pskDaysDiv"  >24 Hour History </div>
-                        </td>      
+                        </td>
                         <td></td>
                         <td></td>
                      </tr>
@@ -1255,7 +1255,7 @@
 								TQSL Password<input id="lotwTrusted" type="password" class="inputTextValue" size="8" oninput="ValidateText(this); adifTextValueChange(this);" / ><br/>
 								Station Name<select id="lotwStation" class="inputTextValue" onchange="ValidateText(this); adifTextValueChange(this);" ></select>
 							</div>
-                        </td>  
+                        </td>
                         <td >
                            <div class="button" onclick="if ( ValidateText(lotwLogin) && ValidateText(lotwPassword) ) grabLOtWLog(true);">Test Download</div><br/>
 						   <div id="trustedTestButton" style="margin-top:25px" class="button" onclick="testTrustedQSL(true);">Test TQSL</div>
@@ -1401,10 +1401,10 @@
 							    <input id="huntRosterNotifyWord" type="text" class="inputTextValue"  size="14" onkeyup="if (event.keyCode === 13) { speakAlertString(this.value);}"  oninput="ValidateText(this);wantedChanged(this);" />
 								<select id="huntRosterNotifyMedia" style="display:block" onchange="wantedChanged(this);" >
 								</select>
-							</td>	
+							</td>
 						</tr>
 					</table>
-				</div>	
+				</div>
 			</div>
             <div id="alertsDiv" 	 	class="settingsTabcontent">
 				<div id="alertMatrixDiv" style="display:inline-block;">
@@ -1419,7 +1419,7 @@
 								<option value="2">Current Band, Any Digi Mode</option>
 								<option value="3">Current Mode, Any Band</option>
 								<option value="4">Any Band, Any Mode</option>
-								<option value="5">Any Band, Any Digi Mode</option>		
+								<option value="5">Any Band, Any Digi Mode</option>
 							</select>
 							</td>
 					  </tr>
@@ -1464,7 +1464,7 @@
 							<input id="huntGridNotifyWord" type="text" class="inputTextValue"  size="14" onkeyup="if (event.keyCode === 13) { speakAlertString(this.value);}"  oninput="ValidateText(this);wantedChanged(this);" />
 								<select id="huntGridNotifyMedia" style="display:block" onchange="wantedChanged(this);" >
 								</select>
-							</td>							
+							</td>
 						</tr>
 						<tr>
 							<th>DXCC</th>
@@ -1486,7 +1486,7 @@
 							<input id="huntDXCCNotifyWord" type="text" class="inputTextValue"  size="14" onkeyup="if (event.keyCode === 13) { speakAlertString(this.value);}"  oninput="ValidateText(this);wantedChanged(this);" />
 								<select id="huntDXCCNotifyMedia" style="display:block" onchange="wantedChanged(this);" >
 								</select>
-							</td>							
+							</td>
 						</tr>
 						<tr>
 							<th>CQ Zone</th>
@@ -1507,7 +1507,7 @@
 							    <input id="huntCQzNotifyWord" type="text" class="inputTextValue"  size="14" onkeyup="if (event.keyCode === 13) { speakAlertString(this.value);}"  oninput="ValidateText(this);wantedChanged(this);" />
 								<select id="huntCQzNotifyMedia" style="display:block" onchange="wantedChanged(this);" >
 								</select>
-							</td>							
+							</td>
 						</tr>
 						<tr>
 							<th>ITU Zone</th>
@@ -1528,7 +1528,7 @@
 							<input id="huntITUzNotifyWord" type="text" class="inputTextValue"  size="14" onkeyup="if (event.keyCode === 13) { speakAlertString(this.value);}"  oninput="ValidateText(this);wantedChanged(this);" />
 								<select id="huntITUzNotifyMedia" style="display:block" onchange="wantedChanged(this);" >
 								</select>
-							</td>							
+							</td>
 						</tr>
 						<tr>
 							<th>US States</th>
@@ -1549,7 +1549,7 @@
 							<input id="huntStatesNotifyWord" type="text" class="inputTextValue"  size="14" onkeyup="if (event.keyCode === 13) { speakAlertString(this.value);}"  oninput="ValidateText(this);wantedChanged(this);" />
 								<select id="huntStatesNotifyMedia" style="display:block" onchange="wantedChanged(this);" >
 								</select>
-							</td>							
+							</td>
 						</tr>
 					</table>
 					<table  class="roundBorder"  align="left" style="border:1px solid #622;margin:auto;padding:1px;text-align:left" >
@@ -1611,7 +1611,7 @@
 					</table>
 				</div><br/>
                <div id="alertFormDiv" style="display:inline-block;" >
-			   
+
                   <table align="center"  class="roundBorder" style="border:3px groove darkred;margin:0 auto;">
 					<th colspan=8>Custom Alerts</th>
                      <tr>
@@ -1787,14 +1787,14 @@
                   <br />
                   &copy;2020 Stephen "Tag" Loomis / N&Oslash;TTL<br />
 				  <br />
-				  &copy;2020 Henry "atouk" Forte / N2VFL<br/>                 
+				  &copy;2020 Henry "atouk" Forte / N2VFL<br/>
                   <p>
 				  <H3>Contributors</H3>
 				  <b>NR&Oslash;Q</b><p>
 				  "d3jake" KE&Oslash;RIY - "Don" KB2YSI - K4KPW - "Paul" K6PST
                   <br />
                   <img src="./gridview.png" /> <br />
-				 
+
                </div>
             </div>
 			<div id="updateSettingsDiv"	class="settingsTabcontent">

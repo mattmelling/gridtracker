@@ -60,7 +60,7 @@ function latLonToGridSquare(param1,param2){
 		  lon += 180;
 		  lon = 180 + lon;
 	  } // 53032
-  }	 
+  }
   adjLat = lat + 90;
   adjLon = lon + 180;
   GLat = U[Math.trunc(adjLat/10)];
@@ -71,7 +71,7 @@ function latLonToGridSquare(param1,param2){
 //  gLon = L[Math.trunc(rLon/5)];
   return GLon+GLat+nLon+nLat;
 }
-  
+
 
 
 function bitwise(str){
@@ -92,28 +92,28 @@ function binaryTransfer(integer, binary) {
 	var num;
 	var result = '';
 	var sign = integer < 0 ? '-' : '';
-	
+
 	function table (num) {
 		var t = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		return t[num];
 	}
-	
+
 	integer = Math.abs(integer);
-	
+
 	while (integer >= binary) {
 		num = integer % binary;
 		integer = Math.floor(integer / binary);
 		stack.push(table(num));
 	}
-	
+
 	if (integer > 0) {
 		stack.push(table(integer));
 	}
-	
+
 	for (var i = stack.length - 1; i >= 0; i--) {
 		result += stack[i];
-	} 
-	
+	}
+
 	return sign + result;
 }
 
@@ -141,7 +141,7 @@ var MyCircle = {
 
     distance: function(lat1, lon1, lat2, lon2, unit) {
         if ( unit === undefined ) unit = 'KM';
-        var r = this.validateRadius(unit); 
+        var r = this.validateRadius(unit);
         lat1 *= Math.PI / 180;
         lon1 *= Math.PI / 180;
         lat2 *= Math.PI / 180;
@@ -150,10 +150,10 @@ var MyCircle = {
         var a = Math.pow(Math.cos(lat2) * Math.sin(lonDelta) , 2) + Math.pow(Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lonDelta) , 2);
         var b = Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lonDelta);
         var angle = Math.atan2(Math.sqrt(a) , b);
-        
+
         return angle;
     },
-    
+
     bearing: function(lat1, lon1, lat2, lon2) {
         lat1 *= Math.PI / 180;
         lon1 *= Math.PI / 180;
@@ -164,12 +164,12 @@ var MyCircle = {
         var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lonDelta);
         var brng = Math.atan2(y, x);
         brng = brng * (180 / Math.PI);
-        
+
         if ( brng < 0 ) { brng += 360; }
-        
+
         return brng;
     },
-    
+
     destination: function(lat1, lon1, brng, dt, unit) {
         if ( unit === undefined ) unit = 'KM';
         var r = this.validateRadius(unit);
@@ -177,7 +177,7 @@ var MyCircle = {
         lon1 *= Math.PI / 180;
         var lat3 = Math.asin(Math.sin(lat1) * Math.cos(dt / r) + Math.cos(lat1) * Math.sin(dt / r) * Math.cos( brng * Math.PI / 180 ));
         var lon3 = lon1 + Math.atan2(Math.sin( brng * Math.PI / 180 ) * Math.sin(dt / r) * Math.cos(lat1) , Math.cos(dt / r) - Math.sin(lat1) * Math.sin(lat3));
-        
+
         return {
             'LAT': lat3 * 180 / Math.PI,
             'LON': lon3 * 180 / Math.PI
@@ -205,7 +205,7 @@ if (typeof module != 'undefined' && module.exports) {
  *
  * Please use as you wish at your own risk.
  */
- 
+
 function XML2jsobj(node) {
 
 	var	data = {};
@@ -222,13 +222,13 @@ function XML2jsobj(node) {
 			data[name] = value;
 		}
 	};
-	
+
 	// element attributes
 	var c, cn;
 	for (c = 0; cn = node.attributes[c]; c++) {
 		Add(cn.name, cn.value);
 	}
-	
+
 	// child elements
 	for (c = 0; cn = node.childNodes[c]; c++) {
 		if (cn.nodeType == 1) {
@@ -246,7 +246,7 @@ function XML2jsobj(node) {
 	return data;
 }
 
-// From https://pskreporter.info/ 
+// From https://pskreporter.info/
 // Many many thanks!!!
 function flightFeature(line, opts, layer, canAnimate) {
 	var steps = opts.steps;
@@ -293,12 +293,12 @@ function flightFeature(line, opts, layer, canAnimate) {
 
 	var featureArrow = new ol.Feature(new ol.geom.Point(line[0]));
 
-		  
+
 	line = new ol.geom.LineString(line);
 	var feature = new ol.Feature({ geometry: line, name: 'flight' });
-	
-	
-	feature.setStyle(new ol.style.Style({ 
+
+
+	feature.setStyle(new ol.style.Style({
 		stroke: new ol.style.Stroke({ color: opts.color, width: opts.weight, lineDash: dash, lineDashOffset:dashOff}) }));
 
 
@@ -439,19 +439,19 @@ function subLunar (t)
      GMST = fmod(15*(18.697374558 + 24.06570982441908*D), 360.0);
     ll.lng_d = fmod(RA-GMST+36000.0+180.0, 360.0) - 180.0;
     ll.lng = deg2rad(ll.lng_d);
-	
+
 	data = Object();
 	data.ll = [ll.lng_d,ll.lat_d];
 	data.RA = RA/15;
 	data.Dec = 180/M_PI*Dec;
-	
+
 	return data;
 }
 
 
 
 function doRAconvert(lg, la, ras, decs) {
- 
+
   jd=datetojd();
   lgt=lg;
   lat=rad(la);
@@ -486,8 +486,8 @@ function datetojd(datestring) {
 
 
 	jd = (timeNowSec() /86400.0) + 2440587.5;
- 
-  
+
+
 
   return jd
 }
@@ -520,7 +520,7 @@ function convert(ra, dec, lmst,lat) {
 	var data = Object();
 	data.azimuth = deg(az);
 	data.elevation = deg(alt);
-  
+
 	return data;
 }
 

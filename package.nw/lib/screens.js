@@ -1,4 +1,4 @@
-var s_title = null; 
+var s_title = null;
 var s_screenSettings = {};
 var s_zoomLevel = 0;
 
@@ -21,7 +21,7 @@ function setWindowInfo()
 	windowInfo.width = win.width;
 	windowInfo.height = win.height;
 	g_windowInfo = windowInfo;
-	
+
 }
 
 function clearAllScreenTimers()
@@ -67,9 +67,9 @@ var screenCB = {
 function saveScreenSettings()
 {
 	var setting = { "showing" : g_isShowing , "zoomLevel" : s_zoomLevel };
-	
+
 	s_screenSettings = JSON.parse(localStorage.screenSettings);
-	
+
 	s_screenSettings[s_title] = setting;
 
 	localStorage.screenSettings = JSON.stringify(s_screenSettings);
@@ -86,10 +86,10 @@ nw.Window.get().on('loaded', function () {
 		if ( typeof localStorage.screenSettings == "undefined" )
 		{
 			localStorage.screenSettings = "{}";
-			
+
 		}
 		s_screenSettings = JSON.parse(localStorage.screenSettings);
-	
+
 		if ( !(s_title in s_screenSettings) )
 		{
 			saveScreenSettings();
@@ -100,19 +100,19 @@ nw.Window.get().on('loaded', function () {
 		}
 		g_isShowing = s_screenSettings[s_title].showing;
 		nw.Window.get().zoomLevel = s_zoomLevel = s_screenSettings[s_title].zoomLevel;
-		
+
 		if ( g_isShowing || s_title == "GridTracker ©202" )
 			this.show();
 		else
 			this.hide();
-		
+
 		g_initialScreenCount = nw.Screen.screens.length;
 		setWindowInfo();
 
 		document.addEventListener('keydown', onZoomControlDown, true);
   });
-  
-  
+
+
 var g_windowMoveTimer = null;
 nw.Window.get().on('move', function (x,y) {
 		if ( g_windowMoveTimer != null )
@@ -121,7 +121,7 @@ nw.Window.get().on('move', function (x,y) {
 		}
 		g_windowMoveTimer = setTimeout(setWindowInfo,1000);
   });
- 
+
 var g_windowResizeTimer = null;
 nw.Window.get().on('resize', function (w,h) {
 		if ( g_windowResizeTimer != null )
@@ -130,8 +130,8 @@ nw.Window.get().on('resize', function (w,h) {
 		}
 		g_windowResizeTimer = setTimeout(setWindowInfo,1000);
   });
-  
-  
+
+
 var g_zoomKeys = { "NumpadSubtract":reduceZoom , "Minus":reduceZoom , "NumpadAdd":increaseZoom, "Equal":increaseZoom, "Numpad0":resetZoom , "Digit0":resetZoom };
 
 function onZoomControlDown(event)
@@ -149,28 +149,28 @@ function reduceZoom()
 {
 	s_zoomLevel -= 0.20;
 	nw.Window.get().zoomLevel = s_zoomLevel;
-	saveScreenSettings();	
+	saveScreenSettings();
 }
 
 function increaseZoom()
 {
 	s_zoomLevel += 0.20;
 	nw.Window.get().zoomLevel = s_zoomLevel;
-	
+
 	saveScreenSettings();
 }
 
 function resetZoom()
 {
-	s_zoomLevel = 0;	
+	s_zoomLevel = 0;
 	nw.Window.get().zoomLevel = s_zoomLevel;
-	saveScreenSettings();	
+	saveScreenSettings();
 }
 
 var g_process = require('process');
 
 g_process.on('uncaughtException', function (e) {
-	
+
 });
 
 

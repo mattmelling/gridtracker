@@ -1,5 +1,5 @@
 /**
- 
+
 **/
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -15,7 +15,7 @@
   }
 
   function GMST(julianDay) {
-    /* Calculate Greenwich Mean Sidereal Time according to 
+    /* Calculate Greenwich Mean Sidereal Time according to
        http://aa.usno.navy.mil/faq/docs/GAST.php */
     var d = julianDay - 2451545.0;
     // Low precision equation is good enough for our purposes.
@@ -131,7 +131,7 @@
 
         return [lng,lat];
     }
-	
+
     _sunEquatorialPosition (sunEclLng, eclObliq) {
       /* Compute the Sun's equatorial position from its ecliptic
        * position. Inputs are expected in degrees. Outputs are in
@@ -200,12 +200,12 @@
 var dayNight = {
     map: null,
 	vectorLayer:null,
-	
+
     init: function (map) {
         this.map = map;
 
 		var geoJSON = new GeoJSONTerminator();
-        
+
 		this.vectorSource = new ol.source.Vector({
           features: (new ol.format.GeoJSON()).readFeatures(geoJSON, {
             featureProjection: 'EPSG:3857'
@@ -235,18 +235,18 @@ var dayNight = {
 				 this.vectorLayer.setStyle(circleStyle);
 				 this.vectorLayer.setOpacity(Number(g_mapSettings.shadow));
 				 this.vectorSource.clear();
-					
+
 				this.vectorSource.addFeature(
 					(new ol.format.GeoJSON()).readFeature(new GeoJSONTerminator(), {
 						featureProjection: 'EPSG:3857'
 					})
-					);	
+					);
 				var point =	 ol.proj.fromLonLat([g_myLon, g_myLat]);
 				var arr = this.vectorSource.getFeaturesAtCoordinate(point);
 				return (arr.length > 0?true:false);
-				
+
     },
-    
+
     show: function () {
 		this.vectorLayer.setVisible(true);
 		return this.refresh();
@@ -258,7 +258,7 @@ var dayNight = {
         return this.vectorLayer.getVisible();
     }
 };
- 
+
 var moonLayer = {
     map: null,
 	vectorLayer:null,
@@ -275,8 +275,8 @@ var moonLayer = {
 				scale: 0.10,
 				opacity: 0.5
 			});
-        
-		
+
+
 		this.pin = iconFeature( ol.proj.fromLonLat(subLunar(timeNowSec()).ll) , this.icon, 0);
 		this.pin.size = 99;
 		this.vectorSource = new ol.source.Vector({});
@@ -285,7 +285,7 @@ var moonLayer = {
             source: this.vectorSource,
             zIndex: 30
         });
-		this.map.getLayers().insertAt(1, this.vectorLayer);	
+		this.map.getLayers().insertAt(1, this.vectorLayer);
 
     },
 	future: function (now) {
@@ -302,7 +302,7 @@ var moonLayer = {
 		var lonOff = 0;
 		var lastc = 0;
 
-		for (var i = 0; i < data.length; i++) 
+		for (var i = 0; i < data.length; i++)
 		{
 		  var c = data[i];
 		  if (isNaN(c[0])) {
@@ -319,21 +319,21 @@ var moonLayer = {
 		  lastc = c[0];
 		  line.push(ol.proj.fromLonLat([ c[0] + lonOff, c[1]]));
 		}
-		
+
 		if (line.length == 0) {
 		line.push(ol.proj.fromLonLat(start));
 		}
-		
-		
+
+
 		line = new ol.geom.LineString(line);
 		var feature = new ol.Feature({ geometry: line, name: 'moonFlight' });
-	
-	
-		feature.setStyle(new ol.style.Style({ 
+
+
+		feature.setStyle(new ol.style.Style({
 			stroke: new ol.style.Stroke({ color: "#FFF", width: 1}) }));
-			
+
 		return feature;
-		
+
 	},
     refresh: function () {
 		this.vectorSource.clear();
@@ -348,7 +348,7 @@ var moonLayer = {
 		}
 
     },
-    
+
     show: function () {
 		this.refresh();
 		this.vectorLayer.setVisible(true);

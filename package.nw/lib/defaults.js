@@ -1,4 +1,4 @@
-var validSettings =  
+var validSettings =
 [
 	"HRDLogbookLogSettings",
 	"N1MMSettings",
@@ -30,7 +30,7 @@ var validSettings =
 	"screenSettings"
 ];
 
-var def_appSettings = 
+var def_appSettings =
 {
 	"alertMute" : 0,
 	"rosterAlwaysOnTop": false,
@@ -93,7 +93,7 @@ var def_appSettings =
 	"gtSpotEnable" : true
 };
 
-var def_mapSettings = 
+var def_mapSettings =
 {
 	"animate" :  true,
 	"animateSpeed" :  4,
@@ -131,7 +131,7 @@ var def_mapSettings =
 	"mapTrans" : 0.5
 };
 
-var def_adifLogSettings = 
+var def_adifLogSettings =
 {
 		"menu": {
 			"buttonAdifCheckBox": false,
@@ -180,7 +180,7 @@ var def_adifLogSettings =
 		"downloads": {}
 };
 
-var def_msgSettings = 
+var def_msgSettings =
 {
 	"msgAlertSelect" :  1,
 	"msgAlertWord" :  "New chat message",
@@ -192,7 +192,7 @@ var def_msgSettings =
 
 };
 
-var def_receptionSettings = 
+var def_receptionSettings =
 {
 	"lastSequenceNumber" :  "0", // Treat as a string, it's friggin big
 	"lastDownloadTimeSec" :  0,
@@ -205,47 +205,47 @@ var def_receptionSettings =
 };
 
 
-var def_N1MMSettings = 
+var def_N1MMSettings =
 {
 	"enable" :  false,
 	"port" :  2333,
 	"ip" :  "127.0.0.1"
 
 };
-var def_log4OMSettings = 
+var def_log4OMSettings =
 {
 	"enable" :  false,
 	"port" :  2236,
 	"ip" :  "127.0.0.1"
 };
-var def_dxkLogSettings = 
+var def_dxkLogSettings =
 {
 	"enable" :  false,
 	"port" :  52000,
 	"ip" :  "127.0.0.1"
 };
-var def_HRDLogbookLogSettings = 
+var def_HRDLogbookLogSettings =
 {
 
 	"enable" :  false,
 	"port" :  7826,
 	"ip" :  "127.0.0.1"
 };
-var def_acLogSettings = 
+var def_acLogSettings =
 {
 
 	"enable" :  false,
 	"port" :  1100,
 	"ip" :  "127.0.0.1"
 };
-var def_trustedQslSettings =  
+var def_trustedQslSettings =
 {
 	"stationFile" :  "",
 	"stationFileValid" :  false,
 	"binaryFile" :  "",
 	"binaryFileValid" :  false
 };
-var def_callsignLookups = 
+var def_callsignLookups =
 {
 	"lotwUseEnable" :  true,
 	"lotwWeeklyEnable" :  true,
@@ -262,7 +262,7 @@ var def_callsignLookups =
 
 };
 
-var def_bandActivity = 
+var def_bandActivity =
 {
 	"lastUpdate" : {},
 	"lines" : {}

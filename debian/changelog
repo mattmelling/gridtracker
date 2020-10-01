@@ -1,32 +1,9 @@
-gridtracker (1.20.0927) unstable; urgency=medium
+gridtracker (1.20.0927) stable; urgency=medium
 
   [ Tag Loomis ]
   * Author release 1.20.0927
 
- -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Mon, 28 Sep 2020 14:06:49 -0700
-
-gridtracker (1.20.0922) unstable; urgency=medium
-
-  [ Tag Loomis ]
-  * Author release 1.20.0922
-
- -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Tue, 22 Sep 2020 21:10:23 -0700
-
-gridtracker (1.20.0803) unstable; urgency=medium
-
-  * Raspberry Pi/ARM shadows in the "Callable Roster" now work
-  * Band Activity Pop-out now works on Mac
-  * Open Lookup On Transmit" behavior fixed!
-
- -- Tag Loomis <n0ttl@tagloomis.com>  Mon, 03 Aug 2020 12:55:09 +0700
-
-gridtracker (1.20.0801) unstable; urgency=low
-
-  [ Tag Loomis ]
-  * Upstream release 1.20.0801
-
   [ Paul Traina ]
   * Debian package building support
 
- -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Sat, 01 Aug 2020 12:55:09 +0700
-
+ -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Mon, 28 Sep 2020 14:06:49 -0700

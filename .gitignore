@@ -6,3 +6,4 @@ debian/nwjs-sdk
 debian/*-stamp
 debian/*.substvars
 debian/tmp
+.DS_Store

@@ -1,3 +1,5 @@
+build
+dist
 debian/gridtracker
 debian/.debhelper
 debian/files

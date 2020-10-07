@@ -1,8 +1,6 @@
-debian/gridtracker
 debian/.debhelper
 debian/files
-debian/nwjs
-debian/nwjs-sdk
+debian/gridtracker
 debian/*-stamp
 debian/*.substvars
 debian/tmp

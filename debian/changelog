@@ -1,4 +1,10 @@
-gridtracker (1.20.0927) stable; urgency=medium
+gridtracker (1.20.0927+repack1) unstable; urgency=high
+
+  * Clean up nw execution in .desktop and .sh file.
+
+ -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Wed, 07 Oct 2020 09:16:02 -0700
+
+gridtracker (1.20.0927) unstable; urgency=medium
 
   [ Tag Loomis ]
   * Author release 1.20.0927

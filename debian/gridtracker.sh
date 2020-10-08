@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/bin/nw --enable-speech-dispatcher /usr/share/gridtracker $@
+exec nw --enable-speech-dispatcher /usr/share/gridtracker $@

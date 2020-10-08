@@ -1,6 +1,10 @@
+build
+dist
+debian/gridtracker
 debian/.debhelper
 debian/files
 debian/gridtracker
 debian/*-stamp
 debian/*.substvars
 debian/tmp
+.DS_Store

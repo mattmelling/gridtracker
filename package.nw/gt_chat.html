@@ -262,6 +262,8 @@ function openIdCid( from )
 
 function openLookupCid( from )
 {
+	from.preventDefault();
+
 	if ( typeof window.opener.g_gtFlagPins[from.currentTarget.id] != "undefined" )
 	{
 		doLookup(window.opener.g_gtFlagPins[from.currentTarget.id].call);

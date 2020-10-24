@@ -39,6 +39,8 @@ if (g_platform == "windows")
 var gui = require('nw.gui');
 var win = gui.Window.get();
 
+var g_developerMode = (process.versions['nw-flavor'] == "sdk");
+
 var g_popupWindowHandle = null;
 var g_callRosterWindowHandle = null;
 var g_conditionsWindowHandle = null;
@@ -4789,6 +4791,7 @@ function initMap() {
 
 	//mapDiv.addEventListener('mouseout', mapLoseFocus, false);
 	mapDiv.addEventListener('mouseleave', mapLoseFocus, false);
+	mapDiv.addEventListener('contextmenu', function(event) { event.preventDefault(); })
 
 	g_map.on('pointerdown', function (event) {
 
@@ -4835,7 +4838,6 @@ function initMap() {
 		if (g_mapSettings.mouseOver == false)
 			mouseOutOfDataItem();
 	});
-
 
 	document.getElementById("menuDiv").style.display = "block";
 
@@ -6720,12 +6722,13 @@ function resetSearch()
 
 function showWorkedByCall(callsign, evt)
 {
+	evt.preventDefault();
+
 	resetSearch();
 	g_searchWB = callsign;
 	if ( event.shiftKey == true )
 		g_filterQSL = "true";
 	openInfoTab('qsobox', 'workedBoxDiv', showWorkedBox);
-
 }
 
 function showWorkedSearchChanged(object, index) {
@@ -7546,8 +7549,9 @@ function showSettingsBox() {
 	}
 }
 
-function toggleBaWindow()
-{
+function toggleBaWindow(event) {
+	event.preventDefault();
+
 	if (g_baWindowHandle == null)
 	{
 		openBaWindow(true);
@@ -11199,9 +11203,11 @@ function loadAdifSettings()
 
 function startupVersionInit() {
 
-	document.body.addEventListener('contextmenu', function(ev) {
-		ev.preventDefault();
-	});
+	if (!g_developerMode) {
+		document.body.addEventListener('contextmenu', function(ev) {
+			ev.preventDefault();
+		});
+	}
 
 	imSureCheck.checked = false;
 	stopAskingCheckbox.checked = g_appSettings.stopAskingVersion;

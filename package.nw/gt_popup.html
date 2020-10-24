@@ -66,8 +66,10 @@ function onMyKeyDown(event)
 	window.opener.onMyKeyDown(event);
 }
 
-document.oncontextmenu = function() {
-  return false;
+document.oncontextmenu = function(event) {
+  if (process.versions['nw-flavor'] != "sdk") {
+    ev.preventDefault();
+  }
 }
 
 </script>

@@ -212,7 +212,9 @@
 				<div id="instancesDiv" style="display:none;" ></div>
 			</div>
 
-			<div id="rosterTable" style="overflow:auto;overflow-x:hidden;" ></div>
+			<div oncontextmenu="handleContextMenu(event);">
+				<div id="rosterTable" style="overflow:auto;overflow-x:hidden;"></div>
+			</div>
 		</div>
 		<div id="editView" class="roundBorder"  style="height:100%;border:3px solid #066;padding:10px;margin:10px;display:none;">
 			<div style='display:block;font-size:larger'>Callsign, CQ and DXCC Ignores</div><br/>

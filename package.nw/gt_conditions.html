@@ -37,8 +37,10 @@ table, th, td {
 </style>
 <script>
 
-document.oncontextmenu = function() {
-  return false;
+document.oncontextmenu = function(event) {
+  if (process.versions['nw-flavor'] != "sdk") {
+    ev.preventDefault();
+  }
 }
 
 document.addEventListener("dragover", function (event) {

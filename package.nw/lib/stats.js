@@ -1,8 +1,8 @@
 // GridTracker ©2020 N0TTL
 
 
-document.oncontextmenu = function() {
- return false;
+document.oncontextmenu = function(event) {
+	event.preventDefault();
 }
 
 document.addEventListener("dragover", function (event) {

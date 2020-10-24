@@ -42,6 +42,7 @@ var g_callsignDatabaseDXCC = {};
 var g_callsignDatabaseUS = {}
 var g_callsignDatabaseUSplus = {};
 
+var g_developerMode = (process.versions['nw-flavor'] == "sdk");
 
 var g_modeColors = {};
 g_modeColors["FT4"] = '1111FF';
@@ -3036,113 +3037,6 @@ function init()
 	});
 	g_dxccMenu.append(item);
 
-	document.body.addEventListener('contextmenu', function(ev) {
-		ev.preventDefault();
-		if ( editView.style.display == "inline-block" )
-			return false;
-		var len = Object.keys(g_blockedCalls).length;
-		if ( len > 0 )
-		{
-			g_clearIgnores.enabled = true;
-			g_clearIgnores.label = "Clear Call Ignore" + ((len > 1 )?"s ("+len+")":"");
-			g_clearIgnoresCall.enabled = true;
-			g_clearIgnoresCall.label = "Clear Ignore" + ((len > 1 )?"s ("+len+")":"");
-		}
-		else
-		{
-			g_clearIgnores.label = "Clear Call Ignore";
-			g_clearIgnores.enabled = false;
-			g_clearIgnoresCall.label = "Clear Ignore";
-			g_clearIgnoresCall.enabled = false;
-		}
-		len = Object.keys(g_blockedDxcc).length;
-		if ( len > 0 )
-		{
-			g_clearDxccIgnoreMainMenu.enabled = true;
-			g_clearDxccIgnoreMainMenu.label = "Clear DXCC Ignore" + ((len > 1 )?"s ("+len+")":"");
-			g_clearDxccIgnore.enabled = true;
-			g_clearDxccIgnore.label = "Clear Ignore" + ((len > 1 )?"s ("+len+")":"");
-		}
-		else
-		{
-			g_clearDxccIgnoreMainMenu.label = "Clear DXCC Ignore";
-			g_clearDxccIgnoreMainMenu.enabled = false;
-			g_clearDxccIgnore.label = "Clear Ignore";
-			g_clearDxccIgnore.enabled = false;
-		}
-		len = Object.keys(g_blockedCQ).length;
-		if ( len > 0 )
-		{
-			g_clearCQIgnoreMainMenu.enabled = true;
-			g_clearCQIgnoreMainMenu.label = "Clear CQ Ignore" + ((len > 1 )?"s ("+len+")":"");
-			g_clearCQIgnore.enabled = true;
-			g_clearCQIgnore.label = "Clear Ignore" + ((len > 1 )?"s ("+len+")":"");
-		}
-		else
-		{
-			g_clearCQIgnoreMainMenu.label = "Clear CQ Ignore";
-			g_clearCQIgnoreMainMenu.enabled = false;
-			g_clearCQIgnore.label = "Clear Ignore";
-			g_clearCQIgnore.enabled = false;
-		}
-		if ( typeof ev.target != 'undefined' )
-		{
-			var name = ev.target.getAttribute("name");
-			if ( name == "Callsign" )
-			{
-				g_targetHash =  ev.target.parentNode.id;
-				g_callMenu.popup(ev.x, ev.y);
-			}
-			else if ( name == "Calling" )
-			{
-				g_targetHash =  ev.target.parentNode.id;
-				g_callingMenu.popup(ev.x, ev.y);
-			}
-			else if ( name == "CQ" )
-			{
-				if (  callRoster[ev.target.parentNode.id].DXcall != "CQ" )
-				{
-					g_targetCQ =  ev.target.parentNode.id;
-					g_CQMenu.popup(ev.x, ev.y);
-				}
-			}
-			else if ( name && name.startsWith("DXCC")  )
-			{
-				var dxcca = name.split("(");
-				var dxcc = parseInt(dxcca[1]);
-				g_targetDxcc = dxcc;
-				g_dxccMenu.popup(ev.x, ev.y);
-			}
-			else
-			{
-				if ( g_rosterSettings.compact == false )
-				{
-					g_menu.popup(ev.x, ev.y);
-				}
-				else
-				{
-					g_compactMenu.popup(ev.x, ev.y);
-				}
-			}
-		}
-		else
-		{
-			if ( g_rosterSettings.compact == false )
-			{
-				g_menu.popup(ev.x, ev.y);
-			}
-			else
-			{
-				g_compactMenu.popup(ev.x, ev.y);
-			}
-		}
-
-
-
-		return false;
-	});
-
-
 	callsignNeed.value = g_rosterSettings.callsign;
 	huntMode.value = g_rosterSettings.hunting;
 	huntNeed.value = g_rosterSettings.huntNeed;
@@ -3190,6 +3084,114 @@ function init()
 
 	updateInstances();
 
+}
+
+function handleContextMenu(ev) {
+	if ( editView.style.display == "inline-block" )
+		return false;
+
+	var len = Object.keys(g_blockedCalls).length;
+	if ( len > 0 )
+	{
+		g_clearIgnores.enabled = true;
+		g_clearIgnores.label = "Clear Call Ignore" + ((len > 1 )?"s ("+len+")":"");
+		g_clearIgnoresCall.enabled = true;
+		g_clearIgnoresCall.label = "Clear Ignore" + ((len > 1 )?"s ("+len+")":"");
+	}
+	else
+	{
+		g_clearIgnores.label = "Clear Call Ignore";
+		g_clearIgnores.enabled = false;
+		g_clearIgnoresCall.label = "Clear Ignore";
+		g_clearIgnoresCall.enabled = false;
+	}
+	len = Object.keys(g_blockedDxcc).length;
+	if ( len > 0 )
+	{
+		g_clearDxccIgnoreMainMenu.enabled = true;
+		g_clearDxccIgnoreMainMenu.label = "Clear DXCC Ignore" + ((len > 1 )?"s ("+len+")":"");
+		g_clearDxccIgnore.enabled = true;
+		g_clearDxccIgnore.label = "Clear Ignore" + ((len > 1 )?"s ("+len+")":"");
+	}
+	else
+	{
+		g_clearDxccIgnoreMainMenu.label = "Clear DXCC Ignore";
+		g_clearDxccIgnoreMainMenu.enabled = false;
+		g_clearDxccIgnore.label = "Clear Ignore";
+		g_clearDxccIgnore.enabled = false;
+	}
+	len = Object.keys(g_blockedCQ).length;
+	if ( len > 0 )
+	{
+		g_clearCQIgnoreMainMenu.enabled = true;
+		g_clearCQIgnoreMainMenu.label = "Clear CQ Ignore" + ((len > 1 )?"s ("+len+")":"");
+		g_clearCQIgnore.enabled = true;
+		g_clearCQIgnore.label = "Clear Ignore" + ((len > 1 )?"s ("+len+")":"");
+	}
+	else
+	{
+		g_clearCQIgnoreMainMenu.label = "Clear CQ Ignore";
+		g_clearCQIgnoreMainMenu.enabled = false;
+		g_clearCQIgnore.label = "Clear Ignore";
+		g_clearCQIgnore.enabled = false;
+	}
+	if ( typeof ev.target != 'undefined' )
+	{
+		var name = ev.target.getAttribute("name");
+		if ( name == "Callsign" )
+		{
+			g_targetHash =  ev.target.parentNode.id;
+			g_callMenu.popup(ev.x, ev.y);
+		}
+		else if ( name == "Calling" )
+		{
+			g_targetHash =  ev.target.parentNode.id;
+			g_callingMenu.popup(ev.x, ev.y);
+		}
+		else if ( name == "CQ" )
+		{
+			if (  callRoster[ev.target.parentNode.id].DXcall != "CQ" )
+			{
+				g_targetCQ =  ev.target.parentNode.id;
+				g_CQMenu.popup(ev.x, ev.y);
+			}
+		}
+		else if ( name && name.startsWith("DXCC")  )
+		{
+			var dxcca = name.split("(");
+			var dxcc = parseInt(dxcca[1]);
+			g_targetDxcc = dxcc;
+			g_dxccMenu.popup(ev.x, ev.y);
+		}
+		else
+		{
+			if ( g_rosterSettings.compact == false )
+			{
+				g_menu.popup(ev.x, ev.y);
+			}
+			else
+			{
+				g_compactMenu.popup(ev.x, ev.y);
+			}
+		}
+	}
+	else
+	{
+		if ( g_rosterSettings.compact == false )
+		{
+			g_menu.popup(ev.x, ev.y);
+		}
+		else
+		{
+			g_compactMenu.popup(ev.x, ev.y);
+		}
+	}
+
+	if (!g_developerMode) {
+		ev.preventDefault();
+	}
+
+	return false;
 }
 
 function getTypeFromMode(mode)

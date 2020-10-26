@@ -419,7 +419,7 @@
                            <td id="multicastTD" style="display:none" >IP <input id="multicastIpInput" type="text" class="inputTextValue"  maxlength="15"  size="10" onkeypress='return validIpKeys(event.charCode);' oninput=" if ( ValidateMulticast(this) ) setMulticastIp();   "/></td>
                         </tr>
                         <tr>
-                           <td>Port <input id="udpPortInput" type="text" class="inputTextValue"  maxlength="5" size="5" onkeypress='return validNumberKeys(event.charCode);' oninput="if ( ValidatePort(this,null, CheckNotRemoteIpPort ) ) setUdpPort();" /></td>
+                           <td>Port <input id="udpPortInput" type="text" class="inputTextValue"  maxlength="5" size="5" onkeypress='return validNumberKeys(event.charCode);' oninput="if ( ValidatePort(this, null, CheckReceivePortIsNotForwardPort) ) setUdpPort();" /></td>
                         </tr>
                      </table>
                   </div>
@@ -434,10 +434,10 @@
                            <td ><i>e.g. GridTracker on another host</i></td>
                         </tr>
                         <tr>
-                           <td >IP <input id="udpForwardIpInput" type="text" class="inputTextValue"  maxlength="15"  size="10" onkeypress='return validIpKeys(event.charCode);' oninput=" if ( ValidateIPaddress(this,udpForwardEnable) ) setForwardIp();   "/></td>
+                           <td >IP <input id="udpForwardIpInput" type="text" class="inputTextValue"  maxlength="15"  size="10" onkeypress='return validIpKeys(event.charCode);' oninput=" if ( ValidateIPaddress(this, udpForwardEnable) ) setForwardIp();   "/></td>
                         </tr>
                         <tr>
-                           <td >Port <input id="udpForwardPortInput" type="text" class="inputTextValue"   maxlength="5" size="5" onkeypress='return validNumberKeys(event.charCode);' oninput="if ( ValidatePort(this,udpForwardEnable, CheckNotLocalPort ) )  setForwardPort();  " /></td>
+                           <td >Port <input id="udpForwardPortInput" type="text" class="inputTextValue"   maxlength="5" size="5" onkeypress='return validNumberKeys(event.charCode);' oninput="if ( ValidatePort(this, udpForwardEnable, CheckForwardPortIsNotReceivePort) )  setForwardPort();  " /></td>
                         </tr>
                         <tr>
                            <td> Enabled?<input title="Enable / Disable UDP Message forwarding" type="checkbox"  id="udpForwardEnable" onclick="setUdpForwardEnable(this);" /></td>

@@ -9110,7 +9110,7 @@ function setMulticastEnable(checkbox) {
 
 function setUdpForwardEnable(checkbox) {
 	if (checkbox.checked) {
-		if (ValidatePort(udpForwardPortInput, null, CheckNotLocalPort) && ValidateIPaddress(udpForwardIpInput,
+		if (ValidatePort(udpForwardPortInput, null, CheckForwardPortIsNotReceivePort) && ValidateIPaddress(udpForwardIpInput,
 				null)) {
 			g_appSettings.wsjtForwardUdpEnable = checkbox.checked;
 			return;
@@ -9502,30 +9502,31 @@ function updateBasedOnIni() {
 	}
 }
 
-function CheckNotRemoteIpPort(value) {
-	if (udpForwardIpInput.value == "127.0.0.1" && udpForwardPortInput.value == value && g_appSettings.wsjtIP == "")
-		return true;
-	return false;
+function CheckReceivePortIsNotForwardPort(value) {
+	if (udpForwardIpInput.value == "127.0.0.1" && udpForwardPortInput.value == value && g_appSettings.wsjtIP == "" && udpForwardEnable.checked) {
+		return false;
+	}
+	return true;
 }
 
-function CheckNotLocalPort(value) {
+function CheckForwardPortIsNotReceivePort(value) {
 	if (udpForwardIpInput.value == "127.0.0.1" && udpPortInput.value == value && g_appSettings.wsjtIP == "")
-		return true;
-	return false;
+		return false;
+	return true;
 }
 
 function setForwardIp() {
 	g_appSettings.wsjtForwardUdpIp = udpForwardIpInput.value;
-	if (ValidatePort(udpPortInput, null, CheckNotRemoteIpPort)) {
+	if (ValidatePort(udpPortInput, null, CheckReceivePortIsNotForwardPort)) {
 		setUdpPort();
 	}
-	ValidatePort(udpForwardPortInput, null, CheckNotLocalPort);
+	ValidatePort(udpForwardPortInput, null, CheckForwardPortIsNotReceivePort);
 }
 
 function setForwardPort() {
 	g_appSettings.wsjtForwardUdpPort = udpForwardPortInput.value;
 	ValidateIPaddress(udpForwardIpInput, null);
-	if (ValidatePort(udpPortInput, null, CheckNotRemoteIpPort)) {
+	if (ValidatePort(udpPortInput, null, CheckReceivePortIsNotForwardPort)) {
 		setUdpPort();
 	}
 }
@@ -9792,7 +9793,7 @@ function ValidateIPaddress(inputText, checkBox) {
 function ValidatePort(inputText, checkBox, callBackCheck) {
 	var value = Number(inputText.value);
 	if (value > 1023 && value < 65536) {
-		if (callBackCheck && callBackCheck(value)) {
+		if (callBackCheck && !callBackCheck(value)) {
 			inputText.style.color = "#FFF";
 			inputText.style.backgroundColor = "red";
 			if (checkBox)
@@ -11399,9 +11400,9 @@ function loadPortSettings()
 	multicastIpInput.value = g_appSettings.wsjtIP;
 	setMulticastEnable(multicastEnable);
 	udpPortInput.value = g_appSettings.wsjtUdpPort;
-	ValidatePort(udpPortInput, null, CheckNotRemoteIpPort);
+	ValidatePort(udpPortInput, null, CheckReceivePortIsNotForwardPort);
 	udpForwardPortInput.value = g_appSettings.wsjtForwardUdpPort;
-	ValidatePort(udpForwardPortInput, null, CheckNotLocalPort);
+	ValidatePort(udpForwardPortInput, null, CheckForwardPortIsNotReceivePort);
 	udpForwardIpInput.value = g_appSettings.wsjtForwardUdpIp;
 	ValidateIPaddress(udpForwardIpInput, null);
 	udpForwardEnable.checked = g_appSettings.wsjtForwardUdpEnable;
@@ -11563,7 +11564,7 @@ function checkWsjtxListener() {
 		g_wsjtCurrentPort = -1;
 		g_wsjtCurrentIP = "none";
 	}
-	updateWsjtxListener(udpPortInput.value);
+	updateWsjtxListener(g_appSettings.wsjtUdpPort);
 }
 
 var g_instances = {};

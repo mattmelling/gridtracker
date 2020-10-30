@@ -1512,7 +1512,7 @@ function viewRoster()
 			worker += "<td  style='color:#0F0;' align='center'>"+ (thisCall in window.opener.g_oqrsCallsigns ? "&#10004;" : "")+"</td>";
 
 		if ( g_rosterSettings.columns.Spot )
-			worker += "<td style='color:#EEE;' class='spotCol' id='sp"+thisCall+newCallList[x].band+newCallList[x].mode+"' "+ (spotSnr?"title='"+spotSnr+"'" :"")+">"+  spotString +"</td>";
+			worker += "<td style='color:#EEE;' class='spotCol' id='sp"+thisCall+newCallList[x].band+newCallList[x].mode+"' "+ (spotSnr?"title='"+spotSnr+"'" :"")+">"+  spotString + (spotSnr?" / " + spotSnr:"") +"</td>";
 		if ( g_rosterSettings.columns.Life )
 			worker += "<td style='color:#EEE;' class='lifeCol' id='lm"+thisCall+newCallList[x].band+newCallList[x].mode+"'>"+  (timeNowSec() - newCallList[x].life).toDHMS() +"</td>";
 

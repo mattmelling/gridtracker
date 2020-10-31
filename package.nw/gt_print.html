@@ -14,84 +14,165 @@
     along with GridTracker.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head >
-<title>GridTracker - Print</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<style type="text/css">
-table.darkTable {
-  border-collapse: collapse;
-  border: 1px solid black;
-  background-color: white;
-  text-align: center;
-}
-table.darkTable td, table.darkTable th {
-  border: 1px solid black;
-  padding:3px 5px;
+  <head>
+    <title>GridTracker - Print</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+      table.darkTable {
+        border-collapse: collapse;
+        border: 1px solid black;
+        background-color: white;
+        text-align: center;
+      }
+      table.darkTable td,
+      table.darkTable th {
+        border: 1px solid black;
+        padding: 3px 5px;
+      }
 
-}
-
-table.darkTable thead {
-  border-bottom: 2px solid black;
-
-}
-table.darkTable thead th {
-  font-weight: bold;
-  text-align: center;
-  border-left: 2px solid black;
-}
-table.darkTable thead th:first-child {
-  border-left: none;
-
-}
-</style>
-<script>
-
-
-function init()
-{
-	window.print();
-}
-
-</script>
-</head>
-<body  id="mainBody"  onload="init();" >
-<div id="main" >
-  <center><h2>GridTracker</h2></center>
-  <div id="printDiv">
-  <table align=center class="darkTable" >
-					 <tr>
-					 <th  colspan=3  >
-						Hot Key List
-					</th>
-					</tr>
-					<tr>
-					<th>Key</th><th align='left'>Action</th><th>Condition</th>
-					</tr>
-					<tr><td>C</td><td align='left' >Open Conditions Windows</td><td></td></tr>
-					<tr><td>G</td><td align='left' >Toggle GridTracker Flags</td><td></td></tr>
-					<tr><td>I</td><td align='left' >Open Stats/Info </td><td></td></tr>
-					<tr><td>L</td><td align='left' >Open ADIF file</td><td></td></tr>
-					<tr><td>M</td><td align='left' >Toggle Audio Mute</td><td></td></tr>
-					<tr><td>N</td><td align='left' >Toggle Earth Shadow</td><td></td></tr>
-					<tr><td>P</td><td align='left' >Toggle Grid/PushPin Mode</td><td></td></tr>
-					<tr><td>Q</td><td align='left' >Cycle QSO/LIVE view</td><td></td></tr>
-					<tr><td>R</td><td align='left' >Open Call Roster Window</td><td></td></tr>
-					<tr><td>S</td><td align='left' >Open Settings</td><td></td></tr>
-					<tr><td>W</td><td align='left' >Toggle Maidenhead Grid Size</td><td></td></tr>
-					<tr><td>1</td><td align='left' >Show General Map Layer</td><td></td></tr>
-					<tr><td>2</td><td align='left' >Show CQ Zones Award Layer</td><td></td></tr>
-					<tr><td>3</td><td align='left' >Show ITU Zones Award Layer</td><td></td></tr>
-					<tr><td>4</td><td align='left' >Show Continents Award Layer</td><td></td></tr>
-					<tr><td>5</td><td align='left' >Show US States Award Layer</td><td></td></tr>
-					<tr><td>6</td><td align='left' >Show DXCC Award Layer</td><td></td></tr>
-					<tr><td>7</td><td align='left' >Show US Counties Award Layer</td><td></td></tr>
-					<tr><td>M</td><td align='left' >Add MapCenter Alert</td><td>right-click<br>empty grid</td></tr>
-					<tr><td>T</td><td align='left' >Add TTS Alert</td><td>right-click<br>empty grid</td></tr>
-					<tr><td>V</td><td align='left' >Add PopUp Alert</td><td>right-click<br>empty grid</td></tr>
-					<tr><td>F1</td><td align='left' >Hot Key List</td><td></td></tr>
-
-				</table>
-  </div>
-</div>
-</body>
+      table.darkTable thead {
+        border-bottom: 2px solid black;
+      }
+      table.darkTable thead th {
+        font-weight: bold;
+        text-align: center;
+        border-left: 2px solid black;
+      }
+      table.darkTable thead th:first-child {
+        border-left: none;
+      }
+    </style>
+    <script>
+      function init() {
+        window.print();
+      }
+    </script>
+  </head>
+  <body id="mainBody" onload="init();">
+    <div id="main">
+      <center><h2>GridTracker</h2></center>
+      <div id="printDiv">
+        <table align="center" class="darkTable">
+          <tr>
+            <th colspan="3">Hot Key List</th>
+          </tr>
+          <tr>
+            <th>Key</th>
+            <th align="left">Action</th>
+            <th>Condition</th>
+          </tr>
+          <tr>
+            <td>C</td>
+            <td align="left">Open Conditions Windows</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>G</td>
+            <td align="left">Toggle GridTracker Flags</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>I</td>
+            <td align="left">Open Stats/Info</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>L</td>
+            <td align="left">Open ADIF file</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>M</td>
+            <td align="left">Toggle Audio Mute</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>N</td>
+            <td align="left">Toggle Earth Shadow</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>P</td>
+            <td align="left">Toggle Grid/PushPin Mode</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Q</td>
+            <td align="left">Cycle QSO/LIVE view</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>R</td>
+            <td align="left">Open Call Roster Window</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>S</td>
+            <td align="left">Open Settings</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>W</td>
+            <td align="left">Toggle Maidenhead Grid Size</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td align="left">Show General Map Layer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td align="left">Show CQ Zones Award Layer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td align="left">Show ITU Zones Award Layer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td align="left">Show Continents Award Layer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td align="left">Show US States Award Layer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td align="left">Show DXCC Award Layer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td align="left">Show US Counties Award Layer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>M</td>
+            <td align="left">Add MapCenter Alert</td>
+            <td>right-click<br />empty grid</td>
+          </tr>
+          <tr>
+            <td>T</td>
+            <td align="left">Add TTS Alert</td>
+            <td>right-click<br />empty grid</td>
+          </tr>
+          <tr>
+            <td>V</td>
+            <td align="left">Add PopUp Alert</td>
+            <td>right-click<br />empty grid</td>
+          </tr>
+          <tr>
+            <td>F1</td>
+            <td align="left">Hot Key List</td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
 </html>

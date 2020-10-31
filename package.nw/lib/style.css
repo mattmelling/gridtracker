@@ -1,468 +1,413 @@
- 
-
 @media print {
-    .printHotKeyDiv {
-        background-color: white;
-		color: black;
-        height: 100%;
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        margin: 0;
-        padding: 15px;
-        font-size: 14px;
-        line-height: 18px;
-    }
+  .printHotKeyDiv {
+    background-color: white;
+    color: black;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 .mapDivEnd:-webkit-full-screen {
-   height: 100%;
-   width:100%;
- }
- 
-
-
-  
-      #mapDiv 
-      {
-       	height: 100%;
-        
-        z-index:0;
-        position: absolute; 
-        top:0;
-        left:0;
-        background-color:black;
-        overflow:hidden;
-      }
-   
-	  
-	  .menuDivEnd
-	  {
-		position: absolute;
-        right:0;
-        top:0;
-        width:200px;
-        z-index:1;
-        background-color:black;
-      	color:#FFF;
-        display:none;
-      	height:100%;
-
-	  }
-	
-	
-	  
-  	  .mapDivEnd
-	  {
-		padding:0px;
-		margin:0px;
-        right:201px;
-        top:0;
-
-	  }
-	  
-	  .mapDivFullscreen
-	  {
-		padding:0px;
-		margin:0px;
-        right:0;
-        top:0;
-	  }
- .menuDivStart
-      {
-        position: absolute;
-        right:-201px;
-        top:0;
-        width:200px;
-        z-index:1;
-        background-color:black;
-      	color:#FFF;
-        display:none;
-      	height:100%;
-      }
-	  
-	
-	  .chevronDivStart
-      {
-		padding:0px;
-		margin:0px;
-		width:10px;
-		border-width:1px;
-		border-color:#AAA;
-		border-style:inset;
-		-webkit-border-radius:4px; 
-		font-weight:bold;
-        position: absolute;
-        right:-301px;
-        top:40px;
-        z-index:2;
-        background-color:black;
-      	color:#FFF;
-        display:block;
-
-      }
-	  
-	  .chevronDivEnd
-	  {
-		padding:0px;
-		margin:0px;
-		width:10px;
-		border-width:1px;
-		border-color:#AAA;
-		border-style:inset;
-		-webkit-border-radius:4px; 
-		font-weight:bold;
-		position: absolute;
-        right:0;
-        top:40px;
-        z-index:2;
-        background-color:black;
-      	color:#FFF;
-        display:block;
-
-	  }
-	  .mapDivStart
-      {
-		padding:0px;
-		margin:0px;
-        right:0px;
-        top:0;
-
-      }
-	 
-.legendDivStart
-{
-	
-	position:absolute;
-	bottom:2px;
-	right:2px;
-	width:160px;
-	border:1px solid orange;
-	background-color:#444444;
-	vertical-align: top;
-	-webkit-border-radius:6px;
-}	
-
-.legendDivEnd
-{
-	position:absolute;
-	bottom:2px;
-	right:203px;
-	width:160px;
-	border:1px solid orange;
-	background-color:#444444;
-	vertical-align: top;
-	-webkit-border-radius:6px;
+  height: 100%;
+  width: 100%;
 }
 
-.mouseTrack
-{
-	position:absolute;
-	top:8px;
-	padding:1px;
-	background-color:#000000;
-	-webkit-border-radius:6px;
-	vertical-align: top;
-	left: 35px;
-	font-size: larger;
+#mapDiv {
+  height: 100%;
+
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: black;
+  overflow: hidden;
 }
 
-	  .myFlagtipEnd
-	  {
-		vertical-align: top;
-		-webkit-border-radius:6px;
-		-webkit-user-select:text;
-		background-color:black;
-		padding:5px;
-		text-align:center;
-		display:block;
-		position:absolute;
-		z-index:-500;
-		left:-1000px;
-		top:-1000px;
-		border:2px solid lightgreen;
-		white-space: nowrap;
-		overflow:hidden;
-
-	  }
-	  
-	  #countryEditDiv
-	  {
-		position: absolute;
-        right:0;
-        top:0;
-        width:200px;
-        z-index:1;
-        background-color:black;
-      	color:#FFF;
-        display:none;
-      	height:100%;
-	  }
-  
-	  
-::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-	background-color: #F5F5F5;
+.menuDivEnd {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  z-index: 1;
+  background-color: black;
+  color: #fff;
+  display: none;
+  height: 100%;
 }
 
-::-webkit-scrollbar
-{
-	width: 6px;
-	height: 6px;
-	background-color: #F5F5F5;
-
+.mapDivEnd {
+  padding: 0px;
+  margin: 0px;
+  right: 201px;
+  top: 0;
 }
 
-::-webkit-scrollbar-thumb
-{
-	background-color: #09d;
-	
-	
+.mapDivFullscreen {
+  padding: 0px;
+  margin: 0px;
+  right: 0;
+  top: 0;
+}
+.menuDivStart {
+  position: absolute;
+  right: -201px;
+  top: 0;
+  width: 200px;
+  z-index: 1;
+  background-color: black;
+  color: #fff;
+  display: none;
+  height: 100%;
+}
+
+.chevronDivStart {
+  padding: 0px;
+  margin: 0px;
+  width: 10px;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: inset;
+  -webkit-border-radius: 4px;
+  font-weight: bold;
+  position: absolute;
+  right: -301px;
+  top: 40px;
+  z-index: 2;
+  background-color: black;
+  color: #fff;
+  display: block;
+}
+
+.chevronDivEnd {
+  padding: 0px;
+  margin: 0px;
+  width: 10px;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: inset;
+  -webkit-border-radius: 4px;
+  font-weight: bold;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  z-index: 2;
+  background-color: black;
+  color: #fff;
+  display: block;
+}
+.mapDivStart {
+  padding: 0px;
+  margin: 0px;
+  right: 0px;
+  top: 0;
+}
+
+.legendDivStart {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 160px;
+  border: 1px solid orange;
+  background-color: #444444;
+  vertical-align: top;
+  -webkit-border-radius: 6px;
+}
+
+.legendDivEnd {
+  position: absolute;
+  bottom: 2px;
+  right: 203px;
+  width: 160px;
+  border: 1px solid orange;
+  background-color: #444444;
+  vertical-align: top;
+  -webkit-border-radius: 6px;
+}
+
+.mouseTrack {
+  position: absolute;
+  top: 8px;
+  padding: 1px;
+  background-color: #000000;
+  -webkit-border-radius: 6px;
+  vertical-align: top;
+  left: 35px;
+  font-size: larger;
+}
+
+.myFlagtipEnd {
+  vertical-align: top;
+  -webkit-border-radius: 6px;
+  -webkit-user-select: text;
+  background-color: black;
+  padding: 5px;
+  text-align: center;
+  display: block;
+  position: absolute;
+  z-index: -500;
+  left: -1000px;
+  top: -1000px;
+  border: 2px solid lightgreen;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#countryEditDiv {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  z-index: 1;
+  background-color: black;
+  color: #fff;
+  display: none;
+  height: 100%;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #09d;
 }
 
 .rainbow {
-	background: linear-gradient(to bottom right, red,orange,yellow,green,blue,indigo,violet); 
-	filter: brightness(0.7);
-	color: white;
+  background: linear-gradient(
+    to bottom right,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    indigo,
+    violet
+  );
+  filter: brightness(0.7);
+  color: white;
 }
 
 .graph {
-   
-    padding:2px;
-    border: 1px solid #aeaeae;
+  padding: 2px;
+  border: 1px solid #aeaeae;
 }
 .myBand {
-   
-    padding:0px;
-    margin-top:-1px;
-   
-    border: 1px solid yellow;
-    -webkit-border-radius:6px;
+  padding: 0px;
+  margin-top: -1px;
+
+  border: 1px solid yellow;
+  -webkit-border-radius: 6px;
 }
 .aBand {
-   
-    padding:0px;
-    margin:0px;
-    margin-right:3px;
-
+  padding: 0px;
+  margin: 0px;
+  margin-right: 3px;
 }
 .barTx {
-    width:5px;
-    margin: 0px;
-    padding: 0px;
-    display: inline-block;
-    position: relative;
-    background-color: red;
-    vertical-align: baseline;
+  width: 5px;
+  margin: 0px;
+  padding: 0px;
+  display: inline-block;
+  position: relative;
+  background-color: red;
+  vertical-align: baseline;
 }
 .barRx {
-    width: 5px;
-    margin: 0px;
-    padding: 0px;
-    display: inline-block;
-    position: relative;
-    background-color: #1E90FF;
-    vertical-align: baseline;
+  width: 5px;
+  margin: 0px;
+  padding: 0px;
+  display: inline-block;
+  position: relative;
+  background-color: #1e90ff;
+  vertical-align: baseline;
 }
-      .inputTextValue 
-      {
-      	-webkit-border-radius:6px;
-		border:1px solid #999;
-		outline:none;
-		margin:2px;
-		padding:1px;
-		border-style:inset;
-      }
-	  .inputTextValue:hover {
-			border-color:#FFF;
-			border-style:outset;
-		}
-      .roundBorderValue
-      {
-      	border:1px solid white;
-        -webkit-border-radius:6px;
-        background-color:Blue;
-        color:#ff0;
-        min-width:20px;
-		outline:none;
-      }
-      .roundBorderDEInfo
-      {
-      	border:1px solid white;
-        -webkit-border-radius:6px;
-        background-color:#000;
-        color:#ff0;
-        font-size:larger;
-        font-weight:bold;
-		
-      } 
-      
-      .roundBorder
-      {
-        vertical-align: top;
-		-webkit-border-radius:6px;
-      }
-	  
-      
-      html, body 
-      {
-        -webkit-user-select: none;  
-	    user-select: none;
-		height:100%;
-        background-color:black;
-      	color:#FFF;
-      	white-space: nowrap;
-      	font-family:Sans-Serif;
-      	font-size: 12px;
- 	    text-align:center;
-        overflow:hidden;
-        width:100%;
-		display:block;
-
-      }
-      
-      
-      button:focus
-      {
-      	outline:none;
-      }
-      
-.button
-{
-
-	border-radius:4px;  
-	cursor:pointer;
-	margin:0px;
-
-	padding:2px;
-	padding-bottom:0px;
-	border-width:1px;
-	border-color:#999;
-	border-style:outset;
-	min-width: 40px;
-	display:inline-block;
-	color:#EEE;
-	
-	transition: border-style;
+.inputTextValue {
+  -webkit-border-radius: 6px;
+  border: 1px solid #999;
+  outline: none;
+  margin: 2px;
+  padding: 1px;
+  border-style: inset;
+}
+.inputTextValue:hover {
+  border-color: #fff;
+  border-style: outset;
+}
+.roundBorderValue {
+  border: 1px solid white;
+  -webkit-border-radius: 6px;
+  background-color: Blue;
+  color: #ff0;
+  min-width: 20px;
+  outline: none;
+}
+.roundBorderDEInfo {
+  border: 1px solid white;
+  -webkit-border-radius: 6px;
+  background-color: #000;
+  color: #ff0;
+  font-size: larger;
+  font-weight: bold;
 }
 
-.button:active
-{
-	border-style:inset;
+.roundBorder {
+  vertical-align: top;
+  -webkit-border-radius: 6px;
+}
+
+html,
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  height: 100%;
+  background-color: black;
+  color: #fff;
+  white-space: nowrap;
+  font-family: Sans-Serif;
+  font-size: 12px;
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
+  display: block;
+}
+
+button:focus {
+  outline: none;
+}
+
+.button {
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0px;
+
+  padding: 2px;
+  padding-bottom: 0px;
+  border-width: 1px;
+  border-color: #999;
+  border-style: outset;
+  min-width: 40px;
+  display: inline-block;
+  color: #eee;
+
+  transition: border-style;
+}
+
+.button:active {
+  border-style: inset;
 }
 
 .button:hover {
-	border-color:#FFF;
+  border-color: #fff;
 }
-
 
 .buttonRed {
-
-    height:2em;
-    overflow:hidden;
-    border:1px outset #FFF;
-    padding:1px;
-    -webkit-border-radius:6px;
-    color:#FFF;
-    background:#F00;
-    text-align:center;
-    cursor:pointer;
-    white-space: nowrap;
-    align:center;
-    margin:1px;
-    font-size:11px;
-    font-weight:bold;
-    min-width:64px;
-	-webkit-transition: border;
+  height: 2em;
+  overflow: hidden;
+  border: 1px outset #fff;
+  padding: 1px;
+  -webkit-border-radius: 6px;
+  color: #fff;
+  background: #f00;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  align: center;
+  margin: 1px;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 64px;
+  -webkit-transition: border;
 }
-
 
 .Xbutton:active {
-	 border:1px inset #FFF;
+  border: 1px inset #fff;
 }
 
-      
 .Xbutton {
-	height: 20px;
-    overflow:hidden;
-    border:1px outset #AAA;
-    padding:1px;
-    -webkit-border-radius:3px;
-    color:#EE0;
-    background:#600;
-    text-align:center;
-    cursor:pointer;
-    white-space: nowrap;
-    margin:1px;
-    font-size:11px;
-    font-weight:bold;
-    width:20px;
-	-webkit-transition: border;
+  height: 20px;
+  overflow: hidden;
+  border: 1px outset #aaa;
+  padding: 1px;
+  -webkit-border-radius: 3px;
+  color: #ee0;
+  background: #600;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  margin: 1px;
+  font-size: 11px;
+  font-weight: bold;
+  width: 20px;
+  -webkit-transition: border;
 }
 
+.iconButton {
+  -webkit-border-radius: 4px;
+  cursor: pointer;
+  margin: 0px;
+  margin-top: 1px;
+  padding: 1px;
+  padding-top: 4px;
 
+  border-width: 1px;
+  border-color: #999;
+  border-style: outset;
 
-.iconButton
-{
+  display: inline-block;
 
-	-webkit-border-radius:4px;  
-	cursor:pointer;
-	margin:0px;
-	margin-top:1px;
-	padding:1px;
-	padding-top:4px;
-
-	border-width:1px;
-	border-color:#999;
-	border-style:outset;
-	
-	display:inline-block;
-	
-	-webkit-transition: border-style;
+  -webkit-transition: border-style;
 }
 
-.iconButton:active
-{
-	border-style:inset;
+.iconButton:active {
+  border-style: inset;
 }
 
 .iconButton:hover {
-	border-color:#FFF;
+  border-color: #fff;
 }
 
-.mapItem
-{
-	margin:2px;
-	padding:0px;
-	min-height:40px;
-	min-width:150px;
-	border-width:1px;
-	border-color:#AAA;
-	border-style:inset;
-	vertical-align:top;
-	-webkit-border-radius:4px; 
-	display:inline-block;
-	-webkit-transition:border-color;
+.mapItem {
+  margin: 2px;
+  padding: 0px;
+  min-height: 40px;
+  min-width: 150px;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: inset;
+  vertical-align: top;
+  -webkit-border-radius: 4px;
+  display: inline-block;
+  -webkit-transition: border-color;
 }
 
-.mapItem table
-{
-	border-collapse: collapse;
+.mapItem table {
+  border-collapse: collapse;
 }
 
-.mapItemNoSize
-{
-	margin:2px;
-	padding:0px;
-	border-width:1px;
-	border-color:#AAA;
-	border-style:inset;
-	vertical-align:top;
-	-webkit-border-radius:4px; 
-	display:inline-block;
-	-webkit-transition:border-color;
+.mapItemNoSize {
+  margin: 2px;
+  padding: 0px;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: inset;
+  vertical-align: top;
+  -webkit-border-radius: 4px;
+  display: inline-block;
+  -webkit-transition: border-color;
 }
 
 img {
@@ -476,319 +421,296 @@ img {
 }
 
 .mapItem td {
-	padding: 1px;
+  padding: 1px;
 }
 
 .mapItem:hover {
-	border-color:#FFF;
+  border-color: #fff;
 }
 
-.buttonImg
-{
-	height:32px;
-	padding:0;
-	margin:0;
-
+.buttonImg {
+  height: 32px;
+  padding: 0;
+  margin: 0;
 }
 
-.buttonImgWide
-{
-	width:74px;
-	height:36px;
-	padding:0;
-	margin-top:1px;
-	margin-bottom:-1px;
-
+.buttonImgWide {
+  width: 74px;
+  height: 36px;
+  padding: 0;
+  margin-top: 1px;
+  margin-bottom: -1px;
 }
 
-.solarImg
-{
-	
-	height:80px;
-	-webkit-border-radius:4px;  
-	margin:0px;
-	padding:0px;
-	border-width:1px;
-	border-color:#AAA;
-	border-style:outset;
-	
-	position:relative;
-	
-	-webkit-transform: scale(1) ;
+.solarImg {
+  height: 80px;
+  -webkit-border-radius: 4px;
+  margin: 0px;
+  padding: 0px;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: outset;
 
-	-webkit-transition: .3s ease-in-out;
+  position: relative;
 
+  -webkit-transform: scale(1);
 
-	z-index:inherit;
+  -webkit-transition: 0.3s ease-in-out;
+
+  z-index: inherit;
 }
 
-.solarImg:hover
-{
-	-webkit-transform: scale(2);
+.solarImg:hover {
+  -webkit-transform: scale(2);
 
-	-webkit-transition: .3s ease-in-out;
+  -webkit-transition: 0.3s ease-in-out;
 
-	z-index: 9999;
-
+  z-index: 9999;
 }
 
-input[type=range]{
--webkit-appearance: none;
-outline:none;
+input[type="range"] {
+  -webkit-appearance: none;
+  outline: none;
 }
 
+input[type="checkbox"] {
+  border: 2px solid #fff;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-color: Black;
+  outline: none;
+  -webkit-border-radius: 6px;
 
-input[type="checkbox"] 
-{
-    border:2px solid #fff;
-    -webkit-appearance:none;
-    cursor:pointer;
-    background-color:Black;
-    outline: none;
-    -webkit-border-radius: 6px;
-
-    margin-top:4px;
-    margin-bottom:-2px;
-    height: 15px;
-    width: 15px;
-
-   
+  margin-top: 4px;
+  margin-bottom: -2px;
+  height: 15px;
+  width: 15px;
 }
 
-input[type="checkbox"]:checked 
-{
-    -webkit-appearance:none;
-	border:2px solid green;
-    background-color:lightgreen;
+input[type="checkbox"]:checked {
+  -webkit-appearance: none;
+  border: 2px solid green;
+  background-color: lightgreen;
 }
 
-
-
-
-
-input[type=range]::-webkit-slider-runnable-track {
-        -webkit-appearance:none;
-    height: 4px;
-    background: #000;
-    border-style:solid;
-    border-width:1px;
-    border-color:#FFF;
-    color:Fuchsia;
-    background-color: #111;
-    -webkit-border-radius:10px;
-
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  height: 4px;
+  background: #000;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #fff;
+  color: Fuchsia;
+  background-color: #111;
+  -webkit-border-radius: 10px;
 }
 
-input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    border: 1px solid #003;
-    height: 14px;
-    width: 14px;
-    -webkit-border-radius: 25%;
-    background: goldenrod;
-    
-    margin-top: -6px;
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #003;
+  height: 14px;
+  width: 14px;
+  -webkit-border-radius: 25%;
+  background: goldenrod;
+
+  margin-top: -6px;
 }
 
-input[type=range]:focus {
-    outline: none;
-    background: #000;
+input[type="range"]:focus {
+  outline: none;
+  background: #000;
 }
 
-input[type=range]:focus::-webkit-slider-runnable-track {
-    background: #000;
-    outline:none;
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #000;
+  outline: none;
 }
-  
+
 select {
-    -webkit-appearance: none;
-    -webkit-border-radius:6px;
-    text-indent: 0.20px;
-    text-overflow: '';
-	min-width:30px;
-    padding: 2px;
-	padding-right: 3px;
-	background-color:darkgreen;
-    color:#ff0;
-	cursor:pointer;
-} 
-select:focus 
-{
-	outline:none;
+  -webkit-appearance: none;
+  -webkit-border-radius: 6px;
+  text-indent: 0.2px;
+  text-overflow: "";
+  min-width: 30px;
+  padding: 2px;
+  padding-right: 3px;
+  background-color: darkgreen;
+  color: #ff0;
+  cursor: pointer;
+}
+select:focus {
+  outline: none;
 }
 
-select:hover
-{
-	border-color:#FFF;
+select:hover {
+  border-color: #fff;
 }
 
-select:disabled
-{
-	border:1px solid grey;
-	background-color:#008;
-	color:#ff0;
-	outline:none;
-
+select:disabled {
+  border: 1px solid grey;
+  background-color: #008;
+  color: #ff0;
+  outline: none;
 }
 
 select option {
-    margin: 40px;
-    background: #000;
-    color: #fff;
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -moz-border-radius:8px;
-    -webkit-border-radius:8px;
-    border-radius:8px;
-    text-indent: 0.20px;
-    text-overflow: '';
-    padding: 5px;
+  margin: 40px;
+  background: #000;
+  color: #fff;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  text-indent: 0.2px;
+  text-overflow: "";
+  padding: 5px;
 }
 
-select option:focus 
-{
-	color: #F00;
+select option:focus {
+  color: #f00;
 }
 
-option:disabled 
-{
-	color: #666;
+option:disabled {
+  color: #666;
 }
 
 a {
   -webkit-appearance: none;
-  text-decoration: none; 
+  text-decoration: none;
   color: inherit;
 }
 
-
 /* Style the tab */
 .settingstab {
-    overflow: hidden;
-   -webkit-border-radius:6px;
-    background-color:black;
+  overflow: hidden;
+  -webkit-border-radius: 6px;
+  background-color: black;
 }
 
 /* Style the buttons that are used to open the tab content */
 .settingstab button {
-	border:1px solid blue;
-    padding:3px;
-	font-weight:bold;
-	border-top-right-radius: 6px;
-	border-top-left-radius: 6px;
-	margin-left:5px;
-	margin-right:1px;
-    color:#EEE;
-    background:black;
-    text-align:center;
-    cursor:pointer;
-    white-space: nowrap;
-	border-bottom-style:none;
-    transition: 0.1s;
+  border: 1px solid blue;
+  padding: 3px;
+  font-weight: bold;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  margin-left: 5px;
+  margin-right: 1px;
+  color: #eee;
+  background: black;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom-style: none;
+  transition: 0.1s;
 }
-
-
 
 /* Create an active/current tablink class */
 .settingstab button.active {
-    background-color: blue;
+  background-color: blue;
 
-	 color:yellow;
+  color: yellow;
 }
 
 /* Style the tab content */
 .settingsTabcontent {
-	margin:0;
-	display: none;
-	background-color:black;
-	padding:2px;
-	text-align:center;
-	width:auto;
-	border:1px solid blue;
+  margin: 0;
+  display: none;
+  background-color: black;
+  padding: 2px;
+  text-align: center;
+  width: auto;
+  border: 1px solid blue;
 
-    vertical-align: top;
-	-webkit-border-radius:6px;	
-	white-space:normal;
-		
-	/* animation: fadeEffect .3s;  Fading effect takes 1 second */
+  vertical-align: top;
+  -webkit-border-radius: 6px;
+  white-space: normal;
+
+  /* animation: fadeEffect .3s;  Fading effect takes 1 second */
 }
 
 /* Go from zero to full opacity */
 @keyframes fadeInEffect {
-    from {opacity: 0;}
-    to {opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeOutEffect {
-    from {opacity: 1;}
-    to {opacity: 0;}
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
-
-
 
 /* Style the tab */
 .infotab {
-    overflow: hidden;
-   
-    background-color:black;
+  overflow: hidden;
+
+  background-color: black;
 }
 
 /* Style the buttons that are used to open the tab content */
 .infotab button {
-	border:1px solid green;
-    padding:3px;
-	font-weight:bold;
-	border-top-right-radius: 6px;
-	border-top-left-radius: 6px;
-	margin-left:5px;
-	margin-right:0px;
-    color:#EEE;
-    background:black;
-    text-align:center;
-    cursor:pointer;
-    white-space: nowrap;
-	border-bottom-style:none;
-    transition: 0.1s;
+  border: 1px solid green;
+  padding: 3px;
+  font-weight: bold;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  margin-left: 5px;
+  margin-right: 0px;
+  color: #eee;
+  background: black;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom-style: none;
+  transition: 0.1s;
 }
-
 
 /* Create an active/current tablink class */
 .infotab button.active {
-    background-color: green;
-	 color:yellow;
+  background-color: green;
+  color: yellow;
 }
 
 /* Style the tab content */
 .infoTabcontent {
-	margin:0;
-	display: none;
-	background-color:black;
-	padding:0;
-	text-align:center;
-	width:auto;
-	border-top:1px solid green;
+  margin: 0;
+  display: none;
+  background-color: black;
+  padding: 0;
+  text-align: center;
+  width: auto;
+  border-top: 1px solid green;
 
-    vertical-align: top;
+  vertical-align: top;
 
-	white-space:normal;
-	
-	/* animation: fadeEffect .3s;  Fading effect takes 1 second */
+  white-space: normal;
+
+  /* animation: fadeEffect .3s;  Fading effect takes 1 second */
 }
 
 /* Style the tab content */
 .lookupContent {
-	margin:0;
-	display: none;
-	background-color:black;
-	padding:0;
-	text-align:center;
-	width:auto;
-    vertical-align: top;
+  margin: 0;
+  display: none;
+  background-color: black;
+  padding: 0;
+  text-align: center;
+  width: auto;
+  vertical-align: top;
 
-	white-space:normal;
-	
-	/* animation: fadeEffect .3s;  Fading effect takes 1 second */
+  white-space: normal;
+
+  /* animation: fadeEffect .3s;  Fading effect takes 1 second */
 }
 
 table.darkTable {
@@ -797,15 +719,14 @@ table.darkTable {
   background-color: black;
   text-align: center;
 }
-table.darkTable td, table.darkTable th {
+table.darkTable td,
+table.darkTable th {
   border: 1px solid #888;
-  padding:2px 4px;
-  
+  padding: 2px 4px;
 }
 
 table.darkTable thead {
   border-bottom: 2px solid #888;
-
 }
 table.darkTable thead th {
   font-weight: bold;
@@ -814,10 +735,11 @@ table.darkTable thead th {
 }
 table.darkTable thead th:first-child {
   border-left: none;
- 
 }
 
-.darkTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888; }
+.darkTable tr:hover td {
+  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
+}
 
 table.subtable {
   border-collapse: collapse;
@@ -826,15 +748,14 @@ table.subtable {
   text-align: center;
 }
 
-table.subtable td, table.subtable th {
+table.subtable td,
+table.subtable th {
   border: 0px;
-  padding:2px 4px;
-  
+  padding: 2px 4px;
 }
 
 table.subtable thead {
   border-bottom: 0px;
-
 }
 
 table.subtable thead th {
@@ -845,110 +766,110 @@ table.subtable thead th {
 
 table.subtable thead th:first-child {
   border-left: none;
- 
 }
 
-table.subtable tr td {  box-shadow: none; }
-table.subtable tr:hover td {  box-shadow: none; }			
-				 
+table.subtable tr td {
+  box-shadow: none;
+}
+table.subtable tr:hover td {
+  box-shadow: none;
+}
+
 .DXCallBox {
-	font-weight:bold;
-	color:cyan;
+  font-weight: bold;
+  color: cyan;
 }
 
 .DXCallBoxWorked {
-	font-weight:bold;
-	background-color:yellow;
-	color:black;
-	animation: change-background-yellow 2s ease infinite;	
+  font-weight: bold;
+  background-color: yellow;
+  color: black;
+  animation: change-background-yellow 2s ease infinite;
 }
 
 .DXCallBoxConfirmed {
-	font-weight:bold;
-	background-color:red;
-	color:black;
-	animation: change-background-red 2s ease infinite;	
+  font-weight: bold;
+  background-color: red;
+  color: black;
+  animation: change-background-red 2s ease infinite;
 }
 
 .oneByOne {
-	background-clip:content-box;box-shadow: 0 0 8px 3px inset #FFF;
+  background-clip: content-box;
+  box-shadow: 0 0 8px 3px inset #fff;
 }
 
 .dxCaller {
-	background-clip:content-box;box-shadow: 0 0 8px 3px inset lightgreen;
+  background-clip: content-box;
+  box-shadow: 0 0 8px 3px inset lightgreen;
 }
 
 .dxCalling {
-	background-clip:content-box;box-shadow: 0 0 8px 3px inset #F00;
+  background-clip: content-box;
+  box-shadow: 0 0 8px 3px inset #f00;
 }
 
-@keyframes change-background-red
-  {
-      0% {
-        background: black;
-		color:red;
-      }
-	  50% {
-        background: red;
-				color:black;
-      }
-      100% {
-        background: black;
-		color:red;
-      }
+@keyframes change-background-red {
+  0% {
+    background: black;
+    color: red;
+  }
+  50% {
+    background: red;
+    color: black;
+  }
+  100% {
+    background: black;
+    color: red;
+  }
 }
 
-@keyframes change-background-yellow
- {
-      0% {
-        background: black;
-		color: yellow;
-      }
-	  50% {
-        background: yellow;
-		color: black;
-      }
-      100% {
-        background: black;
-		color: yellow;
-		
-      }
+@keyframes change-background-yellow {
+  0% {
+    background: black;
+    color: yellow;
+  }
+  50% {
+    background: yellow;
+    color: black;
+  }
+  100% {
+    background: black;
+    color: yellow;
+  }
 }
-
 
 .fill {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-	padding-top:15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 15%;
 }
 
 .buttonScript {
-    overflow:hidden;
-    border:1px outset #888;
-    padding:1px;
-	padding-right:2px;
-    -webkit-border-radius:4px;
-    color:#000;
-    background:black;
-    text-align:center;
-    white-space: nowrap;
-    margin:1px;
-    font-size:11px;
-    font-weight:bold;
-	cursor:pointer;
-	min-width:90px;
+  overflow: hidden;
+  border: 1px outset #888;
+  padding: 1px;
+  padding-right: 2px;
+  -webkit-border-radius: 4px;
+  color: #000;
+  background: black;
+  text-align: center;
+  white-space: nowrap;
+  margin: 1px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 90px;
 }
 
 .buttonScript:active {
-	 border-style:inset;
+  border-style: inset;
 }
 
 .buttonScript:hover {
-
-	  border-color: #FFF;
-	
+  border-color: #fff;
 }
 
 table.bioTable {
@@ -959,9 +880,10 @@ table.bioTable {
   table-layout: fixed;
   width: 300px;
 }
-table.bioTable td, table.bioTable th {
+table.bioTable td,
+table.bioTable th {
   border: 1px solid #888;
-  padding:2px 4px;
+  padding: 2px 4px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -969,7 +891,6 @@ table.bioTable td, table.bioTable th {
 
 table.bioTable thead {
   border-bottom: 2px solid #888;
-
 }
 table.bioTable thead th {
   font-weight: bold;
@@ -978,8 +899,8 @@ table.bioTable thead th {
 }
 table.bioTable thead th:first-child {
   border-left: none;
- 
 }
 
-
-.bioTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888; }
+.bioTable tr:hover td {
+  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
+}

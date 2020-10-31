@@ -1,15 +1,15 @@
 {
   "name": "GridTracker",
   "product_string": "GridTracker",
-  "window" : {
-    "id" : "mainWindow",
-	"icon" : "gridview.png",
-	"toolbar" : false,
-	"show" : false,
-	"width" : 800,
-	"height" : 652
-	},
- "webkit": {
+  "window": {
+    "id": "mainWindow",
+    "icon": "gridview.png",
+    "toolbar": false,
+    "show": false,
+    "width": 800,
+    "height": 652
+  },
+  "webkit": {
     "plugin": true
   },
   "main": "GridTracker.html"

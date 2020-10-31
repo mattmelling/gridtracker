@@ -1438,25 +1438,13 @@
   "CA-PE": {
     "postal": "CA-PE",
     "name": "Prince Edward Island",
-    "mh": [
-      "FN86",
-      "FN85",
-      "FN96",
-      "FN76",
-      "FN77",
-      "FN87"
-    ],
+    "mh": ["FN86", "FN85", "FN96", "FN76", "FN77", "FN87"],
     "dxcc": 1
   },
   "US-MA": {
     "postal": "US-MA",
     "name": "Massachusetts",
-    "mh": [
-      "FN51",
-      "FN32",
-      "FN42",
-      "FN41"
-    ],
+    "mh": ["FN51", "FN32", "FN42", "FN41"],
     "dxcc": 291
   },
   "US-MN": {
@@ -1644,7 +1632,7 @@
     "postal": "US-CA",
     "name": "California",
     "mh": [
-	"CM93",
+      "CM93",
       "DM02",
       "DM12",
       "DM22",
@@ -1993,9 +1981,9 @@
       "EN05",
       "EN15",
       "EN02",
-	  "DN73",
-	  "DN74",
-	  "DN75"
+      "DN73",
+      "DN74",
+      "DN75"
     ],
     "dxcc": 291
   },
@@ -2079,119 +2067,81 @@
   "US-CT": {
     "postal": "US-CT",
     "name": "Connecticut",
-    "mh": [
-      "FN30",
-      "FN31",
-      "FN41",
-      "FN32",
-      "FN42"
-    ],
+    "mh": ["FN30", "FN31", "FN41", "FN32", "FN42"],
     "dxcc": 291
   },
   "US-NH": {
     "postal": "US-NH",
     "name": "New Hampshire",
-    "mh": [
-      "FN45",
-      "FN42",
-      "FN32",
-      "FN33",
-      "FN44",
-      "FN34",
-      "FN43"
-    ],
+    "mh": ["FN45", "FN42", "FN32", "FN33", "FN44", "FN34", "FN43"],
     "dxcc": 291
   },
   "US-RI": {
     "postal": "US-RI",
     "name": "Rhode Island",
-    "mh": [
-      "FN41",
-      "FN42"
-    ],
+    "mh": ["FN41", "FN42"],
     "dxcc": 291
   },
   "US-DC": {
     "postal": "US-DC",
     "name": "District Of Columbia",
-    "mh": [
-      "FM18"
-    ],
+    "mh": ["FM18"],
     "dxcc": 291
   },
   "US-GU": {
     "postal": "US-GU",
     "name": "Guam",
-    "mh": [
-      "QK23"
-    ],
+    "mh": ["QK23"],
     "dxcc": 103
   },
   "US-MH": {
     "postal": "US-MH",
     "name": "Marshall Islands",
     "mh": [
-            "RJ29",
-            "RJ38",
-            "RJ39",
-            "RJ45",
-            "RJ46",
-            "RJ47",
-            "RJ48",
-            "RJ49",
-            "RJ56",
-            "RJ57",
-            "RJ58",
-            "RJ59",
-            "RJ66",
-            "RK11",
-            "RK21",
-            "RK31",
-            "RK40",
-            "RK41",
-            "RK44"
+      "RJ29",
+      "RJ38",
+      "RJ39",
+      "RJ45",
+      "RJ46",
+      "RJ47",
+      "RJ48",
+      "RJ49",
+      "RJ56",
+      "RJ57",
+      "RJ58",
+      "RJ59",
+      "RJ66",
+      "RK11",
+      "RK21",
+      "RK31",
+      "RK40",
+      "RK41",
+      "RK44"
     ],
     "dxcc": 168
   },
-      "US-PR": {
+  "US-PR": {
     "postal": "US-PR",
     "name": "Puerto Rico",
-    "mh": [
-            "FK67",
-            "FK68",
-            "FK77",
-            "FK78"
-    ],
+    "mh": ["FK67", "FK68", "FK77", "FK78"],
     "dxcc": 202
   },
-    "US-VI": {
+  "US-VI": {
     "postal": "US-VI",
     "name": "Virgin Islands",
-    "mh": [
-            "FK77",
-            "FK78"
-    ],
+    "mh": ["FK77", "FK78"],
     "dxcc": 285
   },
-    "US-MP": {
+  "US-MP": {
     "postal": "US-MP",
     "name": "Northern Mariana Islands",
-    "mh": [
-		"LH89"
-    ],
+    "mh": ["LH89"],
     "dxcc": 4
   },
   "US-VT": {
     "postal": "US-VT",
     "name": "Vermont",
-    "mh": [
-      "FN33",
-      "FN34",
-      "FN35",
-      "FN44",
-      "FN32",
-      "FN45"
-    ],
+    "mh": ["FN33", "FN34", "FN35", "FN44", "FN32", "FN45"],
     "dxcc": 291
   },
   "US-AL": {
@@ -2484,38 +2434,19 @@
   "US-DE": {
     "postal": "US-DE",
     "name": "Delaware",
-    "mh": [
-      "FM28",
-      "FM29"
-    ],
+    "mh": ["FM28", "FM29"],
     "dxcc": 291
   },
   "US-MD": {
     "postal": "US-MD",
     "name": "Maryland",
-    "mh": [
-      "FM17",
-      "FM27",
-      "FM08",
-      "FM18",
-      "FM28",
-      "FM09",
-      "FM19",
-      "FM29"
-    ],
+    "mh": ["FM17", "FM27", "FM08", "FM18", "FM28", "FM09", "FM19", "FM29"],
     "dxcc": 291
   },
   "US-NJ": {
     "postal": "US-NJ",
     "name": "New Jersey",
-    "mh": [
-      "FM29",
-      "FN20",
-      "FN30",
-      "FN21",
-      "FN31",
-      "FM28"
-    ],
+    "mh": ["FM29", "FN20", "FN30", "FN21", "FN31", "FM28"],
     "dxcc": 291
   },
   "US-NY": {
@@ -2620,20 +2551,13 @@
   "MX-DIF": {
     "postal": "MX-DIF",
     "name": "Distrito Federal",
-    "mh": [
-      "EK09"
-    ],
+    "mh": ["EK09"],
     "dxcc": 50
   },
   "MX-AGU": {
     "postal": "MX-AGU",
     "name": "Aguascalientes",
-    "mh": [
-      "DL81",
-      "DL91",
-      "DL82",
-      "DL92"
-    ],
+    "mh": ["DL81", "DL91", "DL82", "DL92"],
     "dxcc": 50
   },
   "MX-BCN": {
@@ -2694,16 +2618,7 @@
   "MX-CHP": {
     "postal": "MX-CHP",
     "name": "Chiapas",
-    "mh": [
-      "EK47",
-      "EK37",
-      "EK36",
-      "EK26",
-      "EK35",
-      "EK34",
-      "EK45",
-      "EK46"
-    ],
+    "mh": ["EK47", "EK37", "EK36", "EK26", "EK35", "EK34", "EK45", "EK46"],
     "dxcc": 50
   },
   "MX-CHH": {
@@ -2759,12 +2674,7 @@
   "MX-COL": {
     "postal": "MX-COL",
     "name": "Colima",
-    "mh": [
-      "DK89",
-      "DK79",
-      "DK88",
-      "DK78"
-    ],
+    "mh": ["DK89", "DK79", "DK88", "DK78"],
     "dxcc": 50
   },
   "MX-DUR": {
@@ -2789,37 +2699,19 @@
   "MX-GUA": {
     "postal": "MX-GUA",
     "name": "Guanajuato",
-    "mh": [
-      "DL91",
-      "EL01",
-      "DL90",
-      "DL80",
-      "DK99"
-    ],
+    "mh": ["DL91", "EL01", "DL90", "DL80", "DK99"],
     "dxcc": 50
   },
   "MX-GRO": {
     "postal": "MX-GRO",
     "name": "Guerrero",
-    "mh": [
-      "EK08",
-      "DK98",
-      "DK88",
-      "DK87",
-      "DK97",
-      "EK07",
-      "EK06"
-    ],
+    "mh": ["EK08", "DK98", "DK88", "DK87", "DK97", "EK07", "EK06"],
     "dxcc": 50
   },
   "MX-HID": {
     "postal": "MX-HID",
     "name": "Hidalgo",
-    "mh": [
-      "EL01",
-      "EL00",
-      "EK09"
-    ],
+    "mh": ["EL01", "EL00", "EK09"],
     "dxcc": 50
   },
   "MX-JAL": {
@@ -2841,50 +2733,25 @@
   "MX-MIC": {
     "postal": "MX-MIC",
     "name": "Michoacán",
-    "mh": [
-      "DL80",
-      "DL90",
-      "DK99",
-      "DK98",
-      "DK88",
-      "DK87",
-      "DK89"
-    ],
+    "mh": ["DL80", "DL90", "DK99", "DK98", "DK88", "DK87", "DK89"],
     "dxcc": 50
   },
   "MX-MOR": {
     "postal": "MX-MOR",
     "name": "Morelos",
-    "mh": [
-      "EK09",
-      "EK08"
-    ],
+    "mh": ["EK09", "EK08"],
     "dxcc": 50
   },
   "MX-MEX": {
     "postal": "MX-MEX",
     "name": "México",
-    "mh": [
-      "EK09",
-      "EL00",
-      "DK99",
-      "DK98",
-      "EK08",
-      "DL90"
-    ],
+    "mh": ["EK09", "EL00", "DK99", "DK98", "EK08", "DL90"],
     "dxcc": 50
   },
   "MX-NAY": {
     "postal": "MX-NAY",
     "name": "Nayarit",
-    "mh": [
-      "DL72",
-      "DL71",
-      "DL81",
-      "DL70",
-      "DL61",
-      "DL73"
-    ],
+    "mh": ["DL72", "DL71", "DL81", "DL70", "DL61", "DL73"],
     "dxcc": 50
   },
   "MX-NLE": {
@@ -2926,57 +2793,25 @@
   "MX-PUE": {
     "postal": "MX-PUE",
     "name": "Puebla",
-    "mh": [
-      "EL10",
-      "EL00",
-      "EK19",
-      "EK09",
-      "EK18",
-      "EK17",
-      "EK07",
-      "EK08"
-    ],
+    "mh": ["EL10", "EL00", "EK19", "EK09", "EK18", "EK17", "EK07", "EK08"],
     "dxcc": 50
   },
   "MX-QUE": {
     "postal": "MX-QUE",
     "name": "Querétaro",
-    "mh": [
-      "DL90",
-      "EL00",
-      "EL01",
-      "DL91"
-    ],
+    "mh": ["DL90", "EL00", "EL01", "DL91"],
     "dxcc": 50
   },
   "MX-ROO": {
     "postal": "MX-ROO",
     "name": "Quintana Roo",
-    "mh": [
-      "EL61",
-      "EL60",
-      "EL50",
-      "EK59",
-      "EK69",
-      "EK58",
-      "EK68",
-      "EK57"
-    ],
+    "mh": ["EL61", "EL60", "EL50", "EK59", "EK69", "EK58", "EK68", "EK57"],
     "dxcc": 50
   },
   "MX-SLP": {
     "postal": "MX-SLP",
     "name": "San Luis Potosí",
-    "mh": [
-      "DL94",
-      "DL93",
-      "DL83",
-      "DL92",
-      "DL82",
-      "EL02",
-      "EL01",
-      "DL91"
-    ],
+    "mh": ["DL94", "DL93", "DL83", "DL92", "DL82", "EL02", "EL01", "DL91"],
     "dxcc": 50
   },
   "MX-SIN": {
@@ -3026,14 +2861,7 @@
   "MX-TAB": {
     "postal": "MX-TAB",
     "name": "Tabasco",
-    "mh": [
-      "EK38",
-      "EK47",
-      "EK48",
-      "EK37",
-      "EK28",
-      "EK27"
-    ],
+    "mh": ["EK38", "EK47", "EK48", "EK37", "EK28", "EK27"],
     "dxcc": 50
   },
   "MX-TAM": {
@@ -3059,10 +2887,7 @@
   "MX-TLA": {
     "postal": "MX-TLA",
     "name": "Tlaxcala",
-    "mh": [
-      "EK09",
-      "EK19"
-    ],
+    "mh": ["EK09", "EK19"],
     "dxcc": 50
   },
   "MX-VER": {
@@ -3087,15 +2912,7 @@
   "MX-YUC": {
     "postal": "MX-YUC",
     "name": "Yucatán",
-    "mh": [
-      "EL40",
-      "EL50",
-      "EK59",
-      "EL60",
-      "EL61",
-      "EL51",
-      "EL41"
-    ],
+    "mh": ["EL40", "EL50", "EK59", "EL60", "EL61", "EL51", "EL41"],
     "dxcc": 50
   },
   "MX-ZAC": {
@@ -3654,24 +3471,13 @@
   "AU-ACT": {
     "name": "Australian Capital Territory",
     "postal": "AU-ACT",
-    "mh": [
-      "QF44"
-    ],
+    "mh": ["QF44"],
     "dxcc": 150
   },
   "DE-BW": {
     "name": "Baden-Württemberg",
     "dxcc": 230,
-    "mh": [
-      "JN49",
-      "JN59",
-      "JN58",
-      "JN57",
-      "JN47",
-      "JN37",
-      "JN38",
-      "JN48"
-    ],
+    "mh": ["JN49", "JN59", "JN58", "JN57", "JN47", "JN37", "JN38", "JN48"],
     "postal": "DE-BW"
   },
   "DE-BY": {
@@ -3696,333 +3502,163 @@
   "DE-BE": {
     "name": "Berlin",
     "dxcc": 230,
-    "mh": [
-      "JO62"
-    ],
+    "mh": ["JO62"],
     "postal": "DE-BE"
   },
   "DE-BB": {
     "name": "Brandenburg",
     "dxcc": 230,
-    "mh": [
-      "JO61",
-      "JO71",
-      "JO72",
-      "JO62",
-      "JO52",
-      "JO53",
-      "JO63",
-      "JO73"
-    ],
+    "mh": ["JO61", "JO71", "JO72", "JO62", "JO52", "JO53", "JO63", "JO73"],
     "postal": "DE-BB"
   },
   "DE-HB": {
     "name": "Bremen",
     "dxcc": 230,
-    "mh": [
-      "JO43"
-    ],
+    "mh": ["JO43"],
     "postal": "DE-HB"
   },
   "DE-HH": {
     "name": "Hamburg",
     "dxcc": 230,
-    "mh": [
-      "JO43",
-      "JO53"
-    ],
+    "mh": ["JO43", "JO53"],
     "postal": "DE-HH"
   },
   "DE-HE": {
     "name": "Hessen",
     "dxcc": 230,
-    "mh": [
-      "JN49",
-      "JO30",
-      "JN39",
-      "JO40",
-      "JO50",
-      "JO41",
-      "JO51"
-    ],
+    "mh": ["JN49", "JO30", "JN39", "JO40", "JO50", "JO41", "JO51"],
     "postal": "DE-HE"
   },
   "DE-MV": {
     "name": "Mecklenburg-Vorpommern",
     "dxcc": 230,
-    "mh": [
-      "JO53",
-      "JO63",
-      "JO73",
-      "JO64",
-      "JO74",
-      "JO54"
-    ],
+    "mh": ["JO53", "JO63", "JO73", "JO64", "JO74", "JO54"],
     "postal": "DE-MV"
   },
   "DE-NI": {
     "name": "Niedersachsen",
     "dxcc": 230,
-    "mh": [
-      "JO32",
-      "JO33",
-      "JO43",
-      "JO53",
-      "JO52",
-      "JO51",
-      "JO41",
-      "JO42"
-    ],
+    "mh": ["JO32", "JO33", "JO43", "JO53", "JO52", "JO51", "JO41", "JO42"],
     "postal": "DE-NI"
   },
   "DE-NW": {
     "name": "Nordrhein-Westfalen",
     "dxcc": 230,
-    "mh": [
-      "JO42",
-      "JO32",
-      "JO31",
-      "JO21",
-      "JO20",
-      "JO30",
-      "JO40",
-      "JO41"
-    ],
+    "mh": ["JO42", "JO32", "JO31", "JO21", "JO20", "JO30", "JO40", "JO41"],
     "postal": "DE-NW"
   },
   "DE-RP": {
     "name": "Rheinland-Pfalz",
     "dxcc": 230,
-    "mh": [
-      "JN49",
-      "JN48",
-      "JN39",
-      "JO30",
-      "JO40"
-    ],
+    "mh": ["JN49", "JN48", "JN39", "JO30", "JO40"],
     "postal": "DE-RP"
   },
   "DE-SL": {
     "name": "Saarland",
     "dxcc": 230,
-    "mh": [
-      "JN39"
-    ],
+    "mh": ["JN39"],
     "postal": "DE-SL"
   },
   "DE-SN": {
     "name": "Sachsen",
     "dxcc": 230,
-    "mh": [
-      "JO70",
-      "JO71",
-      "JO61",
-      "JO60",
-      "JO50"
-    ],
+    "mh": ["JO70", "JO71", "JO61", "JO60", "JO50"],
     "postal": "DE-SN"
   },
   "DE-ST": {
     "name": "Sachsen-Anhalt",
     "dxcc": 230,
-    "mh": [
-      "JO52",
-      "JO62",
-      "JO53",
-      "JO61",
-      "JO60",
-      "JO51"
-    ],
+    "mh": ["JO52", "JO62", "JO53", "JO61", "JO60", "JO51"],
     "postal": "DE-ST"
   },
   "DE-SH": {
     "name": "Schleswig-Holstein",
     "dxcc": 230,
-    "mh": [
-      "JO43",
-      "JO53",
-      "JO54",
-      "JO44",
-      "JO45"
-    ],
+    "mh": ["JO43", "JO53", "JO54", "JO44", "JO45"],
     "postal": "DE-SH"
   },
   "DE-TH": {
     "name": "Thüringen",
     "dxcc": 230,
-    "mh": [
-      "JO50",
-      "JO60",
-      "JO61",
-      "JO51",
-      "JO41",
-      "JO40"
-    ],
+    "mh": ["JO50", "JO60", "JO61", "JO51", "JO41", "JO40"],
     "postal": "DE-TH"
   },
   "FR-A": {
     "postal": "FR-A",
     "dxcc": 227,
-    "mh": [
-      "JN38",
-      "JN37",
-      "JN48",
-      "JN49",
-      "JN39"
-    ],
+    "mh": ["JN38", "JN37", "JN48", "JN49", "JN39"],
     "name": "Alsace"
   },
   "FR-B": {
     "postal": "FR-B",
     "dxcc": 227,
-    "mh": [
-      "IN93",
-      "IN92",
-      "JN03",
-      "JN04",
-      "JN05",
-      "IN95",
-      "IN94"
-    ],
+    "mh": ["IN93", "IN92", "JN03", "JN04", "JN05", "IN95", "IN94"],
     "name": "Aquitaine"
   },
   "FR-C": {
     "postal": "FR-C",
     "dxcc": 227,
-    "mh": [
-      "JN14",
-      "JN16",
-      "JN26",
-      "JN24",
-      "JN25",
-      "JN15"
-    ],
+    "mh": ["JN14", "JN16", "JN26", "JN24", "JN25", "JN15"],
     "name": "Auvergne"
   },
   "FR-E": {
     "postal": "FR-E",
     "dxcc": 227,
-    "mh": [
-      "IN78",
-      "IN88",
-      "IN98",
-      "IN97",
-      "IN87",
-      "IN77"
-    ],
+    "mh": ["IN78", "IN88", "IN98", "IN97", "IN87", "IN77"],
     "name": "Bretagne"
   },
   "FR-D": {
     "postal": "FR-D",
     "dxcc": 227,
-    "mh": [
-      "JN27",
-      "JN28",
-      "JN18",
-      "JN17",
-      "JN16",
-      "JN26"
-    ],
+    "mh": ["JN27", "JN28", "JN18", "JN17", "JN16", "JN26"],
     "name": "Bourgogne"
   },
   "FR-F": {
     "postal": "FR-F",
     "dxcc": 227,
-    "mh": [
-      "JN18",
-      "JN17",
-      "JN16",
-      "JN06",
-      "JN07",
-      "JN08"
-    ],
+    "mh": ["JN18", "JN17", "JN16", "JN06", "JN07", "JN08"],
     "name": "Centre"
   },
   "FR-G": {
     "postal": "FR-G",
     "dxcc": 227,
-    "mh": [
-      "JN29",
-      "JO20",
-      "JN19",
-      "JN18",
-      "JN17",
-      "JN27",
-      "JN28"
-    ],
+    "mh": ["JN29", "JO20", "JN19", "JN18", "JN17", "JN27", "JN28"],
     "name": "Champagne-Ardenne"
   },
   "FR-H": {
     "postal": "FR-H",
     "dxcc": 227,
-    "mh": [
-      "JN43",
-      "JN42",
-      "JN41"
-    ],
+    "mh": ["JN43", "JN42", "JN41"],
     "name": "Corse"
   },
   "FR-I": {
     "postal": "FR-I",
     "dxcc": 227,
-    "mh": [
-      "JN26",
-      "JN36",
-      "JN27",
-      "JN37",
-      "JN38"
-    ],
+    "mh": ["JN26", "JN36", "JN27", "JN37", "JN38"],
     "name": "Franche-Comté"
   },
   "FR-K": {
     "postal": "FR-K",
     "dxcc": 227,
-    "mh": [
-      "JN02",
-      "JN12",
-      "JN23",
-      "JN13",
-      "JN03",
-      "JN14",
-      "JN24"
-    ],
+    "mh": ["JN02", "JN12", "JN23", "JN13", "JN03", "JN14", "JN24"],
     "name": "Languedoc-Roussillon"
   },
   "FR-L": {
     "postal": "FR-L",
     "dxcc": 227,
-    "mh": [
-      "JN05",
-      "JN06",
-      "JN16",
-      "JN15",
-      "JN04",
-      "JN14"
-    ],
+    "mh": ["JN05", "JN06", "JN16", "JN15", "JN04", "JN14"],
     "name": "Limousin"
   },
   "FR-M": {
     "postal": "FR-M",
     "dxcc": 227,
-    "mh": [
-      "JN39",
-      "JN29",
-      "JN38",
-      "JN28",
-      "JN27",
-      "JN37"
-    ],
+    "mh": ["JN39", "JN29", "JN38", "JN28", "JN27", "JN37"],
     "name": "Lorraine"
   },
   "FR-P": {
     "postal": "FR-P",
     "dxcc": 227,
-    "mh": [
-      "IN99",
-      "JN09",
-      "JN08",
-      "IN98"
-    ],
+    "mh": ["IN99", "JN09", "JN08", "IN98"],
     "name": "Basse-Normandie"
   },
   "FR-N": {
@@ -4045,68 +3681,31 @@
   "FR-O": {
     "postal": "FR-O",
     "dxcc": 227,
-    "mh": [
-      "JO10",
-      "JO11",
-      "JO20",
-      "JN29",
-      "JO00"
-    ],
+    "mh": ["JO10", "JO11", "JO20", "JN29", "JO00"],
     "name": "Nord-Pas-de-Calais"
   },
   "FR-R": {
     "postal": "FR-R",
     "dxcc": 227,
-    "mh": [
-      "IN96",
-      "IN86",
-      "IN87",
-      "IN98",
-      "JN08",
-      "JN07",
-      "IN97"
-    ],
+    "mh": ["IN96", "IN86", "IN87", "IN98", "JN08", "JN07", "IN97"],
     "name": "Pays de la Loire"
   },
   "FR-S": {
     "postal": "FR-S",
     "dxcc": 227,
-    "mh": [
-      "JO00",
-      "JN09",
-      "JO10",
-      "JN19",
-      "JN29",
-      "JN18",
-      "JM07",
-      "JJ23"
-    ],
+    "mh": ["JO00", "JN09", "JO10", "JN19", "JN29", "JN18", "JM07", "JJ23"],
     "name": "Picardie"
   },
   "FR-T": {
     "postal": "FR-T",
     "dxcc": 227,
-    "mh": [
-      "IN95",
-      "JN05",
-      "IN96",
-      "IN97",
-      "JN06",
-      "JN07"
-    ],
+    "mh": ["IN95", "JN05", "IN96", "IN97", "JN06", "JN07"],
     "name": "Poitou-Charentes"
   },
   "FR-U": {
     "postal": "FR-U",
     "dxcc": 227,
-    "mh": [
-      "JN34",
-      "JN35",
-      "JN24",
-      "JN23",
-      "JN33",
-      "JN32"
-    ],
+    "mh": ["JN34", "JN35", "JN24", "JN23", "JN33", "JN32"],
     "name": "Provence-Alpes-Côte d'Azur"
   },
   "FR-V": {
@@ -4128,23 +3727,13 @@
   "FR-Q": {
     "postal": "FR-Q",
     "dxcc": 227,
-    "mh": [
-      "JN09",
-      "JN08",
-      "JO00"
-    ],
+    "mh": ["JN09", "JN08", "JO00"],
     "name": "Haute-Normandie"
   },
   "FR-J": {
     "postal": "FR-J",
     "dxcc": 227,
-    "mh": [
-      "JN09",
-      "JN19",
-      "JN18",
-      "JN08",
-      "HK37"
-    ],
+    "mh": ["JN09", "JN19", "JN18", "JN08", "HK37"],
     "name": "Île-de-France"
   }
 }

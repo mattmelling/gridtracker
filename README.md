@@ -12,6 +12,7 @@ but for development work we recommend the SDK flavor because it provides access 
 among other things.
 
 ### Code Formatting
+
 We use `prettier` to enforce code formatting rules, and we follow
 the [JavaScript Standard Style](https://standardjs.com/)
 
@@ -22,7 +23,6 @@ all files to match the standard.
 
 If you want to know more about why these tools are useful,
 [watch this talk](https://www.youtube.com/watch?v=kuHfMw8j4xk)
-
 
 # Developer Environment Setup
 

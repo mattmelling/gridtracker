@@ -4,31 +4,36 @@
     "sponsor": "QRZ.com",
     "website": "https://www.qrz.com/",
     "qsl_req": "confirmed",
-	"mixed" : [ "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "11m", "10m", "6m", "4m", "2m", "1.25m", "70cm", "33cm", "23cm"],
+    "mixed": [
+      "160m",
+      "80m",
+      "60m",
+      "40m",
+      "30m",
+      "20m",
+      "17m",
+      "15m",
+      "12m",
+      "11m",
+      "10m",
+      "6m",
+      "4m",
+      "2m",
+      "1.25m",
+      "70cm",
+      "33cm",
+      "23cm"
+    ],
     "awards": {
       "USA": {
         "tooltip": "United States",
         "rule": {
           "type": "states",
-          "dxcc": [
-            6,
-            110,
-            291
-          ],
-          "endorse": [
-            "Mixed"
-          ],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            50
-          ]
+          "dxcc": [6, 110, 291],
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [50]
         },
         "name": "USA - United States",
         "sponsor": "QRZ"
@@ -37,20 +42,10 @@
         "tooltip": "DX World",
         "rule": {
           "type": "dxcc",
-          "endorse": [
-            "Mixed"
-          ],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100
-          ]
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [100]
         },
         "name": "DXWA - DX World",
         "sponsor": "QRZ"
@@ -59,20 +54,10 @@
         "tooltip": "World Continents",
         "rule": {
           "type": "cont",
-          "endorse": [
-            "Mixed"
-          ],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            6
-          ]
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [6]
         },
         "name": "WCA - World Continents",
         "sponsor": "QRZ"
@@ -81,20 +66,10 @@
         "tooltip": "Grid Squared",
         "rule": {
           "type": "grids",
-          "endorse": [
-            "Mixed"
-          ],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100
-          ]
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [100]
         },
         "name": "GSA - Grid Squared",
         "sponsor": "QRZ"
@@ -103,25 +78,11 @@
         "tooltip": "United States Counties",
         "rule": {
           "type": "cnty",
-          "dxcc": [
-            6,
-            110,
-            291
-          ],
+          "dxcc": [6, 110, 291],
           "endorse": [],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            250,
-            500
-          ]
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [100, 250, 500]
         },
         "name": "USCA - United States Counties",
         "sponsor": "QRZ"
@@ -131,20 +92,10 @@
         "rule": {
           "type": "dxcc",
           "cont": "EU",
-          "endorse": [
-            "Mixed"
-          ],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            67
-          ]
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [67]
         },
         "name": "MRCEU - Master of Europe",
         "sponsor": "QRZ"
@@ -154,20 +105,10 @@
         "rule": {
           "type": "dxcc",
           "cont": "SA",
-          "endorse": [
-            "Mixed"
-          ],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            31
-          ]
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [31]
         },
         "name": "MRCSA - Master of South America",
         "sponsor": "QRZ"
@@ -176,20 +117,10 @@
         "tooltip": "World Radio Friendship",
         "rule": {
           "type": "call",
-          "endorse": [
-            "Mixed"
-          ],
-          "mode": [
-            "Mixed",
-            "Digital",
-            "Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            25
-          ]
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [25]
         },
         "name": "WRFA - World Radio Friendship",
         "sponsor": "QRZ"
@@ -201,25 +132,32 @@
     "sponsor": "FT8 Digital Mode Club",
     "website": "https://www.ft8dmc.eu/",
     "qsl_req": "worked",
-	"mixed" : [ "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "11m", "10m", "6m", "4m", "2m" ],
+    "mixed": [
+      "160m",
+      "80m",
+      "60m",
+      "40m",
+      "30m",
+      "20m",
+      "17m",
+      "15m",
+      "12m",
+      "11m",
+      "10m",
+      "6m",
+      "4m",
+      "2m"
+    ],
     "awards": {
       "AAA": {
         "tooltip": "All Asia",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "AS",
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            30,
-            50,
-            58
-          ]
+          "band": ["Mixed"],
+          "count": [30, 50, 58]
         },
         "name": "AAA - All Asia",
         "sponsor": "FT8DMC"
@@ -227,33 +165,12 @@
       "AALA": {
         "tooltip": "Arab African League",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            51,
-            232,
-            382,
-            400,
-            411,
-            436,
-            444,
-            446,
-            466,
-            474,
-            478,
-            492
-          ],
+          "mode": ["FT8"],
+          "dxcc": [51, 232, 382, 400, 411, 436, 444, 446, 466, 474, 478, 492],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            10,
-            15
-          ]
+          "band": ["Mixed"],
+          "count": [5, 10, 15]
         },
         "name": "AALA - Arab African League",
         "sponsor": "FT8DMC"
@@ -261,31 +178,12 @@
       "AALPA": {
         "tooltip": "Arab African League Prefixes",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            51,
-            232,
-            382,
-            400,
-            411,
-            436,
-            444,
-            446,
-            466,
-            474,
-            478,
-            492
-          ],
+          "mode": ["FT8"],
+          "dxcc": [51, 232, 382, 400, 411, 436, 444, 446, 466, 474, 478, 492],
           "type": "px",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "AALPA - Arab African League Prefixes",
         "sponsor": "FT8DMC"
@@ -293,28 +191,12 @@
       "AFSA": {
         "tooltip": "Africa Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "AF",
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            200,
-            300,
-            400,
-            500,
-            600,
-            700,
-            800,
-            900,
-            1000
-          ]
+          "band": ["Mixed"],
+          "count": [100, 200, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
         },
         "name": "AFSA - Africa Stations",
         "sponsor": "FT8DMC"
@@ -322,9 +204,7 @@
       "ALA": {
         "tooltip": "Arab League",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "dxcc": [
             225,
             232,
@@ -351,15 +231,8 @@
           ],
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            6,
-            12,
-            18,
-            22
-          ]
+          "band": ["Mixed"],
+          "count": [6, 12, 18, 22]
         },
         "name": "ALA - Arab League",
         "sponsor": "FT8DMC"
@@ -367,20 +240,12 @@
       "ALGSA": {
         "tooltip": "Algerian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            400
-          ],
+          "mode": ["FT8"],
+          "dxcc": [400],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            8
-          ]
+          "band": ["Mixed"],
+          "count": [8]
         },
         "name": "ALGSA - Algerian Stations",
         "sponsor": "FT8DMC"
@@ -388,9 +253,7 @@
       "ALPA": {
         "tooltip": "Arab League Prefixes",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "dxcc": [
             225,
             232,
@@ -417,16 +280,8 @@
           ],
           "type": "px",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            30,
-            40,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 20, 30, 40, 50]
         },
         "name": "ALPA - Arab League Prefixes",
         "sponsor": "FT8DMC"
@@ -434,20 +289,12 @@
       "ASA": {
         "tooltip": "Andorran Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            203
-          ],
+          "mode": ["FT8"],
+          "dxcc": [203],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "ASA - Andorran Stations",
         "sponsor": "FT8DMC"
@@ -455,27 +302,12 @@
       "ASSA": {
         "tooltip": "Asia Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "AS",
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            300,
-            400,
-            500,
-            600,
-            700,
-            800,
-            900,
-            1000
-          ]
+          "band": ["Mixed"],
+          "count": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
         },
         "name": "ASSA - Asia Stations",
         "sponsor": "FT8DMC"
@@ -483,26 +315,12 @@
       "AUSA": {
         "tooltip": "Austrian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            206
-          ],
+          "mode": ["FT8"],
+          "dxcc": [206],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            25,
-            50,
-            100,
-            200,
-            300,
-            400,
-            500
-          ]
+          "band": ["Mixed"],
+          "count": [25, 50, 100, 200, 300, 400, 500]
         },
         "name": "AUSA - Austrian Stations",
         "sponsor": "FT8DMC"
@@ -510,20 +328,12 @@
       "BASSA": {
         "tooltip": "Basotho Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            432
-          ],
+          "mode": ["FT8"],
+          "dxcc": [432],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "BASSA - Basotho Stations",
         "sponsor": "FT8DMC"
@@ -531,20 +341,12 @@
       "BENSA": {
         "tooltip": "Benninese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            416
-          ],
+          "mode": ["FT8"],
+          "dxcc": [416],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "BENSA - Benninese Stations",
         "sponsor": "FT8DMC"
@@ -552,20 +354,12 @@
       "BESA": {
         "tooltip": "Belizean Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            66
-          ],
+          "mode": ["FT8"],
+          "dxcc": [66],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "BESA - Belizean Stations",
         "sponsor": "FT8DMC"
@@ -573,22 +367,12 @@
       "BHSA": {
         "tooltip": "Bosnian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            501
-          ],
+          "mode": ["FT8"],
+          "dxcc": [501],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "BHSA - Bosnian Stations",
         "sponsor": "FT8DMC"
@@ -596,20 +380,12 @@
       "BHUSA": {
         "tooltip": "Bhutanese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            306
-          ],
+          "mode": ["FT8"],
+          "dxcc": [306],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "BHUSA - Bhutanese Stations",
         "sponsor": "FT8DMC"
@@ -617,22 +393,12 @@
       "BSA": {
         "tooltip": "Belgium Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            209
-          ],
+          "mode": ["FT8"],
+          "dxcc": [209],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "BSA - Belgium Stations",
         "sponsor": "FT8DMC"
@@ -640,23 +406,13 @@
       "BSC": {
         "tooltip": "Worked Bahrain Special Callsigns",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            304
-          ],
-          "pxplus": [
-            "A91"
-          ],
+          "mode": ["FT8"],
+          "dxcc": [304],
+          "pxplus": ["A91"],
           "type": "pxplus",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "BSC - Worked Bahrain Special Callsigns",
         "sponsor": "FT8DMC"
@@ -664,20 +420,12 @@
       "BURSA": {
         "tooltip": "Burkinabe Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            480
-          ],
+          "mode": ["FT8"],
+          "dxcc": [480],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "BURSA - Burkinabe Stations",
         "sponsor": "FT8DMC"
@@ -685,29 +433,12 @@
       "CHISA": {
         "tooltip": "Chinese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            318
-          ],
+          "mode": ["FT8"],
+          "dxcc": [318],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            300,
-            400,
-            500,
-            600,
-            700,
-            800,
-            900,
-            1000
-          ]
+          "band": ["Mixed"],
+          "count": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
         },
         "name": "CHISA - Chinese Stations",
         "sponsor": "FT8DMC"
@@ -715,20 +446,12 @@
       "COMSA": {
         "tooltip": "Comorian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            411
-          ],
+          "mode": ["FT8"],
+          "dxcc": [411],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "COMSA - Comorian Stations",
         "sponsor": "FT8DMC"
@@ -736,20 +459,12 @@
       "CRISA": {
         "tooltip": "Costa Rican Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            308
-          ],
+          "mode": ["FT8"],
+          "dxcc": [308],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "CRISA - Costa Rican Stations",
         "sponsor": "FT8DMC"
@@ -757,22 +472,12 @@
       "CRSA": {
         "tooltip": "Czech Republic Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            503
-          ],
+          "mode": ["FT8"],
+          "dxcc": [503],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "CRSA - Czech Republic Stations",
         "sponsor": "FT8DMC"
@@ -780,22 +485,12 @@
       "CSA": {
         "tooltip": "Croatian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            497
-          ],
+          "mode": ["FT8"],
+          "dxcc": [497],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "CSA - Croatian Stations",
         "sponsor": "FT8DMC"
@@ -803,20 +498,12 @@
       "CYPSA": {
         "tooltip": "Cypriot Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            215
-          ],
+          "mode": ["FT8"],
+          "dxcc": [215],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "CYPSA - Cypriot Stations",
         "sponsor": "FT8DMC"
@@ -824,20 +511,12 @@
       "DJISA": {
         "tooltip": "Djiboutian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            382
-          ],
+          "mode": ["FT8"],
+          "dxcc": [382],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "DJISA - Djiboutian Stations",
         "sponsor": "FT8DMC"
@@ -845,20 +524,12 @@
       "EGYSA": {
         "tooltip": "Egyptian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            478
-          ],
+          "mode": ["FT8"],
+          "dxcc": [478],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "EGYSA - Egyptian Stations",
         "sponsor": "FT8DMC"
@@ -866,20 +537,12 @@
       "ERISA": {
         "tooltip": "Eritrean Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            51
-          ],
+          "mode": ["FT8"],
+          "dxcc": [51],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "ERISA - Eritrean Stations",
         "sponsor": "FT8DMC"
@@ -887,20 +550,12 @@
       "ETHSA": {
         "tooltip": "Ethiopian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            53
-          ],
+          "mode": ["FT8"],
+          "dxcc": [53],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "ETHSA - Ethiopian Stations",
         "sponsor": "FT8DMC"
@@ -908,15 +563,11 @@
       "EUSA": {
         "tooltip": "Europe Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "EU",
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
+          "band": ["Mixed"],
           "count": [
             100,
             200,
@@ -944,20 +595,12 @@
       "GHASA": {
         "tooltip": "Ghanaian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            424
-          ],
+          "mode": ["FT8"],
+          "dxcc": [424],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "GHASA - Ghanaian Stations",
         "sponsor": "FT8DMC"
@@ -965,27 +608,12 @@
       "GIA": {
         "tooltip": "German Islands",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "IOTA": [
-            "EU-042",
-            "EU-047",
-            "EU-057",
-            "EU-127",
-            "EU-128",
-            "EU-129"
-          ],
+          "mode": ["FT8"],
+          "IOTA": ["EU-042", "EU-047", "EU-057", "EU-127", "EU-128", "EU-129"],
           "type": "IOTA",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2,
-            4,
-            6
-          ]
+          "band": ["Mixed"],
+          "count": [2, 4, 6]
         },
         "name": "GIA - German Islands",
         "sponsor": "FT8DMC"
@@ -993,20 +621,12 @@
       "GISA": {
         "tooltip": "Gibraltarian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            233
-          ],
+          "mode": ["FT8"],
+          "dxcc": [233],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "GISA - Gibraltarian Stations",
         "sponsor": "FT8DMC"
@@ -1014,17 +634,11 @@
       "GSA": {
         "tooltip": "German Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            230
-          ],
+          "mode": ["FT8"],
+          "dxcc": [230],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
+          "band": ["Mixed"],
           "count": [
             10,
             25,
@@ -1047,20 +661,12 @@
       "GUSA": {
         "tooltip": "Guatemalan Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            76
-          ],
+          "mode": ["FT8"],
+          "dxcc": [76],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "GUSA - Guatemalan Stations",
         "sponsor": "FT8DMC"
@@ -1068,20 +674,12 @@
       "HOSA": {
         "tooltip": "Honduran Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            80
-          ],
+          "mode": ["FT8"],
+          "dxcc": [80],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "HOSA - Honduran Stations",
         "sponsor": "FT8DMC"
@@ -1089,22 +687,12 @@
       "HSA": {
         "tooltip": "Hungarian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            239
-          ],
+          "mode": ["FT8"],
+          "dxcc": [239],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "HSA - Hungarian Stations",
         "sponsor": "FT8DMC"
@@ -1112,22 +700,12 @@
       "ISA": {
         "tooltip": "Israeli Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            336
-          ],
+          "mode": ["FT8"],
+          "dxcc": [336],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "ISA - Israeli Stations",
         "sponsor": "FT8DMC"
@@ -1135,17 +713,11 @@
       "JSA": {
         "tooltip": "Japanese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            339
-          ],
+          "mode": ["FT8"],
+          "dxcc": [339],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
+          "band": ["Mixed"],
           "count": [
             100,
             200,
@@ -1174,20 +746,12 @@
       "KENSA": {
         "tooltip": "Kenyan Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            430
-          ],
+          "mode": ["FT8"],
+          "dxcc": [430],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "KENSA - Kenyan Stations",
         "sponsor": "FT8DMC"
@@ -1195,20 +759,12 @@
       "LIBSA": {
         "tooltip": "Libyan Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            436
-          ],
+          "mode": ["FT8"],
+          "dxcc": [436],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "LIBSA - Libyan Stations",
         "sponsor": "FT8DMC"
@@ -1216,20 +772,12 @@
       "MALSA": {
         "tooltip": "Malagasy Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            438
-          ],
+          "mode": ["FT8"],
+          "dxcc": [438],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "MALSA - Malagasy Stations",
         "sponsor": "FT8DMC"
@@ -1237,20 +785,12 @@
       "MAURSA": {
         "tooltip": "Mauritian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            165
-          ],
+          "mode": ["FT8"],
+          "dxcc": [165],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "MAURSA - Mauritian Stations",
         "sponsor": "FT8DMC"
@@ -1258,20 +798,12 @@
       "MAUSA": {
         "tooltip": "Mauritanian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            444
-          ],
+          "mode": ["FT8"],
+          "dxcc": [444],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "MAUSA - Mauritanian Stations",
         "sponsor": "FT8DMC"
@@ -1279,20 +811,12 @@
       "MORSA": {
         "tooltip": "Moroccanian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            446
-          ],
+          "mode": ["FT8"],
+          "dxcc": [446],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "MORSA - Moroccanian Stations",
         "sponsor": "FT8DMC"
@@ -1300,22 +824,12 @@
       "MOSA": {
         "tooltip": "Moldovian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            179
-          ],
+          "mode": ["FT8"],
+          "dxcc": [179],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "MOSA - Moldovian Stations",
         "sponsor": "FT8DMC"
@@ -1323,20 +837,12 @@
       "NAMSA": {
         "tooltip": "Namibian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            464
-          ],
+          "mode": ["FT8"],
+          "dxcc": [464],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "NAMSA - Namibian Stations",
         "sponsor": "FT8DMC"
@@ -1344,20 +850,12 @@
       "NSA": {
         "tooltip": "Nicaraguan Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            86
-          ],
+          "mode": ["FT8"],
+          "dxcc": [86],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "NSA - Nicaraguan Stations",
         "sponsor": "FT8DMC"
@@ -1365,9 +863,7 @@
       "OHCA": {
         "tooltip": "One Hundred Countries",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "dxcc",
           "endorse": [
             "6m",
@@ -1381,17 +877,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            150,
-            200,
-            250,
-            300,
-            331
-          ]
+          "band": ["Mixed"],
+          "count": [100, 150, 200, 250, 300, 331]
         },
         "name": "OHCA - One Hundred Countries",
         "sponsor": "FT8DMC"
@@ -1399,17 +886,11 @@
       "OHCA60": {
         "tooltip": "One Hundred Counties - 60m",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "60m"
-          ],
+          "mode": ["FT8"],
+          "band": ["60m"],
           "type": "dxcc",
           "endorse": [],
-          "count": [
-            100
-          ]
+          "count": [100]
         },
         "name": "OHCA60 - One Hundred Counties - 60m",
         "sponsor": "FT8DMC"
@@ -1417,20 +898,12 @@
       "PASA": {
         "tooltip": "Panamanian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            88
-          ],
+          "mode": ["FT8"],
+          "dxcc": [88],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "PASA - Panamanian Stations",
         "sponsor": "FT8DMC"
@@ -1438,20 +911,12 @@
       "PSA": {
         "tooltip": "Palestinian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            510
-          ],
+          "mode": ["FT8"],
+          "dxcc": [510],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "PSA - Palestinian Stations",
         "sponsor": "FT8DMC"
@@ -1459,20 +924,12 @@
       "RSASA": {
         "tooltip": "South African Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            462
-          ],
+          "mode": ["FT8"],
+          "dxcc": [462],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "RSASA - South African Stations",
         "sponsor": "FT8DMC"
@@ -1480,20 +937,12 @@
       "SAHSA": {
         "tooltip": "Saharawi Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            302
-          ],
+          "mode": ["FT8"],
+          "dxcc": [302],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "SAHSA - Saharawi Stations",
         "sponsor": "FT8DMC"
@@ -1501,20 +950,12 @@
       "SARSA": {
         "tooltip": "Sardinian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            225
-          ],
+          "mode": ["FT8"],
+          "dxcc": [225],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "SARSA - Sardinian Stations",
         "sponsor": "FT8DMC"
@@ -1522,20 +963,12 @@
       "SASA": {
         "tooltip": "Salvadoran Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            74
-          ],
+          "mode": ["FT8"],
+          "dxcc": [74],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "SASA - Salvadoran Stations",
         "sponsor": "FT8DMC"
@@ -1543,22 +976,12 @@
       "SESA": {
         "tooltip": "Serbian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            296
-          ],
+          "mode": ["FT8"],
+          "dxcc": [296],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "SESA - Serbian Stations",
         "sponsor": "FT8DMC"
@@ -1566,20 +989,12 @@
       "SEYSA": {
         "tooltip": "Seychellois Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            379
-          ],
+          "mode": ["FT8"],
+          "dxcc": [379],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "SEYSA - Seychellois Stations",
         "sponsor": "FT8DMC"
@@ -1587,20 +1002,12 @@
       "SIESA": {
         "tooltip": "Sierra Leonean Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            458
-          ],
+          "mode": ["FT8"],
+          "dxcc": [458],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "SIESA - Sierra Leonean Stations",
         "sponsor": "FT8DMC"
@@ -1608,22 +1015,12 @@
       "SLSA": {
         "tooltip": "Slovanian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            499
-          ],
+          "mode": ["FT8"],
+          "dxcc": [499],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "SLSA - Slovanian Stations",
         "sponsor": "FT8DMC"
@@ -1632,20 +1029,12 @@
         "tooltip": "Somali Stations",
         "rule": {
           "mdoe": "FT8",
-          "dxcc": [
-            232
-          ],
+          "dxcc": [232],
           "type": "call",
           "endorse": [],
-          "mode": [
-            "Mixed"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "mode": ["Mixed"],
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "SOMSA - Somali Stations",
         "sponsor": "FT8DMC"
@@ -1653,20 +1042,12 @@
       "SRSA": {
         "tooltip": "Slovak Republic Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            504
-          ],
+          "mode": ["FT8"],
+          "dxcc": [504],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "SRSA - Slovak Republic Stations",
         "sponsor": "FT8DMC"
@@ -1674,22 +1055,12 @@
       "SSA": {
         "tooltip": "Scottish Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            279
-          ],
+          "mode": ["FT8"],
+          "dxcc": [279],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "SSA - Scottish Stations",
         "sponsor": "FT8DMC"
@@ -1697,20 +1068,12 @@
       "SUDSA": {
         "tooltip": "Sudanese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            466
-          ],
+          "mode": ["FT8"],
+          "dxcc": [466],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "SUDSA - Sudanese Stations",
         "sponsor": "FT8DMC"
@@ -1718,22 +1081,12 @@
       "SWSA": {
         "tooltip": "Swiss Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            287
-          ],
+          "mode": ["FT8"],
+          "dxcc": [287],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "SWSA - Swiss Stations",
         "sponsor": "FT8DMC"
@@ -1741,20 +1094,12 @@
       "TOGSA": {
         "tooltip": "Togolese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            483
-          ],
+          "mode": ["FT8"],
+          "dxcc": [483],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "TOGSA - Togolese Stations",
         "sponsor": "FT8DMC"
@@ -1762,20 +1107,12 @@
       "TUNSA": {
         "tooltip": "Tunisian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            474
-          ],
+          "mode": ["FT8"],
+          "dxcc": [474],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "TUNSA - Tunisian Stations",
         "sponsor": "FT8DMC"
@@ -1783,20 +1120,12 @@
       "UGSA": {
         "tooltip": "Ugandan Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            286
-          ],
+          "mode": ["FT8"],
+          "dxcc": [286],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "UGSA - Ugandan Stations",
         "sponsor": "FT8DMC"
@@ -1804,22 +1133,12 @@
       "URSA": {
         "tooltip": "Uruguayan Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            144
-          ],
+          "mode": ["FT8"],
+          "dxcc": [144],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "URSA - Uruguayan Stations",
         "sponsor": "FT8DMC"
@@ -1827,24 +1146,10 @@
       "WAA": {
         "tooltip": "Worked All Austria",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            206
-          ],
+          "mode": ["FT8"],
+          "dxcc": [206],
           "type": "callarea",
-          "zone": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "zone": [1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "6m",
             "10m",
@@ -1857,12 +1162,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            9
-          ]
+          "band": ["Mixed"],
+          "count": [9]
         },
         "name": "WAA - Worked All Austria",
         "sponsor": "FT8DMC"
@@ -1870,23 +1171,10 @@
       "WAAA": {
         "tooltip": "Worked All Australia",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            150
-          ],
+          "mode": ["FT8"],
+          "dxcc": [150],
           "type": "callarea",
-          "zone": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ],
+          "zone": [1, 2, 3, 4, 5, 6, 7, 8],
           "endorse": [
             "6m",
             "10m",
@@ -1899,12 +1187,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            8
-          ]
+          "band": ["Mixed"],
+          "count": [8]
         },
         "name": "WAAA - Worked All Australia",
         "sponsor": "FT8DMC"
@@ -1912,20 +1196,12 @@
       "WAAC": {
         "tooltip": "Worked All African Countries",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "AF",
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            30,
-            50,
-            78
-          ]
+          "band": ["Mixed"],
+          "count": [30, 50, 78]
         },
         "name": "WAAC - Worked All African Countries",
         "sponsor": "FT8DMC"
@@ -1933,20 +1209,12 @@
       "WAAFA": {
         "tooltip": "Worked All Afghanistan",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            3
-          ],
+          "mode": ["FT8"],
+          "dxcc": [3],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAAFA - Worked All Afghanistan",
         "sponsor": "FT8DMC"
@@ -1954,9 +1222,7 @@
       "WAAM": {
         "tooltip": "Worked All Award Managers",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "call",
           "call": [
             "OE6VIE",
@@ -1974,14 +1240,8 @@
             "9K2OW"
           ],
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            4,
-            8,
-            13
-          ]
+          "band": ["Mixed"],
+          "count": [4, 8, 13]
         },
         "name": "WAAM - Worked All Award Managers",
         "sponsor": "FT8DMC"
@@ -1989,20 +1249,12 @@
       "WAARA": {
         "tooltip": "Worked All Armenia",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            14
-          ],
+          "mode": ["FT8"],
+          "dxcc": [14],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAARA - Worked All Armenia",
         "sponsor": "FT8DMC"
@@ -2010,38 +1262,12 @@
       "WAASA": {
         "tooltip": "Worked All ASEAN Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            143,
-            293,
-            299,
-            309,
-            312,
-            327,
-            345,
-            375,
-            381,
-            387
-          ],
+          "mode": ["FT8"],
+          "dxcc": [143, 293, 299, 309, 312, 327, 345, 375, 381, 387],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            300,
-            400,
-            500,
-            600,
-            700,
-            800,
-            900,
-            1000
-          ]
+          "band": ["Mixed"],
+          "count": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
         },
         "name": "WAASA - Worked All ASEAN Stations",
         "sponsor": "FT8DMC"
@@ -2049,20 +1275,12 @@
       "WAAZA": {
         "tooltip": "Worked All Azerbaijan",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            18
-          ],
+          "mode": ["FT8"],
+          "dxcc": [18],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WAAZA - Worked All Azerbaijan",
         "sponsor": "FT8DMC"
@@ -2070,12 +1288,8 @@
       "WABA": {
         "tooltip": "Worked All Antarctic Bases",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            13
-          ],
+          "mode": ["FT8"],
+          "dxcc": [13],
           "type": "call",
           "endorse": [
             "6m",
@@ -2089,12 +1303,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WABA - Worked All Antarctic Bases",
         "sponsor": "FT8DMC"
@@ -2102,26 +1312,13 @@
       "WABSA": {
         "tooltip": "Worked All Black Sea",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            54,
-            75,
-            212,
-            275,
-            288,
-            390
-          ],
+          "mode": ["FT8"],
+          "dxcc": [54, 75, 212, 275, 288, 390],
           "type": "calls2dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            6
-          ],
-		  "unique":  5
+          "band": ["Mixed"],
+          "count": [6],
+          "unique": 5
         },
         "name": "WABSA - Worked All Black Sea",
         "sponsor": "FT8DMC"
@@ -2129,9 +1326,7 @@
       "WAC": {
         "tooltip": "Worked All Continents",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "cont",
           "endorse": [
             "6m",
@@ -2145,12 +1340,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            6
-          ]
+          "band": ["Mixed"],
+          "count": [6]
         },
         "name": "WAC - Worked All Continents",
         "sponsor": "FT8DMC"
@@ -2158,20 +1349,12 @@
       "WACA": {
         "tooltip": "Worked All Christmas Island",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            35
-          ],
+          "mode": ["FT8"],
+          "dxcc": [35],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WACA - Worked All Christmas Island",
         "sponsor": "FT8DMC"
@@ -2179,23 +1362,10 @@
       "WACCA": {
         "tooltip": "Worked All Chile Call Area",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            112
-          ],
+          "mode": ["FT8"],
+          "dxcc": [112],
           "type": "callarea",
-          "zone": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ],
+          "zone": [1, 2, 3, 4, 5, 6, 7, 8],
           "endorse": [
             "2m",
             "4m",
@@ -2211,12 +1381,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            8
-          ]
+          "band": ["Mixed"],
+          "count": [8]
         },
         "name": "WACCA - Worked All Chile Call Area",
         "sponsor": "FT8DMC"
@@ -2224,27 +1390,13 @@
       "WACEA": {
         "tooltip": "Worked All Central America",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            66,
-            74,
-            76,
-            80,
-            86,
-            88,
-            308
-          ],
+          "mode": ["FT8"],
+          "dxcc": [66, 74, 76, 80, 86, 88, 308],
           "type": "calls2dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            7
-          ],
-		  "unique":7
+          "band": ["Mixed"],
+          "count": [7],
+          "unique": 7
         },
         "name": "WACEA - Worked All Central America",
         "sponsor": "FT8DMC"
@@ -2252,20 +1404,12 @@
       "WACKA": {
         "tooltip": "Worked All Cocos Keeling",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            38
-          ],
+          "mode": ["FT8"],
+          "dxcc": [38],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WACKA - Worked All Cocos Keeling",
         "sponsor": "FT8DMC"
@@ -2273,21 +1417,12 @@
       "WAE": {
         "tooltip": "Worked All Europe",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "EU",
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            40,
-            50,
-            60,
-            73
-          ]
+          "band": ["Mixed"],
+          "count": [40, 50, 60, 73]
         },
         "name": "WAE - Worked All Europe",
         "sponsor": "FT8DMC"
@@ -2295,20 +1430,12 @@
       "WAFA": {
         "tooltip": "Worked All Fiji",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            176
-          ],
+          "mode": ["FT8"],
+          "dxcc": [176],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAFA - Worked All Fiji",
         "sponsor": "FT8DMC"
@@ -2316,20 +1443,12 @@
       "WAGA": {
         "tooltip": "Worked All Georgia",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            75
-          ],
+          "mode": ["FT8"],
+          "dxcc": [75],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAGA - Worked All Georgia",
         "sponsor": "FT8DMC"
@@ -2337,19 +1456,9 @@
       "WAGB": {
         "tooltip": "Worked All Great Britain",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "dxcc",
-          "dxcc": [
-            106,
-            114,
-            122,
-            223,
-            265,
-            279,
-            294
-          ],
+          "dxcc": [106, 114, 122, 223, 265, 279, 294],
           "endorse": [
             "6m",
             "10m",
@@ -2362,12 +1471,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            7
-          ]
+          "band": ["Mixed"],
+          "count": [7]
         },
         "name": "WAGB - Worked All Great Britain",
         "sponsor": "FT8DMC"
@@ -2375,34 +1480,12 @@
       "WAGCC": {
         "tooltip": "Worked All Gulf Cooperation Council",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "dxcc",
-          "dxcc": [
-            304,
-            348,
-            370,
-            376,
-            378,
-            391
-          ],
-          "endorse": [
-            "10m",
-            "12m",
-            "15m",
-            "17m",
-            "20m",
-            "40m",
-            "80m",
-            "160m"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            6
-          ]
+          "dxcc": [304, 348, 370, 376, 378, 391],
+          "endorse": ["10m", "12m", "15m", "17m", "20m", "40m", "80m", "160m"],
+          "band": ["Mixed"],
+          "count": [6]
         },
         "name": "WAGCC - Worked All Gulf Cooperation Council",
         "sponsor": "FT8DMC"
@@ -2410,12 +1493,8 @@
       "WAGP": {
         "tooltip": "Worked All Germany Prefix",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            230
-          ],
+          "mode": ["FT8"],
+          "dxcc": [230],
           "type": "px",
           "px": [
             "DA",
@@ -2434,22 +1513,9 @@
             "DQ",
             "DR"
           ],
-          "endorse": [
-            "10m",
-            "12m",
-            "15m",
-            "20m",
-            "30m",
-            "40m",
-            "80m",
-            "160m"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            15
-          ]
+          "endorse": ["10m", "12m", "15m", "20m", "30m", "40m", "80m", "160m"],
+          "band": ["Mixed"],
+          "count": [15]
         },
         "name": "WAGP - Worked All Germany Prefix",
         "sponsor": "FT8DMC"
@@ -2457,25 +1523,10 @@
       "WAICA": {
         "tooltip": "Worked All Italian Call Area",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            248
-          ],
+          "mode": ["FT8"],
+          "dxcc": [248],
           "type": "callarea",
-          "zone": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "zone": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "6m",
             "10m",
@@ -2488,12 +1539,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WAICA - Worked All Italian Call Area",
         "sponsor": "FT8DMC"
@@ -2501,33 +1548,13 @@
       "WAIP": {
         "tooltip": "Worked All Indonesia Prefixes",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            327
-          ],
+          "mode": ["FT8"],
+          "dxcc": [327],
           "type": "px",
-          "px": [
-            "YB",
-            "YC",
-            "YD",
-            "YE",
-            "YF",
-            "YG"
-          ],
-          "endorse": [
-            "10m",
-            "15m",
-            "40m",
-            "80m"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            6
-          ]
+          "px": ["YB", "YC", "YD", "YE", "YF", "YG"],
+          "endorse": ["10m", "15m", "40m", "80m"],
+          "band": ["Mixed"],
+          "count": [6]
         },
         "name": "WAIP - Worked All Indonesia Prefixes",
         "sponsor": "FT8DMC"
@@ -2535,29 +1562,12 @@
       "WAISA": {
         "tooltip": "Worked All Indonesian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            327
-          ],
+          "mode": ["FT8"],
+          "dxcc": [327],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            300,
-            400,
-            500,
-            600,
-            700,
-            800,
-            900,
-            1000
-          ]
+          "band": ["Mixed"],
+          "count": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
         },
         "name": "WAISA - Worked All Indonesian Stations",
         "sponsor": "FT8DMC"
@@ -2565,25 +1575,10 @@
       "WAJCA": {
         "tooltip": "Worked All Japan Call Area",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            339
-          ],
+          "mode": ["FT8"],
+          "dxcc": [339],
           "type": "callarea",
-          "zone": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "zone": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "6m",
             "10m",
@@ -2596,12 +1591,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WAJCA - Worked All Japan Call Area",
         "sponsor": "FT8DMC"
@@ -2609,21 +1600,10 @@
       "WAKA": {
         "tooltip": "Worked All Korea",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            137
-          ],
+          "mode": ["FT8"],
+          "dxcc": [137],
           "type": "callarea",
-          "zone": [
-			0,
-            1,
-            2,
-            3,
-            4,
-            5
-          ],
+          "zone": [0, 1, 2, 3, 4, 5],
           "endorse": [
             "2m",
             "4m",
@@ -2639,12 +1619,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WAKA - Worked All Korea",
         "sponsor": "FT8DMC"
@@ -2652,20 +1628,12 @@
       "WAKAA": {
         "tooltip": "Worked All Kazakhstan",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            130
-          ],
+          "mode": ["FT8"],
+          "dxcc": [130],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WAKAA - Worked All Kazakhstan",
         "sponsor": "FT8DMC"
@@ -2673,20 +1641,12 @@
       "WAKYA": {
         "tooltip": "Worked All Kyrgyzstan",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            135
-          ],
+          "mode": ["FT8"],
+          "dxcc": [135],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAKYA - Worked All Kyrgyzstan",
         "sponsor": "FT8DMC"
@@ -2694,20 +1654,12 @@
       "WALISA": {
         "tooltip": "Worked All Aland Islands Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            5
-          ],
+          "mode": ["FT8"],
+          "dxcc": [5],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WALISA - Worked All Aland Islands Stations",
         "sponsor": "FT8DMC"
@@ -2715,22 +1667,12 @@
       "WALSA": {
         "tooltip": "Worked Alaskan Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            6
-          ],
+          "mode": ["FT8"],
+          "dxcc": [6],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            10,
-            15
-          ]
+          "band": ["Mixed"],
+          "count": [5, 10, 15]
         },
         "name": "WALSA - Worked Alaskan Stations",
         "sponsor": "FT8DMC"
@@ -2738,20 +1680,12 @@
       "WAMIA": {
         "tooltip": "Worked All Micronesia",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            173
-          ],
+          "mode": ["FT8"],
+          "dxcc": [173],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAMIA - Worked All Micronesia",
         "sponsor": "FT8DMC"
@@ -2759,20 +1693,12 @@
       "WANA": {
         "tooltip": "Worked All North America",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "NA",
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            30,
-            40,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [30, 40, 50]
         },
         "name": "WANA - Worked All North America",
         "sponsor": "FT8DMC"
@@ -2780,20 +1706,12 @@
       "WANIA": {
         "tooltip": "Worked All Niue",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            188
-          ],
+          "mode": ["FT8"],
+          "dxcc": [188],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WANIA - Worked All Niue",
         "sponsor": "FT8DMC"
@@ -2801,20 +1719,12 @@
       "WANKA": {
         "tooltip": "Worked All New Caledonia",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            162
-          ],
+          "mode": ["FT8"],
+          "dxcc": [162],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WANKA - Worked All New Caledonia",
         "sponsor": "FT8DMC"
@@ -2822,20 +1732,12 @@
       "WANOA": {
         "tooltip": "Worked All Norfolk Island",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            189
-          ],
+          "mode": ["FT8"],
+          "dxcc": [189],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WANOA - Worked All Norfolk Island",
         "sponsor": "FT8DMC"
@@ -2843,20 +1745,12 @@
       "WAOA": {
         "tooltip": "Worked All Oceania",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "OC",
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            30,
-            50,
-            59
-          ]
+          "band": ["Mixed"],
+          "count": [30, 50, 59]
         },
         "name": "WAOA - Worked All Oceania",
         "sponsor": "FT8DMC"
@@ -2864,20 +1758,12 @@
       "WAPA": {
         "tooltip": "Worked All Pakistan",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            372
-          ],
+          "mode": ["FT8"],
+          "dxcc": [372],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAPA - Worked All Pakistan",
         "sponsor": "FT8DMC"
@@ -2885,20 +1771,12 @@
       "WAPAA": {
         "tooltip": "Worked All Palau",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            22
-          ],
+          "mode": ["FT8"],
+          "dxcc": [22],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WAPAA - Worked All Palau",
         "sponsor": "FT8DMC"
@@ -2906,26 +1784,13 @@
       "WARA": {
         "tooltip": "Worked All Argentine Republic",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            100
-          ],
+          "mode": ["FT8"],
+          "dxcc": [100],
           "type": "sfx",
           "sfx": [
-            [
-              "A",
-              "B",
-              "C"
-            ],
-            [
-              "D",
-              "E"
-            ],
-            [
-              "F"
-            ],
+            ["A", "B", "C"],
+            ["D", "E"],
+            ["F"],
             [
               "GA",
               "GB",
@@ -2943,70 +1808,24 @@
               "GN",
               "GO"
             ],
-            [
-              "GP",
-              "GQ",
-              "GR",
-              "GS",
-              "GT",
-              "GU",
-              "GV",
-              "GW",
-              "GX",
-              "GY",
-              "GZ"
-            ],
-            [
-              "H"
-            ],
-            [
-              "I"
-            ],
-            [
-              "J"
-            ],
-            [
-              "K"
-            ],
-            [
-              "L"
-            ],
-            [
-              "L"
-            ],
-            [
-              "M"
-            ],
-            [
-              "N"
-            ],
-            [
-              "O"
-            ],
-            [
-              "P"
-            ],
-            [
-              "Q"
-            ],
-            [
-              "R"
-            ],
-            [
-              "S"
-            ],
-            [
-              "T"
-            ],
-            [
-              "U"
-            ],
-            [
-              "V"
-            ],
-            [
-              "W"
-            ],
+            ["GP", "GQ", "GR", "GS", "GT", "GU", "GV", "GW", "GX", "GY", "GZ"],
+            ["H"],
+            ["I"],
+            ["J"],
+            ["K"],
+            ["L"],
+            ["L"],
+            ["M"],
+            ["N"],
+            ["O"],
+            ["P"],
+            ["Q"],
+            ["R"],
+            ["S"],
+            ["T"],
+            ["U"],
+            ["V"],
+            ["W"],
             [
               "XA",
               "XB",
@@ -3024,25 +1843,9 @@
               "XN",
               "XO"
             ],
-            [
-              "XP",
-              "XQ",
-              "XR",
-              "XS",
-              "XT",
-              "XU",
-              "XV",
-              "XW",
-              "XX",
-              "XY",
-              "XY"
-            ],
-            [
-              "Y"
-            ],
-            [
-              "Z"
-            ]
+            ["XP", "XQ", "XR", "XS", "XT", "XU", "XV", "XW", "XX", "XY", "XY"],
+            ["Y"],
+            ["Z"]
           ],
           "endorse": [
             "6m",
@@ -3055,14 +1858,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            25
-          ]
+          "band": ["Mixed"],
+          "count": [10, 20, 25]
         },
         "name": "WARA - Worked All Argentine Republic",
         "sponsor": "FT8DMC"
@@ -3070,14 +1867,8 @@
       "WAS": {
         "tooltip": "Worked All States",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            6,
-            110,
-            291
-          ],
+          "mode": ["FT8"],
+          "dxcc": [6, 110, 291],
           "type": "states",
           "mh": 6,
           "endorse": [
@@ -3092,12 +1883,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [50]
         },
         "name": "WAS - Worked All States",
         "sponsor": "FT8DMC"
@@ -3105,20 +1892,12 @@
       "WASA": {
         "tooltip": "Worked All South America",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "SA",
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            30
-          ]
+          "band": ["Mixed"],
+          "count": [10, 20, 30]
         },
         "name": "WASA - Worked All South America",
         "sponsor": "FT8DMC"
@@ -3126,27 +1905,10 @@
       "WASCA": {
         "tooltip": "Worked All Spain Call Area",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            21,
-            29,
-            32,
-            281
-          ],
+          "mode": ["FT8"],
+          "dxcc": [21, 29, 32, 281],
           "type": "callarea",
-          "zone": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "zone": [1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "6m",
             "10m",
@@ -3159,12 +1921,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            9
-          ]
+          "band": ["Mixed"],
+          "count": [9]
         },
         "name": "WASCA - Worked All Spain Call Area",
         "sponsor": "FT8DMC"
@@ -3172,20 +1930,12 @@
       "WASOA": {
         "tooltip": "Worked All Solomon",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            185
-          ],
+          "mode": ["FT8"],
+          "dxcc": [185],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WASOA - Worked All Solomon",
         "sponsor": "FT8DMC"
@@ -3193,20 +1943,12 @@
       "WATA": {
         "tooltip": "Worked All Tajikistan",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            262
-          ],
+          "mode": ["FT8"],
+          "dxcc": [262],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WATA - Worked All Tajikistan",
         "sponsor": "FT8DMC"
@@ -3214,20 +1956,12 @@
       "WATLA": {
         "tooltip": "Worked All Timor Leste",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            511
-          ],
+          "mode": ["FT8"],
+          "dxcc": [511],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WATLA - Worked All Timor Leste",
         "sponsor": "FT8DMC"
@@ -3235,20 +1969,12 @@
       "WAUA": {
         "tooltip": "Worked All Uzbekistan",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            292
-          ],
+          "mode": ["FT8"],
+          "dxcc": [292],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WAUA - Worked All Uzbekistan",
         "sponsor": "FT8DMC"
@@ -3256,9 +1982,7 @@
       "WAZ": {
         "tooltip": "Worked All Zones",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "cqz",
           "endorse": [
             "6m",
@@ -3272,12 +1996,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            40
-          ]
+          "band": ["Mixed"],
+          "count": [40]
         },
         "name": "WAZ - Worked All Zones",
         "sponsor": "FT8DMC"
@@ -3285,14 +2005,8 @@
       "WBA": {
         "tooltip": "Worked All Benelux",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            209,
-            254,
-            263
-          ],
+          "mode": ["FT8"],
+          "dxcc": [209, 254, 263],
           "type": "calls2dxcc",
           "endorse": [
             "6m",
@@ -3306,13 +2020,9 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ],
-		  "unique": 3
+          "band": ["Mixed"],
+          "count": [3],
+          "unique": 3
         },
         "name": "WBA - Worked All Benelux",
         "sponsor": "FT8DMC"
@@ -3320,22 +2030,12 @@
       "WBESA": {
         "tooltip": "Worked Belarusian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            27
-          ],
+          "mode": ["FT8"],
+          "dxcc": [27],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WBESA - Worked Belarusian Stations",
         "sponsor": "FT8DMC"
@@ -3343,22 +2043,12 @@
       "WBPA": {
         "tooltip": "Worked Brazilian Prefix",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            108
-          ],
+          "mode": ["FT8"],
+          "dxcc": [108],
           "type": "px",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            15,
-            30
-          ]
+          "band": ["Mixed"],
+          "count": [5, 15, 30]
         },
         "name": "WBPA - Worked Brazilian Prefix",
         "sponsor": "FT8DMC"
@@ -3366,14 +2056,8 @@
       "WBSA": {
         "tooltip": "Worked Baltic States",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            52,
-            145,
-            146
-          ],
+          "mode": ["FT8"],
+          "dxcc": [52, 145, 146],
           "type": "calls2dxcc",
           "endorse": [
             "2m",
@@ -3389,13 +2073,9 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ],
-		  "unique": 5
+          "band": ["Mixed"],
+          "count": [3],
+          "unique": 5
         },
         "name": "WBSA - Worked Baltic States",
         "sponsor": "FT8DMC"
@@ -3403,22 +2083,12 @@
       "WBUSA": {
         "tooltip": "Worked Bulgarian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            212
-          ],
+          "mode": ["FT8"],
+          "dxcc": [212],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WBUSA - Worked Bulgarian Stations",
         "sponsor": "FT8DMC"
@@ -3426,22 +2096,12 @@
       "WCASA": {
         "tooltip": "Worked Canadian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            1
-          ],
+          "mode": ["FT8"],
+          "dxcc": [1],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WCASA - Worked Canadian Stations",
         "sponsor": "FT8DMC"
@@ -3449,21 +2109,9 @@
       "WCIS": {
         "tooltip": "Worked Commonwealth of Independent States",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "dxcc",
-          "dxcc": [
-            14,
-            18,
-            27,
-            54,
-            130,
-            135,
-            179,
-            262,
-            292
-          ],
+          "dxcc": [14, 18, 27, 54, 130, 135, 179, 262, 292],
           "endorse": [
             "6m",
             "10m",
@@ -3477,12 +2125,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            9
-          ]
+          "band": ["Mixed"],
+          "count": [9]
         },
         "name": "WCIS - Worked Commonwealth of Independent States",
         "sponsor": "FT8DMC"
@@ -3490,20 +2134,12 @@
       "WCOSA": {
         "tooltip": "Worked Corsican Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            214
-          ],
+          "mode": ["FT8"],
+          "dxcc": [214],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WCOSA - Worked Corsican Stations",
         "sponsor": "FT8DMC"
@@ -3511,12 +2147,8 @@
       "WCP": {
         "tooltip": "Worked Chinese Prefixes",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            318
-          ],
+          "mode": ["FT8"],
+          "dxcc": [318],
           "type": "px",
           "endorse": [
             "2m",
@@ -3533,14 +2165,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            30
-          ]
+          "band": ["Mixed"],
+          "count": [10, 20, 30]
         },
         "name": "WCP - Worked Chinese Prefixes",
         "sponsor": "FT8DMC"
@@ -3548,12 +2174,8 @@
       "WCPA": {
         "tooltip": "Worked Chinese Provinces",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            318
-          ],
+          "mode": ["FT8"],
+          "dxcc": [318],
           "type": "numsfx",
           "numsfx": [
             [
@@ -3582,258 +2204,34 @@
               "1W",
               "1X"
             ],
-            [
-              "2A",
-              "2B",
-              "2C",
-              "2D",
-              "2E",
-              "2F",
-              "2G",
-              "2H"
-            ],
-            [
-              "2I",
-              "2J",
-              "2K",
-              "2L",
-              "2M",
-              "2N",
-              "2O",
-              "2P"
-            ],
-            [
-              "3A",
-              "3B",
-              "3C",
-              "3D",
-              "3E",
-              "3F"
-            ],
-            [
-              "3G",
-              "3H",
-              "3I",
-              "3J",
-              "3K",
-              "3L"
-            ],
-            [
-              "3M",
-              "3N",
-              "3O",
-              "3P",
-              "3Q",
-              "3R"
-            ],
-            [
-              "3S",
-              "3T",
-              "3U",
-              "3V",
-              "3W",
-              "3X"
-            ],
-            [
-              "4A",
-              "4B",
-              "4C",
-              "4D",
-              "4E",
-              "4F",
-              "4G",
-              "4H"
-            ],
-            [
-              "4I",
-              "4J",
-              "4K",
-              "4L",
-              "4M",
-              "4N",
-              "4O",
-              "4P"
-            ],
-            [
-              "4Q",
-              "4R",
-              "4S",
-              "4T",
-              "4U",
-              "4V",
-              "4W",
-              "4X"
-            ],
-            [
-              "5A",
-              "5B",
-              "5C",
-              "5D",
-              "5E",
-              "5F",
-              "5G",
-              "5H"
-            ],
-            [
-              "5I",
-              "5J",
-              "5K",
-              "5L",
-              "5M",
-              "5N",
-              "5O",
-              "5P"
-            ],
-            [
-              "5Q",
-              "5R",
-              "5S",
-              "5T",
-              "5U",
-              "5V",
-              "5W",
-              "5X"
-            ],
-            [
-              "6A",
-              "6B",
-              "6C",
-              "6D",
-              "6E",
-              "6F",
-              "6G",
-              "6H"
-            ],
-            [
-              "6I",
-              "6J",
-              "6K",
-              "6L",
-              "6M",
-              "6N",
-              "6O",
-              "6P"
-            ],
-            [
-              "6Q",
-              "6R",
-              "6S",
-              "6T",
-              "6U",
-              "6V",
-              "6W",
-              "6X"
-            ],
-            [
-              "7A",
-              "7B",
-              "7C",
-              "7D",
-              "7E",
-              "7F",
-              "7G",
-              "7H"
-            ],
-            [
-              "7I",
-              "7J",
-              "7K",
-              "7L",
-              "7M",
-              "7N",
-              "7O",
-              "7P"
-            ],
-            [
-              "7Q",
-              "7R",
-              "7S",
-              "7T",
-              "7U",
-              "7V",
-              "7W",
-              "7X"
-            ],
-            [
-              "8A",
-              "8B",
-              "8C",
-              "8D",
-              "8E",
-              "8F"
-            ],
-            [
-              "8G",
-              "8H",
-              "8I",
-              "8J",
-              "8K",
-              "8L"
-            ],
-            [
-              "8M",
-              "8N",
-              "8O",
-              "8P",
-              "8Q",
-              "8R"
-            ],
-            [
-              "8S",
-              "8T",
-              "8U",
-              "8V",
-              "8W",
-              "8X"
-            ],
-            [
-              "9A",
-              "9B",
-              "9C",
-              "9D",
-              "9E",
-              "9F"
-            ],
-            [
-              "9G",
-              "9H",
-              "9I",
-              "9J",
-              "9K",
-              "9L"
-            ],
-            [
-              "9M",
-              "9N",
-              "9O",
-              "9P",
-              "9Q",
-              "9R"
-            ],
-            [
-              "9S",
-              "9T",
-              "9U",
-              "9V",
-              "9W",
-              "9X"
-            ],
-            [
-              "0A",
-              "0B",
-              "0C",
-              "0D",
-              "0E",
-              "0F"
-            ],
-            [
-              "0G",
-              "0H",
-              "0I",
-              "0J",
-              "0K",
-              "0L"
-            ]
+            ["2A", "2B", "2C", "2D", "2E", "2F", "2G", "2H"],
+            ["2I", "2J", "2K", "2L", "2M", "2N", "2O", "2P"],
+            ["3A", "3B", "3C", "3D", "3E", "3F"],
+            ["3G", "3H", "3I", "3J", "3K", "3L"],
+            ["3M", "3N", "3O", "3P", "3Q", "3R"],
+            ["3S", "3T", "3U", "3V", "3W", "3X"],
+            ["4A", "4B", "4C", "4D", "4E", "4F", "4G", "4H"],
+            ["4I", "4J", "4K", "4L", "4M", "4N", "4O", "4P"],
+            ["4Q", "4R", "4S", "4T", "4U", "4V", "4W", "4X"],
+            ["5A", "5B", "5C", "5D", "5E", "5F", "5G", "5H"],
+            ["5I", "5J", "5K", "5L", "5M", "5N", "5O", "5P"],
+            ["5Q", "5R", "5S", "5T", "5U", "5V", "5W", "5X"],
+            ["6A", "6B", "6C", "6D", "6E", "6F", "6G", "6H"],
+            ["6I", "6J", "6K", "6L", "6M", "6N", "6O", "6P"],
+            ["6Q", "6R", "6S", "6T", "6U", "6V", "6W", "6X"],
+            ["7A", "7B", "7C", "7D", "7E", "7F", "7G", "7H"],
+            ["7I", "7J", "7K", "7L", "7M", "7N", "7O", "7P"],
+            ["7Q", "7R", "7S", "7T", "7U", "7V", "7W", "7X"],
+            ["8A", "8B", "8C", "8D", "8E", "8F"],
+            ["8G", "8H", "8I", "8J", "8K", "8L"],
+            ["8M", "8N", "8O", "8P", "8Q", "8R"],
+            ["8S", "8T", "8U", "8V", "8W", "8X"],
+            ["9A", "9B", "9C", "9D", "9E", "9F"],
+            ["9G", "9H", "9I", "9J", "9K", "9L"],
+            ["9M", "9N", "9O", "9P", "9Q", "9R"],
+            ["9S", "9T", "9U", "9V", "9W", "9X"],
+            ["0A", "0B", "0C", "0D", "0E", "0F"],
+            ["0G", "0H", "0I", "0J", "0K", "0L"]
           ],
           "endorse": [
             "2m",
@@ -3850,14 +2248,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            30
-          ]
+          "band": ["Mixed"],
+          "count": [10, 20, 30]
         },
         "name": "WCPA - Worked Chinese Provinces",
         "sponsor": "FT8DMC"
@@ -3865,12 +2257,8 @@
       "WCPT": {
         "tooltip": "Worked Canadian Provinces And Territories",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            1
-          ],
+          "mode": ["FT8"],
+          "dxcc": [1],
           "type": "pxa",
           "pxa": [
             [
@@ -3971,70 +2359,17 @@
               "XL7",
               "VB7"
             ],
-            [
-              "VE8",
-              "CG8",
-              "CK8",
-              "VX8",
-              "XM8",
-              "VC8"
-            ],
-            [
-              "VE9",
-              "CG9",
-              "CK9",
-              "VX9",
-              "XM9",
-              "VC9"
-            ],
-            [
-              "VO1",
-              "CH1",
-              "CY1",
-              "XJ1",
-              "XN1",
-              "VD1"
-            ],
-            [
-              "VO2",
-              "CH2",
-              "CY2",
-              "XJ2",
-              "XN2",
-              "VD2"
-            ],
-            [
-              "VY0",
-              "CI0",
-              "CZ0",
-              "XK0",
-              "XO0",
-              "VF0"
-            ],
-            [
-              "VY1",
-              "CI1",
-              "CZ1",
-              "XK1",
-              "XO1",
-              "VF1"
-            ],
-            [
-              "VY2",
-              "CI2",
-              "CZ2",
-              "XK2",
-              "XO2",
-              "VF2"
-            ]
+            ["VE8", "CG8", "CK8", "VX8", "XM8", "VC8"],
+            ["VE9", "CG9", "CK9", "VX9", "XM9", "VC9"],
+            ["VO1", "CH1", "CY1", "XJ1", "XN1", "VD1"],
+            ["VO2", "CH2", "CY2", "XJ2", "XN2", "VD2"],
+            ["VY0", "CI0", "CZ0", "XK0", "XO0", "VF0"],
+            ["VY1", "CI1", "CZ1", "XK1", "XO1", "VF1"],
+            ["VY2", "CI2", "CZ2", "XK2", "XO2", "VF2"]
           ],
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            13
-          ]
+          "band": ["Mixed"],
+          "count": [13]
         },
         "name": "WCPT - Worked Canadian Provinces And Territories",
         "sponsor": "FT8DMC"
@@ -4042,20 +2377,12 @@
       "WCUSA": {
         "tooltip": "Worked Cuban Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            70
-          ],
+          "mode": ["FT8"],
+          "dxcc": [70],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WCUSA - Worked Cuban Stations",
         "sponsor": "FT8DMC"
@@ -4063,30 +2390,13 @@
       "WDRA": {
         "tooltip": "Worked Danube River",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            179,
-            206,
-            212,
-            230,
-            239,
-            275,
-            288,
-            296,
-            497,
-            504
-          ],
+          "mode": ["FT8"],
+          "dxcc": [179, 206, 212, 230, 239, 275, 288, 296, 497, 504],
           "type": "calls2dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ],
-		  "unique": 3
+          "band": ["Mixed"],
+          "count": [10],
+          "unique": 3
         },
         "name": "WDRA - Worked Danube River",
         "sponsor": "FT8DMC"
@@ -4094,22 +2404,12 @@
       "WDSA": {
         "tooltip": "Worked Dutch Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            263
-          ],
+          "mode": ["FT8"],
+          "dxcc": [263],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WDSA - Worked Dutch Stations",
         "sponsor": "FT8DMC"
@@ -4117,22 +2417,12 @@
       "WESA": {
         "tooltip": "Worked English Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            223
-          ],
+          "mode": ["FT8"],
+          "dxcc": [223],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WESA - Worked English Stations",
         "sponsor": "FT8DMC"
@@ -4140,20 +2430,12 @@
       "WFASA": {
         "tooltip": "Worked Faroese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            222
-          ],
+          "mode": ["FT8"],
+          "dxcc": [222],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WFASA - Worked Faroese Stations",
         "sponsor": "FT8DMC"
@@ -4161,22 +2443,12 @@
       "WFINSA": {
         "tooltip": "Worked Finnish Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            224
-          ],
+          "mode": ["FT8"],
+          "dxcc": [224],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WFINSA - Worked Finnish Stations",
         "sponsor": "FT8DMC"
@@ -4184,20 +2456,12 @@
       "WFISA": {
         "tooltip": "Worked Falkland Island Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            141
-          ],
+          "mode": ["FT8"],
+          "dxcc": [141],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WFISA - Worked Falkland Island Stations",
         "sponsor": "FT8DMC"
@@ -4205,9 +2469,7 @@
       "WFOSA": {
         "tooltip": "Worked French Oversea",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "dxcc": [
             10,
             36,
@@ -4233,16 +2495,8 @@
           ],
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            10,
-            15,
-            20,
-            21
-          ]
+          "band": ["Mixed"],
+          "count": [5, 10, 15, 20, 21]
         },
         "name": "WFOSA - Worked French Oversea",
         "sponsor": "FT8DMC"
@@ -4250,22 +2504,12 @@
       "WFSA": {
         "tooltip": "Worked French Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            227
-          ],
+          "mode": ["FT8"],
+          "dxcc": [227],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WFSA - Worked French Stations",
         "sponsor": "FT8DMC"
@@ -4273,25 +2517,11 @@
       "WGA": {
         "tooltip": "Worked Grids",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "grids",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            300,
-            400,
-            500,
-            750,
-            1000,
-            1500,
-            2000
-          ]
+          "band": ["Mixed"],
+          "count": [100, 200, 300, 400, 500, 750, 1000, 1500, 2000]
         },
         "name": "WGA - Worked Grids",
         "sponsor": "FT8DMC"
@@ -4299,20 +2529,12 @@
       "WGRSA": {
         "tooltip": "Worked Greenlander Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            237
-          ],
+          "mode": ["FT8"],
+          "dxcc": [237],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WGRSA - Worked Greenlander Stations",
         "sponsor": "FT8DMC"
@@ -4320,22 +2542,12 @@
       "WGSA": {
         "tooltip": "Worked Greek Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            236
-          ],
+          "mode": ["FT8"],
+          "dxcc": [236],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WGSA - Worked Greek Stations",
         "sponsor": "FT8DMC"
@@ -4343,22 +2555,12 @@
       "WHKSA": {
         "tooltip": "Worked Hong Kong Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            321
-          ],
+          "mode": ["FT8"],
+          "dxcc": [321],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WHKSA - Worked Hong Kong Stations",
         "sponsor": "FT8DMC"
@@ -4366,22 +2568,12 @@
       "WHSA": {
         "tooltip": "Worked Hawaiian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            110
-          ],
+          "mode": ["FT8"],
+          "dxcc": [110],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            10,
-            15
-          ]
+          "band": ["Mixed"],
+          "count": [5, 10, 15]
         },
         "name": "WHSA - Worked Hawaiian Stations",
         "sponsor": "FT8DMC"
@@ -4389,19 +2581,11 @@
       "WIA": {
         "tooltip": "Worked Islands",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "IOTA",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            300
-          ]
+          "band": ["Mixed"],
+          "count": [100, 200, 300]
         },
         "name": "WIA - Worked Islands",
         "sponsor": "FT8DMC"
@@ -4409,25 +2593,10 @@
       "WICA": {
         "tooltip": "Worked All Indonesia Call Area",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            327
-          ],
+          "mode": ["FT8"],
+          "dxcc": [327],
           "type": "callarea",
-          "zone": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "zone": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "6m",
             "10m",
@@ -4440,12 +2609,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WICA - Worked All Indonesia Call Area",
         "sponsor": "FT8DMC"
@@ -4453,12 +2618,8 @@
       "WIIA": {
         "tooltip": "Worked Indonesia Islands",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            327
-          ],
+          "mode": ["FT8"],
+          "dxcc": [327],
           "type": "IOTA",
           "endorse": [
             "6m",
@@ -4472,14 +2633,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            30
-          ]
+          "band": ["Mixed"],
+          "count": [10, 20, 30]
         },
         "name": "WIIA - Worked Indonesia Islands",
         "sponsor": "FT8DMC"
@@ -4487,20 +2642,12 @@
       "WIS": {
         "tooltip": "Worked Iraqi Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            333
-          ],
+          "mode": ["FT8"],
+          "dxcc": [333],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WIS - Worked Iraqi Stations",
         "sponsor": "FT8DMC"
@@ -4508,12 +2655,8 @@
       "WISA": {
         "tooltip": "Worked Indian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            324
-          ],
+          "mode": ["FT8"],
+          "dxcc": [324],
           "type": "call",
           "endorse": [
             "2m",
@@ -4529,12 +2672,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WISA - Worked Indian Stations",
         "sponsor": "FT8DMC"
@@ -4542,20 +2681,12 @@
       "WJSA": {
         "tooltip": "Worked Jordanian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            342
-          ],
+          "mode": ["FT8"],
+          "dxcc": [342],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WJSA - Worked Jordanian Stations",
         "sponsor": "FT8DMC"
@@ -4563,12 +2694,8 @@
       "WKS": {
         "tooltip": "Worked Kuwait Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            348
-          ],
+          "mode": ["FT8"],
+          "dxcc": [348],
           "type": "call",
           "endorse": [
             "2m",
@@ -4584,12 +2711,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WKS - Worked Kuwait Stations",
         "sponsor": "FT8DMC"
@@ -4597,12 +2720,8 @@
       "WKSA": {
         "tooltip": "Worked Korea Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            137
-          ],
+          "mode": ["FT8"],
+          "dxcc": [137],
           "type": "call",
           "endorse": [
             "2m",
@@ -4619,14 +2738,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [5, 25, 50]
         },
         "name": "WKSA - Worked Korea Stations",
         "sponsor": "FT8DMC"
@@ -4634,20 +2747,12 @@
       "WLISA": {
         "tooltip": "Worked Liechtenstein Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            251
-          ],
+          "mode": ["FT8"],
+          "dxcc": [251],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WLISA - Worked Liechtenstein Stations",
         "sponsor": "FT8DMC"
@@ -4655,13 +2760,9 @@
       "WLSA": {
         "tooltip": "Worked Lebanon Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-		  "type": "call",
-          "dxcc": [
-            354
-          ],
+          "mode": ["FT8"],
+          "type": "call",
+          "dxcc": [354],
           "endorse": [
             "2m",
             "6m",
@@ -4676,12 +2777,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WLSA - Worked Lebanon Stations",
         "sponsor": "FT8DMC"
@@ -4689,20 +2786,12 @@
       "WMASA": {
         "tooltip": "Worked Maltese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            257
-          ],
+          "mode": ["FT8"],
+          "dxcc": [257],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WMASA - Worked Maltese Stations",
         "sponsor": "FT8DMC"
@@ -4710,20 +2799,12 @@
       "WMOSA": {
         "tooltip": "Worked Montenegrin Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            514
-          ],
+          "mode": ["FT8"],
+          "dxcc": [514],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WMOSA - Worked Montenegrin Stations",
         "sponsor": "FT8DMC"
@@ -4731,20 +2812,12 @@
       "WMRSA": {
         "tooltip": "Worked Market Reef Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            167
-          ],
+          "mode": ["FT8"],
+          "dxcc": [167],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WMRSA - Worked Market Reef Stations",
         "sponsor": "FT8DMC"
@@ -4752,22 +2825,12 @@
       "WMSA": {
         "tooltip": "Worked Mexican Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            50
-          ],
+          "mode": ["FT8"],
+          "dxcc": [50],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WMSA - Worked Mexican Stations",
         "sponsor": "FT8DMC"
@@ -4775,12 +2838,8 @@
       "WOS": {
         "tooltip": "Worked Oman Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            370
-          ],
+          "mode": ["FT8"],
+          "dxcc": [370],
           "type": "call",
           "endorse": [
             "2m",
@@ -4797,12 +2856,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WOS - Worked Oman Stations",
         "sponsor": "FT8DMC"
@@ -4810,15 +2865,11 @@
       "WOSA": {
         "tooltip": "Worked Oceania Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "cont": "OC",
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
+          "band": ["Mixed"],
           "count": [
             100,
             200,
@@ -4841,12 +2892,8 @@
       "WPA": {
         "tooltip": "Worked Philippines",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            375
-          ],
+          "mode": ["FT8"],
+          "dxcc": [375],
           "type": "call",
           "endorse": [
             "6m",
@@ -4860,12 +2907,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WPA - Worked Philippines",
         "sponsor": "FT8DMC"
@@ -4873,22 +2916,12 @@
       "WPOSA": {
         "tooltip": "Worked Polish Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            269
-          ],
+          "mode": ["FT8"],
+          "dxcc": [269],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WPOSA - Worked Polish Stations",
         "sponsor": "FT8DMC"
@@ -4896,14 +2929,8 @@
       "WPPA": {
         "tooltip": "Worked Portuguese Prefix",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            149,
-            256,
-            272
-          ],
+          "mode": ["FT8"],
+          "dxcc": [149, 256, 272],
           "type": "px",
           "endorse": [
             "2m",
@@ -4920,15 +2947,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            10,
-            20,
-            30
-          ]
+          "band": ["Mixed"],
+          "count": [5, 10, 20, 30]
         },
         "name": "WPPA - Worked Portuguese Prefix",
         "sponsor": "FT8DMC"
@@ -4936,12 +2956,8 @@
       "WPSA": {
         "tooltip": "Worked Portuguese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            272
-          ],
+          "mode": ["FT8"],
+          "dxcc": [272],
           "type": "call",
           "endorse": [
             "2m",
@@ -4958,15 +2974,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            50,
-            100,
-            200
-          ]
+          "band": ["Mixed"],
+          "count": [10, 50, 100, 200]
         },
         "name": "WPSA - Worked Portuguese Stations",
         "sponsor": "FT8DMC"
@@ -4974,9 +2983,7 @@
       "WPX": {
         "tooltip": "Worked Prefixes",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "type": "px",
           "endorse": [
             "6m",
@@ -4990,14 +2997,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            500,
-            1000
-          ]
+          "band": ["Mixed"],
+          "count": [100, 500, 1000]
         },
         "name": "WPX - Worked Prefixes",
         "sponsor": "FT8DMC"
@@ -5005,12 +3006,8 @@
       "WQSA": {
         "tooltip": "Worked Qatar Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            376
-          ],
+          "mode": ["FT8"],
+          "dxcc": [376],
           "type": "call",
           "endorse": [
             "2m",
@@ -5027,12 +3024,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WQSA - Worked Qatar Stations",
         "sponsor": "FT8DMC"
@@ -5040,9 +3033,7 @@
       "WR1A": {
         "tooltip": "Worked Region One",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "dxcc": [
             7,
             14,
@@ -5155,15 +3146,8 @@
           ],
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            30,
-            60,
-            90,
-            108
-          ]
+          "band": ["Mixed"],
+          "count": [30, 60, 90, 108]
         },
         "name": "WR1A - Worked Region One",
         "sponsor": "FT8DMC"
@@ -5171,9 +3155,7 @@
       "WR2A": {
         "tooltip": "Worked Region Two",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "dxcc": [
             1,
             50,
@@ -5213,15 +3195,8 @@
           ],
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            30,
-            35
-          ]
+          "band": ["Mixed"],
+          "count": [10, 20, 30, 35]
         },
         "name": "WR2A - Worked Region Two",
         "sponsor": "FT8DMC"
@@ -5229,9 +3204,7 @@
       "WR3A": {
         "tooltip": "Worked Region Three",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "dxcc": [
             3,
             31,
@@ -5290,15 +3263,8 @@
           ],
           "type": "dxcc",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            15,
-            30,
-            45,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [15, 30, 45, 50]
         },
         "name": "WR3A - Worked Region Three",
         "sponsor": "FT8DMC"
@@ -5306,22 +3272,12 @@
       "WROSA": {
         "tooltip": "Worked Romanian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            275
-          ],
+          "mode": ["FT8"],
+          "dxcc": [275],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WROSA - Worked Romanian Stations",
         "sponsor": "FT8DMC"
@@ -5329,25 +3285,12 @@
       "WRPA": {
         "tooltip": "Worked Russian Prefixes",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            15,
-            54,
-            126
-          ],
+          "mode": ["FT8"],
+          "dxcc": [15, 54, 126],
           "type": "px",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            25,
-            50,
-            100,
-            200
-          ]
+          "band": ["Mixed"],
+          "count": [25, 50, 100, 200]
         },
         "name": "WRPA - Worked Russian Prefixes",
         "sponsor": "FT8DMC"
@@ -5355,19 +3298,11 @@
       "WRSA-100": {
         "tooltip": "Worked Russian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            15,
-            54,
-            126
-          ],
+          "mode": ["FT8"],
+          "dxcc": [15, 54, 126],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
+          "band": ["Mixed"],
           "count": [
             100,
             200,
@@ -5389,17 +3324,11 @@
       "WSA": {
         "tooltip": "Worked Sixty",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "60m"
-          ],
+          "mode": ["FT8"],
+          "band": ["60m"],
           "type": "dxcc",
           "endorse": [],
-          "count": [
-            30
-          ]
+          "count": [30]
         },
         "name": "WSA - Worked Sixty",
         "sponsor": "FT8DMC"
@@ -5407,19 +3336,13 @@
       "WSAT": {
         "tooltip": "Worked Satellite",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
+          "mode": ["FT8"],
           "propMode": "SAT",
-          "satName": [ "QO-100"],
+          "satName": ["QO-100"],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WSAT - Worked Satellite",
         "sponsor": "FT8DMC"
@@ -5427,16 +3350,8 @@
       "WSCA": {
         "tooltip": "Worked Scandinavian Countries",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            221,
-            224,
-            242,
-            266,
-            269
-          ],
+          "mode": ["FT8"],
+          "dxcc": [221, 224, 242, 266, 269],
           "type": "calls2dxcc",
           "endorse": [
             "2m",
@@ -5453,13 +3368,9 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ],
-		   "unique": 5
+          "band": ["Mixed"],
+          "count": [5],
+          "unique": 5
         },
         "name": "WSCA - Worked Scandinavian Countries",
         "sponsor": "FT8DMC"
@@ -5467,22 +3378,8 @@
       "WSEAA": {
         "tooltip": "Worked South East Asia",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            46,
-            143,
-            293,
-            299,
-            309,
-            312,
-            327,
-            345,
-            375,
-            381,
-            387
-          ],
+          "mode": ["FT8"],
+          "dxcc": [46, 143, 293, 299, 309, 312, 327, 345, 375, 381, 387],
           "type": "dxcc",
           "endorse": [
             "6m",
@@ -5497,12 +3394,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WSEAA - Worked South East Asia",
         "sponsor": "FT8DMC"
@@ -5510,20 +3403,12 @@
       "WSMSA": {
         "tooltip": "Worked Sammarinese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            278
-          ],
+          "mode": ["FT8"],
+          "dxcc": [278],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            3
-          ]
+          "band": ["Mixed"],
+          "count": [3]
         },
         "name": "WSMSA - Worked Sammarinese Stations",
         "sponsor": "FT8DMC"
@@ -5531,12 +3416,8 @@
       "WSSA": {
         "tooltip": "Worked Saudi Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            378
-          ],
+          "mode": ["FT8"],
+          "dxcc": [378],
           "type": "call",
           "endorse": [
             "2m",
@@ -5550,12 +3431,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WSSA - Worked Saudi Stations",
         "sponsor": "FT8DMC"
@@ -5563,20 +3440,12 @@
       "WSVSA": {
         "tooltip": "Worked Svalbardian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            359
-          ],
+          "mode": ["FT8"],
+          "dxcc": [359],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WSVSA - Worked Svalbardian Stations",
         "sponsor": "FT8DMC"
@@ -5584,25 +3453,10 @@
       "WTCAA": {
         "tooltip": "Worked Turkish Call Area",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            390
-          ],
+          "mode": ["FT8"],
+          "dxcc": [390],
           "type": "callarea",
-          "zone": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "zone": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "2m",
             "4m",
@@ -5618,12 +3472,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WTCAA - Worked Turkish Call Area",
         "sponsor": "FT8DMC"
@@ -5631,22 +3481,12 @@
       "WTPA": {
         "tooltip": "Worked Taiwanese Prefixes",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            386
-          ],
+          "mode": ["FT8"],
+          "dxcc": [386],
           "type": "px",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            10,
-            20
-          ]
+          "band": ["Mixed"],
+          "count": [5, 10, 20]
         },
         "name": "WTPA - Worked Taiwanese Prefixes",
         "sponsor": "FT8DMC"
@@ -5654,12 +3494,8 @@
       "WTS": {
         "tooltip": "Worked Turkish Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            390
-          ],
+          "mode": ["FT8"],
+          "dxcc": [390],
           "type": "call",
           "endorse": [
             "2m",
@@ -5676,12 +3512,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WTS - Worked Turkish Stations",
         "sponsor": "FT8DMC"
@@ -5689,22 +3521,12 @@
       "WTSA": {
         "tooltip": "Worked Taiwanese Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            386
-          ],
+          "mode": ["FT8"],
+          "dxcc": [386],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [5, 25, 50]
         },
         "name": "WTSA - Worked Taiwanese Stations",
         "sponsor": "FT8DMC"
@@ -5712,12 +3534,8 @@
       "WUAES": {
         "tooltip": "Worked United Arab Emirates Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            391
-          ],
+          "mode": ["FT8"],
+          "dxcc": [391],
           "type": "call",
           "endorse": [
             "2m",
@@ -5734,12 +3552,8 @@
             "80m",
             "160m"
           ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WUAES - Worked United Arab Emirates Stations",
         "sponsor": "FT8DMC"
@@ -5747,26 +3561,12 @@
       "WUGSA": {
         "tooltip": "Worked US Grid Squares",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            291
-          ],
+          "mode": ["FT8"],
+          "dxcc": [291],
           "type": "grids",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            25,
-            50,
-            75,
-            100,
-            150,
-            200,
-            300
-          ]
+          "band": ["Mixed"],
+          "count": [25, 50, 75, 100, 150, 200, 300]
         },
         "name": "WUGSA - Worked US Grid Squares",
         "sponsor": "FT8DMC"
@@ -5774,22 +3574,12 @@
       "WUSA": {
         "tooltip": "Worked Ukrainian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            288
-          ],
+          "mode": ["FT8"],
+          "dxcc": [288],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WUSA - Worked Ukrainian Stations",
         "sponsor": "FT8DMC"
@@ -5797,17 +3587,11 @@
       "WUSSA": {
         "tooltip": "Worked United States Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            291
-          ],
+          "mode": ["FT8"],
+          "dxcc": [291],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
+          "band": ["Mixed"],
           "count": [
             100,
             200,
@@ -5835,21 +3619,11 @@
       "WVGA2": {
         "tooltip": "Worked VHF Grid - 2m",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "2m"
-          ],
+          "mode": ["FT8"],
+          "band": ["2m"],
           "type": "grids",
           "endorse": [],
-          "count": [
-            50,
-            100,
-            150,
-            250,
-            500
-          ]
+          "count": [50, 100, 150, 250, 500]
         },
         "name": "WVGA2 - Worked VHF Grid - 2m",
         "sponsor": "FT8DMC"
@@ -5857,21 +3631,11 @@
       "WVGA4": {
         "tooltip": "Worked VHF Grid - 4m",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "4m"
-          ],
+          "mode": ["FT8"],
+          "band": ["4m"],
           "type": "grids",
           "endorse": [],
-          "count": [
-            50,
-            100,
-            150,
-            250,
-            500
-          ]
+          "count": [50, 100, 150, 250, 500]
         },
         "name": "WVGA4 - Worked VHF Grid - 4m",
         "sponsor": "FT8DMC"
@@ -5879,21 +3643,11 @@
       "WVGA6": {
         "tooltip": "Worked VHF Grid - 6m",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "6m"
-          ],
+          "mode": ["FT8"],
+          "band": ["6m"],
           "type": "grids",
           "endorse": [],
-          "count": [
-            50,
-            100,
-            150,
-            250,
-            500
-          ]
+          "count": [50, 100, 150, 250, 500]
         },
         "name": "WVGA6 - Worked VHF Grid - 6m",
         "sponsor": "FT8DMC"
@@ -5901,22 +3655,12 @@
       "WVSA": {
         "tooltip": "Worked Venezuelian Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            148
-          ],
+          "mode": ["FT8"],
+          "dxcc": [148],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WVSA - Worked Venezuelian Stations",
         "sponsor": "FT8DMC"
@@ -5924,22 +3668,12 @@
       "WWSA": {
         "tooltip": "Worked Welsh Stations",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "dxcc": [
-            294
-          ],
+          "mode": ["FT8"],
+          "dxcc": [294],
           "type": "call",
           "endorse": [],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            25,
-            50
-          ]
+          "band": ["Mixed"],
+          "count": [10, 25, 50]
         },
         "name": "WWSA - Worked Welsh Stations",
         "sponsor": "FT8DMC"
@@ -5947,22 +3681,12 @@
       "OHCA-5B": {
         "tooltip": "5-Band One Hundred Countries",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "10m",
-            "15m",
-            "20m",
-            "40m",
-            "80m"
-          ],
+          "mode": ["FT8"],
+          "band": ["10m", "15m", "20m", "40m", "80m"],
           "type": "dxcc2band",
           "endorse": [],
-          "count": [
-            5
-          ],
-		  "unique": 100
+          "count": [5],
+          "unique": 100
         },
         "name": "OHCA-5B - 5-Band One Hundred Countries",
         "sponsor": "FT8DMC"
@@ -5970,24 +3694,12 @@
       "WAC-5B": {
         "tooltip": "5-Band Worked All Continents",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "10m",
-            "15m",
-            "20m",
-            "40m",
-            "80m"
-          ],
+          "mode": ["FT8"],
+          "band": ["10m", "15m", "20m", "40m", "80m"],
           "type": "cont2band",
           "endorse": [],
-          "count": [
-            5
-          ],
-		  "unique": [
-            6
-          ]
+          "count": [5],
+          "unique": [6]
         },
         "name": "WAC-5B - 5-Band Worked All Continents",
         "sponsor": "FT8DMC"
@@ -5995,27 +3707,13 @@
       "WAS-5B": {
         "tooltip": "5-Band Worked All States",
         "rule": {
-          "mode": [
-            "FT8"
-          ],
-          "band": [
-            "10m",
-            "15m",
-            "20m",
-            "40m",
-            "80m"
-          ],
-          "dxcc": [
-            6,
-            110,
-            291
-          ],
+          "mode": ["FT8"],
+          "band": ["10m", "15m", "20m", "40m", "80m"],
+          "dxcc": [6, 110, 291],
           "type": "states2band",
           "endorse": [],
-          "count": [
-            5
-          ],
-		  "unique":  50
+          "count": [5],
+          "unique": 50
         },
         "name": "WAS-5B - 5-Band Worked All States",
         "sponsor": "FT8DMC"
@@ -6027,7 +3725,22 @@
     "sponsor": "European ROS Club",
     "website": "https://www.europeanrosclub.com/en",
     "qsl_req": "worked",
-	"mixed" : [ "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "11m", "10m", "6m", "4m", "2m" ],
+    "mixed": [
+      "160m",
+      "80m",
+      "60m",
+      "40m",
+      "30m",
+      "20m",
+      "17m",
+      "15m",
+      "12m",
+      "11m",
+      "10m",
+      "6m",
+      "4m",
+      "2m"
+    ],
     "awards": {
       "WAC": {
         "tooltip": "Worked All Continents",
@@ -6046,15 +3759,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [5]
         },
         "name": "WAC - Worked All Continents",
         "sponsor": "ERC"
@@ -6064,21 +3771,11 @@
         "rule": {
           "type": "cont52band",
           "_note": "N & S Americas are combined",
-          "band": [
-            "10m",
-            "15m",
-            "20m",
-            "40m",
-            "80m"
-          ],
+          "band": ["10m", "15m", "20m", "40m", "80m"],
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "count": [
-            5
-          ],
-		  "unique": 5
+          "mode": ["Digital"],
+          "count": [5],
+          "unique": 5
         },
         "name": "WAC-5B - 5-Band Worked All Continents",
         "sponsor": "ERC"
@@ -6101,22 +3798,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            25,
-            50,
-            75,
-            100,
-            150,
-            200,
-            250,
-            300
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [25, 50, 75, 100, 150, 200, 250, 300]
         },
         "name": "DXCC - DXCC",
         "sponsor": "ERC"
@@ -6137,23 +3821,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100,
-            200,
-            300,
-            400,
-            500,
-            750,
-            1000,
-            1500,
-            2000
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [100, 200, 300, 400, 500, 750, 1000, 1500, 2000]
         },
         "name": "WGA - Worked Grids",
         "sponsor": "ERC"
@@ -6162,11 +3832,7 @@
         "tooltip": "Worked US Grid Squares",
         "rule": {
           "type": "grids",
-          "dxcc": [
-            6,
-            110,
-            291
-          ],
+          "dxcc": [6, 110, 291],
           "endorse": [
             "6m",
             "10m",
@@ -6180,27 +3846,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            15,
-            25,
-            50,
-            75,
-            100,
-            125,
-            150,
-            200,
-            250,
-            300,
-            350,
-            400,
-            450
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [15, 25, 50, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450]
         },
         "name": "WGUSA - Worked US Grid Squares",
         "sponsor": "ERC"
@@ -6209,27 +3857,11 @@
         "tooltip": "Central America",
         "rule": {
           "type": "dxcc",
-          "dxcc": [
-            50,
-            66,
-            74,
-            76,
-            80,
-            86,
-            88,
-            308
-          ],
+          "dxcc": [50, 66, 74, 76, 80, 86, 88, 308],
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            8
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [5, 8]
         },
         "name": "DCA - Central America",
         "sponsor": "ERC"
@@ -6238,31 +3870,11 @@
         "tooltip": "South America",
         "rule": {
           "type": "dxcc",
-          "dxcc": [
-            100,
-            104,
-            108,
-            112,
-            116,
-            120,
-            129,
-            132,
-            136,
-            140,
-            144,
-            148
-          ],
+          "dxcc": [100, 104, 108, 112, 116, 120, 129, 132, 136, 140, 144, 148],
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            6,
-            12
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [6, 12]
         },
         "name": "DSA - South America",
         "sponsor": "ERC"
@@ -6271,11 +3883,7 @@
         "tooltip": "Worked All States",
         "rule": {
           "type": "states",
-          "dxcc": [
-            6,
-            110,
-            291
-          ],
+          "dxcc": [6, 110, 291],
           "endorse": [
             "6m",
             "10m",
@@ -6289,16 +3897,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            25,
-            50
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [25, 50]
         },
         "name": "WAS - Worked All States",
         "sponsor": "ERC"
@@ -6307,9 +3908,7 @@
         "tooltip": "Worked Different Chile Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            112
-          ],
+          "dxcc": [112],
           "endorse": [
             "6m",
             "10m",
@@ -6323,22 +3922,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            10,
-            15,
-            25,
-            50,
-            75,
-            100,
-            125
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [5, 10, 15, 25, 50, 75, 100, 125]
         },
         "name": "WDCA - Worked Different Chile Stations",
         "sponsor": "ERC"
@@ -6347,9 +3933,7 @@
         "tooltip": "Worked Different Ecuador Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            120
-          ],
+          "dxcc": [120],
           "endorse": [
             "6m",
             "10m",
@@ -6363,23 +3947,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2,
-            5,
-            10,
-            15,
-            25,
-            50,
-            75,
-            100,
-            125
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [2, 5, 10, 15, 25, 50, 75, 100, 125]
         },
         "name": "WDHC - Worked Different Ecuador Stations",
         "sponsor": "ERC"
@@ -6388,9 +3958,7 @@
         "tooltip": "Worked Different Argentina Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            100
-          ],
+          "dxcc": [100],
           "endorse": [
             "6m",
             "10m",
@@ -6404,12 +3972,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             25,
             50,
@@ -6436,11 +4000,7 @@
         "tooltip": "Worked Different US Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            6,
-            110,
-            291
-          ],
+          "dxcc": [6, 110, 291],
           "endorse": [
             "6m",
             "10m",
@@ -6454,12 +4014,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             100,
             300,
@@ -6489,9 +4045,7 @@
         "tooltip": "Worked Different Venezuela Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            148
-          ],
+          "dxcc": [148],
           "endorse": [
             "6m",
             "10m",
@@ -6505,12 +4059,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             5,
             15,
@@ -6592,19 +4142,9 @@
             521
           ],
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10,
-            20,
-            30,
-            40,
-            54
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [10, 20, 30, 40, 54]
         },
         "name": "DPA - Africa",
         "sponsor": "ERC"
@@ -6627,12 +4167,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             5,
             15,
@@ -6659,12 +4195,8 @@
           "cont": "EU",
           "type": "call",
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             50,
             100,
@@ -6719,15 +4251,9 @@
             504
           ],
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            27
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [27]
         },
         "name": "DPUE - Member Countries of the EU",
         "sponsor": "ERC"
@@ -6736,9 +4262,7 @@
         "tooltip": "Worked Different German Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            230
-          ],
+          "dxcc": [230],
           "endorse": [
             "6m",
             "10m",
@@ -6751,12 +4275,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             50,
             100,
@@ -6780,9 +4300,7 @@
         "tooltip": "Worked Different Spanish Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            281
-          ],
+          "dxcc": [281],
           "endorse": [
             "6m",
             "10m",
@@ -6795,23 +4313,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            50,
-            100,
-            200,
-            300,
-            500,
-            750,
-            1000,
-            2000,
-            3000
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [50, 100, 200, 300, 500, 750, 1000, 2000, 3000]
         },
         "name": "WDEA - Worked Different Spanish Stations",
         "sponsor": "ERC"
@@ -6820,23 +4324,8 @@
         "tooltip": "Worked Spanish Call Districts",
         "rule": {
           "type": "callarea",
-          "dxcc": [
-            21,
-            29,
-            32,
-            281
-          ],
-          "zone": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "dxcc": [21, 29, 32, 281],
+          "zone": [1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "2m",
             "6m",
@@ -6851,15 +4340,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            9
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [9]
         },
         "name": "DEA - Worked Spanish Call Districts",
         "sponsor": "ERC"
@@ -6868,9 +4351,7 @@
         "tooltip": "Worked Different French Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            227
-          ],
+          "dxcc": [227],
           "endorse": [
             "6m",
             "10m",
@@ -6883,21 +4364,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            25,
-            100,
-            200,
-            300,
-            500,
-            750,
-            1000
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [25, 100, 200, 300, 500, 750, 1000]
         },
         "name": "WDFR - Worked Different French Stations",
         "sponsor": "ERC"
@@ -6906,15 +4375,7 @@
         "tooltip": "Worked Different Great Britain Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            106,
-            114,
-            122,
-            223,
-            265,
-            279,
-            294
-          ],
+          "dxcc": [106, 114, 122, 223, 265, 279, 294],
           "endorse": [
             "6m",
             "10m",
@@ -6927,12 +4388,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             25,
             50,
@@ -6957,25 +4414,11 @@
         "tooltip": "Worked All Great Britain Call Area",
         "rule": {
           "type": "dxcc",
-          "dxcc": [
-            106,
-            114,
-            122,
-            223,
-            265,
-            279,
-            294
-          ],
+          "dxcc": [106, 114, 122, 223, 265, 279, 294],
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            7
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [7]
         },
         "name": "WAGB - Worked All Great Britain Call Area",
         "sponsor": "ERC"
@@ -6984,9 +4427,7 @@
         "tooltip": "Worked Different Poland Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            269
-          ],
+          "dxcc": [269],
           "endorse": [
             "6m",
             "10m",
@@ -6999,12 +4440,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             50,
             100,
@@ -7028,9 +4465,7 @@
         "tooltip": "Worked Different Italy Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            248
-          ],
+          "dxcc": [248],
           "endorse": [
             "6m",
             "10m",
@@ -7043,12 +4478,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             100,
             500,
@@ -7070,11 +4501,7 @@
         "tooltip": "Worked Different Russian Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            15,
-            54,
-            126
-          ],
+          "dxcc": [15, 54, 126],
           "endorse": [
             "6m",
             "10m",
@@ -7087,12 +4514,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             100,
             200,
@@ -7132,27 +4555,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2,
-            5,
-            50,
-            75,
-            100,
-            150,
-            200,
-            300,
-            400,
-            500,
-            600,
-            750,
-            1000
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [2, 5, 50, 75, 100, 150, 200, 300, 400, 500, 600, 750, 1000]
         },
         "name": "WDAS - Asia",
         "sponsor": "ERC"
@@ -7161,9 +4566,7 @@
         "tooltip": "Worked Different China Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            318
-          ],
+          "dxcc": [318],
           "endorse": [
             "6m",
             "10m",
@@ -7177,16 +4580,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            5,
-            15
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [5, 15]
         },
         "name": "WDBV - Worked Different China Stations",
         "sponsor": "ERC"
@@ -7195,9 +4591,7 @@
         "tooltip": "Worked Different Indonesia Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            327
-          ],
+          "dxcc": [327],
           "endorse": [
             "6m",
             "10m",
@@ -7210,21 +4604,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            50,
-            100,
-            200,
-            300,
-            500,
-            750,
-            1500
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [50, 100, 200, 300, 500, 750, 1500]
         },
         "name": "WDII - Worked Different Indonesia Stations",
         "sponsor": "ERC"
@@ -7233,21 +4615,8 @@
         "tooltip": "Worked All Indonesia Call Area",
         "rule": {
           "type": "callarea",
-          "dxcc": [
-            327
-          ],
-          "zone": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "dxcc": [327],
+          "zone": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "6m",
             "10m",
@@ -7260,15 +4629,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WAICA - Worked All Indonesia Call Area",
         "sponsor": "ERC"
@@ -7277,9 +4640,7 @@
         "tooltip": "Worked Different Japan Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            339
-          ],
+          "dxcc": [339],
           "endorse": [
             "6m",
             "10m",
@@ -7293,12 +4654,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             25,
             50,
@@ -7325,21 +4682,8 @@
         "tooltip": "Worked All Japan Call Area",
         "rule": {
           "type": "callarea",
-          "dxcc": [
-            339
-          ],
-          "zone": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
+          "dxcc": [339],
+          "zone": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
           "endorse": [
             "2m",
             "6m",
@@ -7353,15 +4697,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            10
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [10]
         },
         "name": "WAJCA - Worked All Japan Call Area",
         "sponsor": "ERC"
@@ -7370,9 +4708,7 @@
         "tooltip": "Worked Different Australian Stations",
         "rule": {
           "type": "call",
-          "dxcc": [
-            339
-          ],
+          "dxcc": [339],
           "endorse": [
             "6m",
             "10m",
@@ -7385,12 +4721,8 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
+          "mode": ["Digital"],
+          "band": ["Mixed"],
           "count": [
             10,
             15,
@@ -7417,19 +4749,8 @@
         "tooltip": "Worked All Australia Call Area",
         "rule": {
           "type": "callarea",
-          "dxcc": [
-            339
-          ],
-          "zone": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ],
+          "dxcc": [339],
+          "zone": [1, 2, 3, 4, 5, 6, 7, 8],
           "endorse": [
             "6m",
             "10m",
@@ -7442,15 +4763,9 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            8
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [8]
         },
         "name": "WAACA - Worked All Australia Call Area",
         "sponsor": "ERC"
@@ -7489,314 +4804,232 @@
             "80m",
             "160m"
           ],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2,
-            4,
-            5,
-            7,
-            8,
-            12
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [2, 4, 5, 7, 8, 12]
         },
         "name": "XANN - Special X Anniversary",
         "sponsor": "ERC"
       }
     }
   },
-    "ARRL": {
+  "ARRL": {
     "compiledBy": "N0TTL",
     "sponsor": "Amateur Radio Relay League",
     "website": "https://arrl.org/",
     "qsl_req": "confirmed",
-	"mixed" : [ "160m", "80m",  "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m",  "2m", "1.5m", "70cm" , "23cm"],
+    "mixed": [
+      "160m",
+      "80m",
+      "40m",
+      "30m",
+      "20m",
+      "17m",
+      "15m",
+      "12m",
+      "10m",
+      "6m",
+      "2m",
+      "1.5m",
+      "70cm",
+      "23cm"
+    ],
     "awards": {
       "FFMA": {
         "tooltip": "Fred Fish Memorial",
         "rule": {
           "type": "grids",
-		  "dxcc" : [ 291 ],
-          "endorse": [
-          ],
-          "mode": [
-            "Mixed"
-          ],
-          "band": [
-            "6m"
-          ],
-          "count": [
-            488
-          ]
+          "dxcc": [291],
+          "endorse": [],
+          "mode": ["Mixed"],
+          "band": ["6m"],
+          "count": [488]
         },
         "name": "FFMA - Fred Fish Memorial",
         "sponsor": "ARRL"
       },
-	  "DXCC": {
+      "DXCC": {
         "tooltip": "DX Century Club",
         "rule": {
           "type": "dxcc",
-          "endorse": [
-			"Mixed"
-          ],
-          "mode": [
-            "Mixed",
-			"Digital",
-			"Phone"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            100
-          ]
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [100]
         },
         "name": "DXCC - DX Century Club",
         "sponsor": "ARRL"
       },
-	  "DXCC-5B": {
+      "DXCC-5B": {
         "tooltip": "Five-Band DXCC",
         "rule": {
           "type": "dxcc2band",
-          "endorse": [
-          ],
-          "mode": [
-            "Mixed",
-			"Digital",
-			"Phone"
-          ],
-          "band": [
-			"80m", "40m", "20m", "15m", "10m"
-          ],
-          "count": [
-            5
-          ],
-		  "unique": 100
+          "endorse": [],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["80m", "40m", "20m", "15m", "10m"],
+          "count": [5],
+          "unique": 100
         },
         "name": "DXCC-5B - Five-Band DXCC",
         "sponsor": "ARRL"
       },
-	  "DXCCCA": {
+      "DXCCCA": {
         "tooltip": "DXCC Challenge",
         "rule": {
           "type": "call",
-          "endorse": [
-          ],
-          "mode": [
-            "Mixed",
-			"Digital",
-			"Phone"
-          ],
+          "endorse": [],
+          "mode": ["Mixed", "Digital", "Phone"],
           "band": [
-			"160m", "80m", "40m", "30m", "20m", "17m", "15m", "12m", "10m", "6m"
+            "160m",
+            "80m",
+            "40m",
+            "30m",
+            "20m",
+            "17m",
+            "15m",
+            "12m",
+            "10m",
+            "6m"
           ],
-          "count": [
-            1000
-          ]
+          "count": [1000]
         },
         "name": "DXCCCA - DXCC Challenge",
         "sponsor": "ARRL"
       },
-	  "WAC": {
+      "WAC": {
         "tooltip": "Worked All Continents",
         "rule": {
           "type": "cont",
-          "endorse": [
-          ],
-          "mode": [
-            "Mixed",
-			"Digital",
-			"Phone"
-          ],
-          "band": [
-			"Mixed"
-          ],
-          "count": [
-            6
-          ]
+          "endorse": [],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [6]
         },
         "name": "WAC - Worked All Continents",
         "sponsor": "ARRL"
       },
-	  "WAC-5B": {
+      "WAC-5B": {
         "tooltip": "Five-Band Worked All Continents",
         "rule": {
           "type": "cont2band",
-          "endorse": [
-          ],
-          "mode": [
-            "Mixed",
-			"Digital",
-			"Phone"
-          ],
-          "band": [
-			"80m","40m","20m","15m","10m"
-          ],
-          "count": [
-            5
-          ],
-		  "unique": 6
+          "endorse": [],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["80m", "40m", "20m", "15m", "10m"],
+          "count": [5],
+          "unique": 6
         },
         "name": "5BWAC - Five-Band Worked All Continents",
         "sponsor": "ARRL"
       },
-	  "WAS": {
-			"tooltip": "Worked All States",
-			"rule": {
-			  "type": "states",
-			  "dxcc": [
-				6,
-				110,
-				291
-			  ],
-			  "endorse": [
-				"Mixed"
-			  ],
-			  "mode": [
-				"Mixed",
-				"Digital",
-				"Phone"
-			  ],
-			  "band": [
-				"Mixed"
-			  ],
-			  "count": [
-				50
-			  ]
-			 },
-			"name": "WAS - Worked All States",
-			"sponsor": "ARRL"
-		},
-		"WAS5B": {
-			"tooltip": "5 Band Worked All States",
-			"rule": {
-			  "type": "states2band",
-			  "dxcc": [
-				6,
-				110,
-				291
-			  ],
-			  "endorse": [
-
-			  ],
-			  "mode": [
-				"Mixed",
-				"Digital",
-				"Phone"
-			  ],
-			  "band": [
-				"80m", "40m", "20m", "15m", "10m"
-			  ],
-			  "count": [
-				5
-			  ],
-			  "unique" : 50
-			 },
-			"name": "5BWAS - 5 Band Worked All States",
-			"sponsor": "ARRL"
-		}
-
-	}
-
+      "WAS": {
+        "tooltip": "Worked All States",
+        "rule": {
+          "type": "states",
+          "dxcc": [6, 110, 291],
+          "endorse": ["Mixed"],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["Mixed"],
+          "count": [50]
+        },
+        "name": "WAS - Worked All States",
+        "sponsor": "ARRL"
+      },
+      "WAS5B": {
+        "tooltip": "5 Band Worked All States",
+        "rule": {
+          "type": "states2band",
+          "dxcc": [6, 110, 291],
+          "endorse": [],
+          "mode": ["Mixed", "Digital", "Phone"],
+          "band": ["80m", "40m", "20m", "15m", "10m"],
+          "count": [5],
+          "unique": 50
+        },
+        "name": "5BWAS - 5 Band Worked All States",
+        "sponsor": "ARRL"
+      }
+    }
   },
-    "GT": {
+  "GT": {
     "compiledBy": "N0TTL",
     "sponsor": "GridTracker",
     "website": "https://tagloomis.com/",
     "qsl_req": "confirmed",
-	"mixed" : [ "160m", "80m", "60m", "40m", "30m", "20m", "17m", "15m", "12m", "11m", "10m", "6m", "4m", "2m", "1.25m", "70cm", "33cm", "23cm"],
+    "mixed": [
+      "160m",
+      "80m",
+      "60m",
+      "40m",
+      "30m",
+      "20m",
+      "17m",
+      "15m",
+      "12m",
+      "11m",
+      "10m",
+      "6m",
+      "4m",
+      "2m",
+      "1.25m",
+      "70cm",
+      "33cm",
+      "23cm"
+    ],
     "awards": {
       "WTF": {
         "tooltip": "Worked The Founders",
         "rule": {
-		  "qsl_req": "worked",
+          "qsl_req": "worked",
           "type": "call",
-          "call": [
-            "N2VFL",
-            "N0TTL"
-          ],
+          "call": ["N2VFL", "N0TTL"],
           "endorse": [],
-          "mode": [
-            "Digital"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            2
-          ]
+          "mode": ["Digital"],
+          "band": ["Mixed"],
+          "count": [2]
         },
         "name": "WTF - Worked The Founders",
         "sponsor": "GT"
       },
-		"TL48": {
+      "TL48": {
         "tooltip": "The Lower Forty-Eight",
         "rule": {
           "qsl_req": "worked",
           "type": "grids",
-          "dxcc" : [ 291 ],
+          "dxcc": [291],
           "endorse": [],
-          "mode": [
-            "Mixed"
-          ],
-          "band": [
-            "Mixed"
-          ],
-          "count": [
-            488
-          ]
+          "mode": ["Mixed"],
+          "band": ["Mixed"],
+          "count": [488]
         },
         "name": "TL48 - The Lower Forty-Eight",
         "sponsor": "GT"
       },
-	   "WACO": {
-			"tooltip": "Worked All US Counties",
-			"rule": {
-			  "type": "cnty",
-			  "dxcc": [
-				6,
-				110,
-				291
-			  ],
-			  "endorse": [
-			  ],
-			  "mode": [
-				"Mixed"
-			  ],
-			  "band": [
-				"Mixed"
-			  ],
-			  "count": [
-				500,1000,2000,3181
-			  ]
-			 },
-			"name": "WACO - Worked All US Counties",
-			"sponsor": "GT"
-		},
-		"W100-4": {
-			"tooltip": "Worked 100 Stations in 4 bands",
-			"rule": {
-			  "type": "calls2band",
-			  "endorse": [
-			  ],
-			  "mode": [
-				"Mixed"
-			  ],
-			  "band": [
-				"80m","40m","30m","20m"
-			  ],
-			  "count": [
-				4
-			  ],
-			  "unique": 100
-			 },
-			"name": "W100-4 - Worked 100 Stations 80,40,30,20",
-			"sponsor": "GT"
-		}
+      "WACO": {
+        "tooltip": "Worked All US Counties",
+        "rule": {
+          "type": "cnty",
+          "dxcc": [6, 110, 291],
+          "endorse": [],
+          "mode": ["Mixed"],
+          "band": ["Mixed"],
+          "count": [500, 1000, 2000, 3181]
+        },
+        "name": "WACO - Worked All US Counties",
+        "sponsor": "GT"
+      },
+      "W100-4": {
+        "tooltip": "Worked 100 Stations in 4 bands",
+        "rule": {
+          "type": "calls2band",
+          "endorse": [],
+          "mode": ["Mixed"],
+          "band": ["80m", "40m", "30m", "20m"],
+          "count": [4],
+          "unique": 100
+        },
+        "name": "W100-4 - Worked 100 Stations 80,40,30,20",
+        "sponsor": "GT"
+      }
     }
   }
 }

@@ -7127,6 +7127,7 @@ function showDXCCsBox() {
 					item.dxcc = g_worldGeoData[key].dxcc;
 
 					item.flag = g_worldGeoData[key].flag;
+					item.confirmed = g_worldGeoData[key].confirmed;
 					List[g_worldGeoData[key].name] = item;
 					worked++;
 				}
@@ -7135,6 +7136,7 @@ function showDXCCsBox() {
 					item.dxcc = g_worldGeoData[key].dxcc;
 
 					item.flag = g_worldGeoData[key].flag;
+					item.confirmed = g_worldGeoData[key].confirmed;
 					ListConfirmed[g_worldGeoData[key].name] = item;
 					confirmed++;
 				}
@@ -7142,6 +7144,7 @@ function showDXCCsBox() {
 					var item = {};
 					item.dxcc = g_worldGeoData[key].dxcc;
 					item.flag = g_worldGeoData[key].flag;
+					item.confirmed = g_worldGeoData[key].confirmed;
 					ListNotWorked[g_worldGeoData[key].name] = item;
 					needed++;
 				}
@@ -7155,7 +7158,9 @@ function showDXCCsBox() {
 			"px;'><table class='darkTable' align=center><tr><th colspan=5 style='font-weight:bold'>Worked (" +
 			worked + ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
 			Object.keys(List).sort().forEach(function (key, i) {
-				worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
+				var confirmed = List[key].confirmed ? "" : "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
+				worker += "<tr><td align=left style='color:#ff0;" + confirmed + "' >" + key + "</td>";
+
 				worker +=
 				"<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
 				List[key].flag + "'></td>";
@@ -7200,273 +7205,82 @@ function showDXCCsBox() {
 }
 
 function showCQzoneBox() {
-	var List = {};
-	var worker = getCurrentBandModeHTML();
-	var worked = 0;
-	var needed = 0;
-	var confirmed = 0;
-	List = {};
-	ListNotWorked = {};
-	ListConfirmed = {};
-	for (var key in g_cqZones) {
-		if (key != -1) {
-			if (g_cqZones[key].worked == true) {
-				var item = {};
-				item.zone = key;
-				List[g_cqZones[key].name] = item;
-				worked++;
-			}
-			if (g_cqZones[key].confirmed == true) {
-				var item = {};
-				item.zone = key;
-				ListConfirmed[g_cqZones[key].name] = item;
-				confirmed++;
-			}
-			if (g_cqZones[key].confirmed == false && g_cqZones[key].worked == false) {
-				var item = {};
-				item.zone = key;
-				ListNotWorked[g_cqZones[key].name] = item;
-				needed++;
-			}
-		}
-	}
-	if (worked > 0) {
-		worker +=
-		"<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(List).length * 23) + 45, getStatsWindowHeight()) +
-		"px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Worked (" +
-		worked + ")</th><tr><th align=left>Name</th><th align=left>Zone</th></tr>";
-		Object.keys(List).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-			worker += "<td align=left style='color:cyan;' >" + List[key].zone + "</td>";
-		});
-		worker += "</table></div>";
-	}
-	if (confirmed > 0) {
-		worker +=
-		"<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListConfirmed).length * 23) + 45, getStatsWindowHeight()) +
-		"px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Confirmed (" +
-		confirmed + ")</th><tr><th align=left>Name</th><th align=left>Zone</th></tr>";
-		Object.keys(ListConfirmed).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-			worker += "<td align=left style='color:cyan;' >" + ListConfirmed[key].zone + "</td>";
-		});
-		worker += "</table></div>";
-	}
-	if (needed > 0) {
-		worker +=
-		"<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListNotWorked).length * 23) + 45,getStatsWindowHeight()) +
-		"px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Needed (" +
-		needed + ")</th><tr><th align=left>Name</th><th align=left>Zone</th></tr>";
-		Object.keys(ListNotWorked).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-			worker += "<td align=left style='color:cyan;' >" + ListNotWorked[key].zone + "</td>";
-		});
-		worker += "</table></div>";
-	}
-	setStatsDiv("cqzoneListDiv", worker);
+	var worker = getCurrentBandModeHTML(); ;
+
+	worker += "<div style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Worked CQ Zones</b><br/>";
+	worker += displayItemList(g_cqZones, "#FFFFFF");
+	worker += "</div>";
+
+	setStatsDiv("cqzoneListDiv",worker);
 }
 
 function showITUzoneBox() {
-	var List = {};
 	var worker = getCurrentBandModeHTML(); ;
-	var worked = 0;
-	var needed = 0;
-	var confirmed = 0;
-	List = {};
-	ListNotWorked = {};
-	ListConfirmed = {};
-	for (var key in g_ituZones) {
-		if (key != -1) {
-			if (g_ituZones[key].worked == true) {
-				var item = {};
-				item.zone = key;
-				List[key] = item;
-				worked++;
-			}
-			if (g_ituZones[key].confirmed == true) {
-				var item = {};
-				item.zone = key;
-				ListConfirmed[key] = item;
-				confirmed++;
-			}
-			if (g_ituZones[key].confirmed == false && g_ituZones[key].worked == false ) {
-				var item = {};
-				item.zone = key;
-				ListNotWorked[key] = item;
-				needed++;
-			}
-		}
-	}
-	if (worked > 0) {
-		worker +=
-		"<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(List).length * 23) + 45, getStatsWindowHeight()) +
-		"px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Worked (" +
-		worked + ")</th></tr><tr><th align=left>Zone</th></tr>";
-		Object.keys(List).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-		});
-		worker += "</table></div>";
-	}
-	if (confirmed > 0) {
-		worker +=
-		"<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListConfirmed).length * 23) + 45, getStatsWindowHeight()) +
-		"px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Confirmed (" +
-		confirmed + ")</th></tr><tr><th align=left>Zone</th></tr>";
-		Object.keys(ListConfirmed).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-		});
-		worker += "</table></div>";
-	}
-	if (needed > 0) {
-		worker +=
-		"<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListNotWorked).length * 23) + 45, getStatsWindowHeight()) +
-		"px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Needed (" +
-		needed + ")</th></tr><tr><th align=left>Zone</th></tr>";
-		Object.keys(ListNotWorked).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-		});
-		worker += "</table></div>";
-	}
+
+	worker += "<div style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Worked ITU Zones</b><br/>";
+	worker += displayItemList(g_ituZones, "#FFFFFF");
+	worker += "</div>";
+
 	setStatsDiv("ituzoneListDiv",worker);
 }
 
+
 function showWASWACzoneBox() {
 	var worker = getCurrentBandModeHTML();
-	worker += "<div   style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Worked All Continents</b><br/>";
 
-	var List = {};
+	worker += "<div style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Worked All Continents</b><br/>";
+	worker += displayItemList(g_wacZones, "#90EE90");
+	worker += "</div>";
 
+	worker += "<div style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Worked All States</b><br/>";
+	worker += displayItemList(g_wasZones, "#00DDDD");
+	worker += "</div>";
+
+	setStatsDiv("waswacListDiv", worker);
+}
+
+
+function displayItemList(table, color) {
 	var worked = 0;
 	var needed = 0;
 	var confirmed = 0;
-	List = {};
-	ListNotWorked = {};
-	ListConfirmed = {};
-	for (var key in g_wacZones) { {
-			if (g_wacZones[key].worked == true) {
-				List[key] = key;
-				worked++;
-			}
-			if (g_wacZones[key].confirmed == true) {
-
-				ListConfirmed[key] = key;
-				confirmed++;
-			}
-			if (g_wacZones[key].confirmed == false && g_wacZones[key].worked == false ) {
-
-				ListNotWorked[key] = key;
-				needed++;
-			}
+	for (var key in table) {
+		if (table[key].worked == true) {
+			worked++;
+		}
+		if (table[key].confirmed == true) {
+			confirmed++;
+		}
+		if (table[key].confirmed == false && table[key].worked == false) {
+			needed++;
 		}
 	}
-	if (worked > 0) {
-		worker +=
-		"<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(List).length * 23) + 45, getStatsWindowHeight() - 12 ) +
-		"px;'><table class='darkTable' align=center><tr><th  style='font-weight:bold'>Worked (" +
-		worked + ")</th></tr><tr><th align=left>Name</th></tr>";
-		Object.keys(List).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td></tr>";
+	var worker = "<div style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
+		Math.min((Object.keys(table).length * 23) + (23+45), getStatsWindowHeight() -12) + "px;'>";
+	worker += "<table class='darkTable' align=center>";
+	worker += "<tr><th style='font-weight:bold'>Worked (" + worked + ")</th></tr>";
+	worker += "<tr><th style='font-weight:bold'>Confirmed (" + confirmed + ")</th></tr>";
+	worker += "<tr><th style='font-weight:bold'>Needed (" + needed + ")</th></tr>";
+        worker += "<tr><th align=left>Name</th></tr>";
 
-		});
-		worker += "</table></div>";
-	}
-	if (confirmed > 0) {
-		worker +=
-		"<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListConfirmed).length * 23) + 45, getStatsWindowHeight() - 12 ) +
-		"px;'><table class='darkTable' align=center><tr><th  style='font-weight:bold'>Confirmed (" +
-		confirmed + ")</th></tr><tr><th align=left>Name</th></tr>";
-		Object.keys(ListConfirmed).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td></tr>";
+	var inversionAlpha = "DD";
+	var confirmed = "";
+	var bold = "text-shadow: 0px 0px 1px black;";
+	var unconf = "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
 
-		});
-		worker += "</table></div>";
-	}
-	if (needed > 0) {
-		worker +=
-		"<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListNotWorked).length * 23) + 45, getStatsWindowHeight() - 12 ) +
-		"px;'><table class='darkTable' align=center><tr><th  style='font-weight:bold'>Needed (" +
-		needed + ")</th></tr><tr><th align=left>Name</th></tr>";
-		Object.keys(ListNotWorked).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td></tr>";
-
-		});
-		worker += "</table></div>";
-	}
-	worker += "</div>";
-
-	worker += "<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Worked All States</b><br/>";
-
-	worked = 0;
-	needed = 0;
-	confirmed = 0;
-	List = {};
-	ListNotWorked = {};
-	ListConfirmed = {};
-	for (var key in g_wasZones) { {
-			if (g_wasZones[key].worked == true) {
-				List[key] = key;
-				worked++;
-			}
-			if (g_wasZones[key].confirmed == true) {
-
-				ListConfirmed[key] = key;
-				confirmed++;
-			}
-			if (g_wasZones[key].confirmed == false && g_wasZones[key].worked == false) {
-
-				ListNotWorked[key] = key;
-				needed++;
-			}
+	Object.keys(table).sort().forEach(function (key, i) {
+		var style;
+		if (table[key].confirmed == true) {
+			style = "color:" + color + ";" + confirmed;
+		} else if (table[key].worked == true)  {
+			style = "color:" + color + ";" + unconf;
+		} else { // needed
+			style = "color:#000000;background-color:" + color + ";" + bold;
 		}
-	}
-	if (worked > 0) {
-		worker +=
-		"<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(List).length * 23) + 45, getStatsWindowHeight() -12) +
-		"px;'><table class='darkTable' align=center><tr><th  style='font-weight:bold'>Worked (" +
-		worked + ")</th></tr><tr><th align=left>Name</th></tr>";
-		Object.keys(List).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td></tr>";
-
-		});
-		worker += "</table></div>";
-	}
-	if (confirmed > 0) {
-		worker +=
-		"<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListConfirmed).length * 23) + 45, getStatsWindowHeight() - 12) +
-		"px;'><table class='darkTable' align=center><tr><th style='font-weight:bold'>Confirmed (" +
-		confirmed + ")</th></tr><tr><th align=left>Name</th></tr>";
-		Object.keys(ListConfirmed).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td></tr>";
-
-		});
-		worker += "</table></div>";
-	}
-	if (needed > 0) {
-		worker +=
-		"<div  style='color:white;vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;height:" +
-		Math.min((Object.keys(ListNotWorked).length * 23) + 45,getStatsWindowHeight() - 12) +
-		"px;'><table class='darkTable' align=center><tr><th style='font-weight:bold'>Needed (" +
-		needed + ")</th></tr><tr><th align=left>Name</th></tr>";
-		Object.keys(ListNotWorked).sort().forEach(function (key, i) {
-			worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td></tr>";
-
-		});
-		worker += "</table></div>";
-	}
-
-	worker += "</div>";
-	setStatsDiv("waswacListDiv", worker);
+		worker += "<tr><td align=left style='" + style + "'>" + key + "</td></tr>";
+	});
+	worker += "</table></div>";
+	return worker;
 }
 
 

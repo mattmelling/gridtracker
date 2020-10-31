@@ -1,0 +1,11 @@
+{
+  "name": "gridtracker-development",
+  "devDependencies": {
+    "prettier": "2.1.2"
+  },
+  "scripts": {
+    "test": "npm run prettier-check",
+    "prettier-check": "npx prettier --check package.nw",
+    "prettier-write": "npx prettier --write package.nw"
+  }
+}

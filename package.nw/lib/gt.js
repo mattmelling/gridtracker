@@ -5620,7 +5620,7 @@ function handleWsjtxStatus(newMessage) {
 				txrxdec.innerHTML = "RECEIVE";
 			}
 
-		if (newMessage.TxEnabled == 1)
+		if (newMessage.TxEnabled == 1 && g_spotsEnabled == 0)
 		{
 			if ( g_mapSettings.fitQRZ )
 			{

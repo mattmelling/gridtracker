@@ -1,3 +1,12 @@
+gridtracker (1.20.1031) unstable; urgency=medium
+
+  * Disable fit to QTH when in PSK mode
+  * Higlight confirmed DXCC countries in DXCC report
+  * Unify worked/confirmed/unworked in WAC/WAS/CQ Zones/ITU Zones reports
+  * In CR, when requiring LOTW, don't show stations that aren't LOTW-current
+
+ -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Sat, 31 Sep 2020 14:06:49 -0700
+
 gridtracker (1.20.0927+repack1) unstable; urgency=high
 
   * Clean up nw execution in .desktop and .sh file.

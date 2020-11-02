@@ -1,0 +1,10 @@
+node_modules/
+macos/
+debian/
+build/
+package.nw/lib/ol.js
+package.nw/lib/moment-with-locales.js
+package.nw/lib/moment-timezone-with-data.js
+package.nw/lib/datepicker.js
+package.nw/lib/third-party.js
+

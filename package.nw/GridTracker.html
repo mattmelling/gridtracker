@@ -534,7 +534,7 @@
 							<tr>
 							   <td><div style="display:none" id="importSettingsButton" class="button"  onclick="importSettings();">Import Settings</div></td>
 							</tr>
-							<tr><td><font style="display:none" id="importSettingsFile"></font></td></td>
+							<tr><td><font style="display:none" id="importSettingsFile"></font></td>
 						 </table>
 					  </div>
 					</td>
@@ -1384,7 +1384,7 @@
 				<br/>
 				<div  class="mapItem">
 					<table align="center" title="Alert when new 'Wanted Row(s)' appear in the Call Roster">
-						<tr><td colspan=2>Audio Alert On <b>New Wanted</b></td></td>
+						<tr><td colspan=2>Audio Alert On <b>New Wanted</b></td>
 						<tr>
 							<td colspan=2>
 								<input type="checkbox" id="huntRoster" onchange="wantedChanged(this);"/>
@@ -1600,10 +1600,10 @@
 								 <td colspan=2 ><input type="checkbox" id="onlyRoundUp" onchange="noRoundUp.checked=false; exceptionValuesChanged();">Only Round-Up</td>
 								</tr>
 								<tr>
-								 <td colspan=2 > <div id="usesLoTWDiv" style="display:none"><input  type="checkbox" id="usesLoTW" onchange="exceptionValuesChanged();">Uses LoTW<div></td>
+								 <td colspan=2 > <div id="usesLoTWDiv" style="display:none"><input  type="checkbox" id="usesLoTW" onchange="exceptionValuesChanged();">Uses LoTW</div></td>
 								</tr>
 								<tr>
-								 <td colspan=2 > <div id="useseQSLDiv" style="display:none"><input type="checkbox" id="useseQSL" onchange="exceptionValuesChanged();">Uses eQSL<div></td>
+								 <td colspan=2 > <div id="useseQSLDiv" style="display:none"><input type="checkbox" id="useseQSL" onchange="exceptionValuesChanged();">Uses eQSL</div></td>
 								</tr>
 								</table>
 							</td>
@@ -1831,12 +1831,10 @@
             </tr>
          </table>
       </div>
-      </div>
       <div id="upToDateDiv" style="margin: 0 auto; left: 0; right: 0;top:0;height:100%;width:100%;display:none;background-color:black;text-align:center;vertical-align:middle;position:absolute;z-index:800;white-space: nowrap;overflow:hidden;" >
          <h2>GridTracker is up to date!</h2>
          <div class="button"  onclick="closeUpdateToDateDiv();">OK</div>
       </div>
       <div id="selectNodeDiv" style="-webkit-user-select:text;display:block;zIndex:-10000"></div>
-      </div>
    </body>
 </html>

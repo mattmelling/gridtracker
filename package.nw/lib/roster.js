@@ -1873,10 +1873,10 @@ function viewRoster() {
 
   if (g_rosterSettings.compact == false) {
     worker += "</table>";
-    rosterTable.innerHTML = worker;
+    RosterTable.innerHTML = worker;
     callTable.style.width = parseInt(window.innerWidth) - 6 + "px";
   } else {
-    rosterTable.innerHTML = worker + "</div>";
+    RosterTable.innerHTML = worker + "</div>";
     buttonsDiv.style.width = parseInt(window.innerWidth) - 6 + "px";
   }
 
@@ -2194,7 +2194,7 @@ function updateAwardList(target = null) {
 
   worker += "</table>";
 
-  awardWantedDiv.innerHTML = worker;
+  AwardWantedList.innerHTML = worker;
 
   var keys = Object.keys(g_awardTracker).sort();
 
@@ -2378,11 +2378,26 @@ function closeAwardPopup() {
   resetAwardAdd();
 }
 
-function setVisual() {
-  huntNeedTd.style.display = "none";
-  huntStateTd.style.display = "none";
-  huntDXCCsTd.style.display = "none";
+function toggleMoreControls() {
+  g_rosterSettings.controls = !g_rosterSettings.controls;
 
+  if (g_rosterSettings.controls) {
+    RosterControls.className = "extended"
+  } else {
+    RosterControls.className = "normal"
+  }
+}
+
+function setVisual() {
+  HuntNeedControls.style.display = "none";
+  HuntStateControls.style.display = "none";
+  HuntDXCCsControls.style.display = "none";
+
+  if (g_rosterSettings.controls) {
+    RosterControls.className = "extended"
+  } else {
+    RosterControls.className = "normal"
+  }
   // Award Hunter
   if (referenceNeed.value == 6) {
     /*for ( key in g_rosterSettings.wanted )
@@ -2393,10 +2408,9 @@ function setVisual() {
 				g_rosterSettings.columns[t] = true;
 		}*/
 
-    huntingTr.style.display = "none";
-    callsignsTr.style.display = "none";
-    awardHunterTr.style.display = "";
-    awardWantedDiv.style.display = "";
+    HuntingControls.style.display = "none";
+    CallsignsControls.style.display = "none";
+    AwardTrackerControls.style.display = "";
     huntingMatrixDiv.style.display = "";
     updateAwardList();
   } else {
@@ -2405,34 +2419,33 @@ function setVisual() {
         document.getElementById(key).checked = g_rosterSettings.wanted[key];
     }
 
-    awardHunterTr.style.display = "none";
-    awardWantedDiv.style.display = "none";
-    huntingTr.style.display = "";
-    callsignsTr.style.display = "";
+    AwardTrackerControls.style.display = "none";
+    HuntingControls.style.display = "";
+    CallsignsControls.style.display = "";
     closeAwardPopup();
     if (callsignNeed.value == "all" || callsignNeed.value == "hits") {
       huntingMatrixDiv.style.display = "";
-      huntNeedTd.style.display = "block";
-      huntModeTd.style.display = "none";
+      HuntNeedControls.style.display = "block";
+      HuntModeControls.style.display = "none";
     } else {
       huntingMatrixDiv.style.display = "none";
-      huntModeTd.style.display = "block";
+      HuntModeControls.style.display = "block";
 
       if (
         huntMode.value != "callsign" &&
         huntMode.value != "usstate" &&
         huntMode.value != "dxccs"
       ) {
-        huntNeedTd.style.display = "block";
+        HuntNeedControls.style.display = "block";
       }
       if (huntMode.value == "usstate") {
-        huntStateTd.style.display = "block";
+        HuntStateControls.style.display = "block";
       }
       if (huntMode.value == "usstates") {
-        huntNeedTd.style.display = "block";
+        HuntNeedControls.style.display = "block";
       }
       if (huntMode.value == "dxccs") {
-        huntDXCCsTd.style.display = "block";
+        HuntDXCCsControls.style.display = "block";
       }
     }
   }
@@ -2876,12 +2889,6 @@ function checkForEnter(ele) {
 }
 
 function resize() {
-  rosterTable.style.height = window.innerHeight - (rosterHead.clientHeight + 8);
-  awardWantedDiv.style.height = exceptionDiv.clientHeight;
-
-  if (typeof callTable != "undefined")
-    callTable.style.width = parseInt(window.innerWidth) - 6 + "px";
-
   if (editView.style.display == "inline-block") openIgnoreEdit();
 
   window.opener.goProcessRoster();
@@ -2923,51 +2930,6 @@ function init() {
   g_menu = new nw.Menu();
   g_compactMenu = new nw.Menu();
 
-  // Bind a callback to item
-  var item = new nw.MenuItem({
-    type: "normal",
-    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
-    click: function () {
-      if (this.label == "Hide Controls") {
-        this.label = "Show Controls";
-        rosterHead.style.display = "none";
-        g_rosterSettings.controls = false;
-      } else {
-        this.label = "Hide Controls";
-        rosterHead.style.display = "block";
-        g_rosterSettings.controls = true;
-      }
-      g_compactMenu.items[0].label = g_rosterSettings.controls
-        ? "Hide Controls"
-        : "Show Controls";
-      localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
-      resize();
-    },
-  });
-  g_menu.append(item);
-
-  item = new nw.MenuItem({
-    type: "normal",
-    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
-    click: function () {
-      if (this.label == "Hide Controls") {
-        this.label = "Show Controls";
-        rosterHead.style.display = "none";
-        g_rosterSettings.controls = false;
-      } else {
-        this.label = "Hide Controls";
-        rosterHead.style.display = "block";
-        g_rosterSettings.controls = true;
-      }
-      g_menu.items[0].label = g_rosterSettings.controls
-        ? "Hide Controls"
-        : "Show Controls";
-      localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
-      resize();
-    },
-  });
-  g_compactMenu.append(item);
-
   item = new nw.MenuItem({
     type: "normal",
     label: "Compact Mode",
@@ -2989,8 +2951,6 @@ function init() {
     },
   });
   g_compactMenu.append(item);
-
-  rosterHead.style.display = g_rosterSettings.controls ? "block" : "none";
 
   g_callMenu = new nw.Menu();
 

@@ -1,3 +1,4 @@
+/* == General Elements ==================================== */
 table,
 th,
 td {
@@ -27,7 +28,6 @@ td {
 }
 
 input[type="checkbox"] {
-  -webkit-appearance: checkbox !important;
   appearance: checkbox !important;
   margin: 0;
   margin-right: 1px;
@@ -36,14 +36,13 @@ input[type="checkbox"] {
   top: 0px;
 }
 
-input[type="checkbox"]:checked {
-  // -webkit-appearance: checkbox !important;
-  // appearance: checkbox !important;
-}
+/* input[type="checkbox"]:checked {
+  appearance: checkbox !important;
+} */
 
 select {
-  -webkit-appearance: none;
-  -webkit-border-radius: 6px;
+  appearance: none;
+  border-radius: 6px;
   text-indent: 0.2px;
   text-overflow: "";
   padding: 2px;
@@ -72,10 +71,7 @@ select option {
   background: #000;
   color: #eee;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
+  appearance: none;
   border-radius: 8px;
   text-indent: 0.2px;
   text-overflow: "";
@@ -91,8 +87,84 @@ option:disabled {
   color: #666;
 }
 
+/* == Layout ============================================== */
+
+body.roster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  margin: 0;
+  padding: 0;
+
+  background-color: black;
+  white-space: nowrap;
+
+  overflow: auto;
+}
+
+#MainCallRoster {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+#MainCallRoster header {
+  flex: 0;
+}
+
+#MainCallRoster main {
+  flex: 1;
+}
+
+#MainRosterControls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 2px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#MainRosterControls > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#MainRosterControls label {
+  margin-right: 4px;
+}
+
+#RosterControls.normal #ShowFewerControlsLink { display: none; }
+#RosterControls.normal #ShowMoreControlsLink { display: block; }
+#RosterControls.normal #SecondaryRosterControls { display: none; }
+
+#RosterControls.extended #ShowFewerControlsLink { display: block; }
+#RosterControls.extended #ShowMoreControlsLink { display: none; }
+#RosterControls.extended #SecondaryRosterControls { display: block; }
+
+/* == Other Elements ====================================== */
+
+#txrxdec {
+  width: 100px;
+}
+
+.link {
+  cursor: hand;
+  color: #FFFFAA;
+}
+
+.link:hover {
+  color: #FFFF00;
+  text-decoration: underline;
+}
+
 .controlItem {
-  -webkit-appearance: none;
+  appearance: none;
   margin: 0;
   padding: 0;
   padding-top: 1px;
@@ -101,9 +173,9 @@ option:disabled {
   border-width: 1px;
   border-color: #aaa;
   border-style: inset;
-  -webkit-border-radius: 4px;
+  border-radius: 4px;
   display: inline-block;
-  -webkit-transition: border-color;
+  transition: border-color;
   vertical-align: top;
 }
 
@@ -142,6 +214,7 @@ table.rosterTable {
   border: 1px solid #555;
   background-color: black;
   text-align: center;
+  width: 100%;
 }
 
 table.rosterTable td,
@@ -204,8 +277,8 @@ table.rosterTable thead th:first-child {
   min-height: 2em;
   display: inline-block;
   color: #eee;
-  -webkit-transition: border-style;
-  -webkit-border-radius: 4px;
+  transition: border-style;
+  border-radius: 4px;
 }
 
 .compact:active {

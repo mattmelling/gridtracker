@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s;
@@ -14,28 +14,28 @@
   opacity: 1;
   visibility: visible;
 }
-.picker-wrap .picker{ 
+.picker-wrap .picker {
   margin: 50vh auto 0 auto;
-  transform: translateY(-50%)
+  transform: translateY(-50%);
 }
 
 /* [CONTAINER] */
 .picker {
   max-width: 200px;
   border: 1px solid #444;
-  -webkit-border-radius:6px;  
+  -webkit-border-radius: 6px;
   background: #444;
-  border-style:outset;
+  border-style: outset;
   padding: 5px;
 }
 
-.picker:hover
-{
-	border: 1px solid #888;
+.picker:hover {
+  border: 1px solid #888;
 }
 
 /* [MONTH + YEAR] */
-.picker-m, .picker-y {
+.picker-m,
+.picker-y {
   width: 25%;
   padding: 5px;
   box-sizing: border-box;

@@ -18,758 +18,657 @@ var g_oqrsFile = "";
 var g_oqrsWhenDate = 0;
 var g_oqrsLoadTimer = null;
 
-
-function dumpFile(file)
-{
-	try
-	{
-		if ( fs.existsSync(file) )
-			fs.unlinkSync(file);
-	}
-	catch (e)
-	{
-	}
+function dumpFile(file) {
+  try {
+    if (fs.existsSync(file)) fs.unlinkSync(file);
+  } catch (e) {}
 }
 
-function dumpDir(dir)
-{
-	try
-	{
-		if ( fs.existsSync(dir) )
-			fs.rmdirSync(dir);
-	}
-	catch (e)
-	{
-	}
+function dumpDir(dir) {
+  try {
+    if (fs.existsSync(dir)) fs.rmdirSync(dir);
+  } catch (e) {}
 }
 
-function callsignServicesInit()
-{
-	// Dump old data files we no longer reference
-	dumpFile(g_jsonDir + "uls-callsigns.json");
-	dumpFile(g_jsonDir + "us-callsigns.json");
-	dumpFile(g_jsonDir + "lotw-callsigns.json");
-	dumpFile(g_jsonDir + "lotw-ts-callsigns.json");
-	dumpFile(g_jsonDir + "eqsl-callsigns.json");
-	dumpFile(g_jsonDir + "cloqrs-callsigns.json");
-	dumpFile(g_jsonDir + "internal_qso.json");
-	dumpFile(g_jsonDir + "spots.json");
-	dumpDir(g_jsonDir);
+function callsignServicesInit() {
+  // Dump old data files we no longer reference
+  dumpFile(g_jsonDir + "uls-callsigns.json");
+  dumpFile(g_jsonDir + "us-callsigns.json");
+  dumpFile(g_jsonDir + "lotw-callsigns.json");
+  dumpFile(g_jsonDir + "lotw-ts-callsigns.json");
+  dumpFile(g_jsonDir + "eqsl-callsigns.json");
+  dumpFile(g_jsonDir + "cloqrs-callsigns.json");
+  dumpFile(g_jsonDir + "internal_qso.json");
+  dumpFile(g_jsonDir + "spots.json");
+  dumpDir(g_jsonDir);
 
-	g_lotwFile = g_NWappData + "lotw-ts-callsigns.json";
-	g_eqslFile = g_NWappData + "eqsl-callsigns.json";
-	g_oqrsFile = g_NWappData + "cloqrs-callsigns.json";
+  g_lotwFile = g_NWappData + "lotw-ts-callsigns.json";
+  g_eqslFile = g_NWappData + "eqsl-callsigns.json";
+  g_oqrsFile = g_NWappData + "cloqrs-callsigns.json";
 
-	if ( g_callsignLookups.lotwUseEnable )
-	{
-		lotwLoadCallsigns();
-	}
-	if ( g_callsignLookups.eqslUseEnable )
-	{
-		eqslLoadCallsigns();
-	}
-	if ( g_callsignLookups.ulsUseEnable  )
-	{
-		ulsLoadCallsigns();
-	}
-	if ( g_callsignLookups.oqrsUseEnable  )
-	{
-		oqrsLoadCallsigns();
-	}
+  if (g_callsignLookups.lotwUseEnable) {
+    lotwLoadCallsigns();
+  }
+  if (g_callsignLookups.eqslUseEnable) {
+    eqslLoadCallsigns();
+  }
+  if (g_callsignLookups.ulsUseEnable) {
+    ulsLoadCallsigns();
+  }
+  if (g_callsignLookups.oqrsUseEnable) {
+    oqrsLoadCallsigns();
+  }
 
-	lotwSettingsDisplay();
-	eqslSettingsDisplay();
-	ulsSettingsDisplay();
-	oqrsSettingsDisplay();
+  lotwSettingsDisplay();
+  eqslSettingsDisplay();
+  ulsSettingsDisplay();
+  oqrsSettingsDisplay();
 }
 
-function saveCallsignSettings()
-{
-	localStorage.callsignLookups = JSON.stringify(g_callsignLookups);
+function saveCallsignSettings() {
+  localStorage.callsignLookups = JSON.stringify(g_callsignLookups);
 }
 
-function lotwLoadCallsigns()
-{
+function lotwLoadCallsigns() {
+  var now = timeNowSec();
+  if (now - g_callsignLookups.lotwLastUpdate > 86400 * 7)
+    g_callsignLookups.lotwLastUpdate = 0;
+  else {
+    var lotwWhenTimer = 86400 * 7 - (now - g_callsignLookups.lotwLastUpdate);
+    g_lotwWhenDate = now + lotwWhenTimer;
+    g_lotwLoadTimer = setTimeout(lotwDownload, lotwWhenTimer * 1000);
+  }
 
-	var now = timeNowSec();
-	if ( now - g_callsignLookups.lotwLastUpdate  > (86400 * 7) )
-		g_callsignLookups.lotwLastUpdate = 0;
-	else
-	{
-		var lotwWhenTimer = (86400 * 7) - (now - g_callsignLookups.lotwLastUpdate);
-		g_lotwWhenDate = now + lotwWhenTimer;
-		g_lotwLoadTimer = setTimeout(lotwDownload,(lotwWhenTimer)*1000);
-	}
-
-
-
-	if (!fs.existsSync(g_lotwFile))
-	{
-		g_callsignLookups.lotwLastUpdate = 0;
-	}
-	else
-	{
-		var data = fs.readFileSync(g_lotwFile);
-		g_lotwCallsigns = JSON.parse(data);
-		if ( Object.keys(g_lotwCallsigns).length < 100 )
-		{
-			lotwDownload();
-		}
-	}
-	if ( g_callsignLookups.lotwLastUpdate == 0 )
-	{
-		lotwDownload();
-	}
+  if (!fs.existsSync(g_lotwFile)) {
+    g_callsignLookups.lotwLastUpdate = 0;
+  } else {
+    var data = fs.readFileSync(g_lotwFile);
+    g_lotwCallsigns = JSON.parse(data);
+    if (Object.keys(g_lotwCallsigns).length < 100) {
+      lotwDownload();
+    }
+  }
+  if (g_callsignLookups.lotwLastUpdate == 0) {
+    lotwDownload();
+  }
 }
 
-function lotwSettingsDisplay()
-{
-	lotwUseEnable.checked = g_callsignLookups.lotwUseEnable;
+function lotwSettingsDisplay() {
+  lotwUseEnable.checked = g_callsignLookups.lotwUseEnable;
 
-	if ( g_callsignLookups.lotwLastUpdate == 0 )
-	{
-		lotwUpdatedTd.innerHTML = "Never";
+  if (g_callsignLookups.lotwLastUpdate == 0) {
+    lotwUpdatedTd.innerHTML = "Never";
+  } else {
+    lotwUpdatedTd.innerHTML = userTimeString(
+      g_callsignLookups.lotwLastUpdate * 1000
+    );
+  }
 
-	}
-	else
-	{
-		lotwUpdatedTd.innerHTML = userTimeString(g_callsignLookups.lotwLastUpdate * 1000);
-
-	}
-
-	if ( !g_callsignLookups.lotwUseEnable )
-	{
-
-		if ( g_lotwLoadTimer != null )
-			clearTimeout(g_lotwLoadTimer);
-		g_lotwLoadTimer = null;
-		g_lotwCallsigns = Object();
-	}
-	lotwCountTd.innerHTML = Object.keys(g_lotwCallsigns).length;
+  if (!g_callsignLookups.lotwUseEnable) {
+    if (g_lotwLoadTimer != null) clearTimeout(g_lotwLoadTimer);
+    g_lotwLoadTimer = null;
+    g_lotwCallsigns = Object();
+  }
+  lotwCountTd.innerHTML = Object.keys(g_lotwCallsigns).length;
 }
 
-function lotwValuesChanged()
-{
-	g_callsignLookups.lotwUseEnable = lotwUseEnable.checked;
-	saveCallsignSettings();
-	if ( g_callsignLookups.lotwUseEnable == true )
-	{
-		lotwLoadCallsigns();
-	}
-	lotwSettingsDisplay();
+function lotwValuesChanged() {
+  g_callsignLookups.lotwUseEnable = lotwUseEnable.checked;
+  saveCallsignSettings();
+  if (g_callsignLookups.lotwUseEnable == true) {
+    lotwLoadCallsigns();
+  }
+  lotwSettingsDisplay();
 
-
-	setAlertVisual();
-	goProcessRoster();
-	if ( g_callRosterWindowHandle )
-		g_callRosterWindowHandle.window.resize();
+  setAlertVisual();
+  goProcessRoster();
+  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
 }
 
-function lotwDownload(fromSettings)
-{
-	lotwUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
-	getBuffer("https://lotw.arrl.org/lotw-user-activity.csv", processLotwCallsigns, null, "https", 443);
+function lotwDownload(fromSettings) {
+  lotwUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
+  getBuffer(
+    "https://lotw.arrl.org/lotw-user-activity.csv",
+    processLotwCallsigns,
+    null,
+    "https",
+    443
+  );
 }
 
+function processLotwCallsigns(result, flag) {
+  //var result = String(buffer);
+  var lines = Array();
+  lines = result.split("\n");
+  delete result;
+  var lotwCallsigns = Object();
+  for (x in lines) {
+    var breakout = lines[x].split(",");
+    if (breakout.length == 3) {
+      var dateTime = new Date(
+        Date.UTC(
+          breakout[1].substr(0, 4),
+          parseInt(breakout[1].substr(5, 2)) - 1,
+          breakout[1].substr(8, 2),
+          0,
+          0,
+          0
+        )
+      );
+      lotwCallsigns[breakout[0]] = parseInt(dateTime.getTime() / 1000) / 86400;
+    }
+  }
+  delete lines;
+  g_callsignLookups.lotwLastUpdate = timeNowSec();
 
-function processLotwCallsigns(result, flag)
-{
-	//var result = String(buffer);
-	var lines = Array();
-    lines = result.split("\n");
-	delete result;
-	var lotwCallsigns = Object();
-	for ( x in lines )
-	{
-		var breakout = lines[x].split(",");
-		if ( breakout.length == 3 )
-		{
-			var dateTime = new Date(Date.UTC(breakout[1].substr(0,4), parseInt(breakout[1].substr(5,2))-1,breakout[1].substr(8,2), 0, 0, 0));
-			lotwCallsigns[breakout[0]] = parseInt(dateTime.getTime() / 1000)/86400;
-		}
-	}
-	delete lines;
-	g_callsignLookups.lotwLastUpdate = timeNowSec();
+  var now = timeNowSec();
+  if (g_lotwLoadTimer != null) clearTimeout(g_lotwLoadTimer);
 
-	var now = timeNowSec();
-	if ( g_lotwLoadTimer != null )
-		clearTimeout(g_lotwLoadTimer);
+  var lotwWhenTimer = 86400 * 7 - (now - g_callsignLookups.lotwLastUpdate);
+  g_lotwWhenDate = now + lotwWhenTimer;
+  g_lotwLoadTimer = setTimeout(lotwDownload, lotwWhenTimer * 1000);
 
-	var lotwWhenTimer = (86400 * 7) - (now - g_callsignLookups.lotwLastUpdate);
-	g_lotwWhenDate = now + lotwWhenTimer;
-	g_lotwLoadTimer = setTimeout(lotwDownload,(lotwWhenTimer)*1000);
+  if (Object.keys(lotwCallsigns).length > 100) {
+    g_lotwCallsigns = lotwCallsigns;
+    fs.writeFileSync(g_lotwFile, JSON.stringify(g_lotwCallsigns));
+  }
 
-	if ( Object.keys(lotwCallsigns).length > 100 )
-	{
-		g_lotwCallsigns = lotwCallsigns;
-		fs.writeFileSync(g_lotwFile, JSON.stringify(g_lotwCallsigns));
-	}
-
-	lotwSettingsDisplay();
+  lotwSettingsDisplay();
 }
 
+function oqrsLoadCallsigns() {
+  var now = timeNowSec();
+  if (now - g_callsignLookups.oqrsLastUpdate > 86400 * 7)
+    g_callsignLookups.oqrsLastUpdate = 0;
+  else {
+    var oqrsWhenTimer = 86400 * 7 - (now - g_callsignLookups.oqrsLastUpdate);
+    g_oqrsWhenDate = now + oqrsWhenTimer;
+    g_oqrsLoadTimer = setTimeout(oqrsDownload, oqrsWhenTimer * 1000);
+  }
 
-function oqrsLoadCallsigns()
-{
-
-	var now = timeNowSec();
-	if ( now - g_callsignLookups.oqrsLastUpdate  > (86400 * 7) )
-		g_callsignLookups.oqrsLastUpdate = 0;
-	else
-	{
-		var oqrsWhenTimer = (86400 * 7) - (now - g_callsignLookups.oqrsLastUpdate);
-		g_oqrsWhenDate = now + oqrsWhenTimer;
-		g_oqrsLoadTimer = setTimeout(oqrsDownload,(oqrsWhenTimer)*1000);
-	}
-
-	if (!fs.existsSync(g_oqrsFile))
-	{
-		g_callsignLookups.oqrsLastUpdate = 0;
-	}
-	else
-	{
-		var data = fs.readFileSync(g_oqrsFile);
-		g_oqrsCallsigns = JSON.parse(data);
-	}
-	if ( g_callsignLookups.oqrsLastUpdate == 0 )
-	{
-		oqrsDownload();
-	}
+  if (!fs.existsSync(g_oqrsFile)) {
+    g_callsignLookups.oqrsLastUpdate = 0;
+  } else {
+    var data = fs.readFileSync(g_oqrsFile);
+    g_oqrsCallsigns = JSON.parse(data);
+  }
+  if (g_callsignLookups.oqrsLastUpdate == 0) {
+    oqrsDownload();
+  }
 }
 
-function oqrsSettingsDisplay()
-{
-	oqrsUseEnable.checked = g_callsignLookups.oqrsUseEnable;
+function oqrsSettingsDisplay() {
+  oqrsUseEnable.checked = g_callsignLookups.oqrsUseEnable;
 
+  if (g_callsignLookups.oqrsLastUpdate == 0) {
+    oqrsUpdatedTd.innerHTML = "Never";
+  } else {
+    oqrsUpdatedTd.innerHTML = userTimeString(
+      g_callsignLookups.oqrsLastUpdate * 1000
+    );
+  }
 
-	if ( g_callsignLookups.oqrsLastUpdate == 0 )
-	{
-		oqrsUpdatedTd.innerHTML = "Never";
-
-	}
-	else
-	{
-		oqrsUpdatedTd.innerHTML = userTimeString(g_callsignLookups.oqrsLastUpdate * 1000);
-
-	}
-
-
-	if ( !g_callsignLookups.oqrsUseEnable )
-	{
-		if ( g_oqrsLoadTimer != null )
-			clearTimeout(g_oqrsLoadTimer);
-		g_oqrsLoadTimer = null;
-		g_oqrsCallsigns = Object();
-	}
-	oqrsCountTd.innerHTML = Object.keys(g_oqrsCallsigns).length;
+  if (!g_callsignLookups.oqrsUseEnable) {
+    if (g_oqrsLoadTimer != null) clearTimeout(g_oqrsLoadTimer);
+    g_oqrsLoadTimer = null;
+    g_oqrsCallsigns = Object();
+  }
+  oqrsCountTd.innerHTML = Object.keys(g_oqrsCallsigns).length;
 }
 
-function oqrsValuesChanged()
-{
-	g_callsignLookups.oqrsUseEnable = oqrsUseEnable.checked;
-	saveCallsignSettings();
-	if ( g_callsignLookups.oqrsUseEnable == true )
-	{
-		oqrsLoadCallsigns();
-	}
-	oqrsSettingsDisplay();
+function oqrsValuesChanged() {
+  g_callsignLookups.oqrsUseEnable = oqrsUseEnable.checked;
+  saveCallsignSettings();
+  if (g_callsignLookups.oqrsUseEnable == true) {
+    oqrsLoadCallsigns();
+  }
+  oqrsSettingsDisplay();
 
-	setAlertVisual();
-	goProcessRoster();
-	if ( g_callRosterWindowHandle )
-		g_callRosterWindowHandle.window.resize();
+  setAlertVisual();
+  goProcessRoster();
+  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
 }
 
-function oqrsDownload(fromSettings)
-{
-	oqrsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
-	getBuffer("https://dl.dropboxusercontent.com/s/9nycdpbxx5b3bpp/clublog.json?cb="+timeNowSec(), processoqrsCallsigns, null, "https", 443);
+function oqrsDownload(fromSettings) {
+  oqrsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
+  getBuffer(
+    "https://dl.dropboxusercontent.com/s/9nycdpbxx5b3bpp/clublog.json?cb=" +
+      timeNowSec(),
+    processoqrsCallsigns,
+    null,
+    "https",
+    443
+  );
 }
 
-function processoqrsCallsigns(buffer, flag)
-{
-	g_oqrsCallsigns = JSON.parse(buffer);
+function processoqrsCallsigns(buffer, flag) {
+  g_oqrsCallsigns = JSON.parse(buffer);
 
-	g_callsignLookups.oqrsLastUpdate = timeNowSec();
+  g_callsignLookups.oqrsLastUpdate = timeNowSec();
 
-	var now = timeNowSec();
-	if ( g_oqrsLoadTimer != null )
-		clearTimeout(g_oqrsLoadTimer);
+  var now = timeNowSec();
+  if (g_oqrsLoadTimer != null) clearTimeout(g_oqrsLoadTimer);
 
-	var oqrsWhenTimer = (86400 * 7) - (now - g_callsignLookups.oqrsLastUpdate);
-	g_oqrsWhenDate = now + oqrsWhenTimer;
-	g_oqrsLoadTimer = setTimeout(oqrsDownload,(oqrsWhenTimer)*1000);
+  var oqrsWhenTimer = 86400 * 7 - (now - g_callsignLookups.oqrsLastUpdate);
+  g_oqrsWhenDate = now + oqrsWhenTimer;
+  g_oqrsLoadTimer = setTimeout(oqrsDownload, oqrsWhenTimer * 1000);
 
-
-	fs.writeFileSync(g_oqrsFile, JSON.stringify(g_oqrsCallsigns));
-	oqrsSettingsDisplay();
+  fs.writeFileSync(g_oqrsFile, JSON.stringify(g_oqrsCallsigns));
+  oqrsSettingsDisplay();
 }
 
-function eqslLoadCallsigns()
-{
+function eqslLoadCallsigns() {
+  var now = timeNowSec();
+  if (now - g_callsignLookups.eqslLastUpdate > 86400 * 7)
+    g_callsignLookups.eqslLastUpdate = 0;
+  else {
+    var eqslWhenTimer = 86400 * 7 - (now - g_callsignLookups.eqslLastUpdate);
+    g_eqslWhenDate = now + eqslWhenTimer;
+    g_eqslLoadTimer = setTimeout(eqslDownload, eqslWhenTimer * 1000);
+  }
 
-	var now = timeNowSec();
-	if ( now - g_callsignLookups.eqslLastUpdate  > (86400 * 7) )
-		g_callsignLookups.eqslLastUpdate = 0;
-	else
-	{
-		var eqslWhenTimer = (86400 * 7) - (now - g_callsignLookups.eqslLastUpdate);
-		g_eqslWhenDate = now + eqslWhenTimer;
-		g_eqslLoadTimer = setTimeout(eqslDownload,(eqslWhenTimer)*1000);
-	}
-
-
-	if (!fs.existsSync(g_eqslFile))
-	{
-		g_callsignLookups.eqslLastUpdate = 0;
-	}
-	else
-	{
-		var data = fs.readFileSync(g_eqslFile);
-		g_eqslCallsigns = JSON.parse(data);
-	}
-	if ( g_callsignLookups.eqslLastUpdate == 0 )
-	{
-		eqslDownload();
-	}
+  if (!fs.existsSync(g_eqslFile)) {
+    g_callsignLookups.eqslLastUpdate = 0;
+  } else {
+    var data = fs.readFileSync(g_eqslFile);
+    g_eqslCallsigns = JSON.parse(data);
+  }
+  if (g_callsignLookups.eqslLastUpdate == 0) {
+    eqslDownload();
+  }
 }
 
-function eqslSettingsDisplay()
-{
-	eqslUseEnable.checked = g_callsignLookups.eqslUseEnable;
+function eqslSettingsDisplay() {
+  eqslUseEnable.checked = g_callsignLookups.eqslUseEnable;
 
-	if ( g_callsignLookups.eqslLastUpdate == 0 )
-	{
-		eqslUpdatedTd.innerHTML = "Never";
+  if (g_callsignLookups.eqslLastUpdate == 0) {
+    eqslUpdatedTd.innerHTML = "Never";
+  } else {
+    eqslUpdatedTd.innerHTML = userTimeString(
+      g_callsignLookups.eqslLastUpdate * 1000
+    );
+  }
 
-	}
-	else
-	{
-		eqslUpdatedTd.innerHTML = userTimeString(g_callsignLookups.eqslLastUpdate * 1000);
-
-	}
-
-
-	if ( !g_callsignLookups.eqslUseEnable )
-	{
-		if ( g_eqslLoadTimer != null )
-			clearTimeout(g_eqslLoadTimer);
-		g_eqslLoadTimer = null;
-		g_eqslCallsigns = Object();
-	}
-	eqslCountTd.innerHTML = Object.keys(g_eqslCallsigns).length;
+  if (!g_callsignLookups.eqslUseEnable) {
+    if (g_eqslLoadTimer != null) clearTimeout(g_eqslLoadTimer);
+    g_eqslLoadTimer = null;
+    g_eqslCallsigns = Object();
+  }
+  eqslCountTd.innerHTML = Object.keys(g_eqslCallsigns).length;
 }
 
-function eqslValuesChanged()
-{
-	g_callsignLookups.eqslUseEnable = eqslUseEnable.checked;
-	saveCallsignSettings();
-	if ( g_callsignLookups.eqslUseEnable == true )
-	{
-		eqslLoadCallsigns();
-	}
-	eqslSettingsDisplay();
+function eqslValuesChanged() {
+  g_callsignLookups.eqslUseEnable = eqslUseEnable.checked;
+  saveCallsignSettings();
+  if (g_callsignLookups.eqslUseEnable == true) {
+    eqslLoadCallsigns();
+  }
+  eqslSettingsDisplay();
 
-	setAlertVisual();
-	goProcessRoster();
-	if ( g_callRosterWindowHandle )
-		g_callRosterWindowHandle.window.resize();
+  setAlertVisual();
+  goProcessRoster();
+  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
 }
 
-function eqslDownload(fromSettings)
-{
-	eqslUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
-	getBuffer("https://www.eqsl.cc/qslcard/DownloadedFiles/AGMemberList.txt", processeqslCallsigns, null, "https", 443);
+function eqslDownload(fromSettings) {
+  eqslUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
+  getBuffer(
+    "https://www.eqsl.cc/qslcard/DownloadedFiles/AGMemberList.txt",
+    processeqslCallsigns,
+    null,
+    "https",
+    443
+  );
 }
 
-function processeqslCallsigns(buffer, flag)
-{
-	var result = String(buffer);
-	var lines = Array();
-    lines = result.split("\n");
-	g_eqslCallsigns = Object();
-	for ( x in lines )
-	{
-		g_eqslCallsigns[lines[x].trim()] = true;
-	}
-	g_callsignLookups.eqslLastUpdate = timeNowSec();
+function processeqslCallsigns(buffer, flag) {
+  var result = String(buffer);
+  var lines = Array();
+  lines = result.split("\n");
+  g_eqslCallsigns = Object();
+  for (x in lines) {
+    g_eqslCallsigns[lines[x].trim()] = true;
+  }
+  g_callsignLookups.eqslLastUpdate = timeNowSec();
 
-	var now = timeNowSec();
-	if ( g_eqslLoadTimer != null )
-		clearTimeout(g_eqslLoadTimer);
+  var now = timeNowSec();
+  if (g_eqslLoadTimer != null) clearTimeout(g_eqslLoadTimer);
 
-	var eqslWhenTimer = (86400 * 7) - (now - g_callsignLookups.eqslLastUpdate);
-	g_eqslWhenDate = now + eqslWhenTimer;
-	g_eqslLoadTimer = setTimeout(eqslDownload,(eqslWhenTimer)*1000);
+  var eqslWhenTimer = 86400 * 7 - (now - g_callsignLookups.eqslLastUpdate);
+  g_eqslWhenDate = now + eqslWhenTimer;
+  g_eqslLoadTimer = setTimeout(eqslDownload, eqslWhenTimer * 1000);
 
-	if ( Object.keys(g_eqslCallsigns).length > 10000 )
-		fs.writeFileSync(g_eqslFile, JSON.stringify(g_eqslCallsigns));
+  if (Object.keys(g_eqslCallsigns).length > 10000)
+    fs.writeFileSync(g_eqslFile, JSON.stringify(g_eqslCallsigns));
 
-	eqslSettingsDisplay();
+  eqslSettingsDisplay();
 }
 
+function ulsLoadCallsigns() {
+  if (g_ulsLoadTimer != null) {
+    clearTimeout(g_ulsLoadTimer);
+    g_ulsLoadTimer = null;
+  }
 
-function ulsLoadCallsigns()
-{
-	if ( g_ulsLoadTimer != null )
-	{
-		clearTimeout(g_ulsLoadTimer);
-		g_ulsLoadTimer = null;
-
-	}
-
-	var now = timeNowSec();
-	if ( now - g_callsignLookups.ulsLastUpdate  > (86400 * 7)  )
-		ulsDownload();
-	else
-	{
-		var ulsWhenTimer = (86400 * 7) - (now - g_callsignLookups.ulsLastUpdate);
-		g_ulsWhenDate = now + ulsWhenTimer;
-		g_ulsLoadTimer = setTimeout(ulsDownload,(ulsWhenTimer)*1000);
-		updateCallsignCount();
-	}
-
-
+  var now = timeNowSec();
+  if (now - g_callsignLookups.ulsLastUpdate > 86400 * 7) ulsDownload();
+  else {
+    var ulsWhenTimer = 86400 * 7 - (now - g_callsignLookups.ulsLastUpdate);
+    g_ulsWhenDate = now + ulsWhenTimer;
+    g_ulsLoadTimer = setTimeout(ulsDownload, ulsWhenTimer * 1000);
+    updateCallsignCount();
+  }
 }
 
-function updateQSO()
-{
-	if ( g_ulsCallsignsCount > 0 )
-	{
-		for ( hash in g_QSOhash )
-		{
-			var details = g_QSOhash[hash];
-			var lookupCall = false;
+function updateQSO() {
+  if (g_ulsCallsignsCount > 0) {
+    for (hash in g_QSOhash) {
+      var details = g_QSOhash[hash];
+      var lookupCall = false;
 
-
-			if ( (details.cnty == null || details.state == null) && isKnownCallsignDXCC(details.dxcc))
-			{
-				// Do County Lookup
-				lookupCall = true;
-			}
-			else if (details.cnty != null && isKnownCallsignUSplus(details.dxcc))
-			{
-				if (!(details.cnty in g_cntyToCounty))
-				{
-					if (details.cnty.indexOf(",") == -1)
-					{
-						if (!(details.state + "," + details.cnty in  g_cntyToCounty))
-							lookupCall = true;
-					}
-					else
-						lookupCall = true;
-
-				}
-			}
-			if (lookupCall)
-			{
-				if (g_callsignLookups.ulsUseEnable)
-				{
-					lookupUsCallsign(details,true );
-				}
-			}
-		}
-	}
+      if (
+        (details.cnty == null || details.state == null) &&
+        isKnownCallsignDXCC(details.dxcc)
+      ) {
+        // Do County Lookup
+        lookupCall = true;
+      } else if (details.cnty != null && isKnownCallsignUSplus(details.dxcc)) {
+        if (!(details.cnty in g_cntyToCounty)) {
+          if (details.cnty.indexOf(",") == -1) {
+            if (!(details.state + "," + details.cnty in g_cntyToCounty))
+              lookupCall = true;
+          } else lookupCall = true;
+        }
+      }
+      if (lookupCall) {
+        if (g_callsignLookups.ulsUseEnable) {
+          lookupUsCallsign(details, true);
+        }
+      }
+    }
+  }
 }
 
-function updateCallsignCount()
-{
-	g_ulsDatabase.transaction(function (tx) {
-	tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (tx, results)
-	{
-		var len = results.rows.length, i;
-		if ( len == 1 )
-		{
+function updateCallsignCount() {
+  g_ulsDatabase.transaction(function (tx) {
+    tx.executeSql(
+      "SELECT count(*) as cnt FROM calls",
+      [],
+      function (tx, results) {
+        var len = results.rows.length,
+          i;
+        if (len == 1) {
+          g_ulsCallsignsCount = results.rows[0]["cnt"];
+          ulsCountTd.innerHTML = g_ulsCallsignsCount;
 
-			g_ulsCallsignsCount = results.rows[0]["cnt"];
-			ulsCountTd.innerHTML = g_ulsCallsignsCount;
-
-			updateQSO();
-		}
-
-	}, null);
-});
+          updateQSO();
+        }
+      },
+      null
+    );
+  });
 }
 
+function ulsSettingsDisplay() {
+  ulsUseEnable.checked = g_callsignLookups.ulsUseEnable;
 
-function ulsSettingsDisplay()
-{
-	ulsUseEnable.checked = g_callsignLookups.ulsUseEnable;
+  if (g_callsignLookups.ulsLastUpdate == 0) {
+    ulsUpdatedTd.innerHTML = "Never";
+  } else {
+    ulsUpdatedTd.innerHTML = userTimeString(
+      g_callsignLookups.ulsLastUpdate * 1000
+    );
+  }
 
-	if ( g_callsignLookups.ulsLastUpdate == 0 )
-	{
-		ulsUpdatedTd.innerHTML = "Never";
-	}
-	else
-	{
-		ulsUpdatedTd.innerHTML = userTimeString(g_callsignLookups.ulsLastUpdate * 1000);
-	}
-
-
-	if ( !g_callsignLookups.ulsUseEnable )
-	{
-		if ( g_ulsLoadTimer != null )
-			clearTimeout(g_ulsLoadTimer);
-		g_ulsLoadTimer = null;
-		g_ulsCallsignsCount = 0;
-		ulsCountTd.innerHTML = g_ulsCallsignsCount;
-	}
+  if (!g_callsignLookups.ulsUseEnable) {
+    if (g_ulsLoadTimer != null) clearTimeout(g_ulsLoadTimer);
+    g_ulsLoadTimer = null;
+    g_ulsCallsignsCount = 0;
+    ulsCountTd.innerHTML = g_ulsCallsignsCount;
+  }
 }
 
-function ulsValuesChanged()
-{
-	g_callsignLookups.ulsUseEnable = ulsUseEnable.checked;
+function ulsValuesChanged() {
+  g_callsignLookups.ulsUseEnable = ulsUseEnable.checked;
 
-	if ( g_callsignLookups.ulsUseEnable == true )
-	{
-		ulsLoadCallsigns();
-	}
-	else
-	{
-		resetULSDatabase();
-		ulsCountTd.innerHTML = 0;
-	}
-	saveCallsignSettings();
+  if (g_callsignLookups.ulsUseEnable == true) {
+    ulsLoadCallsigns();
+  } else {
+    resetULSDatabase();
+    ulsCountTd.innerHTML = 0;
+  }
+  saveCallsignSettings();
 
-	ulsSettingsDisplay();
-	goProcessRoster();
-	if ( g_callRosterWindowHandle )
-		g_callRosterWindowHandle.window.resize();
+  ulsSettingsDisplay();
+  goProcessRoster();
+  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
 }
 
-function ulsDownload()
-{
-	ulsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
-	ulsCountTd.innerHTML = 0;
-	getChunkedBuffer("https://dl.dropboxusercontent.com/s/91iynrvdse7zcf5/callsigns.txt?cb="+timeNowSec(), processulsCallsigns, null, "https", 443);
+function ulsDownload() {
+  ulsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
+  ulsCountTd.innerHTML = 0;
+  getChunkedBuffer(
+    "https://dl.dropboxusercontent.com/s/91iynrvdse7zcf5/callsigns.txt?cb=" +
+      timeNowSec(),
+    processulsCallsigns,
+    null,
+    "https",
+    443
+  );
 }
 
-function getChunkedBuffer(file_url, callback, flag, mode, port, cookie, errorHandler) {
-	var url = require('url');
-	var http = require(mode);
-	var fileBuffer = null;
-	var options = null;
-	if (cookie != null) {
-		options = {
-			host: url.parse(file_url).host,
-			port: port,
-			followAllRedirects: true,
-			path: url.parse(file_url).path,
-			headers: {
-				'Cookie': cookie
-			}
-		};
-	} else {
-		options = {
-			host: url.parse(file_url).host,
-			port: port,
-			followAllRedirects: true,
-			path: url.parse(file_url).path
-		};
-	}
-	http.get(options, function (res) {
-		var fsize = res.headers['content-length'];
-		var fread = 0;
-		var cookies = null;
-		if (typeof res.headers['set-cookie'] != 'undefined')
-			cookies = res.headers['set-cookie'];
-		res.on('data', function (data) {
-			var isEnd = false;
-			fread += data.length;
-			if ( fread == fsize )
-				isEnd = true;
-			if (fileBuffer == null)
-			{
-				fileBuffer = callback(data, flag, cookies, true, isEnd);
-			}
-			else
-			{
-				fileBuffer = callback(fileBuffer + data, flag, cookies, false, isEnd);
-			}
-		}).on('end', function () {
-
-		}).on('error', function (e) {
-			console.error('Got error: ' + e.message);
-		});
-	});
+function getChunkedBuffer(
+  file_url,
+  callback,
+  flag,
+  mode,
+  port,
+  cookie,
+  errorHandler
+) {
+  var url = require("url");
+  var http = require(mode);
+  var fileBuffer = null;
+  var options = null;
+  if (cookie != null) {
+    options = {
+      host: url.parse(file_url).host,
+      port: port,
+      followAllRedirects: true,
+      path: url.parse(file_url).path,
+      headers: {
+        Cookie: cookie,
+      },
+    };
+  } else {
+    options = {
+      host: url.parse(file_url).host,
+      port: port,
+      followAllRedirects: true,
+      path: url.parse(file_url).path,
+    };
+  }
+  http.get(options, function (res) {
+    var fsize = res.headers["content-length"];
+    var fread = 0;
+    var cookies = null;
+    if (typeof res.headers["set-cookie"] != "undefined")
+      cookies = res.headers["set-cookie"];
+    res
+      .on("data", function (data) {
+        var isEnd = false;
+        fread += data.length;
+        if (fread == fsize) isEnd = true;
+        if (fileBuffer == null) {
+          fileBuffer = callback(data, flag, cookies, true, isEnd);
+        } else {
+          fileBuffer = callback(fileBuffer + data, flag, cookies, false, isEnd);
+        }
+      })
+      .on("end", function () {})
+      .on("error", function (e) {
+        console.error("Got error: " + e.message);
+      });
+  });
 }
 
-
-var g_ulsDatabase = openDatabase('ulsDB', '1.0', 'US Callsigns', 50 * 1024 * 1024);
-
+var g_ulsDatabase = openDatabase(
+  "ulsDB",
+  "1.0",
+  "US Callsigns",
+  50 * 1024 * 1024
+);
 
 g_ulsDatabase.transaction(function (tx) {
-	tx.executeSql('CREATE TABLE IF NOT EXISTS calls ( callsign TEXT PRIMARY KEY, zip, state)');
+  tx.executeSql(
+    "CREATE TABLE IF NOT EXISTS calls ( callsign TEXT PRIMARY KEY, zip, state)"
+  );
 });
 
-
-function resetULSDatabase()
-{
-	g_callsignLookups.ulsLastUpdate = 0;
-	g_ulsCallsignsCount = 0;
-
+function resetULSDatabase() {
+  g_callsignLookups.ulsLastUpdate = 0;
+  g_ulsCallsignsCount = 0;
 }
 
-function processulsCallsigns(data, flag, cookies, starting, finished)
-{
-	var buffer = String(data);
-	var returnBuffer = "";
+function processulsCallsigns(data, flag, cookies, starting, finished) {
+  var buffer = String(data);
+  var returnBuffer = "";
 
+  if (buffer && buffer.length > 0) {
+    var lines = null;
 
-	if ( buffer && buffer.length > 0 )
-	{
-		var lines = null;
+    if (buffer[buffer.length - 1] == "\n") {
+      lines = buffer.split("\n");
+    } else {
+      var lastIndex = buffer.lastIndexOf("\n");
+      returnBuffer = buffer.substring(lastIndex);
+      lines = buffer.substring(0, lastIndex).split("\n");
+    }
 
-		if ( buffer[buffer.length-1] == "\n" )
-		{
-			lines = buffer.split("\n");
-		}
-		else
-		{
-			var lastIndex = buffer.lastIndexOf("\n");
-			returnBuffer = buffer.substring(lastIndex);
-			lines =  buffer.substring(0,lastIndex).split("\n");
-		}
+    if (lines.length > 0) {
+      g_ulsDatabase.transaction(function (tx) {
+        if (starting == true) {
+          if (g_ulsLoadTimer != null) clearTimeout(g_ulsLoadTimer);
+          g_ulsLoadTimer = null;
+          g_ulsWhenDate = 0;
+          g_ulsCallsignsCount = 0;
+          ulsUpdatedTd.innerHTML = "<b><i>Processing...</i></b>";
+          tx.executeSql("delete from calls");
+        }
+        for (var x in lines) {
+          if (lines[x].length) {
+            ++g_ulsCallsignsCount;
+            tx.executeSql(
+              "INSERT INTO calls (rowid, callsign, zip, state) VALUES (" +
+                g_ulsCallsignsCount +
+                ',"' +
+                lines[x].substr(7) +
+                '","' +
+                lines[x].substr(0, 5) +
+                '","' +
+                lines[x].substr(5, 2) +
+                '")'
+            );
+            if (g_ulsCallsignsCount % 10000 == 0) {
+              tx.executeSql("SELECT count(*) as cnt FROM calls", [], function (
+                rx,
+                results
+              ) {
+                var len = results.rows.length,
+                  i;
+                if (len == 1) {
+                  ulsCountTd.innerHTML = results.rows[0]["cnt"];
+                }
+              });
+            }
+          }
+        }
+        delete lines;
+        lines = null;
+      });
+    }
+  }
 
-		if ( lines.length > 0 )
-		{
-			g_ulsDatabase.transaction(function (tx) {
-				if ( starting == true )
-				{
-					if ( g_ulsLoadTimer != null )
-						clearTimeout(g_ulsLoadTimer);
-					g_ulsLoadTimer = null;
-					g_ulsWhenDate = 0;
-					g_ulsCallsignsCount = 0;
-					ulsUpdatedTd.innerHTML = "<b><i>Processing...</i></b>";
-					tx.executeSql('delete from calls');
+  if (finished == true) {
+    var now = timeNowSec();
 
-				}
-				for (var x in lines )
-				{
-					if ( lines[x].length )
-					{
-						++g_ulsCallsignsCount;
-						tx.executeSql( 'INSERT INTO calls (rowid, callsign, zip, state) VALUES ('+g_ulsCallsignsCount+',"'+lines[x].substr(7)+'","'+lines[x].substr(0,5)+'","'+lines[x].substr(5,2)+'")');
-						if ( g_ulsCallsignsCount % 10000 == 0 )
-						{
-							tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (rx, results)
-							{
-								var len = results.rows.length, i;
-								if ( len == 1 )
-								{
-									ulsCountTd.innerHTML = results.rows[0]["cnt"];
-								}
-							});
-						}
-					}
-				}
-				delete lines;
-				lines = null;
+    if (g_ulsLoadTimer != null) clearTimeout(g_ulsLoadTimer);
 
-			});
-		}
-	}
+    var ulsWhenTimer = 86400 * 7;
+    g_ulsWhenDate = ulsWhenTimer + now;
+    g_ulsLoadTimer = setTimeout(ulsDownload, ulsWhenTimer * 1000);
 
-	if ( finished == true )
-	{
-		var now = timeNowSec();
+    g_ulsDatabase.transaction(function (tx) {
+      tx.executeSql("SELECT count(*) as cnt FROM calls", [], function (
+        rx,
+        results
+      ) {
+        var len = results.rows.length,
+          i;
+        if (len == 1) {
+          g_ulsCallsignsCount = results.rows[0]["cnt"];
+          ulsCountTd.innerHTML = g_ulsCallsignsCount;
+          g_callsignLookups.ulsLastUpdate = timeNowSec();
+          saveCallsignSettings();
+          ulsSettingsDisplay();
+          updateQSO();
+        }
+      });
+    });
+  }
 
-		if ( g_ulsLoadTimer != null )
-			clearTimeout(g_ulsLoadTimer);
-
-		var ulsWhenTimer = 86400 * 7;
-		g_ulsWhenDate = ulsWhenTimer + now;
-		g_ulsLoadTimer = setTimeout(ulsDownload,(ulsWhenTimer)*1000);
-
-		g_ulsDatabase.transaction(function (tx) {
-			tx.executeSql('SELECT count(*) as cnt FROM calls', [], function (rx, results)
-			{
-				var len = results.rows.length, i;
-				if ( len == 1 )
-				{
-					g_ulsCallsignsCount = results.rows[0]["cnt"];
-					ulsCountTd.innerHTML = g_ulsCallsignsCount;
-					g_callsignLookups.ulsLastUpdate = timeNowSec();
-					saveCallsignSettings();
-					ulsSettingsDisplay();
-					updateQSO();
-				}
-			});
-		});
-	}
-
-
-	return Buffer(returnBuffer);
+  return Buffer(returnBuffer);
 }
 
-function lookupUsCallsign( object , writeState = false)
-{
-	g_ulsDatabase.transaction(function (tx)
-	{
-		var qry = 'SELECT * FROM calls where callsign = "'+object.DEcall+'"';
-		tx.executeSql(qry, [], function (tx, results)
-		{
-		var len = results.rows.length, i;
-		if ( len == 1 )
-		{
-			if ( object.state == null )
-			{
-				if ( object.dxcc == 1 )
-				{
-					object.state  = "CA-"+results.rows[0]["state"];
-				}
-				else
-				{
-					object.state  = "US-"+results.rows[0]["state"];
-				}
-				if ( writeState )
-					setState(object)
-			}
-			object.zipcode = String(results.rows[0]["zip"]);
-			if ( object.cnty == null )
-			{
-				let request = g_Idb.transaction(["lookups"], "readwrite")
-			   .objectStore("lookups")
-			   .get(object.DEcall);
+function lookupUsCallsign(object, writeState = false) {
+  g_ulsDatabase.transaction(function (tx) {
+    var qry = 'SELECT * FROM calls where callsign = "' + object.DEcall + '"';
+    tx.executeSql(
+      qry,
+      [],
+      function (tx, results) {
+        var len = results.rows.length,
+          i;
+        if (len == 1) {
+          if (object.state == null) {
+            if (object.dxcc == 1) {
+              object.state = "CA-" + results.rows[0]["state"];
+            } else {
+              object.state = "US-" + results.rows[0]["state"];
+            }
+            if (writeState) setState(object);
+          }
+          object.zipcode = String(results.rows[0]["zip"]);
+          if (object.cnty == null) {
+            let request = g_Idb
+              .transaction(["lookups"], "readwrite")
+              .objectStore("lookups")
+              .get(object.DEcall);
 
-				request.onsuccess = function(event)
-				{
-					if ( request.result )
-					{
-						object.cnty = request.result.cnty;
-						object.qual = true;
-					}
+            request.onsuccess = function (event) {
+              if (request.result) {
+                object.cnty = request.result.cnty;
+                object.qual = true;
+              }
 
-					if ( object.cnty == null && object.zipcode in g_zipToCounty )
-					{
-						var counties = g_zipToCounty[object.zipcode];
-						if ( counties.length > 1 )
-							object.qual = false;
-						else
-							object.qual = true;
-						object.cnty = counties[0];
-					}
-					else
-						object.qual = false;
-					if ( writeState )
-						setState(object);
-				};
+              if (object.cnty == null && object.zipcode in g_zipToCounty) {
+                var counties = g_zipToCounty[object.zipcode];
+                if (counties.length > 1) object.qual = false;
+                else object.qual = true;
+                object.cnty = counties[0];
+              } else object.qual = false;
+              if (writeState) setState(object);
+            };
 
-				request.onerror = function(event)
-				{
-					object.qual = false;
-					if ( writeState )
-						setState(object);
-				}
-
-			}
-			if ( writeState )
-				setState(object);
-
-		 }
-
-
-		}, null);
-});
+            request.onerror = function (event) {
+              object.qual = false;
+              if (writeState) setState(object);
+            };
+          }
+          if (writeState) setState(object);
+        }
+      },
+      null
+    );
+  });
 }

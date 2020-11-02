@@ -1,120 +1,111 @@
- 
-table, th, td {
-	color:#EEE;
-	white-space: nowrap;
-	font-family:Sans-Serif;
-	text-align:auto;
-	padding:0px;
-	margin:0px;
-	top:0;
-	
+table,
+th,
+td {
+  color: #eee;
+  white-space: nowrap;
+  font-family: Sans-Serif;
+  text-align: auto;
+  padding: 0px;
+  margin: 0px;
+  top: 0;
 }
 
-table, th, td, select, .compact {font-size: 12px;}
-
-th,td {
-	padding-bottom:2px;
-	padding-right:1px;
-	margin-right:2px;
-	padding-left:2px;
+table,
+th,
+td,
+select,
+.compact {
+  font-size: 12px;
 }
 
-
-
-input[type="checkbox"] 
-{
-    -webkit-appearance: checkbox !important;
-    appearance: checkbox !important;
-	margin:0;
-	margin-right:1px;
-	vertical-align: middle;
-	position: relative;
-	top: 0px;
-
+th,
+td {
+  padding-bottom: 2px;
+  padding-right: 1px;
+  margin-right: 2px;
+  padding-left: 2px;
 }
 
-input[type="checkbox"]:checked 
-{
-   // -webkit-appearance: checkbox !important;
-   // appearance: checkbox !important;
-
+input[type="checkbox"] {
+  -webkit-appearance: checkbox !important;
+  appearance: checkbox !important;
+  margin: 0;
+  margin-right: 1px;
+  vertical-align: middle;
+  position: relative;
+  top: 0px;
 }
 
+input[type="checkbox"]:checked {
+  // -webkit-appearance: checkbox !important;
+  // appearance: checkbox !important;
+}
 
 select {
-    -webkit-appearance: none;
-    -webkit-border-radius:6px;
-    text-indent: 0.20px;
-    text-overflow: '';
-    padding: 2px;
-	padding-right: 3px;
-	background-color:darkgreen;
-    color:#ff0;
-	cursor:pointer;
-
-} 
-select:focus 
-{
-	outline:none;
+  -webkit-appearance: none;
+  -webkit-border-radius: 6px;
+  text-indent: 0.2px;
+  text-overflow: "";
+  padding: 2px;
+  padding-right: 3px;
+  background-color: darkgreen;
+  color: #ff0;
+  cursor: pointer;
+}
+select:focus {
+  outline: none;
 }
 
-select:hover
-{
-	border-color:#FFF;
+select:hover {
+  border-color: #fff;
 }
 
-select:disabled
-{
-	border:1px solid #333;
-	background-color:#000;
-	color:#AAA;
-	outline:none;
-	
+select:disabled {
+  border: 1px solid #333;
+  background-color: #000;
+  color: #aaa;
+  outline: none;
 }
 
 select option {
-    margin: 40px;
-    background: #000;
-    color: #EEE;
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -moz-border-radius:8px;
-    -webkit-border-radius:8px;
-    border-radius:8px;
-    text-indent: 0.20px;
-    text-overflow: '';
-    text-align:right;
-    padding: 5px;
+  margin: 40px;
+  background: #000;
+  color: #eee;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  text-indent: 0.2px;
+  text-overflow: "";
+  text-align: right;
+  padding: 5px;
 }
 
-select option:focus 
-{
-	color: #F00;
+select option:focus {
+  color: #f00;
 }
 
-option:disabled 
-{
-	color: #666;
+option:disabled {
+  color: #666;
 }
 
-.controlItem
-{
-	-webkit-appearance: none;
-	margin:0;
-	padding:0;
-	padding-top:1px;
-	margin-top:1px;
-	margin-bottom:1px;
-	border-width:1px;
-	border-color:#AAA;
-	border-style:inset;
-	-webkit-border-radius:4px; 
-	display:inline-block;
-	-webkit-transition:border-color;
-	vertical-align:top;
+.controlItem {
+  -webkit-appearance: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 1px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: inset;
+  -webkit-border-radius: 4px;
+  display: inline-block;
+  -webkit-transition: border-color;
+  vertical-align: top;
 }
-
 
 table.awardTableCSS {
   border-collapse: collapse;
@@ -122,16 +113,16 @@ table.awardTableCSS {
   background-color: black;
   text-align: center;
 }
-table.awardTableCSS td, table.awardTableCSS th {
+table.awardTableCSS td,
+table.awardTableCSS th {
   border: 1px solid #888;
-  padding:2px 4px;
-    border-left: none;
-    border-right: none;
+  padding: 2px 4px;
+  border-left: none;
+  border-right: none;
 }
 
 table.awardTableCSS thead {
   border-bottom: 0px solid #888;
-
 }
 table.awardTableCSS thead th {
   font-weight: bold;
@@ -140,12 +131,11 @@ table.awardTableCSS thead th {
 }
 table.awardTableCSS thead th:first-child {
   border-left: none;
- 
 }
 
-.awardTableCSS tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888; }
-
-
+.awardTableCSS tr:hover td {
+  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
+}
 
 table.rosterTable {
   border-collapse: collapse;
@@ -154,87 +144,92 @@ table.rosterTable {
   text-align: center;
 }
 
-table.rosterTable td, table.rosterTable th {
+table.rosterTable td,
+table.rosterTable th {
   border: 1px solid #555;
-  padding:2px 4px;
-  
+  padding: 2px 4px;
 }
 
 table.rosterTable thead {
   border-bottom: 1px solid #555;
-
 }
 table.rosterTable thead th {
-	font-weight: bold;
-	text-align: center;
-	border-left:1px solid #555;
-	top:-1px;
-	position:sticky;
-	background-color: #000000FF;
+  font-weight: bold;
+  text-align: center;
+  border-left: 1px solid #555;
+  top: -1px;
+  position: sticky;
+  background-color: #000000ff;
 }
-
 
 table.rosterTable thead th:first-child {
   border-left: none;
- 
 }
 
-.rosterTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #555, inset 0px -11px 6px -8px #555; }
+.rosterTable tr:hover td {
+  box-shadow: inset 0px 11px 6px -8px #555, inset 0px -11px 6px -8px #555;
+}
 
 .oneByOne {
-	background-clip:content-box;box-shadow: 0 0 8px 3px inset #FFF;background-color:#000;color:#FF0;
+  background-clip: content-box;
+  box-shadow: 0 0 8px 3px inset #fff;
+  background-color: #000;
+  color: #ff0;
 }
 
 .dxCaller {
-	background-clip:content-box;box-shadow: 0 0 4px 4px inset #0F0;background-color:#000;color:#FF0;
+  background-clip: content-box;
+  box-shadow: 0 0 4px 4px inset #0f0;
+  background-color: #000;
+  color: #ff0;
 }
 
 .dxCalling {
-	background-clip:content-box;box-shadow: 0 0 4px 4px inset #F00;background-color:#000;color:#FF0;
+  background-clip: content-box;
+  box-shadow: 0 0 4px 4px inset #f00;
+  background-color: #000;
+  color: #ff0;
 }
 
-
-.compact
-{
-	cursor:pointer;
-	margin:0px;
-	padding:0px;
-	margin-right:2px;
-	margin-bottom:2px;
-	border-width:2px;
-	border-color:#999;
-	border-style:outset;
-	min-width: 9em;
-	min-height: 2em;
-	display:inline-block;
-	color:#EEE;
-	-webkit-transition: border-style;
-	-webkit-border-radius:4px; 
+.compact {
+  cursor: pointer;
+  margin: 0px;
+  padding: 0px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  border-width: 2px;
+  border-color: #999;
+  border-style: outset;
+  min-width: 9em;
+  min-height: 2em;
+  display: inline-block;
+  color: #eee;
+  -webkit-transition: border-style;
+  -webkit-border-radius: 4px;
 }
 
-.compact:active
-{
-	border-style:inset;
+.compact:active {
+  border-style: inset;
 }
 
 .compact:hover {
-	border-color:#FFF;
+  border-color: #fff;
 }
 
 .compactCallsign {
-	padding:1px;
-	overflow: hidden;
-	white-space: nowrap;
+  padding: 1px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .compactDXCC {
-	padding:2px;
-	max-width: 9em;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  padding: 2px;
+  max-width: 9em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-
-
-.rosterTable tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888; }
+.rosterTable tr:hover td {
+  box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
+}

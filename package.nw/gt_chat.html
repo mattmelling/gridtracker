@@ -13,671 +13,710 @@
     You should have received a copy of the GNU General Public License
     along with GridTracker.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%;width:100%" >
-<head >
-<title>Off-Air Message Service (OAMS)</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="./lib/style.css">
-<style type="text/css">
-table, th, td, body, input {
-	color: #FFF;
-	white-space: nowrap;
-	font-family: Sans-Serif;
-	font-size: 13px;
-	text-align: auto;
-}
-.boxDisplay {
-	margin: 1px;
-	padding: 2px;
-	border-width: 2px;
-	border-color: #AAA;
-	border-style: inset;
-	vertical-align: top;
-	-webkit-border-radius: 4px;
-}
-textarea {
-	width: 100%;
-	resize: none;
-	font-size:15px;
-}
-.self {
-	color: #FFFF00;
-	font-weight: bold;
-}
-.them {
-	color: #00FFFF;
-	font-weight: bold;
-}
-.system {
-	color: #FF0000;
-	font-weight: bold;
-}
-.when {
-	color: #777777;
-	font-size: 12px;
-}
-.msgText {
-	color: #EEEEEE;
-	font-size: 15px;
-}
-.msgTextUnicode {
-	color: #EEEEEE;
-	font-size: 15px;
-}
+<html xmlns="http://www.w3.org/1999/xhtml" style="height: 100%; width: 100%">
+  <head>
+    <title>Off-Air Message Service (OAMS)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="./lib/style.css" />
+    <style type="text/css">
+      table,
+      th,
+      td,
+      body,
+      input {
+        color: #fff;
+        white-space: nowrap;
+        font-family: Sans-Serif;
+        font-size: 13px;
+        text-align: auto;
+      }
+      .boxDisplay {
+        margin: 1px;
+        padding: 2px;
+        border-width: 2px;
+        border-color: #aaa;
+        border-style: inset;
+        vertical-align: top;
+        -webkit-border-radius: 4px;
+      }
+      textarea {
+        width: 100%;
+        resize: none;
+        font-size: 15px;
+      }
+      .self {
+        color: #ffff00;
+        font-weight: bold;
+      }
+      .them {
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .system {
+        color: #ff0000;
+        font-weight: bold;
+      }
+      .when {
+        color: #777777;
+        font-size: 12px;
+      }
+      .msgText {
+        color: #eeeeee;
+        font-size: 15px;
+      }
+      .msgTextUnicode {
+        color: #eeeeee;
+        font-size: 15px;
+      }
 
-body {
-	background-image: url(img/gridtracker10.png);
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-position: center;
-}
-#callsign {
-	color: #00FFFF;
-	font-weight: bold;
-}
-#country,#dxcc {
-	color: #FFFF00;
-	font-weight: bold;
-}
-#grid {
-	color: orange;
-	font-weight: bold;
-}
-#band {
-	color: #009900;
-	font-weight: bold;
-}
-#mode {
-	color: #EE0000;
-	font-weight: bold;
-}
+      body {
+        background-image: url(img/gridtracker10.png);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+      }
+      #callsign {
+        color: #00ffff;
+        font-weight: bold;
+      }
+      #country,
+      #dxcc {
+        color: #ffff00;
+        font-weight: bold;
+      }
+      #grid {
+        color: orange;
+        font-weight: bold;
+      }
+      #band {
+        color: #009900;
+        font-weight: bold;
+      }
+      #mode {
+        color: #ee0000;
+        font-weight: bold;
+      }
 
-.rosterOn {
-	color: #FFFFFF;
-}
+      .rosterOn {
+        color: #ffffff;
+      }
 
-.rosterOff {
-	color: #777777;
-}
+      .rosterOff {
+        color: #777777;
+      }
 
-.imgGray {
-  -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
-}
+      .imgGray {
+        -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+      }
 
-.imgNoFilter {
-}
+      .imgNoFilter {
+      }
 
-input:focus, textarea:focus, select:focus{
+      input:focus,
+      textarea:focus,
+      select:focus {
         outline: none;
-}
+      }
 
-table {
-    border-collapse: collapse;
-}
+      table {
+        border-collapse: collapse;
+      }
 
-tr:hover td{  box-shadow: inset 0px 11px 6px -8px #888,
-						inset 0px -11px 6px -8px #888; }
+      tr:hover td {
+        box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
+      }
+    </style>
+    <script src="./lib/protos.js" type="text/javascript"></script>
+    <script src="./lib/third-party.js" type="text/javascript"></script>
+    <script src="./lib/screens.js"></script>
+    <script type="text/javascript">
+      var g_rosterSettings = null;
 
-</style>
-<script src="./lib/protos.js" type="text/javascript" ></script>
-<script src="./lib/third-party.js" type="text/javascript" ></script>
-<script src="./lib/screens.js"></script>
-<script type="text/javascript">
-
-var g_rosterSettings = null;
-
-document.addEventListener("dragover", function (event) {
-	event.preventDefault();
-});
-
-document.addEventListener("drop", function (event) {
-	event.preventDefault();
-});
-
-function timeNowSec()
-{
-    return parseInt(Date.now() / 1000);
-}
-
-function lockNewWindows()
-{
-  if ( typeof nw != 'undefined' )
-    {
-      var gui = require('nw.gui');
-      var win = gui.Window.get();
-      win.on('new-win-policy', function (frame, url, policy) {
-        gui.Shell.openExternal(url);
-        policy.ignore();
+      document.addEventListener("dragover", function (event) {
+        event.preventDefault();
       });
-    }
-}
-
-
-function scrollDown( objDiv )
-{
-	objDiv.scrollTop = objDiv.scrollHeight;
-}
-
-function scrollUp( objDiv )
-{
-	objDiv.scrollTop = 0;
-}
-
-function htmlEntities(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-function userAgrees()
-{
-	window.opener.g_appSettings.gtAgree = "user agrees to messaging";
-	noticeDiv.style.display = "none";
-	wrapperDiv.style.display = "block";
-}
-
-document.addEventListener('keyup', handleKey, false);
-
-function handleKey( event )
-{
-    if (event.key === "Enter")
-	{
-        // Do work
-		var msg = messageInput.value.trim();
-		if ( msg.length > 0 && g_currentId != 0 && g_currentId in window.opener.g_gtFlagPins && window.opener.g_gtFlagPins[g_currentId].canmsg == true )
-		{
-			var worker = "";
-			// No message history, so lets clear the div
-			if ( !(g_currentId in window.opener.g_gtMessages) )
-				messageTextDiv.innerHTML = "";
-
-			if ( g_currentId in window.opener.g_gtSentAwayToCid )
-			{
-				var thisMsg = "Returned from away."
-				window.opener.gtSendMessage(thisMsg, g_currentId);
-				worker = makeViewMessage("self", window.opener.myDEcall,thisMsg);
-				messageTextDiv.innerHTML += worker;
-				delete window.opener.g_gtSentAwayToCid[g_currentId];
-			}
-			if (  window.opener.g_msgSettings.msgAwaySelect == 1 )
-			{
-				window.opener.msgAwaySelect.value = 0;
-				window.opener.newMessageSetting( window.opener.msgAwaySelect );
-			}
-			window.opener.gtSendMessage(msg, g_currentId);
-			worker = makeViewMessage("self", window.opener.myDEcall, htmlEntities(msg));
-			messageTextDiv.innerHTML += worker;
-			scrollDown(messageTextDiv);
-		}
-		messageInput.value = "";
-    };
-}
-
-function init()
-{
-	lockNewWindows();
-
-	if (window.opener.g_appSettings.gtAgree != "user agrees to messaging")
-	{
-		noticeDiv.style.display = "block";
-		wrapperDiv.style.display = "none";
-	}
-	else
-	{
-		noticeDiv.style.display = "none";
-		wrapperDiv.style.display = "inline-block";
-		Resize();
-	}
-	showAllCallsigns();
-
-}
-
-
-var g_viewBand = 0;
-
-function toggleBand()
-{
-	g_viewBand ^= 1;
-	showAllCallsigns();
-}
-
-var g_viewMode = 0;
-
-function toggleMode()
-{
-	g_viewMode ^= 1;
-	showAllCallsigns();
-}
-
-
-
-function openIdCid( from )
-{
-	if ( typeof window.opener.g_gtFlagPins[from.currentTarget.id] != "undefined" )
-	{
-
-		openId(from.currentTarget.id);
-	}
-	else
-		allCallTable.deleteRow(from.currentTarget.rowIndex);
-}
-
-function openLookupCid( from )
-{
-	from.preventDefault();
-
-	if ( typeof window.opener.g_gtFlagPins[from.currentTarget.id] != "undefined" )
-	{
-		doLookup(window.opener.g_gtFlagPins[from.currentTarget.id].call);
-	}
-	else
-		allCallTable.deleteRow(from.currentTarget.rowIndex);
-}
-
-function onHoverCid( from )
-{
-	var cid = from.currentTarget.parentNode.id;
-	if ( typeof window.opener.g_gtFlagPins[cid] != "undefined" )
-	{
-		from.currentTarget.title = window.opener.g_gtFlagPins[cid].band + " , " +  window.opener.g_gtFlagPins[cid].mode + " , " + window.opener.g_dxccToAltName[window.opener.g_gtFlagPins[cid].dxcc];
-	}
-}
-
-function onNoHoverCid( from )
-{
-	from.currentTarget.title = null;
-}
-
-function makeCallsignRow( callObj, show )
-{
-	var oldRow = document.getElementById(callObj.cid);
-
-	if ( !oldRow )
-	{
-		var newCall = callObj.call.formatCallsign();
-
-		var x;
-		for ( x = 0; x < allCallTable.rows.length &&  newCall.localeCompare(allCallTable.rows[x].cells[0].innerHTML) != -1 ; x++ )
-		{
-			// just count
-		}
-
-		var row = allCallTable.insertRow(x);
-		row.id = callObj.cid;
-
-		row.style.cursor = "pointer";
-		row.style.display = show?"":"none";
-		row.onclick = openIdCid;
-		row.oncontextmenu = openLookupCid;
-
-		var td = row.insertCell();
-
-		td.className = callObj.live==false?"rosterOff":"rosterOn";
-		td.innerHTML = newCall;
-		td.onmouseenter = onHoverCid;
-		td.onmouseout = onNoHoverCid;
-
-		if (callObj.dxcc > 0 && (callObj.dxcc in window.opener.g_dxccToGeoData))
-		{
-			var imgClass = callObj.live==false?"imgGray":"imgNoFilter";
-			td = row.insertCell();
-			td.innerHTML = "<img class='"+imgClass+"' style='padding-bottom:0px' src='./img/flags/16/" + window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].flag + "'>";
-		}
-	}
-	else
-	{
-		oldRow.style.display = show?"":"none";
-	}
-}
-
-function showAllCallsigns()
-{
-	var count = 0;
-	for (var x in window.opener.g_gtFlagPins)
-	{
-		var obj = window.opener.g_gtFlagPins[x];
-		if (obj.call != "" && obj.call != "NOCALL" && obj.canmsg == true )
-		{
-			var show = true;
-			try {
-				if ( searchBox.value.length > 0 && !obj.call.match(searchBox.value)  )
-				{
-					show = false;
-				}
-			}
-			catch(e){
-			}
-
-			if ( g_viewBand > 0 && window.opener.myBand != obj.band )
-				show = false;
-
-			if ( g_viewMode > 0 && window.opener.myMode != obj.mode )
-				show = false;
-
-			if ( show )
-				count++;
-
-			makeCallsignRow(obj, show);
-
-			if (  obj.cid == g_currentId && messageInput.disabled==true && obj.live == true )
-			{
-				messageTextDiv.innerHTML += makeViewMessage("system","GT","Session resumed",null);
-				messageInput.value = "";
-				scrollDown(messageTextDiv);
-				messageInput.disabled=false;
-			}
-		}
-	}
-
-	if ( typeof allCallTable.childNodes != "undefined" && 0 in allCallTable.childNodes )
-	{
-		for ( var x = 0; x < allCallTable.childNodes[0].rows.length; x++ )
-		{
-			if (  !(allCallTable.childNodes[0].rows[x].id in window.opener.g_gtFlagPins) )
-			{
-				var close =  allCallTable.childNodes[0].rows[x];
-				allCallTable.deleteRow(close.rowIndex);
-				x = 0; // start over!
-				close = null;
-			}
-		}
-	}
-	updateBar(g_currentId);
-	userCount.innerHTML = count;
-
-	if ( g_viewBand )
-	{
-		viewBand.innerHTML = window.opener.myBand;
-	}
-	else
-	{
-		viewBand.innerHTML = "All"
-	}
-
-	if ( g_viewMode )
-	{
-		viewMode.innerHTML = window.opener.myMode;
-	}
-	else
-	{
-		viewMode.innerHTML = "All";
-	}
-
-	showAllMessages();
-	Resize();
-}
-
-function showAllMessages()
-{
-	if ( Object.keys(window.opener.g_gtMessages).length > 0  )
-	{
-		var worker = "<table style='width:100%;'>";
-		for ( var key in window.opener.g_gtMessages )
-		{
-			worker += "<tr style='cursor:pointer;vertical-align:bottom;'><td align=left onclick=\"openId('"+key+"');\">";
-			if ( key in window.opener.g_gtUnread )
-				worker += "🔥";
-			else
-				worker += "💬";
-
-			worker +=  "</td><td align=left style='color:cyan;' onclick=\"openId('"+key+"');\" >"+window.opener.g_gtFlagPins[key].call.formatCallsign()+"</td>";
-			worker +=  "<td align=right title='Clear Messages' style='padding-bottom:2px' onclick=\"clearMessage('"+key+"');\"  >❌</td></tr>";
-		}
-
-		worker += "</table>";
-		activeCallsignsDiv.innerHTML = worker;
-	}
-	else
-	{
-		activeCallsignsDiv.innerHTML = "<font color='gray'>no message history</font>";
-	}
-}
-
-function clearMessage( what )
-{
-	try {
-		if ( what in window.opener.g_gtMessages )
-			delete window.opener.g_gtMessages[what];
-		if ( what in window.opener.g_gtUnread )
-			delete window.opener.g_gtUnread[what];
-	}
-	catch (e)
-	{
-	}
-
-	if ( what  == g_currentId )
-	{
-		g_currentId = "";
-		openId(what);
-	}
-	showAllMessages();
-	Resize();
-}
-
-function updateEverything()
-{
-	showAllCallsigns();
-}
-
-var g_currentId = 0;
-
-var regex = /[^\u0000-\u00ff]/; // Small performance gain from pre-compiling the regex
-function containsDoubleByte(str) {
-    if (!str.length) return false;
-    if (str.charCodeAt(0) > 255) return true;
-    return regex.test(str);
-}
-
-function makeViewMessage(className, who, msg, when)
-{
-		var who = "<text class='"+className+"'>"+who.formatCallsign()+"</text>";
-		var time = "<text class='when'>"+ window.opener.userTimeString(when) +"</text>";
-		var worker = who+" "+time+"</br>";
-		var newMsg = msg.replace(new RegExp('\r?\n','g'), '<br />');
-		var msgTextClass = containsDoubleByte(newMsg)?"msgTextUnicode":"msgText";
-		worker += "<text class='"+ msgTextClass +"' >" + newMsg.linkify() + "</text><br/>";
-		return worker;
-}
-
-function newChatMessage(id,jsmesg)
-{
-	if ( id == g_currentId )
-	{
-		var worker = makeViewMessage("them",window.opener.g_gtFlagPins[id].call,jsmesg.msg,jsmesg.when);
-		if ( id in window.opener.g_gtUnread )
-			delete  window.opener.g_gtUnread[id];
-		messageTextDiv.innerHTML += worker;
-		scrollDown(messageTextDiv);
-		return document.hasFocus();
-	}
-	return false;
-}
-
-function closeMessageArea()
-{
-	messageAreaDiv.style.display = "none";
-	g_currentId = 0;
-}
-
-function notifyNoChat(id)
-{
-	if ( id == g_currentId )
-	{
-		messageTextDiv.innerHTML += makeViewMessage("system","GT","Session ended",null);
-		messageInput.value = "...this session is no longer available...";
-		scrollDown(messageTextDiv);
-		messageInput.disabled=true;
-	}
-}
-
-function updateBar(id)
-{
-	if ( id == 0 )
-		return;
-
-	if ( id in window.opener.g_gtFlagPins )
-	{
-		callsign.innerHTML = window.opener.g_gtFlagPins[id].call.formatCallsign();
-		country.innerHTML =   window.opener.g_dxccToAltName[window.opener.g_gtFlagPins[id].dxcc];
-		grid.innerHTML = window.opener.g_gtFlagPins[id].grid;
-		band.innerHTML = window.opener.g_gtFlagPins[id].band;
-		mode.innerHTML = window.opener.g_gtFlagPins[id].mode;
-	}
-
-}
-function openId(id)
-{
-	updateBar(id);
-	// already displayed?
-	if ( id == g_currentId && messageAreaDiv.style.display == "inline-block" )
-		return;
-
-	if ( !(id in window.opener.g_gtFlagPins) )
-		return;
-
-	var worker = "";
-	if ( id in window.opener.g_gtMessages &&  window.opener.g_gtMessages[id].history.length > 0 )
-	{
-		for ( msg in window.opener.g_gtMessages[id].history )
-		{
-			if ( window.opener.g_gtMessages[id].history[msg].id != 0 )
-				worker += makeViewMessage("them",window.opener.g_gtFlagPins[id].call,window.opener.g_gtMessages[id].history[msg].msg,window.opener.g_gtMessages[id].history[msg].when);
-			else
-				worker += makeViewMessage("self",window.opener.myDEcall,window.opener.g_gtMessages[id].history[msg].msg,window.opener.g_gtMessages[id].history[msg].when);
-		}
-		if ( id in window.opener.g_gtUnread )
-		{
-			delete  window.opener.g_gtUnread[id];
-			showAllCallsigns();
-		}
-	}
-	messageTextDiv.innerHTML = worker;
-	g_currentId = id;
-	messageAreaDiv.style.display = "inline-block";
-
-	if ( window.opener.g_gtFlagPins[id].live == false )
-	{
-		notifyNoChat(id);
-	}
-	else
-	{
-		messageInput.disabled=false;
-		messageInput.value = "";
-	}
-	scrollDown(messageTextDiv);
-	Resize();
-}
-
-if(!String.linkify) {
-    String.prototype.linkify = function() {
-
-        // http://, https://, ftp://
-        var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
-
-        // www. sans http:// or https://
-        var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-
-        // Email addresses
-        var emailAddressPattern = /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim;
-
-        return this
-            .replace(urlPattern, '<a style="color:cyan" target="_blank" href="$&">$&</a>')
+
+      document.addEventListener("drop", function (event) {
+        event.preventDefault();
+      });
+
+      function timeNowSec() {
+        return parseInt(Date.now() / 1000);
+      }
+
+      function lockNewWindows() {
+        if (typeof nw != "undefined") {
+          var gui = require("nw.gui");
+          var win = gui.Window.get();
+          win.on("new-win-policy", function (frame, url, policy) {
+            gui.Shell.openExternal(url);
+            policy.ignore();
+          });
+        }
+      }
+
+      function scrollDown(objDiv) {
+        objDiv.scrollTop = objDiv.scrollHeight;
+      }
+
+      function scrollUp(objDiv) {
+        objDiv.scrollTop = 0;
+      }
+
+      function htmlEntities(str) {
+        return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      }
+
+      function userAgrees() {
+        window.opener.g_appSettings.gtAgree = "user agrees to messaging";
+        noticeDiv.style.display = "none";
+        wrapperDiv.style.display = "block";
+      }
+
+      document.addEventListener("keyup", handleKey, false);
+
+      function handleKey(event) {
+        if (event.key === "Enter") {
+          // Do work
+          var msg = messageInput.value.trim();
+          if (
+            msg.length > 0 &&
+            g_currentId != 0 &&
+            g_currentId in window.opener.g_gtFlagPins &&
+            window.opener.g_gtFlagPins[g_currentId].canmsg == true
+          ) {
+            var worker = "";
+            // No message history, so lets clear the div
+            if (!(g_currentId in window.opener.g_gtMessages)) messageTextDiv.innerHTML = "";
+
+            if (g_currentId in window.opener.g_gtSentAwayToCid) {
+              var thisMsg = "Returned from away.";
+              window.opener.gtSendMessage(thisMsg, g_currentId);
+              worker = makeViewMessage("self", window.opener.myDEcall, thisMsg);
+              messageTextDiv.innerHTML += worker;
+              delete window.opener.g_gtSentAwayToCid[g_currentId];
+            }
+            if (window.opener.g_msgSettings.msgAwaySelect == 1) {
+              window.opener.msgAwaySelect.value = 0;
+              window.opener.newMessageSetting(window.opener.msgAwaySelect);
+            }
+            window.opener.gtSendMessage(msg, g_currentId);
+            worker = makeViewMessage("self", window.opener.myDEcall, htmlEntities(msg));
+            messageTextDiv.innerHTML += worker;
+            scrollDown(messageTextDiv);
+          }
+          messageInput.value = "";
+        }
+      }
+
+      function init() {
+        lockNewWindows();
+
+        if (window.opener.g_appSettings.gtAgree != "user agrees to messaging") {
+          noticeDiv.style.display = "block";
+          wrapperDiv.style.display = "none";
+        } else {
+          noticeDiv.style.display = "none";
+          wrapperDiv.style.display = "inline-block";
+          Resize();
+        }
+        showAllCallsigns();
+      }
+
+      var g_viewBand = 0;
+
+      function toggleBand() {
+        g_viewBand ^= 1;
+        showAllCallsigns();
+      }
+
+      var g_viewMode = 0;
+
+      function toggleMode() {
+        g_viewMode ^= 1;
+        showAllCallsigns();
+      }
+
+      function openIdCid(from) {
+        if (typeof window.opener.g_gtFlagPins[from.currentTarget.id] != "undefined") {
+          openId(from.currentTarget.id);
+        } else allCallTable.deleteRow(from.currentTarget.rowIndex);
+      }
+
+      function openLookupCid(from) {
+        from.preventDefault();
+
+        if (typeof window.opener.g_gtFlagPins[from.currentTarget.id] != "undefined") {
+          doLookup(window.opener.g_gtFlagPins[from.currentTarget.id].call);
+        } else allCallTable.deleteRow(from.currentTarget.rowIndex);
+      }
+
+      function onHoverCid(from) {
+        var cid = from.currentTarget.parentNode.id;
+        if (typeof window.opener.g_gtFlagPins[cid] != "undefined") {
+          from.currentTarget.title =
+            window.opener.g_gtFlagPins[cid].band +
+            " , " +
+            window.opener.g_gtFlagPins[cid].mode +
+            " , " +
+            window.opener.g_dxccToAltName[window.opener.g_gtFlagPins[cid].dxcc];
+        }
+      }
+
+      function onNoHoverCid(from) {
+        from.currentTarget.title = null;
+      }
+
+      function makeCallsignRow(callObj, show) {
+        var oldRow = document.getElementById(callObj.cid);
+
+        if (!oldRow) {
+          var newCall = callObj.call.formatCallsign();
+
+          var x;
+          for (
+            x = 0;
+            x < allCallTable.rows.length && newCall.localeCompare(allCallTable.rows[x].cells[0].innerHTML) != -1;
+            x++
+          ) {
+            // just count
+          }
+
+          var row = allCallTable.insertRow(x);
+          row.id = callObj.cid;
+
+          row.style.cursor = "pointer";
+          row.style.display = show ? "" : "none";
+          row.onclick = openIdCid;
+          row.oncontextmenu = openLookupCid;
+
+          var td = row.insertCell();
+
+          td.className = callObj.live == false ? "rosterOff" : "rosterOn";
+          td.innerHTML = newCall;
+          td.onmouseenter = onHoverCid;
+          td.onmouseout = onNoHoverCid;
+
+          if (callObj.dxcc > 0 && callObj.dxcc in window.opener.g_dxccToGeoData) {
+            var imgClass = callObj.live == false ? "imgGray" : "imgNoFilter";
+            td = row.insertCell();
+            td.innerHTML =
+              "<img class='" +
+              imgClass +
+              "' style='padding-bottom:0px' src='./img/flags/16/" +
+              window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].flag +
+              "'>";
+          }
+        } else {
+          oldRow.style.display = show ? "" : "none";
+        }
+      }
+
+      function showAllCallsigns() {
+        var count = 0;
+        for (var x in window.opener.g_gtFlagPins) {
+          var obj = window.opener.g_gtFlagPins[x];
+          if (obj.call != "" && obj.call != "NOCALL" && obj.canmsg == true) {
+            var show = true;
+            try {
+              if (searchBox.value.length > 0 && !obj.call.match(searchBox.value)) {
+                show = false;
+              }
+            } catch (e) {}
+
+            if (g_viewBand > 0 && window.opener.myBand != obj.band) show = false;
+
+            if (g_viewMode > 0 && window.opener.myMode != obj.mode) show = false;
+
+            if (show) count++;
+
+            makeCallsignRow(obj, show);
+
+            if (obj.cid == g_currentId && messageInput.disabled == true && obj.live == true) {
+              messageTextDiv.innerHTML += makeViewMessage("system", "GT", "Session resumed", null);
+              messageInput.value = "";
+              scrollDown(messageTextDiv);
+              messageInput.disabled = false;
+            }
+          }
+        }
+
+        if (typeof allCallTable.childNodes != "undefined" && 0 in allCallTable.childNodes) {
+          for (var x = 0; x < allCallTable.childNodes[0].rows.length; x++) {
+            if (!(allCallTable.childNodes[0].rows[x].id in window.opener.g_gtFlagPins)) {
+              var close = allCallTable.childNodes[0].rows[x];
+              allCallTable.deleteRow(close.rowIndex);
+              x = 0; // start over!
+              close = null;
+            }
+          }
+        }
+        updateBar(g_currentId);
+        userCount.innerHTML = count;
+
+        if (g_viewBand) {
+          viewBand.innerHTML = window.opener.myBand;
+        } else {
+          viewBand.innerHTML = "All";
+        }
+
+        if (g_viewMode) {
+          viewMode.innerHTML = window.opener.myMode;
+        } else {
+          viewMode.innerHTML = "All";
+        }
+
+        showAllMessages();
+        Resize();
+      }
+
+      function showAllMessages() {
+        if (Object.keys(window.opener.g_gtMessages).length > 0) {
+          var worker = "<table style='width:100%;'>";
+          for (var key in window.opener.g_gtMessages) {
+            worker +=
+              "<tr style='cursor:pointer;vertical-align:bottom;'><td align=left onclick=\"openId('" + key + "');\">";
+            if (key in window.opener.g_gtUnread) worker += "🔥";
+            else worker += "💬";
+
+            worker +=
+              "</td><td align=left style='color:cyan;' onclick=\"openId('" +
+              key +
+              "');\" >" +
+              window.opener.g_gtFlagPins[key].call.formatCallsign() +
+              "</td>";
+            worker +=
+              "<td align=right title='Clear Messages' style='padding-bottom:2px' onclick=\"clearMessage('" +
+              key +
+              "');\"  >❌</td></tr>";
+          }
+
+          worker += "</table>";
+          activeCallsignsDiv.innerHTML = worker;
+        } else {
+          activeCallsignsDiv.innerHTML = "<font color='gray'>no message history</font>";
+        }
+      }
+
+      function clearMessage(what) {
+        try {
+          if (what in window.opener.g_gtMessages) delete window.opener.g_gtMessages[what];
+          if (what in window.opener.g_gtUnread) delete window.opener.g_gtUnread[what];
+        } catch (e) {}
+
+        if (what == g_currentId) {
+          g_currentId = "";
+          openId(what);
+        }
+        showAllMessages();
+        Resize();
+      }
+
+      function updateEverything() {
+        showAllCallsigns();
+      }
+
+      var g_currentId = 0;
+
+      var regex = /[^\u0000-\u00ff]/; // Small performance gain from pre-compiling the regex
+      function containsDoubleByte(str) {
+        if (!str.length) return false;
+        if (str.charCodeAt(0) > 255) return true;
+        return regex.test(str);
+      }
+
+      function makeViewMessage(className, who, msg, when) {
+        var who = "<text class='" + className + "'>" + who.formatCallsign() + "</text>";
+        var time = "<text class='when'>" + window.opener.userTimeString(when) + "</text>";
+        var worker = who + " " + time + "</br>";
+        var newMsg = msg.replace(new RegExp("\r?\n", "g"), "<br />");
+        var msgTextClass = containsDoubleByte(newMsg) ? "msgTextUnicode" : "msgText";
+        worker += "<text class='" + msgTextClass + "' >" + newMsg.linkify() + "</text><br/>";
+        return worker;
+      }
+
+      function newChatMessage(id, jsmesg) {
+        if (id == g_currentId) {
+          var worker = makeViewMessage("them", window.opener.g_gtFlagPins[id].call, jsmesg.msg, jsmesg.when);
+          if (id in window.opener.g_gtUnread) delete window.opener.g_gtUnread[id];
+          messageTextDiv.innerHTML += worker;
+          scrollDown(messageTextDiv);
+          return document.hasFocus();
+        }
+        return false;
+      }
+
+      function closeMessageArea() {
+        messageAreaDiv.style.display = "none";
+        g_currentId = 0;
+      }
+
+      function notifyNoChat(id) {
+        if (id == g_currentId) {
+          messageTextDiv.innerHTML += makeViewMessage("system", "GT", "Session ended", null);
+          messageInput.value = "...this session is no longer available...";
+          scrollDown(messageTextDiv);
+          messageInput.disabled = true;
+        }
+      }
+
+      function updateBar(id) {
+        if (id == 0) return;
+
+        if (id in window.opener.g_gtFlagPins) {
+          callsign.innerHTML = window.opener.g_gtFlagPins[id].call.formatCallsign();
+          country.innerHTML = window.opener.g_dxccToAltName[window.opener.g_gtFlagPins[id].dxcc];
+          grid.innerHTML = window.opener.g_gtFlagPins[id].grid;
+          band.innerHTML = window.opener.g_gtFlagPins[id].band;
+          mode.innerHTML = window.opener.g_gtFlagPins[id].mode;
+        }
+      }
+      function openId(id) {
+        updateBar(id);
+        // already displayed?
+        if (id == g_currentId && messageAreaDiv.style.display == "inline-block") return;
+
+        if (!(id in window.opener.g_gtFlagPins)) return;
+
+        var worker = "";
+        if (id in window.opener.g_gtMessages && window.opener.g_gtMessages[id].history.length > 0) {
+          for (msg in window.opener.g_gtMessages[id].history) {
+            if (window.opener.g_gtMessages[id].history[msg].id != 0)
+              worker += makeViewMessage(
+                "them",
+                window.opener.g_gtFlagPins[id].call,
+                window.opener.g_gtMessages[id].history[msg].msg,
+                window.opener.g_gtMessages[id].history[msg].when
+              );
+            else
+              worker += makeViewMessage(
+                "self",
+                window.opener.myDEcall,
+                window.opener.g_gtMessages[id].history[msg].msg,
+                window.opener.g_gtMessages[id].history[msg].when
+              );
+          }
+          if (id in window.opener.g_gtUnread) {
+            delete window.opener.g_gtUnread[id];
+            showAllCallsigns();
+          }
+        }
+        messageTextDiv.innerHTML = worker;
+        g_currentId = id;
+        messageAreaDiv.style.display = "inline-block";
+
+        if (window.opener.g_gtFlagPins[id].live == false) {
+          notifyNoChat(id);
+        } else {
+          messageInput.disabled = false;
+          messageInput.value = "";
+        }
+        scrollDown(messageTextDiv);
+        Resize();
+      }
+
+      if (!String.linkify) {
+        String.prototype.linkify = function () {
+          // http://, https://, ftp://
+          var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+
+          // www. sans http:// or https://
+          var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+
+          // Email addresses
+          var emailAddressPattern = /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim;
+
+          return this.replace(urlPattern, '<a style="color:cyan" target="_blank" href="$&">$&</a>')
             .replace(pseudoUrlPattern, '$1<a style="color:cyan" target="_blank" href="http://$2">$2</a>')
             .replace(emailAddressPattern, '<a style="color:orange" target="_blank" href="mailto:$&">$&</a>');
-    };
-}
+        };
+      }
 
-function Resize()
-{
-	var height = window.innerHeight;
-	var width = window.innerWidth;
+      function Resize() {
+        var height = window.innerHeight;
+        var width = window.innerWidth;
 
-	width -= allCallsignsDiv.offsetWidth;
-	width -= 6;
+        width -= allCallsignsDiv.offsetWidth;
+        width -= 6;
 
-	height -= messageInfoDiv.offsetHeight;
-	height -= messageInputDiv.offsetHeight;
-	height -= 19;
+        height -= messageInfoDiv.offsetHeight;
+        height -= messageInputDiv.offsetHeight;
+        height -= 19;
 
-	messageAreaDiv.style.width = width + "px";
-	messageInputDiv.style.width = width + "px";
-	messageTextDiv.style.height = height + "px";
+        messageAreaDiv.style.width = width + "px";
+        messageInputDiv.style.width = width + "px";
+        messageTextDiv.style.height = height + "px";
 
-	allCallsignsDiv.style.bottom  = (activeCallsignsDiv.clientHeight + 8) + "px";
+        allCallsignsDiv.style.bottom = activeCallsignsDiv.clientHeight + 8 + "px";
+      }
 
+      function KeepUpper(inputText) {
+        if (inputText.value.length > 0) {
+          inputText.value = inputText.value.toUpperCase();
+          clearSearch.style.display = "block";
+        } else {
+          clearSearch.style.display = "none";
+        }
+        showAllCallsigns();
+      }
 
-}
+      function doLookup(what) {
+        if (typeof what == "string") window.opener.startLookup(what, "");
+      }
+    </script>
+  </head>
+  <body onLoad="init();" style="height: 100%; width: 100%" onresize="Resize();">
+    <div id="noticeDiv" style="display: none; width: 80%; overflow-wrap: break-word; white-space: normal">
+      <b>NOTICE</b>: GridTracker chat is not encrypted or obfuscated beyond HTTPS. This means that it's sent as
+      plaintext that is vulnerable to hackers, pirates, the NSA, your wife, and anyone that thinks you're interesting
+      enough to monitor.
+      <p>
+        <b>NEVER</b> give passwords, credit card numbers, safe combinations or any personal information that you don't
+        want bad people to know because there are some very bad people out there.
+      </p>
 
-function KeepUpper(inputText) {
+      <p>
+        Not us, though. While GridTracker is free, unlike some other free apps, we don't store, save, sell, peek at or
+        otherwise do anything with the chat that would violate your trust. We don't keep logs. We don't save Metadata.
+        We just don't.
+      </p>
 
-	if ((inputText.value.length > 0)) {
-		inputText.value = inputText.value.toUpperCase();
-		clearSearch.style.display="block";
-	}
-	else
-	{
-		clearSearch.style.display="none";
-	}
-	showAllCallsigns();
-}
+      <p>
+        Close GridTracker, lose the text. So write anything down you want to save.
+        <br />Because when it's gone, gone is forever.
+      </p>
 
-function doLookup(what )
-{
-	if (typeof what == "string")
-		window.opener.startLookup(what,"");
-}
+      <p>
+        <br />
+      </p>
 
-
-
-
-</script>
-</head>
-<body onLoad="init();" style="height:100%;width:100%" onresize="Resize();" >
-<div id="noticeDiv" style="display:none;width:80%;overflow-wrap:break-word;white-space:normal;">
-<b>NOTICE</b>: GridTracker chat is not encrypted or obfuscated beyond HTTPS.  This means that it's sent as plaintext that is vulnerable to hackers, pirates, the NSA, your wife, and anyone that thinks you're interesting enough to monitor.
-<p>
-<b>NEVER</b> give passwords, credit card numbers, safe combinations or any personal information that you don't want bad people to know because there are some very bad people out there.
-<p>
-Not us, though.  While GridTracker is free, unlike some other free apps, we don't store, save, sell, peek at or otherwise do anything with the chat that would violate your trust. We don't keep logs.  We don't save Metadata.  We just don't.
-<p>
-Close GridTracker, lose the text.  So write anything down you want to save.
-<br/>Because when it's gone, gone is forever.
-<p>
-<br/>
-<p>
-<div class="button"  onclick="userAgrees();">Click here to acknowledge the above and enable messaging</div>
-
-</div>
-<div id="wrapperDiv" style="display:none">
-  <div id="messageAreaDiv" style='position:fixed;left:2px;top:2px;display:none;text-align:left;overflow-wrap: break-word;white-space:normal;' >
-    <div id="messageInfoDiv" class="boxDisplay">
-		<text id="callsign"></text> /
-		<text id="country"></text> /
-		<text id="grid"></text> /
-		<text id="band"></text> /
-		<text id="mode"></text>
+      <p></p>
+      <div class="button" onclick="userAgrees();">Click here to acknowledge the above and enable messaging</div>
     </div>
-    <div id="messageTextDiv"  class="boxDisplay" style="overflow:auto;user-select:text"> </div>
-    <div id="messageInputDiv" style='position:fixed;bottom:3px'>
-      <textarea disabled="true" id="messageInput" maxlength="256" rows="2" value=""  class="roundBorder"></textarea>
+    <div id="wrapperDiv" style="display: none">
+      <div
+        id="messageAreaDiv"
+        style="
+          position: fixed;
+          left: 2px;
+          top: 2px;
+          display: none;
+          text-align: left;
+          overflow-wrap: break-word;
+          white-space: normal;
+        "
+      >
+        <div id="messageInfoDiv" class="boxDisplay">
+          <text id="callsign"></text> / <text id="country"></text> / <text id="grid"></text> / <text id="band"></text> /
+          <text id="mode"></text>
+        </div>
+        <div id="messageTextDiv" class="boxDisplay" style="overflow: auto; user-select: text"></div>
+        <div id="messageInputDiv" style="position: fixed; bottom: 3px">
+          <textarea disabled="true" id="messageInput" maxlength="256" rows="2" value="" class="roundBorder"></textarea>
+        </div>
+      </div>
+      <div
+        class="boxDisplay"
+        style="
+          top: 2px;
+          right: 2px;
+          position: fixed;
+          vertical-align: top;
+          display: inline-block;
+          overflow: none;
+          width: 132px;
+        "
+      >
+        <div style="display: inline-block; cursor: pointer" onclick="toggleBand()">
+          <font color="lightgreen">Band: </font>
+          <font id="viewBand" color="yellow">All</font>
+        </div>
+        <div style="display: inline-block; cursor: pointer" onclick="toggleMode()">
+          <font color="orange">Mode: </font>
+          <font id="viewMode" color="yellow">All</font>
+        </div>
+      </div>
+
+      <img
+        id="clearSearch"
+        title="Clear Search"
+        onclick='searchBox.value="";KeepUpper(searchBox);'
+        src="/img/trash_24x48.png"
+        style="display: none; top: 30px; right: 114px; position: absolute; width: 30px; cursor: pointer"
+      />
+      <input
+        id="searchBox"
+        type="text"
+        title="Call Search"
+        class="inputTextValue"
+        style="
+          top: 26px;
+          right: 45px;
+          position: absolute;
+          vertical-align: top;
+          display: inline-block;
+          overflow: auto;
+          overflow-x: hidden;
+          width: 75px;
+          background-color: green;
+          color: yellow;
+        "
+        maxlength="100"
+        oninput="KeepUpper(this);"
+      />
+      <div
+        id="userCount"
+        class="roundBorderValue"
+        style="
+          top: 30px;
+          right: 3px;
+          position: absolute;
+          vertical-align: top;
+          overflow: hidden;
+          width: 40px;
+          margin: 0px;
+          padding: 0px;
+          text-overflow: ellipsis;
+        "
+        title="Station Count"
+      >
+        0
+      </div>
+
+      <div
+        id="allCallsignsDiv"
+        class="boxDisplay"
+        style="
+          top: 48px;
+          right: 2px;
+          bottom: 5px;
+          position: fixed;
+          vertical-align: top;
+          display: inline-block;
+          overflow: auto;
+          overflow-x: hidden;
+          width: 132px;
+        "
+      >
+        <table style="width: 100%" id="allCallTable"></table>
+      </div>
+      <div
+        id="activeCallsignsDiv"
+        class="boxDisplay"
+        style="
+          bottom: 2px;
+          right: 2px;
+          position: fixed;
+          vertical-align: top;
+          display: inline-block;
+          overflow: auto;
+          overflow-x: hidden;
+          width: 132px;
+          max-height: 60px;
+        "
+      >
+        <font color="gray">no message history</font>
+      </div>
     </div>
-  </div>
- <div class="boxDisplay" style='top:2px;right:2px;position:fixed;vertical-align:top;display:inline-block;overflow:none;width:132px;' >
-		<div style="display:inline-block;cursor:pointer" onclick="toggleBand()" >
-			<font color="lightgreen">Band: </font>
-			<font id="viewBand" color="yellow" >All</font>
-		</div>
-		<div style="display:inline-block;cursor:pointer" onclick="toggleMode()">
-			<font color="orange">Mode: </font>
-			<font id="viewMode" color="yellow">All</font>
-		</div>
-	</div>
-
-   <img id="clearSearch"  title="Clear Search"  onclick='searchBox.value="";KeepUpper(searchBox);' src='/img/trash_24x48.png' style='display:none;top:30px;right:114px;position:absolute;width:30px;cursor:pointer'>
-	<input id="searchBox" type="text" title="Call Search" class="inputTextValue" style='top:26px;right:45px;position:absolute;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;width:75px;background-color:green;color:yellow' maxlength="100" oninput='KeepUpper(this);'/>
-	<div id="userCount" class="roundBorderValue"  style='top:30px;right:3px;position:absolute;vertical-align:top;overflow:hidden;width:40px;margin:0px;padding:0px;text-overflow:ellipsis' title="Station Count" >0</div>
-
-
- <div id="allCallsignsDiv" class="boxDisplay" style='top:48px;right:2px;bottom:5px;position:fixed;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;width:132px;'><table style='width:100%' id='allCallTable'></table></div>
- <div id="activeCallsignsDiv" class="boxDisplay" style='bottom:2px;right:2px;position:fixed;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;width:132px;max-height:60px'><font color='gray'>no message history</font></div>
-</div>
-</body>
+  </body>
 </html>

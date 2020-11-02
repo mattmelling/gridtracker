@@ -14,70 +14,81 @@
     along with GridTracker.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head >
-<title>Data Breakout</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="./lib/style.css">
-<style type="text/css">
-body {
-	-webkit-appearance: none;
-	-webkit-user-select: none;
-	height: 98%;
-	overflow: auto;
-}
-table, th, td, body {
-	color: #FFF;
-	white-space: nowrap;
-	font-family: Sans-Serif;
-	font-size: 12px;
-	text-align: auto;
-}
-</style>
-<script>
+  <head>
+    <title>Data Breakout</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="./lib/style.css" />
+    <style type="text/css">
+      body {
+        -webkit-appearance: none;
+        -webkit-user-select: none;
+        height: 98%;
+        overflow: auto;
+      }
+      table,
+      th,
+      td,
+      body {
+        color: #fff;
+        white-space: nowrap;
+        font-family: Sans-Serif;
+        font-size: 12px;
+        text-align: auto;
+      }
+    </style>
+    <script>
+      function startLookup(call, grid) {
+        window.opener.startLookup(call, grid);
+        window.opener.focus();
+      }
 
-function startLookup(call, grid)
-{
-	window.opener.startLookup(call,grid);
-	window.opener.focus();
-}
+      function lockNewWindows() {
+        if (typeof nw != "undefined") {
+          var gui = require("nw.gui");
+          var win = gui.Window.get();
+          win.on("new-win-policy", function (frame, url, policy) {
+            gui.Shell.openExternal(url);
+            policy.ignore();
+          });
+        }
+      }
 
-function lockNewWindows()
-{
-  if ( typeof nw != 'undefined' )
-    {
-      var gui = require('nw.gui');
-      var win = gui.Window.get();
-      win.on('new-win-policy', function (frame, url, policy) {
-        gui.Shell.openExternal(url);
-        policy.ignore();
-      });
-    }
-}
+      function init() {
+        lockNewWindows();
 
-function init()
-{
-	lockNewWindows();
+        document.addEventListener("keydown", onMyKeyDown, false);
+      }
 
-    document.addEventListener('keydown', onMyKeyDown, false);
-}
+      function onMyKeyDown(event) {
+        window.opener.onMyKeyDown(event);
+      }
 
-function onMyKeyDown(event)
-{
-	window.opener.onMyKeyDown(event);
-}
-
-document.oncontextmenu = function(event) {
-  if (process.versions['nw-flavor'] != "sdk") {
-    ev.preventDefault();
-  }
-}
-
-</script>
-<script src="./lib/screens.js"></script>
-</head>
-<body  id="mainBody"  onload="init();" >
-<div id="main" style="margin:0;top:0;min-height:60px;width:auto;background-color:black;padding:2px;text-align:center;vertical-align:middle;position:relative;white-space:nowrap;overflow:hidden;" >
-  <div id="adifTable"></div>
-</div>
-</body>
+      document.oncontextmenu = function (event) {
+        if (process.versions["nw-flavor"] != "sdk") {
+          ev.preventDefault();
+        }
+      };
+    </script>
+    <script src="./lib/screens.js"></script>
+  </head>
+  <body id="mainBody" onload="init();">
+    <div
+      id="main"
+      style="
+        margin: 0;
+        top: 0;
+        min-height: 60px;
+        width: auto;
+        background-color: black;
+        padding: 2px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+      "
+    >
+      <div id="adifTable"></div>
+    </div>
+  </body>
 </html>

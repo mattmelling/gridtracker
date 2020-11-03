@@ -1,4 +1,6 @@
-// GridTracker ©2020 N0TTL
+// GridTracker ©2020 GridTracker.org
+// All rights reserved.
+// See LICENSE for more information.
 var gtVersion = 1200927;
 var gtBeta = "Elsa III";
 var g_startVersion = 0;
@@ -25,7 +27,7 @@ var gtShortVersion =
   vers.substr(3, 4) +
   " " +
   gtBeta;
-var gtVersionString = "GridTracker ©2020 N0TTL " + gtShortVersion;
+var gtVersionString = "GridTracker " + gtShortVersion;
 
 var g_windowName = "GT-main";
 var os = require("os");
@@ -568,7 +570,7 @@ var g_gridAlpha = "88";
 if (typeof g_mapMemory[6] == "undefined") g_mapMemory[6] = g_mapMemory[0];
 
 function qsoBackupFileInit() {
-  var adifHeader = "GridTracker by N0TTL v" + gtVersion + " <EOH>\r\n";
+  var adifHeader = "GridTracker v" + gtVersion + " <EOH>\r\n";
   if (!fs.existsSync(g_qsoLogFile)) {
     fs.writeFileSync(g_qsoLogFile, adifHeader);
   }
@@ -11628,6 +11630,8 @@ var g_startupTable = [
 
 function init() {
   window.document.title = gtVersionString;
+  startupVersionDiv.innerHTML = gtVersionString;
+  aboutVersionDiv.innerHTML = gtVersionString;
   g_currentDay = parseInt(timeNowSec() / 86400);
   if (mediaCheck() == false) {
     startupDiv.style.display = "none";

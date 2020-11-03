@@ -11629,7 +11629,6 @@ var g_startupTable = [
 ];
 
 function init() {
-  window.document.title = gtVersionString;
   startupVersionDiv.innerHTML = gtVersionString;
   aboutVersionDiv.innerHTML = gtVersionString;
   g_currentDay = parseInt(timeNowSec() / 86400);

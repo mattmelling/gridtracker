@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <!--
-    This file is part of GridTracker.
+Copyright (c) 2018-2020 GridTricker.org
+All rights reserved.
 
-    GridTracker is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, version 3 of the License.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    GridTracker is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-    You should have received a copy of the GNU General Public License
-    along with GridTracker.  If not, see <https://www.gnu.org/licenses/>.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <html lang="en" xml:lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>GridTracker &copy;2020 N0TTL</title>
+    <title>GridTracker &copy;2020 GridTracker.org</title>
     <link rel="stylesheet" href="./lib/dp-dark.css" />
     <link rel="stylesheet" href="./lib/ol.css" />
     <link rel="stylesheet" href="./lib/style.css" />
@@ -42,10 +56,10 @@
       <div class="fill">
         <img src="gridview.png" alt="" />
         <div>
-          <h1>GridTracker by</h1>
-          <h1>N&Oslash;TTL</h1>
-          <h2>&amp;</h2>
-          <h1>N2VFL</h1>
+          <h1><div id="startupVersionDiv">GridTracker</div></h1>
+          <h2>originally created by</h2>
+          <h2>N&Oslash;TTL &amp; N2VFL</h1>
+          <h3>Further information at GridTracker.org</h3>
         </div>
       </div>
       <div id="startupStatusDiv">Initial Startup</div>
@@ -3376,21 +3390,13 @@
         </div>
         <div id="aboutDiv" class="settingsTabcontent">
           <div class="mapItem" style="padding: 4px">
-            <h2>GridTracker</h2>
-            <br />
-            GridTracker listens to traffic from WSJT-X and displays it on a map<br />
-            <i>It will also load ADIF log files</i> - Feb 2018<br />
-            <br />
-            &copy;2020 Stephen "Tag" Loomis / N&Oslash;TTL<br />
-            <br />
-            &copy;2020 Henry "atouk" Forte / N2VFL<br />
-            <p></p>
-            <h3>Contributors</h3>
-            <b>NR&Oslash;Q</b>
+            <h2><div id="aboutVersionDiv">GridTracker</div></h2>
             <p>
-              "d3jake" KE&Oslash;RIY - "Don" KB2YSI - K4KPW - "Paul" K6PST
-              <br />
-              <img src="./gridview.png" /> <br />
+            GridTracker listens to traffic from WSJT-X and similar programs,
+            displays it on a map, and creates traffic alerts and a roster
+            display of interesting traffic.</p>
+            <p>Copyright &copy; 2020 GridTracker.org<p />
+            <img src="./gridview.png" /> <br />
             </p>
           </div>
         </div>

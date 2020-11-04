@@ -25,34 +25,28 @@ build1:
     paths:
       - build/*
   script:
-    - echo "Do your build here"
     - apt-get update
     - apt-get -y install git dh-make build-essential autoconf autotools-dev
-    - cp LICENSE debian/copyright
     - apt-get -y build-dep .
     - dpkg-buildpackage -uc -us
     - mkdir build
-    - mv ../*.deb build/
+    - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/
 
-test1:
-  stage: test
-  only:
-    - tags
-  script:
-    - echo "Do a test here"
-    - echo "For example run a test suite"
-
-test2:
-  stage: test
-  only:
-    - tags
-  script:
-    - echo "Do another parallel test here"
-    - echo "For example run a lint test"
-
-deploy1:
-  stage: deploy
-  only:
-    - tags
-  script:
-    - echo "Do your deploy here"
+# test1:
+#   stage: test
+#   script:
+#     - echo "Do a test here"
+#     - echo "For example run a test suite"
+#
+# test2:
+#   stage: test
+#   script:
+#     - echo "Do another parallel test here"
+#     - echo "For example run a lint test"
+#
+# deploy1:
+#   stage: deploy
+#   only:
+#     - tags
+#   script:
+#     - echo "Do your deploy here"

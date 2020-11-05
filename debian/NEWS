@@ -1,4 +1,4 @@
-gridtracker (1.20.0922) buster; urgency=medium
+gridtracker (1.20.1104) unstable; urgency=low
 
   The old method of creating/editing/copying a GridTracker.desktop
   file has been deprecated, instead, we install one in /usr/share/applications,
@@ -9,6 +9,4 @@ gridtracker (1.20.0922) buster; urgency=medium
         rm -f Desktop/GridTracker.desktop
         ln -s /usr/share/applications/gridtracker.desktop Desktop/GridTracker.desktop
 
- -- Tag Loomis <n0ttl@tagloomis.com>  Mon, 03 Aug 2020 12:55:09 +0700
-
-
+ -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Wed, 04 Nov 2020 15:58:29 -0800

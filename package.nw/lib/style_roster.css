@@ -139,6 +139,12 @@ body.roster {
   margin-right: 4px;
 }
 
+#AwardWantedList {
+  overflow: auto;
+  overflow-x: hidden;
+  max-height: 142px;
+}
+
 #RosterControls.normal #ShowFewerControlsLink { display: none; }
 #RosterControls.normal #ShowMoreControlsLink { display: block; }
 #RosterControls.normal #SecondaryRosterControls { display: none; }

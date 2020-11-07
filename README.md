@@ -40,3 +40,33 @@ We suggest using the `macos/run.sh` script to launch GridTracker while developin
 of NWJS if needed, and use it to run the app.
 
 To access the Developer Tools, right-click on an unused area of a window, or press F12.
+
+# Building for Distribution
+
+## Docker Build Environment
+
+The following code uses docker to create a build environment for packaging
+GridTracker for distribution. It can be used to support, or in lieu of,
+GitLab's CI/CD chain.
+
+- `docker/run-docker.sh`
+  1. Build a build-environment container. This container does NOT carry the source code
+     of GridTracker inside it, it is merely a build container.
+  2. Execute the build container, linking it up to the current directory and `../gridtracker-dist`
+
+- `docker/build-all.sh`
+  1. Package the full debian release for gridtracker (which does not require binaries).
+  2. Build npmjs+gridtracker native binaries for Win (32, 64) including installers,
+     Mac OS (Intel 64), and Linux (I386 and AMD64) binaries.
+     THe Linux binaries are for use in non-debian/raspbian/ubuntu distributions.
+
+TODO:
+  3. Package up a release for Fedora/RPM distributions.
+
+Temporary artifacts are left in:
+        gridtracker/node_modules (including cached copies of npmjs binaries)
+        gridtracker/package-json.lock
+
+Final build results are left in:
+        gridtracker-dist/
+        gridtracker-dist/debian

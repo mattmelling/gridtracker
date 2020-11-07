@@ -1,8 +1,8 @@
 // GridTracker ©2020 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
-var gtVersion = 1200927;
-var gtBeta = "Elsa III";
+var gtVersion = 1201107;
+var gtBeta = "Phoenix";
 var g_startVersion = 0;
 
 if (typeof localStorage.currentVersion != "undefined")

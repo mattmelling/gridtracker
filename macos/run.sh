@@ -1,4 +1,4 @@
-NWJS_VERSION=0.49.0
+NWJS_VERSION=0.49.2
 NWJS_FULL_NAME=nwjs-sdk-v$NWJS_VERSION-osx-x64
 
 if [ ! -e build/macos/$NWJS_FULL_NAME/nwjs.app ]; then

@@ -1,4 +1,4 @@
-NWJS_VERSION=0.49.0
+NWJS_VERSION=0.49.2
 
 if [ ! -e build/macos/nwjs-v$NWJS_VERSION-osx-x64/nwjs.app ]; then
   echo "Downloading NWJS $NWJS_VERSION"

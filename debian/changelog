@@ -1,16 +1,15 @@
-gridtracker (1.20.1104) unstable; urgency=low
+gridtracker (1.20.1107) unstable; urgency=low
 
-  [Tag Loomis/Paul Traina/Sebastian Delmont]
   * GridTracker is now Open Source! Copyright assigned to GridTracker.org and
     is BSD 3-clause.
-  [Paul Traina]
+  [ Paul Traina ]
   * Disable fit to QTH when in PSK mode
   * Higlight confirmed DXCC countries in DXCC report
   * Unify worked/confirmed/unworked in WAC/WAS/CQ Zones/ITU Zones reports
   * In call roster, when requiring LoTW, don't show stations that don't meet
     time limits.
   * Support auto-building CI/CD for GitLab and Debian Packaging
-  [Sebastian Delmont]
+  [ Sebastian Delmont ]
   * Improve roster controls
   * Clean up and pretify HTML and JSON code, reformat code base.
   * Make UDP port vaildation behavior clearer, allow recevie on 2238 if

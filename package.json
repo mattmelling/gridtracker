@@ -1,11 +1,15 @@
 {
   "name": "gridtracker-development",
   "devDependencies": {
-    "prettier": "2.1.2"
+    "nwjs-builder-phoenix": "^1.15.0",
+    "prettier": "^2.1.2"
   },
   "scripts": {
     "test": "npm run prettier-check",
     "prettier-check": "npx prettier --check package.nw",
-    "prettier-write": "npx prettier --write package.nw"
+    "prettier-write": "npx prettier --write package.nw",
+    "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ package.nw",
+    "distsome": "build --debug --tasks linux-x64,mac-x64 --mirror https://dl.nwjs.io/ package.nw",
+    "start": "run --mirror https://dl.nwjs.io/ package.nw"
   }
 }

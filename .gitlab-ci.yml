@@ -25,12 +25,19 @@ build1:
     paths:
       - build/*
   script:
+    - dpkg --add-architecture i386
     - apt-get update
-    - apt-get -y install git dh-make build-essential autoconf autotools-dev
+    - apt-get -y install npm wine wine32
+    - apt-get -y install git dh-make build-essential devscripts lintian diffutils patch \
+        patchutils quilt
     - apt-get -y build-dep .
     - dpkg-buildpackage -uc -us
-    - mkdir build
-    - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/
+    - mkdir build build/debian
+    - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
+    - debian/rules clean
+    - npm install
+    - npm run dist
+    - (cd package.nw/build ; mv *.zip *.exe *.7z *.json ../build)
 
 # test1:
 #   stage: test

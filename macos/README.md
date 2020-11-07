@@ -1,3 +1,9 @@
+# [Deprecated]
+
+Use standard "npm run start" and "npm run dist" commands.
+
+
+
 # MacOS-specific notes and instructions
 
 # Development Environment

@@ -1,6 +1,11 @@
 {
   "name": "GridTracker",
-  "product_string": "GridTracker",
+  "product_string_do_not_use": "gridtracker",
+  "version": "1.20.1107",
+  "description": "GridTracker, an amateur radio companion",
+  "author": "Steven Tag Loomis (N0TTL) and GridTracker.org",
+  "license": "BSD-3-Clause",
+  "main": "GridTracker.html",
   "window": {
     "id": "mainWindow",
     "icon": "gridview.png",
@@ -12,5 +17,29 @@
   "webkit": {
     "plugin": true
   },
-  "main": "GridTracker.html"
+  "scripts": {
+    "test": "npm run prettier-check",
+    "prettier-check": "npx prettier --check .",
+    "prettier-write": "npx prettier --write .",
+    "start": "run --mirror https://dl.nwjs.io/ ."
+  },
+  "build": {
+    "nwVersion": "0.48.4",
+    "targets": [
+      "zip",
+      "nsis7z"
+    ],
+    "mac": {
+      "icon": "gridview.icns",
+      "copyright": "Copyright (c) 2020 GridTracker.org",
+      "plistStrings": {
+        "CFBundleIdentifier": "org.gridtracker.gridtracker",
+        "CFBundleDocumentTypes": []
+      }
+    },
+    "win": {
+      "icon": "gridview.ico",
+      "copyright": "Copyright (c) 2020 GridTracker.org"
+    }
+  }
 }

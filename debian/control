@@ -1,5 +1,5 @@
 Source: gridtracker
-Section: non-free/hamradio
+Section: hamradio
 Priority: optional
 Maintainer: Tag Loomis <n0ttl@tagloomis.com>
 Build-Depends: debhelper (>= 12.1)

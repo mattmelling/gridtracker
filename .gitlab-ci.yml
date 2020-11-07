@@ -36,7 +36,7 @@ build1:
     - debian/rules clean
     - npm install
     - npm run dist
-    - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../build)
+    - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
 
 # test1:
 #   stage: test

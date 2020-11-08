@@ -145,13 +145,25 @@ body.roster {
   max-height: 142px;
 }
 
-#RosterControls.normal #ShowFewerControlsLink { display: none; }
-#RosterControls.normal #ShowMoreControlsLink { display: block; }
-#RosterControls.normal #SecondaryRosterControls { display: none; }
+#RosterControls.normal #ShowFewerControlsLink {
+  display: none;
+}
+#RosterControls.normal #ShowMoreControlsLink {
+  display: block;
+}
+#RosterControls.normal #SecondaryRosterControls {
+  display: none;
+}
 
-#RosterControls.extended #ShowFewerControlsLink { display: block; }
-#RosterControls.extended #ShowMoreControlsLink { display: none; }
-#RosterControls.extended #SecondaryRosterControls { display: block; }
+#RosterControls.extended #ShowFewerControlsLink {
+  display: block;
+}
+#RosterControls.extended #ShowMoreControlsLink {
+  display: none;
+}
+#RosterControls.extended #SecondaryRosterControls {
+  display: block;
+}
 
 /* == Other Elements ====================================== */
 
@@ -161,11 +173,11 @@ body.roster {
 
 .link {
   cursor: hand;
-  color: #FFFFAA;
+  color: #ffffaa;
 }
 
 .link:hover {
-  color: #FFFF00;
+  color: #ffff00;
   text-decoration: underline;
 }
 

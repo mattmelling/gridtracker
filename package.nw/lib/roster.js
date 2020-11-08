@@ -2384,9 +2384,9 @@ function toggleMoreControls() {
   g_rosterSettings.controls = !g_rosterSettings.controls;
 
   if (g_rosterSettings.controls) {
-    RosterControls.className = "extended"
+    RosterControls.className = "extended";
   } else {
-    RosterControls.className = "normal"
+    RosterControls.className = "normal";
   }
 }
 
@@ -2396,9 +2396,9 @@ function setVisual() {
   HuntDXCCsControls.style.display = "none";
 
   if (g_rosterSettings.controls) {
-    RosterControls.className = "extended"
+    RosterControls.className = "extended";
   } else {
-    RosterControls.className = "normal"
+    RosterControls.className = "normal";
   }
   // Award Hunter
   if (referenceNeed.value == 6) {

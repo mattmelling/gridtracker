@@ -17,13 +17,14 @@ default:
 #  - echo "After script section"
 #  - echo "For example you might do some cleanup here"
 
-build1:
+build:
   stage: build
   only:
     - tags
   artifacts:
     paths:
       - build/*
+    expire_in: 1 week
   script:
     - dpkg --add-architecture i386
     - apt-get update
@@ -38,12 +39,16 @@ build1:
     - npm run dist
     - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
 
-# test1:
-#   stage: test
-#   script:
-#     - echo "Do a test here"
-#     - echo "For example run a test suite"
-#
+test:
+   stage: test
+   script:
+     - npm install
+     - npm test
+   only:
+     - branches
+   except:
+     - master
+
 # test2:
 #   stage: test
 #   script:

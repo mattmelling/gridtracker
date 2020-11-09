@@ -4,7 +4,7 @@ gridtracker (1.20.1107) unstable; urgency=low
     is BSD 3-clause.
   [ Paul Traina ]
   * Disable fit to QTH when in PSK mode
-  * Higlight confirmed DXCC countries in DXCC report
+  * Highlight confirmed DXCC countries in DXCC report
   * Unify worked/confirmed/unworked in WAC/WAS/CQ Zones/ITU Zones reports
   * In call roster, when requiring LoTW, don't show stations that don't meet
     time limits.
@@ -12,7 +12,7 @@ gridtracker (1.20.1107) unstable; urgency=low
   [ Sebastian Delmont ]
   * Improve roster controls
   * Clean up and pretify HTML and JSON code, reformat code base.
-  * Make UDP port vaildation behavior clearer, allow recevie on 2238 if
+  * Make UDP port vaildation behavior clearer, allow receive on 2238 if
     forwarding enabled.
   * Improve debugging/developer experience by enabling context menus when
     using nwjs's SDK.

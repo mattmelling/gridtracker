@@ -2,7 +2,7 @@
 Name=GridTracker
 Comment=GridTracker
 GenericName=GridTracker, a WSJT-X Companion
-Exec=nw --enable-speech-dispatcher /usr/share/gridtracker
+Exec=gridtracker
 Icon=/usr/share/gridtracker/gridview.png
 Encoding=UTF-8
 Categories=Network;HamRadio

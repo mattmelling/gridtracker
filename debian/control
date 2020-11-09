@@ -1,9 +1,9 @@
 Source: gridtracker
 Section: hamradio
 Priority: optional
-Maintainer: Tag Loomis <n0ttl@tagloomis.com>
+Maintainer: Paul Traina <216482-pleasantone@users.noreply.gitlab.com>
 Build-Depends: debhelper (>= 12.1)
-Standards-Version: 4.5.0
+Standards-Version: 4.3.0
 Homepage: http://tagloomis.com/
 
 Package: gridtracker

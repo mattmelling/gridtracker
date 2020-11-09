@@ -14,11 +14,8 @@ cache:
     - .cache/
 
 before_script:
-  - echo "Before script section"
-  - echo "For example you might run an update here or install a build dependency"
-  - echo "Or perhaps you might print out some debugging details"
   - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -pv $APT_CACHE_DIR
-  - export NPM_CONFIG_CACHE=APT_CACHE_DIR=`pwd`/.cache/npm && mkdir -pv $NPM_CONFIG_CACHE
+  - export NPM_CONFIG_CACHE=`pwd`/.cache/npm && mkdir -pv $NPM_CONFIG_CACHE
   - dpkg --add-architecture i386
   - apt-get update
   - apt-get -y install npm wine wine32

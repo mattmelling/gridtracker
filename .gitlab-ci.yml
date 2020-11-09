@@ -8,10 +8,23 @@ default:
   image: ${DEFAULT_IMAGE}
   interruptible: true
 
-# before_script:
-#  - echo "Before script section"
-#  - echo "For example you might run an update here or install a build dependency"
-#  - echo "Or perhaps you might print out some debugging details"
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cache/
+
+before_script:
+  - echo "Before script section"
+  - echo "For example you might run an update here or install a build dependency"
+  - echo "Or perhaps you might print out some debugging details"
+  - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -pv $APT_CACHEDIR
+  - export NPM_CONFIG_CACHE=APT_CACHE_DIR=`pwd`/.cache/npm && mkdir -pv $NPM_CONFIG_CACHE
+  - dpkg --add-architecture i386
+  - apt-get update
+  - apt-get -y install npm wine wine32
+  - apt-get -y install git dh-make build-essential devscripts lintian diffutils patch quilt
+  - apt-get -y build-dep .
+  - npm install
 
 # after_script:
 #  - echo "After script section"
@@ -26,28 +39,20 @@ build:
       - build/*
     expire_in: 1 week
   script:
-    - dpkg --add-architecture i386
-    - apt-get update
-    - apt-get -y install npm wine wine32
-    - apt-get -y install git dh-make build-essential devscripts lintian diffutils patch quilt
-    - apt-get -y build-dep .
     - dpkg-buildpackage -uc -us
     - mkdir build build/debian
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
-    - debian/rules clean
-    - npm install
     - npm run dist
     - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
 
 test:
    stage: test
-   script:
-     - npm install
-     - npm test
    only:
      - branches
    except:
      - master
+   script:
+     - npm test
 
 # test2:
 #   stage: test

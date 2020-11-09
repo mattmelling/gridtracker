@@ -3,3 +3,4 @@ tar-ignore=.DS_Store
 tar-ignore=node_modules
 tar-ignore=package-lock.json
 tar-ignore=package.nw/dist
+tar-ignore=.cache

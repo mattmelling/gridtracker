@@ -53,7 +53,10 @@ test_job:
     <<: *global_cache
     policy: pull
   script:
+    - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -p $APT_CACHE_DIR
     - export NPM_CONFIG_CACHE=`pwd`/.cache/npm && mkdir -p $NPM_CONFIG_CACHE
+    - apt-get update
+    - apt-get -y install npm
     - rm -rf package.nw/dist
     - npm install --prefer-offline
     - npm test

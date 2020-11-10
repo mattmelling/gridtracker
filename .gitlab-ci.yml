@@ -3,51 +3,72 @@
 
 variables:
   DEFAULT_IMAGE: debian:stable
+  EXTRA_DESCRIPTION: ''
+
+# only run for merge requests and tags
+include:
+  - template: "Workflows/MergeRequest-Pipelines.gitlab-ci.yml"
 
 default:
   image: ${DEFAULT_IMAGE}
   interruptible: true
 
-# before_script:
-#  - echo "Before script section"
-#  - echo "For example you might run an update here or install a build dependency"
-#  - echo "Or perhaps you might print out some debugging details"
+cache:
+  paths:
+    - .cache/
+  key:
+    files:
+      - package.json
+      - package.nw/package.json
 
-# after_script:
-#  - echo "After script section"
-#  - echo "For example you might do some cleanup here"
+before_script:
+  - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -pv $APT_CACHE_DIR
+  - export NPM_CONFIG_CACHE=`pwd`/.cache/npm && mkdir -pv $NPM_CONFIG_CACHE
+  - dpkg --add-architecture i386
+  - apt-get update
+  - apt-get -y install npm wine wine32
+  - apt-get -y install git dh-make build-essential devscripts lintian diffutils patch quilt
+  - apt-get -y build-dep .
+  - npm install
 
-build:
+build_all_job:
   stage: build
-  only:
-    - tags
+  rules:
+    - if: $CI_COMMIT_TAG
   artifacts:
     paths:
       - build/*
     expire_in: 1 week
   script:
-    - dpkg --add-architecture i386
-    - apt-get update
-    - apt-get -y install npm wine wine32
-    - apt-get -y install git dh-make build-essential devscripts lintian diffutils patch quilt
-    - apt-get -y build-dep .
+    - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -pv $APT_CACHE_DIR
+    - export NPM_CONFIG_CACHE=`pwd`/.cache/npm && mkdir -pv $NPM_CONFIG_CACHE
     - dpkg-buildpackage -uc -us
     - mkdir build build/debian
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
-    - debian/rules clean
-    - npm install
     - npm run dist
     - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
 
-test:
-   stage: test
-   script:
-     - npm install
-     - npm test
-   only:
-     - branches
-   except:
-     - master
+test_job:
+  stage: test
+  script:
+    - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -pv $APT_CACHE_DIR
+    - export NPM_CONFIG_CACHE=`pwd`/.cache/npm && mkdir -pv $NPM_CONFIG_CACHE
+    - npm test
+
+release_job:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - echo 'Release for $CI_COMMIT_TAG'
+  release:
+    name: 'Release $CI_COMMIT_TAG'
+    description: debian/changelog
+    tag_name: '$CI_COMMIT_TAG'
+    ref: '$CI_COMMIT_SHA'
+
 
 # test2:
 #   stage: test

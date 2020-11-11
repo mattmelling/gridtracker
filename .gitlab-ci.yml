@@ -93,7 +93,7 @@ build_job:
 # copy the assets over to our build server
 staging_upload:
   stage: deploy
-  image: google/gcloud-sdk:alpine
+  image: google/cloud-sdk:alpine
   rules:
     - if: '$CI_COMMIT_TAG =~ /^test_.*/'
   cache: {}

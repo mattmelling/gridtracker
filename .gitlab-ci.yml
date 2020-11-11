@@ -6,6 +6,7 @@ variables:
   APT_CACHE_DIR: $CI_PROJECT_DIR/.cache/apt
   NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/npm
   GCLOUD_SERVICE_ACCOUNT: /dev/null
+  GCLOUD_DEPLOY_PATH: gs://gridtracker_dltest/$CI_COMMIT_TAG
 
 stages:
   - build
@@ -46,7 +47,7 @@ packaging:
     - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
   artifacts:
     paths:
-      - build/*
+      - build/
     name: '$CI_COMMIT_REF_SLUG'
   cache:
     paths:
@@ -78,11 +79,9 @@ staging_upload:
     - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
   script:
     - echo "This will be the upload script for $CI_COMMIT_TAG"
+    - echo copying to $GCLOUD_DEPLOY_PATH
     - gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_ACCOUNT
-    - echo build artifacts ----
-    - ls -R build
-    - echo copying
-    - gsutil -m --project=gridtracker rsync build/* gs://gridtracker_dltest/$CI_COMMIT_TAG/
+    - cd build; gsutil -m rsync * $GCLOUD_DEPLOY_PATH
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now

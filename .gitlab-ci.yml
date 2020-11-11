@@ -35,6 +35,7 @@ build_job:
     paths:
       - build/*
   script:
+    - mkdir -p build/debian
     - dpkg --add-architecture i386
     - apt-get -qq update
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
@@ -45,7 +46,6 @@ build_job:
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
     - dpkg-buildpackage -uc -us
-    - mkdir -p build/debian
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
 
 test_job:

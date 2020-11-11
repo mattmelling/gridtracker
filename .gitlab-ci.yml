@@ -3,6 +3,8 @@
 
 variables:
   DEFAULT_IMAGE: debian:stable
+  APT_CACHE_DIR: $CI_PROJECT_DIR/.cache/apt
+  NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/.npm
   EXTRA_DESCRIPTION: ''
 
 # only run for merge requests and tags
@@ -22,6 +24,9 @@ cache: &global_cache
       - package.json
       - package.nw/package.json
 
+before_script:
+  - mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
+
 build_job:
   stage: build
   rules:
@@ -30,18 +35,16 @@ build_job:
     paths:
       - build/*
   script:
-    - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -p $APT_CACHE_DIR
-    - export NPM_CONFIG_CACHE=`pwd`/.cache/npm && mkdir -p $NPM_CONFIG_CACHE
-    - echo $APT_CACHE_DIR $NPM_CONFIG_CACHE
+    - env
     - dpkg --add-architecture i386
-    - apt-get update
-    - apt-get -y install npm wine wine32
+    - apt-get -yq update
+    - apt-get -yq -o dir::cache::archives="$APT_CACHE_DIR" install npm wine wine32
     - npm install --prefer-offline
     - npm run dist
     - mkdir build
     - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
-    - apt-get -y install build-essential devscripts
-    - apt-get -y build-dep .
+    - apt-get -yq -o dir::cache::archives="$APT_CACHE_DIR" install build-essential devscripts
+    - apt-get -yq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
     - dpkg-buildpackage -uc -us
     - mkdir -p build/debian
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
@@ -53,10 +56,8 @@ test_job:
     <<: *global_cache
     policy: pull
   script:
-    - export APT_CACHE_DIR=`pwd`/.cache/apt && mkdir -p $APT_CACHE_DIR
-    - export NPM_CONFIG_CACHE=`pwd`/.cache/npm && mkdir -p $NPM_CONFIG_CACHE
     - apt-get update
-    - apt-get -y install npm
+    - apt-get -yq -o dir::cache::archives="$APT_CACHE_DIR" install npm
     - rm -rf package.nw/dist
     - npm install --prefer-offline
     - npm test
@@ -75,7 +76,6 @@ release_job:
     description: debian/changelog
     tag_name: '$CI_COMMIT_TAG'
     ref: '$CI_COMMIT_SHA'
-
 
 # test2:
 #   stage: test

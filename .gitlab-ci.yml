@@ -40,12 +40,13 @@ build_job:
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
     - npm install --prefer-offline
     - npm run dist
+    - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
+    - rm -rf package.nw/dist
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
     - dpkg-buildpackage -uc -us
     - mkdir -p build/debian
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
-    - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
 
 test_job:
   stage: test

@@ -9,8 +9,8 @@
     "test": "npm run prettier-check",
     "prettier-check": "npx prettier --check package.nw",
     "prettier-write": "npx prettier --write package.nw",
-    "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ package.nw",
-    "distsome": "build --debug --tasks linux-x64,mac-x64 --mirror https://dl.nwjs.io/ package.nw",
-    "start": "run --mirror https://dl.nwjs.io/ package.nw"
+    "dist": "build --concurrent --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 package.nw",
+    "distsome": "build --debug --tasks linux-x64,mac-x64 package.nw",
+    "start": "run package.nw"
   }
 }

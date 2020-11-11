@@ -5,7 +5,15 @@ variables:
   DEFAULT_IMAGE: debian:stable
   APT_CACHE_DIR: $CI_PROJECT_DIR/.cache/apt
   NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/.npm
+  GCLOUD_SERVICE_ACCOUNT: ""
   EXTRA_DESCRIPTION: ''
+
+stages:
+  - precheck
+  - build
+  - test
+  - deploy
+
 
 # only run for merge requests and tags
 include:
@@ -27,6 +35,17 @@ cache: &global_cache
 before_script:
   - mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
 
+# just do a quick syntax check job
+code_test_job:
+  stage: precheck
+  image: node:latest
+  cache: {}
+  script:
+    - npm install
+    - npm test
+
+# if we've been tagged with a tag starting with v or test_, build some binaries for
+# and leave them in the build artifacts
 build_job:
   stage: build
   rules:
@@ -34,6 +53,7 @@ build_job:
   artifacts:
     paths:
       - build/*
+    name: '$CI_COMMIT_REF_SLUG'
   script:
     - mkdir -p build/debian
     - dpkg --add-architecture i386
@@ -48,42 +68,58 @@ build_job:
     - dpkg-buildpackage -uc -us
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
 
-test_job:
-  stage: test
-  cache:
-    <<: *global_cache
-    policy: pull
-  script:
-    - apt-get -qq update
-    - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm
-    - rm -rf package.nw/dist
-    - npm install --prefer-offline
-    - npm test
-
-release_job:
-  stage: deploy
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
-  needs:
-    - job: build_job
-  script:
-    - echo 'Release for $CI_COMMIT_TAG'
-  release:
-    name: 'GridTracker $CI_COMMIT_TAG'
-    description: debian/changelog
-    tag_name: '$CI_COMMIT_TAG'
-    ref: '$CI_COMMIT_SHA'
-
+# currently we run syntax checking before we even attempt builds
+# this is left as an example placeholder for post-build tests
+#
+# test1:
+#   stage: test
+#   cache:
+#     <<: *global_cache
+#     policy: pull
+#   script:
+#     - apt-get -qq update
+#     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm
+#     - rm -rf package.nw/dist
+#     - npm install --prefer-offline
+#     - npm test
+#
 # test2:
 #   stage: test
 #   script:
 #     - echo "Do another parallel test here"
 #     - echo "For example run a lint test"
 #
-# deploy1:
-#   stage: deploy
-#   only:
-#     - tags
-#   script:
-#     - echo "Do your deploy here"
+
+# copy the assets over to our build server
+staging_upload:
+  stage: deploy
+  image: google/gcloud-sdk:alpine
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^test_.*/'
+  cache: {}
+  script:
+    - echo "This will be the upload script for $CI_COMMIT_TAG"
+    - env
+    - echo "Credentials in $GCLOUD_SERVICE_ACCOUNT"
+    - cat $GCLOUD_SERVICE_ACCOUNT
+    - gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_ACCOUNT
+    - echo build artifacts ----
+    - ls -R build
+    - echo copying
+    - gsutil -m --project=gridtracker rsync build/* gs://gridtracker_dltest/$CI_COMMIT_TAG
+
+# this only creates a "source code release" -- gitlab doesn't specify binaries
+# except as links to external storage, which is suboptimal for now
+source_release:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v.*/'
+  script:
+    - echo 'Release for $CI_COMMIT_TAG'
+  release:
+    name: 'GridTracker $CI_COMMIT_TAG'
+    description: 'GridTracker source $CI_COMMIT_TAG'
+    tag_name: '$CI_COMMIT_TAG'
+    ref: '$CI_COMMIT_SHA'
+

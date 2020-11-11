@@ -5,7 +5,6 @@ variables:
   DEFAULT_IMAGE: debian:stable
   APT_CACHE_DIR: $CI_PROJECT_DIR/.cache/apt
   NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/.npm
-  GCLOUD_SERVICE_ACCOUNT: ""
   EXTRA_DESCRIPTION: ''
 
 stages:
@@ -61,8 +60,7 @@ build_job:
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
     - npm install --prefer-offline
     - npm run dist
-    - (cd package.nw/dist ; mv *.zip *.exe *.7z *.json ../../build)
-    - rm -rf package.nw/dist
+    - (cd dist ; mv *.zip *.exe *.7z *.json ../build)
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
     - dpkg-buildpackage -uc -us
@@ -79,7 +77,6 @@ build_job:
 #   script:
 #     - apt-get -qq update
 #     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm
-#     - rm -rf package.nw/dist
 #     - npm install --prefer-offline
 #     - npm test
 #

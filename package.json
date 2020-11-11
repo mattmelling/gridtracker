@@ -1,5 +1,6 @@
 {
   "name": "gridtracker-development",
+  "version": "1.0.0",
   "devDependencies": {
     "nwjs-builder-phoenix": "^1.15.0",
     "prettier": "^2.1.2"

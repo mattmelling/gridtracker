@@ -81,7 +81,7 @@ staging_upload:
     - echo "This will be the upload script for $CI_COMMIT_TAG"
     - echo copying to $GCLOUD_DEPLOY_PATH
     - gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_ACCOUNT
-    - cd build; gsutil -m rsync * $GCLOUD_DEPLOY_PATH
+    - cd build; gsutil -m rsync . $GCLOUD_DEPLOY_PATH
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now

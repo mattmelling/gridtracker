@@ -375,6 +375,7 @@ var g_worldGeoData = {};
 var g_prefixToMap = {};
 var g_directCallToDXCC = {};
 var g_dxccToAltName = {};
+var g_dxccToADIFName = {};
 var g_dxccToGeoData = {};
 var g_gridToDXCC = {};
 var g_gridToCQZone = {};
@@ -10299,6 +10300,7 @@ function loadMaidenHeadData() {
       g_worldGeoData[key].worked_modes = {};
       g_worldGeoData[key].confirmed_modes = {};
       g_dxccToAltName[g_worldGeoData[key].dxcc] = g_worldGeoData[key].name;
+      g_dxccToADIFName[g_worldGeoData[key].dxcc] = g_worldGeoData[key].aname;
       g_dxccToGeoData[g_worldGeoData[key].dxcc] = key;
 
       for (var x = 0; x < g_worldGeoData[key].prefix.length; x++) {

@@ -6,7 +6,7 @@ variables:
   APT_CACHE_DIR: $CI_PROJECT_DIR/.cache/apt
   NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/npm
   GCLOUD_SERVICE_ACCOUNT: /dev/null
-  GCLOUD_DEPLOY_PATH: gs://gridtracker_dltest/$CI_COMMIT_TAG
+  GCLOUD_DEPLOY_PATH: gs://download.gridtracker.org/staging/$CI_COMMIT_TAG
 
 stages:
   - build

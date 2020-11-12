@@ -6,7 +6,16 @@ variables:
   APT_CACHE_DIR: $CI_PROJECT_DIR/.cache/apt
   NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/npm
   GCLOUD_SERVICE_ACCOUNT: /dev/null
-  GCLOUD_DEPLOY_PATH: gs://download.gridtracker.org/staging/$CI_COMMIT_TAG
+  GCLOUD_RELEASE_DEPLOY_PATH: gs://download.gridtracker.org/release/$CI_COMMIT_TAG
+  GCLOUD_TESTING_DEPLOY_PATH: gs://download.gridtracker.org/testing/$CI_COMMIT_TAG
+
+# nothing in this file should be allowed to run automatically except for:
+# 1. merge requests
+# 2. manual tagging
+# 3. committing to the default branch
+
+include:
+  - template: "Workflows/MergeRequest-Pipelines.gitlab-ci.yml"
 
 stages:
   - build
@@ -14,16 +23,12 @@ stages:
   - package
   - deploy
 
-# only run for merge requests and tags
-include:
-  - template: "Workflows/MergeRequest-Pipelines.gitlab-ci.yml"
-
 default:
   image: ${DEFAULT_IMAGE}
   interruptible: true
 
-
-# just do a quick syntax check job, we don't need to "build" anything here
+# just do a quick syntax check job, we don't need to "build" anything here other than the
+# outer dev environment for gridtracker
 npm_test:
   stage: test
   image: node:latest
@@ -38,12 +43,12 @@ npm_test:
 #     - echo "For example run a lint test"
 
 
-# if we've been tagged with a tag starting with v or test_, package binaries and create
-# build artifacts
+# package binaries and create build artifacts that may be used in later stages
 
 packaging:
   stage: package
   rules:
+    # only do this with a manual tag starting with v or test_
     - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
   artifacts:
     paths:
@@ -71,17 +76,29 @@ packaging:
     - dpkg-buildpackage -uc -us
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
 
-# copy the assets over to our distribution storage
-staging_upload:
+# copy the assets over to our distribution storage (testing, tag = test_.*)
+upload_testing:
   stage: deploy
   image: google/cloud-sdk:alpine
+  needs:
+    - job: packaging
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
+    - if: '$CI_COMMIT_TAG =~ /^(test_).*/'
   script:
-    - echo "This will be the upload script for $CI_COMMIT_TAG"
-    - echo copying to $GCLOUD_DEPLOY_PATH
     - gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_ACCOUNT
-    - cd build; gsutil -m rsync -r . $GCLOUD_DEPLOY_PATH
+    - cd build; gsutil -m rsync -r . $GCLOUD_TESTING_DEPLOY_PATH
+
+# copy the assets over to our distribution storage (full release, tag = v.*)
+upload_release:
+  stage: deploy
+  image: google/cloud-sdk:alpine
+  needs:
+    - job: packaging
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(v).*/'
+  script:
+    - gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_ACCOUNT
+    - cd build; gsutil -m rsync -r . $GCLOUD_RELEASE_DEPLOY_PATH
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now
@@ -89,11 +106,16 @@ source_release:
   stage: deploy
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v.*/'
+    - if: '$CI_COMMIT_TAG =~ /^(v).*/'
+  release:
+    tag_name: '$CI_COMMIT_TAG'
+    name: 'GridTracker $CI_COMMIT_TAG'
+    description: 'GridTracker source archive for $CI_COMMIT_TAG'
+    ref: '$CI_COMMIT_SHA'
   script:
     - echo 'Release for $CI_COMMIT_TAG'
-  release:
-    name: 'GridTracker $CI_COMMIT_TAG'
-    description: 'GridTracker source $CI_COMMIT_TAG'
-    tag_name: '$CI_COMMIT_TAG'
-    ref: '$CI_COMMIT_SHA'
+  # (unused yet, need to decide if we do this manually or not)
+  # release-cli create  --name "$GridTracker $CI_COMMIT_TAG" \
+  #                     --tag-name "$CI_COMMIT_TAG" \
+  #                     --assets-link "{\"name\":\"${DARWIN_AMD64_BINARY}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${DARWIN_AMD64_BINARY}\"}" \
+  #                     --assets-link "{\"name\":\"${LINUX_AMD64_BINARY}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${LINUX_AMD64_BINARY}\"}"

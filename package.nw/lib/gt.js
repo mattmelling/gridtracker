@@ -5670,8 +5670,11 @@ function handleWsjtxStatus(newMessage) {
       txrxdec.innerHTML = "RECEIVE";
     }
 
-    if (newMessage.TxEnabled == 1 && g_spotsEnabled == 0) {
-      if (g_mapSettings.fitQRZ) {
+    if (newMessage.TxEnabled) {
+      if (
+        g_mapSettings.fitQRZ &&
+        (!g_spotsEnabled || g_receptionSettings.mergeSpots)
+      ) {
         if (g_lastMapView == null) {
           g_lastMapView = {};
           g_lastMapView.LoLa = g_mapView.getCenter();

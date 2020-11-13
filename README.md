@@ -26,18 +26,8 @@ If you want to know more about why these tools are useful,
 
 # Developer Environment Setup
 
-## Developing on Windows
-
-To access the Developer Tools, right-click on an unused area of a window, or press F12.
-
-## Developing on Linux
-
-To access the Developer Tools, right-click on an unused area of a window, or press F12.
-
-## Developing on Mac
-
-We suggest using the `macos/run.sh` script to launch GridTracker while developing. It will download the sdk flavor
-of NWJS if needed, and use it to run the app.
+Running on MacOS, Linux (i386, amd64 only), and Windows (x86, amd64), just run
+`npm start` from the top level directory.
 
 To access the Developer Tools, right-click on an unused area of a window, or press F12.
 

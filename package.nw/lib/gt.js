@@ -5671,8 +5671,10 @@ function handleWsjtxStatus(newMessage) {
     }
 
     if (newMessage.TxEnabled) {
-      if (g_mapSettings.fitQRZ &&
-          (!g_spotsEnabled || g_receptionSettings.mergeSpots)) {
+      if (
+        g_mapSettings.fitQRZ &&
+        (!g_spotsEnabled || g_receptionSettings.mergeSpots)
+      ) {
         if (g_lastMapView == null) {
           g_lastMapView = {};
           g_lastMapView.LoLa = g_mapView.getCenter();

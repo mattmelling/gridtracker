@@ -12784,6 +12784,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
     getLookProp(lookup, "fname"),
     getLookProp(lookup, "name")
   );
+  lookup.fname = "";
 
   if (cacheable) {
     lookup.cached = timeNowSec();

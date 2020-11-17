@@ -65,7 +65,7 @@ function gtConnectChat() {
   var rnd = parseInt(Math.random() * 10) + 18260;
   try {
     g_gtState = ChatState.connecting;
-    g_gtChatSocket = new WebSocket("wss://tagloomis.com:" + rnd);
+    g_gtChatSocket = new WebSocket("wss://oams.space:" + rnd);
   } catch (e) {
     g_gtState = ChatState.error;
     return;

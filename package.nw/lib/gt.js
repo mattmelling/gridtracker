@@ -9442,7 +9442,7 @@ function newMessageSetting(whichSetting) {
 function checkForNewVersion(showUptoDate) {
   if (typeof nw != "undefined")
     getBuffer(
-      "https://tagloomis.com/gt/version.txt?lang=" + g_localeString,
+      "https://gridtracker.org/gt/version.txt?lang=" + g_localeString,
       versionCheck,
       showUptoDate,
       "https",
@@ -10799,12 +10799,8 @@ function versionCheck(buffer, flag) {
 }
 
 function onExitAppToGoWebsite() {
-  require("nw.gui").Shell.openExternal("https://tagloomis.com/");
+  require("nw.gui").Shell.openExternal("https://gridtracker.org/");
   saveAndCloseApp();
-}
-
-function mailMe() {
-  require("nw.gui").Shell.openExternal("mailto:tag.loomis@gmail.com");
 }
 
 function mailThem(address) {
@@ -13534,7 +13530,7 @@ function pskSpotCheck(timeSec) {
         "&senderCallsign=" +
         encodeURIComponent(myRawCall) +
         "&appcontact=" +
-        encodeURIComponent("tag.loomis@gmail.com"),
+        encodeURIComponent("contact@gridtracker.org"),
       pskSpotResults,
       null,
       "https",
@@ -13968,7 +13964,7 @@ function updateSpotView(leaveCount = true) {
 
 function gotoDonate() {
   var gui = require("nw.gui");
-  gui.Shell.openExternal("https://tagloomis.com/donations/");
+  gui.Shell.openExternal("https://gridtracker.org/donations/");
 }
 
 function changeRosterTime() {

@@ -234,8 +234,7 @@ function oqrsValuesChanged() {
 function oqrsDownload(fromSettings) {
   oqrsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
   getBuffer(
-    "https://dl.dropboxusercontent.com/s/9nycdpbxx5b3bpp/clublog.json?cb=" +
-      timeNowSec(),
+    "https://gridtracker.org/gt/clublog.json",
     processoqrsCallsigns,
     null,
     "https",
@@ -450,8 +449,7 @@ function ulsDownload() {
   ulsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
   ulsCountTd.innerHTML = 0;
   getChunkedBuffer(
-    "https://dl.dropboxusercontent.com/s/91iynrvdse7zcf5/callsigns.txt?cb=" +
-      timeNowSec(),
+    "https://gridtracker.org/gt/callsigns.txt",
     processulsCallsigns,
     null,
     "https",

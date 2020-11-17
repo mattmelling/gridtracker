@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Paul Traina <216482-pleasantone@users.noreply.gitlab.com>
 Build-Depends: debhelper (>= 12.1)
 Standards-Version: 4.3.0
-Homepage: http://tagloomis.com/
+Homepage: http://gridtracker.org/
 
 Package: gridtracker
 Architecture: all

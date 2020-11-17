@@ -1504,7 +1504,7 @@ function sendToLogger(ADIF) {
   }
 
   if (!("COUNTRY" in record) && Number(record["DXCC"]) > 0) {
-    record["COUNTRY"] = g_dxccToAltName[Number(record["DXCC"])];
+    record["COUNTRY"] = g_dxccToADIFName[Number(record["DXCC"])];
   }
 
   if (g_appSettings.lookupMerge == true) {

@@ -31,7 +31,7 @@ make
 %install
 make install DESTDIR=${RPM_BUILD_ROOT}
 # temporary hack to check if all of our files were installed properly
-find ${RPM_BUILD_ROOT} -ls
+find ${RPM_BUILD_ROOT}/usr/share/man -ls
 
 %check
 # desktop-file-validate desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop

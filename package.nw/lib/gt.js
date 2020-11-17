@@ -1,10 +1,11 @@
 // GridTracker ©2020 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
-var gtVersion = 1201107;
-var gtBeta = "Phoenix";
-var g_startVersion = 0;
+var pjson = require("./package.json");
+var gtVersion = parseInt(pjson.version.replace(/\./g, ""));
+var gtBeta = pjson.betaVersion;
 
+var g_startVersion = 0;
 if (typeof localStorage.currentVersion != "undefined")
   g_startVersion = localStorage.currentVersion;
 

@@ -64,17 +64,23 @@ packaging:
         - package.nw/package.json
   script:
     - mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
-    - mkdir -p build/debian
+    - mkdir -p build/debian build/rpm
     - dpkg --add-architecture i386
     - apt-get -qq update
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
+    - echo "Building native packages"
     - npm install --prefer-offline
     - npm run dist
     - (cd dist ; mv *.zip *.exe *.7z *.json ../build)
+    - echo "Building Debian packages"
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
     - dpkg-buildpackage -uc -us
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
+    - echo "Building RPM packages"
+    - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpmbuild
+    - rpmbuild -D "version `node ./version.js`" --build-in-place -bb --target noarch gridtracker.spec
+    - mv $HOME/rpmbuild/RPMS/noarch/gridtracker-*.noarch.rpm build/rpm
 
 # copy the assets over to our distribution storage (testing, tag = test_.*)
 upload_testing:

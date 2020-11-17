@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=GridTracker
 Comment=GridTracker
-GenericName=GridTracker, a WSJT-X Companion
+GenericName=GridTracker, an Amateur Radio Companion
 Exec=gridtracker
 Icon=/usr/share/gridtracker/gridview.png
 Encoding=UTF-8

@@ -12,4 +12,7 @@ Depends: nwjs (>= 0.47.4), fonts-noto, ${misc:Depends}
 Recommends: speech-dispatcher-espeak-ng
 Description: Companion program to WSJT-X/JTDX
  .
- GridTracker cleans your teeth and freshens your breath.
+ GridTracker listens to traffic from WSJT-X/JTDX, displays it on a map,
+ and has a sophisticated alerting and filtering system for finding and
+ working interesting stations. It also will upload QSO records to multiple
+ logging frameworks including Logbook of the World.

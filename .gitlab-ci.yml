@@ -71,7 +71,7 @@ packaging:
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm
     - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
-    - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch: `node version.js` != `dpkg-parsechangelog -S version`"; exit 1)
+    - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
     - echo "Building native packages"
     - npm install --prefer-offline
     - npm run dist

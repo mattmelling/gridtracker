@@ -2487,7 +2487,7 @@ function didConfirm(testObj) {
   return testObj.confirmed;
 }
 
-function drawTitleInfo() {
+function makeTitleInfo(mapWindow) {
   var band =
     g_appSettings.gtBandFilter.length == 0
       ? "Mixed"
@@ -2501,41 +2501,36 @@ function drawTitleInfo() {
       ? myMode
       : g_appSettings.gtModeFilter;
   var space = " ";
-  var news =
-    gtVersionString +
-    " [" +
-    " Band: " +
-    band +
-    " Mode: " +
-    mode +
-    " Layer: " +
-    g_viewInfo[g_currentOverlay][1];
+  var news = gtVersionString + " [" + " Band: " + band + " Mode: " + mode;
   var end = " ]";
 
-  if (g_currentOverlay == 0 && g_appSettings.gridViewMode == 1) {
-    window.document.title = news + end;
-  } else {
-    var workline =
-      " -- Worked (" +
-      g_viewInfo[g_currentOverlay][2] +
-      ") Confirmed (" +
-      g_viewInfo[g_currentOverlay][3] +
-      ")";
-    if (
-      g_viewInfo[g_currentOverlay][2] <= g_viewInfo[g_currentOverlay][4] &&
-      g_viewInfo[g_currentOverlay][4] > 0
-    )
-      end =
-        " Needed (" +
-        (g_viewInfo[g_currentOverlay][4] - g_viewInfo[g_currentOverlay][2]) +
-        ") ]";
-    window.document.title = news + workline + end;
+  if (mapWindow) {
+    news += " Layer: " + g_viewInfo[g_currentOverlay][1];
   }
+
+  if (g_currentOverlay == 0 && g_appSettings.gridViewMode == 1)
+    return news + end;
+
+  var workline =
+    " -- Worked (" +
+    g_viewInfo[g_currentOverlay][2] +
+    ") Confirmed (" +
+    g_viewInfo[g_currentOverlay][3] +
+    ")";
+  if (
+    g_viewInfo[g_currentOverlay][2] <= g_viewInfo[g_currentOverlay][4] &&
+    g_viewInfo[g_currentOverlay][4] > 0
+  )
+    end =
+      " Needed (" +
+      (g_viewInfo[g_currentOverlay][4] - g_viewInfo[g_currentOverlay][2]) +
+      ") ]";
+  return news + workline + end;
 }
 
 function setTrophyOverlay(which) {
   g_currentOverlay = which;
-  drawTitleInfo();
+  window.document.title = makeTitleInfo(true);
   trophyImg.src = g_trophyImageArray[which];
   myTrophyTooltip.style.zIndex = -1;
   clearCurrentShapes();

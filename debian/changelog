@@ -1,14 +1,24 @@
-gridtracker (1.20.1107) unstable; urgency=low
+gridtracker (1.20.1118) unstable; urgency=low
 
   * GridTracker is now Open Source! Copyright assigned to GridTracker.org and
     is BSD 3-clause.
   [ Paul Traina ]
-  * Disable fit to QTH when in PSK mode
-  * Highlight confirmed DXCC countries in DXCC report
-  * Unify worked/confirmed/unworked in WAC/WAS/CQ Zones/ITU Zones reports
+  * Disconnect from tagloomis.com infrastructure -> gridtracker.org
+  * Disable fit to QTH when in PSK mode.
+  * Highlight confirmed DXCC countries in DXCC report.
+  * Unify worked/confirmed/unworked in WAC/WAS/CQ Zones/ITU Zones reports.
   * In call roster, when requiring LoTW, don't show stations that don't meet
     time limits.
-  * Support auto-building CI/CD for GitLab and Debian Packaging
+  * Improve call roster title bar.
+  * Fix duplicate-first-name in lookup window.
+  * Change ADIF COUNTRY field output to comply with ADIF 3.1.1 specification.
+  * Clean up media handling.
+    Don't create duplicates of GT's media files in Documents/GridTracker/media.
+    Remove any duplicates that are already there.
+    User directory is still respected if you want to add your own files there.
+  * Add a man page for GridTracker for Linux packages.
+  * Add RPM build support, based upon NR0Q's work.
+  * Support auto-building CI/CD for GitLab, Debian, and RPM packaging
   [ Sebastian Delmont ]
   * Improve roster controls
   * Clean up and pretify HTML and JSON code, reformat code base.
@@ -16,7 +26,6 @@ gridtracker (1.20.1107) unstable; urgency=low
     forwarding enabled.
   * Improve debugging/developer experience by enabling context menus when
     using nwjs's SDK.
-  * Ignore MacOS folder info
 
  -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Wed, 04 Nov 2020 15:58:29 -0800
 

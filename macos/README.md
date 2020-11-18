@@ -1,4 +1,4 @@
-# [Deprecated]
+# [Deprecated] DO NOT USE, KEPT FOR REFERENCE
 
 Use standard "npm run start" and "npm run dist" commands.
 

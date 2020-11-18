@@ -1727,7 +1727,7 @@ function finishSendingReport(record, localMode) {
 
 function alertLogMessage() {
   if (logEventMedia.value != "none") {
-    playAlertMediaFile(g_mediaDir + g_dirSeperator + logEventMedia.value);
+    playAlertMediaFile(logEventMedia.value);
   }
 }
 

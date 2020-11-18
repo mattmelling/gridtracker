@@ -1,7 +1,7 @@
 // GridTracker ©2020 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
-var pjson = require("./package.json");
+const pjson = require("./package.json");
 var gtVersion = parseInt(pjson.version.replace(/\./g, ""));
 var gtBeta = pjson.betaVersion;
 
@@ -31,17 +31,18 @@ var gtShortVersion =
 var gtVersionString = "GridTracker " + gtShortVersion;
 
 var g_windowName = "GT-main";
-var os = require("os");
-var fs = require("fs");
+const os = require("os");
+const fs = require("fs");
+const process = require("process");
+const path = require("path");
+const g_dirSeperator = path.sep;
+
 var g_platform = os.platform();
 if (g_platform.indexOf("win") == 0 || g_platform.indexOf("Win") == 0) {
   g_platform = "windows";
 }
 if (g_platform.indexOf("inux") > -1) g_platform = "linux";
 if (g_platform.indexOf("darwin") > -1) g_platform = "mac";
-
-var g_dirSeperator = "/";
-if (g_platform == "windows") g_dirSeperator = "\\";
 
 var gui = require("nw.gui");
 var win = gui.Window.get();
@@ -446,7 +447,8 @@ var g_NWappData = "";
 var g_screenshotDir = "";
 var g_scriptDir = "";
 var g_qsoLogFile = "";
-var g_mediaDir = "";
+var g_userMediaDir = "";
+var g_gtMediaDir = path.resolve("./media");
 var g_localeString = navigator.language;
 
 var g_shapeFile = "./data/shapes.json";
@@ -2299,7 +2301,7 @@ function onMyKeyDown(event) {
       processedAlert = true;
     }
     if (processedAlert == true) {
-      playAlertMediaFile(g_mediaDir + mediaClip);
+      playAlertMediaFile(mediaClip);
     }
     return;
   }
@@ -2360,7 +2362,7 @@ function mapMemory(x, save, exit = false) {
     g_mapMemory[x].zoom = g_mapView.getZoom();
     localStorage.mapMemory = JSON.stringify(g_mapMemory);
     if (exit == false) {
-      playAlertMediaFile(g_mediaDir + g_dirSeperator + "Clicky-3.mp3");
+      playAlertMediaFile("Clicky-3.mp3");
     }
   } else {
     if (g_mapMemory[x].zoom != -1) {
@@ -3848,17 +3850,19 @@ function changeStrikesAlert() {
 }
 
 function playStrikeAlert() {
-  if (g_mapSettings.strikesAlert > 0) {
-    var filename = g_mediaDir + g_dirSeperator;
-    if (g_mapSettings.strikesAlert == 1) filename += "short-strike.wav";
-    if (g_mapSettings.strikesAlert == 2) filename += "long-strike.mp3";
-    if (g_mapSettings.strikesAlert == 3) filename += "strike-detected.mp3";
-
-    var audio = document.createElement("audio");
-    audio.src = "file://" + filename;
-    audio.setSinkId(g_soundCard);
-    audio.volume = g_audioSettings.volume;
-    audio.play();
+  switch (g_mapSettings.strikesAlert) {
+    case 1:
+      playAlertMediaFile("short-strike.wav", true);
+      break;
+    case 2:
+      playAlertMediaFile("long-strike.mp3", true);
+      break;
+    case 3:
+      playAlertMediaFile("strike-detected.mp3", true);
+      break;
+    default:
+      // do nothing
+      break;
   }
 }
 
@@ -9628,13 +9632,9 @@ function getIniFromApp(appName) {
     if (end > -1) {
       wsjtxCfgPath = data.substr(0, end) + appName + "\\" + appName + ".ini";
     }
-  }
-  if (g_platform == "mac") {
-    process = require("process");
+  } else if (g_platform == "mac") {
     wsjtxCfgPath = process.env.HOME + "/Library/Preferences/WSJT-X.ini";
-  }
-  if (g_platform == "linux") {
-    process = require("process");
+  } else {
     wsjtxCfgPath = process.env.HOME + "/.config/" + appName + ".ini";
   }
   if (fs.existsSync(wsjtxCfgPath)) {
@@ -9694,25 +9694,21 @@ function getIniFromApp(appName) {
 }
 
 function checkRunningProcesses() {
+  const child_process = require("child_process");
   var list = "";
   if (g_platform == "windows") {
-    var child_process = require("child_process");
     list = child_process.execFileSync("tasklist.exe");
     if (list.indexOf("wsjtx") > -1) g_wsjtxProcessRunning = true;
     else g_wsjtxProcessRunning = false;
     if (list.indexOf("jtdx") > -1) g_jtdxProcessRunning = true;
     else g_jtdxProcessRunning = false;
-  }
-  if (g_platform == "mac") {
-    var child_process = require("child_process");
+  } else if (g_platform == "mac") {
     list = child_process.execFileSync("ps", ["-aef"]);
     if (list.indexOf("jt9 -s WSJT-X") > -1) g_wsjtxProcessRunning = true;
     else g_wsjtxProcessRunning = false;
     // no jtdx on Mac, woot!
     g_jtdxProcessRunning = false;
-  }
-  if (g_platform == "linux") {
-    var child_process = require("child_process");
+  } else {
     list = child_process.execFileSync("ps", ["-aef"]);
     if (list.indexOf("wsjtx") > -1) g_wsjtxProcessRunning = true;
     else g_wsjtxProcessRunning = false;
@@ -13239,141 +13235,82 @@ function is_dir(path) {
   }
 }
 
+// Old versions of GridTracker copied its own media files into the
+// user's media directory. Clean out old duplicate files from the
+// user directory if they have the same name and size in the
+// system directory.
+//
+function purgeUserFiles(userDir, systemDir) {
+  var userFiles = fs.readdirSync(userDir);
+  var systemFiles = fs.readdirSync(systemDir);
+  userFiles.forEach((filename) => {
+    if (systemFiles.includes(filename)) {
+      var userPath = path.join(userDir, filename);
+      var systemPath = path.join(systemDir, filename);
+      console.log(userPath + " -- " + systemPath);
+      if (fs.statSync(userPath).size == fs.statSync(systemPath).size) {
+        console.log("removing duplicate user media " + filename);
+        try {
+          fs.unlinkSync(userPath);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }
+  });
+}
+
 function mediaCheck() {
-  if (g_platform == "windows") {
-    var process = require("process");
+  var homeDir =
+    g_platform == "windows" ? process.env.USERPROFILE : process.env.HOME;
 
-    g_appData = process.env.USERPROFILE + "\\Dokumente";
+  g_appData = path.join(homeDir, "Dokumente");
+  if (!is_dir(g_appData)) {
+    g_appData = path.join(homeDir, "Documents");
     if (!is_dir(g_appData)) {
-      g_appData = process.env.USERPROFILE + "\\Documents";
-      if (!is_dir(g_appData)) {
-        if (g_appSettings.savedAppData != null) {
-          g_appData = g_appSettings.savedAppData;
-          if (!is_dir(g_appData)) return false;
-        } else return false;
-      }
+      if (g_appSettings.savedAppData != null) {
+        g_appData = g_appSettings.savedAppData;
+        if (!is_dir(g_appData)) return false;
+      } else return false;
     }
-
-    g_appData += "\\GridTracker";
-    g_mediaDir = g_appData + "\\media";
-    g_jsonDir = g_appData + "\\data";
-    g_NWappData = nw.App.dataPath + "\\Ginternal";
-    g_screenshotDir = g_appData + "\\screenshots";
-    g_scriptDir = g_appData + "\\scripts";
-
-    try {
-      if (!fs.existsSync(g_appData)) {
-        fs.mkdirSync(g_appData);
-      }
-
-      if (!fs.existsSync(g_NWappData)) {
-        fs.mkdirSync(g_NWappData);
-      }
-
-      if (!fs.existsSync(g_screenshotDir)) {
-        fs.mkdirSync(g_screenshotDir);
-      }
-      if (!fs.existsSync(g_scriptDir)) {
-        fs.mkdirSync(g_scriptDir);
-      }
-
-      g_jsonDir += g_dirSeperator;
-      g_NWappData += g_dirSeperator;
-      g_screenshotDir += g_dirSeperator;
-      g_scriptDir += g_dirSeperator;
-      if (!fs.existsSync(g_mediaDir + g_dirSeperator + "long-strike.mp3")) {
-        if (!fs.existsSync(g_mediaDir)) fs.mkdirSync(g_mediaDir);
-        var sourceMediaDir = ".\\media";
-        if (fs.existsSync(sourceMediaDir)) {
-          var filesToMove = fs.readdirSync(sourceMediaDir);
-          for (var key in filesToMove) {
-            var source = sourceMediaDir + g_dirSeperator + filesToMove[key];
-            var target = g_mediaDir + g_dirSeperator + filesToMove[key];
-            fs.copyFileSync(
-              sourceMediaDir + g_dirSeperator + filesToMove[key],
-              g_mediaDir + "\\" + filesToMove[key]
-            );
-          }
-        }
-      }
-    } catch (e) {
-      alert(
-        "Unable to create or access " +
-          g_appData +
-          " folder.\r\nPermission violation, GT cannot continue"
-      );
-      nw.App.quit();
-    }
-
-    g_qsoLogFile = g_appData + "\\GridTracker_QSO.adif";
   }
-  if (g_platform == "mac" || g_platform == "linux") {
-    var process = require("process");
 
-    g_appData = process.env.HOME + "/Dokumente";
-    if (!is_dir(g_appData)) {
-      g_appData = process.env.HOME + "/Documents";
-      if (!is_dir(g_appData)) {
-        if (g_appSettings.savedAppData != null) {
-          g_appData = g_appSettings.savedAppData;
-          if (!is_dir(g_appData)) return false;
-        } else return false;
+  g_appData = path.join(g_appData, "GridTracker");
+  g_userMediaDir = path.join(g_appData, "media");
+  g_jsonDir = path.join(g_appData, "data");
+  g_screenshotDir = path.join(g_appData, "screenshots");
+  g_scriptDir = path.join(g_appData, "scripts");
+
+  g_NWappData = path.join(nw.App.dataPath, "Ginternal");
+
+  try {
+    var userdirs = [
+      g_appData,
+      g_NWappData,
+      g_screenshotDir,
+      g_scriptDir,
+      g_userMediaDir,
+    ];
+    for (var dir of userdirs) {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
       }
     }
-
-    g_appData += "/GridTracker";
-
-    var mediaDir = g_appData + "/media";
-    g_jsonDir = g_appData + "/data";
-    g_NWappData = nw.App.dataPath + "/Ginternal";
-    g_screenshotDir = g_appData + "/screenshots";
-    g_scriptDir = g_appData + "/scripts";
-    try {
-      if (!fs.existsSync(g_appData)) {
-        fs.mkdirSync(g_appData);
-      }
-      if (!fs.existsSync(g_NWappData)) {
-        fs.mkdirSync(g_NWappData);
-      }
-
-      if (!fs.existsSync(g_screenshotDir)) {
-        fs.mkdirSync(g_screenshotDir);
-      }
-      if (!fs.existsSync(g_scriptDir)) {
-        fs.mkdirSync(g_scriptDir);
-      }
-
-      if (!fs.existsSync(mediaDir + g_dirSeperator + "long-strike.mp3")) {
-        if (!fs.existsSync(mediaDir)) fs.mkdirSync(mediaDir);
-        var sourceMediaDir = "./media";
-        if (fs.existsSync(sourceMediaDir)) {
-          var filesToMove = fs.readdirSync(sourceMediaDir);
-          for (var key in filesToMove) {
-            var source = sourceMediaDir + g_dirSeperator + filesToMove[key];
-            var target = mediaDir + g_dirSeperator + filesToMove[key];
-            fs.copyFileSync(
-              sourceMediaDir + g_dirSeperator + filesToMove[key],
-              mediaDir + g_dirSeperator + filesToMove[key]
-            );
-          }
-        }
-      }
-    } catch (e) {
-      alert(
-        "Unable to create or access " +
-          g_appData +
-          " folder.\r\nPermission violation, GT cannot continue"
-      );
-      nw.App.quit();
-    }
-
-    g_jsonDir += g_dirSeperator;
-    g_NWappData += g_dirSeperator;
-    g_screenshotDir += g_dirSeperator;
-    g_scriptDir += g_dirSeperator;
-    g_mediaDir = mediaDir;
-    g_qsoLogFile = g_appData + g_dirSeperator + "GridTracker_QSO.adif";
+  } catch (e) {
+    alert(
+      "Unable to create or access " +
+        g_appData +
+        " folder.\r\nPermission violation, GT cannot continue"
+    );
+    nw.App.quit();
   }
+
+  g_jsonDir += g_dirSeperator;
+  g_NWappData += g_dirSeperator;
+  g_screenshotDir += g_dirSeperator;
+  g_scriptDir += g_dirSeperator;
+
+  g_qsoLogFile = path.join(g_appData, "GridTracker_QSO.adif");
 
   logEventMedia.appendChild(newOption("none", "None"));
   msgAlertMedia.appendChild(newOption("none", "Select File"));
@@ -13386,22 +13323,28 @@ function mediaCheck() {
   huntStatesNotifyMedia.appendChild(newOption("none", "Select File"));
   huntRosterNotifyMedia.appendChild(newOption("none", "Select File"));
 
-  var mediaFiles = fs.readdirSync(g_mediaDir);
-  var path = g_mediaDir + g_dirSeperator;
+  purgeUserFiles(g_userMediaDir, g_gtMediaDir);
 
-  for (var key in mediaFiles) {
-    var path = g_mediaDir + g_dirSeperator + mediaFiles[key];
-    logEventMedia.appendChild(newOption(mediaFiles[key], mediaFiles[key]));
-    alertMediaSelect.appendChild(newOption(path, mediaFiles[key]));
-    huntCallsignNotifyMedia.appendChild(newOption(path, mediaFiles[key]));
-    huntGridNotifyMedia.appendChild(newOption(path, mediaFiles[key]));
-    huntDXCCNotifyMedia.appendChild(newOption(path, mediaFiles[key]));
-    huntCQzNotifyMedia.appendChild(newOption(path, mediaFiles[key]));
-    huntITUzNotifyMedia.appendChild(newOption(path, mediaFiles[key]));
-    huntStatesNotifyMedia.appendChild(newOption(path, mediaFiles[key]));
-    huntRosterNotifyMedia.appendChild(newOption(path, mediaFiles[key]));
-    msgAlertMedia.appendChild(newOption(path, mediaFiles[key]));
-  }
+  // add all the files in both directories to the list, user filenames
+  // override system filenames later
+
+  var mediaFiles = [].concat(
+    fs.readdirSync(g_userMediaDir),
+    fs.readdirSync(g_gtMediaDir)
+  );
+  mediaFiles.forEach((filename) => {
+    var noExt = path.parse(filename).name;
+    logEventMedia.appendChild(newOption(filename, noExt));
+    alertMediaSelect.appendChild(newOption(filename, noExt));
+    huntCallsignNotifyMedia.appendChild(newOption(filename, noExt));
+    huntGridNotifyMedia.appendChild(newOption(filename, noExt));
+    huntDXCCNotifyMedia.appendChild(newOption(filename, noExt));
+    huntCQzNotifyMedia.appendChild(newOption(filename, noExt));
+    huntITUzNotifyMedia.appendChild(newOption(filename, noExt));
+    huntStatesNotifyMedia.appendChild(newOption(filename, noExt));
+    huntRosterNotifyMedia.appendChild(newOption(filename, noExt));
+    msgAlertMedia.appendChild(newOption(filename, noExt));
+  });
 
   var modeData = fs.readFileSync("./data/modes.json");
   g_modes = JSON.parse(modeData);

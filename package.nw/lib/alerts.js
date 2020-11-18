@@ -295,7 +295,7 @@ function changeAudioValues() {
 }
 
 function playTestFile() {
-  playAlertMediaFile(g_mediaDir + g_dirSeperator + "Sysenter-7.mp3");
+  playAlertMediaFile("Sysenter-7.mp3");
 }
 
 function changeSpeechValues() {
@@ -556,14 +556,17 @@ function handleAlert(nAlert, target, lastMessage, callsignRecord, grid) {
   nAlert.fired++;
 }
 
-function playAlertMediaFile(filename) {
-  if (g_appSettings.alertMute == 0) {
-    var audio = document.createElement("audio");
-    audio.src = "file://" + filename;
-    audio.setSinkId(g_soundCard);
-    audio.volume = g_audioSettings.volume;
-    audio.play();
-  }
+function playAlertMediaFile(filename, overrideMute) {
+  if (g_appSettings.alertMute && !overrideMute) return;
+
+  var fpath = path.join(g_userMediaDir, filename);
+  if (!fs.existsSync(fpath)) fpath = path.join(g_gtMediaDir, filename);
+
+  var audio = document.createElement("audio");
+  audio.src = "file://" + fpath;
+  audio.setSinkId(g_soundCard);
+  audio.volume = g_audioSettings.volume;
+  audio.play();
 }
 
 function stringToPhonetics(string) {

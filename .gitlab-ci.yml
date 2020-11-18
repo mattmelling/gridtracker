@@ -80,8 +80,8 @@ packaging:
     - dpkg-buildpackage -uc -us
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
     - echo "Building RPM packages"
-    - rpmbuild -D "version `node ./version.js`" --build-in-place --buildroot `pwd`/buildroot -bb --target noarch gridtracker.spec
-    - mv buildroot/RPMS/noarch/gridtracker-*.noarch.rpm build/rpm
+    - rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.spec
+    - mv /root/rpmbuild/RPMS/noarch/gridtracker-*.noarch.rpm build/rpm
 
 # copy the assets over to our distribution storage (testing, tag = test_.*)
 upload_testing:

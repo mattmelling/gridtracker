@@ -570,16 +570,17 @@ function processulsCallsigns(data, flag, cookies, starting, finished) {
                 '")'
             );
             if (g_ulsCallsignsCount % 10000 == 0) {
-              tx.executeSql("SELECT count(*) as cnt FROM calls", [], function (
-                rx,
-                results
-              ) {
-                var len = results.rows.length,
-                  i;
-                if (len == 1) {
-                  ulsCountTd.innerHTML = results.rows[0]["cnt"];
+              tx.executeSql(
+                "SELECT count(*) as cnt FROM calls",
+                [],
+                function (rx, results) {
+                  var len = results.rows.length,
+                    i;
+                  if (len == 1) {
+                    ulsCountTd.innerHTML = results.rows[0]["cnt"];
+                  }
                 }
-              });
+              );
             }
           }
         }
@@ -599,21 +600,22 @@ function processulsCallsigns(data, flag, cookies, starting, finished) {
     g_ulsLoadTimer = setTimeout(ulsDownload, ulsWhenTimer * 1000);
 
     g_ulsDatabase.transaction(function (tx) {
-      tx.executeSql("SELECT count(*) as cnt FROM calls", [], function (
-        rx,
-        results
-      ) {
-        var len = results.rows.length,
-          i;
-        if (len == 1) {
-          g_ulsCallsignsCount = results.rows[0]["cnt"];
-          ulsCountTd.innerHTML = g_ulsCallsignsCount;
-          g_callsignLookups.ulsLastUpdate = timeNowSec();
-          saveCallsignSettings();
-          ulsSettingsDisplay();
-          updateQSO();
+      tx.executeSql(
+        "SELECT count(*) as cnt FROM calls",
+        [],
+        function (rx, results) {
+          var len = results.rows.length,
+            i;
+          if (len == 1) {
+            g_ulsCallsignsCount = results.rows[0]["cnt"];
+            ulsCountTd.innerHTML = g_ulsCallsignsCount;
+            g_callsignLookups.ulsLastUpdate = timeNowSec();
+            saveCallsignSettings();
+            ulsSettingsDisplay();
+            updateQSO();
+          }
         }
-      });
+      );
     });
   }
 

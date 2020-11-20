@@ -31,11 +31,11 @@ make
 %install
 make install DESTDIR=${RPM_BUILD_ROOT}
 
-%check
+# %check
 # desktop-file-validate desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
-%clean
-make clean
+# %clean
+# make clean
 
 %files
 %{_bindir}/%{name}

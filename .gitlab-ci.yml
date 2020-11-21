@@ -85,7 +85,7 @@ packaging:
     - npm install --prefer-offline
     - npm run dist
     - for dir in dist/*-linux-* ; do if [ -d $dir ] ; then tar -C dist -cjf ${dir}.tar.bz `basename $dir` ; fi ; done
-    - (cd dist ; mv *.exe *.mac-x64.zip *.tar.bz ../build)
+    - (cd dist ; mv *.exe *-mac-x64.zip *.tar.bz ../build)
     - echo "Building Debian packages"
     - dpkg-buildpackage -uc -us
     - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/

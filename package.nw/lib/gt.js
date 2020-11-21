@@ -2503,8 +2503,8 @@ function makeTitleInfo(mapWindow) {
       ? myMode
       : g_appSettings.gtModeFilter;
   var space = " ";
-  var news = gtVersionString + " [" + " Band: " + band + " Mode: " + mode;
-  var end = " ]";
+  var news = "GridTracker [Band: " + band + " Mode: " + mode;
+  var end = "]";
 
   if (mapWindow) {
     news += " Layer: " + g_viewInfo[g_currentOverlay][1];
@@ -2514,19 +2514,18 @@ function makeTitleInfo(mapWindow) {
     return news + end;
 
   var workline =
-    " -- Worked (" +
+    " - Worked " +
     g_viewInfo[g_currentOverlay][2] +
-    ") Confirmed (" +
-    g_viewInfo[g_currentOverlay][3] +
-    ")";
+    " Confirmed " +
+    g_viewInfo[g_currentOverlay][3];
   if (
     g_viewInfo[g_currentOverlay][2] <= g_viewInfo[g_currentOverlay][4] &&
     g_viewInfo[g_currentOverlay][4] > 0
   )
     end =
-      " Needed (" +
+      " Needed " +
       (g_viewInfo[g_currentOverlay][4] - g_viewInfo[g_currentOverlay][2]) +
-      ") ]";
+      "]";
   return news + workline + end;
 }
 

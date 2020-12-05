@@ -125,6 +125,7 @@ var g_defaultSettings = {
   },
   reference: 0,
   controls: true,
+  controlsExpanded: false,
   compact: false,
   settingProfiles: false,
   lastSortIndex: 6,
@@ -2383,13 +2384,10 @@ function closeAwardPopup() {
 }
 
 function toggleMoreControls() {
-  g_rosterSettings.controls = !g_rosterSettings.controls;
+  g_rosterSettings.controlsExtended = !g_rosterSettings.controlsExtended;
+  localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
 
-  if (g_rosterSettings.controls) {
-    RosterControls.className = "extended";
-  } else {
-    RosterControls.className = "normal";
-  }
+  setVisual();
 }
 
 function setVisual() {
@@ -2398,10 +2396,15 @@ function setVisual() {
   HuntDXCCsControls.style.display = "none";
 
   if (g_rosterSettings.controls) {
-    RosterControls.className = "extended";
+    if (g_rosterSettings.controlsExtended) {
+      RosterControls.className = "extended";
+    } else {
+      RosterControls.className = "normal";
+    }
   } else {
-    RosterControls.className = "normal";
+    RosterControls.className = "hidden";
   }
+
   // Award Hunter
   if (referenceNeed.value == 6) {
     /*for ( key in g_rosterSettings.wanted )
@@ -2934,6 +2937,46 @@ function init() {
   g_menu = new nw.Menu();
   g_compactMenu = new nw.Menu();
 
+  var item = new nw.MenuItem({
+    type: "normal",
+    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
+    click: function () {
+      if (this.label == "Hide Controls") {
+        this.label = "Show Controls";
+        g_rosterSettings.controls = false;
+      } else {
+        this.label = "Hide Controls";
+        g_rosterSettings.controls = true;
+      }
+      g_compactMenu.items[0].label = g_rosterSettings.controls
+        ? "Hide Controls"
+        : "Show Controls";
+      localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
+      setVisual();
+    },
+  });
+  g_menu.append(item);
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
+    click: function () {
+      if (this.label == "Hide Controls") {
+        this.label = "Show Controls";
+        g_rosterSettings.controls = false;
+      } else {
+        this.label = "Hide Controls";
+        g_rosterSettings.controls = true;
+      }
+      g_menu.items[0].label = g_rosterSettings.controls
+        ? "Hide Controls"
+        : "Show Controls";
+      localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
+      setVisual();
+    },
+  });
+  g_compactMenu.append(item);
+
   item = new nw.MenuItem({
     type: "normal",
     label: "Compact Mode",
@@ -3263,6 +3306,9 @@ function init() {
 function handleContextMenu(ev) {
   if (editView.style.display == "inline-block") return false;
 
+  var mouseX = Math.round(ev.x)
+  var mouseY = Math.round(ev.y)
+
   var len = Object.keys(g_blockedCalls).length;
   if (len > 0) {
     g_clearIgnores.enabled = true;
@@ -3308,32 +3354,32 @@ function handleContextMenu(ev) {
     var name = ev.target.getAttribute("name");
     if (name == "Callsign") {
       g_targetHash = ev.target.parentNode.id;
-      g_callMenu.popup(ev.x, ev.y);
+      g_callMenu.popup(mouseX, mouseY);
     } else if (name == "Calling") {
       g_targetHash = ev.target.parentNode.id;
-      g_callingMenu.popup(ev.x, ev.y);
+      g_callingMenu.popup(mouseX, mouseY);
     } else if (name == "CQ") {
       if (callRoster[ev.target.parentNode.id].DXcall != "CQ") {
         g_targetCQ = ev.target.parentNode.id;
-        g_CQMenu.popup(ev.x, ev.y);
+        g_CQMenu.popup(mouseX, mouseY);
       }
     } else if (name && name.startsWith("DXCC")) {
       var dxcca = name.split("(");
       var dxcc = parseInt(dxcca[1]);
       g_targetDxcc = dxcc;
-      g_dxccMenu.popup(ev.x, ev.y);
+      g_dxccMenu.popup(mouseX, mouseY);
     } else {
       if (g_rosterSettings.compact == false) {
-        g_menu.popup(ev.x, ev.y);
+        g_menu.popup(mouseX, mouseY);
       } else {
-        g_compactMenu.popup(ev.x, ev.y);
+        g_compactMenu.popup(mouseX, mouseY);
       }
     }
   } else {
     if (g_rosterSettings.compact == false) {
-      g_menu.popup(ev.x, ev.y);
+      g_menu.popup(mouseX, mouseY);
     } else {
-      g_compactMenu.popup(ev.x, ev.y);
+      g_compactMenu.popup(mouseX, mouseY);
     }
   }
 

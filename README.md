@@ -26,8 +26,33 @@ If you want to know more about why these tools are useful,
 
 # Developer Environment Setup
 
-Running on MacOS, Linux (i386, amd64 only), and Windows (x86, amd64), just run
-`npm start` from the top level directory.
+## x86-based Windows, Mac, Linux
+
+Run `npm install` and then `npm start`
+
+## ARM-based Raspberry
+
+Run `npm install`.
+
+Install the SDK version of the [unofficial NWJS for ARM](https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases)
+
+For example, by running these commands in the parent directory containing your local copy of the GridTracker repository.
+```
+mkdir -p nwjs && cd nwjs
+wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/nw49_2020-11-22/nw49_2020-11-22.tar.gz
+tar zxvf nw49_2020-11-22.tar.gz
+cd usr/docker/dist/nwjs-sdk-chrome-ffmpeg-branding
+tar zxvf nwjs-sdk-v0.49.3-linux-arm.tar.gz
+mv nwjs-sdk-v0.49.3-linux-arm ../../../nwjs-sdk
+cd ..
+```
+
+And now you can run GridTracker from your local repository with a command like
+```
+../nwjs/nwjs-sdk/nw ./package.nw
+```
+
+# Developer Tips
 
 To access the Developer Tools, right-click on an unused area of a window, or press F12.
 

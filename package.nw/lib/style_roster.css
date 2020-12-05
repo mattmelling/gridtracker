@@ -145,6 +145,14 @@ body.roster {
   max-height: 142px;
 }
 
+#RosterControls {
+  display: block;
+}
+
+#RosterControls.hidden {
+  display: none;
+}
+
 #RosterControls.normal #ShowFewerControlsLink {
   display: none;
 }

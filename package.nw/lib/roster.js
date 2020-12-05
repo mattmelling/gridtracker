@@ -2663,7 +2663,7 @@ function stateChangedValue(what) {
     if (window.opener.g_mapSettings.offlineMode == false) {
       var callState = r_currentUSState.replace("CN-", "");
       getBuffer(
-        "https://gridtracker.org/gt/callsigns/" + callState + ".callsigns.json",
+        "https://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
         callsignResult,
         r_currentUSState,
         "https",
@@ -2915,7 +2915,7 @@ function init() {
 
   if (window.opener.g_mapSettings.offlineMode == false)
     getBuffer(
-      "https://gridtracker.org/gt/callsigns/manifest.json",
+      "https://app.gridtracker.org/callsigns/manifest.json",
       manifestResult,
       null,
       "https",

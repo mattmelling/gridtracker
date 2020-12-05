@@ -9442,7 +9442,7 @@ function newMessageSetting(whichSetting) {
 function checkForNewVersion(showUptoDate) {
   if (typeof nw != "undefined")
     getBuffer(
-      "https://gridtracker.org/gt/version.txt?lang=" + g_localeString,
+      "https://app.gridtracker.org/version.txt?lang=" + g_localeString,
       versionCheck,
       showUptoDate,
       "https",

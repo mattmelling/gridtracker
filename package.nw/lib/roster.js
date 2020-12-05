@@ -2663,11 +2663,11 @@ function stateChangedValue(what) {
     if (window.opener.g_mapSettings.offlineMode == false) {
       var callState = r_currentUSState.replace("CN-", "");
       getBuffer(
-        "https://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
+        "http://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
         callsignResult,
         r_currentUSState,
-        "https",
-        443
+        "http",
+        80
       );
     } else {
       window.opener.goProcessRoster();
@@ -2915,11 +2915,11 @@ function init() {
 
   if (window.opener.g_mapSettings.offlineMode == false)
     getBuffer(
-      "https://app.gridtracker.org/callsigns/manifest.json",
+      "http://app.gridtracker.org/callsigns/manifest.json",
       manifestResult,
       null,
-      "https",
-      443
+      "http",
+      80
     );
 
   loadSettings();

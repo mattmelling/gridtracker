@@ -54,10 +54,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <body id="mainBody" onload="initialDatabases();">
     <div id="startupDiv">
       <div class="fill">
-		<img src="gridview.png" alt="" />
+        <img src="gridview.png" alt="" />
       </div>
-	  <div><h1><div id="startupVersionDiv">GridTracker</div></h1></div>
-	  <div><h3><i>An Amateur Radio Companion</i></h3></div>
+      <div>
+        <h1><div id="startupVersionDiv">GridTracker</div></h1>
+      </div>
+      <div>
+        <h3><i>An Amateur Radio Companion</i></h3>
+      </div>
       <div id="startupStatusDiv">Initial Startup</div>
     </div>
     <div id="documentsDiv" style="display: none">
@@ -589,7 +593,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <img id="pinImg" src="" class="buttonImg" />
           </div>
           <div id="lookupButton" onclick="openLookupWindow(true)" class="iconButton" title="Open Lookup Window">
-            <img style="" src="./img/lookup.svg" class="buttonImg" />
+            <img src="./img/lookup.svg" class="buttonImg" />
           </div>
           <div id="statsDiv" onclick="showRootInfoBox();" class="iconButton" title="Show Stats">
             <img src="./img/stats-button.svg" class="buttonImg" />
@@ -636,7 +640,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <img src="./img/conditions.svg" class="buttonImg" />
           </div>
           <div id="donateButton" onclick="gotoDonate();" class="iconButton" title="Donate with PayPal">
-            <img style="-webkit-filter: brightness(50%)" src="./img/donate.svg" class="buttonImg" />
+            <img
+              style="-webkit-filter: brightness(50%); filter: brightness(50%)"
+              src="./img/donate.svg"
+              class="buttonImg"
+            />
           </div>
           <div id="alterMuteDiv" onclick="toggleAlertMute()" class="iconButton" title="Toggle Audio Mute">
             <img id="alertMuteImg" src="" class="buttonImg" />
@@ -1110,7 +1118,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             About
           </button>
         </div>
-        <div id="udpSettingsDiv" class="settingsTabcontent" style="display: block; vertical-align: top">
+        <div id="udpSettingsDiv" class="settingsTabcontent" style="display: block">
           <table align="center">
             <tr>
               <td colspan="3">
@@ -1671,7 +1679,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   </td>
                 </tr>
                 <tr>
-                  <td id="workingCallsignsTd" style="">
+                  <td id="workingCallsignsTd">
                     Callsign(s)<input
                       id="workingCallsignsValue"
                       type="text"
@@ -3391,17 +3399,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <div class="mapItem" style="padding: 4px">
             <h2><div id="aboutVersionDiv">GridTracker</div></h2>
             <p>
-				GridTracker is a warehouse of amateur radio information presented in an easy to use interface<br />
-				<br />
-				From Live Rraffic Decodes<br />
-				Logbooks<br />
-				Real-time Spot Reports<br />
-				Weather<br />
-				Current Solar Conditions and More!<br />
-				Learn more at <a href="#" style="cursor:pointer" onclick="require('nw.gui').Shell.openExternal('https://gridtracker.org/grid-tracker/');">GridTracker.org!</a>
+              GridTracker is a warehouse of amateur radio information presented in an easy to use interface<br />
+              <br />
+              From Live Traffic Decodes<br />
+              Logbooks<br />
+              Real-time Spot Reports<br />
+              Weather<br />
+              Current Solar Conditions and More!<br />
+              Learn more at
+              <a
+                href="#"
+                style="cursor: pointer"
+                onclick="require('nw.gui').Shell.openExternal('https://gridtracker.org/grid-tracker/');"
+                >GridTracker.org!</a
+              >
             </p>
             <p>Copyright &copy; 2020 GridTracker.org</p>
-            <p />
             <img src="./gridview.png" /> <br />
           </div>
         </div>
@@ -3498,6 +3511,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <h2>GridTracker is up to date!</h2>
       <div class="button" onclick="closeUpdateToDateDiv();">OK</div>
     </div>
-    <div id="selectNodeDiv" style="-webkit-user-select: text; display: block; zindex: -10000"></div>
+    <div id="selectNodeDiv" style="-webkit-user-select: text; display: block; z-index: -10000"></div>
   </body>
 </html>

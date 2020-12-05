@@ -3306,8 +3306,8 @@ function init() {
 function handleContextMenu(ev) {
   if (editView.style.display == "inline-block") return false;
 
-  var mouseX = Math.round(ev.x)
-  var mouseY = Math.round(ev.y)
+  var mouseX = Math.round(ev.x);
+  var mouseY = Math.round(ev.y);
 
   var len = Object.keys(g_blockedCalls).length;
   if (len > 0) {

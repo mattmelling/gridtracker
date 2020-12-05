@@ -234,7 +234,7 @@ function oqrsValuesChanged() {
 function oqrsDownload(fromSettings) {
   oqrsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
   getBuffer(
-    "http://app.gridtracker.org/clublog.json",
+    "http://app.gridtracker.org/callsigns/clublog.json",
     processoqrsCallsigns,
     null,
     "http",
@@ -449,7 +449,7 @@ function ulsDownload() {
   ulsUpdatedTd.innerHTML = "<b><i>Downloading...</i></b>";
   ulsCountTd.innerHTML = 0;
   getChunkedBuffer(
-    "http://app.gridtracker.org/callsigns.txt",
+    "http://app.gridtracker.org/callsigns/callsigns.txt",
     processulsCallsigns,
     null,
     "http",

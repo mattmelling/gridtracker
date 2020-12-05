@@ -4,7 +4,7 @@
   "version": "1.20.1118",
   "betaVersion": "Phoenix II",
   "description": "GridTracker, an amateur radio companion",
-  "author": "Steven Tag Loomis (N0TTL) and GridTracker.org",
+  "author": "Stephen Loomis (N0TTL) and GridTracker.org",
   "license": "BSD-3-Clause",
   "main": "GridTracker.html",
   "window": {

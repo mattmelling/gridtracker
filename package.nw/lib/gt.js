@@ -10843,7 +10843,7 @@ function getBuffer(file_url, callback, flag, mode, port, cache = null) {
         }
       })
       .on("error", function (e) {
-        console.error("Got error: " + e.message);
+        console.error("getBuffer " + file_url + " error: " + e.message);
       });
   });
 }

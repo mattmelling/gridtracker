@@ -417,7 +417,7 @@ function gtChatMessage(jsmesg) {
     var cid = jsmesg.cid;
     jsmesg.when = Date.now();
     try {
-      jsmesg.msg = new Buffer(jsmesg.msg, "base64").toString("utf8");
+      jsmesg.msg = new Buffer.from(jsmesg.msg, "base64").toString("utf8");
       jsmesg.msg = htmlEntities(jsmesg.msg);
     } catch (e) {
       jsmesg.msg = "Corrupt message recieved";
@@ -446,7 +446,7 @@ function gtSendMessage(message, who) {
   msg.type = "mesg";
   msg.uuid = g_appSettings.chatUUID;
   msg.cid = who;
-  msg.msg = new Buffer(message).toString("base64");
+  msg.msg = new Buffer.from(message).toString("base64");
   sendGtJson(JSON.stringify(msg));
   msg.msg = htmlEntities(message);
   msg.id = 0;

@@ -9694,27 +9694,14 @@ function getIniFromApp(appName) {
 }
 
 function checkRunningProcesses() {
-  const child_process = require("child_process");
-  var list = "";
-  if (g_platform == "windows") {
-    list = child_process.execFileSync("tasklist.exe");
-    if (list.indexOf("wsjtx") > -1) g_wsjtxProcessRunning = true;
-    else g_wsjtxProcessRunning = false;
-    if (list.indexOf("jtdx") > -1) g_jtdxProcessRunning = true;
-    else g_jtdxProcessRunning = false;
-  } else if (g_platform == "mac") {
-    list = child_process.execFileSync("ps", ["-aef"]);
-    if (list.indexOf("jt9 -s WSJT-X") > -1) g_wsjtxProcessRunning = true;
-    else g_wsjtxProcessRunning = false;
-    // no jtdx on Mac, woot!
-    g_jtdxProcessRunning = false;
-  } else {
-    list = child_process.execFileSync("ps", ["-aef"]);
-    if (list.indexOf("wsjtx") > -1) g_wsjtxProcessRunning = true;
-    else g_wsjtxProcessRunning = false;
-    if (list.indexOf("jtdx") > -1) g_jtdxProcessRunning = true;
-    else g_jtdxProcessRunning = false;
-  }
+  var child_process = require("child_process");
+  var list =
+    g_platform == "windows"
+      ? child_process.execFileSync("tasklist.exe")
+      : child_process.execFileSync("ps", ["-aef"]);
+
+  g_wsjtxProcessRunning = list.indexOf("wsjtx") > -1;
+  g_jtdxProcessRunning = list.indexOf("jtdx") > -1;
 }
 
 function updateRunningProcesses() {

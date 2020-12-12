@@ -24,7 +24,7 @@
     <script src="./lib/roster.js" type="text/javascript"></script>
     <script src="./lib/screens.js"></script>
   </head>
-  <body onload="init()" class="roster">
+  <body onload="init()" class="roster" oncontextmenu="return handleContextMenu(event);">
     <div id="MainCallRoster">
       <header id="RosterControls">
         <div id="MainRosterControls">
@@ -374,7 +374,7 @@
         </div>
       </header>
 
-      <main id="RosterTable" oncontextmenu="return handleContextMenu(event);"></main>
+      <main id="RosterTable"></main>
     </div>
 
     <div

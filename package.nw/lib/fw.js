@@ -1,9 +1,10 @@
-function hooray() {
+function hooray()
+{
   var SCREEN_WIDTH = window.innerWidth,
     SCREEN_HEIGHT = window.innerHeight,
     mousePos = {
       x: 400,
-      y: 300,
+      y: 300
     },
     // create canvas
     canvas = document.createElement("canvas"),
@@ -14,7 +15,8 @@ function hooray() {
     colorCode = 0;
 
   // init
-  $(document).ready(function () {
+  $(document).ready(function ()
+  {
     document.body.appendChild(canvas);
     canvas.width = SCREEN_WIDTH;
     canvas.height = SCREEN_HEIGHT;
@@ -23,27 +25,33 @@ function hooray() {
   });
 
   // update mouse position
-  $(document).mousemove(function (e) {
+  $(document).mousemove(function (e)
+  {
     e.preventDefault();
     mousePos = {
       x: e.clientX,
-      y: e.clientY,
+      y: e.clientY
     };
   });
 
   // launch more rockets!!!
-  $(document).mousedown(function (e) {
-    for (var i = 0; i < 5; i++) {
+  $(document).mousedown(function (e)
+  {
+    for (var i = 0; i < 5; i++)
+    {
       launchFrom((Math.random() * SCREEN_WIDTH * 2) / 3 + SCREEN_WIDTH / 6);
     }
   });
 
-  function launch() {
+  function launch()
+  {
     launchFrom(mousePos.x);
   }
 
-  function launchFrom(x) {
-    if (rockets.length < 10) {
+  function launchFrom(x)
+  {
+    if (rockets.length < 10)
+    {
       var rocket = new Rocket(x);
       rocket.explosionColor = Math.floor((Math.random() * 360) / 10) * 10;
       rocket.vel.y = Math.random() * -3 - 4;
@@ -55,12 +63,15 @@ function hooray() {
     }
   }
 
-  function loop() {
+  function loop()
+  {
     // update screen size
-    if (SCREEN_WIDTH != window.innerWidth) {
+    if (SCREEN_WIDTH != window.innerWidth)
+    {
       canvas.width = SCREEN_WIDTH = window.innerWidth;
     }
-    if (SCREEN_HEIGHT != window.innerHeight) {
+    if (SCREEN_HEIGHT != window.innerHeight)
+    {
       canvas.height = SCREEN_HEIGHT = window.innerHeight;
     }
 
@@ -70,7 +81,8 @@ function hooray() {
 
     var existingRockets = [];
 
-    for (var i = 0; i < rockets.length; i++) {
+    for (var i = 0; i < rockets.length; i++)
+    {
       // update and render
       rockets[i].update();
       rockets[i].render(context);
@@ -98,9 +110,12 @@ function hooray() {
         rockets[i].vel.y >= 0 ||
         distance < 50 ||
         randomChance
-      ) {
+      )
+      {
         rockets[i].explode();
-      } else {
+      }
+      else
+      {
         existingRockets.push(rockets[i]);
       }
     }
@@ -109,11 +124,13 @@ function hooray() {
 
     var existingParticles = [];
 
-    for (var i = 0; i < particles.length; i++) {
+    for (var i = 0; i < particles.length; i++)
+    {
       particles[i].update();
 
       // render and save particles that can be rendered
-      if (particles[i].exists()) {
+      if (particles[i].exists())
+      {
         particles[i].render(context);
         existingParticles.push(particles[i]);
       }
@@ -122,19 +139,21 @@ function hooray() {
     // update array with existing particles - old particles should be garbage collected
     particles = existingParticles;
 
-    while (particles.length > MAX_PARTICLES) {
+    while (particles.length > MAX_PARTICLES)
+    {
       particles.shift();
     }
   }
 
-  function Particle(pos) {
+  function Particle(pos)
+  {
     this.pos = {
       x: pos ? pos.x : 0,
-      y: pos ? pos.y : 0,
+      y: pos ? pos.y : 0
     };
     this.vel = {
       x: 0,
-      y: 0,
+      y: 0
     };
     this.shrink = 0.97;
     this.size = 2;
@@ -149,7 +168,8 @@ function hooray() {
     this.color = 0;
   }
 
-  Particle.prototype.update = function () {
+  Particle.prototype.update = function ()
+  {
     // apply resistance
     this.vel.x *= this.resistance;
     this.vel.y *= this.resistance;
@@ -168,8 +188,10 @@ function hooray() {
     this.alpha -= this.fade;
   };
 
-  Particle.prototype.render = function (c) {
-    if (!this.exists()) {
+  Particle.prototype.render = function (c)
+  {
+    if (!this.exists())
+    {
       return;
     }
 
@@ -206,16 +228,18 @@ function hooray() {
     c.restore();
   };
 
-  Particle.prototype.exists = function () {
+  Particle.prototype.exists = function ()
+  {
     return this.alpha >= 0.1 && this.size >= 1;
   };
 
-  function Rocket(x) {
+  function Rocket(x)
+  {
     Particle.apply(this, [
       {
         x: x,
-        y: SCREEN_HEIGHT,
-      },
+        y: SCREEN_HEIGHT
+      }
     ]);
 
     this.explosionColor = 0;
@@ -224,10 +248,12 @@ function hooray() {
   Rocket.prototype = new Particle();
   Rocket.prototype.constructor = Rocket;
 
-  Rocket.prototype.explode = function () {
+  Rocket.prototype.explode = function ()
+  {
     var count = Math.random() * 10 + 80;
 
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++)
+    {
       var particle = new Particle(this.pos);
       var angle = Math.random() * Math.PI * 2;
 
@@ -250,8 +276,10 @@ function hooray() {
     }
   };
 
-  Rocket.prototype.render = function (c) {
-    if (!this.exists()) {
+  Rocket.prototype.render = function (c)
+  {
+    if (!this.exists())
+    {
       return;
     }
 

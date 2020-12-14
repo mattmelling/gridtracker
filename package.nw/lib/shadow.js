@@ -1,23 +1,27 @@
 /**
 
 **/
-(function (global, factory) {
+(function (global, factory)
+{
   typeof exports === "object" && typeof module !== "undefined"
     ? (module.exports = factory())
     : typeof define === "function" && define.amd
-    ? define(factory)
-    : (global.GeoJSONTerminator = factory());
-})(this, function () {
+      ? define(factory)
+      : (global.GeoJSONTerminator = factory());
+})(this, function ()
+{
   "use strict";
 
-  function julian(date) {
+  function julian(date)
+  {
     /* Calculate the present UTC Julian Date. Function is valid after
      * the beginning of the UNIX epoch 1970-01-01 and ignores leap
      * seconds. */
     return date / 86400000 + 2440587.5;
   }
 
-  function GMST(julianDay) {
+  function GMST(julianDay)
+  {
     /* Calculate Greenwich Mean Sidereal Time according to
        http://aa.usno.navy.mil/faq/docs/GAST.php */
     var d = julianDay - 2451545.0;
@@ -25,25 +29,29 @@
     return (18.697374558 + 24.06570982441908 * d) % 24;
   }
 
-  class Terminator {
-    constructor(options = { resolution: 1 }) {
+  class Terminator
+  {
+    constructor(options = { resolution: 1 })
+    {
       this.options = options;
       this.version = "0.1.0";
       this._R2D = 180 / Math.PI;
       this._D2R = Math.PI / 180;
-      //this.options.resolution = options.resolution || this.options.resolution;
+      // this.options.resolution = options.resolution || this.options.resolution;
       // this.options.time = options.time;
       var latLngs = this._compute(this.options.time);
       return this._toGeoJSON(latLngs);
     }
 
-    setTime(date) {
+    setTime(date)
+    {
       this.options.time = date;
       var latLngs = this._compute(date);
       return this._toGeoJSON(latLngs);
     }
 
-    _toGeoJSON(latLngs) {
+    _toGeoJSON(latLngs)
+    {
       /* Return 'pseudo' GeoJSON representation of the coordinates
         Why 'pseudo'?
         Coordinates longitude range go from -360 to 360
@@ -61,19 +69,21 @@
           type: "Polygon",
           coordinates: [
             [
-              ...latLngs.map((latLng) => {
+              ...latLngs.map((latLng) =>
+              {
                 return [latLng[1], latLng[0]];
               }),
-              [latLngs[0][1], latLngs[0][0]],
+              [latLngs[0][1], latLngs[0][0]]
             ]
               .slice()
-              .reverse(),
-          ],
-        },
+              .reverse()
+          ]
+        }
       };
     }
 
-    _sunEclipticPosition(julianDay) {
+    _sunEclipticPosition(julianDay)
+    {
       /* Compute the position of the Sun in ecliptic coordinates at
          julianDay.  Following
          http://en.wikipedia.org/wiki/Position_of_the_Sun */
@@ -94,7 +104,8 @@
       return { lambda: lambda };
     }
 
-    _eclipticObliquity(julianDay) {
+    _eclipticObliquity(julianDay)
+    {
       // Following the short term expression in
       // http://en.wikipedia.org/wiki/Axial_tilt#Obliquity_of_the_ecliptic_.28Earth.27s_axial_tilt.29
       var n = julianDay - 2451545.0;
@@ -111,10 +122,14 @@
                     T * (0.576e-6 / 3600 - (T * 4.34e-8) / 3600))));
       return epsilon;
     }
-    _jday(date) {
+
+    _jday(date)
+    {
       return date.getTime() / 86400000.0 + 2440587.5;
     }
-    _calculatePositionOfSun(date) {
+
+    _calculatePositionOfSun(date)
+    {
       date = date instanceof Date ? date : new Date();
 
       var rad = 0.017453292519943295;
@@ -175,7 +190,8 @@
       return [lng, lat];
     }
 
-    _sunEquatorialPosition(sunEclLng, eclObliq) {
+    _sunEquatorialPosition(sunEclLng, eclObliq)
+    {
       /* Compute the Sun's equatorial position from its ecliptic
        * position. Inputs are expected in degrees. Outputs are in
        * degrees as well. */
@@ -195,14 +211,16 @@
       return { alpha: alpha, delta: delta };
     }
 
-    _hourAngle(lng, sunPos, gst) {
+    _hourAngle(lng, sunPos, gst)
+    {
       /* Compute the hour angle of the sun for a longitude on
        * Earth. Return the hour angle in degrees. */
       var lst = gst + lng / 15;
       return lst * 15 - sunPos.alpha;
     }
 
-    _latitude(ha, sunPos) {
+    _latitude(ha, sunPos)
+    {
       /* For a given hour angle and sun position, compute the
        * latitude of the terminator in degrees. */
       var lat =
@@ -212,7 +230,8 @@
       return lat;
     }
 
-    _compute(time) {
+    _compute(time)
+    {
       var today = time ? new Date(time) : new Date();
       var julianDay = julian(today);
       var gst = GMST(julianDay);
@@ -222,22 +241,27 @@
       var sunEclPos = this._sunEclipticPosition(julianDay);
       var eclObliq = this._eclipticObliquity(julianDay);
       var sunEqPos = this._sunEquatorialPosition(sunEclPos.lambda, eclObliq);
-      for (var i = 0; i <= 720 * this.options.resolution; i++) {
+      for (var i = 0; i <= 720 * this.options.resolution; i++)
+      {
         var lng = startMinus + i / this.options.resolution;
         var ha = this._hourAngle(lng, sunEqPos, gst);
         latLng[i + 1] = [this._latitude(ha, sunEqPos), lng];
       }
-      if (sunEqPos.delta < 0) {
+      if (sunEqPos.delta < 0)
+      {
         latLng[0] = [90, startMinus];
         latLng[latLng.length] = [90, 360];
-      } else {
+      }
+      else
+      {
         latLng[0] = [-90, startMinus];
         latLng[latLng.length] = [-90, 360];
       }
       return latLng;
     }
   }
-  function terminator(options) {
+  function terminator(options)
+  {
     return new Terminator(options);
   }
 
@@ -248,35 +272,37 @@ var dayNight = {
   map: null,
   vectorLayer: null,
 
-  init: function (map) {
+  init: function (map)
+  {
     this.map = map;
 
     var geoJSON = new GeoJSONTerminator();
 
     this.vectorSource = new ol.source.Vector({
       features: new ol.format.GeoJSON().readFeatures(geoJSON, {
-        featureProjection: "EPSG:3857",
-      }),
+        featureProjection: "EPSG:3857"
+      })
     });
 
     this.vectorLayer = new ol.layer.Vector({
       source: this.vectorSource,
       style: new ol.style.Style({
         fill: new ol.style.Fill({
-          color: "rgb(0,0,0)",
+          color: "rgb(0,0,0)"
         }),
-        stroke: null,
+        stroke: null
       }),
       opacity: Number(g_mapSettings.shadow),
-      zIndex: 0,
+      zIndex: 0
     });
     this.map.getLayers().insertAt(1, this.vectorLayer);
   },
-  refresh: function () {
+  refresh: function ()
+  {
     var circleStyle = new ol.style.Style({
       fill: new ol.style.Fill({
-        color: "rgb(0,0,0)",
-      }),
+        color: "rgb(0,0,0)"
+      })
     });
     this.vectorLayer.setStyle(circleStyle);
     this.vectorLayer.setOpacity(Number(g_mapSettings.shadow));
@@ -284,24 +310,27 @@ var dayNight = {
 
     this.vectorSource.addFeature(
       new ol.format.GeoJSON().readFeature(new GeoJSONTerminator(), {
-        featureProjection: "EPSG:3857",
+        featureProjection: "EPSG:3857"
       })
     );
     var point = ol.proj.fromLonLat([g_myLon, g_myLat]);
     var arr = this.vectorSource.getFeaturesAtCoordinate(point);
-    return arr.length > 0 ? true : false;
+    return arr.length > 0;
   },
 
-  show: function () {
+  show: function ()
+  {
     this.vectorLayer.setVisible(true);
     return this.refresh();
   },
-  hide: function () {
+  hide: function ()
+  {
     this.vectorLayer.setVisible(false);
   },
-  isVisible: function () {
+  isVisible: function ()
+  {
     return this.vectorLayer.getVisible();
-  },
+  }
 };
 
 var moonLayer = {
@@ -309,7 +338,8 @@ var moonLayer = {
   vectorLayer: null,
   icon: null,
   pin: null,
-  init: function (map) {
+  init: function (map)
+  {
     this.map = map;
 
     this.icon = new ol.style.Icon({
@@ -318,7 +348,7 @@ var moonLayer = {
       anchorXUnits: "pixels",
       anchor: [255, 255],
       scale: 0.1,
-      opacity: 0.5,
+      opacity: 0.5
     });
 
     this.pin = iconFeature(
@@ -331,16 +361,18 @@ var moonLayer = {
 
     this.vectorLayer = new ol.layer.Vector({
       source: this.vectorSource,
-      zIndex: 30,
+      zIndex: 30
     });
     this.map.getLayers().insertAt(1, this.vectorLayer);
   },
-  future: function (now) {
+  future: function (now)
+  {
     var r = 0;
     var x = 25;
     var i = 3600;
     var data = Array();
-    for (r = 0; r < x; r++) {
+    for (r = 0; r < x; r++)
+    {
       data.push(subLunar(now + r * i).ll);
     }
     line = [];
@@ -348,16 +380,22 @@ var moonLayer = {
     var lonOff = 0;
     var lastc = 0;
 
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++)
+    {
       var c = data[i];
-      if (isNaN(c[0])) {
+      if (isNaN(c[0]))
+      {
         continue;
       }
-      if (Math.abs(lastc - c[0]) > 270) {
+      if (Math.abs(lastc - c[0]) > 270)
+      {
         // Wrapped
-        if (c[0] < lastc) {
+        if (c[0] < lastc)
+        {
           lonOff += 360;
-        } else {
+        }
+        else
+        {
           lonOff -= 360;
         }
       }
@@ -365,7 +403,8 @@ var moonLayer = {
       line.push(ol.proj.fromLonLat([c[0] + lonOff, c[1]]));
     }
 
-    if (line.length == 0) {
+    if (line.length == 0)
+    {
       line.push(ol.proj.fromLonLat(start));
     }
 
@@ -374,18 +413,20 @@ var moonLayer = {
 
     feature.setStyle(
       new ol.style.Style({
-        stroke: new ol.style.Stroke({ color: "#FFF", width: 1 }),
+        stroke: new ol.style.Stroke({ color: "#FFF", width: 1 })
       })
     );
 
     return feature;
   },
-  refresh: function () {
+  refresh: function ()
+  {
     this.vectorSource.clear();
-    if (g_appSettings.moonTrack == 1) {
+    if (g_appSettings.moonTrack == 1)
+    {
       now = timeNowSec();
       if (g_appSettings.moonPath == 1)
-        this.vectorSource.addFeature(this.future(now));
+      { this.vectorSource.addFeature(this.future(now)); }
       this.pin = iconFeature(
         ol.proj.fromLonLat(subLunar(now).ll),
         this.icon,
@@ -396,16 +437,19 @@ var moonLayer = {
     }
   },
 
-  show: function () {
+  show: function ()
+  {
     this.refresh();
     this.vectorLayer.setVisible(true);
     lunaButonImg.style.webkitFilter = "brightness(100%)";
   },
-  hide: function () {
+  hide: function ()
+  {
     this.vectorLayer.setVisible(false);
     lunaButonImg.style.webkitFilter = "brightness(50%)";
   },
-  isVisible: function () {
+  isVisible: function ()
+  {
     return this.vectorLayer.getVisible();
-  },
+  }
 };

@@ -9,7 +9,7 @@ var g_chatRecvFunctions = {
   info: gtChatUpdateCall,
   drop: gtChatRemoveCall,
   mesg: gtChatMessage,
-  o: gtSpotMessage,
+  o: gtSpotMessage
 };
 
 var ChatState = Object();
@@ -30,7 +30,7 @@ var g_gtStateToFunction = {
   3: gtChatSendUUID,
   4: gtStatusCheck,
   5: gtInError,
-  6: gtClosedSocket,
+  6: gtClosedSocket
 };
 
 var g_gtChatSocket = null;
@@ -55,66 +55,84 @@ var myRoom = 0;
 var g_gtChatlistChangeCount = 0;
 var g_gtCurrentMessageCount = 0;
 
-function gtConnectChat() {
-  if (g_gtChatSocket != null) {
+function gtConnectChat()
+{
+  if (g_gtChatSocket != null)
+  {
     // we should start over
     g_gtState = ChatState.error;
     return;
   }
 
   var rnd = parseInt(Math.random() * 10) + 18260;
-  try {
+  try
+  {
     g_gtState = ChatState.connecting;
     g_gtChatSocket = new WebSocket("wss://tagloomis.com:" + rnd);
-  } catch (e) {
+  }
+  catch (e)
+  {
     g_gtState = ChatState.error;
     return;
   }
 
-  g_gtChatSocket.onopen = function () {
+  g_gtChatSocket.onopen = function ()
+  {
     g_gtState = ChatState.connected;
   };
 
-  g_gtChatSocket.onmessage = function (evt) {
-    if (g_appSettings.gtShareEnable == true) {
+  g_gtChatSocket.onmessage = function (evt)
+  {
+    if (g_appSettings.gtShareEnable == true)
+    {
       var jsmesg = false;
-      try {
+      try
+      {
         jsmesg = JSON.parse(evt.data);
-      } catch (err) {
+      }
+      catch (err)
+      {
         // bad message, dumping client
         g_gtState = ChatState.error;
         return;
       }
-      if (typeof jsmesg.type == "undefined") {
+      if (typeof jsmesg.type == "undefined")
+      {
         g_gtState = ChatState.error;
         return;
       }
 
-      if (jsmesg.type in g_chatRecvFunctions) {
+      if (jsmesg.type in g_chatRecvFunctions)
+      {
         g_chatRecvFunctions[jsmesg.type](jsmesg);
-      } else {
+      }
+      else
+      {
         g_gtState = ChatState.error;
-        return;
       }
     }
   };
 
-  g_gtChatSocket.onerror = function () {
+  g_gtChatSocket.onerror = function ()
+  {
     g_gtState = ChatState.error;
   };
 
-  g_gtChatSocket.onclose = function () {
+  g_gtChatSocket.onclose = function ()
+  {
     g_gtState = ChatState.closed;
   };
 }
 
 function gtConnecting() {}
 
-function gtInError() {
+function gtInError()
+{
   closeGtSocket();
 }
 
-function gtChatSendClose() {
+function gtChatSendClose()
+{
   msg = Object();
   msg.type = "close";
   msg.uuid = g_appSettings.chatUUID;
@@ -122,69 +140,91 @@ function gtChatSendClose() {
   sendGtJson(JSON.stringify(msg));
 }
 
-function closeGtSocket() {
-  if (g_gtChatSocket != null) {
+function closeGtSocket()
+{
+  if (g_gtChatSocket != null)
+  {
     gtChatSendClose();
 
     if (g_gtChatSocket.readyState != WebSocket.CLOSED) g_gtChatSocket.close();
 
-    if (g_gtChatSocket.readyState === WebSocket.CLOSED) {
+    if (g_gtChatSocket.readyState === WebSocket.CLOSED)
+    {
       g_gtChatSocket = null;
       g_gtState = ChatState.none;
     }
-  } else g_gtState = ChatState.none;
+  }
+  else g_gtState = ChatState.none;
 }
 
-function gtClosedSocket() {
+function gtClosedSocket()
+{
   g_gtChatSocket = null;
   g_gtState = ChatState.none;
 }
 
-function gtCanConnect() {
+function gtCanConnect()
+{
   g_gtState = ChatState.connect;
 }
 
-function gtSetIdle() {
+function gtSetIdle()
+{
   g_gtStatusCount = 0;
   g_gtNeedUsersList = true;
   g_gtState = ChatState.idle;
   g_lastGtStatus = "";
 }
 
-function gtStatusCheck() {
-  if (g_gtStatusCount > 0) {
+function gtStatusCheck()
+{
+  if (g_gtStatusCount > 0)
+  {
     g_gtStatusCount--;
   }
-  if (g_gtStatusCount == 0 || g_gtLiveStatusUpdate == true) {
-    if (g_gtLiveStatusUpdate == true) {
+  if (g_gtStatusCount == 0 || g_gtLiveStatusUpdate == true)
+  {
+    if (g_gtLiveStatusUpdate == true)
+    {
       g_gtLiveStatusUpdate = false;
-    } else {
+    }
+    else
+    {
       g_lastGtStatus = "";
       g_gtStatusCount = g_gtStatusTime;
     }
     gtChatSendStatus();
   }
-  if (g_gtNeedUsersList == true) {
+  if (g_gtNeedUsersList == true)
+  {
     g_gtNeedUsersList = false;
     gtChatGetList();
   }
 }
 
-function sendGtJson(json) {
-  if (g_gtChatSocket != null) {
-    if (g_gtChatSocket.readyState === WebSocket.OPEN) {
+function sendGtJson(json)
+{
+  if (g_gtChatSocket != null)
+  {
+    if (g_gtChatSocket.readyState === WebSocket.OPEN)
+    {
       g_gtChatSocket.send(json);
-    } else {
-      if (g_gtChatSocket.readyState === WebSocket.CLOSED) {
+    }
+    else
+    {
+      if (g_gtChatSocket.readyState === WebSocket.CLOSED)
+      {
         g_gtState = ChatState.closed;
       }
     }
-  } else g_gtState = ChatState.closed;
+  }
+  else g_gtState = ChatState.closed;
 }
 
 var g_lastGtStatus = "";
 
-function gtChatSendStatus() {
+function gtChatSendStatus()
+{
   var msg = Object();
   msg.type = "status";
   msg.uuid = g_appSettings.chatUUID;
@@ -198,13 +238,15 @@ function gtChatSendStatus() {
   msg.o = g_appSettings.gtSpotEnable == true ? 1 : 0;
   msg = JSON.stringify(msg);
 
-  if (msg != g_lastGtStatus) {
+  if (msg != g_lastGtStatus)
+  {
     sendGtJson(msg);
     g_lastGtStatus = msg;
   }
 }
 
-function gtChatSendSpots(spotsObject) {
+function gtChatSendSpots(spotsObject)
+{
   var msg = Object();
   msg.type = "o";
   msg.uuid = g_appSettings.chatUUID;
@@ -213,23 +255,29 @@ function gtChatSendSpots(spotsObject) {
   sendGtJson(msg);
 }
 
-function gtChatRemoveCall(jsmesg) {
+function gtChatRemoveCall(jsmesg)
+{
   var id = jsmesg.id;
-  if (id in g_gtIdToCid) {
+  if (id in g_gtIdToCid)
+  {
     var cid = g_gtIdToCid[id];
-    if (cid in g_gtFlagPins) {
+    if (cid in g_gtFlagPins)
+    {
       delete g_gtFlagPins[cid].ids[id];
-      if (Object.keys(g_gtFlagPins[cid].ids).length == 0) {
-        if (g_gtFlagPins[cid].pin != null) {
+      if (Object.keys(g_gtFlagPins[cid].ids).length == 0)
+      {
+        if (g_gtFlagPins[cid].pin != null)
+        {
           // remove pin from map here
-          if (g_layerSources["gtflags"].hasFeature(g_gtFlagPins[cid].pin))
-            g_layerSources["gtflags"].removeFeature(g_gtFlagPins[cid].pin);
+          if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))
+          { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
           delete g_gtFlagPins[cid].pin;
           g_gtFlagPins[cid].pin = null;
         }
         g_gtFlagPins[cid].live = false;
         notifyNoChat(cid);
-        if (!(cid in g_gtMessages)) {
+        if (!(cid in g_gtMessages))
+        {
           delete g_gtCallsigns[g_gtFlagPins[cid].call];
           delete g_gtFlagPins[cid];
         }
@@ -241,21 +289,26 @@ function gtChatRemoveCall(jsmesg) {
   }
 }
 
-function gtChatUpdateCall(jsmesg) {
+function gtChatUpdateCall(jsmesg)
+{
   var id = jsmesg.id;
   var cid = jsmesg.cid;
 
-  if (cid in g_gtFlagPins) {
+  if (cid in g_gtFlagPins)
+  {
     g_gtFlagPins[cid].ids[id] = true;
     // Did they move grid location?
-    if (g_gtFlagPins[cid].pin != null) {
+    if (g_gtFlagPins[cid].pin != null)
+    {
       // remove pin from map here
-      if (g_layerSources["gtflags"].hasFeature(g_gtFlagPins[cid].pin))
-        g_layerSources["gtflags"].removeFeature(g_gtFlagPins[cid].pin);
+      if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))
+      { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
       delete g_gtFlagPins[cid].pin;
       g_gtFlagPins[cid].pin = null;
     }
-  } else {
+  }
+  else
+  {
     g_gtFlagPins[cid] = Object();
     g_gtFlagPins[cid].pin = null;
 
@@ -275,17 +328,19 @@ function gtChatUpdateCall(jsmesg) {
   g_gtFlagPins[cid].dxcc = callsignToDxcc(jsmesg.call);
   g_gtFlagPins[cid].live = true;
   // Make a pin here
-  if (g_gtFlagPins[cid].pin == null) {
+  if (g_gtFlagPins[cid].pin == null)
+  {
     makeGtPin(g_gtFlagPins[cid]);
     if (g_gtFlagPins[cid].pin != null)
-      g_layerSources["gtflags"].addFeature(g_gtFlagPins[cid].pin);
+    { g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin); }
   }
   g_gtChatlistChangeCount++;
   g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
   updateChatWindow();
 }
 
-function gtChatGetList() {
+function gtChatGetList()
+{
   msg = Object();
   msg.type = "list";
   msg.uuid = g_appSettings.chatUUID;
@@ -293,10 +348,13 @@ function gtChatGetList() {
   sendGtJson(JSON.stringify(msg));
 }
 
-function redrawPins() {
+function redrawPins()
+{
   clearGtFlags();
-  for (cid in g_gtFlagPins) {
-    if (g_gtFlagPins[cid].pin != null) {
+  for (cid in g_gtFlagPins)
+  {
+    if (g_gtFlagPins[cid].pin != null)
+    {
       delete g_gtFlagPins[cid].pin;
       g_gtFlagPins[cid].pin = null;
     }
@@ -304,15 +362,18 @@ function redrawPins() {
     makeGtPin(g_gtFlagPins[cid]);
 
     if (g_gtFlagPins[cid].pin != null)
-      g_layerSources["gtflags"].addFeature(g_gtFlagPins[cid].pin);
+    { g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin); }
   }
 }
 
-function makeGtPin(obj) {
-  try {
-    if (obj.pin) {
-      if (g_layerSources["gtflags"].hasFeature(obj.pin))
-        g_layerSources["gtflags"].removeFeature(obj.pin);
+function makeGtPin(obj)
+{
+  try
+  {
+    if (obj.pin)
+    {
+      if (g_layerSources.gtflags.hasFeature(obj.pin))
+      { g_layerSources.gtflags.removeFeature(obj.pin); }
       delete obj.pin;
       obj.pin = null;
     }
@@ -327,38 +388,47 @@ function makeGtPin(obj) {
       g_appSettings.gtFlagImgSrc == 2 &&
       (obj.mode != myMode || obj.band != myBand)
     )
-      return;
+    { return; }
 
     var LL = squareToLatLongAll(obj.grid);
     var myLonLat = [
       LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-      LL.la2 - (LL.la2 - LL.la1) / 2,
+      LL.la2 - (LL.la2 - LL.la1) / 2
     ];
 
     obj.pin = iconFeature(ol.proj.fromLonLat(myLonLat), g_gtFlagIcon, 100);
     obj.pin.key = obj.cid;
     obj.pin.isGtFlag = true;
     obj.pin.size = 1;
-  } catch (e) {}
+  }
+  catch (e) {}
 }
 
-function gtChatNewList(jsmesg) {
+function gtChatNewList(jsmesg)
+{
   clearGtFlags();
 
-  for (var cid in g_gtFlagPins) {
+  for (var cid in g_gtFlagPins)
+  {
     g_gtFlagPins[cid].live = false;
-    if (!(cid in g_gtMessages)) {
+    if (!(cid in g_gtMessages))
+    {
       delete g_gtFlagPins[cid];
     }
   }
 
-  for (var key in jsmesg.data.calls) {
+  for (var key in jsmesg.data.calls)
+  {
     var cid = jsmesg.data.cid[key];
     var id = jsmesg.data.id[key];
-    if (id != myChatId) {
-      if (cid in g_gtFlagPins) {
+    if (id != myChatId)
+    {
+      if (cid in g_gtFlagPins)
+      {
         g_gtFlagPins[cid].ids[id] = true;
-      } else {
+      }
+      else
+      {
         g_gtFlagPins[cid] = Object();
         g_gtFlagPins[cid].ids = Object();
         g_gtFlagPins[cid].ids[id] = true;
@@ -379,7 +449,7 @@ function gtChatNewList(jsmesg) {
       g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
       makeGtPin(g_gtFlagPins[cid]);
       if (g_gtFlagPins[cid].pin != null)
-        g_layerSources["gtflags"].addFeature(g_gtFlagPins[cid].pin);
+      { g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin); }
     }
   }
   g_gtChatlistChangeCount++;
@@ -387,19 +457,23 @@ function gtChatNewList(jsmesg) {
   updateChatWindow();
 }
 
-function appendToHistory(cid, jsmesg) {
-  if (!(cid in g_gtMessages)) {
+function appendToHistory(cid, jsmesg)
+{
+  if (!(cid in g_gtMessages))
+  {
     g_gtMessages[cid] = Object();
     g_gtMessages[cid].history = Array();
   }
 
   g_gtMessages[cid].history.push(jsmesg);
-  while (g_gtMessages[cid].history.length > g_gtMaxChatMessages) {
+  while (g_gtMessages[cid].history.length > g_gtMaxChatMessages)
+  {
     g_gtMessages[cid].history.shift();
   }
 }
 
-function htmlEntities(str) {
+function htmlEntities(str)
+{
   return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -407,25 +481,32 @@ function htmlEntities(str) {
     .replace(/"/g, "&quot;");
 }
 
-function gtChatMessage(jsmesg) {
-  if (g_appSettings.gtMsgEnable == true) {
+function gtChatMessage(jsmesg)
+{
+  if (g_appSettings.gtMsgEnable == true)
+  {
     var cid = jsmesg.cid;
     jsmesg.when = Date.now();
-    try {
+    try
+    {
       jsmesg.msg = new Buffer.from(jsmesg.msg, "base64").toString("utf8"); // eslint-disable-line new-cap
       jsmesg.msg = htmlEntities(jsmesg.msg);
-    } catch (e) {
+    }
+    catch (e)
+    {
       jsmesg.msg = "Corrupt message recieved";
     }
 
-    if (jsmesg.call != null && jsmesg.call != "" && jsmesg.call != "NOCALL") {
+    if (jsmesg.call != null && jsmesg.call != "" && jsmesg.call != "NOCALL")
+    {
       appendToHistory(cid, jsmesg);
       g_gtUnread[cid] = true;
       g_gtCurrentMessageCount++;
 
       if (newChatMessage(cid, jsmesg) == false) alertChatMessage();
 
-      if (g_msgSettings.msgAwaySelect == 1 && !(cid in g_gtSentAwayToCid)) {
+      if (g_msgSettings.msgAwaySelect == 1 && !(cid in g_gtSentAwayToCid))
+      {
         g_gtSentAwayToCid[cid] = true;
         gtSendMessage(
           "Away message [ " + g_msgSettings.msgAwayText + " ]",
@@ -436,7 +517,8 @@ function gtChatMessage(jsmesg) {
   }
 }
 
-function gtSendMessage(message, who) {
+function gtSendMessage(message, who)
+{
   msg = Object();
   msg.type = "mesg";
   msg.uuid = g_appSettings.chatUUID;
@@ -449,7 +531,8 @@ function gtSendMessage(message, who) {
   appendToHistory(who, msg);
 }
 
-function gtChatSendUUID() {
+function gtChatSendUUID()
+{
   var msg = Object();
   msg.type = "uuid";
   if (g_appSettings.chatUUID != "") msg.uuid = g_appSettings.chatUUID;
@@ -458,7 +541,8 @@ function gtChatSendUUID() {
   sendGtJson(JSON.stringify(msg));
 }
 
-function gtChatSetUUID(jsmesg) {
+function gtChatSetUUID(jsmesg)
+{
   g_appSettings.chatUUID = jsmesg.uuid;
   myChatId = jsmesg.id;
 
@@ -467,93 +551,126 @@ function gtChatSetUUID(jsmesg) {
   g_gtState = ChatState.status;
 }
 
-function gtChatStateMachine() {
+function gtChatStateMachine()
+{
   if (
     g_appSettings.gtShareEnable == true &&
     g_mapSettings.offlineMode == false
-  ) {
+  )
+  {
     var now = timeNowSec();
     g_gtStateToFunction[g_gtState]();
 
-    if (Object.keys(g_gtUnread).length > 0 && now % 2 == 0) {
+    if (Object.keys(g_gtUnread).length > 0 && now % 2 == 0)
+    {
       msgImg.style.webkitFilter = "invert(1)";
-    } else msgImg.style.webkitFilter = "";
+    }
+    else msgImg.style.webkitFilter = "";
 
     if (
       g_msgSettings.msgFrequencySelect > 0 &&
       Object.keys(g_gtUnread).length > 0
-    ) {
-      if (now - g_lastChatMsgAlert > g_msgSettings.msgFrequencySelect * 60) {
+    )
+    {
+      if (now - g_lastChatMsgAlert > g_msgSettings.msgFrequencySelect * 60)
+      {
         alertChatMessage();
       }
     }
-  } else {
+  }
+  else
+  {
     closeGtSocket();
     g_gtChatlistChangeCount = 0;
     g_lastGtStatus = "";
   }
 }
 
-function gtSpotMessage(jsmesg) {
+function gtSpotMessage(jsmesg)
+{
   addNewOAMSSpot(jsmesg.cid, jsmesg.db);
 }
 
-function gtChatSystemInit() {
+function gtChatSystemInit()
+{
   g_gtEngineInterval = setInterval(gtChatStateMachine, 1000);
 }
 
-function showGtFlags() {
-  if (g_appSettings.gtFlagImgSrc > 0) {
-    if (g_mapSettings.offlineMode == false) {
+function showGtFlags()
+{
+  if (g_appSettings.gtFlagImgSrc > 0)
+  {
+    if (g_mapSettings.offlineMode == false)
+    {
       redrawPins();
-      g_layerVectors["gtflags"].setVisible(true);
-    } else {
-      g_layerVectors["gtflags"].setVisible(false);
+      g_layerVectors.gtflags.setVisible(true);
     }
-  } else g_layerVectors["gtflags"].setVisible(false);
+    else
+    {
+      g_layerVectors.gtflags.setVisible(false);
+    }
+  }
+  else g_layerVectors.gtflags.setVisible(false);
 }
 
-function clearGtFlags() {
-  g_layerSources["gtflags"].clear();
+function clearGtFlags()
+{
+  g_layerSources.gtflags.clear();
 }
 
-function toggleGtMap() {
+function toggleGtMap()
+{
   g_appSettings.gtFlagImgSrc += 1;
   g_appSettings.gtFlagImgSrc %= 3;
   gtFlagImg.src = g_gtFlagImageArray[g_appSettings.gtFlagImgSrc];
   if (g_spotsEnabled == 1 && g_receptionSettings.mergeSpots == false) return;
-  if (g_appSettings.gtFlagImgSrc > 0) {
+  if (g_appSettings.gtFlagImgSrc > 0)
+  {
     redrawPins();
-    g_layerVectors["gtflags"].setVisible(true);
-  } else {
-    g_layerVectors["gtflags"].setVisible(false);
+    g_layerVectors.gtflags.setVisible(true);
+  }
+  else
+  {
+    g_layerVectors.gtflags.setVisible(false);
   }
 }
 
-function notifyNoChat(id) {
-  if (g_chatWindowHandle != null) {
-    try {
+function notifyNoChat(id)
+{
+  if (g_chatWindowHandle != null)
+  {
+    try
+    {
       g_chatWindowHandle.window.notifyNoChat(id);
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function updateChatWindow() {
-  if (g_chatWindowHandle != null) {
-    try {
+function updateChatWindow()
+{
+  if (g_chatWindowHandle != null)
+  {
+    try
+    {
       g_chatWindowHandle.window.updateEverything();
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function newChatMessage(id, jsmesg) {
+function newChatMessage(id, jsmesg)
+{
   var hasFocus = false;
   if (g_msgSettings.msgActionSelect == 1) showMessaging();
 
-  if (g_chatWindowHandle != null) {
-    try {
+  if (g_chatWindowHandle != null)
+  {
+    try
+    {
       hasFocus = g_chatWindowHandle.window.newChatMessage(id, jsmesg);
-    } catch (e) {}
+    }
+    catch (e) {}
     updateChatWindow();
   }
   return hasFocus;
@@ -561,12 +678,15 @@ function newChatMessage(id, jsmesg) {
 
 var g_lastChatMsgAlert = 0;
 
-function alertChatMessage() {
-  if (g_msgSettings.msgAlertSelect == 1) {
+function alertChatMessage()
+{
+  if (g_msgSettings.msgAlertSelect == 1)
+  {
     // Text to speech
     speakAlertString(g_msgSettings.msgAlertWord);
   }
-  if (g_msgSettings.msgAlertSelect == 2) {
+  if (g_msgSettings.msgAlertSelect == 2)
+  {
     // Audible
     playAlertMediaFile(g_msgSettings.msgAlertMedia);
   }

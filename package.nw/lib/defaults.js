@@ -26,7 +26,7 @@ var validSettings = [
   "speechSettings",
   "startupLogs",
   "trustedQslSettings",
-  "screenSettings",
+  "screenSettings"
 ];
 
 var def_appSettings = {
@@ -88,7 +88,7 @@ var def_appSettings = {
   workingCallsigns: {},
   workingDateEnable: false,
   workingDate: 0,
-  gtSpotEnable: true,
+  gtSpotEnable: true
 };
 
 var def_mapSettings = {
@@ -125,7 +125,7 @@ var def_mapSettings = {
   trafficDecode: true,
   usNexrad: false,
   zoom: 4,
-  mapTrans: 0.5,
+  mapTrans: 0.5
 };
 
 var def_adifLogSettings = {
@@ -134,7 +134,7 @@ var def_adifLogSettings = {
     buttonClubCheckBox: false,
     buttonLOTWCheckBox: false,
     buttonQRZCheckBox: false,
-    buttonPsk24CheckBox: true,
+    buttonPsk24CheckBox: true
   },
   startup: {
     loadAdifCheckBox: false,
@@ -142,7 +142,7 @@ var def_adifLogSettings = {
     loadQRZCheckBox: false,
     loadLOTWCheckBox: false,
     loadClubCheckBox: false,
-    loadGTCheckBox: true,
+    loadGTCheckBox: true
   },
   qsolog: {
     logQRZqsoCheckBox: false,
@@ -151,10 +151,10 @@ var def_adifLogSettings = {
     logHRDLOGqsoCheckBox: false,
     logClubqsoCheckBox: false,
     logCloudlogQSOCheckBox: false,
-    logeQSLQSOCheckBox: false,
+    logeQSLQSOCheckBox: false
   },
   nickname: {
-    nicknameeQSLCheckBox: false,
+    nicknameeQSLCheckBox: false
   },
   text: {
     lotwLogin: "",
@@ -171,9 +171,9 @@ var def_adifLogSettings = {
     CloudlogAPI: "",
     eQSLUser: "",
     eQSLPassword: "",
-    eQSLNickname: "",
+    eQSLNickname: ""
   },
-  downloads: {},
+  downloads: {}
 };
 
 var def_msgSettings = {
@@ -183,7 +183,7 @@ var def_msgSettings = {
   msgFrequencySelect: 0,
   msgActionSelect: 0,
   msgAwaySelect: 0,
-  msgAwayText: "I am away from the shack at the moment",
+  msgAwayText: "I am away from the shack at the moment"
 };
 
 var def_receptionSettings = {
@@ -194,39 +194,39 @@ var def_receptionSettings = {
   pathColor: -1,
   pathNightColor: 361,
   spotWidth: 0.8,
-  mergeSpots: false,
+  mergeSpots: false
 };
 
 var def_N1MMSettings = {
   enable: false,
   port: 2333,
-  ip: "127.0.0.1",
+  ip: "127.0.0.1"
 };
 var def_log4OMSettings = {
   enable: false,
   port: 2236,
-  ip: "127.0.0.1",
+  ip: "127.0.0.1"
 };
 var def_dxkLogSettings = {
   enable: false,
   port: 52000,
-  ip: "127.0.0.1",
+  ip: "127.0.0.1"
 };
 var def_HRDLogbookLogSettings = {
   enable: false,
   port: 7826,
-  ip: "127.0.0.1",
+  ip: "127.0.0.1"
 };
 var def_acLogSettings = {
   enable: false,
   port: 1100,
-  ip: "127.0.0.1",
+  ip: "127.0.0.1"
 };
 var def_trustedQslSettings = {
   stationFile: "",
   stationFileValid: false,
   binaryFile: "",
-  binaryFileValid: false,
+  binaryFileValid: false
 };
 var def_callsignLookups = {
   lotwUseEnable: true,
@@ -240,10 +240,10 @@ var def_callsignLookups = {
   ulsLastUpdate: 0,
   oqrsUseEnable: false,
   oqrsWeeklyEnable: false,
-  oqrsLastUpdate: 0,
+  oqrsLastUpdate: 0
 };
 
 var def_bandActivity = {
   lastUpdate: {},
-  lines: {},
+  lines: {}
 };

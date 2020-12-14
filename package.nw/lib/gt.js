@@ -7,12 +7,13 @@ var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
 if (typeof localStorage.currentVersion != "undefined")
-  g_startVersion = localStorage.currentVersion;
+{ g_startVersion = localStorage.currentVersion; }
 
 if (
   typeof localStorage.currentVersion == "undefined" ||
   localStorage.currentVersion != String(gtVersion)
-) {
+)
+{
   localStorage.currentVersion = String(gtVersion);
   var gui = require("nw.gui");
   gui.App.clearCache();
@@ -38,7 +39,8 @@ const path = require("path");
 const g_dirSeperator = path.sep;
 
 var g_platform = os.platform();
-if (g_platform.indexOf("win") == 0 || g_platform.indexOf("Win") == 0) {
+if (g_platform.indexOf("win") == 0 || g_platform.indexOf("Win") == 0)
+{
   g_platform = "windows";
 }
 if (g_platform.indexOf("inux") > -1) g_platform = "linux";
@@ -78,25 +80,28 @@ var g_callsignDatabaseDXCC = {
   1: true,
   6: true,
   110: true,
-  202: true,
+  202: true
 };
 
 var g_callsignDatabaseUS = {
   291: true,
   6: true,
-  110: true,
+  110: true
 };
 
 var g_callsignDatabaseUSplus = {
   291: true,
   6: true,
   110: true,
-  202: true,
+  202: true
 };
 
-function loadAllSettings() {
-  for (var x in localStorage) {
-    if (!validSettings.includes(x) && typeof localStorage[x] == "string") {
+function loadAllSettings()
+{
+  for (var x in localStorage)
+  {
+    if (!validSettings.includes(x) && typeof localStorage[x] == "string")
+    {
       delete localStorage[x];
     }
   }
@@ -134,9 +139,11 @@ function loadAllSettings() {
   g_startupLogs = loadArrayIfExists("startupLogs");
   g_mapMemory = loadArrayIfExists("mapMemory");
 
-  if (g_mapMemory.length != 7) {
+  if (g_mapMemory.length != 7)
+  {
     g_mapMemory = [];
-    for (var x = 0; x < 7; x++) {
+    for (var x = 0; x < 7; x++)
+    {
       g_mapMemory[x] = {};
       g_mapMemory[x].zoom = -1;
       g_mapMemory[x].LoLa = [0, 0];
@@ -164,14 +171,18 @@ var g_heatEnabled = g_appSettings.heatEnabled;
 var g_myLat = g_mapSettings.latitude;
 var g_myLon = g_mapSettings.longitude;
 
-function loadDefaultsAndMerge(key, def) {
+function loadDefaultsAndMerge(key, def)
+{
   var settings = {};
-  if (typeof localStorage[key] != "undefined") {
+  if (typeof localStorage[key] != "undefined")
+  {
     settings = JSON.parse(localStorage[key]);
   }
   var merged = deepmerge(def, settings);
-  for (var x in merged) {
-    if (!(x in def)) {
+  for (var x in merged)
+  {
+    if (!(x in def))
+    {
       delete merged[x];
     }
   }
@@ -179,35 +190,43 @@ function loadDefaultsAndMerge(key, def) {
   return merged;
 }
 
-function loadArrayIfExists(key) {
+function loadArrayIfExists(key)
+{
   var data = [];
-  if (typeof localStorage[key] != "undefined") {
+  if (typeof localStorage[key] != "undefined")
+  {
     data = JSON.parse(localStorage[key]);
   }
   return data;
 }
 
-function loadObjectIfExists(key) {
+function loadObjectIfExists(key)
+{
   var data = {};
-  if (typeof localStorage[key] != "undefined") {
+  if (typeof localStorage[key] != "undefined")
+  {
     data = JSON.parse(localStorage[key]);
   }
   return data;
 }
 
-function saveAppSettings() {
+function saveAppSettings()
+{
   localStorage.appSettings = JSON.stringify(g_appSettings);
 }
 
-function saveMapSettings() {
+function saveMapSettings()
+{
   localStorage.mapSettings = JSON.stringify(g_mapSettings);
 }
 
-function saveStartupLogs() {
+function saveStartupLogs()
+{
   localStorage.startupLogs = JSON.stringify(g_startupLogs);
 }
 
-function saveLogSettings() {
+function saveLogSettings()
+{
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
   localStorage.N1MMSettings = JSON.stringify(g_N1MMSettings);
   localStorage.log4OMSettings = JSON.stringify(g_log4OMSettings);
@@ -217,12 +236,14 @@ function saveLogSettings() {
   localStorage.trustedQslSettings = JSON.stringify(g_trustedQslSettings);
 }
 
-function saveAndCloseApp() {
+function saveAndCloseApp()
+{
   g_closing = true;
 
   saveReceptionReports();
 
-  try {
+  try
+  {
     var data = {};
 
     data.tracker = g_tracker;
@@ -233,36 +254,47 @@ function saveAndCloseApp() {
     data.version = gtVersion;
 
     fs.writeFileSync(g_NWappData + "internal_qso.json", JSON.stringify(data));
-  } catch (e) {
+  }
+  catch (e)
+  {
     console.log(e);
   }
 
-  if (g_map) {
+  if (g_map)
+  {
     mapMemory(6, true, true);
     g_mapSettings.zoom = g_map.getView().getZoom();
     saveMapSettings();
   }
 
-  if (g_wsjtUdpServer != null) {
-    try {
-      if (multicastEnable.checked == true && g_appSettings.wsjtIP != "") {
+  if (g_wsjtUdpServer != null)
+  {
+    try
+    {
+      if (multicastEnable.checked == true && g_appSettings.wsjtIP != "")
+      {
         g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
       }
       g_wsjtUdpServer.close();
-    } catch (e) {
+    }
+    catch (e)
+    {
       console.log(e);
     }
   }
 
-  if (g_forwardUdpServer != null) {
+  if (g_forwardUdpServer != null)
+  {
     g_forwardUdpServer.close();
   }
 
   saveAppSettings();
   saveMapSettings();
 
-  try {
-    if (g_callRosterWindowHandle) {
+  try
+  {
+    if (g_callRosterWindowHandle)
+    {
       g_callRosterWindowHandle.window.writeRosterSettings();
     }
     if (g_popupWindowHandle != null) g_popupWindowHandle.window.close(true);
@@ -273,13 +305,16 @@ function saveAndCloseApp() {
     g_lookupWindowHandle.window.close(true);
     g_baWindowHandle.window.close(true);
     g_callRosterWindowHandle.window.close(true);
-  } catch (e) {}
+  }
+  catch (e) {}
   nw.App.quit();
 }
 
-function clearAndReload() {
+function clearAndReload()
+{
   g_closing = true;
-  if (g_wsjtUdpServer != null) {
+  if (g_wsjtUdpServer != null)
+  {
     g_wsjtUdpServer.close();
     g_wsjtUdpServer = null;
   }
@@ -290,7 +325,8 @@ function clearAndReload() {
 
 win.hide();
 
-win.on("close", function () {
+win.on("close", function ()
+{
   saveAndCloseApp();
 });
 win.show();
@@ -342,19 +378,19 @@ var g_colorBands = [
   "2m",
   "1.25m",
   "70cm",
-  "23cm",
+  "23cm"
 ];
 
 var g_pathIgnore = {};
-g_pathIgnore["RU"] = true;
-g_pathIgnore["FTRU"] = true;
-g_pathIgnore["FD"] = true;
-g_pathIgnore["TEST"] = true;
-g_pathIgnore["DX"] = true;
-g_pathIgnore["CQ"] = true;
+g_pathIgnore.RU = true;
+g_pathIgnore.FTRU = true;
+g_pathIgnore.FD = true;
+g_pathIgnore.TEST = true;
+g_pathIgnore.DX = true;
+g_pathIgnore.CQ = true;
 
 var g_replaceCQ = {};
-g_replaceCQ["ASIA"] = "AS";
+g_replaceCQ.ASIA = "AS";
 
 var g_searchBand = "dummy";
 
@@ -392,7 +428,8 @@ var g_tracker = {};
 
 initQSOdata();
 
-function initQSOdata() {
+function initQSOdata()
+{
   g_tracker.worked = {};
   g_tracker.confirmed = {};
 
@@ -430,10 +467,10 @@ var g_layerVectors = {};
 var g_scaleLine = null;
 var g_scaleUnits = {};
 
-g_scaleUnits["MI"] = "us";
-g_scaleUnits["KM"] = "metric";
-g_scaleUnits["NM"] = "nautical";
-g_scaleUnits["DG"] = "degrees";
+g_scaleUnits.MI = "us";
+g_scaleUnits.KM = "metric";
+g_scaleUnits.NM = "nautical";
+g_scaleUnits.DG = "degrees";
 
 var g_passingToolTipTableString = "";
 var g_mouseX = 0;
@@ -463,7 +500,7 @@ var g_us48Data = {};
 var g_startupFunctions = Array();
 
 var g_pskColors = {};
-g_pskColors["OOB"] = "888888";
+g_pskColors.OOB = "888888";
 g_pskColors["4000m"] = "45E0FF";
 g_pskColors["2200m"] = "FF4500";
 g_pskColors["630m"] = "1E90FF";
@@ -498,7 +535,7 @@ var g_UTCoptions = {
   minute: "2-digit",
   second: "2-digit",
   timeZone: "UTC",
-  timeZoneName: "short",
+  timeZoneName: "short"
 };
 
 var g_LocalOptions = {
@@ -508,7 +545,7 @@ var g_LocalOptions = {
   hour: "2-digit",
   minute: "2-digit",
   second: "2-digit",
-  timeZoneName: "short",
+  timeZoneName: "short"
 };
 
 var g_earthShadowImageArray = Array();
@@ -571,14 +608,17 @@ var g_gridAlpha = "88";
 
 if (typeof g_mapMemory[6] == "undefined") g_mapMemory[6] = g_mapMemory[0];
 
-function qsoBackupFileInit() {
+function qsoBackupFileInit()
+{
   var adifHeader = "GridTracker v" + gtVersion + " <EOH>\r\n";
-  if (!fs.existsSync(g_qsoLogFile)) {
+  if (!fs.existsSync(g_qsoLogFile))
+  {
     fs.writeFileSync(g_qsoLogFile, adifHeader);
   }
 }
 
-function gtBandFilterChanged(selector) {
+function gtBandFilterChanged(selector)
+{
   g_appSettings.gtBandFilter = selector.value;
 
   removePaths();
@@ -586,65 +626,78 @@ function gtBandFilterChanged(selector) {
   redrawSpots();
 }
 
-function gtModeFilterChanged(selector) {
+function gtModeFilterChanged(selector)
+{
   g_appSettings.gtModeFilter = selector.value;
 
   redrawGrids();
   redrawSpots();
 }
 
-function gtPropFilterChanged(selector) {
+function gtPropFilterChanged(selector)
+{
   g_appSettings.gtPropFilter = selector.value;
 
   redrawGrids();
   redrawSpots();
 }
 
-function setBandAndModeToAuto() {
+function setBandAndModeToAuto()
+{
   g_appSettings.gtModeFilter = g_appSettings.gtBandFilter = gtBandFilter.value = gtModeFilter.value =
     "auto";
   redrawGrids();
   redrawSpots();
 }
 
-function hideLiveGrid(i) {
-  if (g_layerSources["live"].hasFeature(g_liveGrids[i].rectangle)) {
-    g_layerSources["live"].removeFeature(g_liveGrids[i].rectangle);
+function hideLiveGrid(i)
+{
+  if (g_layerSources.live.hasFeature(g_liveGrids[i].rectangle))
+  {
+    g_layerSources.live.removeFeature(g_liveGrids[i].rectangle);
   }
 }
 
-function liveTriangleGrid(i) {
-  if (g_liveGrids[i].isTriangle == false) {
-    if (g_layerSources["live"].hasFeature(g_liveGrids[i].rectangle)) {
-      g_layerSources["live"].removeFeature(g_liveGrids[i].rectangle);
+function liveTriangleGrid(i)
+{
+  if (g_liveGrids[i].isTriangle == false)
+  {
+    if (g_layerSources.live.hasFeature(g_liveGrids[i].rectangle))
+    {
+      g_layerSources.live.removeFeature(g_liveGrids[i].rectangle);
     }
 
     gridToTriangle(i, g_liveGrids[i].rectangle, false);
     g_liveGrids[i].isTriangle = true;
-    g_layerSources["live"].addFeature(g_liveGrids[i].rectangle);
+    g_layerSources.live.addFeature(g_liveGrids[i].rectangle);
   }
 }
 
-function qsoTriangleGrid(i) {
-  if (g_qsoGrids[i].isTriangle == false) {
-    if (g_layerSources["qso"].hasFeature(g_qsoGrids[i].rectangle)) {
-      g_layerSources["qso"].removeFeature(g_qsoGrids[i].rectangle);
+function qsoTriangleGrid(i)
+{
+  if (g_qsoGrids[i].isTriangle == false)
+  {
+    if (g_layerSources.qso.hasFeature(g_qsoGrids[i].rectangle))
+    {
+      g_layerSources.qso.removeFeature(g_qsoGrids[i].rectangle);
     }
 
     gridToTriangle(i, g_qsoGrids[i].rectangle, true);
     g_qsoGrids[i].isTriangle = true;
-    g_layerSources["qso"].addFeature(g_qsoGrids[i].rectangle);
+    g_layerSources.qso.addFeature(g_qsoGrids[i].rectangle);
   }
 }
 
-function setGridViewMode(mode) {
+function setGridViewMode(mode)
+{
   g_appSettings.gridViewMode = mode;
   gridViewButton.innerHTML = g_gridViewArray[g_appSettings.gridViewMode];
   redrawGrids();
   goProcessRoster();
 }
 
-function cycleGridView() {
+function cycleGridView()
+{
   var mode = g_appSettings.gridViewMode;
   mode++;
   if (mode > 3) mode = 1;
@@ -655,23 +708,29 @@ function cycleGridView() {
   redrawGrids();
 }
 
-function toggleEarth() {
+function toggleEarth()
+{
   g_appSettings.earthImgSrc ^= 1;
   earthImg.src = g_earthShadowImageArray[g_appSettings.earthImgSrc];
-  if (g_appSettings.earthImgSrc == 1) {
+  if (g_appSettings.earthImgSrc == 1)
+  {
     dayNight.hide();
     g_nightTime = dayNight.refresh();
-  } else {
+  }
+  else
+  {
     g_nightTime = dayNight.refresh();
     dayNight.show();
   }
   changeMapLayer();
 }
 
-function toggleOffline() {
+function toggleOffline()
+{
   if (g_map == null) return;
 
-  if (g_mapSettings.offlineMode == true) {
+  if (g_mapSettings.offlineMode == true)
+  {
     g_mapSettings.offlineMode = false;
     offlineImg.src = g_mapImageArray[1];
     conditionsButton.style.display = "inline-block";
@@ -681,28 +740,37 @@ function toggleOffline() {
     buttonPSKSpotsBoxDiv.style.display = "inline-block";
     donateButton.style.display = "inline-block";
 
-    if (g_appSettings.gtShareEnable == true) {
+    if (g_appSettings.gtShareEnable == true)
+    {
       gtFlagButton.style.display = "inline-block";
       if (g_appSettings.gtMsgEnable == true)
-        msgButton.style.display = "inline-block";
+      { msgButton.style.display = "inline-block"; }
       else msgButton.style.display = "none";
-    } else {
+    }
+    else
+    {
       msgButton.style.display = "none";
       gtFlagButton.style.display = "none";
     }
 
-    for (var key in g_adifLogSettings.menu) {
+    for (var key in g_adifLogSettings.menu)
+    {
       var value = g_adifLogSettings.menu[key];
       var where = key + "Div";
       document.getElementById(key).checked = value;
-      if (value == true) {
+      if (value == true)
+      {
         document.getElementById(where).style.display = "inline-block";
-      } else {
+      }
+      else
+      {
         document.getElementById(where).style.display = "none";
       }
     }
     pskReporterBandActivityDiv.style.display = "block";
-  } else {
+  }
+  else
+  {
     g_mapSettings.offlineMode = true;
     offlineImg.src = g_mapImageArray[0];
     conditionsButton.style.display = "none";
@@ -724,14 +792,18 @@ function toggleOffline() {
   changeMapValues();
 }
 
-function ignoreMessagesToggle() {
+function ignoreMessagesToggle()
+{
   g_ignoreMessages ^= 1;
-  if (g_ignoreMessages == 0) {
+  if (g_ignoreMessages == 0)
+  {
     txrxdec.style.backgroundColor = "Green";
     txrxdec.style.borderColor = "GreenYellow";
     txrxdec.innerHTML = "RECEIVE";
     txrxdec.title = "Click to ignore incoming messages";
-  } else {
+  }
+  else
+  {
     txrxdec.style.backgroundColor = "DimGray";
     txrxdec.style.borderColor = "DarkGray";
     txrxdec.innerHTML = "IGNORE";
@@ -739,18 +811,21 @@ function ignoreMessagesToggle() {
   }
 }
 
-function toggleTime() {
+function toggleTime()
+{
   g_appSettings.useLocalTime ^= 1;
   displayTime();
 }
 
-function dateToString(dateTime) {
+function dateToString(dateTime)
+{
   if (g_appSettings.useLocalTime == 1)
-    return dateTime.toLocaleString().replace(/,/g, "");
+  { return dateTime.toLocaleString().replace(/,/g, ""); }
   else return dateTime.toUTCString().replace(/GMT/g, "UTC").replace(/,/g, "");
 }
 
-function userDayString(Msec) {
+function userDayString(Msec)
+{
   var dateTime;
   if (Msec != null) dateTime = new Date(Msec);
   else dateTime = new Date();
@@ -763,30 +838,34 @@ function userDayString(Msec) {
   return dra.join(" ");
 }
 
-function userTimeString(Msec) {
+function userTimeString(Msec)
+{
   var dateTime;
   if (Msec != null) dateTime = new Date(Msec);
   else dateTime = new Date();
   return dateToString(dateTime);
 }
 
-function getWpx(callsign) {
+function getWpx(callsign)
+{
   var prefix = null;
 
   if (callsign.includes("/"))
-    // Handle in the future?
-    return null;
+  // Handle in the future?
+  { return null; }
   if (!/\d/.test(callsign))
-    // Insert 0, never seen this
-    return null;
+  // Insert 0, never seen this
+  { return null; }
 
   var end = callsign.length;
   var foundPrefix = false;
   var prefixEnd = 1;
-  while (prefixEnd != end) {
-    if (/\d/.test(callsign.charAt(prefixEnd))) {
+  while (prefixEnd != end)
+  {
+    if (/\d/.test(callsign.charAt(prefixEnd)))
+    {
       while (prefixEnd + 1 != end && /\d/.test(callsign.charAt(prefixEnd + 1)))
-        prefixEnd++;
+      { prefixEnd++; }
       foundPrefix = true;
       break;
     }
@@ -798,56 +877,65 @@ function getWpx(callsign) {
   return prefix;
 }
 
-function setState(details) {
-  if (details.state != null && details.state.length > 0) {
+function setState(details)
+{
+  if (details.state != null && details.state.length > 0)
+  {
     var isDigi = details.digital;
 
     if (details.state.substr(0, 2) != "US")
-      details.state = "US-" + details.state;
+    { details.state = "US-" + details.state; }
 
     g_tracker.worked.state[details.state + details.band + details.mode] = true;
     g_tracker.worked.state[details.state] = true;
     g_tracker.worked.state[details.state + details.mode] = true;
     g_tracker.worked.state[details.state + details.band] = true;
-    if (isDigi) {
+    if (isDigi)
+    {
       g_tracker.worked.state[details.state + "dg"] = true;
       g_tracker.worked.state[details.state + details.band + "dg"] = true;
     }
 
-    if (details.confirmed) {
+    if (details.confirmed)
+    {
       g_tracker.confirmed.state[
         details.state + details.band + details.mode
       ] = true;
       g_tracker.confirmed.state[details.state] = true;
       g_tracker.confirmed.state[details.state + details.mode] = true;
       g_tracker.confirmed.state[details.state + details.band] = true;
-      if (isDigi) {
+      if (isDigi)
+      {
         g_tracker.confirmed.state[details.state + "dg"] = true;
         g_tracker.confirmed.state[details.state + details.band + "dg"] = true;
       }
     }
   }
 
-  if (details.cnty != null && details.cnty.length > 0) {
+  if (details.cnty != null && details.cnty.length > 0)
+  {
     var isDigi = details.digital;
 
     g_tracker.worked.cnty[details.cnty + details.band + details.mode] = true;
     g_tracker.worked.cnty[details.cnty] = true;
     g_tracker.worked.cnty[details.cnty + details.mode] = true;
     g_tracker.worked.cnty[details.cnty + details.band] = true;
-    if (isDigi) {
+    if (isDigi)
+    {
       g_tracker.worked.cnty[details.cnty + "dg"] = true;
       g_tracker.worked.cnty[details.cnty + details.band + "dg"] = true;
     }
 
-    if (details.confirmed) {
+    if (details.confirmed)
+    {
       g_tracker.confirmed.cnty[
         details.cnty + details.band + details.mode
       ] = true;
       g_tracker.confirmed.cnty[details.cnty] = true;
       g_tracker.confirmed.cnty[details.cnty + details.mode] = true;
       g_tracker.confirmed.cnty[details.cnty + details.band] = true;
-      if (isDigi) {
+      if (isDigi)
+      {
         g_tracker.confirmed.cnty[details.cnty + "dg"] = true;
         g_tracker.confirmed.cnty[details.cnty + details.band + "dg"] = true;
       }
@@ -855,17 +943,20 @@ function setState(details) {
   }
 }
 
-function isKnownCallsignDXCC(dxcc) {
+function isKnownCallsignDXCC(dxcc)
+{
   if (dxcc in g_callsignDatabaseDXCC) return true;
   return false;
 }
 
-function isKnownCallsignUS(dxcc) {
+function isKnownCallsignUS(dxcc)
+{
   if (dxcc in g_callsignDatabaseUS) return true;
   return false;
 }
 
-function isKnownCallsignUSplus(dxcc) {
+function isKnownCallsignUSplus(dxcc)
+{
   if (dxcc in g_callsignDatabaseUSplus) return true;
   return false;
 }
@@ -897,7 +988,8 @@ function addDeDx(
   finalPhone = false,
   finalIOTA = "",
   finalSatName = ""
-) {
+)
+{
   var callsign = null;
   var rect = null;
   var worked = false;
@@ -908,22 +1000,25 @@ function addDeDx(
   var finalMsg = ifinalMsg.trim();
   if (finalMsg.length > 40) finalMsg = finalMsg.substring(0, 40) + "...";
   var details = null;
-  if (!notQso) {
+  if (!notQso)
+  {
     var timeMod = finalTime - (finalTime % 360) + 180;
     hash = unique(mode + band + finalDXcall + timeMod);
 
     var lookupCall = false;
 
-    if (hash in g_QSOhash) {
+    if (hash in g_QSOhash)
+    {
       details = g_QSOhash[hash];
-      if (finalGrid.length > 0 && finalGrid != details.grid) {
+      if (finalGrid.length > 0 && finalGrid != details.grid)
+      {
         // only touch the grid if it's larger than the last grid && the 4wide is the same
         if (
           details.grid.length < 6 &&
           (details.grid.substr(0, 4) == finalGrid.substr(0, 4) ||
             details.grid.length == 0)
         )
-          details.grid = finalGrid;
+        { details.grid = finalGrid; }
       }
       if (finalRSTsent.length > 0) details.RSTsent = finalRSTsent;
       if (finalRSTrecv.length > 0) details.RSTrecv = finalRSTrecv;
@@ -938,7 +1033,9 @@ function addDeDx(
       if (finalVucc.length > 0) details.vucc_grids = finalVucc;
       if (finalIOTA.length > 0) details.IOTA = finalIOTA;
       if (finalSatName.length > 0) details.satName = finalSatName;
-    } else {
+    }
+    else
+    {
       details = {};
       details.grid = finalGrid;
       details.RSTsent = finalRSTsent;
@@ -970,40 +1067,50 @@ function addDeDx(
     if (finalDxcc < 1) finalDxcc = callsignToDxcc(finalDXcall);
     details.dxcc = finalDxcc;
 
-    if (details.dxcc > 0 && details.px == null) {
+    if (details.dxcc > 0 && details.px == null)
+    {
       details.px = getWpx(finalDXcall);
       if (details.px)
-        details.zone = Number(details.px.charAt(details.px.length - 1));
+      { details.zone = Number(details.px.charAt(details.px.length - 1)); }
     }
 
     if (
       details.state == null &&
       isKnownCallsignUSplus(finalDxcc) &&
       finalGrid.length > 0
-    ) {
+    )
+    {
       var fourGrid = finalGrid.substr(0, 4);
-      if (fourGrid in g_gridToState && g_gridToState[fourGrid].length == 1) {
+      if (fourGrid in g_gridToState && g_gridToState[fourGrid].length == 1)
+      {
         details.state = g_gridToState[fourGrid][0];
       }
       lookupCall = true;
     }
 
     details.cont = finalCont;
-    if (details.cont == null && finalDxcc > 0) {
+    if (details.cont == null && finalDxcc > 0)
+    {
       details.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
       if (details.dxcc == 390 && details.zone == 1) details.cont = "EU";
     }
 
     details.cnty = finalCnty;
-    if (details.cnty) {
+    if (details.cnty)
+    {
       details.qual = true;
     }
 
-    if (isKnownCallsignUSplus(finalDxcc)) {
-      if (details.cnty == null) {
+    if (isKnownCallsignUSplus(finalDxcc))
+    {
+      if (details.cnty == null)
+      {
         lookupCall = true;
-      } else {
-        if (!(details.cnty in g_cntyToCounty)) {
+      }
+      else
+      {
+        if (!(details.cnty in g_cntyToCounty))
+        {
           lookupCall = true;
         }
       }
@@ -1020,18 +1127,21 @@ function addDeDx(
     g_tracker.worked.call[finalDXcall + mode] = true;
     g_tracker.worked.call[finalDXcall + band] = true;
 
-    if (isDigi == true) {
+    if (isDigi == true)
+    {
       g_tracker.worked.call[finalDXcall + "dg"] = true;
       g_tracker.worked.call[finalDXcall + band + "dg"] = true;
     }
 
     var fourGrid = details.grid.substr(0, 4);
-    if (fourGrid != "") {
+    if (fourGrid != "")
+    {
       g_tracker.worked.grid[fourGrid + band + mode] = true;
       g_tracker.worked.grid[fourGrid] = true;
       g_tracker.worked.grid[fourGrid + mode] = true;
       g_tracker.worked.grid[fourGrid + band] = true;
-      if (isDigi == true) {
+      if (isDigi == true)
+      {
         g_tracker.worked.grid[fourGrid + "dg"] = true;
         g_tracker.worked.grid[fourGrid + band + "dg"] = true;
       }
@@ -1040,15 +1150,18 @@ function addDeDx(
       details.ituz.length == 0 &&
       fourGrid in g_gridToITUZone &&
       g_gridToITUZone[fourGrid].length == 1
-    ) {
+    )
+    {
       details.ituz = g_gridToITUZone[fourGrid][0];
     }
-    if (details.ituz.length > 0) {
+    if (details.ituz.length > 0)
+    {
       g_tracker.worked.ituz[details.ituz + band + mode] = true;
       g_tracker.worked.ituz[details.ituz] = true;
       g_tracker.worked.ituz[details.ituz + mode] = true;
       g_tracker.worked.ituz[details.ituz + band] = true;
-      if (isDigi == true) {
+      if (isDigi == true)
+      {
         g_tracker.worked.ituz[details.ituz + "dg"] = true;
         g_tracker.worked.ituz[details.ituz + band + "dg"] = true;
       }
@@ -1057,57 +1170,68 @@ function addDeDx(
       details.cqz.length == 0 &&
       fourGrid in g_gridToCQZone &&
       g_gridToCQZone[fourGrid].length == 1
-    ) {
+    )
+    {
       details.cqz = g_gridToCQZone[fourGrid][0];
     }
-    if (details.cqz.length > 0) {
+    if (details.cqz.length > 0)
+    {
       g_tracker.worked.cqz[details.cqz + band + mode] = true;
       g_tracker.worked.cqz[details.cqz] = true;
       g_tracker.worked.cqz[details.cqz + mode] = true;
       g_tracker.worked.cqz[details.cqz + band] = true;
-      if (isDigi == true) {
+      if (isDigi == true)
+      {
         g_tracker.worked.cqz[details.cqz + "dg"] = true;
         g_tracker.worked.cqz[details.cqz + band + "dg"] = true;
       }
     }
 
-    if (details.dxcc > 0) {
+    if (details.dxcc > 0)
+    {
       var sDXCC = String(details.dxcc);
       g_tracker.worked.dxcc[sDXCC + band + mode] = true;
       g_tracker.worked.dxcc[sDXCC] = true;
       g_tracker.worked.dxcc[sDXCC + mode] = true;
       g_tracker.worked.dxcc[sDXCC + band] = true;
-      if (isDigi == true) {
+      if (isDigi == true)
+      {
         g_tracker.worked.dxcc[sDXCC + "dg"] = true;
         g_tracker.worked.dxcc[sDXCC + band + "dg"] = true;
       }
     }
 
-    if (details.px) {
+    if (details.px)
+    {
       g_tracker.worked.px[details.px + band + mode] = true;
       g_tracker.worked.px[details.px] = hash;
       g_tracker.worked.px[details.px + mode] = true;
       g_tracker.worked.px[details.px + band] = true;
-      if (isDigi == true) {
+      if (isDigi == true)
+      {
         g_tracker.worked.px[details.px + "dg"] = true;
         g_tracker.worked.px[details.px + band + "dg"] = true;
       }
-      if (isPhone == true) {
+      if (isPhone == true)
+      {
         g_tracker.worked.px[details.px + "ph"] = true;
         g_tracker.worked.px[details.px + band + "ph"] = true;
       }
     }
 
-    if (details.cont) {
+    if (details.cont)
+    {
       g_tracker.worked.cont[details.cont + band + mode] = true;
       g_tracker.worked.cont[details.cont] = hash;
       g_tracker.worked.cont[details.cont + mode] = true;
       g_tracker.worked.cont[details.cont + band] = true;
-      if (isDigi == true) {
+      if (isDigi == true)
+      {
         g_tracker.worked.cont[details.cont + "dg"] = true;
         g_tracker.worked.cont[details.cont + band + "dg"] = true;
       }
-      if (isPhone == true) {
+      if (isPhone == true)
+      {
         g_tracker.worked.cont[details.cont + "ph"] = true;
         g_tracker.worked.cont[details.cont + band + "ph"] = true;
       }
@@ -1116,7 +1240,8 @@ function addDeDx(
     worked = true;
     locked = true;
     details.worked = worked;
-    if (typeof details.confirmed == "undefined" || details.confirmed == false) {
+    if (typeof details.confirmed == "undefined" || details.confirmed == false)
+    {
       details.confirmed = confirmed;
     }
 
@@ -1124,73 +1249,88 @@ function addDeDx(
 
     setState(details);
 
-    if (lookupCall) {
-      if (g_callsignLookups.ulsUseEnable) {
+    if (lookupCall)
+    {
+      if (g_callsignLookups.ulsUseEnable)
+      {
         lookupUsCallsign(details, true);
       }
     }
 
-    if (confirmed == true) {
-      if (fourGrid != "") {
+    if (confirmed == true)
+    {
+      if (fourGrid != "")
+      {
         g_tracker.confirmed.grid[fourGrid + band + mode] = true;
         g_tracker.confirmed.grid[fourGrid] = true;
         g_tracker.confirmed.grid[fourGrid + mode] = true;
         g_tracker.confirmed.grid[fourGrid + band] = true;
-        if (isDigi == true) {
+        if (isDigi == true)
+        {
           g_tracker.confirmed.grid[fourGrid + "dg"] = true;
           g_tracker.confirmed.grid[fourGrid + band + "dg"] = true;
         }
       }
-      if (details.ituz.length > 0) {
+      if (details.ituz.length > 0)
+      {
         g_tracker.confirmed.ituz[details.ituz + band + mode] = true;
         g_tracker.confirmed.ituz[details.ituz] = true;
         g_tracker.confirmed.ituz[details.ituz + mode] = true;
         g_tracker.confirmed.ituz[details.ituz + band] = true;
-        if (isDigi == true) {
+        if (isDigi == true)
+        {
           g_tracker.confirmed.ituz[details.ituz + "dg"] = true;
           g_tracker.confirmed.ituz[details.ituz + band + "dg"] = true;
         }
       }
-      if (details.cqz.length > 0) {
+      if (details.cqz.length > 0)
+      {
         g_tracker.confirmed.cqz[details.cqz + band + mode] = true;
         g_tracker.confirmed.cqz[details.cqz] = true;
         g_tracker.confirmed.cqz[details.cqz + mode] = true;
         g_tracker.confirmed.cqz[details.cqz + band] = true;
-        if (isDigi == true) {
+        if (isDigi == true)
+        {
           g_tracker.confirmed.cqz[details.cqz + "dg"] = true;
           g_tracker.confirmed.cqz[details.cqz + band + "dg"] = true;
         }
       }
 
-      if (details.dxcc > 0) {
+      if (details.dxcc > 0)
+      {
         var sDXCC = String(details.dxcc);
         g_tracker.confirmed.dxcc[sDXCC + band + mode] = true;
         g_tracker.confirmed.dxcc[sDXCC] = true;
         g_tracker.confirmed.dxcc[sDXCC + mode] = true;
         g_tracker.confirmed.dxcc[sDXCC + band] = true;
-        if (isDigi == true) {
+        if (isDigi == true)
+        {
           g_tracker.confirmed.dxcc[sDXCC + "dg"] = true;
           g_tracker.confirmed.dxcc[sDXCC + band + "dg"] = true;
         }
       }
 
-      if (details.px) {
+      if (details.px)
+      {
         g_tracker.confirmed.px[details.px + band + mode] = true;
         g_tracker.confirmed.px[details.px] = hash;
         g_tracker.confirmed.px[details.px + mode] = true;
         g_tracker.confirmed.px[details.px + band] = true;
-        if (isDigi == true) {
+        if (isDigi == true)
+        {
           g_tracker.confirmed.px[details.px + "dg"] = true;
           g_tracker.confirmed.px[details.px + band + "dg"] = true;
         }
       }
 
-      if (details.cont) {
+      if (details.cont)
+      {
         g_tracker.confirmed.cont[details.cont + band + mode] = true;
         g_tracker.confirmed.cont[details.cont] = hash;
         g_tracker.confirmed.cont[details.cont + mode] = true;
         g_tracker.confirmed.cont[details.cont + band] = true;
-        if (isDigi == true) {
+        if (isDigi == true)
+        {
           g_tracker.confirmed.cont[details.cont + "dg"] = true;
           g_tracker.confirmed.cont[details.cont + band + "dg"] = true;
         }
@@ -1200,7 +1340,8 @@ function addDeDx(
       g_tracker.confirmed.call[finalDXcall] = true;
       g_tracker.confirmed.call[finalDXcall + mode] = true;
       g_tracker.confirmed.call[finalDXcall + band] = true;
-      if (isDigi == true) {
+      if (isDigi == true)
+      {
         g_tracker.confirmed.call[finalDXcall + "dg"] = true;
         g_tracker.confirmed.call[finalDXcall + band + "dg"] = true;
       }
@@ -1211,11 +1352,13 @@ function addDeDx(
   if (finalDxcc < 1) finalDxcc = callsignToDxcc(finalDXcall);
 
   hash = finalDXcall + band + mode;
-  if (notQso) {
+  if (notQso)
+  {
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
   }
 
-  if (!notQso) {
+  if (!notQso)
+  {
     if (
       (g_appSettings.gtBandFilter.length == 0 ||
         (g_appSettings.gtBandFilter == "auto"
@@ -1223,7 +1366,8 @@ function addDeDx(
           : g_appSettings.gtBandFilter == band)) &&
       validateMapMode(mode) &&
       validatePropMode(finalPropMode)
-    ) {
+    )
+    {
       details.rect = qthToQsoBox(
         finalGrid,
         hash,
@@ -1238,7 +1382,9 @@ function addDeDx(
       );
     }
     return;
-  } else {
+  }
+  else
+  {
     if (finalDxcc in g_dxccCount) g_dxccCount[finalDxcc]++;
     else g_dxccCount[finalDxcc] = 1;
 
@@ -1248,7 +1394,8 @@ function addDeDx(
           ? myBand == band
           : g_appSettings.gtBandFilter == band)) &&
       validateMapMode(mode)
-    ) {
+    )
+    {
       rect = qthToBox(
         finalGrid,
         finalDXcall,
@@ -1263,7 +1410,8 @@ function addDeDx(
     }
   }
 
-  if (callsign == null) {
+  if (callsign == null)
+  {
     var newCallsign = {};
     newCallsign.DEcall = finalDXcall;
     newCallsign.grid = finalGrid;
@@ -1282,23 +1430,29 @@ function addDeDx(
     newCallsign.zone = null;
     newCallsign.cnty = finalCnty;
     newCallsign.cont = finalCont;
-    if (finalDxcc > -1) {
+    if (finalDxcc > -1)
+    {
       newCallsign.px = getWpx(finalDXcall);
       if (newCallsign.px)
+      {
         newCallsign.zone = Number(
           newCallsign.px.charAt(newCallsign.px.length - 1)
         );
+      }
 
-      if (newCallsign.cont == null) {
+      if (newCallsign.cont == null)
+      {
         newCallsign.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
         if (newCallsign.dxcc == 390 && newCallsign.zone == 1)
-          newCallsign.cont = "EU";
+        { newCallsign.cont = "EU"; }
       }
     }
-    if (finalRSTsent != null) {
+    if (finalRSTsent != null)
+    {
       newCallsign.RSTsent = finalRSTsent;
     }
-    if (finalRSTrecv != null) {
+    if (finalRSTrecv != null)
+    {
       newCallsign.RSTrecv = finalRSTrecv;
     }
     newCallsign.time = finalTime;
@@ -1323,24 +1477,31 @@ function addDeDx(
       newCallsign.state == null &&
       isKnownCallsignDXCC(finalDxcc) &&
       finalGrid.length > 0
-    ) {
-      if (g_callsignLookups.ulsUseEnable) {
+    )
+    {
+      if (g_callsignLookups.ulsUseEnable)
+      {
         lookupUsCallsign(newCallsign);
       }
 
-      if (newCallsign.state == null && isKnownCallsignUSplus(finalDxcc)) {
+      if (newCallsign.state == null && isKnownCallsignUSplus(finalDxcc))
+      {
         var fourGrid = finalGrid.substr(0, 4);
         if (
           fourGrid in g_gridToState &&
           g_gridToState[finalGrid.substr(0, 4)].length == 1
-        ) {
+        )
+        {
           newCallsign.state = g_gridToState[finalGrid.substr(0, 4)][0];
         }
       }
     }
     g_liveCallsigns[hash] = newCallsign;
-  } else {
-    if (callsign.DXcall != "Self" && finalTime > callsign.time) {
+  }
+  else
+  {
+    if (callsign.DXcall != "Self" && finalTime > callsign.time)
+    {
       callsign.time = finalTime;
       callsign.mode = mode;
       callsign.band = band;
@@ -1355,7 +1516,7 @@ function addDeDx(
         finalGrid.length == callsign.grid.length &&
         finalGrid != callsign.grid
       )
-        callsign.grid = finalGrid;
+      { callsign.grid = finalGrid; }
       if (finalRSTsent != null) callsign.RSTsent = finalRSTsent;
       if (finalRSTrecv != null) callsign.RSTrecv = finalRSTrecv;
       callsign.vucc_grids = [];
@@ -1368,20 +1529,23 @@ function addDeDx(
   }
 }
 
-function timeoutSetUdpPort() {
+function timeoutSetUdpPort()
+{
   g_appSettings.wsjtUdpPort = udpPortInput.value;
   lastMsgTimeDiv.innerHTML = "Waiting for msg...";
   g_setNewUdpPortTimeoutHandle = null;
 }
 
-function setUdpPort() {
+function setUdpPort()
+{
   if (g_setNewUdpPortTimeoutHandle != null)
-    window.clearTimeout(g_setNewUdpPortTimeoutHandle);
+  { window.clearTimeout(g_setNewUdpPortTimeoutHandle); }
   lastMsgTimeDiv.innerHTML = "..setting..";
   g_setNewUdpPortTimeoutHandle = window.setTimeout(timeoutSetUdpPort, 1000);
 }
 
-function changeGridDecay() {
+function changeGridDecay()
+{
   g_appSettings.gridsquareDecayTime = parseInt(gridDecay.value);
   decayRateTd.innerHTML =
     Number(g_appSettings.gridsquareDecayTime) == 0
@@ -1389,56 +1553,69 @@ function changeGridDecay() {
       : Number(g_appSettings.gridsquareDecayTime).toDHMS();
 }
 
-function changeMouseOverValue() {
+function changeMouseOverValue()
+{
   g_mapSettings.mouseOver = mouseOverValue.checked;
   saveMapSettings();
 }
 
-function changeMergeOverlayValue() {
+function changeMergeOverlayValue()
+{
   g_mapSettings.mergeOverlay = mergeOverlayValue.checked;
   saveMapSettings();
   setTrophyOverlay(g_currentOverlay);
 }
 
-function getPathColor() {
-  if (g_mapSettings.nightMapEnable && g_nightTime) {
+function getPathColor()
+{
+  if (g_mapSettings.nightMapEnable && g_nightTime)
+  {
     if (g_mapSettings.nightPathColor == 0) return "#000";
     if (g_mapSettings.nightPathColor == 361) return "#FFF";
     return "hsl(" + g_mapSettings.nightPathColor + ", 100%, 50%)";
-  } else {
+  }
+  else
+  {
     if (g_mapSettings.pathColor == 0) return "#000";
     if (g_mapSettings.pathColor == 361) return "#FFF";
     return "hsl(" + g_mapSettings.pathColor + ", 100%, 50%)";
   }
 }
 
-function getQrzPathColor() {
-  if (g_mapSettings.nightMapEnable && g_nightTime) {
+function getQrzPathColor()
+{
+  if (g_mapSettings.nightMapEnable && g_nightTime)
+  {
     if (g_mapSettings.nightQrzPathColor == 0) return "#000";
     if (g_mapSettings.nightQrzPathColor == 361) return "#FFF";
     return "hsl(" + g_mapSettings.nightQrzPathColor + ", 100%, 50%)";
-  } else {
+  }
+  else
+  {
     if (g_mapSettings.qrzPathColor == 0) return "#000";
     if (g_mapSettings.qrzPathColor == 361) return "#FFF";
     return "hsl(" + g_mapSettings.qrzPathColor + ", 100%, 50%)";
   }
 }
 
-function changeShadow() {
+function changeShadow()
+{
   g_mapSettings.shadow = shadowValue.value;
   showDarknessTd.innerHTML = parseInt(shadowValue.value * 100) + "%";
   saveMapSettings();
   g_nightTime = dayNight.refresh();
 }
 
-function changePathWidth() {
+function changePathWidth()
+{
   g_appSettings.pathWidthWeight = pathWidthValue.value;
   g_appSettings.qrzPathWidthWeight = qrzPathWidthValue.value;
 
   pathWidthTd.innerHTML = pathWidthValue.value;
   qrzPathWidthTd.innerHTML = qrzPathWidthValue.value;
 
-  for (var i = g_flightPaths.length - 1; i >= 0; i--) {
+  for (var i = g_flightPaths.length - 1; i >= 0; i--)
+  {
     var featureStyle = g_flightPaths[i].getStyle();
     var featureStroke = featureStyle.getStroke();
 
@@ -1447,10 +1624,11 @@ function changePathWidth() {
       ? qrzPathWidthValue.value
       : pathWidthValue.value;
 
-    if (width == 0) {
+    if (width == 0)
+    {
       if (typeof g_flightPaths[i].Arrow != "undefined")
-        g_layerSources["flight"].removeFeature(g_flightPaths[i].Arrow);
-      g_layerSources["flight"].removeFeature(g_flightPaths[i]);
+      { g_layerSources.flight.removeFeature(g_flightPaths[i].Arrow); }
+      g_layerSources.flight.removeFeature(g_flightPaths[i]);
       delete g_flightPaths[i];
       g_flightPaths[i] = null;
 
@@ -1465,43 +1643,49 @@ function changePathWidth() {
     featureStyle.setStroke(featureStroke);
     g_flightPaths[i].setStyle(featureStyle);
 
-    if (typeof g_flightPaths[i].Arrow != "undefined") {
+    if (typeof g_flightPaths[i].Arrow != "undefined")
+    {
       var stroke = new ol.style.Stroke({
         color: color,
-        width: width,
+        width: width
       });
       var thisStle = new ol.style.Style({
         image: new ol.style.Circle({
           stroke: stroke,
-          radius: 3,
-        }),
+          radius: 3
+        })
       });
       g_flightPaths[i].Arrow.setStyle(thisStle);
     }
   }
-  if (g_transmitFlightPath != null) {
+  if (g_transmitFlightPath != null)
+  {
     var featureStyle = g_transmitFlightPath.getStyle();
     var featureStroke = featureStyle.getStroke();
 
-    if (qrzPathWidthValue.value == 0) {
-      g_layerSources["transmit"].clear();
+    if (qrzPathWidthValue.value == 0)
+    {
+      g_layerSources.transmit.clear();
       g_transmitFlightPath = null;
-    } else {
+    }
+    else
+    {
       featureStroke.setWidth(qrzPathWidthValue.value);
       featureStroke.setColor(getQrzPathColor());
       featureStyle.setStroke(featureStroke);
       g_transmitFlightPath.setStyle(featureStyle);
 
-      if (typeof g_transmitFlightPath.Arrow != "undefined") {
+      if (typeof g_transmitFlightPath.Arrow != "undefined")
+      {
         var stroke = new ol.style.Stroke({
           color: getQrzPathColor(),
-          width: qrzPathWidthValue.value,
+          width: qrzPathWidthValue.value
         });
         var thisStle = new ol.style.Style({
           image: new ol.style.Circle({
             stroke: stroke,
-            radius: 3,
-          }),
+            radius: 3
+          })
         });
         g_transmitFlightPath.Arrow.setStyle(thisStle);
       }
@@ -1509,25 +1693,30 @@ function changePathWidth() {
   }
 }
 
-function compareCallsignTime(a, b) {
+function compareCallsignTime(a, b)
+{
   if (a.time < b.time) return -1;
   if (a.time > b.time) return 1;
   return 0;
 }
 
-function createFlagTipTable(toolElement) {
+function createFlagTipTable(toolElement)
+{
   var myFlagtip = document.getElementById("myFlagtip");
   var worker = "";
-  if (toolElement.size == 1) {
+  if (toolElement.size == 1)
+  {
     var key = toolElement.key;
     var dxcc = callsignToDxcc(g_gtFlagPins[key].call);
     var dxccName = g_dxccToAltName[dxcc];
     var workColor = "cyan";
 
-    if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.worked.call) {
+    if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.worked.call)
+    {
       workColor = "yellow";
     }
-    if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.confirmed.call) {
+    if (g_gtFlagPins[key].call + myBand + myMode in g_tracker.confirmed.call)
+    {
       workColor = "#00FF00";
     }
 
@@ -1593,7 +1782,9 @@ function createFlagTipTable(toolElement) {
       "&deg;</td></tr>";
 
     worker += "</table>";
-  } else if (toolElement.size == 73) {
+  }
+  else if (toolElement.size == 73)
+  {
     var props = toolElement.getProperties();
 
     moment.locale(navigator.languages[0]);
@@ -1626,37 +1817,47 @@ function createFlagTipTable(toolElement) {
   return 1;
 }
 
-function remove_duplicates(arr) {
+function remove_duplicates(arr)
+{
   var obj = {};
   var ret_arr = [];
-  for (var i = 0; i < arr.length; i++) {
+  for (var i = 0; i < arr.length; i++)
+  {
     obj[arr[i]] = true;
   }
-  for (var key in obj) {
+  for (var key in obj)
+  {
     ret_arr.push(key);
   }
   return ret_arr;
 }
 
-function splitNoParen(s) {
+function splitNoParen(s)
+{
   var results = [];
   var next;
   var str = "";
   var left = 0,
     right = 0;
 
-  function keepResult() {
+  function keepResult()
+  {
     results.push(str.trim());
     str = "";
   }
 
-  for (var i = 0; i < s.length; i++) {
-    switch (s[i]) {
+  for (var i = 0; i < s.length; i++)
+  {
+    switch (s[i])
+    {
       case ",":
-        if (left === right) {
+        if (left === right)
+        {
           keepResult();
           left = right = 0;
-        } else {
+        }
+        else
+        {
           str += s[i];
         }
         break;
@@ -1676,11 +1877,13 @@ function splitNoParen(s) {
   return results;
 }
 
-function createSpotTipTable(toolElement) {
+function createSpotTipTable(toolElement)
+{
   var now = timeNowSec();
   var myTooltip = document.getElementById("myTooltip");
   var worker = "";
-  if (toolElement.spot in g_receptionReports.spots) {
+  if (toolElement.spot in g_receptionReports.spots)
+  {
     g_layerSources["psk-hop"].clear();
     var report = g_receptionReports.spots[toolElement.spot];
 
@@ -1705,12 +1908,14 @@ function createSpotTipTable(toolElement) {
       "</td></tr>";
 
     if (report.dxcc > 0)
+    {
       worker +=
         "<tr><td>DXCC</td><td style='color:orange;'>" +
         g_dxccToAltName[report.dxcc] +
         " <font color='lightgreen'>(" +
         g_worldGeoData[g_dxccToGeoData[report.dxcc]].pp +
         ")</font></td>";
+    }
 
     worker +=
       "<tr><td>Grid</td><td style='color:cyan;cursor:pointer' >" +
@@ -1774,7 +1979,7 @@ function createSpotTipTable(toolElement) {
       {
         weight: strokeWeight,
         color: getQrzPathColor(),
-        steps: 75,
+        steps: 75
       },
       "psk-hop",
       false
@@ -1785,8 +1990,10 @@ function createSpotTipTable(toolElement) {
   return 10;
 }
 
-function createTooltTipTable(toolElement) {
-  if (typeof toolElement.spot != "undefined") {
+function createTooltTipTable(toolElement)
+{
+  if (typeof toolElement.spot != "undefined")
+  {
     return createSpotTipTable(toolElement);
   }
   var myTooltip = document.getElementById("myTooltip");
@@ -1802,25 +2009,30 @@ function createTooltTipTable(toolElement) {
     " style='color:cyan'>" +
     toolElement.qth +
     "</th></tr>";
-  if (toolElement.qth in g_gridToDXCC) {
+  if (toolElement.qth in g_gridToDXCC)
+  {
     worker += "<tr><th colspan=" + colspan + " style='color:yellow'><small>";
-    for (var x = 0; x < g_gridToDXCC[toolElement.qth].length; x++) {
+    for (var x = 0; x < g_gridToDXCC[toolElement.qth].length; x++)
+    {
       worker += g_dxccToAltName[g_gridToDXCC[toolElement.qth][x]];
-      if (toolElement.qth in g_gridToState) {
+      if (toolElement.qth in g_gridToState)
+      {
         worker += " (<font color='orange'>";
         var added = false;
-        for (var y = 0; y < g_gridToState[toolElement.qth].length; y++) {
+        for (var y = 0; y < g_gridToState[toolElement.qth].length; y++)
+        {
           if (
             g_gridToDXCC[toolElement.qth][x] ==
             g_StateData[g_gridToState[toolElement.qth][y]].dxcc
-          ) {
+          )
+          {
             worker +=
               g_StateData[g_gridToState[toolElement.qth][y]].name + " / ";
             added = true;
           }
         }
         if (added == true)
-          worker = worker.substr(0, worker.length - " / ".length);
+        { worker = worker.substr(0, worker.length - " / ".length); }
         worker += "</font>)";
       }
       if (x + 1 < g_gridToDXCC[toolElement.qth].length) worker += ", ";
@@ -1828,8 +2040,10 @@ function createTooltTipTable(toolElement) {
     worker += "</small></th></tr>";
   }
   var newCallList = Array();
-  if (toolElement.qso == true) {
-    if (Object.keys(toolElement.hashes).length > 0) {
+  if (toolElement.qso == true)
+  {
+    if (Object.keys(toolElement.hashes).length > 0)
+    {
       worker +=
         "<tr align='center'><td>Call</td><td>Freq</td><td>Sent</td><td>Rcvd</td><td>Station</td><td>Mode</td><td>Band</td><td>QSL</td><td>Last Msg</td><td>DXCC</td><td>Time</td>";
 
@@ -1838,8 +2052,10 @@ function createTooltTipTable(toolElement) {
       if (g_callsignLookups.oqrsUseEnable == true) worker += "<td>OQRS</td>";
       worker += "</tr>";
     }
-    for (var KeyIsHash in toolElement.hashes) {
-      if (KeyIsHash in g_QSOhash) {
+    for (var KeyIsHash in toolElement.hashes)
+    {
+      if (KeyIsHash in g_QSOhash)
+      {
         newCallList.push(g_QSOhash[KeyIsHash]);
       }
     }
@@ -1847,14 +2063,19 @@ function createTooltTipTable(toolElement) {
       toolElement.qth in g_liveGrids &&
       g_liveGrids[toolElement.qth].rectangle != null &&
       g_liveGrids[toolElement.qth].isTriangle == false
-    ) {
-      for (var KeyIsCall in g_liveGrids[toolElement.qth].rectangle.liveHash) {
+    )
+    {
+      for (var KeyIsCall in g_liveGrids[toolElement.qth].rectangle.liveHash)
+      {
         if (KeyIsCall in g_liveCallsigns && g_appSettings.gridViewMode == 3)
-          newCallList.push(g_liveCallsigns[KeyIsCall]);
+        { newCallList.push(g_liveCallsigns[KeyIsCall]); }
       }
     }
-  } else {
-    if (Object.keys(toolElement.liveHash).length > 0) {
+  }
+  else
+  {
+    if (Object.keys(toolElement.liveHash).length > 0)
+    {
       worker +=
         "<tr align='center'><td>Call</td><td>Freq</td><td>Sent</td><td>Rcvd</td><td>Station</td><td>Mode</td><td>Band</td><td>Last Msg</td><td>DXCC</td><td>Time</td>";
 
@@ -1863,33 +2084,36 @@ function createTooltTipTable(toolElement) {
       if (g_callsignLookups.oqrsUseEnable == true) worker += "<td>OQRS</td>";
       worker += "</tr>";
     }
-    for (var KeyIsCall in toolElement.liveHash) {
+    for (var KeyIsCall in toolElement.liveHash)
+    {
       if (KeyIsCall in g_liveCallsigns)
-        newCallList.push(g_liveCallsigns[KeyIsCall]);
+      { newCallList.push(g_liveCallsigns[KeyIsCall]); }
     }
   }
   newCallList.sort(compareCallsignTime).reverse();
-  for (var x = 0; x < newCallList.length; x++) {
+  for (var x = 0; x < newCallList.length; x++)
+  {
     var callsign = newCallList[x];
     var bgDX = " style='font-weight:bold;color:cyan;' ";
     var bgDE = " style='font-weight:bold;color:yellow;' ";
     if (callsign.DXcall == myDEcall)
-      bgDX = " style='background-color:cyan;color:#000;font-weight:bold' ";
+    { bgDX = " style='background-color:cyan;color:#000;font-weight:bold' "; }
     if (callsign.DEcall == myDEcall)
-      bgDE = " style='background-color:#FFFF00;color:#000;font-weight:bold' ";
+    { bgDE = " style='background-color:#FFFF00;color:#000;font-weight:bold' "; }
     if (typeof callsign.msg == "undefined" || callsign.msg == "")
-      callsign.msg = "-";
+    { callsign.msg = "-"; }
     var ageString = "";
     if (timeNowSec() - callsign.time < 3601)
-      ageString = (timeNowSec() - callsign.time).toDHMS();
-    else {
+    { ageString = (timeNowSec() - callsign.time).toDHMS(); }
+    else
+    {
       ageString = userTimeString(callsign.time * 1000);
     }
     worker += "<tr><td" + bgDE + ">";
     worker +=
       "<div style='display:inline-table;cursor:pointer' onclick='startLookup(\"" +
       callsign.DEcall +
-      '","' +
+      "\",\"" +
       toolElement.qth +
       "\");' >" +
       callsign.DEcall.formatCallsign() +
@@ -1899,14 +2123,16 @@ function createTooltTipTable(toolElement) {
     worker += "<td>" + callsign.RSTsent + "</td>";
     worker += "<td>" + callsign.RSTrecv + "</td>" + "<td" + bgDX + ">";
     if (callsign.DXcall.indexOf("CQ") == 0 || callsign.DXcall == "-")
-      worker += callsign.DXcall.formatCallsign();
+    { worker += callsign.DXcall.formatCallsign(); }
     else
+    {
       worker +=
         "<div  style='display:inline-table;cursor:pointer' onclick='startLookup(\"" +
         callsign.DXcall +
         "\",null);' >" +
         callsign.DXcall.formatCallsign() +
         "</div>";
+    }
     worker +=
       "</td>" +
       "<td style='color:lightblue'>" +
@@ -1915,7 +2141,8 @@ function createTooltTipTable(toolElement) {
       "<td style='color:lightgreen'>" +
       callsign.band +
       "</td>";
-    if (toolElement.qso == true) {
+    if (toolElement.qso == true)
+    {
       worker +=
         "<td align='center'>" +
         (callsign.confirmed ? "&#10004;" : "") +
@@ -1933,20 +2160,26 @@ function createTooltTipTable(toolElement) {
       ageString +
       "</td>";
     if (g_callsignLookups.lotwUseEnable == true)
+    {
       worker +=
         "<td align='center'>" +
         (callsign.DEcall in g_lotwCallsigns ? "&#10004;" : "") +
         "</td>";
+    }
     if (g_callsignLookups.eqslUseEnable == true)
+    {
       worker +=
         "<td align='center'>" +
         (callsign.DEcall in g_eqslCallsigns ? "&#10004;" : "") +
         "</td>";
+    }
     if (g_callsignLookups.oqrsUseEnable == true)
+    {
       worker +=
         "<td align='center'>" +
         (callsign.DEcall in g_oqrsCallsigns ? "&#10004;" : "") +
         "</td>";
+    }
     worker += "</tr>";
   }
   worker += "</table>";
@@ -1955,9 +2188,12 @@ function createTooltTipTable(toolElement) {
   return newCallList.length;
 }
 
-function renderTooltipWindow(feature) {
-  if (g_popupWindowHandle != null) {
-    try {
+function renderTooltipWindow(feature)
+{
+  if (g_popupWindowHandle != null)
+  {
+    try
+    {
       createTooltTipTable(feature);
       var adif = g_popupWindowHandle.window.document.getElementById(
         "adifTable"
@@ -1970,34 +2206,42 @@ function renderTooltipWindow(feature) {
 
       g_popupWindowHandle.width = parseInt(positionInfo.width) + 20;
       g_popupWindowHandle.height = parseInt(positionInfo.height) + 50;
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function leftClickGtFlag(feature) {
+function leftClickGtFlag(feature)
+{
   var e = window.event;
-  if ((e.which && e.which == 1) || (e.button && e.button == 1)) {
+  if ((e.which && e.which == 1) || (e.button && e.button == 1))
+  {
     startLookup(g_gtFlagPins[feature.key].call, g_gtFlagPins[feature.key].grid);
   }
   return false;
 }
 
-function openConditionsWindow() {
-  if (g_conditionsWindowHandle == null) {
+function openConditionsWindow()
+{
+  if (g_conditionsWindowHandle == null)
+  {
     popupNewWindows();
     var gui = require("nw.gui");
     gui.Window.open(
       "gt_conditions.html",
       {
         show: false,
-        id: "GT-Conditions",
+        id: "GT-Conditions"
       },
-      function (new_win) {
+      function (new_win)
+      {
         g_conditionsWindowHandle = new_win;
-        new_win.on("loaded", function () {
+        new_win.on("loaded", function ()
+        {
           g_conditionsWindowHandle.setMinimumSize(490, 290);
         });
-        new_win.on("close", function () {
+        new_win.on("close", function ()
+        {
           g_conditionsWindowHandle.window.g_isShowing = false;
           g_conditionsWindowHandle.window.saveScreenSettings();
           g_conditionsWindowHandle.hide();
@@ -2005,13 +2249,17 @@ function openConditionsWindow() {
       }
     );
     lockNewWindows();
-  } else {
-    try {
+  }
+  else
+  {
+    try
+    {
       g_conditionsWindowHandle.window.g_isShowing = true;
       g_conditionsWindowHandle.window.saveScreenSettings();
       g_conditionsWindowHandle.show();
       g_conditionsWindowHandle.focus();
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
@@ -2023,19 +2271,23 @@ function insertMessageInRoster(
   msgDXcallsign,
   callObj,
   hash
-) {
+)
+{
   var now = timeNowSec();
-  if (!(hash in g_callRoster)) {
+  if (!(hash in g_callRoster))
+  {
     g_callRoster[hash] = {};
     callObj.life = now;
     callObj.reset = false;
   }
-  if (callObj.reset) {
+  if (callObj.reset)
+  {
     callObj.life = now;
     callObj.reset = false;
   }
 
-  if (typeof callObj.life == "undefined") {
+  if (typeof callObj.life == "undefined")
+  {
     callObj.life = now;
     callObj.reset = false;
   }
@@ -2047,8 +2299,10 @@ function insertMessageInRoster(
   goProcessRoster(true);
 }
 
-function openCallRosterWindow(show = true) {
-  if (g_callRosterWindowHandle == null) {
+function openCallRosterWindow(show = true)
+{
+  if (g_callRosterWindowHandle == null)
+  {
     popupNewWindows();
     var gui = require("nw.gui");
     gui.Window.open(
@@ -2056,16 +2310,19 @@ function openCallRosterWindow(show = true) {
       {
         show: false,
         id: "GT-roster",
-        icon: "img/roster-icon.png",
+        icon: "img/roster-icon.png"
       },
-      function (new_win) {
+      function (new_win)
+      {
         g_callRosterWindowHandle = new_win;
-        new_win.on("loaded", function () {
+        new_win.on("loaded", function ()
+        {
           g_callRosterWindowHandle.setMinimumSize(390, 250);
           g_callRosterWindowHandle.setResizable(true);
           setRosterTop();
         });
-        new_win.on("close", function () {
+        new_win.on("close", function ()
+        {
           g_callRosterWindowHandle.window.g_isShowing = false;
           g_callRosterWindowHandle.window.saveScreenSettings();
           g_callRosterWindowHandle.hide();
@@ -2073,54 +2330,72 @@ function openCallRosterWindow(show = true) {
       }
     );
     lockNewWindows();
-  } else {
-    try {
+  }
+  else
+  {
+    try
+    {
       g_callRosterWindowHandle.show();
       g_callRosterWindowHandle.window.g_isShowing = true;
       g_callRosterWindowHandle.window.saveScreenSettings();
       g_callRosterWindowHandle.focus();
       goProcessRoster();
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function updateRosterWorked() {
-  if (g_callRosterWindowHandle) {
-    try {
+function updateRosterWorked()
+{
+  if (g_callRosterWindowHandle)
+  {
+    try
+    {
       g_callRosterWindowHandle.window.updateWorked();
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function updateRosterInstances() {
-  if (g_callRosterWindowHandle) {
-    try {
+function updateRosterInstances()
+{
+  if (g_callRosterWindowHandle)
+  {
+    try
+    {
       g_callRosterWindowHandle.window.updateInstances();
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function updateLogbook() {
+function updateLogbook()
+{
   showWorkedBox(0, 0, true);
 }
 
-function openStatsWindow(show = true) {
-  if (g_statsWindowHandle == null) {
+function openStatsWindow(show = true)
+{
+  if (g_statsWindowHandle == null)
+  {
     popupNewWindows();
     var gui = require("nw.gui");
     gui.Window.open(
       "gt_stats.html",
       {
         show: false,
-        id: "GT-stats",
+        id: "GT-stats"
       },
-      function (new_win) {
+      function (new_win)
+      {
         g_statsWindowHandle = new_win;
-        new_win.on("loaded", function () {
+        new_win.on("loaded", function ()
+        {
           g_statsWindowHandle.setMinimumSize(620, 200);
           g_statsWindowHandle.setResizable(true);
         });
-        new_win.on("close", function () {
+        new_win.on("close", function ()
+        {
           g_statsWindowHandle.window.g_isShowing = false;
           g_statsWindowHandle.window.saveScreenSettings();
           g_statsWindowHandle.hide();
@@ -2128,33 +2403,42 @@ function openStatsWindow(show = true) {
       }
     );
     lockNewWindows();
-  } else {
-    try {
+  }
+  else
+  {
+    try
+    {
       g_statsWindowHandle.show();
       g_statsWindowHandle.window.g_isShowing = true;
       g_statsWindowHandle.window.saveScreenSettings();
       g_statsWindowHandle.focus();
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function showMessaging(show = true, cid) {
-  if (g_chatWindowHandle == null) {
+function showMessaging(show = true, cid)
+{
+  if (g_chatWindowHandle == null)
+  {
     popupNewWindows();
     var gui = require("nw.gui");
     gui.Window.open(
       "gt_chat.html",
       {
         show: false,
-        id: "GT-chat",
+        id: "GT-chat"
       },
-      function (new_win) {
+      function (new_win)
+      {
         g_chatWindowHandle = new_win;
-        g_chatWindowHandle.on("loaded", function () {
+        g_chatWindowHandle.on("loaded", function ()
+        {
           g_chatWindowHandle.setMinimumSize(450, 140);
           g_chatWindowHandle.setResizable(true);
         });
-        g_chatWindowHandle.on("close", function () {
+        g_chatWindowHandle.on("close", function ()
+        {
           g_chatWindowHandle.window.closeMessageArea();
           g_chatWindowHandle.window.g_isShowing = false;
           g_chatWindowHandle.window.saveScreenSettings();
@@ -2163,146 +2447,184 @@ function showMessaging(show = true, cid) {
       }
     );
     lockNewWindows();
-  } else {
-    try {
+  }
+  else
+  {
+    try
+    {
       g_chatWindowHandle.window.g_isShowing = true;
       g_chatWindowHandle.window.saveScreenSettings();
       g_chatWindowHandle.show();
       g_chatWindowHandle.focus();
       if (typeof cid != "undefined") g_chatWindowHandle.window.openId(cid);
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function onRightClickGridSquare(feature) {
+function onRightClickGridSquare(feature)
+{
   var e = window.event;
   if (
     (e.which && e.button == 2 && event.shiftKey) ||
     (e.button && e.button == 2 && event.shiftKey)
-  ) {
+  )
+  {
     var myTooltip = document.getElementById("myTooltip");
     createTooltTipTable(feature);
     selectElementContents(myTooltip);
-  } else if (e.button == 0 && g_mapSettings.mouseOver == false) {
+  }
+  else if (e.button == 0 && g_mapSettings.mouseOver == false)
+  {
     mouseOverDataItem(feature, false);
-  } else if ((e.which && e.which == 3) || (e.button && e.button == 2)) {
-    if (g_popupWindowHandle == null) {
+  }
+  else if ((e.which && e.which == 3) || (e.button && e.button == 2))
+  {
+    if (g_popupWindowHandle == null)
+    {
       popupNewWindows();
       var gui = require("nw.gui");
       gui.Window.open(
         "gt_popup.html",
         {
           show: false,
-          id: "GT-popup",
+          id: "GT-popup"
         },
-        function (new_win) {
+        function (new_win)
+        {
           g_popupWindowHandle = new_win;
-          new_win.on("loaded", function () {
+          new_win.on("loaded", function ()
+          {
             g_popupWindowHandle.show();
             renderTooltipWindow(feature);
           });
-          new_win.on("close", function () {
+          new_win.on("close", function ()
+          {
             g_popupWindowHandle.hide();
           });
         }
       );
       lockNewWindows();
-    } else {
-      try {
+    }
+    else
+    {
+      try
+      {
         renderTooltipWindow(feature);
-      } catch (e) {}
+      }
+      catch (e) {}
     }
     mouseOutOfDataItem();
-  } else if ((e.which && e.which == 1) || (e.button && e.button == 0)) {
-    if (typeof feature.spot != "undefined") {
+  }
+  else if ((e.which && e.which == 1) || (e.button && e.button == 0))
+  {
+    if (typeof feature.spot != "undefined")
+    {
       spotLookupAndSetCall(feature.spot);
     }
   }
   return false;
 }
 
-function onMouseUpdate(e) {
+function onMouseUpdate(e)
+{
   g_mouseX = e.pageX;
   g_mouseY = e.pageY;
   mouseMoveGrid();
 }
 
-function getMouseX() {
+function getMouseX()
+{
   return g_mouseX;
 }
 
-function getMouseY() {
+function getMouseY()
+{
   return g_mouseY;
 }
 var g_tempGridBox = null;
 
-function tempGridToBox(iQTH, oldGrid, borderColor, boxColor, layer) {
+function tempGridToBox(iQTH, oldGrid, borderColor, boxColor, layer)
+{
   var borderWeight = 2;
   var newGridBox = null;
   var LL = squareToLatLong(iQTH.substr(0, 4));
-  if (oldGrid) {
-    if (g_layerSources["temp"].hasFeature(oldGrid))
-      g_layerSources["temp"].removeFeature(oldGrid);
+  if (oldGrid)
+  {
+    if (g_layerSources.temp.hasFeature(oldGrid))
+    { g_layerSources.temp.removeFeature(oldGrid); }
   }
   var bounds = [
     [LL.lo1, LL.la1],
-    [LL.lo2, LL.la2],
+    [LL.lo2, LL.la2]
   ];
   newGridBox = rectangle(bounds);
   newGridBox.setId(iQTH);
   const featureStyle = new ol.style.Style({
     fill: new ol.style.Fill({
-      color: boxColor,
+      color: boxColor
     }),
     stroke: new ol.style.Stroke({
       color: borderColor,
       width: borderWeight,
-      lineJoin: "round",
+      lineJoin: "round"
     }),
-    zIndex: 60,
+    zIndex: 60
   });
   newGridBox.setStyle(featureStyle);
   newGridBox.grid = iQTH;
   newGridBox.size = 0;
-  g_layerSources["temp"].addFeature(newGridBox);
+  g_layerSources.temp.addFeature(newGridBox);
   return newGridBox;
 }
 var g_tempGrids = Array();
 
-function onMyKeyDown(event) {
-  if (g_MyGridIsUp == true && g_MyCurrentGrid.length == 4) {
+function onMyKeyDown(event)
+{
+  if (g_MyGridIsUp == true && g_MyCurrentGrid.length == 4)
+  {
     var processedAlert = false;
     var mediaClip = "";
     var failedToAdd = g_dirSeperator + "Balloon-deflating-1.mp3";
-    if (event.code == "KeyM") {
+    if (event.code == "KeyM")
+    {
       mediaClip = g_dirSeperator + "Clicky-1.mp3";
       var valid = addAlert(g_MyCurrentGrid, 2, 3, 2, "", "");
-      if (!valid) {
-        mediaClip = failedToAdd;
-      }
-      processedAlert = true;
-    } else if (event.code == "KeyT") {
-      mediaClip = g_dirSeperator + "Ping-coin.mp3";
-      var valid = addAlert(g_MyCurrentGrid, 2, 1, 2, "", "");
-      if (!valid) {
-        mediaClip = failedToAdd;
-      }
-      processedAlert = true;
-    } else if (event.code == "KeyV") {
-      mediaClip = g_dirSeperator + "Slide-ping.mp3";
-      var valid = addAlert(g_MyCurrentGrid, 2, 2, 2, "", "");
-      if (!valid) {
+      if (!valid)
+      {
         mediaClip = failedToAdd;
       }
       processedAlert = true;
     }
-    if (processedAlert == true) {
+    else if (event.code == "KeyT")
+    {
+      mediaClip = g_dirSeperator + "Ping-coin.mp3";
+      var valid = addAlert(g_MyCurrentGrid, 2, 1, 2, "", "");
+      if (!valid)
+      {
+        mediaClip = failedToAdd;
+      }
+      processedAlert = true;
+    }
+    else if (event.code == "KeyV")
+    {
+      mediaClip = g_dirSeperator + "Slide-ping.mp3";
+      var valid = addAlert(g_MyCurrentGrid, 2, 2, 2, "", "");
+      if (!valid)
+      {
+        mediaClip = failedToAdd;
+      }
+      processedAlert = true;
+    }
+    if (processedAlert == true)
+    {
       playAlertMediaFile(mediaClip);
     }
     return;
   }
 
-  if (event.keyCode == 27) {
+  if (event.keyCode == 27)
+  {
     alertsPopDiv.style.display = "none";
     rootSettingsDiv.style.display = "none";
 
@@ -2313,55 +2635,75 @@ function onMyKeyDown(event) {
   if (
     alertsPopDiv.style.display == "none" &&
     rootSettingsDiv.style.display == "none"
-  ) {
-    if (event.code in g_hotKeys) {
-      if (typeof g_hotKeys[event.code].param1 != "undefined") {
+  )
+  {
+    if (event.code in g_hotKeys)
+    {
+      if (typeof g_hotKeys[event.code].param1 != "undefined")
+      {
         var param2 = null;
-        if (typeof g_hotKeys[event.code].param2 != "undefined") {
+        if (typeof g_hotKeys[event.code].param2 != "undefined")
+        {
           if (typeof event[g_hotKeys[event.code].param2] != "undefined")
-            param2 = event[g_hotKeys[event.code].param2];
+          { param2 = event[g_hotKeys[event.code].param2]; }
         }
         g_hotKeys[event.code].func(g_hotKeys[event.code].param1, param2);
-      } else {
+      }
+      else
+      {
         if (event.ctrlKey == false) g_hotKeys[event.code].func();
       }
-    } else if (event.key in g_hotKeys) {
-      if (typeof g_hotKeys[event.key].param1 != "undefined") {
+    }
+    else if (event.key in g_hotKeys)
+    {
+      if (typeof g_hotKeys[event.key].param1 != "undefined")
+      {
         var param2 = null;
-        if (typeof g_hotKeys[event.key].param2 != "undefined") {
+        if (typeof g_hotKeys[event.key].param2 != "undefined")
+        {
           if (typeof event[g_hotKeys[event.key].param2] != "undefined")
-            param2 = event[g_hotKeys[event.key].param2];
+          { param2 = event[g_hotKeys[event.key].param2]; }
         }
         g_hotKeys[event.key].func(g_hotKeys[event.key].param1, param2);
-      } else {
+      }
+      else
+      {
         if (event.ctrlKey == false) g_hotKeys[event.key].func();
       }
     }
   }
 }
 
-function clearTempGrids() {
-  g_layerSources["temp"].clear();
+function clearTempGrids()
+{
+  g_layerSources.temp.clear();
   g_tempGrids = Array();
 }
 
 var g_currentShapes = {};
 
-function clearCurrentShapes() {
-  g_layerSources["award"].clear();
+function clearCurrentShapes()
+{
+  g_layerSources.award.clear();
   g_currentShapes = {};
 }
 
-function mapMemory(x, save, exit = false) {
-  if (save == true) {
+function mapMemory(x, save, exit = false)
+{
+  if (save == true)
+  {
     g_mapMemory[x].LoLa = g_mapView.getCenter();
     g_mapMemory[x].zoom = g_mapView.getZoom();
     localStorage.mapMemory = JSON.stringify(g_mapMemory);
-    if (exit == false) {
+    if (exit == false)
+    {
       playAlertMediaFile("Clicky-3.mp3");
     }
-  } else {
-    if (g_mapMemory[x].zoom != -1) {
+  }
+  else
+  {
+    if (g_mapMemory[x].zoom != -1)
+    {
       g_mapView.setCenter(g_mapMemory[x].LoLa);
       g_mapView.setZoom(g_mapMemory[x].zoom);
     }
@@ -2370,14 +2712,16 @@ function mapMemory(x, save, exit = false) {
 
 var g_hotKeys = {};
 
-function registerHotKey(key, func, param1, param2) {
+function registerHotKey(key, func, param1, param2)
+{
   g_hotKeys[key] = {};
   g_hotKeys[key].func = func;
   g_hotKeys[key].param1 = param1;
   g_hotKeys[key].param2 = param2;
 }
 
-function registerHotKeys() {
+function registerHotKeys()
+{
   registerHotKey("1", setTrophyOverlay, 0);
   registerHotKey("2", setTrophyOverlay, 1);
   registerHotKey("3", setTrophyOverlay, 2);
@@ -2398,7 +2742,7 @@ function registerHotKeys() {
   registerHotKey("KeyG", toggleGtMap);
   registerHotKey("KeyH", toggleHeatSpots);
   registerHotKey("KeyI", showRootInfoBox);
-  //registerHotKey("KeyJ", setTrophyOverlay, 8);
+  // registerHotKey("KeyJ", setTrophyOverlay, 8);
   registerHotKey("KeyK", makeScreenshots);
   registerHotKey("KeyL", adifLoadDialog);
   registerHotKey("KeyM", toggleAlertMute);
@@ -2429,85 +2773,103 @@ function registerHotKeys() {
   registerHotKey("Equal", cycleTrophyOverlay);
 }
 
-function toggleMoon() {
+function toggleMoon()
+{
   g_appSettings.moonTrack ^= 1;
 
-  if (g_appSettings.moonTrack == 1) {
+  if (g_appSettings.moonTrack == 1)
+  {
     moonLayer.show();
-  } else {
+  }
+  else
+  {
     moonLayer.hide();
   }
 }
 
-function toggleMoonTrack() {
+function toggleMoonTrack()
+{
   g_appSettings.moonPath ^= 1;
 
   moonLayer.refresh();
 }
 
-function toggleFullscreen() {
-  if (document.fullscreenElement == null) {
+function toggleFullscreen()
+{
+  if (document.fullscreenElement == null)
+  {
     mainBody.requestFullscreen();
-  } else {
+  }
+  else
+  {
     document.exitFullscreen();
   }
 }
 
-function toggleMenu() {
+function toggleMenu()
+{
   if (g_menuShowing == false) collapseMenu(false);
   else collapseMenu(true);
 }
 
 g_helpShow = false;
-function toggleHelp() {
+function toggleHelp()
+{
   g_helpShow = !g_helpShow;
-  if (g_helpShow == true) {
+  if (g_helpShow == true)
+  {
     helpDiv.style.display = "block";
-  } else helpDiv.style.display = "none";
+  }
+  else helpDiv.style.display = "none";
 }
 
 function onMyKeyUp(event) {}
 
 var g_currentOverlay = 0;
 
-function cycleTrophyOverlay() {
+function cycleTrophyOverlay()
+{
   g_currentOverlay++;
   g_currentOverlay %= 8;
 
   setTrophyOverlay(g_currentOverlay);
 }
 
-function didWork(testObj) {
+function didWork(testObj)
+{
   return testObj.worked;
 }
 
-function didConfirm(testObj) {
+function didConfirm(testObj)
+{
   return testObj.confirmed;
 }
 
-function makeTitleInfo(mapWindow) {
+function makeTitleInfo(mapWindow)
+{
   var band =
     g_appSettings.gtBandFilter.length == 0
       ? "Mixed"
       : g_appSettings.gtBandFilter == "auto"
-      ? myBand
-      : g_appSettings.gtBandFilter;
+        ? myBand
+        : g_appSettings.gtBandFilter;
   var mode =
     g_appSettings.gtModeFilter.length == 0
       ? "Mixed"
       : g_appSettings.gtModeFilter == "auto"
-      ? myMode
-      : g_appSettings.gtModeFilter;
+        ? myMode
+        : g_appSettings.gtModeFilter;
   var space = " ";
   var news = "GridTracker [Band: " + band + " Mode: " + mode;
   var end = "]";
 
-  if (mapWindow) {
+  if (mapWindow)
+  {
     news += " Layer: " + g_viewInfo[g_currentOverlay][1];
   }
 
   if (g_currentOverlay == 0 && g_appSettings.gridViewMode == 1)
-    return news + end;
+  { return news + end; }
 
   var workline =
     " - Worked " +
@@ -2518,14 +2880,17 @@ function makeTitleInfo(mapWindow) {
     g_viewInfo[g_currentOverlay][2] <= g_viewInfo[g_currentOverlay][4] &&
     g_viewInfo[g_currentOverlay][4] > 0
   )
+  {
     end =
       " Needed " +
       (g_viewInfo[g_currentOverlay][4] - g_viewInfo[g_currentOverlay][2]) +
       "]";
+  }
   return news + workline + end;
 }
 
-function setTrophyOverlay(which) {
+function setTrophyOverlay(which)
+{
   g_currentOverlay = which;
   window.document.title = makeTitleInfo(true);
   trophyImg.src = g_trophyImageArray[which];
@@ -2534,75 +2899,102 @@ function setTrophyOverlay(which) {
   // set the scope of key
   var key = 0;
 
-  if (which == 0) {
-    for (key in g_layerVectors) {
+  if (which == 0)
+  {
+    for (key in g_layerVectors)
+    {
       g_layerVectors[key].setVisible(true);
     }
     if (
       g_appSettings.gtFlagImgSrc > 0 &&
       g_appSettings.gtShareEnable == true &&
       g_mapSettings.offlineMode == false
-    ) {
-      g_layerVectors["gtflags"].setVisible(true);
-    } else {
-      g_layerVectors["gtflags"].setVisible(false);
+    )
+    {
+      g_layerVectors.gtflags.setVisible(true);
     }
-    g_layerVectors["award"].setVisible(false);
-    if (g_showAllGrids == false) {
+    else
+    {
+      g_layerVectors.gtflags.setVisible(false);
+    }
+    g_layerVectors.award.setVisible(false);
+    if (g_showAllGrids == false)
+    {
       g_layerVectors["line-grids"].setVisible(false);
       g_layerVectors["big-grids"].setVisible(false);
       g_layerVectors["short-grids"].setVisible(false);
       g_layerVectors["long-grids"].setVisible(false);
     }
-    if (g_timezoneLayer) {
-      if (g_timezonesEnable == 1) {
+    if (g_timezoneLayer)
+    {
+      if (g_timezonesEnable == 1)
+      {
         g_timezoneLayer.setVisible(true);
-      } else {
+      }
+      else
+      {
         g_timezoneLayer.setVisible(false);
       }
     }
-  } else {
-    if (g_mapSettings.mergeOverlay == false) {
-      for (key in g_layerVectors) {
+  }
+  else
+  {
+    if (g_mapSettings.mergeOverlay == false)
+    {
+      for (key in g_layerVectors)
+      {
         g_layerVectors[key].setVisible(false);
       }
-    } else {
-      for (key in g_layerVectors) {
+    }
+    else
+    {
+      for (key in g_layerVectors)
+      {
         g_layerVectors[key].setVisible(true);
       }
       if (
         g_appSettings.gtFlagImgSrc > 0 &&
         g_appSettings.gtShareEnable == true &&
         g_mapSettings.offlineMode == false
-      ) {
-        g_layerVectors["gtflags"].setVisible(true);
-      } else {
-        g_layerVectors["gtflags"].setVisible(false);
+      )
+      {
+        g_layerVectors.gtflags.setVisible(true);
       }
-      if (g_showAllGrids == false) {
+      else
+      {
+        g_layerVectors.gtflags.setVisible(false);
+      }
+      if (g_showAllGrids == false)
+      {
         g_layerVectors["line-grids"].setVisible(false);
         g_layerVectors["big-grids"].setVisible(false);
         g_layerVectors["short-grids"].setVisible(false);
         g_layerVectors["long-grids"].setVisible(false);
       }
     }
-    g_layerVectors["award"].setVisible(true);
-    if (g_timezoneLayer) {
+    g_layerVectors.award.setVisible(true);
+    if (g_timezoneLayer)
+    {
       g_timezoneLayer.setVisible(false);
     }
     mapLoseFocus();
   }
 
-  g_layerVectors["strikes"].setVisible(true);
+  g_layerVectors.strikes.setVisible(true);
 
-  if (which == 1) {
-    for (key in g_cqZones) {
+  if (which == 1)
+  {
+    for (key in g_cqZones)
+    {
       var boxColor = "#FF000015";
       var borderColor = "#005500FF";
       var borderWeight = 1;
-      if (didConfirm(g_cqZones[key])) {
+      if (didConfirm(g_cqZones[key]))
+      {
         boxColor = "#00FF0066";
-      } else if (didWork(g_cqZones[key])) {
+      }
+      else if (didWork(g_cqZones[key]))
+      {
         boxColor = "#FFFF0066";
       }
 
@@ -2614,18 +3006,23 @@ function setTrophyOverlay(which) {
         borderColor,
         borderWeight
       );
-      g_layerSources["award"].addFeature(g_currentShapes[key]);
+      g_layerSources.award.addFeature(g_currentShapes[key]);
     }
   }
-  if (which == 2) {
-    for (key in g_ituZones) {
+  if (which == 2)
+  {
+    for (key in g_ituZones)
+    {
       var boxColor = "#FF000015";
       var borderColor = "#800080FF";
       var borderWeight = 1;
-      if (didConfirm(g_ituZones[key])) {
+      if (didConfirm(g_ituZones[key]))
+      {
         boxColor = "#00FF0066";
         borderWeight = 1;
-      } else if (didWork(g_ituZones[key])) {
+      }
+      else if (didWork(g_ituZones[key]))
+      {
         boxColor = "#FFFF0066";
         borderWeight = 1;
       }
@@ -2638,18 +3035,23 @@ function setTrophyOverlay(which) {
         borderColor,
         borderWeight
       );
-      g_layerSources["award"].addFeature(g_currentShapes[key]);
+      g_layerSources.award.addFeature(g_currentShapes[key]);
     }
   }
-  if (which == 3) {
-    for (key in g_wacZones) {
+  if (which == 3)
+  {
+    for (key in g_wacZones)
+    {
       var boxColor = "#FF000015";
       var borderColor = "#006666FF";
       var borderWeight = 1;
       var originalKey = key;
-      if (didConfirm(g_wacZones[key])) {
+      if (didConfirm(g_wacZones[key]))
+      {
         boxColor = "#00FF0066";
-      } else if (didWork(g_wacZones[key])) {
+      }
+      else if (didWork(g_wacZones[key]))
+      {
         boxColor = "#FFFF0066";
       }
 
@@ -2661,17 +3063,22 @@ function setTrophyOverlay(which) {
         borderColor,
         borderWeight
       );
-      g_layerSources["award"].addFeature(g_currentShapes[originalKey]);
+      g_layerSources.award.addFeature(g_currentShapes[originalKey]);
     }
   }
-  if (which == 4) {
-    for (key in g_wasZones) {
+  if (which == 4)
+  {
+    for (key in g_wasZones)
+    {
       var boxColor = "#FF000020";
       var borderColor = "#0000FFFF";
       var borderWeight = 1;
-      if (didConfirm(g_wasZones[key])) {
+      if (didConfirm(g_wasZones[key]))
+      {
         boxColor = "#00FF0066";
-      } else if (didWork(g_wasZones[key])) {
+      }
+      else if (didWork(g_wasZones[key]))
+      {
         boxColor = "#FFFF0066";
       }
 
@@ -2683,21 +3090,27 @@ function setTrophyOverlay(which) {
         borderColor,
         borderWeight
       );
-      g_layerSources["award"].addFeature(g_currentShapes[key]);
+      g_layerSources.award.addFeature(g_currentShapes[key]);
     }
   }
-  if (which == 5) {
-    for (key in g_worldGeoData) {
+  if (which == 5)
+  {
+    for (key in g_worldGeoData)
+    {
       var boxColor = "#FF000015";
       var borderColor = "#0000FFFF";
       var borderWeight = 1;
-      if (didConfirm(g_worldGeoData[key])) {
+      if (didConfirm(g_worldGeoData[key]))
+      {
         boxColor = "#00FF0066";
-      } else if (didWork(g_worldGeoData[key])) {
+      }
+      else if (didWork(g_worldGeoData[key]))
+      {
         boxColor = "#FFFF0066";
       }
 
-      if (g_worldGeoData[key].geo != "deleted") {
+      if (g_worldGeoData[key].geo != "deleted")
+      {
         g_currentShapes[key] = shapeFeature(
           key,
           g_worldGeoData[key].geo,
@@ -2706,19 +3119,24 @@ function setTrophyOverlay(which) {
           borderColor,
           borderWeight
         );
-        g_layerSources["award"].addFeature(g_currentShapes[key]);
+        g_layerSources.award.addFeature(g_currentShapes[key]);
       }
     }
   }
-  if (which == 6) {
-    for (key in g_countyData) {
+  if (which == 6)
+  {
+    for (key in g_countyData)
+    {
       var boxColor = "#00000000";
       var borderColor = "#0000FFFF";
       var borderWeight = 0.1;
-      if (didConfirm(g_countyData[key])) {
+      if (didConfirm(g_countyData[key]))
+      {
         boxColor = "#00FF0066";
         borderWeight = 1;
-      } else if (didWork(g_countyData[key])) {
+      }
+      else if (didWork(g_countyData[key]))
+      {
         boxColor = "#FFFF0066";
         borderWeight = 1;
       }
@@ -2731,24 +3149,29 @@ function setTrophyOverlay(which) {
         borderColor,
         borderWeight
       );
-      g_layerSources["award"].addFeature(g_currentShapes[key]);
+      g_layerSources.award.addFeature(g_currentShapes[key]);
     }
   }
-  if (which == 7) {
-    for (key in g_us48Data) {
+  if (which == 7)
+  {
+    for (key in g_us48Data)
+    {
       var LL = squareToLatLong(key);
       var bounds = [
         [LL.lo1, LL.la1],
-        [LL.lo2, LL.la2],
+        [LL.lo2, LL.la2]
       ];
 
       var boxColor = "#FF000015";
       var borderColor = "#0000FFFF";
       var borderWeight = 0.1;
-      if (g_us48Data[key].confirmed) {
+      if (g_us48Data[key].confirmed)
+      {
         boxColor = "#00FF0066";
         borderWeight = 0.2;
-      } else if (g_us48Data[key].worked) {
+      }
+      else if (g_us48Data[key].worked)
+      {
         boxColor = "#FFFF0066";
         borderWeight = 0.2;
       }
@@ -2761,7 +3184,7 @@ function setTrophyOverlay(which) {
         borderColor,
         borderWeight
       );
-      g_layerSources["award"].addFeature(g_currentShapes[key]);
+      g_layerSources.award.addFeature(g_currentShapes[key]);
     }
   }
 
@@ -2775,15 +3198,16 @@ function gridFeature(
   fillColor,
   borderColor,
   borderWidth
-) {
+)
+{
   var style = new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: borderColor,
-      width: borderWidth,
+      width: borderWidth
     }),
     fill: new ol.style.Fill({
-      color: fillColor,
-    }),
+      color: fillColor
+    })
   });
 
   objectData.setStyle(style);
@@ -2795,7 +3219,8 @@ function gridFeature(
 
 var g_lastMoon = null;
 
-function moonOver(feature) {
+function moonOver(feature)
+{
   var data = subLunar(timeNowSec());
 
   var object = doRAconvert(g_myLon, g_myLat, data.RA, data.Dec);
@@ -2820,7 +3245,8 @@ function moonOver(feature) {
 
   myMoonTooltip.innerHTML = worker;
 
-  if (g_lastMoon) {
+  if (g_lastMoon)
+  {
     moonMove();
     return;
   }
@@ -2833,12 +3259,14 @@ function moonOver(feature) {
   myMoonTooltip.style.display = "block";
 }
 
-function moonOut() {
+function moonOut()
+{
   g_lastMoon = null;
   myMoonTooltip.style.zIndex = -1;
 }
 
-function moonMove() {
+function moonMove()
+{
   var positionInfo = myMoonTooltip.getBoundingClientRect();
   myMoonTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
   myMoonTooltip.style.top = getMouseY() + 22 + "px";
@@ -2846,8 +3274,10 @@ function moonMove() {
 
 var g_lastTrophy = null;
 
-function trophyOver(feature) {
-  if (g_lastTrophy && g_lastTrophy == feature) {
+function trophyOver(feature)
+{
+  if (g_lastTrophy && g_lastTrophy == feature)
+  {
     trophyMove();
     return;
   }
@@ -2860,26 +3290,31 @@ function trophyOver(feature) {
   var zone = null;
 
   var key = feature.get("prop");
-  if (key == "cqzone") {
+  if (key == "cqzone")
+  {
     trophy = "CQ Zone";
     infoObject = g_cqZones[name];
     zone = name;
     name = g_cqZones[name].name;
   }
 
-  if (key == "ituzone") {
+  if (key == "ituzone")
+  {
     trophy = "ITU Zone";
     infoObject = g_ituZones[name];
   }
-  if (key == "wac" && name in g_wacZones) {
+  if (key == "wac" && name in g_wacZones)
+  {
     trophy = "Continent";
     infoObject = g_wacZones[name];
   }
-  if (key == "was" && name in g_wasZones) {
+  if (key == "was" && name in g_wasZones)
+  {
     trophy = "US State";
     infoObject = g_wasZones[name];
   }
-  if (key == "dxcc" && name in g_worldGeoData) {
+  if (key == "dxcc" && name in g_worldGeoData)
+  {
     trophy = "DXCC";
     var ref = name;
     infoObject = g_worldGeoData[ref];
@@ -2889,26 +3324,33 @@ function trophyOver(feature) {
       g_worldGeoData[ref].pp +
       ")</font>";
   }
-  if (key == "usc") {
+  if (key == "usc")
+  {
     trophy = "US County";
     infoObject = g_countyData[name];
     name = infoObject.geo.properties.n + ", " + infoObject.geo.properties.st;
   }
-  if (key == "us48") {
+  if (key == "us48")
+  {
     trophy = "US Continental Grids";
     infoObject = g_us48Data[feature.get("grid")];
     name = feature.get("grid");
 
-    if (name in g_gridToState) {
+    if (name in g_gridToState)
+    {
       zone = "";
-      for (var x = 0; x < g_gridToDXCC[name].length; x++) {
-        if (name in g_gridToState) {
-          for (var y = 0; y < g_gridToState[name].length; y++) {
+      for (var x = 0; x < g_gridToDXCC[name].length; x++)
+      {
+        if (name in g_gridToState)
+        {
+          for (var y = 0; y < g_gridToState[name].length; y++)
+          {
             if (
               g_gridToDXCC[name][x] ==
                 g_StateData[g_gridToState[name][y]].dxcc &&
               g_gridToDXCC[name][x] == 291
-            ) {
+            )
+            {
               zone += g_StateData[g_gridToState[name][y]].name + ", ";
             }
           }
@@ -2927,20 +3369,24 @@ function trophyOver(feature) {
     "</b></font></td></tr>";
 
   if (zone)
+  {
     worker +=
       " <tr><td colspan=2><font color='lightgreen'>" +
       zone +
       "</font></td></tr>";
+  }
 
   var wc1Table = "<td></td>";
-  if (infoObject.worked) {
+  if (infoObject.worked)
+  {
     wc1Table = "<td align=center><table class='darkTable'>";
     wc1Table +=
       "<tr><td colspan=2 ><font  color='yellow'>Worked</font></td></tr>";
     wc1Table += "<tr><td align=right><font color='green'>Band</font></td>";
     wc1Table += "<td align=left><table class='subtable'>";
     var keys = Object.keys(infoObject.worked_bands).sort();
-    for (key in keys) {
+    for (key in keys)
+    {
       wc1Table +=
         "<tr><td align=right>" +
         keys[key] +
@@ -2955,7 +3401,8 @@ function trophyOver(feature) {
     wc1Table += "<td align=right><font color='orange'>Mode</font></td>";
     wc1Table += "<td align=left><table class='subtable'>";
     keys = Object.keys(infoObject.worked_modes).sort();
-    for (key in keys) {
+    for (key in keys)
+    {
       wc1Table +=
         "<tr><td align=right>" +
         keys[key] +
@@ -2970,14 +3417,16 @@ function trophyOver(feature) {
     wc1Table += "</table></td>";
   }
   var wcTable = "<td></td>";
-  if (infoObject.confirmed) {
+  if (infoObject.confirmed)
+  {
     wcTable = "<td align=center><table class='darkTable'>";
     wcTable +=
       "<tr><td colspan=2 ><font  color='lightgreen'>Confirmed</font></td></tr>";
     wcTable += "<tr><td align=right><font color='green'>Band</font></td>";
     wcTable += "<td align=left><table class='subtable'>";
     var keys = Object.keys(infoObject.confirmed_bands).sort();
-    for (key in keys) {
+    for (key in keys)
+    {
       wcTable +=
         "<tr><td align=right>" +
         keys[key] +
@@ -2992,7 +3441,8 @@ function trophyOver(feature) {
     wcTable += "<td align=right><font color='orange'>Mode</font></td>";
     wcTable += "<td align=left><table class='subtable'>";
     keys = Object.keys(infoObject.confirmed_modes).sort();
-    for (key in keys) {
+    for (key in keys)
+    {
       wcTable +=
         "<tr><td align=right>" +
         keys[key] +
@@ -3006,9 +3456,12 @@ function trophyOver(feature) {
     wcTable += "</table></td>";
   }
   if (!infoObject.worked && !infoObject.confirmed)
+  {
     worker +=
       "<tr><td colspan=2 ><font  color='orange'>Needed</font></td></tr>";
-  else {
+  }
+  else
+  {
     worker += "<tr>" + wc1Table + wcTable + "</tr>";
   }
 
@@ -3025,12 +3478,14 @@ function trophyOver(feature) {
   myTrophyTooltip.style.display = "block";
 }
 
-function trophyOut() {
+function trophyOut()
+{
   g_lastTrophy = null;
   myTrophyTooltip.style.zIndex = -1;
 }
 
-function trophyMove() {
+function trophyMove()
+{
   var positionInfo = myTrophyTooltip.getBoundingClientRect();
   myTrophyTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
   myTrophyTooltip.style.top = getMouseY() - positionInfo.height - 22 + "px";
@@ -3039,7 +3494,8 @@ function trophyMove() {
 var g_MyCurrentGrid = "";
 var g_MyGridIsUp = false;
 
-function mouseDownGrid(longlat, event) {
+function mouseDownGrid(longlat, event)
+{
   var grid = "";
   grid = latLonToGridSquare(longlat[1], longlat[0]);
   g_MyCurrentGrid = grid.substr(0, 4);
@@ -3071,11 +3527,13 @@ function mouseDownGrid(longlat, event) {
     "<tr><td>Long</td><td style='color:lightblue'>" +
     longlat[0].toFixed(3) +
     "</td></tr></table>";
-  if (grid in g_gridToDXCC) {
+  if (grid in g_gridToDXCC)
+  {
     worker +=
       "<table align='center' class='darkTable' style='border-top:none'><tr style='color:white;'>";
     worker += "<tr style='color:orange;'>";
-    for (var x = 0; x < g_gridToDXCC[grid].length; x++) {
+    for (var x = 0; x < g_gridToDXCC[grid].length; x++)
+    {
       worker +=
         "<td>" +
         g_dxccToAltName[g_gridToDXCC[grid][x]] +
@@ -3083,15 +3541,20 @@ function mouseDownGrid(longlat, event) {
         g_worldGeoData[g_dxccToGeoData[g_gridToDXCC[grid][x]]].pp +
         ")</font></td>";
     }
-    if (grid in g_gridToState) {
+    if (grid in g_gridToState)
+    {
       worker += "</tr><tr style='color:yellow;'>";
-      for (var x = 0; x < g_gridToDXCC[grid].length; x++) {
+      for (var x = 0; x < g_gridToDXCC[grid].length; x++)
+      {
         worker += "<td>";
-        if (grid in g_gridToState) {
-          for (var y = 0; y < g_gridToState[grid].length; y++) {
+        if (grid in g_gridToState)
+        {
+          for (var y = 0; y < g_gridToState[grid].length; y++)
+          {
             if (
               g_gridToDXCC[grid][x] == g_StateData[g_gridToState[grid][y]].dxcc
-            ) {
+            )
+            {
               worker += g_StateData[g_gridToState[grid][y]].name + "<br/>";
             }
           }
@@ -3116,29 +3579,35 @@ function mouseDownGrid(longlat, event) {
   g_MyGridIsUp = true;
 }
 
-function mouseMoveGrid() {
-  if (g_MyGridIsUp == true) {
+function mouseMoveGrid()
+{
+  if (g_MyGridIsUp == true)
+  {
     var positionInfo = myGridTooltip.getBoundingClientRect();
     myGridTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
     myGridTooltip.style.top = getMouseY() - positionInfo.height - 22 + "px";
   }
 }
 
-function mouseUpGrid() {
+function mouseUpGrid()
+{
   g_MyGridIsUp = false;
   myGridTooltip.style.zIndex = -1;
 
-  if (g_tempGridBox) {
-    if (g_layerSources["temp"].hasFeature(g_tempGridBox))
-      g_layerSources["temp"].removeFeature(g_tempGridBox);
+  if (g_tempGridBox)
+  {
+    if (g_layerSources.temp.hasFeature(g_tempGridBox))
+    { g_layerSources.temp.removeFeature(g_tempGridBox); }
   }
 
   g_tempGridBox = null;
 }
 
 var g_lastGtFlag = null;
-function mouseOverGtFlag(feature) {
-  if (g_lastGtFlag && g_lastGtFlag == feature) {
+function mouseOverGtFlag(feature)
+{
+  if (g_lastGtFlag && g_lastGtFlag == feature)
+  {
     gtFlagMove();
     return;
   }
@@ -3153,35 +3622,38 @@ function mouseOverGtFlag(feature) {
   myFlagtip.style.zIndex = 499;
   myFlagtip.style.display = "block";
 
-  if (feature.size == 73 && feature != g_lasttimezone) {
-    if (g_lasttimezone != null) {
+  if (feature.size == 73 && feature != g_lasttimezone)
+  {
+    if (g_lasttimezone != null)
+    {
       g_lasttimezone.setStyle(null);
     }
 
     var style = new ol.style.Style({
       fill: new ol.style.Fill({
-        color: "#FFFF0088",
-      }),
+        color: "#FFFF0088"
+      })
     });
 
     feature.setStyle(style);
     g_lasttimezone = feature;
   }
-
-  return;
 }
 
-function mouseOutGtFlag(mouseEvent) {
+function mouseOutGtFlag(mouseEvent)
+{
   g_lastGtFlag = null;
   myFlagtip.style.zIndex = -1;
 
-  if (g_lasttimezone != null) {
+  if (g_lasttimezone != null)
+  {
     g_lasttimezone.setStyle(null);
     g_lasttimezone = null;
   }
 }
 
-function gtFlagMove() {
+function gtFlagMove()
+{
   var positionInfo = myFlagtip.getBoundingClientRect();
   myFlagtip.style.left = getMouseX() + 15 + "px";
   myFlagtip.style.top = getMouseY() - positionInfo.height - 5 + "px";
@@ -3189,9 +3661,11 @@ function gtFlagMove() {
 
 var g_lastDataGridUp = null;
 
-function mouseOverDataItem(mouseEvent, fromHover) {
+function mouseOverDataItem(mouseEvent, fromHover)
+{
   if (g_MyGridIsUp) return;
-  if (g_lastDataGridUp && g_lastDataGridUp == mouseEvent) {
+  if (g_lastDataGridUp && g_lastDataGridUp == mouseEvent)
+  {
     mouseMoveDataItem(mouseEvent);
     return;
   }
@@ -3215,18 +3689,21 @@ function mouseOverDataItem(mouseEvent, fromHover) {
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
   )
-    noRoomRight = true;
+  { noRoomRight = true; }
   myTooltip.style.left = getMouseX() + 15 + "px";
   top = parseInt(getMouseY() - 20 - (callListLength / 2) * 25);
-  if (windowWidth - getMouseX() < positionInfo.width || noRoomRight == true) {
+  if (windowWidth - getMouseX() < positionInfo.width || noRoomRight == true)
+  {
     myTooltip.style.left = getMouseX() - (10 + positionInfo.width) + "px";
     top = parseInt(getMouseY() - 20 - (callListLength / 2) * 25);
     noRoomRight = true;
   }
-  if (getMouseX() - positionInfo.width < 0) {
+  if (getMouseX() - positionInfo.width < 0)
+  {
     noRoomLeft = true;
   }
-  if (noRoomLeft == true && noRoomRight == true) {
+  if (noRoomLeft == true && noRoomRight == true)
+  {
     myTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
     top = getMouseY() + 30;
   }
@@ -3236,7 +3713,8 @@ function mouseOverDataItem(mouseEvent, fromHover) {
   myTooltip.style.display = "block";
 }
 
-function mouseMoveDataItem(mouseEvent) {
+function mouseMoveDataItem(mouseEvent)
+{
   var myTooltip = document.getElementById("myTooltip");
   var positionInfo = myTooltip.getBoundingClientRect();
   var windowWidth = window.innerWidth;
@@ -3247,19 +3725,22 @@ function mouseMoveDataItem(mouseEvent) {
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
   )
-    noRoomRight = true;
+  { noRoomRight = true; }
   myTooltip.style.left = getMouseX() + 15 + "px";
   top = Number(myTooltip.style.top);
   if (top > 20) top = getMouseY() - 20 + "px";
-  if (windowWidth - getMouseX() < positionInfo.width || noRoomRight == true) {
+  if (windowWidth - getMouseX() < positionInfo.width || noRoomRight == true)
+  {
     myTooltip.style.left = getMouseX() - (10 + positionInfo.width) + "px";
     if (top > 20) top = getMouseY() - 20 + "px";
     noRoomRight = true;
   }
-  if (getMouseX() - positionInfo.width < 0) {
+  if (getMouseX() - positionInfo.width < 0)
+  {
     noRoomLeft = true;
   }
-  if (noRoomLeft == true && noRoomRight == true) {
+  if (noRoomLeft == true && noRoomRight == true)
+  {
     myTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
     top = getMouseY() + 30;
   }
@@ -3267,7 +3748,8 @@ function mouseMoveDataItem(mouseEvent) {
   myTooltip.style.top = top + "px";
 }
 
-function mouseOutOfDataItem(mouseEvent) {
+function mouseOutOfDataItem(mouseEvent)
+{
   var myTooltip = document.getElementById("myTooltip");
   myTooltip.style.zIndex = -1;
   g_lastDataGridUp = null;
@@ -3275,15 +3757,20 @@ function mouseOutOfDataItem(mouseEvent) {
   if (g_spotsEnabled == 1) g_layerSources["psk-hop"].clear();
 }
 
-function reloadInfo(bandOrMode) {
-  if (g_statsWindowHandle != null) {
-    try {
+function reloadInfo(bandOrMode)
+{
+  if (g_statsWindowHandle != null)
+  {
+    try
+    {
       g_statsWindowHandle.window.reloadInfo();
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function twoWideToLatLong(qth) {
+function twoWideToLatLong(qth)
+{
   qth = qth.toUpperCase();
   var a = qth.charCodeAt(0) - 65;
   var b = qth.charCodeAt(1) - 65;
@@ -3305,7 +3792,8 @@ function twoWideToLatLong(qth) {
   return LatLong;
 }
 
-function squareToLatLongAll(qth) {
+function squareToLatLongAll(qth)
+{
   qth = qth.toUpperCase();
   var a = qth.charCodeAt(0) - 65;
   var b = qth.charCodeAt(1) - 65;
@@ -3316,11 +3804,14 @@ function squareToLatLongAll(qth) {
   var la2;
   var lo2;
   var LatLong = [];
-  if (qth.length == 4) {
+  if (qth.length == 4)
+  {
     la2 = la1 + 1;
     lo2 = lo1 + 2;
     LatLong.size = 4;
-  } else {
+  }
+  else
+  {
     var lo3;
     var la3;
     var e = qth.charCodeAt(4) - 65;
@@ -3347,7 +3838,8 @@ function squareToLatLongAll(qth) {
   return LatLong;
 }
 
-function squareToLatLong(qth) {
+function squareToLatLong(qth)
+{
   qth = qth.toUpperCase();
   var a = qth.charCodeAt(0) - 65;
   var b = qth.charCodeAt(1) - 65;
@@ -3358,11 +3850,14 @@ function squareToLatLong(qth) {
   var la2;
   var lo2;
   var LatLong = [];
-  if (qth.length == 4 || g_appSettings.sixWideMode == 0) {
+  if (qth.length == 4 || g_appSettings.sixWideMode == 0)
+  {
     la2 = la1 + 1;
     lo2 = lo1 + 2;
     LatLong.size = 4;
-  } else {
+  }
+  else
+  {
     var lo3;
     var la3;
     var e = qth.charCodeAt(4) - 65;
@@ -3388,15 +3883,16 @@ function squareToLatLong(qth) {
   return LatLong;
 }
 
-function iconFeature(center, iconObj, zIndex) {
+function iconFeature(center, iconObj, zIndex)
+{
   var feature = new ol.Feature({
     geometry: new ol.geom.Point(center),
-    name: "pin",
+    name: "pin"
   });
 
   var iconStyle = new ol.style.Style({
     zIndex: zIndex,
-    image: iconObj,
+    image: iconObj
   });
 
   feature.setStyle(iconStyle);
@@ -3414,7 +3910,8 @@ function qthToQsoBox(
   confirmed,
   band,
   wspr
-) {
+)
+{
   if (g_appSettings.gridViewMode == 1) return null;
 
   var borderColor = "#222288FF";
@@ -3423,39 +3920,50 @@ function qthToQsoBox(
 
   var myDEzOffset = 10;
   var myDEbox = false;
-  if (worked) {
+  if (worked)
+  {
     boxColor = "#FFFF00" + g_gridAlpha;
     borderColor = g_qsoWorkedBorderColor;
   }
-  if (confirmed) {
+  if (confirmed)
+  {
     boxColor = "#FF0000" + g_gridAlpha;
     borderColor = g_qsoWorkedBorderColor;
   }
-  if (wspr != null) {
+  if (wspr != null)
+  {
     boxColor = "hsl(" + wspr + ",100%,50%)";
     borderColor = "gray";
   }
 
   var zIndex = 2;
-  var entityVisibility = Number(g_appSettings.gridViewMode) > 1 ? true : false;
+  var entityVisibility = Number(g_appSettings.gridViewMode) > 1;
   var returnRectangle = null;
   if (g_appSettings.sixWideMode == 0) iQTH = iQTH.substr(0, 4);
   else iQTH = iQTH.substr(0, 6);
   var rect = null;
-  if (iQTH == "") {
-    for (var key in g_qsoGrids) {
-      if (iHash in g_qsoGrids[key].rectangle.hashes) {
+  if (iQTH == "")
+  {
+    for (var key in g_qsoGrids)
+    {
+      if (iHash in g_qsoGrids[key].rectangle.hashes)
+      {
         rect = g_qsoGrids[key];
         break;
       }
     }
-  } else {
-    if (iQTH in g_qsoGrids) {
+  }
+  else
+  {
+    if (iQTH in g_qsoGrids)
+    {
       rect = g_qsoGrids[iQTH];
     }
   }
-  if (rect == null) {
-    if (iQTH != "") {
+  if (rect == null)
+  {
+    if (iQTH != "")
+    {
       // Valid QTH
       var triangleView = false;
       if (
@@ -3463,16 +3971,21 @@ function qthToQsoBox(
         iQTH in g_liveGrids &&
         entityVisibility == true &&
         g_pushPinMode == false
-      ) {
-        if (confirmed) {
+      )
+      {
+        if (confirmed)
+        {
           hideLiveGrid(iQTH);
-        } else {
+        }
+        else
+        {
           liveTriangleGrid(iQTH);
           triangleView = true;
         }
       }
       LL = squareToLatLong(iQTH);
-      if (LL.size == 6) {
+      if (LL.size == 6)
+      {
         borderColor = "#000000FF";
         zIndex = 50;
       }
@@ -3482,7 +3995,7 @@ function qthToQsoBox(
 
       var bounds = [
         [LL.lo1, LL.la1],
-        [LL.lo2, LL.la2],
+        [LL.lo2, LL.la2]
       ];
       if (triangleView == true) newRect.rectangle = triangle(bounds, true);
       else newRect.rectangle = rectangle(bounds);
@@ -3491,21 +4004,21 @@ function qthToQsoBox(
 
       const featureHoverStyle = new ol.style.Style({
         fill: new ol.style.Fill({
-          color: boxColor,
+          color: boxColor
         }),
         stroke: new ol.style.Stroke({
           color: borderColor,
           width: borderWeight,
-          lineJoin: "round",
+          lineJoin: "round"
         }),
-        zIndex: zIndex,
+        zIndex: zIndex
       });
       newRect.rectangle.setStyle(featureHoverStyle);
 
       newRect.rectangle.qth = iQTH;
 
       if (g_pushPinMode == false && entityVisibility == true)
-        g_layerSources["qso"].addFeature(newRect.rectangle);
+      { g_layerSources.qso.addFeature(newRect.rectangle); }
 
       var newPin = g_colorLeafletQPins.worked[band];
       if (confirmed) newPin = g_colorLeafletQPins.confirmed[band];
@@ -3521,7 +4034,7 @@ function qthToQsoBox(
       newRect.rectangle.pin.size = LL.size;
 
       if (g_pushPinMode && entityVisibility == true)
-        g_layerSources["qso-pins"].addFeature(newRect.rectangle.pin);
+      { g_layerSources["qso-pins"].addFeature(newRect.rectangle.pin); }
 
       newRect.rectangle.locked = locked;
       newRect.rectangle.worked = worked;
@@ -3535,22 +4048,27 @@ function qthToQsoBox(
       g_qsoGrids[iQTH] = newRect;
       returnRectangle = newRect.rectangle;
     }
-  } else {
-    if (!(iHash in rect.rectangle.hashes)) {
+  }
+  else
+  {
+    if (!(iHash in rect.rectangle.hashes))
+    {
       rect.rectangle.hashes[iHash] = 1;
 
       rect.rectangle.pin.hashes[iHash] = 1;
     }
-    if (!confirmed && rect.rectangle.confirmed) {
+    if (!confirmed && rect.rectangle.confirmed)
+    {
       return rect.rectangle;
     }
     if (worked && !rect.rectangle.worked) rect.rectangle.worked = worked;
     if (confirmed && !rect.rectangle.confirmed)
-      rect.rectangle.confirmed = confirmed;
+    { rect.rectangle.confirmed = confirmed; }
     borderColor = g_qsoWorkedBorderColor;
     if (myDEbox) borderWeight = 1;
     zIndex = 2;
-    if (rect.rectangle.size == 6) {
+    if (rect.rectangle.size == 6)
+    {
       borderColor = "#000000FF";
       zIndex = 50;
     }
@@ -3558,14 +4076,14 @@ function qthToQsoBox(
 
     const featureHoverStyle = new ol.style.Style({
       fill: new ol.style.Fill({
-        color: boxColor,
+        color: boxColor
       }),
       stroke: new ol.style.Stroke({
         color: borderColor,
         width: borderWeight,
-        lineJoin: "round",
+        lineJoin: "round"
       }),
-      zIndex: zIndex,
+      zIndex: zIndex
     });
     rect.rectangle.setStyle(featureHoverStyle);
     returnRectangle = rect.rectangle;
@@ -3573,7 +4091,8 @@ function qthToQsoBox(
   return returnRectangle;
 }
 
-function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
+function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash)
+{
   if (g_appSettings.gridViewMode == 2) return null;
 
   var borderColor = "#222288FF";
@@ -3582,54 +4101,69 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
 
   var myDEzOffset = 0;
   var myDEbox = false;
-  if (iCQ && iNew) {
+  if (iCQ && iNew)
+  {
     borderColor = "#008888FF";
     boxColor = "#00FF00" + g_gridAlpha;
-  } else if (iCQ && !iNew) {
+  }
+  else if (iCQ && !iNew)
+  {
     borderColor = "#FFFF00FF";
     boxColor = "#FFFF00" + g_gridAlpha;
   }
-  if (DE == myDEcall) {
+  if (DE == myDEcall)
+  {
     borderColor = "#FF0000FF";
     boxColor = "#FFFF00" + g_gridAlpha;
     borderWeight = 1.0;
     myDEzOffset = 20;
     myDEbox = true;
   }
-  if (DE.indexOf("CQ DX") > -1) {
+  if (DE.indexOf("CQ DX") > -1)
+  {
     borderColor = "#008888FF";
     boxColor = "#00FFFF" + g_gridAlpha;
   }
-  if (locked) {
+  if (locked)
+  {
     boxColor = "#FFA500" + g_gridAlpha;
     borderColor = "#000000FF";
 
     borderOpacity = 1;
   }
-  if (wspr != null) {
+  if (wspr != null)
+  {
     boxColor = "hsl(" + wspr + ",100%,50%)";
     borderColor = "gray";
-    //borderWeight = 1;
+    // borderWeight = 1;
   }
   var zIndex = 2;
   var returnRectangle = null;
   if (g_appSettings.sixWideMode == 0) iQTH = iQTH.substr(0, 4);
   else iQTH = iQTH.substr(0, 6);
   var rect = null;
-  if (iQTH == "") {
-    for (var key in g_liveGrids) {
-      if (hash in g_liveGrids[key].rectangle.liveHash) {
+  if (iQTH == "")
+  {
+    for (var key in g_liveGrids)
+    {
+      if (hash in g_liveGrids[key].rectangle.liveHash)
+      {
         rect = g_liveGrids[key];
         break;
       }
     }
-  } else {
-    if (iQTH in g_liveGrids) {
+  }
+  else
+  {
+    if (iQTH in g_liveGrids)
+    {
       rect = g_liveGrids[iQTH];
     }
   }
-  if (rect == null) {
-    if (iQTH != "") {
+  if (rect == null)
+  {
+    if (iQTH != "")
+    {
       // Valid QTH
       var entityVisibility = true;
       var triangleView = false;
@@ -3637,20 +4171,24 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
         Number(g_appSettings.gridViewMode) == 3 &&
         iQTH in g_qsoGrids &&
         g_pushPinMode == false
-      ) {
+      )
+      {
         if (
           g_mapSettings.splitQSL ||
           g_qsoGrids[iQTH].rectangle.confirmed == false
-        ) {
+        )
+        {
           qsoTriangleGrid(iQTH);
           triangleView = true;
           entityVisibility = true;
-        } else entityVisibility = false;
+        }
+        else entityVisibility = false;
       }
       LL = squareToLatLong(iQTH);
-      if (LL.size == 6) {
+      if (LL.size == 6)
+      {
         borderColor = "#000000FF";
-        //borderWeight = 1.0;
+        // borderWeight = 1.0;
         zIndex = 50;
       }
       newRect = {};
@@ -3660,7 +4198,7 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
 
       var bounds = [
         [LL.lo1, LL.la1],
-        [LL.lo2, LL.la2],
+        [LL.lo2, LL.la2]
       ];
       if (triangleView == true) newRect.rectangle = triangle(bounds, false);
       else newRect.rectangle = rectangle(bounds);
@@ -3670,21 +4208,22 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
 
       const featureHoverStyle = new ol.style.Style({
         fill: new ol.style.Fill({
-          color: boxColor,
+          color: boxColor
         }),
         stroke: new ol.style.Stroke({
           color: borderColor,
           width: borderWeight,
-          lineJoin: "round",
+          lineJoin: "round"
         }),
-        zIndex: zIndex,
+        zIndex: zIndex
       });
       newRect.rectangle.setStyle(featureHoverStyle);
 
       newRect.rectangle.qth = iQTH;
 
-      if (g_pushPinMode == false && entityVisibility) {
-        g_layerSources["live"].addFeature(newRect.rectangle);
+      if (g_pushPinMode == false && entityVisibility)
+      {
+        g_layerSources.live.addFeature(newRect.rectangle);
       }
 
       newRect.rectangle.pin = iconFeature(
@@ -3698,7 +4237,7 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
       newRect.rectangle.pin.size = LL.size;
 
       if (g_pushPinMode && entityVisibility == true)
-        g_layerSources["live-pins"].addFeature(newRect.rectangle.pin);
+      { g_layerSources["live-pins"].addFeature(newRect.rectangle.pin); }
 
       newRect.rectangle.locked = locked;
       newRect.rectangle.size = LL.size;
@@ -3710,20 +4249,25 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
       g_liveGrids[iQTH] = newRect;
       returnRectangle = newRect.rectangle;
     }
-  } else {
-    if (!(hash in rect.rectangle.liveHash)) {
+  }
+  else
+  {
+    if (!(hash in rect.rectangle.liveHash))
+    {
       rect.rectangle.liveHash[hash] = 1;
 
       rect.rectangle.pin.liveHash[hash] = 1;
     }
     if (locked && !rect.rectangle.locked) rect.rectangle.locked = locked;
-    if (rect.rectangle.locked) {
+    if (rect.rectangle.locked)
+    {
       borderColor = "#000000FF";
     }
     if (myDEbox) borderWeight = 1;
-    if (rect.rectangle.size == 6) {
+    if (rect.rectangle.size == 6)
+    {
       borderColor = "#000000FF";
-      //borderWeight = 1.0;
+      // borderWeight = 1.0;
       zIndex = 50;
     }
     newRect.age = g_timeNow;
@@ -3731,14 +4275,14 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
 
     const featureHoverStyle = new ol.style.Style({
       fill: new ol.style.Fill({
-        color: boxColor,
+        color: boxColor
       }),
       stroke: new ol.style.Stroke({
         color: borderColor,
         width: borderWeight,
-        lineJoin: "round",
+        lineJoin: "round"
       }),
-      zIndex: zIndex,
+      zIndex: zIndex
     });
     rect.rectangle.setStyle(featureHoverStyle);
 
@@ -3747,31 +4291,38 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash) {
   return returnRectangle;
 }
 
-function alphaFrom(rgba) {
+function alphaFrom(rgba)
+{
   var alphaInt = hexToA(rgba);
   var alphaFloat = alphaInt / 255.0;
   return alphaFloat;
 }
 
-function alphaTo(rgba, alphaFloat) {
+function alphaTo(rgba, alphaFloat)
+{
   var alphaInt = parseInt(alphaFloat * 255);
   var alphaHex = alphaInt.toString(16);
-  if (alphaHex.length == 1) {
+  if (alphaHex.length == 1)
+  {
     alphaHex = "0" + alphaHex;
   }
   return rgba.slice(0, -2) + alphaHex;
 }
 
-function intAlphaToRGB(rgb, alphaInt) {
+function intAlphaToRGB(rgb, alphaInt)
+{
   var alphaHex = alphaInt.toString(16);
-  if (alphaHex.length == 1) {
+  if (alphaHex.length == 1)
+  {
     alphaHex = "0" + alphaHex;
   }
   return rgb + alphaHex;
 }
 
-function dimFunction(qthObj) {
-  if (qthObj.rectangle.locked == false) {
+function dimFunction(qthObj)
+{
+  if (qthObj.rectangle.locked == false)
+  {
     var featureStyle = qthObj.rectangle.getStyle();
     var featureFill = featureStyle.getFill();
     var fillColor = featureFill.getColor();
@@ -3792,58 +4343,70 @@ function dimFunction(qthObj) {
   }
 }
 
-function toggleTrafficDecode() {
-  trafficDecode.checked = trafficDecode.checked == true ? false : true;
+function toggleTrafficDecode()
+{
+  trafficDecode.checked = trafficDecode.checked != true;
   changeTrafficDecode();
 }
 
-function changeTrafficDecode() {
+function changeTrafficDecode()
+{
   g_mapSettings.trafficDecode = trafficDecode.checked;
   trafficDecodeView();
   saveMapSettings();
 }
 
-function trafficDecodeView() {
-  if (g_mapSettings.trafficDecode == false) {
+function trafficDecodeView()
+{
+  if (g_mapSettings.trafficDecode == false)
+  {
     trafficDiv.innerHTML = "";
     g_lastTraffic = Array();
   }
 }
 
-function changeFitQRZvalue() {
+function changeFitQRZvalue()
+{
   g_mapSettings.fitQRZ = fitQRZvalue.checked;
   saveMapSettings();
 }
 
-function changeQrzDxccFallbackValue() {
+function changeQrzDxccFallbackValue()
+{
   g_mapSettings.qrzDxccFallback = qrzDxccFallbackValue.checked;
   saveMapSettings();
 }
 
-function changeCqHiliteValue(check) {
+function changeCqHiliteValue(check)
+{
   g_mapSettings.CQhilite = check.checked;
   saveMapSettings();
   if (check.checked == false) removePaths();
 }
 
-function changeFocusRigValue(check) {
+function changeFocusRigValue(check)
+{
   g_mapSettings.focusRig = check.checked;
   saveMapSettings();
 }
 
-function changeHaltOntTxValue(check) {
+function changeHaltOntTxValue(check)
+{
   g_mapSettings.haltAllOnTx = check.checked;
   saveMapSettings();
 }
 
-function changeStrikesAlert() {
+function changeStrikesAlert()
+{
   g_mapSettings.strikesAlert = strikesAlert.value;
   saveMapSettings();
   playStrikeAlert();
 }
 
-function playStrikeAlert() {
-  switch (g_mapSettings.strikesAlert) {
+function playStrikeAlert()
+{
+  switch (g_mapSettings.strikesAlert)
+  {
     case 1:
       playAlertMediaFile("short-strike.wav", true);
       break;
@@ -3859,68 +4422,88 @@ function playStrikeAlert() {
   }
 }
 
-function setStrikesButton() {
-  if (g_mapSettings.strikes) {
+function setStrikesButton()
+{
+  if (g_mapSettings.strikes)
+  {
     strikesImg.style.webkitFilter = "";
-  } else {
+  }
+  else
+  {
     strikesImg.style.webkitFilter = "grayscale(1)";
   }
 }
 
-function toggleStrikesValue() {
-  if (g_mapSettings.strikesNotify == false && g_mapSettings.strikes == false) {
+function toggleStrikesValue()
+{
+  if (g_mapSettings.strikesNotify == false && g_mapSettings.strikes == false)
+  {
     var confirmed = window.confirm(
       "Lighting Strike Detection is provided by Blitzortung.org\nWe are not responsible for missed strikes that could result in damage.\nBe sure to check your local weather providers for accurate data."
     );
-    if (confirmed == false) {
+    if (confirmed == false)
+    {
       return;
-    } else {
+    }
+    else
+    {
       g_mapSettings.strikesNotify = true;
     }
   }
-  g_mapSettings.strikes = g_mapSettings.strikes == true ? false : true;
+  g_mapSettings.strikes = g_mapSettings.strikes != true;
   setStrikesButton();
 
   saveMapSettings();
 }
 
-function changeSplitQSL() {
+function changeSplitQSL()
+{
   g_mapSettings.splitQSL = splitQSLValue.checked;
   saveMapSettings();
   redrawGrids();
 }
 
-function setAnimateView() {
-  if (animateValue.checked) {
+function setAnimateView()
+{
+  if (animateValue.checked)
+  {
     animationSpeedTd.style.display = "inline-table";
-  } else {
+  }
+  else
+  {
     animationSpeedTd.style.display = "none";
   }
 }
 
-function toggleAnimate() {
-  animateValue.checked = animateValue.checked == true ? false : true;
+function toggleAnimate()
+{
+  animateValue.checked = animateValue.checked != true;
   changeAnimate();
 }
 
-function toggleAllGrids() {
-  g_showAllGrids = g_showAllGrids ? false : true;
+function toggleAllGrids()
+{
+  g_showAllGrids = !g_showAllGrids;
   setTrophyOverlay(g_currentOverlay);
 }
 
-function changeAnimate() {
+function changeAnimate()
+{
   g_mapSettings.animate = animateValue.checked;
   saveMapSettings();
 
   var dash = [];
   var dashOff = 0;
-  if (g_mapSettings.animate == true) {
+  if (g_mapSettings.animate == true)
+  {
     dash = g_flightPathLineDash;
     dashOff = g_flightPathTotal - g_flightPathOffset;
   }
 
-  for (var i = g_flightPaths.length - 1; i >= 0; i--) {
-    if (g_flightPaths[i].isShapeFlight == 0) {
+  for (var i = g_flightPaths.length - 1; i >= 0; i--)
+  {
+    if (g_flightPaths[i].isShapeFlight == 0)
+    {
       var featureStyle = g_flightPaths[i].getStyle();
       var featureStroke = featureStyle.getStroke();
 
@@ -3931,7 +4514,8 @@ function changeAnimate() {
       g_flightPaths[i].setStyle(featureStyle);
     }
   }
-  if (g_transmitFlightPath != null) {
+  if (g_transmitFlightPath != null)
+  {
     var featureStyle = g_transmitFlightPath.getStyle();
     var featureStroke = featureStyle.getStroke();
 
@@ -3944,7 +4528,8 @@ function changeAnimate() {
   setAnimateView();
 }
 
-function changeAnimateSpeedValue() {
+function changeAnimateSpeedValue()
+{
   g_mapSettings.animateSpeed = 21 - animateSpeedValue.value;
   saveMapSettings();
 }
@@ -3953,7 +4538,8 @@ var g_animateFrame = 0;
 
 var g_nextDimTime = 0;
 var g_last = 0;
-function animatePaths() {
+function animatePaths()
+{
   requestAnimationFrame(animatePaths);
 
   g_last ^= g_last;
@@ -3964,11 +4550,13 @@ function animatePaths() {
 
   if (g_animateFrame > 0) return;
 
-  for (var i = g_flightPaths.length - 1; i >= 0; i--) {
-    if (g_flightPaths[i].age < g_timeNow) {
+  for (var i = g_flightPaths.length - 1; i >= 0; i--)
+  {
+    if (g_flightPaths[i].age < g_timeNow)
+    {
       if (typeof g_flightPaths[i].Arrow != "undefined")
-        g_layerSources["flight"].removeFeature(g_flightPaths[i].Arrow);
-      g_layerSources["flight"].removeFeature(g_flightPaths[i]);
+      { g_layerSources.flight.removeFeature(g_flightPaths[i].Arrow); }
+      g_layerSources.flight.removeFeature(g_flightPaths[i]);
       delete g_flightPaths[i];
       g_flightPaths[i] = null;
 
@@ -3976,7 +4564,8 @@ function animatePaths() {
     }
   }
 
-  if (g_timeNow > g_nextDimTime) {
+  if (g_timeNow > g_nextDimTime)
+  {
     dimGridsquare();
   }
 
@@ -3988,8 +4577,10 @@ function animatePaths() {
   var targetOffset = g_flightPathTotal - g_flightPathOffset;
   var featureStyle = null;
   var featureStroke = null;
-  for (var i = 0; i < g_flightPaths.length; i++) {
-    if (g_flightPaths[i].isShapeFlight == 0) {
+  for (var i = 0; i < g_flightPaths.length; i++)
+  {
+    if (g_flightPaths[i].isShapeFlight == 0)
+    {
       featureStyle = g_flightPaths[i].getStyle();
       featureStroke = featureStyle.getStroke();
       featureStroke.setLineDashOffset(targetOffset);
@@ -3997,7 +4588,8 @@ function animatePaths() {
     }
   }
 
-  if (g_transmitFlightPath != null) {
+  if (g_transmitFlightPath != null)
+  {
     var featureStyle = g_transmitFlightPath.getStyle();
     var featureStroke = featureStyle.getStroke();
 
@@ -4008,48 +4600,61 @@ function animatePaths() {
   }
 }
 
-function removePaths() {
-  g_layerSources["flight"].clear();
+function removePaths()
+{
+  g_layerSources.flight.clear();
   g_flightPaths = Array();
 }
 
-function fadePaths() {
-  if (pathWidthValue.value == 0) {
+function fadePaths()
+{
+  if (pathWidthValue.value == 0)
+  {
     removePaths();
-    return;
   }
 }
 
-function dimGridsquare() {
+function dimGridsquare()
+{
   if (gridDecay.value == 0) return;
-  for (var i in g_liveGrids) {
+  for (var i in g_liveGrids)
+  {
     dimFunction(g_liveGrids[i]);
 
     if (
       g_timeNow - g_liveGrids[i].age >= gridDecay.value &&
       g_liveGrids[i].rectangle.locked == false
-    ) {
+    )
+    {
       // Walk the rectangles DEcall's and remove them from g_liveCallsigns
-      for (var CallIsKey in g_liveGrids[i].rectangle.liveHash) {
-        if (CallIsKey in g_liveCallsigns) {
+      for (var CallIsKey in g_liveGrids[i].rectangle.liveHash)
+      {
+        if (CallIsKey in g_liveCallsigns)
+        {
           g_liveCallsigns[CallIsKey].rect = null;
 
           delete g_liveCallsigns[CallIsKey];
         }
       }
-      if (g_liveGrids[i].rectangle.pin != null) {
+      if (g_liveGrids[i].rectangle.pin != null)
+      {
         if (
           g_layerSources["live-pins"].hasFeature(g_liveGrids[i].rectangle.pin)
         )
+        {
           g_layerSources["live-pins"].removeFeature(
             g_liveGrids[i].rectangle.pin
           );
+        }
       }
-      if (g_layerSources["live"].hasFeature(g_liveGrids[i].rectangle)) {
-        g_layerSources["live"].removeFeature(g_liveGrids[i].rectangle);
+      if (g_layerSources.live.hasFeature(g_liveGrids[i].rectangle))
+      {
+        g_layerSources.live.removeFeature(g_liveGrids[i].rectangle);
 
-        if (Number(g_appSettings.gridViewMode) == 3 && i in g_qsoGrids) {
-          if (g_qsoGrids[i].isTriangle) {
+        if (Number(g_appSettings.gridViewMode) == 3 && i in g_qsoGrids)
+        {
+          if (g_qsoGrids[i].isTriangle)
+          {
             triangleToGrid(i, g_qsoGrids[i].rectangle);
             g_qsoGrids[i].isTriangle = false;
           }
@@ -4063,7 +4668,8 @@ function dimGridsquare() {
   g_nextDimTime = g_timeNow + 7;
 }
 
-function updateCountStats() {
+function updateCountStats()
+{
   var count = Object.keys(g_liveCallsigns).length;
 
   if (myDEcall in g_liveCallsigns) count--;
@@ -4075,22 +4681,28 @@ function updateCountStats() {
 
   countryCount.innerHTML = Object.keys(g_dxccCount).length;
 
-  if (Object.keys(g_QSOhash).length > 0) {
+  if (Object.keys(g_QSOhash).length > 0)
+  {
     clearOrLoadButton.innerHTML = "Clear Log";
     g_loadQSOs = false;
-  } else {
+  }
+  else
+  {
     clearOrLoadButton.innerHTML = "Load Logs";
     g_loadQSOs = true;
   }
 }
 
-function clearGrids() {
-  g_layerSources["live"].clear();
+function clearGrids()
+{
+  g_layerSources.live.clear();
   g_layerSources["live-pins"].clear();
 
-  for (var i in g_liveGrids) {
+  for (var i in g_liveGrids)
+  {
     // Walk the rectangles DEcall's and remove the rect from the g_liveCallsigns
-    for (var CallIsKey in g_liveGrids[i].rectangle.liveHash) {
+    for (var CallIsKey in g_liveGrids[i].rectangle.liveHash)
+    {
       if (CallIsKey in g_liveCallsigns) g_liveCallsigns[CallIsKey].rect = null;
     }
   }
@@ -4098,13 +4710,15 @@ function clearGrids() {
   g_liveGrids = {};
 }
 
-function clearQsoGrids() {
-  g_layerSources["qso"].clear();
+function clearQsoGrids()
+{
+  g_layerSources.qso.clear();
   g_layerSources["qso-pins"].clear();
 
   g_qsoGrids = {};
 
-  for (var key in g_worldGeoData) {
+  for (var key in g_worldGeoData)
+  {
     g_worldGeoData[key].worked = false;
     g_worldGeoData[key].confirmed = false;
     g_worldGeoData[key].worked_bands = {};
@@ -4112,7 +4726,8 @@ function clearQsoGrids() {
     g_worldGeoData[key].worked_modes = {};
     g_worldGeoData[key].confirmed_modes = {};
   }
-  for (var key in g_cqZones) {
+  for (var key in g_cqZones)
+  {
     g_cqZones[key].worked = false;
     g_cqZones[key].confirmed = false;
 
@@ -4121,7 +4736,8 @@ function clearQsoGrids() {
     g_cqZones[key].worked_modes = {};
     g_cqZones[key].confirmed_modes = {};
   }
-  for (var key in g_ituZones) {
+  for (var key in g_ituZones)
+  {
     g_ituZones[key].worked = false;
     g_ituZones[key].confirmed = false;
 
@@ -4130,7 +4746,8 @@ function clearQsoGrids() {
     g_ituZones[key].worked_modes = {};
     g_ituZones[key].confirmed_modes = {};
   }
-  for (var key in g_wasZones) {
+  for (var key in g_wasZones)
+  {
     g_wasZones[key].worked = false;
     g_wasZones[key].confirmed = false;
 
@@ -4139,7 +4756,8 @@ function clearQsoGrids() {
     g_wasZones[key].worked_modes = {};
     g_wasZones[key].confirmed_modes = {};
   }
-  for (var key in g_wacZones) {
+  for (var key in g_wacZones)
+  {
     g_wacZones[key].worked = false;
     g_wacZones[key].confirmed = false;
     g_wacZones[key].worked_bands = {};
@@ -4147,7 +4765,8 @@ function clearQsoGrids() {
     g_wacZones[key].worked_modes = {};
     g_wacZones[key].confirmed_modes = {};
   }
-  for (var key in g_countyData) {
+  for (var key in g_countyData)
+  {
     g_countyData[key].worked = false;
     g_countyData[key].confirmed = false;
     g_countyData[key].worked_bands = {};
@@ -4155,7 +4774,8 @@ function clearQsoGrids() {
     g_countyData[key].worked_modes = {};
     g_countyData[key].confirmed_modes = {};
   }
-  for (var key in g_us48Data) {
+  for (var key in g_us48Data)
+  {
     g_us48Data[key].worked = false;
     g_us48Data[key].confirmed = false;
     g_us48Data[key].worked_bands = {};
@@ -4165,15 +4785,18 @@ function clearQsoGrids() {
   }
 }
 
-function clearCalls() {
+function clearCalls()
+{
   removePaths();
-  for (var i in g_liveCallsigns) {
+  for (var i in g_liveCallsigns)
+  {
     if (
       typeof g_liveCallsigns[i].rect != "undefined" &&
       g_liveCallsigns[i].rect != null
-    ) {
+    )
+    {
       if (i in g_liveCallsigns[i].rect.liveHash)
-        delete g_liveCallsigns[i].rect.liveHash[i];
+      { delete g_liveCallsigns[i].rect.liveHash[i]; }
     }
   }
 
@@ -4182,7 +4805,8 @@ function clearCalls() {
   redrawGrids();
 }
 
-function clearLive() {
+function clearLive()
+{
   g_Decodes = 0;
 
   g_lastMessages = Array();
@@ -4202,7 +4826,8 @@ function clearLive() {
   goProcessRoster();
 }
 
-function clearAll() {
+function clearAll()
+{
   clearTempGrids();
   clearCalls();
   clearQSOs();
@@ -4219,15 +4844,20 @@ function clearAll() {
   goProcessRoster();
 }
 
-function clearOrLoadQSOs() {
-  if (g_loadQSOs == true) {
+function clearOrLoadQSOs()
+{
+  if (g_loadQSOs == true)
+  {
     startupAdifLoadCheck();
-  } else {
+  }
+  else
+  {
     clearQSOs();
   }
 }
 
-function clearAndLoadQSOs() {
+function clearAndLoadQSOs()
+{
   initQSOdata();
   g_QSOhash = {};
   g_QSLcount = 0;
@@ -4242,7 +4872,8 @@ function clearAndLoadQSOs() {
   startupAdifLoadCheck();
 }
 
-function clearQSOs() {
+function clearQSOs()
+{
   initQSOdata();
   g_QSOhash = {};
   g_QSLcount = 0;
@@ -4256,7 +4887,8 @@ function clearQSOs() {
   clearLogFilesAndCounts();
 }
 
-function clearLogFilesAndCounts() {
+function clearLogFilesAndCounts()
+{
   tryToDeleteLog("lotw_QSL.adif");
   tryToDeleteLog("lotw_QSO.adif");
   tryToDeleteLog("lotw.adif");
@@ -4266,19 +4898,20 @@ function clearLogFilesAndCounts() {
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 }
 
-function getCurrentBandModeHTML() {
+function getCurrentBandModeHTML()
+{
   var band =
     g_appSettings.gtBandFilter == "auto"
       ? myBand + " (Auto)"
       : g_appSettings.gtBandFilter.length == 0
-      ? "Mixed Bands"
-      : g_appSettings.gtBandFilter;
+        ? "Mixed Bands"
+        : g_appSettings.gtBandFilter;
   var mode =
     g_appSettings.gtModeFilter == "auto"
       ? myMode + " (Auto)"
       : g_appSettings.gtModeFilter.length == 0
-      ? "Mixed Modes"
-      : g_appSettings.gtModeFilter;
+        ? "Mixed Modes"
+        : g_appSettings.gtModeFilter;
   return (
     "<div style='vertical-align:top;display:inline-block;margin-bottom:3px;color:lightgreen;font-weight:bold;font-size:larger'>Viewing: <text style='color:yellow'>" +
     band +
@@ -4297,9 +4930,11 @@ var g_currentNightState = false;
 
 var g_timeNow = timeNowSec();
 
-function displayTime() {
+function displayTime()
+{
   g_timeNow = timeNowSec();
-  if (menuDiv.className == "menuDivStart" && g_menuShowing == true) {
+  if (menuDiv.className == "menuDivStart" && g_menuShowing == true)
+  {
     menuDiv.className = "menuDivEnd";
     mapDiv.className = "mapDivEnd";
     LegendDiv.className = "legendDivEnd";
@@ -4308,59 +4943,78 @@ function displayTime() {
 
   currentTime.innerHTML =
     "<font color='lightblue'>" + userTimeString(null) + "</font>";
-  if (g_lastTimeSinceMessageInSeconds > 0) {
+  if (g_lastTimeSinceMessageInSeconds > 0)
+  {
     var since = g_timeNow - g_lastTimeSinceMessageInSeconds;
     secondsAgoMsg.innerHTML = since.toDHMS();
-    if (since > 17 && since < 122) {
+    if (since > 17 && since < 122)
+    {
       secondsAgoMsg.style.backgroundColor = "yellow";
       secondsAgoMsg.style.color = "#000";
-    } else if (since > 121) {
+    }
+    else if (since > 121)
+    {
       secondsAgoMsg.style.backgroundColor = "red";
       secondsAgoMsg.style.color = "#000";
-    } else {
+    }
+    else
+    {
       secondsAgoMsg.style.backgroundColor = "blue";
       secondsAgoMsg.style.color = "#FF0";
     }
-  } else secondsAgoMsg.innerHTML = "<b>Never</b>";
+  }
+  else secondsAgoMsg.innerHTML = "<b>Never</b>";
 
   checkWsjtxListener();
 
-  if (g_timeNow % 22 == 0) {
+  if (g_timeNow % 22 == 0)
+  {
     g_nightTime = dayNight.refresh();
     moonLayer.refresh();
   }
 
   pskSpotCheck(g_timeNow);
 
-  if (g_mapSettings.strikes && g_mapSettings.offlineMode == false) {
+  if (g_mapSettings.strikes && g_mapSettings.offlineMode == false)
+  {
     if (g_strikeWebSocket == null) loadStrikes();
 
     var now = Date.now();
-    for (var time in g_bolts) {
-      if (now - time > 120000) {
-        if (g_layerSources["strikes"].hasFeature(g_bolts[time]))
-          g_layerSources["strikes"].removeFeature(g_bolts[time]);
+    for (var time in g_bolts)
+    {
+      if (now - time > 120000)
+      {
+        if (g_layerSources.strikes.hasFeature(g_bolts[time]))
+        { g_layerSources.strikes.removeFeature(g_bolts[time]); }
         delete g_bolts[time];
       }
     }
-  } else {
-    g_layerSources["strikes"].clear();
-    if (g_strikeWebSocket != null) {
-      try {
+  }
+  else
+  {
+    g_layerSources.strikes.clear();
+    if (g_strikeWebSocket != null)
+    {
+      try
+      {
         g_strikeWebSocket.close();
-      } catch (e) {
+      }
+      catch (e)
+      {
         g_strikeWebSocket = null;
       }
     }
   }
 
-  if (g_currentNightState != g_nightTime) {
+  if (g_currentNightState != g_nightTime)
+  {
     changeMapLayer();
     g_currentNightState = g_nightTime;
   }
 }
 
-function timeNowSec() {
+function timeNowSec()
+{
   return parseInt(Date.now() / 1000);
 }
 
@@ -4371,66 +5025,74 @@ var g_liveHoverInteraction = null;
 var g_gtFlagHoverInteraction = null;
 var g_trophyHoverInteraction = null;
 
-function createGlobalHeatmapLayer(name, radius, blur) {
+function createGlobalHeatmapLayer(name, radius, blur)
+{
   g_layerSources[name] = new ol.source.Vector({});
   g_layerVectors[name] = new ol.layer.Heatmap({
     source: g_layerSources[name],
-    zIndex: Object.keys(g_layerVectors).length + 1,
+    zIndex: Object.keys(g_layerVectors).length + 1
   });
   g_layerVectors[name].set("name", name);
 }
 
-function createGlobalMapLayer(name, maxResolution, minResolution) {
+function createGlobalMapLayer(name, maxResolution, minResolution)
+{
   g_layerSources[name] = new ol.source.Vector({});
   if (
     typeof maxResolution == "undefined" &&
     typeof minResolution == "undefined"
-  ) {
+  )
+  {
     var zIndex = Object.keys(g_layerVectors).length + 1;
     if (name == "strikes") zIndex = 2000;
     g_layerVectors[name] = new ol.layer.Vector({
       source: g_layerSources[name],
-      zIndex: zIndex,
+      zIndex: zIndex
     });
-  } else if (typeof minResolution == "undefined") {
+  }
+  else if (typeof minResolution == "undefined")
+  {
     g_layerVectors[name] = new ol.layer.Vector({
       source: g_layerSources[name],
       maxResolution: maxResolution,
-      zIndex: Object.keys(g_layerVectors).length + 1,
+      zIndex: Object.keys(g_layerVectors).length + 1
     });
-  } else {
+  }
+  else
+  {
     g_layerVectors[name] = new ol.layer.Vector({
       source: g_layerSources[name],
       maxResolution: maxResolution,
       minResolution: minResolution,
-      zIndex: Object.keys(g_layerVectors).length + 1,
+      zIndex: Object.keys(g_layerVectors).length + 1
     });
   }
   g_layerVectors[name].set("name", name);
 }
 
-function createGeoJsonLayer(name, url, color, stroke) {
+function createGeoJsonLayer(name, url, color, stroke)
+{
   var style = new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: color,
-      width: stroke,
+      width: stroke
     }),
     fill: new ol.style.Fill({
-      color: "#00000000",
-    }),
+      color: "#00000000"
+    })
   });
 
   var layerSource = new ol.source.Vector({
     url: url,
     format: new ol.format.GeoJSON({ geometryName: name }),
-    overlaps: false,
+    overlaps: false
   });
 
   var layerVector = new ol.layer.Vector({
     source: layerSource,
     style: style,
     visible: true,
-    zIndex: 1,
+    zIndex: 1
   });
   layerVector.set("name", name);
   return layerVector;
@@ -4440,22 +5102,23 @@ var g_gtFlagIcon = new ol.style.Icon({
   src: "./img/flag_gt_user.png",
   anchorYUnits: "pixels",
   anchorXUnits: "pixels",
-  anchor: [12, 17],
+  anchor: [12, 17]
 });
 
 var g_pushPinIconOff = new ol.style.Icon({
   src: "./img/red-circle.png",
   anchorYUnits: "pixels",
   anchorXUnits: "pixels",
-  anchor: [5, 18],
+  anchor: [5, 18]
 });
 
-function panTo(location) {
+function panTo(location)
+{
   var duration = 1000;
 
   g_mapView.animate({
     center: location,
-    duration: duration,
+    duration: duration
   });
 }
 
@@ -4465,7 +5128,7 @@ var g_lightningBolt = new ol.style.Icon({
   anchorXUnits: "pixels",
   size: [64, 64],
   anchor: [9, 58],
-  scale: 0.75,
+  scale: 0.75
 });
 
 var g_lightningGlobal = Array();
@@ -4475,7 +5138,7 @@ g_lightningGlobal[0] = new ol.style.Icon({
   anchorYUnits: "pixels",
   anchorXUnits: "pixels",
   opacity: 0.2,
-  anchor: [2, 31],
+  anchor: [2, 31]
 });
 
 g_lightningGlobal[1] = new ol.style.Icon({
@@ -4483,7 +5146,7 @@ g_lightningGlobal[1] = new ol.style.Icon({
   anchorYUnits: "pixels",
   anchorXUnits: "pixels",
   opacity: 0.2,
-  anchor: [1, 34],
+  anchor: [1, 34]
 });
 
 var g_bolts = {};
@@ -4491,9 +5154,10 @@ var g_strikeWebSocket = null;
 var g_strikeInterval = null;
 var g_strikeRange = 0.4;
 
-function toggleStrikeGlobal() {
+function toggleStrikeGlobal()
+{
   g_mapSettings.strikesGlobal =
-    g_mapSettings.strikesGlobal == false ? true : false;
+    g_mapSettings.strikesGlobal == false;
   saveMapSettings();
 
   var msg = "Local Strikes";
@@ -4502,38 +5166,47 @@ function toggleStrikeGlobal() {
   var worker =
     "<font color='yellow'>Strike Distance Changed<br/>" + msg + "</font>";
   if (g_mapSettings.strikes == false)
-    worker += "<br/><font color='red'>Detection is not enabled!</font>";
+  { worker += "<br/><font color='red'>Detection is not enabled!</font>"; }
   addLastTraffic(worker);
 
-  g_layerSources["strikes"].clear();
+  g_layerSources.strikes.clear();
 }
 
-function setStrikeDistance() {
+function setStrikeDistance()
+{
   if (
     g_mapSettings.offlineMode == true &&
     g_strikeWebSocket != null &&
     g_strikeWebSocket.readyState != 3
-  ) {
+  )
+  {
     g_strikeWebSocket.close();
     return;
   }
 
-  if (g_strikeWebSocket != null) {
+  if (g_strikeWebSocket != null)
+  {
     var distance = g_strikeRange;
     if (g_mapSettings.strikesGlobal == true) distance = 1000;
 
-    var send = '{"west":-180,"east":180,"north":-90,"south":-90}';
+    var send = "{\"west\":-180,\"east\":180,\"north\":-90,\"south\":-90}";
 
     if (g_strikeInterval == null)
-      g_strikeInterval = setInterval(setStrikeDistance, 300000);
+    { g_strikeInterval = setInterval(setStrikeDistance, 300000); }
 
-    try {
+    try
+    {
       g_strikeWebSocket.send(send);
-    } catch (e) {
+    }
+    catch (e)
+    {
       g_strikeWebSocket = null;
     }
-  } else {
-    if (g_strikeInterval != null) {
+  }
+  else
+  {
+    if (g_strikeInterval != null)
+    {
       clearInterval(g_strikeInterval);
       g_strikeInterval = null;
     }
@@ -4541,33 +5214,46 @@ function setStrikeDistance() {
 }
 
 var g_strikeCount = 0;
-function loadStrikes() {
+function loadStrikes()
+{
   if (g_strikeWebSocket) return;
 
   var rnd = parseInt(Math.random() * 4);
   var ws_server = "";
-  if (rnd < 1) {
+  if (rnd < 1)
+  {
     ws_server = "ws7.blitzortung.org";
-  } else if (rnd < 2) {
+  }
+  else if (rnd < 2)
+  {
     ws_server = "ws6.blitzortung.org";
-  } else if (rnd < 3) {
+  }
+  else if (rnd < 3)
+  {
     ws_server = "ws5.blitzortung.org";
-  } else {
+  }
+  else
+  {
     ws_server = "ws1.blitzortung.org";
   }
 
-  try {
+  try
+  {
     g_strikeWebSocket = new WebSocket("wss:///" + ws_server + ":3000");
-  } catch (e) {
+  }
+  catch (e)
+  {
     g_strikeWebSocket = null;
     return;
   }
 
-  g_strikeWebSocket.onopen = function () {
+  g_strikeWebSocket.onopen = function ()
+  {
     setStrikeDistance();
   };
 
-  g_strikeWebSocket.onmessage = function (evt) {
+  g_strikeWebSocket.onmessage = function (evt)
+  {
     var Strikes = JSON.parse(evt.data);
     Strikes.sig = null;
 
@@ -4576,7 +5262,8 @@ function loadStrikes() {
       "time" in Strikes &&
       "lat" in Strikes &&
       "lon" in Strikes
-    ) {
+    )
+    {
       var index = Date.now();
       while (index in g_bolts) index++;
 
@@ -4589,17 +5276,19 @@ function loadStrikes() {
       if (
         g_mapSettings.strikesGlobal ||
         (g_mapSettings.strikesGlobal == false && inRange)
-      ) {
+      )
+      {
         g_bolts[index] = iconFeature(
           ol.proj.fromLonLat([Strikes.lon, Strikes.lat]),
           inRange ? g_lightningBolt : g_lightningGlobal[0],
           1
         );
 
-        g_layerSources["strikes"].addFeature(g_bolts[index]);
+        g_layerSources.strikes.addFeature(g_bolts[index]);
       }
 
-      if (inRange == true) {
+      if (inRange == true)
+      {
         playStrikeAlert();
 
         var dist =
@@ -4638,35 +5327,42 @@ function loadStrikes() {
     delete evt.data;
   };
 
-  g_strikeWebSocket.onerror = function () {
+  g_strikeWebSocket.onerror = function ()
+  {
     g_strikeWebSocket = null;
   };
 
-  g_strikeWebSocket.onclose = function () {
+  g_strikeWebSocket.onclose = function ()
+  {
     g_strikeWebSocket = null;
   };
 }
 
-function toggleMouseTrack() {
+function toggleMouseTrack()
+{
   g_appSettings.mouseTrack ^= 1;
   if (g_appSettings.mouseTrack == 0) mouseTrackDiv.style.display = "none";
 }
 
-function myGmapNameCompare(a, b) {
+function myGmapNameCompare(a, b)
+{
   return g_maps[a].name.localeCompare(g_maps[b].name);
 }
 
 var g_Nexrad = null;
 
-function initMap() {
+function initMap()
+{
   document.getElementById("mapDiv").innerHTML = "";
 
   g_maps = JSON.parse(fs.readFileSync(g_mapsFile));
 
-  if (g_maps) {
+  if (g_maps)
+  {
     var entries = Object.keys(g_maps).sort(myGmapNameCompare);
 
-    for (var lmap in entries) {
+    for (var lmap in entries)
+    {
       var key = entries[lmap];
       g_mapsLayer[key] = new ol.source.XYZ(g_maps[key]);
       var option = document.createElement("option");
@@ -4681,33 +5377,38 @@ function initMap() {
     }
     mapSelect.value = g_mapSettings.mapIndex;
     mapNightSelect.value = g_mapSettings.nightMapIndex;
-  } else g_mapsLayer[0] = new ol.source.OSM();
+  }
+  else g_mapsLayer[0] = new ol.source.OSM();
 
   g_offlineLayer = new ol.source.XYZ({
-    url: "/map/sat/{z}/{x}/{y}.png",
+    url: "/map/sat/{z}/{x}/{y}.png"
   });
 
   if (g_mapSettings.offlineMode)
+  {
     g_tileLayer = new ol.layer.Tile({
       source: g_offlineLayer,
       loadTilesWhileInteracting: true,
-      loadTilesWhileAnimating: true,
+      loadTilesWhileAnimating: true
     });
+  }
   else
+  {
     g_tileLayer = new ol.layer.Tile({
       source: g_mapsLayer[mapSelect.value],
       loadTilesWhileInteracting: true,
-      loadTilesWhileAnimating: true,
+      loadTilesWhileAnimating: true
     });
+  }
 
   g_scaleLine = new ol.control.ScaleLine({
-    units: g_scaleUnits[g_appSettings.distanceUnit],
+    units: g_scaleUnits[g_appSettings.distanceUnit]
   });
 
   var g_mapControl = [
     g_scaleLine,
     new ol.control.Zoom(),
-    new ol.control.FullScreen({ source: "mainBody" }),
+    new ol.control.FullScreen({ source: "mainBody" })
   ];
 
   createGlobalMapLayer("award");
@@ -4735,7 +5436,7 @@ function initMap() {
     center: [g_myLon, g_myLat],
     zoomFactor: 1.25,
     zoom: g_mapSettings.zoom,
-    showFullExtent: true,
+    showFullExtent: true
   });
 
   g_map = new ol.Map({
@@ -4743,11 +5444,11 @@ function initMap() {
     layers: [
       g_tileLayer,
 
-      g_layerVectors["award"],
+      g_layerVectors.award,
       g_layerVectors["psk-heat"],
-      g_layerVectors["qso"],
+      g_layerVectors.qso,
       g_layerVectors["qso-pins"],
-      g_layerVectors["live"],
+      g_layerVectors.live,
       g_layerVectors["live-pins"],
       g_layerVectors["line-grids"],
       g_layerVectors["long-grids"],
@@ -4756,27 +5457,30 @@ function initMap() {
       g_layerVectors["psk-flights"],
       g_layerVectors["psk-spots"],
       g_layerVectors["psk-hop"],
-      g_layerVectors["flight"],
-      g_layerVectors["transmit"],
-      g_layerVectors["gtflags"],
-      g_layerVectors["temp"],
-      g_layerVectors["tz"],
-      g_layerVectors["radar"],
-      g_layerVectors["strikes"],
+      g_layerVectors.flight,
+      g_layerVectors.transmit,
+      g_layerVectors.gtflags,
+      g_layerVectors.temp,
+      g_layerVectors.tz,
+      g_layerVectors.radar,
+      g_layerVectors.strikes
     ],
     controls: g_mapControl,
     loadTilesWhileInteracting: false,
     loadTilesWhileAnimating: false,
-    view: g_mapView,
+    view: g_mapView
   });
 
-  mapDiv.addEventListener("mousemove", function (event) {
+  mapDiv.addEventListener("mousemove", function (event)
+  {
     onMouseUpdate(event);
 
     var mousePosition = g_map.getEventPixel(event);
-    if (g_appSettings.mouseTrack == 1) {
+    if (g_appSettings.mouseTrack == 1)
+    {
       var mouseLngLat = g_map.getEventCoordinate(event);
-      if (mouseLngLat) {
+      if (mouseLngLat)
+      {
         var LL = ol.proj.toLonLat(mouseLngLat);
         var dist =
           parseInt(
@@ -4810,50 +5514,61 @@ function initMap() {
     var noMoon = true;
     var noTimeZone = true;
 
-    if (g_map.hasFeatureAtPixel(mousePosition)) {
+    if (g_map.hasFeatureAtPixel(mousePosition))
+    {
       var features = g_map.getFeaturesAtPixel(mousePosition);
 
-      if (features != null) {
+      if (features != null)
+      {
         features = features.reverse();
         var finalGridFeature = null;
-        for (var index in features) {
-          if (features[index].geometryName_ == "tz") {
+        for (var index in features)
+        {
+          if (features[index].geometryName_ == "tz")
+          {
             features[index].size = 73;
           }
           if (typeof features[index].size == "undefined") continue;
-          if (features[index].size == 99 && finalGridFeature == null) {
+          if (features[index].size == 99 && finalGridFeature == null)
+          {
             moonOver(features[index]);
             noMoon = false;
             break;
           }
-          if (features[index].size == 2 && g_currentOverlay != 0) {
+          if (features[index].size == 2 && g_currentOverlay != 0)
+          {
             trophyOver(features[index]);
             noAward = false;
             break;
           }
 
-          if (features[index].size == 1) {
+          if (features[index].size == 1)
+          {
             mouseOverGtFlag(features[index]);
             noFlag = false;
             noFeature = true;
             break;
           }
 
-          if (features[index].size == 6) {
+          if (features[index].size == 6)
+          {
             noFeature = false;
             finalGridFeature = features[index];
           }
-          if (features[index].size == 4 && finalGridFeature == null) {
+          if (features[index].size == 4 && finalGridFeature == null)
+          {
             noFeature = false;
             finalGridFeature = features[index];
             noFlag = true;
           }
-          if (features[index].size == 73 && finalGridFeature == null) {
+          if (features[index].size == 73 && finalGridFeature == null)
+          {
             mouseOverGtFlag(features[index]);
             noFlag = false;
           }
         }
-        if (finalGridFeature) {
+        if (finalGridFeature)
+        {
           mouseOverDataItem(finalGridFeature, true);
         }
       }
@@ -4864,48 +5579,58 @@ function initMap() {
     if (noMoon) moonOut();
   });
 
-  //mapDiv.addEventListener('mouseout', mapLoseFocus, false);
+  // mapDiv.addEventListener('mouseout', mapLoseFocus, false);
   mapDiv.addEventListener("mouseleave", mapLoseFocus, false);
-  mapDiv.addEventListener("contextmenu", function (event) {
+  mapDiv.addEventListener("contextmenu", function (event)
+  {
     event.preventDefault();
   });
 
-  g_map.on("pointerdown", function (event) {
+  g_map.on("pointerdown", function (event)
+  {
     var shouldReturn = false;
 
     var features = g_map.getFeaturesAtPixel(event.pixel);
-    if (features != null) {
+    if (features != null)
+    {
       features = features.reverse();
       var finalGridFeature = null;
-      for (var index in features) {
+      for (var index in features)
+      {
         if (typeof features[index].size == "undefined") continue;
-        if (features[index].size == 6) {
+        if (features[index].size == 6)
+        {
           noFeature = false;
           finalGridFeature = features[index];
         }
-        if (features[index].size == 4 && finalGridFeature == null) {
+        if (features[index].size == 4 && finalGridFeature == null)
+        {
           noFeature = false;
           finalGridFeature = features[index];
         }
-        if (features[index].size == 1) {
+        if (features[index].size == 1)
+        {
           leftClickGtFlag(features[index]);
           shouldReturn = true;
         }
       }
-      if (finalGridFeature) {
+      if (finalGridFeature)
+      {
         onRightClickGridSquare(finalGridFeature);
         shouldReturn = true;
       }
     }
 
     if (shouldReturn) return true;
-    if (event.pointerEvent.buttons == 2 && g_currentOverlay == 0) {
+    if (event.pointerEvent.buttons == 2 && g_currentOverlay == 0)
+    {
       mouseDownGrid(ol.proj.toLonLat(event.coordinate), event);
       return true;
     }
   });
 
-  g_map.on("pointerup", function (event) {
+  g_map.on("pointerup", function (event)
+  {
     mouseUpGrid();
     if (g_mapSettings.mouseOver == false) mouseOutOfDataItem();
   });
@@ -4913,16 +5638,22 @@ function initMap() {
   document.getElementById("menuDiv").style.display = "block";
 
   dayNight.init(g_map);
-  if (g_appSettings.earthImgSrc == 1) {
+  if (g_appSettings.earthImgSrc == 1)
+  {
     dayNight.hide();
-  } else {
+  }
+  else
+  {
     g_nightTime = dayNight.show();
   }
 
   moonLayer.init(g_map);
-  if (g_appSettings.moonTrack == 1) {
+  if (g_appSettings.moonTrack == 1)
+  {
     moonLayer.show();
-  } else {
+  }
+  else
+  {
     moonLayer.hide();
   }
 
@@ -4934,13 +5665,17 @@ function initMap() {
   changeNightMapEnable(nightMapEnable);
 }
 
-function changeNightMapEnable(check) {
-  if (check.checked) {
+function changeNightMapEnable(check)
+{
+  if (check.checked)
+  {
     nightMapTd.style.display = "inline-table";
     spotNightPathColorDiv.style.display = "inline-block";
     g_mapSettings.nightMapEnable = true;
     g_nightTime = dayNight.refresh();
-  } else {
+  }
+  else
+  {
     nightMapTd.style.display = "none";
     spotNightPathColorDiv.style.display = "none";
     g_mapSettings.nightMapEnable = false;
@@ -4956,16 +5691,17 @@ var g_nexradInterval = null;
 
 var g_nexradEnable = 0;
 
-function createNexRad() {
+function createNexRad()
+{
   var layerSource = new ol.source.TileWMS({
     url: "http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi",
-    params: { LAYERS: "nexrad-n0q" },
+    params: { LAYERS: "nexrad-n0q" }
   });
 
   var layerVector = new ol.layer.Tile({
     source: layerSource,
     visible: true,
-    zIndex: 900,
+    zIndex: 900
   });
 
   layerVector.set("name", "radar");
@@ -4973,10 +5709,13 @@ function createNexRad() {
   return layerVector;
 }
 
-function toggleNexrad() {
+function toggleNexrad()
+{
   g_nexradEnable ^= 1;
-  if (g_nexradEnable == 1) {
-    if (g_Nexrad != null) {
+  if (g_nexradEnable == 1)
+  {
+    if (g_Nexrad != null)
+    {
       g_map.removeLayer(g_Nexrad);
     }
 
@@ -4984,35 +5723,45 @@ function toggleNexrad() {
     g_map.addLayer(g_Nexrad);
 
     if (g_nexradInterval == null)
-      g_nexradInterval = setInterval(nexradRefresh, 600000);
-  } else {
-    if (g_nexradInterval != null) {
+    { g_nexradInterval = setInterval(nexradRefresh, 600000); }
+  }
+  else
+  {
+    if (g_nexradInterval != null)
+    {
       clearInterval(g_nexradInterval);
       g_nexradInterval = null;
     }
-    if (g_Nexrad) {
+    if (g_Nexrad)
+    {
       g_map.removeLayer(g_Nexrad);
       g_Nexrad = null;
     }
   }
 
-  g_mapSettings.usNexrad = g_nexradEnable == 1 ? true : false;
+  g_mapSettings.usNexrad = g_nexradEnable == 1;
 }
 
-function nexradRefresh() {
-  if (g_Nexrad != null) {
+function nexradRefresh()
+{
+  if (g_Nexrad != null)
+  {
     g_Nexrad.getSource().refresh();
   }
 }
 
-function collapseMenu(shouldCollapse) {
-  if (shouldCollapse == true) {
+function collapseMenu(shouldCollapse)
+{
+  if (shouldCollapse == true)
+  {
     g_menuShowing = false;
     mapDiv.className = "mapDivStart";
     menuDiv.className = "menuDivStart";
     LegendDiv.className = "legendDivStart";
     chevronDiv.className = "chevronDivEnd";
-  } else {
+  }
+  else
+  {
     g_menuShowing = true;
     chevronDiv.className = "chevronDivStart";
     displayTime();
@@ -5020,7 +5769,8 @@ function collapseMenu(shouldCollapse) {
   g_map.updateSize();
 }
 
-function mapLoseFocus() {
+function mapLoseFocus()
+{
   mouseOutOfDataItem();
   trophyOut();
   mouseUpGrid();
@@ -5028,65 +5778,72 @@ function mapLoseFocus() {
   mouseOutGtFlag();
 }
 
-function lineString(points) {
+function lineString(points)
+{
   var thing = new ol.geom.LineString(points);
   var rect = new ol.Feature({
-    geometry: thing,
+    geometry: thing
   });
   return rect;
 }
 
-function rectangle(bounds, options) {
+function rectangle(bounds, options)
+{
   var thing = new ol.geom.Polygon([
     [
       ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
       ol.proj.fromLonLat([bounds[0][0], bounds[1][1]]),
       ol.proj.fromLonLat([bounds[1][0], bounds[1][1]]),
-      ol.proj.fromLonLat([bounds[1][0], bounds[0][1]]),
-    ],
+      ol.proj.fromLonLat([bounds[1][0], bounds[0][1]])
+    ]
   ]);
   var rect = new ol.Feature({
     name: "rect",
-    geometry: thing,
+    geometry: thing
   });
   return rect;
 }
 
-function triangle(bounds, topLeft) {
+function triangle(bounds, topLeft)
+{
   var thing = null;
 
-  if (topLeft) {
+  if (topLeft)
+  {
     thing = new ol.geom.Polygon([
       [
         ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
         ol.proj.fromLonLat([bounds[0][0], bounds[1][1]]),
         ol.proj.fromLonLat([bounds[1][0], bounds[1][1]]),
-        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
-      ],
+        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]])
+      ]
     ]);
-  } else {
+  }
+  else
+  {
     thing = new ol.geom.Polygon([
       [
         ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
         ol.proj.fromLonLat([bounds[1][0], bounds[1][1]]),
         ol.proj.fromLonLat([bounds[1][0], bounds[0][1]]),
-        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
-      ],
+        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]])
+      ]
     ]);
   }
 
   var rect = new ol.Feature({
     name: "rect",
-    geometry: thing,
+    geometry: thing
   });
   return rect;
 }
 
-function triangleToGrid(iQTH, feature) {
+function triangleToGrid(iQTH, feature)
+{
   var LL = squareToLatLong(iQTH);
   var bounds = [
     [LL.lo1, LL.la1],
-    [LL.lo2, LL.la2],
+    [LL.lo2, LL.la2]
   ];
 
   var thing = new ol.geom.Polygon([
@@ -5095,51 +5852,58 @@ function triangleToGrid(iQTH, feature) {
       ol.proj.fromLonLat([bounds[0][0], bounds[1][1]]),
       ol.proj.fromLonLat([bounds[1][0], bounds[1][1]]),
       ol.proj.fromLonLat([bounds[1][0], bounds[0][1]]),
-      ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
-    ],
+      ol.proj.fromLonLat([bounds[0][0], bounds[0][1]])
+    ]
   ]);
 
   feature.setGeometry(thing);
 }
 
-function gridToTriangle(iQTH, feature, topLeft) {
+function gridToTriangle(iQTH, feature, topLeft)
+{
   var LL = squareToLatLong(iQTH);
   var bounds = [
     [LL.lo1, LL.la1],
-    [LL.lo2, LL.la2],
+    [LL.lo2, LL.la2]
   ];
   var thing = null;
 
-  if (topLeft) {
+  if (topLeft)
+  {
     thing = new ol.geom.Polygon([
       [
         ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
         ol.proj.fromLonLat([bounds[0][0], bounds[1][1]]),
         ol.proj.fromLonLat([bounds[1][0], bounds[1][1]]),
-        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
-      ],
+        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]])
+      ]
     ]);
-  } else {
+  }
+  else
+  {
     thing = new ol.geom.Polygon([
       [
         ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
         ol.proj.fromLonLat([bounds[1][0], bounds[1][1]]),
         ol.proj.fromLonLat([bounds[1][0], bounds[0][1]]),
-        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]]),
-      ],
+        ol.proj.fromLonLat([bounds[0][0], bounds[0][1]])
+      ]
     ]);
   }
 
   feature.setGeometry(thing);
 }
 
-function liveHash(call, band, mode) {
+function liveHash(call, band, mode)
+{
   return call + band + mode;
 }
 
-function setHomeGridsquare() {
+function setHomeGridsquare()
+{
   g_appSettings.centerGridsquare = myDEGrid;
-  if (g_appSettings.centerGridsquare.length > 0) {
+  if (g_appSettings.centerGridsquare.length > 0)
+  {
     homeQTHInput.value = g_appSettings.centerGridsquare;
   }
   var hash = myDEcall;
@@ -5155,13 +5919,16 @@ function setHomeGridsquare() {
     null,
     hash
   );
-  if (typeof rect != "undefined" && rect != null) {
+  if (typeof rect != "undefined" && rect != null)
+  {
     var push = false;
 
-    if (!(hash in g_liveCallsigns)) {
+    if (!(hash in g_liveCallsigns))
+    {
       newCallsign = {};
       push = true;
-    } else newCallsign = g_liveCallsigns[hash];
+    }
+    else newCallsign = g_liveCallsigns[hash];
     newCallsign.DEcall = myDEcall;
     newCallsign.grid = myDEGrid;
     newCallsign.wspr = null;
@@ -5192,9 +5959,12 @@ function setHomeGridsquare() {
 
 var g_transmitFlightPath = null;
 
-function haltAllTx(allTx = false) {
-  for (var instance in g_instances) {
-    if (instance != g_activeInstance || allTx == true) {
+function haltAllTx(allTx = false)
+{
+  for (var instance in g_instances)
+  {
+    if (instance != g_activeInstance || allTx == true)
+    {
       var responseArray = Buffer.alloc(1024);
       var length = 0;
 
@@ -5213,18 +5983,22 @@ function haltAllTx(allTx = false) {
   }
 }
 
-function initiateQso(thisCall) {
+function initiateQso(thisCall)
+{
   if (
     thisCall in g_callRoster &&
     g_callRoster[thisCall].message.instance in g_instances
-  ) {
+  )
+  {
     if (
       g_mapSettings.focusRig &&
       g_activeInstance != g_callRoster[thisCall].message.instance
-    ) {
+    )
+    {
       activeRig(g_callRoster[thisCall].message.instance);
     }
-    if (g_mapSettings.haltAllOnTx) {
+    if (g_mapSettings.haltAllOnTx)
+    {
       haltAllTx();
     }
 
@@ -5252,17 +6026,20 @@ function initiateQso(thisCall) {
   }
 }
 
-function spotLookupAndSetCall(spot) {
+function spotLookupAndSetCall(spot)
+{
   var call = g_receptionReports.spots[spot].call;
   var grid = g_receptionReports.spots[spot].grid;
   var band = g_receptionReports.spots[spot].band;
   var mode = g_receptionReports.spots[spot].mode;
-  for (var instance in g_instances) {
+  for (var instance in g_instances)
+  {
     if (
       g_instances[instance].valid &&
       g_instances[instance].status.Band == band &&
       g_instances[instance].status.MO == mode
-    ) {
+    )
+    {
       setCallAndGrid(call, grid, instance);
       return;
     }
@@ -5270,24 +6047,32 @@ function spotLookupAndSetCall(spot) {
   setCallAndGrid(call, grid, null);
 }
 
-function setCallAndGrid(callsign, grid, instance = null) {
+function setCallAndGrid(callsign, grid, instance = null)
+{
   var thisInstance = null;
   var port;
   var address;
-  if (instance != null) {
-    if (instance in g_instances) {
+  if (instance != null)
+  {
+    if (instance in g_instances)
+    {
       thisInstance = g_instances[instance].status;
       port = g_instances[instance].remote.port;
       address = g_instances[instance].remote.address;
-    } else alert("major instance error");
-  } else {
-    if (g_instances[g_activeInstance].valid) {
+    }
+    else alert("major instance error");
+  }
+  else
+  {
+    if (g_instances[g_activeInstance].valid)
+    {
       thisInstance = g_instances[g_activeInstance].status;
       port = g_instances[g_activeInstance].remote.port;
       address = g_instances[g_activeInstance].remote.address;
     }
   }
-  if (thisInstance && thisInstance.TxEnabled == 0) {
+  if (thisInstance && thisInstance.TxEnabled == 0)
+  {
     var responseArray = Buffer.alloc(1024);
     var length = 0;
     length = encodeQUINT32(responseArray, length, thisInstance.magic_key);
@@ -5304,7 +6089,7 @@ function setCallAndGrid(callsign, grid, instance = null) {
 
     var hash = liveHash(callsign, thisInstance.Band, thisInstance.MO);
     if (hash in g_liveCallsigns && g_liveCallsigns[hash].grid.length > 1)
-      grid = g_liveCallsigns[hash].grid;
+    { grid = g_liveCallsigns[hash].grid; }
 
     if (grid.length == 0) grid = " ";
 
@@ -5315,7 +6100,8 @@ function setCallAndGrid(callsign, grid, instance = null) {
     wsjtUdpMessage(responseArray, responseArray.length, port, address);
     addLastTraffic("<font color='lightgreen'>Generated Msgs</font>");
   }
-  if (thisInstance && thisInstance.TxEnabled == 1) {
+  if (thisInstance && thisInstance.TxEnabled == 1)
+  {
     addLastTraffic(
       "<font color='yellow'>Transmit Enabled!</font><br/><font color='yellow'>Generate Msgs Aborted</font>"
     );
@@ -5335,26 +6121,31 @@ var g_wsjtHandlers = {
   9: handleWsjtxNotSupported,
   10: handleWsjtxWSPR,
   11: handleWsjtxNotSupported,
-  12: handleWsjtxADIF,
+  12: handleWsjtxADIF
 };
 
 var g_oldQSOTimer = null;
 
-function handleWsjtxADIF(newMessage) {
-  if (g_oldQSOTimer) {
+function handleWsjtxADIF(newMessage)
+{
+  if (g_oldQSOTimer)
+  {
     clearTimeout(g_oldQSOTimer);
     g_oldQSOTimer = null;
   }
 
-  if (g_ignoreMessages == 0) {
+  if (g_ignoreMessages == 0)
+  {
     onAdiLoadComplete(newMessage.ADIF);
   }
 
   sendToLogger(newMessage.ADIF);
 }
 
-function handleWsjtxQSO(newMessage) {
-  if (g_oldQSOTimer) {
+function handleWsjtxQSO(newMessage)
+{
+  if (g_oldQSOTimer)
+  {
     clearTimeout(g_oldQSOTimer);
     g_oldQSOTimer = null;
   }
@@ -5378,13 +6169,17 @@ var g_localDXcall = "";
 var g_countIndex = 0;
 var g_lastCountIndex = 0;
 
-function rigChange(up) {
+function rigChange(up)
+{
   if (g_activeInstance == "") return;
 
   var targetInstance = 0;
-  if (up) {
+  if (up)
+  {
     targetInstance = g_instances[g_activeInstance].intId + 1;
-  } else {
+  }
+  else
+  {
     targetInstance = g_instances[g_activeInstance].intId - 1;
     if (targetInstance < 0) targetInstance = g_instancesIndex.length - 1;
   }
@@ -5394,9 +6189,12 @@ function rigChange(up) {
   setRig(targetInstance);
 }
 
-function setRig(instanceId) {
-  if (g_instances[g_instancesIndex[instanceId]].valid) {
-    if (g_lastMapView != null) {
+function setRig(instanceId)
+{
+  if (g_instances[g_instancesIndex[instanceId]].valid)
+  {
+    if (g_lastMapView != null)
+    {
       g_mapView.animate({ zoom: g_lastMapView.zoom, duration: 100 });
       g_mapView.animate({ center: g_lastMapView.LoLa, duration: 100 });
       g_lastMapView = null;
@@ -5409,9 +6207,12 @@ function setRig(instanceId) {
   }
 }
 
-function activeRig(instance) {
-  if (g_instances[instance].valid) {
-    if (g_lastMapView != null) {
+function activeRig(instance)
+{
+  if (g_instances[instance].valid)
+  {
+    if (g_lastMapView != null)
+    {
       g_mapView.animate({ zoom: g_lastMapView.zoom, duration: 100 });
       g_mapView.animate({ center: g_lastMapView.LoLa, duration: 100 });
       g_lastMapView = null;
@@ -5428,50 +6229,62 @@ var g_lastDecodeCallsign = "";
 var g_lastTransmitCallsign = {};
 var g_lastStatusCallsign = {};
 
-function handleWsjtxStatus(newMessage) {
+function handleWsjtxStatus(newMessage)
+{
   if (g_ignoreMessages == 1) return;
 
-  if (g_callRosterWindowHandle) {
-    try {
+  if (g_callRosterWindowHandle)
+  {
+    try
+    {
       g_callRosterWindowHandle.window.processStatus(newMessage);
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 
-  if (g_activeInstance == "") {
+  if (g_activeInstance == "")
+  {
     g_activeInstance = newMessage.instance;
   }
 
-  if (Object.keys(g_instances).length > 1) {
+  if (Object.keys(g_instances).length > 1)
+  {
     rigWrap.style.display = "block";
-  } else {
+  }
+  else
+  {
     rigWrap.style.display = "none";
   }
 
   var DXcall = newMessage.DXcall.trim();
 
-  if (DXcall.length > 1) {
+  if (DXcall.length > 1)
+  {
     if (!(newMessage.instance in g_lastTransmitCallsign))
-      g_lastTransmitCallsign[newMessage.instance] = "";
+    { g_lastTransmitCallsign[newMessage.instance] = ""; }
 
     if (!(newMessage.instance in g_lastStatusCallsign))
-      g_lastStatusCallsign[newMessage.instance] = "";
+    { g_lastStatusCallsign[newMessage.instance] = ""; }
 
     if (
       lookupOnTx.checked == true &&
       newMessage.Transmitting == 1 &&
       g_lastTransmitCallsign[newMessage.instance] != DXcall
-    ) {
+    )
+    {
       openLookupWindow(true);
       g_lastTransmitCallsign[newMessage.instance] = DXcall;
     }
 
-    if (g_lastStatusCallsign[newMessage.instance] != DXcall) {
+    if (g_lastStatusCallsign[newMessage.instance] != DXcall)
+    {
       g_lastStatusCallsign[newMessage.instance] = DXcall;
       lookupCallsign(DXcall, newMessage.DXgrid.trim());
     }
   }
 
-  if (g_activeInstance == newMessage.instance) {
+  if (g_activeInstance == newMessage.instance)
+  {
     var sp = newMessage.Id.split(" - ");
     rigDiv.innerHTML = sp[sp.length - 1].substring(0, 18);
 
@@ -5482,25 +6295,30 @@ function handleWsjtxStatus(newMessage) {
     wsjtxMode.innerHTML = "<font color='orange'>" + newMessage.MO + "</font>";
     myMode = newMessage.MO;
     myBand = Number(newMessage.Frequency / 1000000).formatBand();
-    if (g_lastBand != myBand) {
+    if (g_lastBand != myBand)
+    {
       g_lastBand = myBand;
       bandChange = true;
-      if (g_pskBandActivityTimerHandle != null) {
+      if (g_pskBandActivityTimerHandle != null)
+      {
         clearInterval(g_pskBandActivityTimerHandle);
         g_pskBandActivityTimerHandle = null;
       }
       removePaths();
     }
-    if (g_lastMode != myMode) {
+    if (g_lastMode != myMode)
+    {
       g_lastMode = myMode;
       modeChange = true;
-      if (g_pskBandActivityTimerHandle != null) {
+      if (g_pskBandActivityTimerHandle != null)
+      {
         clearInterval(g_pskBandActivityTimerHandle);
         g_pskBandActivityTimerHandle = null;
       }
     }
     if (g_pskBandActivityTimerHandle == null) pskGetBandActivity();
-    if (bandChange || modeChange) {
+    if (bandChange || modeChange)
+    {
       goProcessRoster();
       redrawGrids();
       redrawSpots();
@@ -5528,7 +6346,8 @@ function handleWsjtxStatus(newMessage) {
     var LL = squareToLatLongAll(myRawGrid);
     g_mapSettings.latitude = g_myLat = LL.la2 - (LL.la2 - LL.la1) / 2;
     g_mapSettings.longitude = g_myLon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-    if (myRawGrid != g_lastRawGrid) {
+    if (myRawGrid != g_lastRawGrid)
+    {
       g_lastRawGrid = myRawGrid;
     }
 
@@ -5536,33 +6355,40 @@ function handleWsjtxStatus(newMessage) {
 
     var hash = DXcall + myBand + myMode;
 
-    if (hash in g_tracker.worked.call) {
+    if (hash in g_tracker.worked.call)
+    {
       dxCallBoxDiv.className = "DXCallBoxWorked";
     }
-    if (hash in g_tracker.confirmed.call) {
+    if (hash in g_tracker.confirmed.call)
+    {
       dxCallBoxDiv.className = "DXCallBoxConfirmed";
     }
 
     g_localDXcall = DXcall;
     localDXcall.innerHTML = DXcall.formatCallsign();
-    if (localDXcall.innerHTML.length == 0) {
+    if (localDXcall.innerHTML.length == 0)
+    {
       localDXcall.innerHTML = "-";
       g_localDXcall = "";
     }
     localDXGrid.innerHTML = myDXGrid = newMessage.DXgrid.trim();
 
-    if (myDXGrid.length == 0 && hash in g_liveCallsigns) {
+    if (myDXGrid.length == 0 && hash in g_liveCallsigns)
+    {
       localDXGrid.innerHTML = myDXGrid = g_liveCallsigns[hash].grid.substr(
         0,
         4
       );
     }
 
-    if (localDXGrid.innerHTML.length == 0) {
+    if (localDXGrid.innerHTML.length == 0)
+    {
       localDXGrid.innerHTML = "-";
       localDXDistance.innerHTML = "&nbsp;";
       localDXAzimuth.innerHTML = "&nbsp;";
-    } else {
+    }
+    else
+    {
       var LL = squareToLatLongAll(myDXGrid);
       localDXDistance.innerHTML =
         parseInt(
@@ -5584,14 +6410,17 @@ function handleWsjtxStatus(newMessage) {
           )
         ) + "&deg;";
     }
-    if (localDXcall.innerHTML != "-") {
+    if (localDXcall.innerHTML != "-")
+    {
       localDXReport.innerHTML = Number(
         newMessage.Report.trim()
       ).formatSignalReport();
       if (DXcall.length > 0)
-        localDXCountry.innerHTML = g_dxccToAltName[callsignToDxcc(DXcall)];
+      { localDXCountry.innerHTML = g_dxccToAltName[callsignToDxcc(DXcall)]; }
       else localDXCountry.innerHTML = "&nbsp;";
-    } else {
+    }
+    else
+    {
       localDXReport.innerHTML = localDXCountry.innerHTML = "";
     }
     myDEcall = newMessage.DEcall;
@@ -5599,7 +6428,8 @@ function handleWsjtxStatus(newMessage) {
     if (myDEGrid.length > 0) setHomeGridsquare();
     if (myDEGrid.length > 0) g_appSettings.centerGridsquare = myDEGrid;
 
-    if (newMessage.Decoding == 1) {
+    if (newMessage.Decoding == 1)
+    {
       // Decoding
       dimGridsquare();
       fadePaths();
@@ -5608,18 +6438,23 @@ function handleWsjtxStatus(newMessage) {
       txrxdec.innerHTML = "DECODE";
       g_countIndex++;
       g_weAreDecoding = true;
-    } else {
+    }
+    else
+    {
       g_weAreDecoding = false;
 
-      if (g_countIndex != g_lastCountIndex) {
+      if (g_countIndex != g_lastCountIndex)
+      {
         g_lastCountIndex = g_countIndex;
 
         updateCountStats();
 
-        if (g_appSettings.gtShareEnable == "true") {
+        if (g_appSettings.gtShareEnable == "true")
+        {
           g_gtLiveStatusUpdate = true;
           g_gtShareCount++;
-        } else g_gtShareCount = 0;
+        }
+        else g_gtShareCount = 0;
 
         if (bandChange || modeChange) reloadInfo(bandChange || modeChange);
         var worker = "";
@@ -5647,7 +6482,8 @@ function handleWsjtxStatus(newMessage) {
         if (
           g_appSettings.gtShareEnable === true &&
           Object.keys(g_spotCollector).length > 0
-        ) {
+        )
+        {
           gtChatSendSpots(g_spotCollector);
           g_spotCollector = {};
         }
@@ -5658,23 +6494,29 @@ function handleWsjtxStatus(newMessage) {
       txrxdec.innerHTML = "RECEIVE";
     }
 
-    if (newMessage.TxEnabled) {
+    if (newMessage.TxEnabled)
+    {
       if (
         g_mapSettings.fitQRZ &&
         (!g_spotsEnabled || g_receptionSettings.mergeSpots)
-      ) {
-        if (g_lastMapView == null) {
+      )
+      {
+        if (g_lastMapView == null)
+        {
           g_lastMapView = {};
           g_lastMapView.LoLa = g_mapView.getCenter();
           g_lastMapView.zoom = g_mapView.getZoom();
         }
-        if (myDXGrid.length > 0) {
+        if (myDXGrid.length > 0)
+        {
           fitViewBetweenPoints([getPoint(myRawGrid), getPoint(myDXGrid)]);
-        } else if (
+        }
+        else if (
           g_mapSettings.qrzDxccFallback &&
           DXcall.length > 0 &&
           callsignToDxcc(DXcall) > 0
-        ) {
+        )
+        {
           var dxcc = callsignToDxcc(DXcall);
           var Lat = g_worldGeoData[g_dxccToGeoData[dxcc]].lat;
           var Lon = g_worldGeoData[g_dxccToGeoData[dxcc]].lon;
@@ -5684,29 +6526,36 @@ function handleWsjtxStatus(newMessage) {
           );
         }
       }
-    } else {
-      if (g_lastMapView != null) {
+    }
+    else
+    {
+      if (g_lastMapView != null)
+      {
         g_mapView.animate({ zoom: g_lastMapView.zoom, duration: 1200 });
         g_mapView.animate({ center: g_lastMapView.LoLa, duration: 1200 });
         g_lastMapView = null;
       }
     }
 
-    if (newMessage.Transmitting == 0) {
+    if (newMessage.Transmitting == 0)
+    {
       // Not Transmitting
-      g_layerSources["transmit"].clear();
+      g_layerSources.transmit.clear();
       g_transmitFlightPath = null;
-    } else {
+    }
+    else
+    {
       txrxdec.style.backgroundColor = "Red";
       txrxdec.style.borderColor = "Orange";
       txrxdec.innerHTML = "TRANSMIT";
-      g_layerSources["transmit"].clear();
+      g_layerSources.transmit.clear();
       g_transmitFlightPath = null;
       if (
         qrzPathWidthValue.value != 0 &&
         g_appSettings.gridViewMode != 2 &&
         validateGridFromString(myRawGrid)
-      ) {
+      )
+      {
         var strokeColor = getQrzPathColor();
         var strokeWeight = qrzPathWidthValue.value;
         var LL = squareToLatLongAll(myRawGrid);
@@ -5715,17 +6564,20 @@ function handleWsjtxStatus(newMessage) {
         var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
         var toPoint = null;
 
-        if (validateGridFromString(myDXGrid)) {
+        if (validateGridFromString(myDXGrid))
+        {
           LL = squareToLatLongAll(myDXGrid);
           Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
           Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
 
           toPoint = ol.proj.fromLonLat([Lon, Lat]);
-        } else if (
+        }
+        else if (
           g_mapSettings.qrzDxccFallback &&
           DXcall.length > 0 &&
           callsignToDxcc(DXcall) > 0
-        ) {
+        )
+        {
           var dxcc = callsignToDxcc(DXcall);
           Lat = g_worldGeoData[g_dxccToGeoData[dxcc]].lat;
           Lon = g_worldGeoData[g_dxccToGeoData[dxcc]].lon;
@@ -5735,7 +6587,8 @@ function handleWsjtxStatus(newMessage) {
           var locality = g_worldGeoData[g_dxccToGeoData[dxcc]].geo;
           if (locality == "deleted") locality = null;
 
-          if (locality != null) {
+          if (locality != null)
+          {
             var feature = shapeFeature(
               "qrz",
               locality,
@@ -5744,18 +6597,19 @@ function handleWsjtxStatus(newMessage) {
               "#FF0000FF",
               1.0
             );
-            g_layerSources["transmit"].addFeature(feature);
+            g_layerSources.transmit.addFeature(feature);
           }
         }
 
-        if (toPoint) {
+        if (toPoint)
+        {
           g_transmitFlightPath = flightFeature(
             [fromPoint, toPoint],
             {
               weight: strokeWeight,
               color: strokeColor,
               steps: 75,
-              zIndex: 90,
+              zIndex: 90
             },
             "transmit",
             true
@@ -5774,7 +6628,8 @@ function handleWsjtxStatus(newMessage) {
     g_appSettings.myRawGrid = myRawGrid;
   }
 
-  if (newMessage.Decoding == 0) {
+  if (newMessage.Decoding == 0)
+  {
     goProcessRoster();
     processClassicAlerts();
   }
@@ -5782,22 +6637,28 @@ function handleWsjtxStatus(newMessage) {
 
 var g_lastMapView = null;
 
-function drawTraffic() {
+function drawTraffic()
+{
   while (g_lastTraffic.length > 60) g_lastTraffic.pop();
 
   var worker = g_lastTraffic.join("<br/>");
   worker = worker.split("80%'><br/>").join("80%'>");
   if (g_localDXcall.length > 1)
+  {
     worker = worker
       .split(g_localDXcall)
       .join("<font style='color:cyan'>" + g_localDXcall + "</font>");
+  }
   if (myRawCall.length > 1)
+  {
     worker = worker
       .split(myRawCall)
       .join("<font style='color:yellow'>" + myRawCall + "</font>");
+  }
   trafficDiv.innerHTML = worker;
 }
-function getPoint(grid) {
+function getPoint(grid)
+{
   var LL = squareToLatLongAll(grid);
   var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
   var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
@@ -5805,15 +6666,20 @@ function getPoint(grid) {
 }
 var g_showCQRU = true;
 
-function fitViewBetweenPoints(points, maxZoom = 20) {
+function fitViewBetweenPoints(points, maxZoom = 20)
+{
   var start = ol.proj.toLonLat(points[0]);
   var end = ol.proj.toLonLat(points[1]);
 
-  if (Math.abs(start[0] - end[0]) > 180) {
+  if (Math.abs(start[0] - end[0]) > 180)
+  {
     // Wrapped
-    if (end[0] < start[0]) {
+    if (end[0] < start[0])
+    {
       start[0] -= 360;
-    } else {
+    }
+    else
+    {
       end[0] -= 360;
     }
   }
@@ -5827,14 +6693,14 @@ function fitViewBetweenPoints(points, maxZoom = 20) {
   g_mapView.fit(extent, {
     duration: 500,
     maxZoom: maxZoom,
-    padding: [75, 75, 75, 75],
+    padding: [75, 75, 75, 75]
   });
-
 }
 
 var g_spotCollector = {};
 
-function handleWsjtxDecode(newMessage) {
+function handleWsjtxDecode(newMessage)
+{
   if (g_ignoreMessages == 1 || g_map == null) return;
   var didAlert = false;
   var didCustomAlert = false;
@@ -5846,9 +6712,12 @@ function handleWsjtxDecode(newMessage) {
   var theirQTH = "";
   var countryName = "";
   var newF;
-  if (newMessage.OF > 0) {
+  if (newMessage.OF > 0)
+  {
     newF = Number((newMessage.OF + newMessage.DF) / 1000).formatMhz(3, 3);
-  } else {
+  }
+  else
+  {
     newF = newMessage.DF;
   }
   theTimeStamp =
@@ -5860,9 +6729,12 @@ function handleWsjtxDecode(newMessage) {
   var decodeWords = newMessage.Msg.split(" ").slice(0, 5);
   while (decodeWords[decodeWords.length - 1] == "") decodeWords.pop();
 
-  if (decodeWords.length > 1 && newMessage.Msg.indexOf("<...>") == -1) {
-    if (newMessage.Msg.indexOf("<") != -1) {
-      for (var i in decodeWords) {
+  if (decodeWords.length > 1 && newMessage.Msg.indexOf("<...>") == -1)
+  {
+    if (newMessage.Msg.indexOf("<") != -1)
+    {
+      for (var i in decodeWords)
+      {
         decodeWords[i] = decodeWords[i].replace("<", "").replace(">", "");
       }
     }
@@ -5870,14 +6742,19 @@ function handleWsjtxDecode(newMessage) {
     var rect = null;
     // Grab the last word in the decoded message
     var qth = decodeWords[decodeWords.length - 1].trim();
-    if (qth.length == 4) {
+    if (qth.length == 4)
+    {
       var LETTERS = qth.substr(0, 2);
       var NUMBERS = qth.substr(2, 2);
-      if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS)) {
+      if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
+      {
         theirQTH = LETTERS + NUMBERS;
-        if (theirQTH != "RR73") {
+        if (theirQTH != "RR73")
+        {
           validQTH = true;
-        } else {
+        }
+        else
+        {
           theirQTH = "";
           validQTH = false;
         }
@@ -5886,26 +6763,31 @@ function handleWsjtxDecode(newMessage) {
 
     if (validQTH) msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
     if (validQTH == false && decodeWords.length == 3)
-      msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
+    { msgDEcallsign = decodeWords[decodeWords.length - 2].trim(); }
     if (validQTH == false && decodeWords.length == 2)
-      msgDEcallsign = decodeWords[decodeWords.length - 1].trim();
-    if (decodeWords[0] == "CQ") {
+    { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
+    if (decodeWords[0] == "CQ")
+    {
       CQ = true;
       msgDXcallsign = "CQ";
     }
-    if (decodeWords.length == 4 && CQ == true) {
+    if (decodeWords.length == 4 && CQ == true)
+    {
       msgDXcallsign += " " + decodeWords[1];
     }
-    if (decodeWords.length == 3 && CQ == false) {
+    if (decodeWords.length == 3 && CQ == false)
+    {
       msgDXcallsign = decodeWords[0];
     }
-    if (decodeWords.length >= 3 && CQ == true && validQTH == false) {
+    if (decodeWords.length >= 3 && CQ == true && validQTH == false)
+    {
       if (validateNumAndLetter(decodeWords[decodeWords.length - 1].trim()))
-        msgDEcallsign = decodeWords[decodeWords.length - 1].trim();
+      { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
       else msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
     }
 
-    if (decodeWords.length >= 4 && CQ == false) {
+    if (decodeWords.length >= 4 && CQ == false)
+    {
       msgDXcallsign = decodeWords[0];
       msgDEcallsign = decodeWords[1];
     }
@@ -5915,9 +6797,10 @@ function handleWsjtxDecode(newMessage) {
     var hash = msgDEcallsign + newMessage.OB + newMessage.OM;
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
 
-    if (validQTH == "" && msgDEcallsign in g_gtCallsigns) {
+    if (validQTH == "" && msgDEcallsign in g_gtCallsigns)
+    {
       if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0)
-        validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid;
+      { validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid; }
     }
 
     var canPath = false;
@@ -5929,7 +6812,8 @@ function handleWsjtxDecode(newMessage) {
         (g_appSettings.gtModeFilter == "auto" && newMessage.OM == myMode) ||
         newMessage.OM == g_appSettings.gtModeFilter ||
         g_appSettings.gtModeFilter == "Digital")
-    ) {
+    )
+    {
       rect = qthToBox(
         theirQTH,
         msgDEcallsign,
@@ -5945,15 +6829,18 @@ function handleWsjtxDecode(newMessage) {
       canPath = true;
     }
 
-    if (rect != null && theirQTH == "") {
+    if (rect != null && theirQTH == "")
+    {
       theirQTH = rect.qth;
     }
 
-    if (rect) {
+    if (rect)
+    {
       g_liveGrids[theirQTH].age = g_timeNow;
     }
 
-    if (callsign == null) {
+    if (callsign == null)
+    {
       newCallsign = {};
       newCallsign.DEcall = msgDEcallsign;
       newCallsign.grid = theirQTH;
@@ -5981,17 +6868,20 @@ function handleWsjtxDecode(newMessage) {
       newCallsign.phone = false;
       newCallsign.IOTA = "";
       newCallsign.satName = "";
-      if (newCallsign.dxcc != -1) {
+      if (newCallsign.dxcc != -1)
+      {
         newCallsign.px = getWpx(newCallsign.DEcall);
         if (newCallsign.px)
+        {
           newCallsign.zone = Number(
             newCallsign.px.charAt(newCallsign.px.length - 1)
           );
+        }
 
         newCallsign.cont =
           g_worldGeoData[g_dxccToGeoData[newCallsign.dxcc]].continent;
         if (newCallsign.dxcc == 390 && newCallsign.zone == 1)
-          details.cont = "EU";
+        { details.cont = "EU"; }
       }
 
       newCallsign.ituza = Array();
@@ -6007,7 +6897,8 @@ function handleWsjtxDecode(newMessage) {
       if (
         g_callsignLookups.ulsUseEnable == true &&
         isKnownCallsignDXCC(newCallsign.dxcc)
-      ) {
+      )
+      {
         lookupUsCallsign(newCallsign, false);
       }
 
@@ -6018,11 +6909,15 @@ function handleWsjtxDecode(newMessage) {
       newCallsign.shouldAlert = false;
       g_liveCallsigns[hash] = newCallsign;
       callsign = newCallsign;
-    } else {
-      if (validQTH) {
+    }
+    else
+    {
+      if (validQTH)
+      {
         callsign.grid = theirQTH;
 
-        if (rect != null && callsign.grid != rect.qth) {
+        if (rect != null && callsign.grid != rect.qth)
+        {
           if (
             (g_appSettings.gtBandFilter.length == 0 ||
               (g_appSettings.gtBandFilter == "auto" &&
@@ -6033,7 +6928,8 @@ function handleWsjtxDecode(newMessage) {
                 newMessage.OM == myMode) ||
               newMessage.OM == g_appSettings.gtModeFilter ||
               g_appSettings.gtModeFilter == "Digital")
-          ) {
+          )
+          {
             rect = qthToBox(
               theirQTH,
               msgDEcallsign,
@@ -6069,7 +6965,8 @@ function handleWsjtxDecode(newMessage) {
     if (msgDXcallsign == myDEcall) callsign.qrz = true;
     else callsign.qrz = false;
 
-    if (callsign.grid.length > 0 && callsign.distance == 0) {
+    if (callsign.grid.length > 0 && callsign.distance == 0)
+    {
       var LL = squareToLatLongAll(callsign.grid);
       callsign.distance = MyCircle.distance(
         g_myLat,
@@ -6085,15 +6982,18 @@ function handleWsjtxDecode(newMessage) {
         LL.lo2 - (LL.lo2 - LL.lo1) / 2
       );
 
-      if (callsign.grid in g_gridToITUZone) {
+      if (callsign.grid in g_gridToITUZone)
+      {
         callsign.ituza = g_gridToITUZone[callsign.grid];
       }
-      if (callsign.grid in g_gridToCQZone) {
+      if (callsign.grid in g_gridToCQZone)
+      {
         callsign.cqza = g_gridToCQZone[callsign.grid];
       }
     }
 
-    if (newMessage.NW) {
+    if (newMessage.NW)
+    {
       didCustomAlert = processAlertMessage(
         decodeWords,
         newMessage.Msg.substr(0, 30).trim(),
@@ -6114,12 +7014,15 @@ function handleWsjtxDecode(newMessage) {
       if (
         g_mapSettings.trafficDecode &&
         (didAlert == true || didCustomAlert == true)
-      ) {
+      )
+      {
         var traffic = htmlEntities(newMessage.Msg);
-        if (didAlert == true) {
+        if (didAlert == true)
+        {
           traffic = "⚠️ " + traffic;
         }
-        if (didCustomAlert == true) {
+        if (didCustomAlert == true)
+        {
           traffic = traffic + " 🚩";
         }
 
@@ -6136,48 +7039,58 @@ function handleWsjtxDecode(newMessage) {
         g_appSettings.gtSpotEnable === true &&
         g_appSettings.gtSpotEnable === true &&
         callsign.DEcall in g_gtCallsigns
-      ) {
+      )
+      {
         if (
           g_gtCallsigns[callsign.DEcall] in g_gtFlagPins &&
           g_gtFlagPins[g_gtCallsigns[callsign.DEcall]].o == 1
         )
-          g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent;
+        { g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent; }
       }
     }
 
     if (callsign.dxcc != -1) countryName = g_dxccToAltName[callsign.dxcc];
-    if (canPath == true) {
+    if (canPath == true)
+    {
       if (
         callsign.DXcall.indexOf("CQ") < 0 &&
         g_appSettings.gridViewMode != 2
-      ) {
+      )
+      {
         // Nothing special, we know the callers grid
-        if (callsign.grid != "") {
+        if (callsign.grid != "")
+        {
           // Our msgDEcallsign is not sending a CQ.
           // Let's see if we can locate who he's talking to in our known list
           var DEcallsign = null;
           if (
             callsign.DXcall + newMessage.OB + newMessage.OM in
             g_liveCallsigns
-          ) {
+          )
+          {
             DEcallsign =
               g_liveCallsigns[callsign.DXcall + newMessage.OB + newMessage.OM];
-          } else if (callsign.DXcall in g_liveCallsigns) {
+          }
+          else if (callsign.DXcall in g_liveCallsigns)
+          {
             DEcallsign = g_liveCallsigns[callsign.DXcall];
           }
 
-          if (DEcallsign != null && DEcallsign.grid != "") {
+          if (DEcallsign != null && DEcallsign.grid != "")
+          {
             var strokeColor = getPathColor();
             var strokeWeight = pathWidthValue.value;
             var flightPath = null;
             var isQRZ = false;
-            if (msgDXcallsign == myDEcall) {
+            if (msgDXcallsign == myDEcall)
+            {
               strokeColor = getQrzPathColor();
               strokeWeight = qrzPathWidthValue.value;
               isQRZ = true;
             }
 
-            if (strokeWeight != 0) {
+            if (strokeWeight != 0)
+            {
               var fromPoint = getPoint(callsign.grid);
               var toPoint = getPoint(DEcallsign.grid);
 
@@ -6187,7 +7100,7 @@ function handleWsjtxDecode(newMessage) {
                   weight: strokeWeight,
                   color: strokeColor,
                   steps: 75,
-                  zIndex: 90,
+                  zIndex: 90
                 },
                 "flight",
                 true
@@ -6200,11 +7113,13 @@ function handleWsjtxDecode(newMessage) {
               g_flightPaths.push(flightPath);
             }
           }
-        } else if (
+        }
+        else if (
           g_mapSettings.qrzDxccFallback &&
           msgDXcallsign == myDEcall &&
           callsign.dxcc > 0
-        ) {
+        )
+        {
           // the caller is calling us, but they don't have a grid, so lookup the DXCC and show it
           var strokeColor = getQrzPathColor();
           var strokeWeight = qrzPathWidthValue.value;
@@ -6212,7 +7127,8 @@ function handleWsjtxDecode(newMessage) {
           var isQRZ = true;
           var DEcallsign = g_liveCallsigns[myDEcall];
 
-          if (strokeWeight != 0) {
+          if (strokeWeight != 0)
+          {
             var toPoint = getPoint(DEcallsign.grid);
 
             var Lat = g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].lat;
@@ -6225,7 +7141,7 @@ function handleWsjtxDecode(newMessage) {
                 weight: strokeWeight,
                 color: strokeColor,
                 steps: 75,
-                zIndex: 90,
+                zIndex: 90
               },
               "flight",
               true
@@ -6248,41 +7164,50 @@ function handleWsjtxDecode(newMessage) {
             feature.age = g_timeNow + g_flightDuration;
             feature.isShapeFlight = 1;
             feature.isQRZ = isQRZ;
-            g_layerSources["flight"].addFeature(feature);
+            g_layerSources.flight.addFeature(feature);
             g_flightPaths.push(feature);
           }
         }
-      } else if (
+      }
+      else if (
         g_mapSettings.CQhilite &&
         msgDXcallsign.indexOf("CQ ") == 0 &&
         callsign.grid != "" &&
         g_appSettings.gridViewMode != 2 &&
         pathWidthValue.value != 0
-      ) {
+      )
+      {
         var CCd = msgDXcallsign.replace("CQ ", "").split(" ")[0];
-        if (CCd.length < 5 && !(CCd in g_pathIgnore)) {
+        if (CCd.length < 5 && !(CCd in g_pathIgnore))
+        {
           var locality = null;
           // Direct lookup US states, Continents, possibly
           if (CCd in g_replaceCQ) CCd = g_replaceCQ[CCd];
 
-          if (CCd.length == 2 && CCd in g_shapeData) {
+          if (CCd.length == 2 && CCd in g_shapeData)
+          {
             locality = g_shapeData[CCd];
-          } else if (CCd.length == 3) {
+          }
+          else if (CCd.length == 3)
+          {
             // maybe it's DEL, or WYO. check the first two letters
             if (CCd.substr(0, 2) in g_shapeData)
-              locality = g_shapeData[CCd.substr(0, 2)];
+            { locality = g_shapeData[CCd.substr(0, 2)]; }
           }
 
-          if (locality == null) {
+          if (locality == null)
+          {
             // Check the prefix for dxcc direct
             var dxcc = callsignToDxcc(CCd);
-            if (dxcc != -1) {
+            if (dxcc != -1)
+            {
               locality = g_worldGeoData[g_dxccToGeoData[dxcc]].geo;
               if (locality == "deleted") locality = null;
             }
           }
 
-          if (locality != null) {
+          if (locality != null)
+          {
             var strokeColor = getPathColor();
             var strokeWeight = pathWidthValue.value;
             var flightPath = null;
@@ -6299,7 +7224,7 @@ function handleWsjtxDecode(newMessage) {
             feature.age = g_timeNow + g_flightDuration;
             feature.isShapeFlight = 1;
             feature.isQRZ = false;
-            g_layerSources["flight"].addFeature(feature);
+            g_layerSources.flight.addFeature(feature);
             g_flightPaths.push(feature);
 
             var fromPoint = getPoint(callsign.grid);
@@ -6311,7 +7236,7 @@ function handleWsjtxDecode(newMessage) {
                 weight: strokeWeight,
                 color: strokeColor,
                 steps: 75,
-                zIndex: 90,
+                zIndex: 90
               },
               "flight",
               true
@@ -6355,7 +7280,8 @@ function handleWsjtxDecode(newMessage) {
   while (g_lastMessages.length > 100) g_lastMessages.pop();
 }
 
-function addLastTraffic(traffic) {
+function addLastTraffic(traffic)
+{
   g_lastTraffic.unshift(traffic);
   g_lastTraffic.unshift(
     "<hr style='border-color:#333;margin-top:0px;margin-bottom:2px;width:80%'>"
@@ -6363,7 +7289,8 @@ function addLastTraffic(traffic) {
   drawTraffic();
 }
 
-function htmlEntities(str) {
+function htmlEntities(str)
+{
   return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -6378,21 +7305,22 @@ function shapeFeature(
   fillColor,
   borderColor,
   borderWidth
-) {
+)
+{
   var feature = new ol.format.GeoJSON({
-    geometryName: key,
+    geometryName: key
   }).readFeature(geoJsonData, {
-    featureProjection: "EPSG:3857",
+    featureProjection: "EPSG:3857"
   });
 
   var style = new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: borderColor,
-      width: borderWidth,
+      width: borderWidth
     }),
     fill: new ol.style.Fill({
-      color: fillColor,
-    }),
+      color: fillColor
+    })
   });
 
   feature.setStyle(style);
@@ -6400,17 +7328,20 @@ function shapeFeature(
   feature.size = 2;
   return feature;
 }
-function handleWsjtxClear(newMessage) {
-  for (var hash in g_liveCallsigns) {
+function handleWsjtxClear(newMessage)
+{
+  for (var hash in g_liveCallsigns)
+  {
     if (
       g_liveCallsigns[hash].instance == newMessage.instance ||
       g_liveCallsigns[hash].mode == g_instances[newMessage.instance].status.MO
     )
-      delete g_liveCallsigns[hash];
+    { delete g_liveCallsigns[hash]; }
   }
-  for (var call in g_callRoster) {
+  for (var call in g_callRoster)
+  {
     if (g_callRoster[call].callObj.instance == newMessage.instance)
-      delete g_callRoster[call];
+    { delete g_callRoster[call]; }
   }
 
   redrawGrids();
@@ -6420,32 +7351,41 @@ function handleWsjtxClear(newMessage) {
   goProcessRoster();
 }
 
-function goProcessRoster(isRealtime = false) {
+function goProcessRoster(isRealtime = false)
+{
   var now = timeNowSec();
-  for (var call in g_callRoster) {
-    if (now - g_callRoster[call].callObj.age > 300) {
+  for (var call in g_callRoster)
+  {
+    if (now - g_callRoster[call].callObj.age > 300)
+    {
       g_callRoster[call].callObj.alerted = false;
       g_callRoster[call].callObj.shouldAlert = false;
       delete g_callRoster[call];
       continue;
     }
   }
-  if (g_callRosterWindowHandle) {
-    try {
-      if (isRealtime == true) {
+  if (g_callRosterWindowHandle)
+  {
+    try
+    {
+      if (isRealtime == true)
+      {
         if (g_callRosterWindowHandle.window.g_rosterSettings.realtime == false)
-          return;
+        { return; }
       }
       g_callRosterWindowHandle.window.processRoster(g_callRoster);
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function handleClosed(newMessage) {
+function handleClosed(newMessage)
+{
   if (
     g_activeInstance == newMessage.Id &&
     g_instances[newMessage.Id].open == false
-  ) {
+  )
+  {
     txrxdec.style.backgroundColor = "Purple";
     txrxdec.style.borderColor = "Purple";
     var name = newMessage.Id.toUpperCase().split(" - ");
@@ -6454,14 +7394,16 @@ function handleClosed(newMessage) {
   }
 }
 
-function handleWsjtxClose(newMessage) {
+function handleWsjtxClose(newMessage)
+{
   updateCountStats();
   g_instances[newMessage.Id].open = false;
   handleClosed(newMessage);
   updateRosterInstances();
 }
 
-function handleWsjtxWSPR(newMessage) {
+function handleWsjtxWSPR(newMessage)
+{
   if (g_ignoreMessages == 1) return;
 
   addDeDx(
@@ -6499,43 +7441,50 @@ function handleWsjtxWSPR(newMessage) {
   updateCountStats();
 }
 
-function centerOn(grid) {
-  if (grid.length >= 4) {
+function centerOn(grid)
+{
+  if (grid.length >= 4)
+  {
     var LL = squareToLatLong(grid);
     g_map
       .getView()
       .setCenter(
         ol.proj.fromLonLat([
           LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-          LL.la2 - (LL.la2 - LL.la1) / 2,
+          LL.la2 - (LL.la2 - LL.la1) / 2
         ])
       );
   }
 }
 
-function setCenterQTH() {
-  if (homeQTHInput.value.length >= 4) {
+function setCenterQTH()
+{
+  if (homeQTHInput.value.length >= 4)
+  {
     g_appSettings.centerGridsquare = homeQTHInput.value;
     // Grab home QTH Gridsquare from Center QTH
     var LL = squareToLatLong(homeQTHInput.value);
 
-    //panTo(ol.proj.fromLonLat([LL.lo2 - (LL.lo2 - LL.lo1) / 2, LL.la2 - ((LL.la2 - LL.la1) / 2)]));
+    // panTo(ol.proj.fromLonLat([LL.lo2 - (LL.lo2 - LL.lo1) / 2, LL.la2 - ((LL.la2 - LL.la1) / 2)]));
 
     g_map
       .getView()
       .setCenter(
         ol.proj.fromLonLat([
           LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-          LL.la2 - (LL.la2 - LL.la1) / 2,
+          LL.la2 - (LL.la2 - LL.la1) / 2
         ])
       );
-  } else {
+  }
+  else
+  {
     homeQTHInput.value = "";
-    return;
   }
 }
-function setCenterGridsquare() {
-  if (g_mapMemory[6].zoom != -1) {
+function setCenterGridsquare()
+{
+  if (g_mapMemory[6].zoom != -1)
+  {
     mapMemory(6, false);
     return;
   }
@@ -6543,22 +7492,28 @@ function setCenterGridsquare() {
   setCenterQTH();
 }
 
-function changeLookupMerge() {
+function changeLookupMerge()
+{
   g_appSettings.lookupMerge = lookupMerge.checked;
   g_appSettings.lookupMissingGrid = lookupMissingGrid.checked;
-  if (g_appSettings.lookupMerge == true) {
+  if (g_appSettings.lookupMerge == true)
+  {
     lookupMissingGridDiv.style.display = "inline-block";
-  } else {
+  }
+  else
+  {
     lookupMissingGridDiv.style.display = "none";
   }
 }
 
-function changelookupOnTx() {
+function changelookupOnTx()
+{
   g_appSettings.lookupOnTx = lookupOnTx.checked;
   g_appSettings.lookupCloseLog = lookupCloseLog.checked;
 }
 
-function exportSettings() {
+function exportSettings()
+{
   var filename = g_appData + g_dirSeperator + "gt_settings.json";
 
   var toWrite = JSON.stringify(localStorage);
@@ -6567,40 +7522,53 @@ function exportSettings() {
   checkForSettings();
 }
 
-function checkForSettings() {
+function checkForSettings()
+{
   var filename = g_appData + g_dirSeperator + "gt_settings.json";
-  if (fs.existsSync(filename)) {
+  if (fs.existsSync(filename))
+  {
     importSettingsButton.style.display = "inline-block";
     importSettingsFile.style.display = "inline-block";
     importSettingsFile.innerHTML = filename;
-  } else {
+  }
+  else
+  {
     importSettingsButton.style.display = "none";
     importSettingsFile.style.display = "none";
   }
 }
 
-function importSettings() {
+function importSettings()
+{
   checkForSettings();
 
   var filename = g_appData + g_dirSeperator + "gt_settings.json";
-  if (fs.existsSync(filename)) {
+  if (fs.existsSync(filename))
+  {
     var data = fs.readFileSync(filename);
     data = JSON.parse(data);
     if (
       typeof data.appSettings != "undefined" &&
       data.currentVersion == localStorage.currentVersion
-    ) {
+    )
+    {
       localStorage.clear();
-      for (var key in data) {
+      for (var key in data)
+      {
         localStorage[key] = data[key];
       }
       fs.unlinkSync(filename);
       chrome.runtime.reload();
-    } else {
-      if (typeof data.appSettings == "undefined") {
+    }
+    else
+    {
+      if (typeof data.appSettings == "undefined")
+      {
         importSettingsFile.innerHTML =
           "<font style='color:red'>Settings File Corrupt!</font>";
-      } else if (data.currentVersion != localStorage.currentVersion) {
+      }
+      else if (data.currentVersion != localStorage.currentVersion)
+      {
         importSettingsFile.innerHTML =
           "<font style='color:red'>Settings Version Mismatch!</font>";
       }
@@ -6608,29 +7576,34 @@ function importSettings() {
   }
 }
 
-function showCallsignBox(redraw) {
+function showCallsignBox(redraw)
+{
   var worker =
     "<div style='vertical-align:top;display:inline-block;margin:2px;color:cyan;font-weight:bold'>Callsigns and DXCC Heard</div><br/>";
 
   g_newCallsignCount = Object.keys(g_liveCallsigns).length;
-  if (g_newCallsignCount > 0) {
+  if (g_newCallsignCount > 0)
+  {
     var newCallList = Array();
 
     worker +=
       "<div  style='display:inline-block;padding-right:8px;overflow:auto;overflow-x:hidden;height:" +
       Math.min(g_newCallsignCount * 24 + 26, getStatsWindowHeight()) +
-      "px;'><table class='darkTable' align=center><th align=left>Callsign</th><th align=left>Grid</th><th>DXCC</th><th>CQ</th><th>ITU</th><th>Flag</th><th align=left>QSO</th><th>QSL</th><th>When</th>"; //<th>ITUz</th><th>CQz</th><th>ISO</th>";
+      "px;'><table class='darkTable' align=center><th align=left>Callsign</th><th align=left>Grid</th><th>DXCC</th><th>CQ</th><th>ITU</th><th>Flag</th><th align=left>QSO</th><th>QSL</th><th>When</th>"; // <th>ITUz</th><th>CQz</th><th>ISO</th>";
     if (g_callsignLookups.lotwUseEnable == true) worker += "<th>LoTW</th>";
     if (g_callsignLookups.eqslUseEnable == true) worker += "<th>eQSL</th>";
     if (g_callsignLookups.oqrsUseEnable == true) worker += "<th>OQRS</th>";
     g_lastCallsignCount = g_newCallsignCount;
-    for (var x in g_liveCallsigns) {
-      if (g_liveCallsigns[x].dxcc != -1) {
+    for (var x in g_liveCallsigns)
+    {
+      if (g_liveCallsigns[x].dxcc != -1)
+      {
         newCallList.push(g_liveCallsigns[x]);
       }
     }
     newCallList.sort(compareCallsignTime).reverse();
-    for (var x in newCallList) {
+    for (var x in newCallList)
+    {
       if (newCallList[x].DEcall == myRawCall) continue;
       var grid = newCallList[x].rect ? newCallList[x].rect.qth : "-";
       var cqzone =
@@ -6642,7 +7615,7 @@ function showCallsignBox(redraw) {
       worker +=
         "<tr><td align=left style='color:#ff0;cursor:pointer'  onClick='window.opener.startLookup(\"" +
         newCallList[x].DEcall +
-        '","' +
+        "\",\"" +
         grid +
         "\");'>" +
         thisCall +
@@ -6666,26 +7639,33 @@ function showCallsignBox(redraw) {
         "</td>";
       var ageString = "";
       if (timeNowSec() - newCallList[x].time < 3601)
-        ageString = (timeNowSec() - newCallList[x].time).toDHMS();
-      else {
+      { ageString = (timeNowSec() - newCallList[x].time).toDHMS(); }
+      else
+      {
         ageString = userTimeString(newCallList[x].time * 1000);
       }
       worker += "<td>" + ageString + "</td>";
       if (g_callsignLookups.lotwUseEnable == true)
+      {
         worker +=
           "<td align='center'>" +
           (thisCall in g_lotwCallsigns ? "&#10004;" : "") +
           "</td>";
+      }
       if (g_callsignLookups.eqslUseEnable == true)
+      {
         worker +=
           "<td align='center'>" +
           (thisCall in g_eqslCallsigns ? "&#10004;" : "") +
           "</td>";
+      }
       if (g_callsignLookups.oqrsUseEnable == true)
+      {
         worker +=
           "<td align='center'>" +
           (thisCall in g_oqrsCallsigns ? "&#10004;" : "") +
           "</td>";
+      }
       worker += "</tr>";
     }
     worker += "</table></div>";
@@ -6693,9 +7673,12 @@ function showCallsignBox(redraw) {
 
   var heard = 0;
   var List = {};
-  if (Object.keys(g_dxccCount).length > 0) {
-    for (var key in g_dxccCount) {
-      if (key != -1) {
+  if (Object.keys(g_dxccCount).length > 0)
+  {
+    for (var key in g_dxccCount)
+    {
+      if (key != -1)
+      {
         var item = {};
         item.total = g_dxccCount[key];
         item.confirmed = g_worldGeoData[g_dxccToGeoData[key]].confirmed;
@@ -6717,7 +7700,8 @@ function showCallsignBox(redraw) {
       ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>Calls</th></tr>";
     Object.keys(List)
       .sort()
-      .forEach(function (key, i) {
+      .forEach(function (key, i)
+      {
         worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
         worker +=
           "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
@@ -6735,99 +7719,121 @@ function showCallsignBox(redraw) {
   setStatsDiv("callsignListDiv", worker);
 }
 
-function setStatsDiv(div, worker) {
+function setStatsDiv(div, worker)
+{
   if (
     g_statsWindowHandle != null &&
     typeof g_statsWindowHandle.window[div] !== "undefined"
-  ) {
+  )
+  {
     g_statsWindowHandle.window[div].innerHTML = worker;
   }
 }
 
-function setStatsDivHeight(div, heightWithPx) {
+function setStatsDivHeight(div, heightWithPx)
+{
   if (
     g_statsWindowHandle != null &&
     typeof g_statsWindowHandle.window[div] !== "undefined"
-  ) {
+  )
+  {
     g_statsWindowHandle.window[div].style.height = heightWithPx;
   }
 }
-function getStatsWindowHeight() {
+function getStatsWindowHeight()
+{
   if (
     g_statsWindowHandle != null &&
     typeof g_statsWindowHandle.window.window !== "undefined"
-  ) {
+  )
+  {
     return g_statsWindowHandle.window.window.innerHeight - 63;
   }
   return 300;
 }
 
-function setLookupDiv(div, worker) {
+function setLookupDiv(div, worker)
+{
   if (
     g_lookupWindowHandle &&
     typeof g_lookupWindowHandle.window[div].innerHTML !== "undefined"
-  ) {
+  )
+  {
     g_lookupWindowHandle.window[div].innerHTML = worker;
   }
 }
 
-function setLookupDivHeight(div, heightWithPx) {
+function setLookupDivHeight(div, heightWithPx)
+{
   if (
     g_lookupWindowHandle &&
     typeof g_lookupWindowHandle.window[div].style !== "undefined"
-  ) {
+  )
+  {
     g_lookupWindowHandle.window[div].style.height = heightWithPx;
   }
 }
-function getLookupWindowHeight() {
+function getLookupWindowHeight()
+{
   if (
     g_lookupWindowHandle &&
     typeof g_lookupWindowHandle.window.window !== "undefined"
-  ) {
+  )
+  {
     return g_lookupWindowHandle.window.window.innerHeight;
   }
   return 300;
 }
 
-function showConditionsBox() {
-  if (g_mapSettings.offlineMode == false) {
+function showConditionsBox()
+{
+  if (g_mapSettings.offlineMode == false)
+  {
     openConditionsWindow();
   }
 }
 
-function myCallCompare(a, b) {
+function myCallCompare(a, b)
+{
   return a.DEcall.localeCompare(b.DEcall);
 }
 
-function myGridCompare(a, b) {
+function myGridCompare(a, b)
+{
   return a.grid.localeCompare(b.grid);
 }
 
-function myModeCompare(a, b) {
+function myModeCompare(a, b)
+{
   return a.mode.localeCompare(b.mode);
 }
 
-function myDxccCompare(a, b) {
+function myDxccCompare(a, b)
+{
   return g_dxccToAltName[a.dxcc].localeCompare(g_dxccToAltName[b.dxcc]);
 }
 
-function myDxccIntCompare(a, b) {
+function myDxccIntCompare(a, b)
+{
   if (!(a in g_dxccToAltName)) return 0;
   if (!(b in g_dxccToAltName))
-    return g_dxccToAltName[a].localeCompare(g_dxccToAltName[b]);
+  { return g_dxccToAltName[a].localeCompare(g_dxccToAltName[b]); }
 }
 
-function myTimeCompare(a, b) {
+function myTimeCompare(a, b)
+{
   if (a.time > b.time) return 1;
   if (a.time < b.time) return -1;
   return 0;
 }
 
-function myBandCompare(a, b) {
+function myBandCompare(a, b)
+{
   return a.band.localeCompare(b.band);
 }
 
-function myConfirmedCompare(a, b) {
+function myConfirmedCompare(a, b)
+{
   if (a.confirmed && !b.confirmed) return 1;
   if (!a.confirmed && b.confirmed) return -1;
   return 0;
@@ -6840,7 +7846,7 @@ var g_sortFunction = [
   myDxccCompare,
   myTimeCompare,
   myBandCompare,
-  myConfirmedCompare,
+  myConfirmedCompare
 ];
 
 var g_lastSortIndex = 4;
@@ -6858,7 +7864,8 @@ var g_filterQSL = "All";
 
 var g_lastSearchSelection = null;
 
-function resetSearch() {
+function resetSearch()
+{
   g_lastSortIndex = 4;
   g_qsoPages = 1;
   g_qsoPage = 0;
@@ -6875,7 +7882,8 @@ function resetSearch() {
   g_lastSearchSelection = null;
 }
 
-function showWorkedByCall(callsign, evt) {
+function showWorkedByCall(callsign, evt)
+{
   evt.preventDefault();
 
   resetSearch();
@@ -6884,46 +7892,54 @@ function showWorkedByCall(callsign, evt) {
   openInfoTab("qsobox", "workedBoxDiv", showWorkedBox);
 }
 
-function showWorkedSearchChanged(object, index) {
+function showWorkedSearchChanged(object, index)
+{
   ValidateCallsign(object, null);
   g_searchWB = object.value.toUpperCase();
   g_lastSearchSelection = object.id;
   showWorkedBox(index, 0);
 }
 
-function showWorkedSearchGrid(object, index) {
+function showWorkedSearchGrid(object, index)
+{
   ValidateCallsign(object, null);
   g_gridSearch = object.value.toUpperCase();
   g_lastSearchSelection = object.id;
   showWorkedBox(index, 0);
 }
 
-function filterBandFunction(event, index) {
+function filterBandFunction(event, index)
+{
   g_filterBand = this.value;
   g_lastSearchSelection = this.id;
   showWorkedBox(index, 0);
 }
 
-function filterModeFunction(event, index) {
+function filterModeFunction(event, index)
+{
   g_filterMode = this.value;
   g_lastSearchSelection = this.id;
   showWorkedBox(index, 0);
 }
 
-function filterDxccFunction(event, index) {
+function filterDxccFunction(event, index)
+{
   g_filterDxcc = this.value;
   g_lastSearchSelection = this.id;
   showWorkedBox(index, 0);
 }
 
-function filterQSLFunction(event, index) {
+function filterQSLFunction(event, index)
+{
   g_filterQSL = this.value;
   g_lastSearchSelection = this.id;
   showWorkedBox(index, 0);
 }
 
-function showWorkedBox(sortIndex, nextPage, redraw) {
-  try {
+function showWorkedBox(sortIndex, nextPage, redraw)
+{
+  try
+  {
     var myObjects = null;
     var mySort = sortIndex;
     var bandOptions;
@@ -6937,7 +7953,8 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
 
     myObjects = g_QSOhash;
 
-    if (sortIndex == null || typeof sortIndex == "undefined") {
+    if (sortIndex == null || typeof sortIndex == "undefined")
+    {
       mySort = 4;
       g_lastSortIndex = 4;
       g_lastSortType = 2;
@@ -6945,20 +7962,26 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
 
     var list = Object.values(myObjects);
 
-    if (g_searchWB.length > 0) {
-      list = list.filter(function (value) {
+    if (g_searchWB.length > 0)
+    {
+      list = list.filter(function (value)
+      {
         return value.DEcall.indexOf(g_searchWB) > -1;
       });
     }
 
     if (g_gridSearch.length > 0)
-      list = list.filter(function (value) {
+    {
+      list = list.filter(function (value)
+      {
         var x = value.grid.indexOf(g_gridSearch);
         var y = value.vucc_grids.indexOf(g_gridSearch);
         return x == 0 || y == 0;
       });
+    }
 
-    for (var key in list) {
+    for (var key in list)
+    {
       bands[list[key].band] = list[key].band;
       modes[list[key].mode] = list[key].mode;
       var pp =
@@ -6969,66 +7992,92 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
     }
 
     if (g_filterBand != "Mixed")
-      list = list.filter(function (value) {
+    {
+      list = list.filter(function (value)
+      {
         return value.band == g_filterBand;
       });
+    }
 
     if (g_filterMode != "Mixed")
-      list = list.filter(function (value) {
+    {
+      list = list.filter(function (value)
+      {
         if (
           g_filterMode == "Phone" &&
           value.mode in g_modes_phone &&
           g_modes_phone[value.mode]
         )
-          return true;
+        { return true; }
         if (
           g_filterMode == "Digital" &&
           value.mode in g_modes &&
           g_modes[value.mode]
         )
-          return true;
+        { return true; }
         return value.mode == g_filterMode;
-      });
-
-    if (g_filterDxcc != 0)
-      list = list.filter(function (value) {
-        return value.dxcc == g_filterDxcc;
-      });
-
-    if (g_filterQSL != "All") {
-      list = list.filter(function (value) {
-        return value.confirmed == (g_filterQSL == "true" ? true : false);
       });
     }
 
-    if (typeof redraw == "undefined") {
-      if (typeof nextPage == "undefined") {
+    if (g_filterDxcc != 0)
+    {
+      list = list.filter(function (value)
+      {
+        return value.dxcc == g_filterDxcc;
+      });
+    }
+
+    if (g_filterQSL != "All")
+    {
+      list = list.filter(function (value)
+      {
+        return value.confirmed == (g_filterQSL == "true");
+      });
+    }
+
+    if (typeof redraw == "undefined")
+    {
+      if (typeof nextPage == "undefined")
+      {
         nextPage = 0;
-        if (g_lastSortIndex != mySort) {
+        if (g_lastSortIndex != mySort)
+        {
           list = list.sort(g_sortFunction[mySort]);
           g_lastSortIndex = mySort;
           g_lastSortType = 1;
           g_qsoPage = 0;
-        } else {
+        }
+        else
+        {
           list = list.sort(g_sortFunction[mySort]).reverse();
           g_lastSortIndex = -1;
           g_lastSortType = 2;
           g_qsoPage = 0;
         }
-      } else {
-        if (g_lastSortType == 1) {
+      }
+      else
+      {
+        if (g_lastSortType == 1)
+        {
           list = list.sort(g_sortFunction[mySort]);
-        } else {
+        }
+        else
+        {
           list = list.sort(g_sortFunction[mySort]).reverse();
         }
       }
-    } else {
+    }
+    else
+    {
       mySort = g_lastSortIndex;
       if (mySort == -1) mySort = 4;
 
-      if (g_lastSortType == 1) {
+      if (g_lastSortType == 1)
+      {
         list = list.sort(g_sortFunction[mySort]);
-      } else {
+      }
+      else
+      {
         list = list.sort(g_sortFunction[mySort]).reverse();
       }
     }
@@ -7047,7 +8096,8 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
 
     var workHead = "<b> Entries (" + ObjectCount + ")</b>";
 
-    if (g_qsoPages > 1) {
+    if (g_qsoPages > 1)
+    {
       workHead +=
         "<br/><font  style='font-size:15px;' color='cyan' onClick='window.opener.showWorkedBox(" +
         mySort +
@@ -7067,7 +8117,8 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
     }
     setStatsDiv("workedHeadDiv", workHead);
 
-    if (myObjects != null) {
+    if (myObjects != null)
+    {
       var worker = "";
       worker +=
         "<table  id='logTable' style='white-space:nowrap;overflow:auto;overflow-x;hidden;' class='darkTable' align=center>";
@@ -7111,12 +8162,13 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
       worker += "</tr>";
 
       var key = null;
-      for (var i = startIndex; i < endIndex; i++) {
+      for (var i = startIndex; i < endIndex; i++)
+      {
         key = list[i];
         worker +=
           "<tr  align=left><td  style='color:#ff0;cursor:pointer' onclick='window.opener.startLookup(\"" +
           key.DEcall +
-          '","' +
+          "\",\"" +
           key.grid +
           "\");' >" +
           key.DEcall.formatCallsign() +
@@ -7151,20 +8203,26 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
           userTimeString(key.time * 1000) +
           "</td>";
         if (g_callsignLookups.lotwUseEnable == true)
+        {
           worker +=
             "<td align=center>" +
             (key.DEcall in g_lotwCallsigns ? "&#10004;" : "") +
             "</td>";
+        }
         if (g_callsignLookups.eqslUseEnable == true)
+        {
           worker +=
             "<td align=center>" +
             (key.DEcall in g_eqslCallsigns ? "&#10004;" : "") +
             "</td>";
+        }
         if (g_callsignLookups.oqrsUseEnable == true)
+        {
           worker +=
             "<td align=center>" +
             (key.DEcall in g_oqrsCallsigns ? "&#10004;" : "") +
             "</td>";
+        }
         worker += "</tr>";
       }
 
@@ -7183,10 +8241,12 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
       option.text = "Mixed";
       newSelect.appendChild(option);
       Object.keys(bands)
-        .sort(function (a, b) {
+        .sort(function (a, b)
+        {
           return parseInt(a) - parseInt(b);
         })
-        .forEach(function (key) {
+        .forEach(function (key)
+        {
           var option = document.createElement("option");
           option.value = key;
           option.text = key;
@@ -7220,7 +8280,8 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
 
       Object.keys(modes)
         .sort()
-        .forEach(function (key) {
+        .forEach(function (key)
+        {
           var option = document.createElement("option");
           option.value = key;
           option.text = key;
@@ -7245,7 +8306,8 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
 
       Object.keys(dxccs)
         .sort()
-        .forEach(function (key) {
+        .forEach(function (key)
+        {
           var option = document.createElement("option");
           option.value = dxccs[key];
           option.text = key;
@@ -7289,53 +8351,66 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
       statsFocus(g_lastSearchSelection);
 
       setStatsDivHeight("workedListDiv", getStatsWindowHeight() - 6 + "px");
-    } else setStatsDiv("workedListDiv", "None");
+    }
+    else setStatsDiv("workedListDiv", "None");
 
     myObjects = null;
-  } catch (e) {
+  }
+  catch (e)
+  {
     console.log(e);
   }
 }
 
-function statsValidateCallByElement(elementString) {
+function statsValidateCallByElement(elementString)
+{
   if (
     g_statsWindowHandle != null &&
     typeof g_statsWindowHandle.window.validateCallByElement !== "undefined"
-  ) {
+  )
+  {
     g_statsWindowHandle.window.validateCallByElement(elementString);
   }
 }
-function statsFocus(selection) {
+function statsFocus(selection)
+{
   if (
     g_statsWindowHandle != null &&
     typeof g_statsWindowHandle.window.statsFocus !== "undefined"
-  ) {
+  )
+  {
     g_statsWindowHandle.window.statsFocus(selection);
   }
 }
 
-function lookupValidateCallByElement(elementString) {
+function lookupValidateCallByElement(elementString)
+{
   if (
     g_lookupWindowHandle != null &&
     typeof g_statsWindowHandle.window.validateCallByElement !== "undefined"
-  ) {
+  )
+  {
     g_lookupWindowHandle.window.validateCallByElement(elementString);
   }
 }
-function lookupFocus(selection) {
+function lookupFocus(selection)
+{
   if (
     g_lookupWindowHandle != null &&
     typeof g_statsWindowHandle.window.statsFocus !== "undefined"
-  ) {
+  )
+  {
     g_lookupWindowHandle.window.statsFocus(selection);
   }
 }
 
-function statsAppendChild(elementString, object, onInputString, defaultValue) {
+function statsAppendChild(elementString, object, onInputString, defaultValue)
+{
   if (
     g_statsWindowHandle != null &&
     typeof g_statsWindowHandle.window.appendToChild !== "undefined"
-  ) {
+  )
+  {
     g_statsWindowHandle.window.appendToChild(
       elementString,
       object,
@@ -7344,7 +8419,8 @@ function statsAppendChild(elementString, object, onInputString, defaultValue) {
     );
   }
 }
-function showDXCCsBox() {
+function showDXCCsBox()
+{
   var worker = getCurrentBandModeHTML();
   var confirmed = 0;
   var worked = 0;
@@ -7352,9 +8428,12 @@ function showDXCCsBox() {
   var List = {};
   var ListConfirmed = {};
   var ListNotWorked = {};
-  for (var key in g_worldGeoData) {
-    if (key != -1) {
-      if (g_worldGeoData[key].worked == true) {
+  for (var key in g_worldGeoData)
+  {
+    if (key != -1)
+    {
+      if (g_worldGeoData[key].worked == true)
+      {
         var item = {};
         item.dxcc = g_worldGeoData[key].dxcc;
 
@@ -7363,7 +8442,8 @@ function showDXCCsBox() {
         List[g_worldGeoData[key].name] = item;
         worked++;
       }
-      if (g_worldGeoData[key].confirmed == true) {
+      if (g_worldGeoData[key].confirmed == true)
+      {
         var item = {};
         item.dxcc = g_worldGeoData[key].dxcc;
 
@@ -7377,7 +8457,8 @@ function showDXCCsBox() {
         g_worldGeoData[key].confirmed == false &&
         g_worldGeoData[key].pp != "" &&
         g_worldGeoData[key].geo != "deleted"
-      ) {
+      )
+      {
         var item = {};
         item.dxcc = g_worldGeoData[key].dxcc;
         item.flag = g_worldGeoData[key].flag;
@@ -7388,7 +8469,8 @@ function showDXCCsBox() {
     }
   }
 
-  if (worked > 0) {
+  if (worked > 0)
+  {
     worker +=
       "<div  style='vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
       Math.min(Object.keys(List).length * 23 + 45, getStatsWindowHeight()) +
@@ -7397,7 +8479,8 @@ function showDXCCsBox() {
       ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
     Object.keys(List)
       .sort()
-      .forEach(function (key, i) {
+      .forEach(function (key, i)
+      {
         var confirmed = List[key].confirmed
           ? ""
           : "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
@@ -7417,7 +8500,8 @@ function showDXCCsBox() {
       });
     worker += "</table></div>";
   }
-  if (confirmed > 0) {
+  if (confirmed > 0)
+  {
     worker +=
       "<div  style='padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
       Math.min(
@@ -7429,7 +8513,8 @@ function showDXCCsBox() {
       ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
     Object.keys(ListConfirmed)
       .sort()
-      .forEach(function (key, i) {
+      .forEach(function (key, i)
+      {
         worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
         worker +=
           "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
@@ -7442,7 +8527,8 @@ function showDXCCsBox() {
       });
     worker += "</table></div>";
   }
-  if (needed > 0) {
+  if (needed > 0)
+  {
     worker +=
       "<div  style='vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
       Math.min(
@@ -7454,7 +8540,8 @@ function showDXCCsBox() {
       ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
     Object.keys(ListNotWorked)
       .sort()
-      .forEach(function (key, i) {
+      .forEach(function (key, i)
+      {
         worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
         worker +=
           "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
@@ -7470,7 +8557,8 @@ function showDXCCsBox() {
   setStatsDiv("dxccListDiv", worker);
 }
 
-function showCQzoneBox() {
+function showCQzoneBox()
+{
   var worker = getCurrentBandModeHTML();
 
   worker +=
@@ -7481,7 +8569,8 @@ function showCQzoneBox() {
   setStatsDiv("cqzoneListDiv", worker);
 }
 
-function showITUzoneBox() {
+function showITUzoneBox()
+{
   var worker = getCurrentBandModeHTML();
 
   worker +=
@@ -7492,7 +8581,8 @@ function showITUzoneBox() {
   setStatsDiv("ituzoneListDiv", worker);
 }
 
-function showWASWACzoneBox() {
+function showWASWACzoneBox()
+{
   var worker = getCurrentBandModeHTML();
 
   worker +=
@@ -7508,18 +8598,23 @@ function showWASWACzoneBox() {
   setStatsDiv("waswacListDiv", worker);
 }
 
-function displayItemList(table, color) {
+function displayItemList(table, color)
+{
   var worked = 0;
   var needed = 0;
   var confirmed = 0;
-  for (var key in table) {
-    if (table[key].worked == true) {
+  for (var key in table)
+  {
+    if (table[key].worked == true)
+    {
       worked++;
     }
-    if (table[key].confirmed == true) {
+    if (table[key].confirmed == true)
+    {
       confirmed++;
     }
-    if (table[key].confirmed == false && table[key].worked == false) {
+    if (table[key].confirmed == false && table[key].worked == false)
+    {
       needed++;
     }
   }
@@ -7546,13 +8641,19 @@ function displayItemList(table, color) {
 
   Object.keys(table)
     .sort()
-    .forEach(function (key, i) {
+    .forEach(function (key, i)
+    {
       var style;
-      if (table[key].confirmed == true) {
+      if (table[key].confirmed == true)
+      {
         style = "color:" + color + ";" + confirmed;
-      } else if (table[key].worked == true) {
+      }
+      else if (table[key].worked == true)
+      {
         style = "color:" + color + ";" + unconf;
-      } else {
+      }
+      else
+      {
         // needed
         style = "color:#000000;background-color:" + color + ";" + bold;
       }
@@ -7563,20 +8664,21 @@ function displayItemList(table, color) {
   return worker;
 }
 
-function showWPXBox() {
+function showWPXBox()
+{
   var worker = getCurrentBandModeHTML();
   var band =
     g_appSettings.gtBandFilter == "auto"
       ? myBand
       : g_appSettings.gtBandFilter.length == 0
-      ? ""
-      : g_appSettings.gtBandFilter;
+        ? ""
+        : g_appSettings.gtBandFilter;
   var mode =
     g_appSettings.gtModeFilter == "auto"
       ? myMode
       : g_appSettings.gtModeFilter.length == 0
-      ? ""
-      : g_appSettings.gtModeFilter;
+        ? ""
+        : g_appSettings.gtModeFilter;
 
   if (mode == "Digital") mode = "dg";
   if (mode == "Phone") mode = "ph";
@@ -7587,20 +8689,24 @@ function showWPXBox() {
   var List = {};
   var ListConfirmed = {};
 
-  for (var key in g_tracker.worked.px) {
+  for (var key in g_tracker.worked.px)
+  {
     if (
       typeof g_tracker.worked.px[key] == "string" &&
       key + modifier in g_tracker.worked.px
-    ) {
+    )
+    {
       List[key] = key;
     }
   }
 
-  for (var key in g_tracker.confirmed.px) {
+  for (var key in g_tracker.confirmed.px)
+  {
     if (
       typeof g_tracker.confirmed.px[key] == "string" &&
       key + modifier in g_tracker.confirmed.px
-    ) {
+    )
+    {
       ListConfirmed[key] = key;
     }
   }
@@ -7608,7 +8714,8 @@ function showWPXBox() {
   worked = Object.keys(List).length;
   confirmed = Object.keys(ListConfirmed).length;
 
-  if (worked > 0) {
+  if (worked > 0)
+  {
     worker +=
       "<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Worked Prefixes (<font color='#fff'>" +
       worked +
@@ -7619,7 +8726,8 @@ function showWPXBox() {
       "px;'><table class='darkTable' align=center>";
     Object.keys(List)
       .sort()
-      .forEach(function (key, i) {
+      .forEach(function (key, i)
+      {
         worker +=
           "<tr><td align=left style='color:#ff0;' >" +
           key.formatCallsign() +
@@ -7632,7 +8740,8 @@ function showWPXBox() {
     worker += "</div>";
   }
 
-  if (confirmed > 0) {
+  if (confirmed > 0)
+  {
     worker +=
       "<div  style='vertical-align:top;display:inline-block;margin-right:8px;overflow:auto;overflow-x:hidden;color:cyan;'><b>Confirmed Prefixes (<font color='#fff'>" +
       confirmed +
@@ -7643,7 +8752,8 @@ function showWPXBox() {
       "px;'><table class='darkTable' align=center>";
     Object.keys(ListConfirmed)
       .sort()
-      .forEach(function (key, i) {
+      .forEach(function (key, i)
+      {
         worker +=
           "<tr><td align=left style='color:#ff0;' >" +
           key.formatCallsign() +
@@ -7659,34 +8769,44 @@ function showWPXBox() {
   setStatsDiv("wpxListDiv", worker);
 }
 
-function showRootInfoBox() {
+function showRootInfoBox()
+{
   openStatsWindow();
-  return;
 }
 
-function showSettingsBox() {
+function showSettingsBox()
+{
   updateRunningProcesses();
   helpDiv.style.display = "none";
   g_helpShow = false;
   rootSettingsDiv.style.display = "inline-block";
 }
 
-function toggleBaWindow(event) {
+function toggleBaWindow(event)
+{
   event.preventDefault();
 
-  if (g_baWindowHandle == null) {
+  if (g_baWindowHandle == null)
+  {
     openBaWindow(true);
-  } else {
-    if (g_baWindowHandle.window.g_isShowing == true) {
+  }
+  else
+  {
+    if (g_baWindowHandle.window.g_isShowing == true)
+    {
       openBaWindow(false);
-    } else {
+    }
+    else
+    {
       openBaWindow(true);
     }
   }
 }
 
-function openBaWindow(show = true) {
-  if (g_baWindowHandle == null) {
+function openBaWindow(show = true)
+{
+  if (g_baWindowHandle == null)
+  {
     popupNewWindows();
     var gui = require("nw.gui");
     gui.Window.open(
@@ -7696,14 +8816,17 @@ function openBaWindow(show = true) {
         id: "GT-baac",
         frame: false,
         resizable: true,
-        always_on_top: true,
+        always_on_top: true
       },
-      function (new_win) {
+      function (new_win)
+      {
         g_baWindowHandle = new_win;
-        new_win.on("loaded", function () {
+        new_win.on("loaded", function ()
+        {
           g_baWindowHandle.setMinimumSize(198, 52);
         });
-        new_win.on("close", function () {
+        new_win.on("close", function ()
+        {
           g_baWindowHandle.window.g_isShowing = false;
           g_baWindowHandle.window.saveScreenSettings();
           g_baWindowHandle.hide();
@@ -7711,23 +8834,32 @@ function openBaWindow(show = true) {
       }
     );
     lockNewWindows();
-  } else {
-    try {
-      if (show == true) {
+  }
+  else
+  {
+    try
+    {
+      if (show == true)
+      {
         g_baWindowHandle.show();
         g_baWindowHandle.window.g_isShowing = true;
         g_baWindowHandle.window.saveScreenSettings();
-      } else {
+      }
+      else
+      {
         g_baWindowHandle.window.g_isShowing = false;
         g_baWindowHandle.window.saveScreenSettings();
         g_baWindowHandle.hide();
       }
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function openLookupWindow(show = false) {
-  if (g_lookupWindowHandle == null) {
+function openLookupWindow(show = false)
+{
+  if (g_lookupWindowHandle == null)
+  {
     popupNewWindows();
     var gui = require("nw.gui");
     gui.Window.open(
@@ -7735,15 +8867,18 @@ function openLookupWindow(show = false) {
       {
         show: false,
         id: "GT-lookups",
-        icon: "img/lookup-icon.png",
+        icon: "img/lookup-icon.png"
       },
-      function (new_win) {
+      function (new_win)
+      {
         g_lookupWindowHandle = new_win;
-        new_win.on("loaded", function () {
+        new_win.on("loaded", function ()
+        {
           g_lookupWindowHandle.setMinimumSize(680, 200);
           g_lookupWindowHandle.setResizable(true);
         });
-        new_win.on("close", function () {
+        new_win.on("close", function ()
+        {
           g_lookupWindowHandle.window.g_isShowing = false;
           g_lookupWindowHandle.window.saveScreenSettings();
           g_lookupWindowHandle.hide();
@@ -7751,39 +8886,50 @@ function openLookupWindow(show = false) {
       }
     );
     lockNewWindows();
-  } else {
-    try {
-      if (show) {
+  }
+  else
+  {
+    try
+    {
+      if (show)
+      {
         g_lookupWindowHandle.show();
         g_lookupWindowHandle.window.g_isShowing = true;
         g_lookupWindowHandle.window.saveScreenSettings();
-      } else {
+      }
+      else
+      {
         g_lookupWindowHandle.hide();
         g_lookupWindowHandle.window.g_isShowing = false;
         g_lookupWindowHandle.window.saveScreenSettings();
       }
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function openInfoTab(evt, tabName, callFunc, callObj) {
+function openInfoTab(evt, tabName, callFunc, callObj)
+{
   openStatsWindow();
 
-  if (g_statsWindowHandle != null) {
+  if (g_statsWindowHandle != null)
+  {
     // Declare all variables
     var i, infoTabcontent, infoTablinks;
     // Get all elements with class="infoTabcontent" and hide them
     infoTabcontent = g_statsWindowHandle.window.document.getElementsByClassName(
       "infoTabcontent"
     );
-    for (i = 0; i < infoTabcontent.length; i++) {
+    for (i = 0; i < infoTabcontent.length; i++)
+    {
       infoTabcontent[i].style.display = "none";
     }
     // Get all elements with class="infoTablinks" and remove the class "active"
     infoTablinks = g_statsWindowHandle.window.document.getElementsByClassName(
       "infoTablinks"
     );
-    for (i = 0; i < infoTablinks.length; i++) {
+    for (i = 0; i < infoTablinks.length; i++)
+    {
       infoTablinks[i].className = infoTablinks[i].className.replace(
         " active",
         ""
@@ -7794,33 +8940,39 @@ function openInfoTab(evt, tabName, callFunc, callObj) {
     g_statsWindowHandle.window.document.getElementById(tabName).style.display =
       "block";
 
-    if (evt) {
+    if (evt)
+    {
       evt = g_statsWindowHandle.window.document.getElementById(evt);
     }
-    if (evt) {
+    if (evt)
+    {
       if (typeof evt.currentTarget != "undefined")
-        evt.currentTarget.className += " active";
+      { evt.currentTarget.className += " active"; }
       else evt.className += " active";
     }
 
-    if (callFunc) {
+    if (callFunc)
+    {
       if (callObj) callFunc(callObj);
       else callFunc();
     }
   }
 }
 
-function openSettingsTab(evt, tabName) {
+function openSettingsTab(evt, tabName)
+{
   // Declare all variables
   var i, settingsTabcontent, settingsTablinks;
   // Get all elements with class="settingsTabcontent" and hide them
   settingsTabcontent = document.getElementsByClassName("settingsTabcontent");
-  for (i = 0; i < settingsTabcontent.length; i++) {
+  for (i = 0; i < settingsTabcontent.length; i++)
+  {
     settingsTabcontent[i].style.display = "none";
   }
   // Get all elements with class="settingsTablinks" and remove the class "active"
   settingsTablinks = document.getElementsByClassName("settingsTablinks");
-  for (i = 0; i < settingsTablinks.length; i++) {
+  for (i = 0; i < settingsTablinks.length; i++)
+  {
     settingsTablinks[i].className = settingsTablinks[i].className.replace(
       " active",
       ""
@@ -7830,25 +8982,28 @@ function openSettingsTab(evt, tabName) {
   // Show the current tab, and add an "active" class to the button that opened the tab
   document.getElementById(tabName).style.display = "block";
   if (typeof evt.currentTarget != "undefined")
-    evt.currentTarget.className += " active";
+  { evt.currentTarget.className += " active"; }
   else evt.className += " active";
 }
 
-function setGridMode(mode) {
+function setGridMode(mode)
+{
   g_appSettings.sixWideMode = mode;
   modeImg.src = g_maidenheadModeImageArray[g_appSettings.sixWideMode];
   clearTempGrids();
   redrawGrids();
 }
 
-function toggleGridMode() {
+function toggleGridMode()
+{
   g_appSettings.sixWideMode ^= 1;
   modeImg.src = g_maidenheadModeImageArray[g_appSettings.sixWideMode];
   clearTempGrids();
   redrawGrids();
 }
 
-function newStatObject() {
+function newStatObject()
+{
   var statObject = {};
   statObject.worked = 0;
   statObject.confirmed = 0;
@@ -7861,7 +9016,8 @@ function newStatObject() {
   return statObject;
 }
 
-function newStatCountObject() {
+function newStatCountObject()
+{
   var statCountObject = {};
 
   statCountObject.worked = 0;
@@ -7881,7 +9037,8 @@ function newStatCountObject() {
   return statCountObject;
 }
 
-function newDistanceObject(start = 0) {
+function newDistanceObject(start = 0)
+{
   var distance = {};
   distance.worked_unit = start;
   distance.worked_hash = "";
@@ -7890,7 +9047,8 @@ function newDistanceObject(start = 0) {
   return distance;
 }
 
-function newModeType() {
+function newModeType()
+{
   var modeType = {};
   modeType.worked = 0;
   modeType.confirmed = 0;
@@ -7900,24 +9058,29 @@ function newModeType() {
 
 var g_statBoxTimer = null;
 
-function showStatBox(resize) {
+function showStatBox(resize)
+{
   var count = Object.keys(g_QSOhash).length;
 
-  if (typeof resize != "undefined" && resize) {
+  if (typeof resize != "undefined" && resize)
+  {
     setStatsDivHeight("statViewDiv", getStatsWindowHeight() + 29 + "px");
     return;
   }
 
   if (g_statBoxTimer) clearTimeout(g_statBoxTimer);
 
-  if (count > 0) {
+  if (count > 0)
+  {
     setStatsDiv(
       "statViewDiv",
       "&nbsp;<br/>...Parsing Log Entries...<br/>&nbsp;"
     );
     setStatsDivHeight("statViewDiv", "auto");
     g_statBoxTimer = setTimeout(renderStatsBox, 250);
-  } else {
+  }
+  else
+  {
     setStatsDiv(
       "statViewDiv",
       "&nbsp;<br/>No log entries available, load one or more ADIF logs<br/>&nbsp;"
@@ -7926,8 +9089,10 @@ function showStatBox(resize) {
   }
 }
 
-function getTypeFromMode(mode) {
-  if (mode in g_modes) {
+function getTypeFromMode(mode)
+{
+  if (mode in g_modes)
+  {
     if (g_modes[mode] == true) return "Digital";
     else if (g_modes_phone[mode] == true) return "Phone";
     else if (mode == "CW") return "CW";
@@ -7935,34 +9100,40 @@ function getTypeFromMode(mode) {
   return "Other";
 }
 
-function workObject(obj, count, band, mode, type, didConfirm) {
+function workObject(obj, count, band, mode, type, didConfirm)
+{
   obj.worked++;
   obj.worked_bands[band] = ~~obj.worked_bands[band] + 1;
   obj.worked_modes[mode] = ~~obj.worked_modes[mode] + 1;
 
-  if (!count) {
-    obj.worked_types["Mixed"] = ~~obj.worked_modes["Mixed"] + 1;
+  if (!count)
+  {
+    obj.worked_types.Mixed = ~~obj.worked_modes.Mixed + 1;
 
     if (type) obj.worked_types[type] = ~~obj.worked_modes[type] + 1;
   }
 
-  if (didConfirm) {
+  if (didConfirm)
+  {
     obj.confirmed++;
     obj.confirmed_bands[band] = ~~obj.confirmed_bands[band] + 1;
     obj.confirmed_modes[mode] = ~~obj.confirmed_modes[mode] + 1;
 
-    if (!count) {
-      obj.confirmed_types["Mixed"] = ~~obj.confirmed_types["Mixed"] + 1;
+    if (!count)
+    {
+      obj.confirmed_types.Mixed = ~~obj.confirmed_types.Mixed + 1;
       if (type) obj.confirmed_types[type] = ~~obj.confirmed_types[type] + 1;
     }
   }
   return obj;
 }
 
-function renderStatsBox() {
+function renderStatsBox()
+{
   var worker = "";
   var scoreSection = "Initial";
-  try {
+  try
+  {
     var worldGeoData = {};
     var cqZones = {};
     var ituZones = {};
@@ -7998,7 +9169,8 @@ function renderStatsBox() {
 
     scoreSection = "QSO";
 
-    for (var i in g_QSOhash) {
+    for (var i in g_QSOhash)
+    {
       var finalGrid = g_QSOhash[i].grid;
       var didConfirm = g_QSOhash[i].confirmed;
       var band = g_QSOhash[i].band;
@@ -8021,29 +9193,40 @@ function renderStatsBox() {
       details.callsigns[call] = ~~details.callsigns[call] + 1;
 
       if (g_QSOhash[i].time < details.oldest)
-        details.oldest = g_QSOhash[i].time;
+      { details.oldest = g_QSOhash[i].time; }
       if (g_QSOhash[i].time > details.newest)
-        details.newest = g_QSOhash[i].time;
+      { details.newest = g_QSOhash[i].time; }
 
       workObject(modet.Mixed, true, band, mode, type, didConfirm);
 
-      if (mode in g_modes) {
-        if (g_modes[mode] == true) {
+      if (mode in g_modes)
+      {
+        if (g_modes[mode] == true)
+        {
           workObject(modet.Digital, true, band, mode, type, didConfirm);
-        } else if (g_modes_phone[mode] == true) {
+        }
+        else if (g_modes_phone[mode] == true)
+        {
           workObject(modet.Phone, true, band, mode, type, didConfirm);
-        } else if (mode == "CW") {
+        }
+        else if (mode == "CW")
+        {
           workObject(modet.CW, true, band, mode, type, didConfirm);
-        } else workObject(modet.Other, true, band, mode, type, didConfirm);
-      } else workObject(modet.Other, true, band, mode, type, didConfirm);
+        }
+        else workObject(modet.Other, true, band, mode, type, didConfirm);
+      }
+      else workObject(modet.Other, true, band, mode, type, didConfirm);
 
-      if (state != null && isKnownCallsignUS(finalDxcc)) {
+      if (state != null && isKnownCallsignUS(finalDxcc))
+      {
         if (state.substr(0, 2) != "US") state = "US-" + state;
 
-        if (state in g_StateData) {
+        if (state in g_StateData)
+        {
           var name = g_StateData[state].name;
 
-          if (name in g_wasZones) {
+          if (name in g_wasZones)
+          {
             if (!(name in wasZones)) wasZones[name] = newStatObject();
 
             workObject(wasZones[name], false, band, mode, type, didConfirm);
@@ -8051,29 +9234,36 @@ function renderStatsBox() {
         }
       }
 
-      if (wpx != null) {
+      if (wpx != null)
+      {
         if (!(wpx in wpxData)) wpxData[wpx] = newStatObject();
 
         workObject(wpxData[wpx], false, band, mode, type, didConfirm);
       }
 
-      if (who in g_gtCallsigns) {
+      if (who in g_gtCallsigns)
+      {
         if (!(i in gtData)) gtData[i] = newStatObject();
 
         gtData[i] = true;
       }
 
-      if (cnty != null) {
-        if (cnty in g_cntyToCounty) {
+      if (cnty != null)
+      {
+        if (cnty in g_cntyToCounty)
+        {
           if (!(cnty in countyData)) countyData[cnty] = newStatObject();
 
           workObject(countyData[cnty], false, band, mode, type, didConfirm);
         }
       }
-      if (cont != null) {
-        if (cont in g_shapeData) {
+      if (cont != null)
+      {
+        if (cont in g_shapeData)
+        {
           var name = g_shapeData[cont].properties.name;
-          if (name in g_wacZones) {
+          if (name in g_wacZones)
+          {
             if (!(name in wacZones)) wacZones[name] = newStatObject();
 
             workObject(wacZones[name], false, band, mode, type, didConfirm);
@@ -8081,7 +9271,8 @@ function renderStatsBox() {
         }
       }
 
-      if (finalGrid.length > 0) {
+      if (finalGrid.length > 0)
+      {
         LL = squareToLatLongAll(finalGrid);
         unit = parseInt(
           MyCircle.distance(
@@ -8093,91 +9284,110 @@ function renderStatsBox() {
           ) * MyCircle.validateRadius(distanceUnit.value)
         );
 
-        if (unit > long_distance.worked_unit) {
+        if (unit > long_distance.worked_unit)
+        {
           long_distance.worked_unit = unit;
           long_distance.worked_hash = i;
         }
 
         if (!(band in long_distance.band))
-          long_distance.band[band] = newDistanceObject();
+        { long_distance.band[band] = newDistanceObject(); }
         if (!(mode in long_distance.mode))
-          long_distance.mode[mode] = newDistanceObject();
+        { long_distance.mode[mode] = newDistanceObject(); }
         if (!(type in long_distance.type))
-          long_distance.type[type] = newDistanceObject();
+        { long_distance.type[type] = newDistanceObject(); }
 
-        if (unit > long_distance.mode[mode].worked_unit) {
+        if (unit > long_distance.mode[mode].worked_unit)
+        {
           long_distance.mode[mode].worked_unit = unit;
           long_distance.mode[mode].worked_hash = i;
         }
 
-        if (unit > long_distance.band[band].worked_unit) {
+        if (unit > long_distance.band[band].worked_unit)
+        {
           long_distance.band[band].worked_unit = unit;
           long_distance.band[band].worked_hash = i;
         }
 
-        if (unit > long_distance.type[type].worked_unit) {
+        if (unit > long_distance.type[type].worked_unit)
+        {
           long_distance.type[type].worked_unit = unit;
           long_distance.type[type].worked_hash = i;
         }
 
-        if (didConfirm) {
-          if (unit > long_distance.confirmed_unit) {
+        if (didConfirm)
+        {
+          if (unit > long_distance.confirmed_unit)
+          {
             long_distance.confirmed_unit = unit;
             long_distance.confirmed_hash = i;
           }
-          if (unit > long_distance.mode[mode].confirmed_unit) {
+          if (unit > long_distance.mode[mode].confirmed_unit)
+          {
             long_distance.mode[mode].confirmed_unit = unit;
             long_distance.mode[mode].confirmed_hash = i;
           }
-          if (unit > long_distance.band[band].confirmed_unit) {
+          if (unit > long_distance.band[band].confirmed_unit)
+          {
             long_distance.band[band].confirmed_unit = unit;
             long_distance.band[band].confirmed_hash = i;
           }
-          if (unit > long_distance.type[type].confirmed_unit) {
+          if (unit > long_distance.type[type].confirmed_unit)
+          {
             long_distance.type[type].confirmed_unit = unit;
             long_distance.type[type].confirmed_hash = i;
           }
         }
 
-        if (unit > 0) {
-          if (unit < short_distance.worked_unit) {
+        if (unit > 0)
+        {
+          if (unit < short_distance.worked_unit)
+          {
             short_distance.worked_unit = unit;
             short_distance.worked_hash = i;
           }
 
           if (!(band in short_distance.band))
-            short_distance.band[band] = newDistanceObject(100000);
+          { short_distance.band[band] = newDistanceObject(100000); }
           if (!(mode in short_distance.mode))
-            short_distance.mode[mode] = newDistanceObject(100000);
+          { short_distance.mode[mode] = newDistanceObject(100000); }
           if (!(type in short_distance.type))
-            short_distance.type[type] = newDistanceObject(100000);
+          { short_distance.type[type] = newDistanceObject(100000); }
 
-          if (unit < short_distance.mode[mode].worked_unit) {
+          if (unit < short_distance.mode[mode].worked_unit)
+          {
             short_distance.mode[mode].worked_unit = unit;
             short_distance.mode[mode].worked_hash = i;
           }
-          if (unit < short_distance.band[band].worked_unit) {
+          if (unit < short_distance.band[band].worked_unit)
+          {
             short_distance.band[band].worked_unit = unit;
             short_distance.band[band].worked_hash = i;
           }
-          if (unit < short_distance.type[type].worked_unit) {
+          if (unit < short_distance.type[type].worked_unit)
+          {
             short_distance.type[type].worked_unit = unit;
             short_distance.type[type].worked_hash = i;
           }
-          if (didConfirm) {
-            if (unit < short_distance.confirmed_unit) {
+          if (didConfirm)
+          {
+            if (unit < short_distance.confirmed_unit)
+            {
               short_distance.confirmed_unit = unit;
               short_distance.confirmed_hash = i;
             }
-            if (unit < short_distance.mode[mode].confirmed_unit) {
+            if (unit < short_distance.mode[mode].confirmed_unit)
+            {
               short_distance.mode[mode].confirmed_unit = unit;
               short_distance.mode[mode].confirmed_hash = i;
             }
-            if (unit < short_distance.band[band].confirmed_unit) {
+            if (unit < short_distance.band[band].confirmed_unit)
+            {
               short_distance.band[band].confirmed_unit = unit;
               short_distance.band[band].confirmed_hash = i;
             }
-            if (unit < short_distance.type[type].confirmed_unit) {
+            if (unit < short_distance.type[type].confirmed_unit)
+            {
               short_distance.type[type].confirmed_unit = unit;
               short_distance.type[type].confirmed_hash = i;
             }
@@ -8186,7 +9396,7 @@ function renderStatsBox() {
       }
 
       if (!(g_dxccToAltName[finalDxcc] in worldGeoData))
-        worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject();
+      { worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject(); }
 
       workObject(
         worldGeoData[g_dxccToAltName[finalDxcc]],
@@ -8197,16 +9407,21 @@ function renderStatsBox() {
         didConfirm
       );
 
-      if (finalGrid.length > 0) {
+      if (finalGrid.length > 0)
+      {
         var gridCheck = finalGrid.substr(0, 4);
 
-        if (cqz.length > 0) {
+        if (cqz.length > 0)
+        {
           var name = g_cqZones[cqz].name;
           if (!(name in cqZones)) cqZones[name] = newStatObject();
 
           workObject(cqZones[name], false, band, mode, type, didConfirm);
-        } else if (gridCheck in g_gridToCQZone) {
-          if (g_gridToCQZone[gridCheck].length == 1) {
+        }
+        else if (gridCheck in g_gridToCQZone)
+        {
+          if (g_gridToCQZone[gridCheck].length == 1)
+          {
             var name = g_cqZones[g_gridToCQZone[gridCheck][0]].name;
             if (!(name in cqZones)) cqZones[name] = newStatObject();
 
@@ -8214,14 +9429,18 @@ function renderStatsBox() {
           }
         }
 
-        if (ituz.length > 0) {
+        if (ituz.length > 0)
+        {
           if (!(ituz in ituZones)) ituZones[ituz] = newStatObject();
 
           workObject(ituZones[ituz], false, band, mode, type, didConfirm);
-        } else if (gridCheck in g_gridToITUZone) {
-          if (g_gridToITUZone[gridCheck].length == 1) {
+        }
+        else if (gridCheck in g_gridToITUZone)
+        {
+          if (g_gridToITUZone[gridCheck].length == 1)
+          {
             if (!(g_gridToITUZone[gridCheck][0] in ituZones))
-              ituZones[g_gridToITUZone[gridCheck][0]] = newStatObject();
+            { ituZones[g_gridToITUZone[gridCheck][0]] = newStatObject(); }
 
             workObject(
               ituZones[g_gridToITUZone[gridCheck][0]],
@@ -8246,58 +9465,70 @@ function renderStatsBox() {
     var output = {};
 
     worldGeoData.order = 1;
-    stats["DXCC"] = worldGeoData;
-    stats["GRID"] = gridData;
-    stats["CQ"] = cqZones;
-    stats["ITU"] = ituZones;
-    stats["WAC"] = wacZones;
-    stats["WAS"] = wasZones;
-    stats["USC"] = countyData;
-    stats["WPX"] = wpxData;
-    stats["WRFA"] = callData;
+    stats.DXCC = worldGeoData;
+    stats.GRID = gridData;
+    stats.CQ = cqZones;
+    stats.ITU = ituZones;
+    stats.WAC = wacZones;
+    stats.WAS = wasZones;
+    stats.USC = countyData;
+    stats.WPX = wpxData;
+    stats.WRFA = callData;
 
-    for (i in stats) {
+    for (i in stats)
+    {
       output[i] = newStatCountObject();
 
-      for (var key in stats[i]) {
-        if (stats[i][key].worked) {
+      for (var key in stats[i])
+      {
+        if (stats[i][key].worked)
+        {
           output[i].worked++;
-          if (stats[i][key].worked > output[i].worked_high) {
+          if (stats[i][key].worked > output[i].worked_high)
+          {
             output[i].worked_high = stats[i][key].worked;
             output[i].worked_high_key = key;
           }
         }
-        if (stats[i][key].confirmed) {
+        if (stats[i][key].confirmed)
+        {
           output[i].confirmed++;
-          if (stats[i][key].confirmed > output[i].confirmed_high) {
+          if (stats[i][key].confirmed > output[i].confirmed_high)
+          {
             output[i].confirmed_high = stats[i][key].confirmed;
             output[i].confirmed_high_key = key;
           }
         }
 
-        for (var band in stats[i][key].worked_bands) {
+        for (var band in stats[i][key].worked_bands)
+        {
           output[i].worked_bands[band] = ~~output[i].worked_bands[band] + 1;
         }
 
-        for (var band in stats[i][key].confirmed_bands) {
+        for (var band in stats[i][key].confirmed_bands)
+        {
           output[i].confirmed_bands[band] =
             ~~output[i].confirmed_bands[band] + 1;
         }
 
-        for (var mode in stats[i][key].worked_modes) {
+        for (var mode in stats[i][key].worked_modes)
+        {
           output[i].worked_modes[mode] = ~~output[i].worked_modes[mode] + 1;
         }
 
-        for (var mode in stats[i][key].confirmed_modes) {
+        for (var mode in stats[i][key].confirmed_modes)
+        {
           output[i].confirmed_modes[mode] =
             ~~output[i].confirmed_modes[mode] + 1;
         }
 
-        for (var type in stats[i][key].worked_types) {
+        for (var type in stats[i][key].worked_types)
+        {
           output[i].worked_types[type] = ~~output[i].worked_types[type] + 1;
         }
 
-        for (var type in stats[i][key].confirmed_types) {
+        for (var type in stats[i][key].confirmed_types)
+        {
           output[i].confirmed_types[type] =
             ~~output[i].confirmed_types[type] + 1;
         }
@@ -8308,13 +9539,14 @@ function renderStatsBox() {
 
     scoreSection = "Modes";
 
-    output["MIXED"] = modet.Mixed;
-    output["DIGITAL"] = modet.Digital;
-    output["PHONE"] = modet.Phone;
-    output["CW"] = modet.CW;
-    output["Other"] = modet.Other;
+    output.MIXED = modet.Mixed;
+    output.DIGITAL = modet.Digital;
+    output.PHONE = modet.Phone;
+    output.CW = modet.CW;
+    output.Other = modet.Other;
 
-    for (var i in output) {
+    for (var i in output)
+    {
       output[i].worked_band_count = Object.keys(output[i].worked_bands).length;
       output[i].confirmed_band_count = Object.keys(
         output[i].confirmed_bands
@@ -8334,7 +9566,7 @@ function renderStatsBox() {
       1: ["DIGITAL", "Digital", ""],
       2: ["PHONE", "Phone", ""],
       3: ["CW", "CW", ""],
-      4: ["Other", "Other", ""],
+      4: ["Other", "Other", ""]
     };
 
     var AwardNames = {
@@ -8346,7 +9578,7 @@ function renderStatsBox() {
       5: ["WAC", "Continents", "WAC", "cyan"],
       6: ["WAS", "US States", "WAS", "lightblue"],
       7: ["USC", "US Counties", "USA-CA", "orange"],
-      8: ["WPX", "Prefixes", "WPX", "yellow"],
+      8: ["WPX", "Prefixes", "WPX", "yellow"]
     };
 
     worker = "<font color='cyan'>";
@@ -8380,7 +9612,8 @@ function renderStatsBox() {
     worker +=
       "<tr><th>Top Score</th><th style='color:yellow'>Worked</th><th style='color:lightgreen'>Confirmed</th></tr>";
 
-    for (var key in AwardNames) {
+    for (var key in AwardNames)
+    {
       scoreSection = "Award " + AwardNames[key][1];
       var infoObject = output[AwardNames[key][0]];
       worker += "<tr><td style='color:white'>" + AwardNames[key][1] + "</td>";
@@ -8393,7 +9626,8 @@ function renderStatsBox() {
         infoObject.worked_high +
         ")</font></td>";
 
-      if (infoObject.confirmed_high_key) {
+      if (infoObject.confirmed_high_key)
+      {
         worker +=
           "<td style='color:" +
           AwardNames[key][3] +
@@ -8402,7 +9636,8 @@ function renderStatsBox() {
           "<font color='white'> (" +
           infoObject.confirmed_high +
           ")</font></td>";
-      } else worker += "<td></td>";
+      }
+      else worker += "<td></td>";
 
       worker += "</tr>";
     }
@@ -8424,7 +9659,8 @@ function renderStatsBox() {
       g_QSOhash[long_distance.worked_hash].grid +
       "</font></td>";
 
-    if (long_distance.confirmed_hash && long_distance.confirmed_unit > 0) {
+    if (long_distance.confirmed_hash && long_distance.confirmed_unit > 0)
+    {
       worker +=
         "<td style='color:lightgreen'>" +
         long_distance.confirmed_unit +
@@ -8438,7 +9674,8 @@ function renderStatsBox() {
         "<font style='color:orange' > " +
         g_QSOhash[long_distance.confirmed_hash].grid +
         "</font></td>";
-    } else worker += "<td></td>";
+    }
+    else worker += "<td></td>";
 
     scoreSection = "Short Distance";
 
@@ -8457,7 +9694,8 @@ function renderStatsBox() {
       g_QSOhash[short_distance.worked_hash].grid +
       "</font></td>";
 
-    if (short_distance.confirmed_hash && short_distance.confirmed_unit > 0) {
+    if (short_distance.confirmed_hash && short_distance.confirmed_unit > 0)
+    {
       worker +=
         "<td style='color:lightblue'>" +
         short_distance.confirmed_unit +
@@ -8471,7 +9709,8 @@ function renderStatsBox() {
         "<font style='color:orange' > " +
         g_QSOhash[short_distance.confirmed_hash].grid +
         "</font></td>";
-    } else worker += "<td></td>";
+    }
+    else worker += "<td></td>";
 
     worker += "</tr>";
     worker += "</table>";
@@ -8480,11 +9719,13 @@ function renderStatsBox() {
 
     scoreSection = "Award Types";
     for (var key in AwardNames)
+    {
       worker += createStatTable(
         AwardNames[key][1],
         output[AwardNames[key][0]],
         AwardNames[key][2]
       );
+    }
 
     worker += "<br/>";
 
@@ -8492,11 +9733,13 @@ function renderStatsBox() {
 
     worker += "<h1>Mode Types</h1>";
     for (var key in TypeNames)
+    {
       worker += createStatTable(
         TypeNames[key][1],
         output[TypeNames[key][0]],
         TypeNames[key][2]
       );
+    }
 
     worker += "<br/>";
 
@@ -8506,7 +9749,8 @@ function renderStatsBox() {
     worker += createDistanceTable(short_distance, "Shortest Distance");
     worker += "<br/>";
 
-    if (g_appSettings.gtShareEnable == true) {
+    if (g_appSettings.gtShareEnable == true)
+    {
       scoreSection = "GT Users";
       worker += "<h1>Worked GridTracker Stations<br/>Online Now</h1>";
       worker += "</font>";
@@ -8516,7 +9760,9 @@ function renderStatsBox() {
       worker += "</font>";
     }
     worker += "</font>";
-  } catch (e) {
+  }
+  catch (e)
+  {
     worker +=
       "<br/> In Section: " +
       scoreSection +
@@ -8527,37 +9773,41 @@ function renderStatsBox() {
   setStatsDivHeight("statViewDiv", getStatsWindowHeight() + 29 + "px");
 }
 
-function hashNameSort(a, b) {
+function hashNameSort(a, b)
+{
   if (g_QSOhash[a].DEcall > g_QSOhash[b].DEcall) return 1;
   if (g_QSOhash[b].DEcall > g_QSOhash[a].DEcall) return -1;
   return 0;
 }
 
-function createGtStationsTable(obj) {
+function createGtStationsTable(obj)
+{
   var worker =
     "<table style='display:inline-table;margin:5px;white-space:nowrap;' class='darkTable'>";
   worker +=
     "<tr align='center'><th>Call</th><th>Grid</th><th>Sent</th><th>Rcvd</th><th>Mode</th><th>Band</th><th>QSL</th><th>Comment</th><th>DXCC</th><th>Time</th></th></tr>";
 
   var keys = Object.keys(obj).sort(hashNameSort);
-  for (var key in keys) {
+  for (var key in keys)
+  {
     var callsign = g_QSOhash[keys[key]];
     var bgDX = " style='font-weight:bold;color:cyan;' ";
     var bgDE = " style='font-weight:bold;color:yellow;' ";
 
     if (typeof callsign.msg == "undefined" || callsign.msg == "")
-      callsign.msg = "-";
+    { callsign.msg = "-"; }
     var ageString = "";
     if (timeNowSec() - callsign.time < 3601)
-      ageString = (timeNowSec() - callsign.time).toDHMS();
-    else {
+    { ageString = (timeNowSec() - callsign.time).toDHMS(); }
+    else
+    {
       ageString = userTimeString(callsign.time * 1000);
     }
     worker += "<tr><td" + bgDE + ">";
     worker +=
       "<div style='display:inline-table;cursor:pointer' onclick='window.opener.startLookup(\"" +
       callsign.DEcall +
-      '","' +
+      "\",\"" +
       callsign.grid +
       "\");' >" +
       callsign.DEcall.formatCallsign() +
@@ -8596,7 +9846,8 @@ function createGtStationsTable(obj) {
   return worker;
 }
 
-function createDistanceTable(obj, name) {
+function createDistanceTable(obj, name)
+{
   var worker =
     "<table style='display:inline-table;margin:5px;' class='darkTable'>";
   worker +=
@@ -8608,7 +9859,8 @@ function createDistanceTable(obj, name) {
   worker += "<tr><td align=center><font color='lightgreen'>Bands</font></td>";
   worker += "<td align=left><table class='subtable'>";
   var keys = Object.keys(obj.band).sort(numberSort);
-  for (var key in keys) {
+  for (var key in keys)
+  {
     var grid = g_QSOhash[obj.band[keys[key]].worked_hash].grid;
     var call = g_QSOhash[obj.band[keys[key]].worked_hash].DEcall;
     worker +=
@@ -8622,7 +9874,7 @@ function createDistanceTable(obj, name) {
     worker +=
       "<td style='color:yellow;cursor:pointer' align=left onclick='window.opener.startLookup(\"" +
       call +
-      '","' +
+      "\",\"" +
       grid +
       "\");' >" +
       call +
@@ -8632,8 +9884,10 @@ function createDistanceTable(obj, name) {
   }
   worker += "</table></td>";
   worker += "<td align=left><table class='subtable'>";
-  for (var key in keys) {
-    if (keys[key] in obj.band && obj.band[keys[key]].confirmed_hash) {
+  for (var key in keys)
+  {
+    if (keys[key] in obj.band && obj.band[keys[key]].confirmed_hash)
+    {
       var grid = g_QSOhash[obj.band[keys[key]].confirmed_hash].grid;
       var call = g_QSOhash[obj.band[keys[key]].confirmed_hash].DEcall;
       worker +=
@@ -8647,14 +9901,15 @@ function createDistanceTable(obj, name) {
       worker +=
         "<td style='color:yellow;cursor:pointer' align=left onclick='window.opener.startLookup(\"" +
         call +
-        '","' +
+        "\",\"" +
         grid +
         "\");'>" +
         call +
         "</td>";
       worker += "<td style='color:orange' align=left>" + grid + "</td>";
       worker += "</tr>";
-    } else worker += "<tr><td>&nbsp;</td></tr>";
+    }
+    else worker += "<tr><td>&nbsp;</td></tr>";
   }
 
   worker += "</table></td>";
@@ -8662,7 +9917,8 @@ function createDistanceTable(obj, name) {
   worker += "<tr><td align=center><font color='orange'>Modes</font></td>";
   worker += "<td align=left><table class='subtable'>";
   keys = Object.keys(obj.mode).sort();
-  for (var key in keys) {
+  for (var key in keys)
+  {
     var grid = g_QSOhash[obj.mode[keys[key]].worked_hash].grid;
     var call = g_QSOhash[obj.mode[keys[key]].worked_hash].DEcall;
     worker +=
@@ -8676,7 +9932,7 @@ function createDistanceTable(obj, name) {
     worker +=
       "<td style='color:yellow;cursor:pointer' align=left  onclick='window.opener.startLookup(\"" +
       call +
-      '","' +
+      "\",\"" +
       grid +
       "\");' >" +
       call +
@@ -8686,8 +9942,10 @@ function createDistanceTable(obj, name) {
   }
   worker += "</table></td>";
   worker += "<td align=left><table class='subtable'>";
-  for (var key in keys) {
-    if (keys[key] in obj.mode && obj.mode[keys[key]].confirmed_hash) {
+  for (var key in keys)
+  {
+    if (keys[key] in obj.mode && obj.mode[keys[key]].confirmed_hash)
+    {
       var grid = g_QSOhash[obj.mode[keys[key]].confirmed_hash].grid;
       var call = g_QSOhash[obj.mode[keys[key]].confirmed_hash].DEcall;
       worker +=
@@ -8701,21 +9959,23 @@ function createDistanceTable(obj, name) {
       worker +=
         "<td style='color:yellow;cursor:pointer' align=left onclick='window.opener.startLookup(\"" +
         call +
-        '","' +
+        "\",\"" +
         grid +
         "\");' >" +
         call +
         "</td>";
       worker += "<td style='color:orange' align=left>" + grid + "</td>";
       worker += "</tr>";
-    } else worker += "<tr><td>&nbsp;</td></tr>";
+    }
+    else worker += "<tr><td>&nbsp;</td></tr>";
   }
   worker += "</table></td>";
   worker += "</tr>";
   worker += "<tr><td align=center><font color='#DD44DD'>Types</font></td>";
   worker += "<td align=left><table class='subtable'>";
   keys = Object.keys(obj.type).sort();
-  for (var key in keys) {
+  for (var key in keys)
+  {
     var grid = g_QSOhash[obj.type[keys[key]].worked_hash].grid;
     var call = g_QSOhash[obj.type[keys[key]].worked_hash].DEcall;
     worker +=
@@ -8729,7 +9989,7 @@ function createDistanceTable(obj, name) {
     worker +=
       "<td style='color:yellow;cursor:pointer' align=left onclick='window.opener.startLookup(\"" +
       call +
-      '","' +
+      "\",\"" +
       grid +
       "\");' >" +
       call +
@@ -8739,8 +9999,10 @@ function createDistanceTable(obj, name) {
   }
   worker += "</table></td>";
   worker += "<td align=left><table class='subtable'>";
-  for (var key in keys) {
-    if (keys[key] in obj.type && obj.type[keys[key]].confirmed_hash) {
+  for (var key in keys)
+  {
+    if (keys[key] in obj.type && obj.type[keys[key]].confirmed_hash)
+    {
       var grid = g_QSOhash[obj.type[keys[key]].confirmed_hash].grid;
       var call = g_QSOhash[obj.type[keys[key]].confirmed_hash].DEcall;
       worker +=
@@ -8754,14 +10016,15 @@ function createDistanceTable(obj, name) {
       worker +=
         "<td style='color:yellow;cursor:pointer' align=left onclick='window.opener.startLookup(\"" +
         call +
-        '","' +
+        "\",\"" +
         grid +
         "\");' >" +
         call +
         "</td>";
       worker += "<td style='color:orange' align=left>" + grid + "</td>";
       worker += "</tr>";
-    } else worker += "<tr><td>&nbsp;</td></tr>";
+    }
+    else worker += "<tr><td>&nbsp;</td></tr>";
   }
   worker += "</table></td>";
   worker += "</tr>";
@@ -8769,16 +10032,19 @@ function createDistanceTable(obj, name) {
   return worker;
 }
 
-function numberSort(a, b) {
+function numberSort(a, b)
+{
   if (parseInt(a) > parseInt(b)) return 1;
   if (parseInt(b) > parseInt(a)) return -1;
   return 0;
 }
 
-function createStatTable(title, infoObject, awardName) {
+function createStatTable(title, infoObject, awardName)
+{
   var wc1Table = "";
 
-  if (infoObject.worked) {
+  if (infoObject.worked)
+  {
     wc1Table =
       "<table style='display:inline-table;margin:5px;' class='darkTable'>";
     wc1Table +=
@@ -8801,7 +10067,8 @@ function createStatTable(title, infoObject, awardName) {
 
     wc1Table += "<td align=left><table class='subtable'>";
     var keys = Object.keys(infoObject.worked_bands).sort(numberSort);
-    for (var key in keys) {
+    for (var key in keys)
+    {
       wc1Table +=
         "<tr><td align=right>" +
         keys[key] +
@@ -8813,15 +10080,18 @@ function createStatTable(title, infoObject, awardName) {
     wc1Table += "</table></td>";
     wc1Table += "<td align=left><table class='subtable'>";
 
-    for (var key in keys) {
-      if (keys[key] in infoObject.confirmed_bands) {
+    for (var key in keys)
+    {
+      if (keys[key] in infoObject.confirmed_bands)
+      {
         wc1Table +=
           "<tr><td align=right>" +
           keys[key] +
           "</td><td align=left> <font color='white'>(" +
           infoObject.confirmed_bands[keys[key]] +
           ")</font></td></tr>";
-      } else wc1Table += "<tr><td>&nbsp;</td></tr>";
+      }
+      else wc1Table += "<tr><td>&nbsp;</td></tr>";
     }
     wc1Table += "</table></td>";
     wc1Table += "</tr>";
@@ -8830,7 +10100,8 @@ function createStatTable(title, infoObject, awardName) {
     wc1Table += "<td align=center><font color='orange'>Modes</font></td>";
     wc1Table += "<td align=left><table class='subtable'>";
     keys = Object.keys(infoObject.worked_modes).sort();
-    for (var key in keys) {
+    for (var key in keys)
+    {
       wc1Table +=
         "<tr><td align=right>" +
         keys[key] +
@@ -8843,26 +10114,31 @@ function createStatTable(title, infoObject, awardName) {
 
     wc1Table += "<td align=left><table class='subtable'>";
 
-    for (var key in keys) {
-      if (keys[key] in infoObject.confirmed_modes) {
+    for (var key in keys)
+    {
+      if (keys[key] in infoObject.confirmed_modes)
+      {
         wc1Table +=
           "<tr><td align=right>" +
           keys[key] +
           "</td><td align=left> <font color='white'>(" +
           infoObject.confirmed_modes[keys[key]] +
           ")</font></td></tr>";
-      } else wc1Table += "<tr><td>&nbsp;</td></tr>";
+      }
+      else wc1Table += "<tr><td>&nbsp;</td></tr>";
     }
 
     wc1Table += "</table></td>";
     wc1Table += "</tr>";
 
-    if (infoObject.worked_type_count > 0) {
+    if (infoObject.worked_type_count > 0)
+    {
       wc1Table += "<tr>";
       wc1Table += "<td align=center><font color='#DD44DD'>Types</font></td>";
       wc1Table += "<td align=left><table class='subtable'>";
       var keys = Object.keys(infoObject.worked_types).sort();
-      for (var key in keys) {
+      for (var key in keys)
+      {
         wc1Table +=
           "<tr><td align=right>" +
           keys[key] +
@@ -8876,8 +10152,10 @@ function createStatTable(title, infoObject, awardName) {
 
       wc1Table += "<td align=left><table class='subtable'>";
 
-      for (var key in keys) {
-        if (keys[key] in infoObject.confirmed_types) {
+      for (var key in keys)
+      {
+        if (keys[key] in infoObject.confirmed_types)
+        {
           wc1Table +=
             "<tr><td align=right>" +
             keys[key] +
@@ -8885,7 +10163,8 @@ function createStatTable(title, infoObject, awardName) {
             infoObject.confirmed_types[keys[key]] +
             ") " +
             "</font></td></tr>";
-        } else wc1Table += "<tr><td>&nbsp;</td></tr>";
+        }
+        else wc1Table += "<tr><td>&nbsp;</td></tr>";
       }
 
       wc1Table += "</table></td>";
@@ -8898,22 +10177,26 @@ function createStatTable(title, infoObject, awardName) {
   return wc1Table;
 }
 
-function validatePropMode(propMode) {
+function validatePropMode(propMode)
+{
   if (g_appSettings.gtPropFilter == "mixed") return true;
 
   return g_appSettings.gtPropFilter == propMode;
 }
 
-function validateMapMode(mode) {
+function validateMapMode(mode)
+{
   if (g_appSettings.gtModeFilter.length == 0) return true;
 
   if (g_appSettings.gtModeFilter == "auto") return myMode == mode;
 
-  if (g_appSettings.gtModeFilter == "Digital") {
+  if (g_appSettings.gtModeFilter == "Digital")
+  {
     if (mode in g_modes && g_modes[mode]) return true;
     return false;
   }
-  if (g_appSettings.gtModeFilter == "Phone") {
+  if (g_appSettings.gtModeFilter == "Phone")
+  {
     if (mode in g_modes_phone && g_modes_phone[mode]) return true;
     return false;
   }
@@ -8923,7 +10206,8 @@ function validateMapMode(mode) {
   return g_appSettings.gtModeFilter == mode;
 }
 
-function redrawGrids() {
+function redrawGrids()
+{
   if (g_appSettings.gridViewMode == 2) removePaths();
   clearGrids();
   clearQsoGrids();
@@ -8931,7 +10215,8 @@ function redrawGrids() {
   g_QSLcount = 0;
   g_QSOcount = 0;
 
-  for (var i in g_QSOhash) {
+  for (var i in g_QSOhash)
+  {
     var finalGrid = g_QSOhash[i].grid;
     var worked = g_QSOhash[i].worked;
     var didConfirm = g_QSOhash[i].confirmed;
@@ -8947,8 +10232,10 @@ function redrawGrids() {
           : g_appSettings.gtBandFilter == g_QSOhash[i].band)) &&
       validateMapMode(g_QSOhash[i].mode) &&
       validatePropMode(g_QSOhash[i].propMode)
-    ) {
-      if (g_appSettings.gridViewMode > 1) {
+    )
+    {
+      if (g_appSettings.gridViewMode > 1)
+      {
         g_QSOhash[i].rect = qthToQsoBox(
           g_QSOhash[i].grid,
           i,
@@ -8961,7 +10248,8 @@ function redrawGrids() {
           g_QSOhash[i].band,
           g_QSOhash[i].wspr
         );
-        for (var vucc in g_QSOhash[i].vucc_grids) {
+        for (var vucc in g_QSOhash[i].vucc_grids)
+        {
           qthToQsoBox(
             g_QSOhash[i].vucc_grids[vucc],
             i,
@@ -8984,26 +10272,33 @@ function redrawGrids() {
       var ituz = g_QSOhash[i].ituz;
       var cqz = g_QSOhash[i].cqz;
 
-      if (state != null && isKnownCallsignUS(finalDxcc)) {
+      if (state != null && isKnownCallsignUS(finalDxcc))
+      {
         if (state.substr(0, 2) != "US") state = "US-" + state;
 
-        if (state in g_StateData) {
+        if (state in g_StateData)
+        {
           var name = g_StateData[state].name;
 
-          if (name in g_wasZones) {
-            if (g_wasZones[name].worked == false) {
+          if (name in g_wasZones)
+          {
+            if (g_wasZones[name].worked == false)
+            {
               g_wasZones[name].worked = worked;
             }
-            if (worked) {
+            if (worked)
+            {
               g_wasZones[name].worked_bands[band] =
                 ~~g_wasZones[name].worked_bands[band] + 1;
               g_wasZones[name].worked_modes[mode] =
                 ~~g_wasZones[name].worked_modes[mode] + 1;
             }
-            if (g_wasZones[name].confirmed == false) {
+            if (g_wasZones[name].confirmed == false)
+            {
               g_wasZones[name].confirmed = didConfirm;
             }
-            if (didConfirm) {
+            if (didConfirm)
+            {
               g_wasZones[name].confirmed_bands[band] =
                 ~~g_wasZones[name].confirmed_bands[band] + 1;
               g_wasZones[name].confirmed_modes[mode] =
@@ -9013,21 +10308,27 @@ function redrawGrids() {
         }
       }
 
-      if (cnty != null) {
-        if (cnty in g_cntyToCounty) {
-          if (g_countyData[cnty].worked == false) {
+      if (cnty != null)
+      {
+        if (cnty in g_cntyToCounty)
+        {
+          if (g_countyData[cnty].worked == false)
+          {
             g_countyData[cnty].worked = worked;
           }
-          if (worked) {
+          if (worked)
+          {
             g_countyData[cnty].worked_bands[band] =
               ~~g_countyData[cnty].worked_bands[band] + 1;
             g_countyData[cnty].worked_modes[mode] =
               ~~g_countyData[cnty].worked_modes[mode] + 1;
           }
-          if (g_countyData[cnty].confirmed == false) {
+          if (g_countyData[cnty].confirmed == false)
+          {
             g_countyData[cnty].confirmed = didConfirm;
           }
-          if (didConfirm) {
+          if (didConfirm)
+          {
             g_countyData[cnty].confirmed_bands[band] =
               ~~g_countyData[cnty].confirmed_bands[band] + 1;
             g_countyData[cnty].confirmed_modes[mode] =
@@ -9035,24 +10336,31 @@ function redrawGrids() {
           }
         }
       }
-      if (cont != null) {
-        if (cont in g_shapeData) {
+      if (cont != null)
+      {
+        if (cont in g_shapeData)
+        {
           var name = g_shapeData[cont].properties.name;
 
-          if (name in g_wacZones) {
-            if (g_wacZones[name].worked == false) {
+          if (name in g_wacZones)
+          {
+            if (g_wacZones[name].worked == false)
+            {
               g_wacZones[name].worked = worked;
             }
-            if (worked) {
+            if (worked)
+            {
               g_wacZones[name].worked_bands[band] =
                 ~~g_wacZones[name].worked_bands[band] + 1;
               g_wacZones[name].worked_modes[mode] =
                 ~~g_wacZones[name].worked_modes[mode] + 1;
             }
-            if (g_wacZones[name].confirmed == false) {
+            if (g_wacZones[name].confirmed == false)
+            {
               g_wacZones[name].confirmed = didConfirm;
             }
-            if (didConfirm) {
+            if (didConfirm)
+            {
               g_wacZones[name].confirmed_bands[band] =
                 ~~g_wacZones[name].confirmed_bands[band] + 1;
               g_wacZones[name].confirmed_modes[mode] =
@@ -9062,19 +10370,23 @@ function redrawGrids() {
         }
       }
 
-      if (g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked == false) {
+      if (g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked == false)
+      {
         g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked = worked;
       }
-      if (worked) {
+      if (worked)
+      {
         g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_bands[band] =
           ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_bands[band] + 1;
         g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_modes[mode] =
           ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_modes[mode] + 1;
       }
-      if (g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed == false) {
+      if (g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed == false)
+      {
         g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed = didConfirm;
       }
-      if (didConfirm) {
+      if (didConfirm)
+      {
         g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_bands[band] =
           ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_bands[band] +
           1;
@@ -9082,23 +10394,29 @@ function redrawGrids() {
           ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_modes[mode] +
           1;
       }
-      if (finalGrid.length > 0) {
+      if (finalGrid.length > 0)
+      {
         var gridCheck = finalGrid.substr(0, 4);
 
-        if (gridCheck in g_us48Data) {
-          if (g_us48Data[gridCheck].worked == false) {
+        if (gridCheck in g_us48Data)
+        {
+          if (g_us48Data[gridCheck].worked == false)
+          {
             g_us48Data[gridCheck].worked = worked;
           }
-          if (worked) {
+          if (worked)
+          {
             g_us48Data[gridCheck].worked_bands[band] =
               ~~g_us48Data[gridCheck].worked_bands[band] + 1;
             g_us48Data[gridCheck].worked_modes[mode] =
               ~~g_us48Data[gridCheck].worked_modes[mode] + 1;
           }
-          if (g_us48Data[gridCheck].confirmed == false) {
+          if (g_us48Data[gridCheck].confirmed == false)
+          {
             g_us48Data[gridCheck].confirmed = didConfirm;
           }
-          if (didConfirm) {
+          if (didConfirm)
+          {
             g_us48Data[gridCheck].confirmed_bands[band] =
               ~~g_us48Data[gridCheck].confirmed_bands[band] + 1;
             g_us48Data[gridCheck].confirmed_modes[mode] =
@@ -9106,31 +10424,41 @@ function redrawGrids() {
           }
         }
 
-        if (cqz.length > 0) {
-          if (g_cqZones[cqz].worked == false) {
+        if (cqz.length > 0)
+        {
+          if (g_cqZones[cqz].worked == false)
+          {
             g_cqZones[cqz].worked = worked;
           }
-          if (worked) {
+          if (worked)
+          {
             g_cqZones[cqz].worked_bands[band] =
               ~~g_cqZones[cqz].worked_bands[band] + 1;
             g_cqZones[cqz].worked_modes[mode] =
               ~~g_cqZones[cqz].worked_modes[mode] + 1;
           }
-          if (g_cqZones[cqz].confirmed == false) {
+          if (g_cqZones[cqz].confirmed == false)
+          {
             g_cqZones[cqz].confirmed = didConfirm;
           }
-          if (didConfirm) {
+          if (didConfirm)
+          {
             g_cqZones[cqz].confirmed_bands[band] =
               ~~g_cqZones[cqz].confirmed_bands[band] + 1;
             g_cqZones[cqz].confirmed_modes[mode] =
               ~~g_cqZones[cqz].confirmed_modes[mode] + 1;
           }
-        } else if (gridCheck in g_gridToCQZone) {
-          if (g_gridToCQZone[gridCheck].length == 1) {
-            if (g_cqZones[g_gridToCQZone[gridCheck][0]].worked == false) {
+        }
+        else if (gridCheck in g_gridToCQZone)
+        {
+          if (g_gridToCQZone[gridCheck].length == 1)
+          {
+            if (g_cqZones[g_gridToCQZone[gridCheck][0]].worked == false)
+            {
               g_cqZones[g_gridToCQZone[gridCheck][0]].worked = worked;
             }
-            if (worked) {
+            if (worked)
+            {
               g_cqZones[g_gridToCQZone[gridCheck][0]].worked_bands[band] =
                 ~~g_cqZones[g_gridToCQZone[gridCheck][0]].worked_bands[band] +
                 1;
@@ -9138,10 +10466,12 @@ function redrawGrids() {
                 ~~g_cqZones[g_gridToCQZone[gridCheck][0]].worked_modes[mode] +
                 1;
             }
-            if (g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed == false) {
+            if (g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed == false)
+            {
               g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed = didConfirm;
             }
-            if (didConfirm) {
+            if (didConfirm)
+            {
               g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed_bands[band] =
                 ~~g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed_bands[
                   band
@@ -9154,31 +10484,41 @@ function redrawGrids() {
           }
         }
 
-        if (ituz.length > 0) {
-          if (g_ituZones[ituz].worked == false) {
+        if (ituz.length > 0)
+        {
+          if (g_ituZones[ituz].worked == false)
+          {
             g_ituZones[ituz].worked = worked;
           }
-          if (worked) {
+          if (worked)
+          {
             g_ituZones[ituz].worked_bands[band] =
               ~~g_ituZones[ituz].worked_bands[band] + 1;
             g_ituZones[ituz].worked_modes[mode] =
               ~~g_ituZones[ituz].worked_modes[mode] + 1;
           }
-          if (g_ituZones[ituz].confirmed == false) {
+          if (g_ituZones[ituz].confirmed == false)
+          {
             g_ituZones[ituz].confirmed = didConfirm;
           }
-          if (didConfirm) {
+          if (didConfirm)
+          {
             g_ituZones[ituz].confirmed_bands[band] =
               ~~g_ituZones[ituz].confirmed_bands[band] + 1;
             g_ituZones[ituz].confirmed_modes[mode] =
               ~~g_ituZones[ituz].confirmed_modes[mode] + 1;
           }
-        } else if (gridCheck in g_gridToITUZone) {
-          if (g_gridToITUZone[gridCheck].length == 1) {
-            if (g_ituZones[g_gridToITUZone[gridCheck][0]].worked == false) {
+        }
+        else if (gridCheck in g_gridToITUZone)
+        {
+          if (g_gridToITUZone[gridCheck].length == 1)
+          {
+            if (g_ituZones[g_gridToITUZone[gridCheck][0]].worked == false)
+            {
               g_ituZones[g_gridToITUZone[gridCheck][0]].worked = worked;
             }
-            if (worked) {
+            if (worked)
+            {
               g_ituZones[g_gridToITUZone[gridCheck][0]].worked_bands[band] =
                 ~~g_ituZones[g_gridToITUZone[gridCheck][0]].worked_bands[band] +
                 1;
@@ -9186,10 +10526,12 @@ function redrawGrids() {
                 ~~g_ituZones[g_gridToITUZone[gridCheck][0]].worked_modes[mode] +
                 1;
             }
-            if (g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed == false) {
+            if (g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed == false)
+            {
               g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed = didConfirm;
             }
-            if (didConfirm) {
+            if (didConfirm)
+            {
               g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_bands[band] =
                 ~~g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_bands[
                   band
@@ -9203,22 +10545,28 @@ function redrawGrids() {
         }
       }
 
-      for (var key in g_QSOhash[i].vucc_grids) {
+      for (var key in g_QSOhash[i].vucc_grids)
+      {
         var grid = g_QSOhash[i].vucc_grids[key].substr(0, 4);
-        if (grid in g_us48Data) {
-          if (g_us48Data[grid].worked == false) {
+        if (grid in g_us48Data)
+        {
+          if (g_us48Data[grid].worked == false)
+          {
             g_us48Data[grid].worked = worked;
           }
-          if (worked) {
+          if (worked)
+          {
             g_us48Data[grid].worked_bands[band] =
               ~~g_us48Data[grid].worked_bands[band] + 1;
             g_us48Data[grid].worked_modes[mode] =
               ~~g_us48Data[grid].worked_modes[mode] + 1;
           }
-          if (g_us48Data[grid].confirmed == false) {
+          if (g_us48Data[grid].confirmed == false)
+          {
             g_us48Data[grid].confirmed = didConfirm;
           }
-          if (didConfirm) {
+          if (didConfirm)
+          {
             g_us48Data[grid].confirmed_bands[band] =
               ~~g_us48Data[grid].confirmed_bands[band] + 1;
             g_us48Data[grid].confirmed_modes[mode] =
@@ -9229,28 +10577,38 @@ function redrawGrids() {
     }
   }
 
-  for (var layer in g_viewInfo) {
+  for (var layer in g_viewInfo)
+  {
     var search = window[g_viewInfo[layer][0]];
     var worked = (confirmed = 0);
 
-    if (layer == 0) {
-      for (var key in search) {
+    if (layer == 0)
+    {
+      for (var key in search)
+      {
         if (search[key].rectangle.worked) worked++;
         if (search[key].rectangle.confirmed) confirmed++;
       }
       g_viewInfo[layer][2] = worked;
       g_viewInfo[layer][3] = confirmed;
-    } else if (layer == 5) {
-      for (var key in search) {
-        if (search[key].geo != "deleted") {
+    }
+    else if (layer == 5)
+    {
+      for (var key in search)
+      {
+        if (search[key].geo != "deleted")
+        {
           if (search[key].worked) worked++;
           if (search[key].confirmed) confirmed++;
         }
       }
       g_viewInfo[layer][2] = worked;
       g_viewInfo[layer][3] = confirmed;
-    } else {
-      for (var key in search) {
+    }
+    else
+    {
+      for (var key in search)
+      {
         if (search[key].worked) worked++;
         if (search[key].confirmed) confirmed++;
       }
@@ -9259,7 +10617,8 @@ function redrawGrids() {
     }
   }
 
-  for (var i in g_liveCallsigns) {
+  for (var i in g_liveCallsigns)
+  {
     if (
       g_appSettings.gridViewMode != 2 &&
       (g_appSettings.gtBandFilter.length == 0 ||
@@ -9267,8 +10626,10 @@ function redrawGrids() {
           ? myBand == g_liveCallsigns[i].band
           : g_appSettings.gtBandFilter == g_liveCallsigns[i].band)) &&
       validateMapMode(g_liveCallsigns[i].mode)
-    ) {
-      if (g_appSettings.gridViewMode == 1 || g_appSettings.gridViewMode == 3) {
+    )
+    {
+      if (g_appSettings.gridViewMode == 1 || g_appSettings.gridViewMode == 3)
+      {
         g_liveCallsigns[i].rect = qthToBox(
           g_liveCallsigns[i].grid,
           g_liveCallsigns[i].DEcall,
@@ -9290,15 +10651,18 @@ function redrawGrids() {
   updateCountStats();
 }
 
-function toggleAlertMute() {
+function toggleAlertMute()
+{
   g_appSettings.alertMute ^= 1;
   alertMuteImg.src = g_alertImageArray[g_appSettings.alertMute];
-  if (g_appSettings.alertMute == 1) {
+  if (g_appSettings.alertMute == 1)
+  {
     chrome.tts.stop();
   }
 }
 
-function togglePushPinMode() {
+function togglePushPinMode()
+{
   if (g_pushPinMode == false) g_pushPinMode = true;
   else g_pushPinMode = false;
   g_appSettings.pushPinMode = g_pushPinMode;
@@ -9307,44 +10671,58 @@ function togglePushPinMode() {
   redrawGrids();
 }
 
-function stopAsking(checkbox) {
+function stopAsking(checkbox)
+{
   g_appSettings.stopAskingVersion = checkbox.checked;
 }
 
-function toggleGtShareEnable() {
-  if (g_appSettings.gtShareEnable == true) {
+function toggleGtShareEnable()
+{
+  if (g_appSettings.gtShareEnable == true)
+  {
     g_appSettings.gtShareEnable = false;
-  } else g_appSettings.gtShareEnable = true;
+  }
+  else g_appSettings.gtShareEnable = true;
 
   setGtShareButtons();
 }
 
-function setGtShareButtons() {
+function setGtShareButtons()
+{
   if (
     g_appSettings.gtShareEnable == true &&
     g_mapSettings.offlineMode == false
-  ) {
+  )
+  {
     if (g_appSettings.gtMsgEnable == true)
-      msgButton.style.display = "inline-block";
+    { msgButton.style.display = "inline-block"; }
     else msgButton.style.display = "none";
 
     gtFlagButton.style.display = "inline-block";
-    if (g_appSettings.gtFlagImgSrc > 0) {
-      g_layerVectors["gtflags"].setVisible(true);
-    } else {
-      g_layerVectors["gtflags"].setVisible(false);
+    if (g_appSettings.gtFlagImgSrc > 0)
+    {
+      g_layerVectors.gtflags.setVisible(true);
     }
-  } else {
+    else
+    {
+      g_layerVectors.gtflags.setVisible(false);
+    }
+  }
+  else
+  {
     msgButton.style.display = "none";
     gtFlagButton.style.display = "none";
-    g_layerVectors["gtflags"].setVisible(false);
+    g_layerVectors.gtflags.setVisible(false);
     clearGtFlags();
     // Clear list
     g_gtFlagPins = {};
-    if (g_chatWindowHandle != null) {
-      try {
+    if (g_chatWindowHandle != null)
+    {
+      try
+      {
         g_chatWindowHandle.hide();
-      } catch (e) {}
+      }
+      catch (e) {}
     }
   }
 
@@ -9352,27 +10730,37 @@ function setGtShareButtons() {
     g_gtShareFlagImageArray[g_appSettings.gtShareEnable == false ? 0 : 1];
 }
 
-function setMulticastIp() {
+function setMulticastIp()
+{
   g_appSettings.wsjtIP = multicastIpInput.value;
 }
 
-function setMulticastEnable(checkbox) {
-  if (checkbox.checked == true) {
+function setMulticastEnable(checkbox)
+{
+  if (checkbox.checked == true)
+  {
     multicastTD.style.display = "block";
-    if (ValidateMulticast(multicastIpInput)) {
+    if (ValidateMulticast(multicastIpInput))
+    {
       g_appSettings.wsjtIP = multicastIpInput.value;
-    } else {
+    }
+    else
+    {
       g_appSettings.wsjtIP = "";
     }
-  } else {
+  }
+  else
+  {
     multicastTD.style.display = "none";
     g_appSettings.wsjtIP = "";
   }
   g_appSettings.multicast = checkbox.checked;
 }
 
-function setUdpForwardEnable(checkbox) {
-  if (checkbox.checked) {
+function setUdpForwardEnable(checkbox)
+{
+  if (checkbox.checked)
+  {
     if (
       ValidatePort(
         udpForwardPortInput,
@@ -9380,7 +10768,8 @@ function setUdpForwardEnable(checkbox) {
         CheckForwardPortIsNotReceivePort
       ) &&
       ValidateIPaddress(udpForwardIpInput, null)
-    ) {
+    )
+    {
       g_appSettings.wsjtForwardUdpEnable = checkbox.checked;
       return;
     }
@@ -9389,20 +10778,25 @@ function setUdpForwardEnable(checkbox) {
   g_appSettings.wsjtForwardUdpEnable = checkbox.checked;
 }
 
-function setGTspotEnable(checkbox) {
+function setGTspotEnable(checkbox)
+{
   g_appSettings.gtSpotEnable = checkbox.checked;
 
   g_gtLiveStatusUpdate = true;
 }
 
-function setMsgEnable(checkbox) {
+function setMsgEnable(checkbox)
+{
   g_appSettings.gtMsgEnable = checkbox.checked;
-  if (g_appSettings.gtShareEnable == true) {
+  if (g_appSettings.gtShareEnable == true)
+  {
     if (g_appSettings.gtMsgEnable == true)
-      msgButton.style.display = "inline-block";
-    else {
+    { msgButton.style.display = "inline-block"; }
+    else
+    {
       msgButton.style.display = "none";
-      if (g_chatWindowHandle != null) {
+      if (g_chatWindowHandle != null)
+      {
         g_chatWindowHandle.hide();
       }
     }
@@ -9411,16 +10805,20 @@ function setMsgEnable(checkbox) {
   setMsgSettingsView();
 }
 
-function newMessageSetting(whichSetting) {
-  if (whichSetting.id in g_msgSettings) {
+function newMessageSetting(whichSetting)
+{
+  if (whichSetting.id in g_msgSettings)
+  {
     g_msgSettings[whichSetting.id] = whichSetting.value;
     localStorage.msgSettings = JSON.stringify(g_msgSettings);
     setMsgSettingsView();
   }
 }
 
-function checkForNewVersion(showUptoDate) {
+function checkForNewVersion(showUptoDate)
+{
   if (typeof nw != "undefined")
+  {
     getBuffer(
       "http://app.gridtracker.org/version.txt?lang=" + g_localeString,
       versionCheck,
@@ -9428,11 +10826,14 @@ function checkForNewVersion(showUptoDate) {
       "http",
       80
     );
+  }
 }
 
-function renderBandActivity() {
+function renderBandActivity()
+{
   var buffer = "";
-  if (typeof g_bandActivity.lines[myMode] != "undefined") {
+  if (typeof g_bandActivity.lines[myMode] != "undefined")
+  {
     var lines = g_bandActivity.lines[myMode];
 
     var bands = [
@@ -9449,9 +10850,10 @@ function renderBandActivity() {
       "10m",
       "6m",
       "4m",
-      "2m",
+      "2m"
     ];
     if (g_myDXCC in g_callsignDatabaseUSplus)
+    {
       bands = [
         "630m",
         "160m",
@@ -9465,11 +10867,13 @@ function renderBandActivity() {
         "12m",
         "10m",
         "6m",
-        "2m",
+        "2m"
       ];
+    }
     var bandData = {};
     var maxValue = 0;
-    for (var i = 0; i < bands.length; i++) {
+    for (var i = 0; i < bands.length; i++)
+    {
       bandData[bands[i]] = {};
 
       bandData[bands[i]].score = 0;
@@ -9477,14 +10881,17 @@ function renderBandActivity() {
       bandData[bands[i]].tx = 0;
       bandData[bands[i]].rx = 0;
     }
-    for (var x = 0; x < lines.length; x++) {
+    for (var x = 0; x < lines.length; x++)
+    {
       var firstChar = lines[x].charCodeAt(0);
-      if (firstChar != 35 && lines[x].length > 1) {
+      if (firstChar != 35 && lines[x].length > 1)
+      {
         // doesn't begins with # and has something
         var values = lines[x].trim().split(" ");
         var band = Number(Number(values[0]) / 1000000).formatBand();
 
-        if (band in bandData) {
+        if (band in bandData)
+        {
           var place = bandData[band];
 
           place.score += Number(values[1]);
@@ -9498,10 +10905,12 @@ function renderBandActivity() {
     }
 
     var scaleFactor = 1.0;
-    if (maxValue > 26) {
+    if (maxValue > 26)
+    {
       scaleFactor = 26 / maxValue;
     }
-    for (var band in bandData) {
+    for (var band in bandData)
+    {
       var blockMyBand = "";
       if (band == myBand) blockMyBand = " class='myBand' ";
 
@@ -9534,18 +10943,23 @@ function renderBandActivity() {
         "</div>";
       buffer += "</div>";
     }
-  } else {
+  }
+  else
+  {
     buffer = "..no data yet..";
   }
   graphDiv.innerHTML = buffer;
-  if (g_baWindowHandle) {
+  if (g_baWindowHandle)
+  {
     g_baWindowHandle.window.graphDiv.innerHTML = buffer;
   }
 }
 
-function pskBandActivityCallback(buffer, flag) {
+function pskBandActivityCallback(buffer, flag)
+{
   var result = String(buffer);
-  if (result.indexOf("frequency score") > -1) {
+  if (result.indexOf("frequency score") > -1)
+  {
     // looks good so far
     g_bandActivity.lines[myMode] = result.split("\n");
     g_bandActivity.lastUpdate[myMode] = g_timeNow + 600;
@@ -9555,9 +10969,11 @@ function pskBandActivityCallback(buffer, flag) {
   renderBandActivity();
 }
 
-function pskGetBandActivity() {
+function pskGetBandActivity()
+{
   if (g_mapSettings.offlineMode == true) return;
-  if (typeof g_bandActivity.lastUpdate[myMode] == "undefined") {
+  if (typeof g_bandActivity.lastUpdate[myMode] == "undefined")
+  {
     g_bandActivity.lastUpdate[myMode] = 0;
   }
 
@@ -9565,7 +10981,8 @@ function pskGetBandActivity() {
     myMode.length > 0 &&
     myDEGrid.length > 0 &&
     g_timeNow > g_bandActivity.lastUpdate[myMode]
-  ) {
+  )
+  {
     getBuffer(
       "https://pskreporter.info/cgi-bin/psk-freq.pl?mode=" +
         myMode +
@@ -9580,16 +10997,19 @@ function pskGetBandActivity() {
 
   renderBandActivity();
 
-  if (g_pskBandActivityTimerHandle != null) {
+  if (g_pskBandActivityTimerHandle != null)
+  {
     clearInterval(g_pskBandActivityTimerHandle);
   }
 
-  g_pskBandActivityTimerHandle = setInterval(function () {
+  g_pskBandActivityTimerHandle = setInterval(function ()
+  {
     pskGetBandActivity();
   }, 601000); // every 20 minutes, 1 second
 }
 
-function getIniFromApp(appName) {
+function getIniFromApp(appName)
+{
   var result = Array();
   result.port = -1;
   result.ip = "";
@@ -9605,64 +11025,81 @@ function getIniFromApp(appName) {
   var wsjtxCfgPath = "";
   var data = String(nw.App.dataPath);
   var end = 0;
-  if (g_platform == "windows") {
+  if (g_platform == "windows")
+  {
     end = data.indexOf("GridTracker\\User Data\\Default");
-    if (end > -1) {
+    if (end > -1)
+    {
       wsjtxCfgPath = data.substr(0, end) + appName + "\\" + appName + ".ini";
     }
-  } else if (g_platform == "mac") {
+  }
+  else if (g_platform == "mac")
+  {
     wsjtxCfgPath = process.env.HOME + "/Library/Preferences/WSJT-X.ini";
-  } else {
+  }
+  else
+  {
     wsjtxCfgPath = process.env.HOME + "/.config/" + appName + ".ini";
   }
-  if (fs.existsSync(wsjtxCfgPath)) {
+  if (fs.existsSync(wsjtxCfgPath))
+  {
     var fileBuf = fs.readFileSync(wsjtxCfgPath, "ascii");
     var fileArray = fileBuf.split("\n");
     for (var key in fileArray) fileArray[key] = fileArray[key].trim();
     result.IniPath = data.substr(0, end) + appName + "\\";
-    for (var x = 0; x < fileArray.length; x++) {
+    for (var x = 0; x < fileArray.length; x++)
+    {
       var indexOfPort = fileArray[x].indexOf("UDPServerPort=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.port = portSplit[1];
       }
       indexOfPort = fileArray[x].indexOf("UDPServer=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.ip = portSplit[1];
       }
       indexOfPort = fileArray[x].indexOf("MyCall=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.MyCall = portSplit[1];
       }
       indexOfPort = fileArray[x].indexOf("MyGrid=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.MyGrid = portSplit[1].substr(0, 6);
       }
       indexOfPort = fileArray[x].indexOf("Mode=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.MyMode = portSplit[1];
       }
       indexOfPort = fileArray[x].indexOf("DialFreq=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.MyBand = Number(portSplit[1] / 1000000).formatBand();
       }
       indexOfPort = fileArray[x].indexOf("N1MMServerPort=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.N1MMServerPort = portSplit[1];
       }
       indexOfPort = fileArray[x].indexOf("N1MMServer=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.N1MMServer = portSplit[1];
       }
       indexOfPort = fileArray[x].indexOf("BroadcastToN1MM=");
-      if (indexOfPort == 0) {
+      if (indexOfPort == 0)
+      {
         var portSplit = fileArray[x].split("=");
         result.BroadcastToN1MM = portSplit[1] == "true";
       }
@@ -9671,7 +11108,8 @@ function getIniFromApp(appName) {
   return result;
 }
 
-function checkRunningProcesses() {
+function checkRunningProcesses()
+{
   var child_process = require("child_process");
   var list =
     g_platform == "windows"
@@ -9682,10 +11120,14 @@ function checkRunningProcesses() {
   g_jtdxProcessRunning = list.indexOf("jtdx") > -1;
 }
 
-function updateRunningProcesses() {
-  try {
+function updateRunningProcesses()
+{
+  try
+  {
     checkRunningProcesses();
-  } catch (e) {
+  }
+  catch (e)
+  {
     g_wsjtxProcessRunning = false;
     g_jtdxProcessRunning = false;
   }
@@ -9693,52 +11135,65 @@ function updateRunningProcesses() {
   if (g_wsjtxProcessRunning == true) runningAppsDiv.innerHTML += " - up - ";
   else runningAppsDiv.innerHTML += " - ? - ";
   g_wsjtxIni = getIniFromApp("WSJT-X");
-  if (g_wsjtxIni.port > -1) {
+  if (g_wsjtxIni.port > -1)
+  {
     runningAppsDiv.innerHTML +=
       "<b>(" + g_wsjtxIni.ip + " / " + g_wsjtxIni.port + ")</b> ";
-  } else runningAppsDiv.innerHTML += "<b>(?)</b> ";
-  if (g_platform != "mac") {
+  }
+  else runningAppsDiv.innerHTML += "<b>(?)</b> ";
+  if (g_platform != "mac")
+  {
     runningAppsDiv.innerHTML += " / JTDX ";
     if (g_jtdxProcessRunning == true) runningAppsDiv.innerHTML += " - up - ";
     else runningAppsDiv.innerHTML += " - ? - ";
     g_jtdxIni = getIniFromApp("JTDX");
-    if (g_jtdxIni.port > -1) {
+    if (g_jtdxIni.port > -1)
+    {
       runningAppsDiv.innerHTML +=
         "<b>(" + g_jtdxIni.ip + " / " + g_jtdxIni.port + ")</b> ";
-    } else runningAppsDiv.innerHTML += "<b>(?)</b> ";
+    }
+    else runningAppsDiv.innerHTML += "<b>(?)</b> ";
   }
 }
 
-function updateBasedOnIni() {
+function updateBasedOnIni()
+{
   var which = null;
   var count = 0;
   if (g_wsjtxProcessRunning) count++;
   if (g_jtdxProcessRunning) count++;
   // UdpPortNotSet
-  if (g_appSettings.wsjtUdpPort == 0 && count == 1) {
+  if (g_appSettings.wsjtUdpPort == 0 && count == 1)
+  {
     if (g_wsjtxProcessRunning) which = g_wsjtxIni;
     else if (g_jtdxProcessRunning) which = g_jtdxIni;
-    if (which != null && which.port > -1) {
+    if (which != null && which.port > -1)
+    {
       g_appSettings.wsjtUdpPort = which.port;
       g_appSettings.wsjtIP = which.ip;
     }
-    if (which == null) {
+    if (which == null)
+    {
       g_appSettings.wsjtUdpPort = 2237;
       g_appSettings.wsjtIP = "";
     }
     if (
       ipToInt(g_appSettings.wsjtIP) >= ipToInt("224.0.0.0") &&
       ipToInt(g_appSettings.wsjtIP) < ipToInt("240.0.0.0")
-    ) {
+    )
+    {
       g_appSettings.multicast = true;
-    } else g_appSettings.multicast = false;
+    }
+    else g_appSettings.multicast = false;
   }
   // Which INI do we load?
-  if (g_appSettings.wsjtUdpPort) {
+  if (g_appSettings.wsjtUdpPort)
+  {
     which = null;
     if (g_wsjtxIni.port == g_appSettings.wsjtUdpPort) which = g_wsjtxIni;
     else if (g_jtdxIni.port == g_appSettings.wsjtUdpPort) which = g_jtdxIni;
-    if (which != null) {
+    if (which != null)
+    {
       myDEcall = which.MyCall;
       myDEGrid = which.MyGrid;
       g_lastBand = myBand;
@@ -9749,11 +11204,13 @@ function updateBasedOnIni() {
       which != null &&
       which.BroadcastToN1MM == true &&
       g_N1MMSettings.enable == true
-    ) {
+    )
+    {
       if (
         which.N1MMServer == g_N1MMSettings.ip &&
         which.N1MMServerPort == g_N1MMSettings.port
-      ) {
+      )
+      {
         buttonN1MMCheckBox.checked = g_N1MMSettings.enable = false;
         localStorage.N1MMSettings = JSON.stringify(g_N1MMSettings);
         alert(
@@ -9762,15 +11219,19 @@ function updateBasedOnIni() {
         );
       }
     }
-    if (which != null) {
-      if (g_appSettings.wsjtIP == "") {
+    if (which != null)
+    {
+      if (g_appSettings.wsjtIP == "")
+      {
         g_appSettings.wsjtIP = which.ip;
       }
     }
   }
   if (myDEGrid.length > 0) setHomeGridsquare();
-  else {
-    if (typeof nw != "undefined") {
+  else
+  {
+    if (typeof nw != "undefined")
+    {
       // lets see if we can find our location the hard way
       getBuffer(
         "https://api.ipstack.com/check?access_key=8c9233ec1c09861a707951ab3718a7f6&format=1",
@@ -9783,113 +11244,143 @@ function updateBasedOnIni() {
   }
 }
 
-function CheckReceivePortIsNotForwardPort(value) {
+function CheckReceivePortIsNotForwardPort(value)
+{
   if (
     udpForwardIpInput.value == "127.0.0.1" &&
     udpForwardPortInput.value == value &&
     g_appSettings.wsjtIP == "" &&
     udpForwardEnable.checked
-  ) {
+  )
+  {
     return false;
   }
   return true;
 }
 
-function CheckForwardPortIsNotReceivePort(value) {
+function CheckForwardPortIsNotReceivePort(value)
+{
   if (
     udpForwardIpInput.value == "127.0.0.1" &&
     udpPortInput.value == value &&
     g_appSettings.wsjtIP == ""
   )
-    return false;
+  { return false; }
   return true;
 }
 
-function setForwardIp() {
+function setForwardIp()
+{
   g_appSettings.wsjtForwardUdpIp = udpForwardIpInput.value;
-  if (ValidatePort(udpPortInput, null, CheckReceivePortIsNotForwardPort)) {
+  if (ValidatePort(udpPortInput, null, CheckReceivePortIsNotForwardPort))
+  {
     setUdpPort();
   }
   ValidatePort(udpForwardPortInput, null, CheckForwardPortIsNotReceivePort);
 }
 
-function setForwardPort() {
+function setForwardPort()
+{
   g_appSettings.wsjtForwardUdpPort = udpForwardPortInput.value;
   ValidateIPaddress(udpForwardIpInput, null);
-  if (ValidatePort(udpPortInput, null, CheckReceivePortIsNotForwardPort)) {
+  if (ValidatePort(udpPortInput, null, CheckReceivePortIsNotForwardPort))
+  {
     setUdpPort();
   }
 }
 
-function validIpKeys(value) {
+function validIpKeys(value)
+{
   if (value == 46) return true;
   return value >= 48 && value <= 57;
 }
 
-function validNumberKeys(value) {
+function validNumberKeys(value)
+{
   return value >= 48 && value <= 57;
 }
 
-function validateNumAndLetter(input) {
+function validateNumAndLetter(input)
+{
   if (/\d/.test(input) && /[A-Z]/.test(input)) return true;
   else return false;
 }
 
-function validCallsignsKeys(value) {
+function validCallsignsKeys(value)
+{
   if (value == 44) return true;
   if (value >= 47 && value <= 57) return true;
   if (value >= 65 && value <= 90) return true;
   return value >= 97 && value <= 122;
 }
 
-function ValidateCallsigns(inputText, validDiv) {
+function ValidateCallsigns(inputText, validDiv)
+{
   inputText.value = inputText.value.toUpperCase();
   var callsigns = inputText.value.split(",");
   var passed = false;
-  for (var call in callsigns) {
-    if (callsigns[call].length > 0) {
-      if (/\d/.test(callsigns[call]) && /[A-Z]/.test(callsigns[call])) {
+  for (var call in callsigns)
+  {
+    if (callsigns[call].length > 0)
+    {
+      if (/\d/.test(callsigns[call]) && /[A-Z]/.test(callsigns[call]))
+      {
         passed = true;
-      } else {
+      }
+      else
+      {
         passed = false;
         break;
       }
-    } else {
+    }
+    else
+    {
       passed = false;
       break;
     }
   }
 
-  if (passed) {
+  if (passed)
+  {
     inputText.style.color = "#FF0";
     inputText.style.backgroundColor = "green";
-  } else {
+  }
+  else
+  {
     inputText.style.color = "#000";
     inputText.style.backgroundColor = "yellow";
   }
   return passed;
 }
 
-function ValidateCallsign(inputText, validDiv) {
+function ValidateCallsign(inputText, validDiv)
+{
   addError.innerHTML = "";
-  if (inputText.value.length > 0) {
+  if (inputText.value.length > 0)
+  {
     var passed = false;
     inputText.value = inputText.value.toUpperCase();
-    if (/\d/.test(inputText.value) || /[A-Z]/.test(inputText.value)) {
+    if (/\d/.test(inputText.value) || /[A-Z]/.test(inputText.value))
+    {
       passed = true;
     }
-    if (passed) {
+    if (passed)
+    {
       inputText.style.color = "#FF0";
       inputText.style.backgroundColor = "green";
       if (validDiv) validDiv.innerHTML = "Valid!";
       return true;
-    } else {
+    }
+    else
+    {
       inputText.style.color = "#000";
       inputText.style.backgroundColor = "yellow";
       if (validDiv) validDiv.innerHTML = "Invalid!";
       return false;
     }
-  } else {
+  }
+  else
+  {
     inputText.style.color = "#000";
     inputText.style.backgroundColor = "yellow";
     if (validDiv) validDiv.innerHTML = "Invalid!";
@@ -9897,28 +11388,36 @@ function ValidateCallsign(inputText, validDiv) {
   }
 }
 
-function ValidateGridsquareOnly4(inputText, validDiv) {
+function ValidateGridsquareOnly4(inputText, validDiv)
+{
   addError.innerHTML = "";
-  if (inputText.value.length == 4) {
+  if (inputText.value.length == 4)
+  {
     var gridSquare = "";
     var LETTERS = inputText.value.substr(0, 2).toUpperCase();
     var NUMBERS = inputText.value.substr(2, 2).toUpperCase();
-    if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS)) {
+    if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
+    {
       gridSquare = LETTERS + NUMBERS;
     }
-    if (gridSquare != "") {
+    if (gridSquare != "")
+    {
       inputText.style.color = "#FF0";
       inputText.style.backgroundColor = "green";
       inputText.value = gridSquare;
       if (validDiv) validDiv.innerHTML = "Valid!";
       return true;
-    } else {
+    }
+    else
+    {
       inputText.style.color = "#FFF";
       inputText.style.backgroundColor = "red";
       if (validDiv) validDiv.innerHTML = "Invalid!";
       return false;
     }
-  } else {
+  }
+  else
+  {
     inputText.style.color = "#000";
     inputText.style.backgroundColor = "yellow";
     if (validDiv) validDiv.innerHTML = "Valid!";
@@ -9926,67 +11425,87 @@ function ValidateGridsquareOnly4(inputText, validDiv) {
   }
 }
 
-function validateGridFromString(inputText) {
-  if (inputText.length == 4 || inputText.length == 6) {
+function validateGridFromString(inputText)
+{
+  if (inputText.length == 4 || inputText.length == 6)
+  {
     var gridSquare = "";
     var LETTERS = inputText.substr(0, 2).toUpperCase();
     var NUMBERS = inputText.substr(2, 2).toUpperCase();
-    if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS)) {
+    if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
+    {
       gridSquare = LETTERS + NUMBERS;
     }
-    if (inputText.length > 4) {
+    if (inputText.length > 4)
+    {
       var LETTERS_SUB = inputText.substr(4, 2).toUpperCase();
       gridSquare = "";
       if (
         /^[A-R]+$/.test(LETTERS) &&
         /^[0-9]+$/.test(NUMBERS) &&
         /^[A-Xa-x]+$/.test(LETTERS_SUB)
-      ) {
+      )
+      {
         gridSquare = LETTERS + NUMBERS + LETTERS_SUB;
       }
     }
-    if (gridSquare != "") {
+    if (gridSquare != "")
+    {
       return true;
-    } else {
+    }
+    else
+    {
       return false;
     }
-  } else {
+  }
+  else
+  {
     return false;
   }
 }
 
-function ValidateGridsquare(inputText, validDiv) {
-  if (inputText.value.length == 4 || inputText.value.length == 6) {
+function ValidateGridsquare(inputText, validDiv)
+{
+  if (inputText.value.length == 4 || inputText.value.length == 6)
+  {
     var gridSquare = "";
     var LETTERS = inputText.value.substr(0, 2).toUpperCase();
     var NUMBERS = inputText.value.substr(2, 2).toUpperCase();
-    if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS)) {
+    if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
+    {
       gridSquare = LETTERS + NUMBERS;
     }
-    if (inputText.value.length > 4) {
+    if (inputText.value.length > 4)
+    {
       var LETTERS_SUB = inputText.value.substr(4, 2);
       gridSquare = "";
       if (
         /^[A-R]+$/.test(LETTERS) &&
         /^[0-9]+$/.test(NUMBERS) &&
         /^[A-Xa-x]+$/.test(LETTERS_SUB)
-      ) {
+      )
+      {
         gridSquare = LETTERS + NUMBERS + LETTERS_SUB;
       }
     }
-    if (gridSquare != "") {
+    if (gridSquare != "")
+    {
       inputText.style.color = "#FF0";
       inputText.style.backgroundColor = "green";
       inputText.value = gridSquare;
       if (validDiv) validDiv.innerHTML = "Valid!";
       return true;
-    } else {
+    }
+    else
+    {
       inputText.style.color = "#FFF";
       inputText.style.backgroundColor = "red";
       if (validDiv) validDiv.innerHTML = "Invalid!";
       return false;
     }
-  } else {
+  }
+  else
+  {
     inputText.style.color = "#FFF";
     inputText.style.backgroundColor = "red";
     if (validDiv) validDiv.innerHTML = "Invalid!";
@@ -9994,62 +11513,85 @@ function ValidateGridsquare(inputText, validDiv) {
   }
 }
 
-function ipToInt(ip) {
+function ipToInt(ip)
+{
   return ip
     .split(".")
-    .map((octet, index, array) => {
+    .map((octet, index, array) =>
+    {
       return parseInt(octet) * Math.pow(256, array.length - index - 1);
     })
-    .reduce((prev, curr) => {
+    .reduce((prev, curr) =>
+    {
       return prev + curr;
     });
 }
 
-function ValidateMulticast(inputText) {
+function ValidateMulticast(inputText)
+{
   var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-  if (inputText.value.match(ipformat)) {
-    if (inputText.value != "0.0.0.0" && inputText.value != "255.255.255.255") {
+  if (inputText.value.match(ipformat))
+  {
+    if (inputText.value != "0.0.0.0" && inputText.value != "255.255.255.255")
+    {
       var ipInt = ipToInt(inputText.value);
-      if (ipInt >= ipToInt("224.0.0.0") && ipInt < ipToInt("240.0.0.0")) {
-        if (ipInt > ipToInt("224.0.0.255")) {
+      if (ipInt >= ipToInt("224.0.0.0") && ipInt < ipToInt("240.0.0.0"))
+      {
+        if (ipInt > ipToInt("224.0.0.255"))
+        {
           inputText.style.color = "black";
           inputText.style.backgroundColor = "yellow";
-        } else {
+        }
+        else
+        {
           inputText.style.color = "#FF0";
           inputText.style.backgroundColor = "green";
         }
         return true;
-      } else {
+      }
+      else
+      {
         inputText.style.color = "#FFF";
         inputText.style.backgroundColor = "red";
         return false;
       }
-    } else {
+    }
+    else
+    {
       inputText.style.color = "#FFF";
       inputText.style.backgroundColor = "red";
       return false;
     }
-  } else {
+  }
+  else
+  {
     inputText.style.color = "#FFF";
     inputText.style.backgroundColor = "red";
     return false;
   }
 }
 
-function ValidateIPaddress(inputText, checkBox) {
+function ValidateIPaddress(inputText, checkBox)
+{
   var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-  if (inputText.value.match(ipformat)) {
-    if (inputText.value != "0.0.0.0" && inputText.value != "255.255.255.255") {
+  if (inputText.value.match(ipformat))
+  {
+    if (inputText.value != "0.0.0.0" && inputText.value != "255.255.255.255")
+    {
       inputText.style.color = "#FF0";
       inputText.style.backgroundColor = "green";
       return true;
-    } else {
+    }
+    else
+    {
       inputText.style.color = "#FFF";
       inputText.style.backgroundColor = "red";
       if (checkBox) checkBox.checked = false;
       return false;
     }
-  } else {
+  }
+  else
+  {
     inputText.style.color = "#FFF";
     inputText.style.backgroundColor = "red";
     if (checkBox) checkBox.checked = false;
@@ -10057,20 +11599,27 @@ function ValidateIPaddress(inputText, checkBox) {
   }
 }
 
-function ValidatePort(inputText, checkBox, callBackCheck) {
+function ValidatePort(inputText, checkBox, callBackCheck)
+{
   var value = Number(inputText.value);
-  if (value > 1023 && value < 65536) {
-    if (callBackCheck && !callBackCheck(value)) {
+  if (value > 1023 && value < 65536)
+  {
+    if (callBackCheck && !callBackCheck(value))
+    {
       inputText.style.color = "#FFF";
       inputText.style.backgroundColor = "red";
       if (checkBox) checkBox.checked = false;
       return false;
-    } else {
+    }
+    else
+    {
       inputText.style.color = "#FF0";
       inputText.style.backgroundColor = "green";
       return true;
     }
-  } else {
+  }
+  else
+  {
     inputText.style.color = "#FFF";
     inputText.style.backgroundColor = "red";
     if (checkBox) checkBox.checked = false;
@@ -10078,17 +11627,20 @@ function ValidatePort(inputText, checkBox, callBackCheck) {
   }
 }
 
-function workingCallsignEnableChanged(ele) {
+function workingCallsignEnableChanged(ele)
+{
   g_appSettings.workingCallsignEnable = ele.checked;
   applyCallsignsAndDateDiv.style.display = "";
 }
 
-function workingDateEnableChanged(ele) {
+function workingDateEnableChanged(ele)
+{
   g_appSettings.workingDateEnable = ele.checked;
   applyCallsignsAndDateDiv.style.display = "";
 }
 
-function workingDateChanged() {
+function workingDateChanged()
+{
   var fields = workingDateValue.value.split("-");
   var date = new Date(
     Date.UTC(
@@ -10113,35 +11665,43 @@ function workingDateChanged() {
   applyCallsignsAndDateDiv.style.display = "";
 }
 
-function displayWorkingDate() {
+function displayWorkingDate()
+{
   var date = new Date(g_appSettings.workingDate * 1000);
   workingDateString.innerHTML = dateToString(date);
 }
 
 var g_tempWorkingCallsigns = {};
-function workingCallsignsChanged(ele) {
+function workingCallsignsChanged(ele)
+{
   g_tempWorkingCallsigns = {};
   var callsigns = ele.value.split(",");
-  for (var call in callsigns) {
+  for (var call in callsigns)
+  {
     g_tempWorkingCallsigns[callsigns[call]] = true;
   }
-  if (callsigns.length > 0) {
+  if (callsigns.length > 0)
+  {
     g_appSettings.workingCallsigns = Object.assign({}, g_tempWorkingCallsigns);
     if (g_appSettings.workingCallsignEnable)
-      applyCallsignsAndDateDiv.style.display = "";
-  } else applyCallsignsAndDateDiv.style.display = "none";
+    { applyCallsignsAndDateDiv.style.display = ""; }
+  }
+  else applyCallsignsAndDateDiv.style.display = "none";
 }
 
-function applyCallsignsAndDates() {
+function applyCallsignsAndDates()
+{
   clearAndLoadQSOs();
   applyCallsignsAndDateDiv.style.display = "none";
 }
 
-function selectElementContents(el) {
+function selectElementContents(el)
+{
   var body = document.body,
     range,
     sel;
-  if (document.createRange && window.getSelection) {
+  if (document.createRange && window.getSelection)
+  {
     range = document.createRange();
     sel = window.getSelection();
     sel.removeAllRanges();
@@ -10159,27 +11719,33 @@ function selectElementContents(el) {
   }
 }
 
-function ipLocation(buffer, flag) {
+function ipLocation(buffer, flag)
+{
   var obj = JSON.parse(buffer);
   if (
     typeof obj != "undefined" &&
     obj != null &&
     typeof obj.latitude != "undefined"
-  ) {
+  )
+  {
     g_appSettings.centerGridsquare = latLonToGridSquare(
       obj.latitude,
       obj.longitude
     ).substr(0, 6);
-    if (g_appSettings.centerGridsquare.length > 0) {
+    if (g_appSettings.centerGridsquare.length > 0)
+    {
       homeQTHInput.value = g_appSettings.centerGridsquare;
       if (ValidateGridsquare(homeQTHInput, null)) setCenterGridsquare();
     }
   }
 }
 
-function popupNewWindows() {
-  if (typeof nw != "undefined") {
-    win.on("new-win-policy", function (frame, url, policy) {
+function popupNewWindows()
+{
+  if (typeof nw != "undefined")
+  {
+    win.on("new-win-policy", function (frame, url, policy)
+    {
       policy.forceNewPopup();
       g_lastUrl = "";
     });
@@ -10187,10 +11753,14 @@ function popupNewWindows() {
 }
 
 var g_lastUrl = "";
-function lockNewWindows() {
-  if (typeof nw != "undefined") {
-    win.on("new-win-policy", function (frame, url, policy) {
-      if (url != g_lastUrl) {
+function lockNewWindows()
+{
+  if (typeof nw != "undefined")
+  {
+    win.on("new-win-policy", function (frame, url, policy)
+    {
+      if (url != g_lastUrl)
+      {
         nw.Shell.openExternal(url);
         g_lastUrl = url;
       }
@@ -10199,7 +11769,8 @@ function lockNewWindows() {
   }
 }
 
-function byName(a, b) {
+function byName(a, b)
+{
   if (g_enums[a] < g_enums[b]) return -1;
   if (g_enums[a] > g_enums[b]) return 1;
   return 0;
@@ -10207,53 +11778,69 @@ function byName(a, b) {
 
 var ancPrefixes = ["P", "M", "MM", "AM", "A", "NWS"];
 
-function callsignToDxcc(insign) {
+function callsignToDxcc(insign)
+{
   var callsign = insign;
 
-  if (!/\d/.test(callsign) || !/[a-zA-Z]/.test(callsign)) {
+  if (!/\d/.test(callsign) || !/[a-zA-Z]/.test(callsign))
+  {
     return -1;
   }
 
   if (callsign in g_directCallToDXCC)
-    return Number(g_directCallToDXCC[callsign]);
+  { return Number(g_directCallToDXCC[callsign]); }
 
-  if (callsign.includes("/")) {
+  if (callsign.includes("/"))
+  {
     var parts = callsign.split("/");
     var end = parts.length - 1;
-    if (ancPrefixes.includes(parts[end])) {
+    if (ancPrefixes.includes(parts[end]))
+    {
       parts.pop();
       end = parts.length - 1;
     }
-    if (end) {
-      if (isNaN(parts[end])) {
-        if (parts[1].length > parts[0].length) {
+    if (end)
+    {
+      if (isNaN(parts[end]))
+      {
+        if (parts[1].length > parts[0].length)
+        {
           callsign = parts[0];
-        } else {
+        }
+        else
+        {
           if (callsignToDxcc(parts[1]) != -1) callsign = parts[1];
           else callsign = parts[0];
         }
-      } else callsign = parts[0];
-    } else callsign = parts[0];
+      }
+      else callsign = parts[0];
+    }
+    else callsign = parts[0];
 
     if (callsign in g_directCallToDXCC)
-      return Number(g_directCallToDXCC[callsign]);
+    { return Number(g_directCallToDXCC[callsign]); }
   }
 
-  for (var x = callsign.length; x > 0; x--) {
-    if (callsign.substr(0, x) in g_prefixToMap) {
+  for (var x = callsign.length; x > 0; x--)
+  {
+    if (callsign.substr(0, x) in g_prefixToMap)
+    {
       return Number(g_worldGeoData[g_prefixToMap[callsign.substr(0, x)]].dxcc);
     }
   }
   return -1;
 }
 
-function loadMaidenHeadData() {
+function loadMaidenHeadData()
+{
   var file = "./data/mh-root-prefixed.json";
-  if (fs.existsSync(file)) {
+  if (fs.existsSync(file))
+  {
     var fileBuf = fs.readFileSync(file, "UTF-8");
     g_worldGeoData = JSON.parse(fileBuf);
 
-    for (var key in g_worldGeoData) {
+    for (var key in g_worldGeoData)
+    {
       g_worldGeoData[key].geo = "deleted";
       g_worldGeoData[key].worked_bands = {};
       g_worldGeoData[key].confirmed_bands = {};
@@ -10263,16 +11850,20 @@ function loadMaidenHeadData() {
       g_dxccToADIFName[g_worldGeoData[key].dxcc] = g_worldGeoData[key].aname;
       g_dxccToGeoData[g_worldGeoData[key].dxcc] = key;
 
-      for (var x = 0; x < g_worldGeoData[key].prefix.length; x++) {
+      for (var x = 0; x < g_worldGeoData[key].prefix.length; x++)
+      {
         if (g_worldGeoData[key].prefix[x].charAt(0) == "=")
+        {
           g_directCallToDXCC[g_worldGeoData[key].prefix[x].substr(1)] =
             g_worldGeoData[key].dxcc;
+        }
         else g_prefixToMap[g_worldGeoData[key].prefix[x]] = key;
       }
       delete g_worldGeoData[key].prefix;
-      for (var x = 0; x < g_worldGeoData[key].mh.length; x++) {
+      for (var x = 0; x < g_worldGeoData[key].mh.length; x++)
+      {
         if (!(g_worldGeoData[key].mh[x] in g_gridToDXCC))
-          g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array();
+        { g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array(); }
         g_gridToDXCC[g_worldGeoData[key].mh[x]].push(g_worldGeoData[key].dxcc);
       }
 
@@ -10281,14 +11872,15 @@ function loadMaidenHeadData() {
         g_worldGeoData[key].dxcc != 110 &&
         g_worldGeoData[key].dxcc != 6
       )
-        delete g_worldGeoData[key].mh;
+      { delete g_worldGeoData[key].mh; }
     }
 
     file = "./data/dxcc.json";
 
     var files = fs.readFileSync(file);
     var dxccGeo = JSON.parse(files);
-    for (var key in dxccGeo.features) {
+    for (var key in dxccGeo.features)
+    {
       var dxcc = dxccGeo.features[key].properties.dxcc_entity_code;
       g_worldGeoData[g_dxccToGeoData[dxcc]].geo = dxccGeo.features[key];
     }
@@ -10296,9 +11888,10 @@ function loadMaidenHeadData() {
     files = fs.readFileSync(file);
     var countyData = JSON.parse(files);
 
-    for (var id in countyData) {
+    for (var id in countyData)
+    {
       if (!(countyData[id].properties.st in g_stateToCounty))
-        g_stateToCounty[countyData[id].properties.st] = Array();
+      { g_stateToCounty[countyData[id].properties.st] = Array(); }
       g_stateToCounty[countyData[id].properties.st].push(id);
 
       var cnty =
@@ -10306,7 +11899,7 @@ function loadMaidenHeadData() {
         "," +
         countyData[id].properties.n.toUpperCase().replaceAll(" ", "");
       if (!(cnty in g_cntyToCounty))
-        g_cntyToCounty[cnty] = countyData[id].properties.n.toProperCase();
+      { g_cntyToCounty[cnty] = countyData[id].properties.n.toProperCase(); }
 
       g_countyData[cnty] = {};
       g_countyData[cnty].geo = countyData[id];
@@ -10318,9 +11911,11 @@ function loadMaidenHeadData() {
       g_countyData[cnty].worked_modes = {};
       g_countyData[cnty].confirmed_modes = {};
 
-      for (var x in countyData[id].properties.z) {
+      for (var x in countyData[id].properties.z)
+      {
         var zipS = String(countyData[id].properties.z[x]);
-        if (!(zipS in g_zipToCounty)) {
+        if (!(zipS in g_zipToCounty))
+        {
           g_zipToCounty[zipS] = Array();
         }
         g_zipToCounty[zipS].push(cnty);
@@ -10330,74 +11925,77 @@ function loadMaidenHeadData() {
     countyData = null;
 
     g_shapeData = JSON.parse(fs.readFileSync(g_shapeFile));
-    for (var key in g_shapeData) {
+    for (var key in g_shapeData)
+    {
       if (g_shapeData[key].properties.alias == key)
-        g_shapeData[key].properties.alias = null;
+      { g_shapeData[key].properties.alias = null; }
       else if (
         g_shapeData[key].properties.alias &&
         g_shapeData[key].properties.alias.length > 2 &&
         (g_shapeData[key].properties.alias.indexOf("US") == 0 ||
           g_shapeData[key].properties.alias.indexOf("CA") == 0)
       )
-        g_shapeData[key].properties.alias = null;
+      { g_shapeData[key].properties.alias = null; }
       if (
         g_shapeData[key].properties.alias &&
         g_shapeData[key].properties.alias.length < 2
       )
-        g_shapeData[key].properties.alias = null;
-      if (g_shapeData[key].properties.alias != null) {
-        if (key.indexOf("CN-") == 0) {
+      { g_shapeData[key].properties.alias = null; }
+      if (g_shapeData[key].properties.alias != null)
+      {
+        if (key.indexOf("CN-") == 0)
+        {
           if (g_shapeData[key].properties.alias == key.replace("CN-", ""))
-            g_shapeData[key].properties.alias = null;
+          { g_shapeData[key].properties.alias = null; }
         }
       }
       if (
         g_shapeData[key].properties.alias != null &&
         g_shapeData[key].properties.alias.length != 2
       )
-        g_shapeData[key].properties.alias = null;
+      { g_shapeData[key].properties.alias = null; }
     }
 
-    //finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6
+    // finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6
     // Create "US" shape from US Dxcc geos
     var x = g_worldGeoData[g_dxccToGeoData[291]].geo.geometry;
-    var y = g_shapeData["AK"].geometry;
-    var z = g_shapeData["HI"].geometry;
+    var y = g_shapeData.AK.geometry;
+    var z = g_shapeData.HI.geometry;
 
     var feature = {
       type: "Feature",
       geometry: {
         type: "GeometryCollection",
-        geometries: [x, y, z],
+        geometries: [x, y, z]
       },
       properties: {
         name: "United States",
         center: g_worldGeoData[g_dxccToGeoData[291]].geo.properties.center,
         postal: "US",
-        type: "Country",
-      },
+        type: "Country"
+      }
     };
-    g_shapeData["US"] = feature;
+    g_shapeData.US = feature;
 
-    y = g_shapeData["OC"].geometry;
-    z = g_shapeData["AU"].geometry;
-    q = g_shapeData["AN"].geometry;
+    y = g_shapeData.OC.geometry;
+    z = g_shapeData.AU.geometry;
+    q = g_shapeData.AN.geometry;
 
     feature = {
       type: "Feature",
       geometry: {
         type: "GeometryCollection",
-        geometries: [y, z, q],
+        geometries: [y, z, q]
       },
       properties: {
         name: "Oceania",
         center: [167.97602, -29.037824],
         postal: "OC",
-        type: "Continent",
-      },
+        type: "Continent"
+      }
     };
-    g_shapeData["OC"] = feature;
-    g_shapeData["AU"].properties.type = "Country";
+    g_shapeData.OC = feature;
+    g_shapeData.AU.properties.type = "Country";
 
     g_StateData = JSON.parse(fs.readFileSync("./data/state.json"));
 
@@ -10413,10 +12011,12 @@ function loadMaidenHeadData() {
     g_StateData["US-HI"].mh = g_worldGeoData[100].mh;
     g_StateData["US-HI"].dxcc = 110;
 
-    for (var key in g_StateData) {
-      for (var x = 0; x < g_StateData[key].mh.length; x++) {
+    for (var key in g_StateData)
+    {
+      for (var x = 0; x < g_StateData[key].mh.length; x++)
+      {
         if (!(g_StateData[key].mh[x] in g_gridToState))
-          g_gridToState[g_StateData[key].mh[x]] = Array();
+        { g_gridToState[g_StateData[key].mh[x]] = Array(); }
         g_gridToState[g_StateData[key].mh[x]].push(g_StateData[key].postal);
       }
       g_StateData[key].worked_bands = {};
@@ -10431,16 +12031,20 @@ function loadMaidenHeadData() {
     fileBuf = fs.readFileSync(file, "UTF-8");
     g_enums = JSON.parse(fileBuf);
 
-    for (var key in g_worldGeoData) {
+    for (var key in g_worldGeoData)
+    {
       if (
         g_worldGeoData[key].pp != "" &&
         g_worldGeoData[key].geo != "deleted"
-      ) {
+      )
+      {
         g_enums[g_worldGeoData[key].dxcc] = g_worldGeoData[key].name;
       }
-      if (key == 270) {
+      if (key == 270)
+      {
         // US Mainland
-        for (var mh in g_worldGeoData[key].mh) {
+        for (var mh in g_worldGeoData[key].mh)
+        {
           var sqr = g_worldGeoData[key].mh[mh];
 
           g_us48Data[sqr] = {};
@@ -10458,10 +12062,12 @@ function loadMaidenHeadData() {
     fileBuf = fs.readFileSync("./data/cqzone.json");
     g_cqZones = JSON.parse(fileBuf);
 
-    for (var key in g_cqZones) {
-      for (var x = 0; x < g_cqZones[key].mh.length; x++) {
+    for (var key in g_cqZones)
+    {
+      for (var x = 0; x < g_cqZones[key].mh.length; x++)
+      {
         if (!(g_cqZones[key].mh[x] in g_gridToCQZone))
-          g_gridToCQZone[g_cqZones[key].mh[x]] = Array();
+        { g_gridToCQZone[g_cqZones[key].mh[x]] = Array(); }
         g_gridToCQZone[g_cqZones[key].mh[x]].push(String(key));
       }
       delete g_cqZones[key].mh;
@@ -10470,21 +12076,26 @@ function loadMaidenHeadData() {
     fileBuf = fs.readFileSync("./data/ituzone.json");
     g_ituZones = JSON.parse(fileBuf);
 
-    for (var key in g_ituZones) {
-      for (var x = 0; x < g_ituZones[key].mh.length; x++) {
+    for (var key in g_ituZones)
+    {
+      for (var x = 0; x < g_ituZones[key].mh.length; x++)
+      {
         if (!(g_ituZones[key].mh[x] in g_gridToITUZone))
-          g_gridToITUZone[g_ituZones[key].mh[x]] = Array();
+        { g_gridToITUZone[g_ituZones[key].mh[x]] = Array(); }
         g_gridToITUZone[g_ituZones[key].mh[x]].push(String(key));
       }
       delete g_ituZones[key].mh;
     }
 
-    for (var key in g_StateData) {
-      if (key.substr(0, 3) == "US-") {
+    for (var key in g_StateData)
+    {
+      if (key.substr(0, 3) == "US-")
+      {
         var shapeKey = key.substr(3, 2);
         var name = g_StateData[key].name;
 
-        if (shapeKey in g_shapeData) {
+        if (shapeKey in g_shapeData)
+        {
           g_wasZones[name] = {};
           g_wasZones[name].geo = g_shapeData[shapeKey];
           g_wasZones[name].worked = false;
@@ -10523,8 +12134,10 @@ function loadMaidenHeadData() {
     g_wasZones[name].worked_modes = {};
     g_wasZones[name].confirmed_modes = {};
 
-    for (var key in g_shapeData) {
-      if (g_shapeData[key].properties.type == "Continent") {
+    for (var key in g_shapeData)
+    {
+      if (g_shapeData[key].properties.type == "Continent")
+      {
         var name = g_shapeData[key].properties.name;
         g_wacZones[name] = {};
         g_wacZones[name].geo = g_shapeData[key];
@@ -10544,7 +12157,8 @@ function loadMaidenHeadData() {
 var g_timezonesEnable = 0;
 var g_timezoneLayer = null;
 
-function createZoneLayer() {
+function createZoneLayer()
+{
   g_timezoneLayer = createGeoJsonLayer(
     "tz",
     "./data/combined-with-oceans.json",
@@ -10555,31 +12169,39 @@ function createZoneLayer() {
   g_timezoneLayer.setVisible(false);
 }
 
-function toggleTimezones() {
+function toggleTimezones()
+{
   if (g_currentOverlay != 0) return;
 
   g_timezonesEnable ^= 1;
 
   mouseOutGtFlag();
 
-  if (g_timezonesEnable == 1) {
-    if (g_timezoneLayer == null) {
+  if (g_timezonesEnable == 1)
+  {
+    if (g_timezoneLayer == null)
+    {
       createZoneLayer();
     }
     g_timezoneLayer.setVisible(true);
-  } else {
-    if (g_timezoneLayer != null) {
+  }
+  else
+  {
+    if (g_timezoneLayer != null)
+    {
       g_map.removeLayer(g_timezoneLayer);
       g_timezoneLayer = null;
     }
   }
 }
 
-function drawAllGrids() {
+function drawAllGrids()
+{
   var borderColor = "#000";
   var borderWeight = 0.5;
 
-  for (var x = -178; x < 181; x += 2) {
+  for (var x = -178; x < 181; x += 2)
+  {
     var fromPoint = ol.proj.fromLonLat([x, -90]);
     var toPoint = ol.proj.fromLonLat([x, 90]);
 
@@ -10593,15 +12215,16 @@ function drawAllGrids() {
     var featureStyle = new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: borderColor,
-        width: borderWeight,
-      }),
+        width: borderWeight
+      })
     });
     newGridBox.setStyle(featureStyle);
 
     g_layerSources["line-grids"].addFeature(newGridBox);
   }
 
-  for (var x = -90; x < 91; x++) {
+  for (var x = -90; x < 91; x++)
+  {
     var fromPoint = ol.proj.fromLonLat([-180, x]);
     var toPoint = ol.proj.fromLonLat([180, x]);
 
@@ -10615,8 +12238,8 @@ function drawAllGrids() {
     var featureStyle = new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: borderColor,
-        width: borderWeight,
-      }),
+        width: borderWeight
+      })
     });
     newGridBox.setStyle(featureStyle);
 
@@ -10624,9 +12247,13 @@ function drawAllGrids() {
   }
 
   for (var x = 65; x < 83; x++)
-    for (var y = 65; y < 83; y++) {
+  {
+    for (var y = 65; y < 83; y++)
+    {
       for (var a = 0; a < 10; a++)
-        for (var b = 0; b < 10; b++) {
+      {
+        for (var b = 0; b < 10; b++)
+        {
           var LL = squareToLatLong(
             String.fromCharCode(x) +
               String.fromCharCode(y) +
@@ -10638,7 +12265,7 @@ function drawAllGrids() {
           var point = ol.proj.fromLonLat([Lon, Lat]);
           var feature = new ol.Feature({
             geometry: new ol.geom.Point(point),
-            name: String(a) + String(b),
+            name: String(a) + String(b)
           });
 
           var featureStyle = new ol.style.Style({
@@ -10647,18 +12274,18 @@ function drawAllGrids() {
               font: "normal 16px sans-serif",
               stroke: new ol.style.Stroke({
                 color: "#88888888",
-                width: 1,
+                width: 1
               }),
               text: String(a) + String(b),
-              offsetY: 1,
-            }),
+              offsetY: 1
+            })
           });
           feature.setStyle(featureStyle);
           g_layerSources["short-grids"].addFeature(feature);
 
           feature = new ol.Feature({
             geometry: new ol.geom.Point(point),
-            name: String(a) + String(b),
+            name: String(a) + String(b)
           });
 
           featureStyle = new ol.style.Style({
@@ -10667,19 +12294,20 @@ function drawAllGrids() {
               font: "normal 16px sans-serif",
               stroke: new ol.style.Stroke({
                 color: "#88888888",
-                width: 1,
+                width: 1
               }),
               text:
                 String.fromCharCode(x) +
                 String.fromCharCode(y) +
                 String(a) +
                 String(b),
-              offsetY: 1,
-            }),
+              offsetY: 1
+            })
           });
           feature.setStyle(featureStyle);
           g_layerSources["long-grids"].addFeature(feature);
         }
+      }
 
       var LL = twoWideToLatLong(
         String.fromCharCode(x) + String.fromCharCode(y)
@@ -10695,27 +12323,32 @@ function drawAllGrids() {
           font: "normal 24px sans-serif",
           stroke: new ol.style.Stroke({
             color: "#88888888",
-            width: 1,
+            width: 1
           }),
-          text: String.fromCharCode(x) + String.fromCharCode(y),
-        }),
+          text: String.fromCharCode(x) + String.fromCharCode(y)
+        })
       });
       feature.setStyle(featureStyle);
       g_layerSources["big-grids"].addFeature(feature);
     }
+  }
 }
 
-function versionCheck(buffer, flag) {
+function versionCheck(buffer, flag)
+{
   var version = String(buffer);
-  if (version.indexOf("gridtracker") == 0) {
+  if (version.indexOf("gridtracker") == 0)
+  {
     // good, we're looking at our version string
     var versionArray = version.split(":");
-    if (versionArray.length == 3) {
+    if (versionArray.length == 3)
+    {
       // Good, there are 3 parts
       var stableVersion = Number(versionArray[1]);
       var betaVersion = Number(versionArray[2]);
 
-      if (gtVersion < stableVersion) {
+      if (gtVersion < stableVersion)
+      {
         var verString = String(stableVersion);
         main.style.display = "none";
         newVersionMustDownloadDiv.innerHTML =
@@ -10727,9 +12360,13 @@ function versionCheck(buffer, flag) {
           verString.substr(3) +
           " available for download.<br />Go there now?<br /><br />";
         versionDiv.style.display = "block";
-      } else {
-        if (flag) {
-          if (gtVersion < betaVersion) {
+      }
+      else
+      {
+        if (flag)
+        {
+          if (gtVersion < betaVersion)
+          {
             var verString = String(betaVersion);
             main.style.display = "none";
             newVersionMustDownloadDiv.innerHTML =
@@ -10741,7 +12378,9 @@ function versionCheck(buffer, flag) {
               verString.substr(3) +
               " available for download.<br />Go there now?<br /><br />";
             versionDiv.style.display = "block";
-          } else {
+          }
+          else
+          {
             main.style.display = "none";
             upToDateDiv.style.display = "block";
           }
@@ -10751,30 +12390,36 @@ function versionCheck(buffer, flag) {
   }
 }
 
-function onExitAppToGoWebsite() {
+function onExitAppToGoWebsite()
+{
   require("nw.gui").Shell.openExternal("https://gridtracker.org/");
   saveAndCloseApp();
 }
 
-function mailThem(address) {
+function mailThem(address)
+{
   require("nw.gui").Shell.openExternal("mailto:" + address);
 }
 
-function openSite(address) {
+function openSite(address)
+{
   require("nw.gui").Shell.openExternal(address);
 }
 
-function closeUpdateToDateDiv() {
+function closeUpdateToDateDiv()
+{
   upToDateDiv.style.display = "none";
   main.style.display = "block";
 }
 
-function cancelVersion() {
+function cancelVersion()
+{
   main.style.display = "block";
   versionDiv.style.display = "none";
 }
 
-function getBuffer(file_url, callback, flag, mode, port, cache = null) {
+function getBuffer(file_url, callback, flag, mode, port, cache = null)
+{
   var url = require("url");
   var http = require(mode);
   var fileBuffer = null;
@@ -10784,26 +12429,31 @@ function getBuffer(file_url, callback, flag, mode, port, cache = null) {
     host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
     port: port,
     followAllRedirects: true,
-    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
+    path: url.parse(file_url).path // eslint-disable-line node/no-deprecated-api
   };
 
-  http.get(options, function (res) {
+  http.get(options, function (res)
+  {
     var fsize = res.headers["content-length"];
     var cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
-      cookies = res.headers["set-cookie"];
+    { cookies = res.headers["set-cookie"]; }
     res
-      .on("data", function (data) {
+      .on("data", function (data)
+      {
         if (fileBuffer == null) fileBuffer = data;
         else fileBuffer += data;
       })
-      .on("end", function () {
-        if (typeof callback === "function") {
+      .on("end", function ()
+      {
+        if (typeof callback === "function")
+        {
           // Call it, since we have confirmed it is callable
           callback(fileBuffer, flag, cache);
         }
       })
-      .on("error", function (e) {
+      .on("error", function (e)
+      {
         console.error("getBuffer " + file_url + " error: " + e.message);
       });
   });
@@ -10819,7 +12469,8 @@ function getPostBuffer(
   timeoutMs,
   timeoutCallback,
   who
-) {
+)
+{
   var querystring = require("querystring");
   var postData = querystring.stringify(theData);
   var url = require("url");
@@ -10832,40 +12483,51 @@ function getPostBuffer(
     method: "post",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": postData.length,
-    },
+      "Content-Length": postData.length
+    }
   };
-  var req = http.request(options, function (res) {
+  var req = http.request(options, function (res)
+  {
     var fsize = res.headers["content-length"];
     var cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
-      cookies = res.headers["set-cookie"];
+    { cookies = res.headers["set-cookie"]; }
     res
-      .on("data", function (data) {
+      .on("data", function (data)
+      {
         if (fileBuffer == null) fileBuffer = data;
         else fileBuffer += data;
       })
-      .on("end", function () {
-        if (typeof callback === "function") {
+      .on("end", function ()
+      {
+        if (typeof callback === "function")
+        {
           // Call it, since we have confirmed it is callable
           callback(fileBuffer, flag, cookies);
         }
       })
-      .on("error", function () {
-        if (typeof errorCallback === "function") {
+      .on("error", function ()
+      {
+        if (typeof errorCallback === "function")
+        {
           errorCallback();
         }
       });
   });
-  if (typeof timeoutMs == "number" && timeoutMs > 0) {
-    req.on("socket", function (socket) {
+  if (typeof timeoutMs == "number" && timeoutMs > 0)
+  {
+    req.on("socket", function (socket)
+    {
       socket.setTimeout(timeoutMs);
-      socket.on("timeout", function () {
+      socket.on("timeout", function ()
+      {
         req.abort();
       });
     });
-    req.on("error", function (err) { // eslint-disable-line node/handle-callback-err
+    req.on("error", function (err) // eslint-disable-line node/handle-callback-err
+    {
       if (typeof timeoutCallback != "undefined")
+      {
         timeoutCallback(
           file_url,
           callback,
@@ -10877,14 +12539,17 @@ function getPostBuffer(
           timeoutCallback,
           who
         );
+      }
     });
   }
   req.write(postData);
   req.end();
 }
 
-function colorToHex(color) {
-  if (color.substr(0, 1) === "#") {
+function colorToHex(color)
+{
+  if (color.substr(0, 1) === "#")
+  {
     return color;
   }
   var digits = /(.*?)rgb\((\d+), (\d+), (\d+)\)/.exec(color);
@@ -10897,12 +12562,14 @@ function colorToHex(color) {
   return "#" + rgb;
 }
 
-function setHueColor() {
+function setHueColor()
+{
   g_mapHue = colorToHex(hueDiv.style.backgroundColor);
   if (g_mapHue == "#000000") g_mapHue = 0;
 }
 
-function loadMapSettings() {
+function loadMapSettings()
+{
   shadowValue.value = g_mapSettings.shadow;
   showDarknessTd.innerHTML = parseInt(shadowValue.value * 100) + "%";
   pathWidthTd.innerHTML = pathWidthValue.value = g_appSettings.pathWidthWeight;
@@ -10954,12 +12621,15 @@ function loadMapSettings() {
     pathColorValue.value == 0
       ? "#000"
       : pathColorValue.value == 361
-      ? "#FFF"
-      : "hsl(" + pathColorValue.value + ", 100%, 50%)";
-  if (pathColorValue.value != 0) {
+        ? "#FFF"
+        : "hsl(" + pathColorValue.value + ", 100%, 50%)";
+  if (pathColorValue.value != 0)
+  {
     pathColorDiv.style.color = "#000";
     pathColorDiv.style.backgroundColor = pathColor;
-  } else {
+  }
+  else
+  {
     pathColorDiv.style.color = "#FFF";
     pathColorDiv.style.backgroundColor = pathColor;
   }
@@ -10968,12 +12638,15 @@ function loadMapSettings() {
     qrzPathColorValue.value == 0
       ? "#000"
       : qrzPathColorValue.value == 361
-      ? "#FFF"
-      : "hsl(" + qrzPathColorValue.value + ", 100%, 50%)";
-  if (qrzPathColorValue.value != 0) {
+        ? "#FFF"
+        : "hsl(" + qrzPathColorValue.value + ", 100%, 50%)";
+  if (qrzPathColorValue.value != 0)
+  {
     qrzPathColorDiv.style.color = "#000";
     qrzPathColorDiv.style.backgroundColor = pathColor;
-  } else {
+  }
+  else
+  {
     qrzPathColorDiv.style.color = "#FFF";
     qrzPathColorDiv.style.backgroundColor = pathColor;
   }
@@ -10983,13 +12656,15 @@ function loadMapSettings() {
   displayLegend();
 }
 
-function changeDistanceUnit() {
+function changeDistanceUnit()
+{
   g_appSettings.distanceUnit = distanceUnit.value;
   g_scaleLine.setUnits(g_scaleUnits[g_appSettings.distanceUnit]);
   goProcessRoster();
 }
 
-function changeMapNightValues() {
+function changeMapNightValues()
+{
   g_mapSettings.nightPathColor = nightPathColorValue.value;
   g_mapSettings.nightQrzPathColor = nightQrzPathColorValue.value;
   g_mapSettings.nightMapIndex = mapNightSelect.value;
@@ -11000,18 +12675,22 @@ function changeMapNightValues() {
   changeMapLayer();
 }
 
-function setNightHtml() {
+function setNightHtml()
+{
   var pathColor =
     g_mapSettings.nightPathColor == 0
       ? "#000"
       : g_mapSettings.nightPathColor == 361
-      ? "#FFF"
-      : "hsl(" + g_mapSettings.nightPathColor + ", 100%, 50%)";
+        ? "#FFF"
+        : "hsl(" + g_mapSettings.nightPathColor + ", 100%, 50%)";
 
-  if (g_mapSettings.nightPathColor != 0) {
+  if (g_mapSettings.nightPathColor != 0)
+  {
     pathNightColorDiv.style.color = "#000";
     pathNightColorDiv.style.backgroundColor = pathColor;
-  } else {
+  }
+  else
+  {
     pathNightColorDiv.style.color = "#FFF";
     pathNightColorDiv.style.backgroundColor = pathColor;
   }
@@ -11020,18 +12699,22 @@ function setNightHtml() {
     g_mapSettings.nightQrzPathColor == 0
       ? "#000"
       : g_mapSettings.nightQrzPathColor == 361
-      ? "#FFF"
-      : "hsl(" + g_mapSettings.nightQrzPathColor + ", 100%, 50%)";
-  if (g_mapSettings.nightQrzPathColor != 0) {
+        ? "#FFF"
+        : "hsl(" + g_mapSettings.nightQrzPathColor + ", 100%, 50%)";
+  if (g_mapSettings.nightQrzPathColor != 0)
+  {
     pathNightQrzColorDiv.style.color = "#000";
     pathNightQrzColorDiv.style.backgroundColor = pathColor;
-  } else {
+  }
+  else
+  {
     pathNightQrzColorDiv.style.color = "#FFF";
     pathNightQrzColorDiv.style.backgroundColor = pathColor;
   }
 }
 
-function changeMapValues() {
+function changeMapValues()
+{
   g_mapSettings.pathColor = pathColorValue.value;
   g_mapSettings.qrzPathColor = qrzPathColorValue.value;
   g_mapSettings.loudness = brightnessValue.value;
@@ -11042,8 +12725,8 @@ function changeMapValues() {
     g_mapSettings.offlineMode == false &&
     g_appSettings.gtShareEnable == true
   )
-    g_layerVectors["gtflags"].setVisible(true);
-  else g_layerVectors["gtflags"].setVisible(false);
+  { g_layerVectors.gtflags.setVisible(true); }
+  else g_layerVectors.gtflags.setVisible(false);
 
   saveMapSettings();
 
@@ -11053,13 +12736,16 @@ function changeMapValues() {
     g_mapSettings.pathColor == 0
       ? "#000"
       : g_mapSettings.pathColor == 361
-      ? "#FFF"
-      : "hsl(" + g_mapSettings.pathColor + ", 100%, 50%)";
+        ? "#FFF"
+        : "hsl(" + g_mapSettings.pathColor + ", 100%, 50%)";
 
-  if (g_mapSettings.pathColor != 0) {
+  if (g_mapSettings.pathColor != 0)
+  {
     pathColorDiv.style.color = "#000";
     pathColorDiv.style.backgroundColor = pathColor;
-  } else {
+  }
+  else
+  {
     pathColorDiv.style.color = "#FFF";
     pathColorDiv.style.backgroundColor = pathColor;
   }
@@ -11068,12 +12754,15 @@ function changeMapValues() {
     g_mapSettings.qrzPathColor == 0
       ? "#000"
       : g_mapSettings.qrzPathColor == 361
-      ? "#FFF"
-      : "hsl(" + g_mapSettings.qrzPathColor + ", 100%, 50%)";
-  if (g_mapSettings.qrzPathColor != 0) {
+        ? "#FFF"
+        : "hsl(" + g_mapSettings.qrzPathColor + ", 100%, 50%)";
+  if (g_mapSettings.qrzPathColor != 0)
+  {
     qrzPathColorDiv.style.color = "#000";
     qrzPathColorDiv.style.backgroundColor = pathColor;
-  } else {
+  }
+  else
+  {
     qrzPathColorDiv.style.color = "#FFF";
     qrzPathColorDiv.style.backgroundColor = pathColor;
   }
@@ -11082,7 +12771,8 @@ function changeMapValues() {
   displayLegend();
 }
 
-function toggleLegend() {
+function toggleLegend()
+{
   if (g_mapSettings.legend == true) g_mapSettings.legend = false;
   else g_mapSettings.legend = true;
 
@@ -11091,25 +12781,32 @@ function toggleLegend() {
   displayLegend();
 }
 
-function hideLegend() {
+function hideLegend()
+{
   LegendDiv.style.display = "none";
 }
 
-function displayLegend() {
-  if (g_mapSettings.legend == true) {
+function displayLegend()
+{
+  if (g_mapSettings.legend == true)
+  {
     LegendDiv.style.display = "block";
     legendImg.style.webkitFilter = "";
-  } else {
+  }
+  else
+  {
     LegendDiv.style.display = "none";
     legendImg.style.webkitFilter = "grayscale(1) brightness(50%)";
   }
 }
 
-function rgbToHex(R, G, B) {
+function rgbToHex(R, G, B)
+{
   return toHex(R) + toHex(G) + toHex(B);
 }
 
-function toHex(n) {
+function toHex(n)
+{
   n = parseInt(n, 10);
   if (isNaN(n)) return "00";
   n = Math.max(0, Math.min(n, 255));
@@ -11119,35 +12816,47 @@ function toHex(n) {
   );
 }
 
-function hexToR(h) {
+function hexToR(h)
+{
   return parseInt(cutHex(h).substring(0, 2), 16);
 }
 
-function hexToG(h) {
+function hexToG(h)
+{
   return parseInt(cutHex(h).substring(2, 4), 16);
 }
 
-function hexToB(h) {
+function hexToB(h)
+{
   return parseInt(cutHex(h).substring(4, 6), 16);
 }
 
-function hexToA(h) {
+function hexToA(h)
+{
   return parseInt(cutHex(h).substring(6, 8), 16);
 }
 
-function cutHex(h) {
+function cutHex(h)
+{
   return h.charAt(0) == "#" ? h.substring(1, 9) : h;
 }
 
-function changeMapLayer() {
-  if (g_mapSettings.offlineMode) {
+function changeMapLayer()
+{
+  if (g_mapSettings.offlineMode)
+  {
     g_tileLayer.setSource(g_offlineLayer);
     g_tileLayer.setOpacity(Number(g_mapSettings.loudness));
-  } else {
-    if (g_mapSettings.nightMapEnable && g_nightTime) {
+  }
+  else
+  {
+    if (g_mapSettings.nightMapEnable && g_nightTime)
+    {
       g_tileLayer.setSource(g_mapsLayer[g_mapSettings.nightMapIndex]);
       g_tileLayer.setOpacity(Number(g_mapSettings.nightLoudness));
-    } else {
+    }
+    else
+    {
       g_tileLayer.setSource(g_mapsLayer[g_mapSettings.mapIndex]);
       g_tileLayer.setOpacity(Number(g_mapSettings.loudness));
     }
@@ -11157,23 +12866,28 @@ function changeMapLayer() {
   redrawSpots();
 }
 
-function voiceChangedValue() {
+function voiceChangedValue()
+{
   g_speechSettings.voice = Number(alertVoiceInput.value) + 1;
   changeSpeechValues();
 }
 
-function timedGetVoices() {
+function timedGetVoices()
+{
   g_voices = window.speechSynthesis.getVoices();
-  if (g_voices.length > 0) {
+  if (g_voices.length > 0)
+  {
     var newSelect = document.createElement("select");
     newSelect.id = "alertVoiceInput";
     newSelect.title = "Select Voice";
-    for (var i = 0; i < g_voices.length; i++) {
+    for (var i = 0; i < g_voices.length; i++)
+    {
       var option = document.createElement("option");
       option.value = i;
       newstring = g_voices[i].name.replace(/ /g, "");
       option.text = newstring;
-      if (g_voices[i].default) {
+      if (g_voices[i].default)
+      {
         option.selected = true;
       }
       newSelect.appendChild(option);
@@ -11185,8 +12899,10 @@ function timedGetVoices() {
   loadAlerts();
 }
 
-function initSpeech() {
-  window.speechSynthesis.onvoiceschanged = function () {
+function initSpeech()
+{
+  window.speechSynthesis.onvoiceschanged = function ()
+  {
     setTimeout(timedGetVoices, 500);
   };
   var msg = new SpeechSynthesisUtterance(".");
@@ -11194,7 +12910,8 @@ function initSpeech() {
   window.speechSynthesis.speak(msg);
 }
 
-function initSoundCards() {
+function initSoundCards()
+{
   navigator.mediaDevices
     .enumerateDevices()
     .then(gotAudioDevices)
@@ -11202,15 +12919,18 @@ function initSoundCards() {
 }
 
 function errorCallback(e) {}
-function gotAudioDevices(deviceInfos) {
+function gotAudioDevices(deviceInfos)
+{
   soundCardDiv.innerHTML = "";
   var newSelect = document.createElement("select");
   newSelect.id = "soundCardInput";
   newSelect.title = "Select Sound Card";
 
-  for (var i = 0; i !== deviceInfos.length; ++i) {
+  for (var i = 0; i !== deviceInfos.length; ++i)
+  {
     var deviceInfo = deviceInfos[i];
-    if (deviceInfo.kind === "audiooutput") {
+    if (deviceInfo.kind === "audiooutput")
+    {
       var option = document.createElement("option");
       option.value = deviceInfo.deviceId;
       option.text = deviceInfo.label || "Speaker " + (newSelect.length + 1);
@@ -11223,42 +12943,46 @@ function gotAudioDevices(deviceInfos) {
   soundCardInput.value = g_soundCard;
 }
 
-function soundCardChangedValue() {
+function soundCardChangedValue()
+{
   g_appSettings.soundCard = g_soundCard = soundCardInput.value;
   playTestFile();
 }
 
-function setPins() {
+function setPins()
+{
   g_colorLeafletPins = {};
   g_colorLeafleteQPins = {};
   g_colorLeafletQPins.worked = {};
   g_colorLeafletQPins.confirmed = {};
-  for (var i = 0; i < g_colorBands.length; i++) {
+  for (var i = 0; i < g_colorBands.length; i++)
+  {
     var pin = new ol.style.Icon({
       src: "./img/pin/" + g_colorBands[i] + ".png",
       anchorYUnits: "pixels",
       anchorXUnits: "pixels",
-      anchor: [5, 18],
+      anchor: [5, 18]
     });
     g_colorLeafletPins[g_colorBands[i]] = pin;
     pin = new ol.style.Icon({
       src: "./img/pin/" + g_colorBands[i] + "w.png",
       anchorYUnits: "pixels",
       anchorXUnits: "pixels",
-      anchor: [5, 18],
+      anchor: [5, 18]
     });
     g_colorLeafletQPins.worked[g_colorBands[i]] = pin;
     pin = new ol.style.Icon({
       src: "./img/pin/" + g_colorBands[i] + "q.png",
       anchorYUnits: "pixels",
       anchorXUnits: "pixels",
-      anchor: [5, 18],
+      anchor: [5, 18]
     });
     g_colorLeafletQPins.confirmed[g_colorBands[i]] = pin;
   }
 }
 
-function loadViewSettings() {
+function loadViewSettings()
+{
   gtBandFilter.value = g_appSettings.gtBandFilter;
   gtModeFilter.value = g_appSettings.gtModeFilter;
   gtPropFilter.value = g_appSettings.gtPropFilter;
@@ -11311,15 +13035,21 @@ function loadViewSettings() {
   lookupMerge.checked = g_appSettings.lookupMerge;
   lookupMissingGrid.checked = g_appSettings.lookupMissingGrid;
 
-  if (g_appSettings.lookupMerge == true) {
+  if (g_appSettings.lookupMerge == true)
+  {
     lookupMissingGridDiv.style.display = "inline-block";
-  } else {
+  }
+  else
+  {
     lookupMissingGridDiv.style.display = "none";
   }
 
-  if (g_receptionSettings.viewPaths) {
+  if (g_receptionSettings.viewPaths)
+  {
     spotPathWidthDiv.style.display = "inline-block";
-  } else {
+  }
+  else
+  {
     spotPathWidthDiv.style.display = "none";
   }
 
@@ -11327,46 +13057,55 @@ function loadViewSettings() {
   setRosterTimeView();
 }
 
-function loadMsgSettings() {
+function loadMsgSettings()
+{
   msgEnable.checked = g_appSettings.gtMsgEnable;
   GTspotEnable.checked = g_appSettings.gtSpotEnable;
 
   pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
 
-  for (var key in g_msgSettings) {
+  for (var key in g_msgSettings)
+  {
     document.getElementById(key).value = g_msgSettings[key];
   }
   ValidateText(msgAwayText);
   setMsgSettingsView();
 }
 
-function setMsgSettingsView() {
+function setMsgSettingsView()
+{
   if (msgEnable.checked) msgSettingsDiv.style.display = "inline-block";
   else msgSettingsDiv.style.display = "none";
 
-  if (g_msgSettings.msgAlertSelect > 0) {
+  if (g_msgSettings.msgAlertSelect > 0)
+  {
     msgFrequencySelectDiv.style.display = "inline-block";
-    if (g_msgSettings.msgAlertSelect == 1) {
+    if (g_msgSettings.msgAlertSelect == 1)
+    {
       msgAlertWord.style.display = "inline-block";
       msgAlertMedia.style.display = "none";
       ValidateText(msgAlertWord);
     }
-    if (g_msgSettings.msgAlertSelect == 2) {
+    if (g_msgSettings.msgAlertSelect == 2)
+    {
       msgAlertWord.style.display = "none";
       msgAlertMedia.style.display = "inline-block";
     }
-  } else {
+  }
+  else
+  {
     msgFrequencySelectDiv.style.display = "none";
     msgAlertWord.style.display = "none";
     msgAlertMedia.style.display = "none";
   }
 
   if (g_msgSettings.msgAwaySelect > 0)
-    msgAwayTextDiv.style.display = "inline-block";
+  { msgAwayTextDiv.style.display = "inline-block"; }
   else msgAwayTextDiv.style.display = "none";
 }
 
-function loadAdifSettings() {
+function loadAdifSettings()
+{
   workingCallsignEnable.checked = g_appSettings.workingCallsignEnable;
   workingCallsignsValue.value = Object.keys(
     g_appSettings.workingCallsigns
@@ -11377,68 +13116,94 @@ function loadAdifSettings() {
   workingDateEnable.checked = g_appSettings.workingDateEnable;
   displayWorkingDate();
 
-  if (g_platform == "mac") {
+  if (g_platform == "mac")
+  {
     selectTQSLButton.style.display = "none";
   }
 
-  for (var key in g_adifLogSettings.menu) {
+  for (var key in g_adifLogSettings.menu)
+  {
     var value = g_adifLogSettings.menu[key];
     var where = key + "Div";
-    if (document.getElementById(key) != null) {
+    if (document.getElementById(key) != null)
+    {
       document.getElementById(key).checked = value;
-      if (value == true) {
+      if (value == true)
+      {
         document.getElementById(where).style.display = "inline-block";
-      } else {
+      }
+      else
+      {
         document.getElementById(where).style.display = "none";
       }
     }
   }
-  for (var key in g_adifLogSettings.startup) {
+  for (var key in g_adifLogSettings.startup)
+  {
     if (document.getElementById(key) != null)
-      document.getElementById(key).checked = g_adifLogSettings.startup[key];
+    { document.getElementById(key).checked = g_adifLogSettings.startup[key]; }
   }
-  for (var key in g_adifLogSettings.nickname) {
-    if (document.getElementById(key) != null) {
+  for (var key in g_adifLogSettings.nickname)
+  {
+    if (document.getElementById(key) != null)
+    {
       document.getElementById(key).checked = g_adifLogSettings.nickname[key];
-      if (key == "nicknameeQSLCheckBox") {
-        if (document.getElementById(key).checked == true) {
+      if (key == "nicknameeQSLCheckBox")
+      {
+        if (document.getElementById(key).checked == true)
+        {
           eQSLNickname.style.display = "inline-block";
-        } else {
+        }
+        else
+        {
           eQSLNickname.style.display = "none";
         }
       }
     }
   }
-  for (var key in g_adifLogSettings.text) {
-    if (document.getElementById(key) != null) {
+  for (var key in g_adifLogSettings.text)
+  {
+    if (document.getElementById(key) != null)
+    {
       document.getElementById(key).value = g_adifLogSettings.text[key];
       ValidateText(document.getElementById(key));
     }
   }
-  for (var key in g_adifLogSettings.qsolog) {
-    if (document.getElementById(key) != null) {
+  for (var key in g_adifLogSettings.qsolog)
+  {
+    if (document.getElementById(key) != null)
+    {
       document.getElementById(key).checked = g_adifLogSettings.qsolog[key];
-      if (key == "logLOTWqsoCheckBox") {
-        if (document.getElementById(key).checked == true) {
+      if (key == "logLOTWqsoCheckBox")
+      {
+        if (document.getElementById(key).checked == true)
+        {
           lotwUpload.style.display = "inline-block";
           trustedTestButton.style.display = "inline-block";
-        } else {
+        }
+        else
+        {
           lotwUpload.style.display = "none";
           trustedTestButton.style.display = "none";
         }
       }
     }
   }
-  if (clubCall.value == "" && myRawCall != "NOCALL") {
+  if (clubCall.value == "" && myRawCall != "NOCALL")
+  {
     clubCall.value = myRawCall;
     ValidateText(clubCall);
     localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
   }
 
-  try {
+  try
+  {
     findTrustedQSLPaths();
-  } catch (e) {
-    if (logLOTWqsoCheckBox.checked == true) {
+  }
+  catch (e)
+  {
+    if (logLOTWqsoCheckBox.checked == true)
+    {
       alert(
         "Unable to access LoTW TrustedQSL (TQSL) due to OS permissions\nLogging to LoTW disabled for this session\nRun as administrator or allow file access to GridTracker if problem persists"
       );
@@ -11449,25 +13214,32 @@ function loadAdifSettings() {
   ValidateQrzApi(qrzApiKey);
 }
 
-function startupVersionInit() {
-  if (!g_developerMode) {
-    document.body.addEventListener("contextmenu", function (ev) {
+function startupVersionInit()
+{
+  if (!g_developerMode)
+  {
+    document.body.addEventListener("contextmenu", function (ev)
+    {
       ev.preventDefault();
     });
   }
 
   imSureCheck.checked = false;
   stopAskingCheckbox.checked = g_appSettings.stopAskingVersion;
-  if (stopAskingCheckbox.checked == false) {
+  if (stopAskingCheckbox.checked == false)
+  {
     checkForNewVersion(false);
-    setInterval(function () {
+    setInterval(function ()
+    {
       checkForNewVersion(false);
     }, 86400000);
   }
 }
 
-function startupButtonsAndInputs() {
-  try {
+function startupButtonsAndInputs()
+{
+  try
+  {
     g_pushPinMode = !(g_appSettings.pushPinMode == true);
     togglePushPinMode();
     udpForwardEnable.checked = g_appSettings.wsjtForwardUdpEnable;
@@ -11484,13 +13256,15 @@ function startupButtonsAndInputs() {
 
     rosterAlwaysOnTop.checked = g_appSettings.rosterAlwaysOnTop;
 
-    if (g_appSettings.centerGridsquare.length > 0) {
+    if (g_appSettings.centerGridsquare.length > 0)
+    {
       homeQTHInput.value = g_appSettings.centerGridsquare.substr(0, 6);
       if (ValidateGridsquare(homeQTHInput, null)) setCenterGridsquare();
     }
     ValidateCallsign(alertValueInput, null);
 
-    if (g_mapSettings.offlineMode == true) {
+    if (g_mapSettings.offlineMode == true)
+    {
       conditionsButton.style.display = "none";
       buttonPsk24CheckBoxDiv.style.display = "none";
       buttonQRZCheckBoxDiv.style.display = "none";
@@ -11506,17 +13280,20 @@ function startupButtonsAndInputs() {
     }
 
     setGtShareButtons();
-  } catch (e) {}
+  }
+  catch (e) {}
 }
 
-function startupEventsAndTimers() {
+function startupEventsAndTimers()
+{
   document.addEventListener("keydown", onMyKeyDown, true);
   document.addEventListener("keyup", onMyKeyUp, false);
   displayTimeInterval = setInterval(displayTime, 1000);
 }
 
 var g_finishedLoading = false;
-function postInit() {
+function postInit()
+{
   redrawSpots();
   checkForSettings();
   updateForwardListener();
@@ -11525,16 +13302,18 @@ function postInit() {
   g_nexradEnable = g_mapSettings.usNexrad ? 0 : 1;
   toggleNexrad();
 
-  if (String(gtVersion) != String(g_startVersion)) {
-    //generalbut.className = "settingsTablinks";
+  if (String(gtVersion) != String(g_startVersion))
+  {
+    // generalbut.className = "settingsTablinks";
     showSettingsBox();
 
     openSettingsTab(updatebut, "updateSettingsDiv");
   }
   g_finishedLoading = true;
-  //tagme
+  // tagme
   var x = document.querySelectorAll("input[type='range']");
-  for (var i = 0; i < x.length; i++) {
+  for (var i = 0; i < x.length; i++)
+  {
     if (x[i].title.length > 0) x[i].title += "\n";
     x[i].title += "(Use Arrow Keys For Smaller Increments)";
   }
@@ -11546,11 +13325,13 @@ function postInit() {
   showMessaging(false);
 }
 
-document.addEventListener("dragover", function (event) {
+document.addEventListener("dragover", function (event)
+{
   event.preventDefault();
 });
 
-document.addEventListener("drop", function (event) {
+document.addEventListener("drop", function (event)
+{
   event.preventDefault();
   if (g_finishedLoading == true) dropHandler(event);
 });
@@ -11579,18 +13360,22 @@ var g_startupTable = [
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
   [gtChatSystemInit, "User System Initialized"],
-  [postInit, "Finalizing System"],
+  [postInit, "Finalizing System"]
 ];
 
-function init() {
+function init()
+{
   startupVersionDiv.innerHTML = gtVersionString;
   aboutVersionDiv.innerHTML = gtVersionString;
   g_currentDay = parseInt(timeNowSec() / 86400);
-  if (mediaCheck() == false) {
+  if (mediaCheck() == false)
+  {
     startupDiv.style.display = "none";
     documentsDiv.style.display = "block";
     searchedDocFolder.innerHTML = g_appData;
-  } else {
+  }
+  else
+  {
     documentsDiv.style.display = "none";
     startupDiv.style.display = "block";
     startupStatusDiv.innerHTML = "Starting...";
@@ -11598,13 +13383,17 @@ function init() {
   }
 }
 
-function startupEngine() {
-  if (g_startupTable.length > 0) {
+function startupEngine()
+{
+  if (g_startupTable.length > 0)
+  {
     var funcInfo = g_startupTable.shift();
     funcInfo[0]();
     startupStatusDiv.innerHTML = funcInfo[1];
     setTimeout(startupEngine, 10);
-  } else {
+  }
+  else
+  {
     startupStatusDiv.innerHTML = "Completed";
     setTimeout(endStartup, 2000);
     startupAdifLoadCheck();
@@ -11612,18 +13401,21 @@ function startupEngine() {
   }
 }
 
-function directoryInput(what) {
+function directoryInput(what)
+{
   g_appSettings.savedAppData = what.files[0].path;
   init();
 }
 
-function endStartup() {
+function endStartup()
+{
   startupDiv.style.display = "none";
   main.style.display = "block";
   g_map.updateSize();
 }
 
-function loadPortSettings() {
+function loadPortSettings()
+{
   multicastEnable.checked = g_appSettings.multicast;
   multicastIpInput.value = g_appSettings.wsjtIP;
   setMulticastEnable(multicastEnable);
@@ -11643,56 +13435,68 @@ var g_wsjtUdpSocketReady = false;
 var g_wsjtUdpSocketError = false;
 var g_qtToSplice = 0;
 
-function decodeQUINT8(byteArray) {
+function decodeQUINT8(byteArray)
+{
   g_qtToSplice = 1;
   return byteArray[0];
 }
 
-function encodeQBOOL(byteArray, offset, value) {
+function encodeQBOOL(byteArray, offset, value)
+{
   return byteArray.writeUInt8(value, offset);
 }
 
-function decodeQUINT32(byteArray) {
+function decodeQUINT32(byteArray)
+{
   g_qtToSplice = 4;
   return byteArray.readUInt32BE(0);
 }
 
-function encodeQUINT32(byteArray, offset, value) {
+function encodeQUINT32(byteArray, offset, value)
+{
   if (value == -1) value = 4294967295;
   return byteArray.writeUInt32BE(value, offset);
 }
 
-function decodeQINT32(byteArray) {
+function decodeQINT32(byteArray)
+{
   g_qtToSplice = 4;
   return byteArray.readInt32BE(0);
 }
 
-function encodeQINT32(byteArray, offset, value) {
+function encodeQINT32(byteArray, offset, value)
+{
   return byteArray.writeInt32BE(value, offset);
 }
 
-function decodeQUINT64(byteArray) {
+function decodeQUINT64(byteArray)
+{
   var value = 0;
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < 8; i++)
+  {
     value = value * 256 + byteArray[i];
   }
   g_qtToSplice = 8;
   return value;
 }
 
-function encodeQUINT64(byteArray, offset, value) {
+function encodeQUINT64(byteArray, offset, value)
+{
   var breakOut = Array();
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < 8; i++)
+  {
     breakOut[i] = value & 0xff;
     value >>= 8;
   }
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < 8; i++)
+  {
     offset = encodeQBOOL(byteArray, offset, breakOut[7 - i]);
   }
   return offset;
 }
 
-function decodeQUTF8(byteArray) {
+function decodeQUTF8(byteArray)
+{
   var utf8_len = decodeQUINT32(byteArray);
   var result = "";
   byteArray = byteArray.slice(g_qtToSplice);
@@ -11702,25 +13506,30 @@ function decodeQUTF8(byteArray) {
   return result.toString();
 }
 
-function encodeQUTF8(byteArray, offset, value) {
+function encodeQUTF8(byteArray, offset, value)
+{
   offset = encodeQUINT32(byteArray, offset, value.length);
   var wrote = byteArray.write(value, offset, value.length);
   return wrote + offset;
 }
 
-function decodeQDOUBLE(byteArray) {
+function decodeQDOUBLE(byteArray)
+{
   g_qtToSplice = 8;
   return byteArray.readDoubleBE(0);
 }
 
-function encodeQDOUBLE(byteArray, offset, value) {
+function encodeQDOUBLE(byteArray, offset, value)
+{
   return byteArray.writeDoubleBE(value, offset);
 }
 
 var g_forwardUdpServer = null;
 
-function updateForwardListener() {
-  if (g_forwardUdpServer != null) {
+function updateForwardListener()
+{
+  if (g_forwardUdpServer != null)
+  {
     g_forwardUdpServer.close();
   }
   if (g_closing == true) return;
@@ -11728,21 +13537,24 @@ function updateForwardListener() {
   var dgram = require("dgram");
   g_forwardUdpServer = dgram.createSocket({
     type: "udp4",
-    reuseAddr: true,
+    reuseAddr: true
   });
 
   g_forwardUdpServer.on("listening", function () {});
-  g_forwardUdpServer.on("error", function () {
+  g_forwardUdpServer.on("error", function ()
+  {
     g_forwardUdpServer.close();
     g_forwardUdpServer = null;
   });
-  g_forwardUdpServer.on("message", function (originalMessage, remote) {
+  g_forwardUdpServer.on("message", function (originalMessage, remote)
+  {
     // Decode enough to get the rig-name, so we know who to send to
     var message = Object.assign({}, originalMessage);
     var newMessage = {};
     newMessage.magic_key = decodeQUINT32(message);
     message = message.slice(g_qtToSplice);
-    if (newMessage.magic_key == 0xadbccbda) {
+    if (newMessage.magic_key == 0xadbccbda)
+    {
       newMessage.schema_number = decodeQUINT32(message);
       message = message.slice(g_qtToSplice);
       newMessage.type = decodeQUINT32(message);
@@ -11751,7 +13563,8 @@ function updateForwardListener() {
       message = message.slice(g_qtToSplice);
 
       var instanceId = newMessage.Id;
-      if (instanceId in g_instances) {
+      if (instanceId in g_instances)
+      {
         wsjtUdpMessage(
           originalMessage,
           originalMessage.length,
@@ -11764,23 +13577,29 @@ function updateForwardListener() {
   g_forwardUdpServer.bind(0);
 }
 
-function sendForwardUdpMessage(msg, length, port, address) {
-  if (g_forwardUdpServer) {
+function sendForwardUdpMessage(msg, length, port, address)
+{
+  if (g_forwardUdpServer)
+  {
     g_forwardUdpServer.send(msg, 0, length, port, address);
   }
 }
 
-function wsjtUdpMessage(msg, length, port, address) {
-  if (g_wsjtUdpServer) {
+function wsjtUdpMessage(msg, length, port, address)
+{
+  if (g_wsjtUdpServer)
+  {
     g_wsjtUdpServer.send(msg, 0, length, port, address);
   }
 }
 
-function checkWsjtxListener() {
+function checkWsjtxListener()
+{
   if (
     g_wsjtUdpServer == null ||
     (g_wsjtUdpSocketReady == false && g_wsjtUdpSocketError == true)
-  ) {
+  )
+  {
     g_wsjtCurrentPort = -1;
     g_wsjtCurrentIP = "none";
   }
@@ -11795,14 +13614,19 @@ var g_activeIndex = 0;
 
 var g_currentID = null;
 
-function updateWsjtxListener(port) {
+function updateWsjtxListener(port)
+{
   if (port == g_wsjtCurrentPort && g_appSettings.wsjtIP == g_wsjtCurrentIP)
-    return;
-  if (g_wsjtUdpServer != null) {
-    if (multicastEnable.checked == true && g_appSettings.wsjtIP != "") {
-      try {
+  { return; }
+  if (g_wsjtUdpServer != null)
+  {
+    if (multicastEnable.checked == true && g_appSettings.wsjtIP != "")
+    {
+      try
+      {
         g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
-      } catch (e) {}
+      }
+      catch (e) {}
     }
     g_wsjtUdpServer.close();
     g_wsjtUdpServer = null;
@@ -11813,37 +13637,45 @@ function updateWsjtxListener(port) {
   var dgram = require("dgram");
   g_wsjtUdpServer = dgram.createSocket({
     type: "udp4",
-    reuseAddr: true,
+    reuseAddr: true
   });
-  if (multicastEnable.checked == true && g_appSettings.wsjtIP != "") {
-    g_wsjtUdpServer.on("listening", function () {
+  if (multicastEnable.checked == true && g_appSettings.wsjtIP != "")
+  {
+    g_wsjtUdpServer.on("listening", function ()
+    {
       var address = g_wsjtUdpServer.address();
       g_wsjtUdpServer.setBroadcast(true);
       g_wsjtUdpServer.setMulticastTTL(128);
       g_wsjtUdpServer.addMembership(g_appSettings.wsjtIP);
       g_wsjtUdpSocketReady = true;
     });
-  } else {
+  }
+  else
+  {
     g_appSettings.multicast = false;
     g_wsjtCurrentIP = g_appSettings.wsjtIP = "";
-    g_wsjtUdpServer.on("listening", function () {
+    g_wsjtUdpServer.on("listening", function ()
+    {
       g_wsjtUdpServer.setBroadcast(true);
       g_wsjtUdpSocketReady = true;
     });
   }
-  g_wsjtUdpServer.on("error", function () {
+  g_wsjtUdpServer.on("error", function ()
+  {
     g_wsjtUdpServer.close();
     g_wsjtUdpServer = null;
     g_wsjtUdpSocketReady = false;
     g_wsjtUdpSocketError = true;
   });
-  g_wsjtUdpServer.on("message", function (message, remote) {
+  g_wsjtUdpServer.on("message", function (message, remote)
+  {
     // if (g_closing == true) true;
 
     if (
       typeof udpForwardEnable != "undefined" &&
       udpForwardEnable.checked == true
-    ) {
+    )
+    {
       sendForwardUdpMessage(
         message,
         message.length,
@@ -11855,7 +13687,8 @@ function updateWsjtxListener(port) {
     var newMessage = {};
     newMessage.magic_key = decodeQUINT32(message);
     message = message.slice(g_qtToSplice);
-    if (newMessage.magic_key == 0xadbccbda) {
+    if (newMessage.magic_key == 0xadbccbda)
+    {
       newMessage.schema_number = decodeQUINT32(message);
       message = message.slice(g_qtToSplice);
       newMessage.type = decodeQUINT32(message);
@@ -11864,13 +13697,15 @@ function updateWsjtxListener(port) {
       message = message.slice(g_qtToSplice);
 
       var instanceId = newMessage.Id;
-      if (!(instanceId in g_instances)) {
+      if (!(instanceId in g_instances))
+      {
         g_instances[instanceId] = {};
         g_instances[instanceId].valid = false;
         g_instancesIndex.push(instanceId);
         g_instances[instanceId].intId = g_instancesIndex.length - 1;
         g_instances[instanceId].crEnable = true;
-        if (g_instancesIndex.length > 1) {
+        if (g_instancesIndex.length > 1)
+        {
           multiRigCRDiv.style.display = "inline-block";
           haltTXDiv.style.display = "inline-block";
         }
@@ -11883,7 +13718,8 @@ function updateWsjtxListener(port) {
 
       if (notify) updateRosterInstances();
 
-      if (newMessage.type == 1) {
+      if (newMessage.type == 1)
+      {
         newMessage.event = "Status";
         newMessage.Frequency = decodeQUINT64(message);
         newMessage.Band = Number(newMessage.Frequency / 1000000).formatBand();
@@ -11919,36 +13755,50 @@ function updateWsjtxListener(port) {
         newMessage.Fastmode = decodeQUINT8(message);
         message = message.slice(g_qtToSplice);
 
-        if (message.length > 0) {
+        if (message.length > 0)
+        {
           newMessage.SopMode = decodeQUINT8(message);
           message = message.slice(g_qtToSplice);
-        } else {
+        }
+        else
+        {
           newMessage.SopMode = -1;
         }
-        if (message.length > 0) {
+        if (message.length > 0)
+        {
           newMessage.FreqTol = decodeQINT32(message);
           message = message.slice(g_qtToSplice);
-        } else {
+        }
+        else
+        {
           newMessage.FreqTol = -1;
         }
-        if (message.length > 0) {
+        if (message.length > 0)
+        {
           newMessage.TRP = decodeQINT32(message);
           message = message.slice(g_qtToSplice);
-        } else {
+        }
+        else
+        {
           newMessage.TRP = -1;
         }
-        if (message.length > 0) {
+        if (message.length > 0)
+        {
           newMessage.ConfName = decodeQUTF8(message);
           message = message.slice(g_qtToSplice);
-        } else {
+        }
+        else
+        {
           newMessage.ConfName = null;
         }
 
         g_instances[instanceId].status = newMessage;
         g_instances[instanceId].valid = true;
       }
-      if (g_instances[instanceId].valid == true) {
-        if (newMessage.type == 2) {
+      if (g_instances[instanceId].valid == true)
+      {
+        if (newMessage.type == 2)
+        {
           newMessage.event = "Decode";
           newMessage.NW = decodeQUINT8(message);
           message = message.slice(g_qtToSplice);
@@ -11974,10 +13824,12 @@ function updateWsjtxListener(port) {
           newMessage.OM = g_instances[instanceId].status.MO;
           newMessage.OB = g_instances[instanceId].status.Band;
         }
-        if (newMessage.type == 3) {
+        if (newMessage.type == 3)
+        {
           newMessage.event = "Clear";
         }
-        if (newMessage.type == 5) {
+        if (newMessage.type == 5)
+        {
           newMessage.event = "QSO Logged";
           newMessage.DateOff = decodeQUINT64(message);
           message = message.slice(g_qtToSplice);
@@ -11985,7 +13837,8 @@ function updateWsjtxListener(port) {
           message = message.slice(g_qtToSplice);
           newMessage.timespecOff = decodeQUINT8(message);
           message = message.slice(g_qtToSplice);
-          if (newMessage.timespecOff == 2) {
+          if (newMessage.timespecOff == 2)
+          {
             newMessage.offsetOff = decodeQINT32(message);
             message = message.slice(g_qtToSplice);
           }
@@ -12013,39 +13866,52 @@ function updateWsjtxListener(port) {
           message = message.slice(g_qtToSplice);
           newMessage.timespecOn = decodeQUINT8(message);
           message = message.slice(g_qtToSplice);
-          if (newMessage.timespecOn == 2) {
+          if (newMessage.timespecOn == 2)
+          {
             newMessage.offsetOn = decodeQINT32(message);
             message = message.slice(g_qtToSplice);
           }
-          if (message.length > 0) {
+          if (message.length > 0)
+          {
             newMessage.Operatorcall = decodeQUTF8(message);
             message = message.slice(g_qtToSplice);
-          } else newMessage.Operatorcall = "";
+          }
+          else newMessage.Operatorcall = "";
 
-          if (message.length > 0) {
+          if (message.length > 0)
+          {
             newMessage.Mycall = decodeQUTF8(message);
             message = message.slice(g_qtToSplice);
-          } else newMessage.Mycall = "";
+          }
+          else newMessage.Mycall = "";
 
-          if (message.length > 0) {
+          if (message.length > 0)
+          {
             newMessage.Mygrid = decodeQUTF8(message);
             message = message.slice(g_qtToSplice);
-          } else newMessage.Mygrid = "";
+          }
+          else newMessage.Mygrid = "";
 
-          if (message.length > 0) {
+          if (message.length > 0)
+          {
             newMessage.ExchangeSent = decodeQUTF8(message);
             message = message.slice(g_qtToSplice);
-          } else newMessage.ExchangeSent = "";
+          }
+          else newMessage.ExchangeSent = "";
 
-          if (message.length > 0) {
+          if (message.length > 0)
+          {
             newMessage.ExchangeReceived = decodeQUTF8(message);
             message = message.slice(g_qtToSplice);
-          } else newMessage.ExchangeReceived = "";
+          }
+          else newMessage.ExchangeReceived = "";
         }
-        if (newMessage.type == 6) {
+        if (newMessage.type == 6)
+        {
           newMessage.event = "Close";
         }
-        if (newMessage.type == 10) {
+        if (newMessage.type == 10)
+        {
           newMessage.event = "WSPRDecode";
           newMessage.NW = decodeQUINT8(message);
           message = message.slice(g_qtToSplice);
@@ -12073,13 +13939,15 @@ function updateWsjtxListener(port) {
           newMessage.OM = g_instances[instanceId].status.MO;
           newMessage.OB = g_instances[instanceId].status.Band;
         }
-        if (newMessage.type == 12) {
+        if (newMessage.type == 12)
+        {
           newMessage.event = "ADIF";
           newMessage.ADIF = decodeQUTF8(message);
           message = message.slice(g_qtToSplice);
         }
 
-        if (newMessage.type in g_wsjtHandlers) {
+        if (newMessage.type in g_wsjtHandlers)
+        {
           newMessage.remote = remote;
           newMessage.instance = instanceId;
 
@@ -12096,39 +13964,48 @@ function updateWsjtxListener(port) {
   g_wsjtCurrentIP = g_appSettings.wsjtIP;
 }
 
-function loadLookupDetails() {
+function loadLookupDetails()
+{
   lookupService.value = g_appSettings.lookupService;
-  if (lookupService.value == "QRZ") {
+  if (lookupService.value == "QRZ")
+  {
     lookupLogin.value = g_appSettings.lookupLoginQrz;
     lookupPassword.value = g_appSettings.lookupPasswordQrz;
   }
-  if (lookupService.value == "QRZCQ") {
+  if (lookupService.value == "QRZCQ")
+  {
     lookupLogin.value = g_appSettings.lookupLoginCq;
     lookupPassword.value = g_appSettings.lookupPasswordCq;
   }
-  if (lookupService.value == "HAMQTH") {
+  if (lookupService.value == "HAMQTH")
+  {
     lookupLogin.value = g_appSettings.lookupLoginQth;
     lookupPassword.value = g_appSettings.lookupPasswordQth;
   }
   ValidateText(lookupLogin);
   ValidateText(lookupPassword);
   if (lookupService.value == "CALLOOK")
-    lookupCredentials.style.display = "none";
+  { lookupCredentials.style.display = "none"; }
   else lookupCredentials.style.display = "block";
 }
 
-function lookupValueChanged(what) {
-  if (g_appSettings.lookupService != lookupService.value) {
+function lookupValueChanged(what)
+{
+  if (g_appSettings.lookupService != lookupService.value)
+  {
     g_lastLookupCallsign = "";
-    if (lookupService.value == "QRZ") {
+    if (lookupService.value == "QRZ")
+    {
       lookupLogin.value = g_appSettings.lookupLoginQrz;
       lookupPassword.value = g_appSettings.lookupPasswordQrz;
     }
-    if (lookupService.value == "QRZCQ") {
+    if (lookupService.value == "QRZCQ")
+    {
       lookupLogin.value = g_appSettings.lookupLoginCq;
       lookupPassword.value = g_appSettings.lookupPasswordCq;
     }
-    if (lookupService.value == "HAMQTH") {
+    if (lookupService.value == "HAMQTH")
+    {
       lookupLogin.value = g_appSettings.lookupLoginQth;
       lookupPassword.value = g_appSettings.lookupPasswordQth;
     }
@@ -12137,18 +14014,22 @@ function lookupValueChanged(what) {
   lookupQrzTestResult.innerHTML = "";
   g_qrzLookupSessionId = null;
   if (lookupService.value == "CALLOOK")
-    lookupCredentials.style.display = "none";
+  { lookupCredentials.style.display = "none"; }
   else lookupCredentials.style.display = "block";
-  if (ValidateText(lookupLogin) && ValidateText(lookupPassword)) {
-    if (lookupService.value == "QRZ") {
+  if (ValidateText(lookupLogin) && ValidateText(lookupPassword))
+  {
+    if (lookupService.value == "QRZ")
+    {
       g_appSettings.lookupLoginQrz = lookupLogin.value;
       g_appSettings.lookupPasswordQrz = lookupPassword.value;
     }
-    if (lookupService.value == "QRZCQ") {
+    if (lookupService.value == "QRZCQ")
+    {
       g_appSettings.lookupLoginCq = lookupLogin.value;
       g_appSettings.lookupPasswordCq = lookupPassword.value;
     }
-    if (lookupService.value == "HAMQTH") {
+    if (lookupService.value == "HAMQTH")
+    {
       g_appSettings.lookupLoginQth = lookupLogin.value;
       g_appSettings.lookupPasswordQth = lookupPassword.value;
     }
@@ -12157,58 +14038,73 @@ function lookupValueChanged(what) {
 var g_lastLookupCallsign = "";
 var g_lookupTimeout = null;
 
-function lookupCallsign(callsign, gridPass, useCache = true) {
+function lookupCallsign(callsign, gridPass, useCache = true)
+{
   if (g_mapSettings.offlineMode == true && useCache == false) return;
   g_lastLookupCallsign = callsign;
 
-  if (g_lookupWindowHandle) {
+  if (g_lookupWindowHandle)
+  {
     g_lookupWindowHandle.window.lookupCallsignInput.value = callsign;
     lookupValidateCallByElement("lookupCallsignInput");
   }
-  if (g_lookupTimeout != null) {
+  if (g_lookupTimeout != null)
+  {
     window.clearTimeout(g_lookupTimeout);
     g_lookupTimeout = null;
   }
   g_lookupTimeout = setTimeout(searchLogForCallsign, 500, callsign);
 
   if (useCache)
+  {
     getLookupCachedObject(
       callsign,
       gridPass,
       cacheLookupObject,
       continueWithLookup
     );
+  }
   else continueWithLookup(callsign, gridPass);
 }
 
-function continueWithLookup(callsign, gridPass) {
+function continueWithLookup(callsign, gridPass)
+{
   setLookupDiv(
     "lookupInfoDiv",
     "Looking up <font color='cyan'>" + callsign + "</font>, please wait..."
   );
-  if (g_appSettings.lookupService != "CALLOOK") {
+  if (g_appSettings.lookupService != "CALLOOK")
+  {
     g_qrzLookupCallsign = callsign;
     g_qrzLookupGrid = gridPass;
     if (
       g_qrzLookupSessionId == null ||
       timeNowSec() - g_sinceLastLookup > 3600
-    ) {
+    )
+    {
       g_qrzLookupSessionId = null;
       g_sinceLastLookup = timeNowSec();
       GetSessionID(null, true);
-    } else {
+    }
+    else
+    {
       g_sinceLastLookup = timeNowSec();
       GetLookup(true);
     }
-  } else {
+  }
+  else
+  {
     var dxcc = callsignToDxcc(callsign);
     var where;
     var ccode = 0;
-    if (dxcc in g_dxccToAltName) {
+    if (dxcc in g_dxccToAltName)
+    {
       where = g_dxccToAltName[dxcc];
       ccode = g_worldGeoData[g_dxccToGeoData[dxcc]].ccode;
-    } else where = "Unknown";
-    if (ccode == 840) {
+    }
+    else where = "Unknown";
+    if (ccode == 840)
+    {
       getBuffer(
         "https://callook.info/" + callsign + "/json",
         callookResults,
@@ -12217,7 +14113,9 @@ function continueWithLookup(callsign, gridPass) {
         443,
         true
       );
-    } else {
+    }
+    else
+    {
       var worker =
         "<center>C A L L O O K<br/>NO-NONSENSE AMATEUR RADIO U.S.A. CALLSIGN LOOKUPS<br/>are limited to United States and United States Territories Only<br/>";
       worker +=
@@ -12235,58 +14133,68 @@ function continueWithLookup(callsign, gridPass) {
     }
   }
 }
-function callookResults(buffer, gridPass) {
+function callookResults(buffer, gridPass)
+{
   var results = JSON.parse(buffer);
-  if (typeof results.status != "undefined") {
-    if (results.status == "VALID") {
+  if (typeof results.status != "undefined")
+  {
+    if (results.status == "VALID")
+    {
       var callObject = {};
       var dxcc = callsignToDxcc(results.current.callsign);
-      if (dxcc in g_dxccToAltName) callObject["land"] = g_dxccToAltName[dxcc];
-      callObject["type"] = results.type;
-      callObject["call"] = results.current.callsign;
-      callObject["dxcc"] = dxcc;
-      callObject["email"] = "";
-      callObject["class"] = results.current.operClass;
-      callObject["aliases"] = results.previous.callsign;
-      callObject["trustee"] =
+      if (dxcc in g_dxccToAltName) callObject.land = g_dxccToAltName[dxcc];
+      callObject.type = results.type;
+      callObject.call = results.current.callsign;
+      callObject.dxcc = dxcc;
+      callObject.email = "";
+      callObject.class = results.current.operClass;
+      callObject.aliases = results.previous.callsign;
+      callObject.trustee =
         results.trustee.callsign +
         (results.trustee.name.length > 0 ? "; " + results.trustee.name : "");
-      callObject["name"] = results.name;
-      callObject["fname"] = "";
-      callObject["addr1"] = results.address.line1;
-      callObject["addr2"] = results.address.line2;
-      callObject["addrAttn"] = results.address.attn;
-      callObject["lat"] = results.location.latitude;
-      callObject["lon"] = results.location.longitude;
-      callObject["grid"] = results.location.gridsquare;
-      callObject["efdate"] = results.otherInfo.grantDate;
-      callObject["expdate"] = results.otherInfo.expiryDate;
-      callObject["frn"] = results.otherInfo.frn;
-      callObject["bio"] = 0;
-      callObject["image"] = "";
-      callObject["country"] = "United States";
-      if (gridPass) callObject["gtGrid"] = gridPass;
-      callObject["source"] =
+      callObject.name = results.name;
+      callObject.fname = "";
+      callObject.addr1 = results.address.line1;
+      callObject.addr2 = results.address.line2;
+      callObject.addrAttn = results.address.attn;
+      callObject.lat = results.location.latitude;
+      callObject.lon = results.location.longitude;
+      callObject.grid = results.location.gridsquare;
+      callObject.efdate = results.otherInfo.grantDate;
+      callObject.expdate = results.otherInfo.expiryDate;
+      callObject.frn = results.otherInfo.frn;
+      callObject.bio = 0;
+      callObject.image = "";
+      callObject.country = "United States";
+      if (gridPass) callObject.gtGrid = gridPass;
+      callObject.source =
         "<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://callook.info/" +
         results.current.callsign +
         "\");'>C A L L O O K</div></b></font></td></tr>";
       cacheLookupObject(callObject, gridPass, true);
-    } else if (results.status == "INVALID") {
+    }
+    else if (results.status == "INVALID")
+    {
       setLookupDiv("lookupInfoDiv", "Invalid Lookup");
-    } else {
+    }
+    else
+    {
       setLookupDiv("lookupInfoDiv", "Server is down for maintenance");
     }
-  } else setLookupDiv("lookupInfoDiv", "Unknown Lookup Error");
+  }
+  else setLookupDiv("lookupInfoDiv", "Unknown Lookup Error");
 }
 var g_qrzLookupSessionId = null;
 var g_qrzLookupCallsign = "";
 var g_qrzLookupGrid = "";
 var g_sinceLastLookup = 0;
 
-function GetSessionID(resultTd, useCache) {
+function GetSessionID(resultTd, useCache)
+{
   if (g_mapSettings.offlineMode == true) return;
   if (resultTd != null) resultTd.innerHTML = "Testing";
   if (g_appSettings.lookupService == "QRZCQ")
+  {
     getBuffer(
       "https://ssl.qrzcq.com/xml?username=" +
         g_appSettings.lookupLoginCq +
@@ -12299,7 +14207,9 @@ function GetSessionID(resultTd, useCache) {
       443,
       useCache
     );
+  }
   else if (g_appSettings.lookupService == "QRZ")
+  {
     getBuffer(
       "https://xmldata.qrz.com/xml/current/?username=" +
         g_appSettings.lookupLoginQrz +
@@ -12311,7 +14221,9 @@ function GetSessionID(resultTd, useCache) {
       443,
       useCache
     );
+  }
   else
+  {
     getBuffer(
       "https://www.hamqth.com/xml.php?u=" +
         g_appSettings.lookupLoginQth +
@@ -12323,78 +14235,110 @@ function GetSessionID(resultTd, useCache) {
       443,
       useCache
     );
+  }
 }
 
-function hamQthGetSessionCallback(buffer, resultTd) {
+function hamQthGetSessionCallback(buffer, resultTd)
+{
   var oParser = new DOMParser();
   var oDOM = oParser.parseFromString(buffer, "text/xml");
   var result = "";
-  if (oDOM != null) {
+  if (oDOM != null)
+  {
     var json = XML2jsobj(oDOM.documentElement);
-    if (json.hasOwnProperty("session")) {
-      if (json.session.hasOwnProperty("session_id")) {
+    if (json.hasOwnProperty("session"))
+    {
+      if (json.session.hasOwnProperty("session_id"))
+      {
         result = "<font color='green'>Valid</font>";
         g_qrzLookupSessionId = json.session.session_id;
-      } else {
+      }
+      else
+      {
         result = "<font color='red'>" + json.session.error + "</font>";
         g_qrzLookupSessionId = null;
       }
-    } else {
+    }
+    else
+    {
       result = "<font color='red'>Invalid Response</font>";
       g_qrzLookupSessionId = null;
     }
-  } else {
+  }
+  else
+  {
     result = "<font color='red'>Unknown Error</font>";
     g_qrzLookupSessionId = null;
   }
-  if (resultTd == null) {
+  if (resultTd == null)
+  {
     // It's a true session Request
     SessionResponse(g_qrzLookupSessionId, result);
-  } else {
+  }
+  else
+  {
     g_qrzLookupSessionId = null;
     resultTd.innerHTML = result;
   }
 }
 
-function qrzGetSessionCallback(buffer, resultTd, useCache) {
+function qrzGetSessionCallback(buffer, resultTd, useCache)
+{
   var oParser = new DOMParser();
   var oDOM = oParser.parseFromString(buffer, "text/xml");
   var result = "";
-  if (oDOM != null) {
+  if (oDOM != null)
+  {
     var json = XML2jsobj(oDOM.documentElement);
-    if (json.hasOwnProperty("Session")) {
-      if (json.Session.hasOwnProperty("Key")) {
+    if (json.hasOwnProperty("Session"))
+    {
+      if (json.Session.hasOwnProperty("Key"))
+      {
         result = "<font color='green'>Valid</font>";
         g_qrzLookupSessionId = json.Session.Key;
-      } else {
+      }
+      else
+      {
         result = "<font color='red'>" + json.Session.Error + "</font>";
         g_qrzLookupSessionId = null;
       }
-    } else {
+    }
+    else
+    {
       result = "<font color='red'>Invalid Response</font>";
       g_qrzLookupSessionId = null;
     }
-  } else {
+  }
+  else
+  {
     result = "<font color='red'>Unknown Error</font>";
     g_qrzLookupSessionId = null;
   }
-  if (resultTd == null) {
+  if (resultTd == null)
+  {
     // It's a true session Request
     SessionResponse(g_qrzLookupSessionId, result, useCache);
-  } else resultTd.innerHTML = result;
+  }
+  else resultTd.innerHTML = result;
 }
 
-function SessionResponse(newKey, result, useCache) {
+function SessionResponse(newKey, result, useCache)
+{
   // for QRZCQ.com as well
-  if (newKey == null) {
+  if (newKey == null)
+  {
     setLookupDiv("lookupInfoDiv", result, useCache);
-  } else {
+  }
+  else
+  {
     GetLookup(useCache);
   }
 }
 
-function GetLookup(useCache) {
+function GetLookup(useCache)
+{
   if (g_appSettings.lookupService == "QRZCQ")
+  {
     getBuffer(
       "https://ssl.qrzcq.com/xml?s=" +
         g_qrzLookupSessionId +
@@ -12407,7 +14351,9 @@ function GetLookup(useCache) {
       443,
       useCache
     );
+  }
   else if (g_appSettings.lookupService == "QRZ")
+  {
     getBuffer(
       "http://xmldata.qrz.com/xml/current/?s=" +
         g_qrzLookupSessionId +
@@ -12419,7 +14365,9 @@ function GetLookup(useCache) {
       80,
       useCache
     );
+  }
   else
+  {
     getBuffer(
       "https://www.hamqth.com/xml.php?id=" +
         g_qrzLookupSessionId +
@@ -12432,15 +14380,19 @@ function GetLookup(useCache) {
       443,
       useCache
     );
+  }
 }
 
-function qthHamLookupResults(buffer, gridPass, useCache) {
+function qthHamLookupResults(buffer, gridPass, useCache)
+{
   var oParser = new DOMParser();
   var oDOM = oParser.parseFromString(buffer, "text/xml");
   var result = "";
-  if (oDOM != null) {
+  if (oDOM != null)
+  {
     var json = XML2jsobj(oDOM.documentElement);
-    if (json.hasOwnProperty("search")) {
+    if (json.hasOwnProperty("search"))
+    {
       if (gridPass) json.search.gtGrid = gridPass;
       json.search.source =
         "<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.hamqth.com/" +
@@ -12448,52 +14400,68 @@ function qthHamLookupResults(buffer, gridPass, useCache) {
         "\");'>HamQTH</div></b></font></td></tr>";
 
       cacheLookupObject(json.search, gridPass, true);
-    } else {
+    }
+    else
+    {
       g_qrzLookupSessionId = null;
       setLookupDiv(
         "lookupInfoDiv",
         "<br/><b>No result for callsign</b><br/><br/>"
       );
     }
-  } else {
+  }
+  else
+  {
     setLookupDiv("lookupInfoDiv", buffer);
     g_qrzLookupSessionId = null;
   }
 }
 
-function qrzLookupResults(buffer, gridPass, useCache) {
+function qrzLookupResults(buffer, gridPass, useCache)
+{
   var oParser = new DOMParser();
   var oDOM = oParser.parseFromString(buffer, "text/xml");
   var result = "";
-  if (oDOM != null) {
+  if (oDOM != null)
+  {
     var json = XML2jsobj(oDOM.documentElement);
-    if (json.hasOwnProperty("Callsign")) {
+    if (json.hasOwnProperty("Callsign"))
+    {
       var call = "";
-      if (json.Callsign.hasOwnProperty("callsign")) {
+      if (json.Callsign.hasOwnProperty("callsign"))
+      {
         json.Callsign.call = lookup.callsign;
         delete json.Callsign.callsign;
       }
       if (json.Callsign.hasOwnProperty("call")) call = json.Callsign.call;
       if (g_appSettings.lookupService == "QRZ")
+      {
         json.Callsign.source =
           "<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrz.com/lookup?callsign=" +
           call +
           "\");'>QRZ.com</div></b></font></td></tr>";
+      }
       else
+      {
         json.Callsign.source =
           "<tr><td>Source</td><td><font color='orange'><b><div style='cursor:pointer' onClick='window.opener.openSite(\"https://www.qrzcq.com/call/" +
           call +
           "\");'>QRZCQ.com</div></b></font></td></tr>";
+      }
       if (gridPass) json.Callsign.gtGrid = gridPass;
       cacheLookupObject(json.Callsign, gridPass, true);
-    } else {
+    }
+    else
+    {
       setLookupDiv(
         "lookupInfoDiv",
         "<br/><b>No result for callsign</b><br/><br/>"
       );
       g_qrzLookupSessionId = null;
     }
-  } else {
+  }
+  else
+  {
     setLookupDiv("lookupInfoDiv", buffer);
     g_qrzLookupSessionId = null;
   }
@@ -12504,10 +14472,12 @@ var g_lastLookupAddress = null;
 var g_Idb = null;
 var g_Irequest = null;
 
-function initialDatabases() {
+function initialDatabases()
+{
   g_Irequest = window.indexedDB.open("GridTracker", 1);
 
-  g_Irequest.onerror = function (event) {
+  g_Irequest.onerror = function (event)
+  {
     alert(
       "Database error: " +
         event.target.errorCode +
@@ -12515,30 +14485,36 @@ function initialDatabases() {
     );
   };
 
-  g_Irequest.onsuccess = function (event) {
+  g_Irequest.onsuccess = function (event)
+  {
     g_Idb = g_Irequest.result;
-    if (!g_Idb.objectStoreNames.contains("lookups")) {
+    if (!g_Idb.objectStoreNames.contains("lookups"))
+    {
       g_Idb.createObjectStore("lookups", { keyPath: "call" });
     }
     init();
   };
 
-  g_Irequest.onupgradeneeded = function (event) {
+  g_Irequest.onupgradeneeded = function (event)
+  {
     g_Idb = g_Irequest.result;
-    if (!g_Idb.objectStoreNames.contains("lookups")) {
+    if (!g_Idb.objectStoreNames.contains("lookups"))
+    {
       g_Idb.createObjectStore("lookups", { keyPath: "call" });
     }
     init();
   };
 }
 
-function addLookupObjectToIndexedDB(lookupObject) {
+function addLookupObjectToIndexedDB(lookupObject)
+{
   var request = g_Idb
     .transaction(["lookups"], "readwrite")
     .objectStore("lookups")
     .put(lookupObject);
 
-  request.onerror = function (event) {
+  request.onerror = function (event)
+  {
     addLastTraffic("<font style='color:orange'>Lookup Write Issue</font>");
   };
 }
@@ -12549,17 +14525,20 @@ function getLookupCachedObject(
   resultFunction = null,
   noResultFunction = null,
   callObject = null
-) {
+)
+{
   var request = g_Idb
     .transaction(["lookups"], "readwrite")
     .objectStore("lookups")
     .get(call);
 
-  request.onsuccess = function (event) {
+  request.onsuccess = function (event)
+  {
     if (
       request.result &&
       parseInt(request.result.cached) + 604800 > timeNowSec()
-    ) {
+    )
+    {
       // 7 days, should an option Tag! I know right?!
       delete request.result;
       request.result = null;
@@ -12568,12 +14547,15 @@ function getLookupCachedObject(
         .objectStore("lookups")
         .delete(call);
     }
-    if (callObject != null) {
-      if (request.result != null) {
+    if (callObject != null)
+    {
+      if (request.result != null)
+      {
         callObject.cnty = request.result.cnty;
 
         if (callObject.cnty in g_countyData) callObject.qual = true;
-        else {
+        else
+        {
           callObject.cnty = null;
           callObject.qual = false;
         }
@@ -12581,156 +14563,193 @@ function getLookupCachedObject(
       return;
     }
     if (request.result != null && resultFunction)
-      resultFunction(request.result, gridPass, false);
+    { resultFunction(request.result, gridPass, false); }
     else if (noResultFunction) noResultFunction(call, gridPass);
   };
 
-  request.onerror = function (event) {
+  request.onerror = function (event)
+  {
     if (noResultFunction) noResultFunction(call, gridPass);
   };
 }
 
-function cacheLookupObject(lookup, gridPass, cacheable = false) {
+function cacheLookupObject(lookup, gridPass, cacheable = false)
+{
   if (!("cnty" in lookup)) lookup.cnty = null;
 
-  if (lookup.hasOwnProperty("callsign")) {
+  if (lookup.hasOwnProperty("callsign"))
+  {
     lookup.call = lookup.callsign;
     delete lookup.callsign;
   }
 
   lookup.call = lookup.call.toUpperCase();
 
-  if (lookup.hasOwnProperty("latitude")) {
+  if (lookup.hasOwnProperty("latitude"))
+  {
     lookup.lat = lookup.latitude;
     delete lookup.latitude;
   }
-  if (lookup.hasOwnProperty("longitude")) {
+  if (lookup.hasOwnProperty("longitude"))
+  {
     lookup.lon = lookup.longitude;
     delete lookup.longitude;
   }
-  if (lookup.hasOwnProperty("locator")) {
+  if (lookup.hasOwnProperty("locator"))
+  {
     lookup.grid = lookup.locator;
     delete lookup.locator;
   }
-  if (lookup.hasOwnProperty("website")) {
+  if (lookup.hasOwnProperty("website"))
+  {
     lookup.url = lookup.website;
     delete lookup.website;
   }
-  if (lookup.hasOwnProperty("web")) {
+  if (lookup.hasOwnProperty("web"))
+  {
     lookup.url = lookup.web;
     delete lookup.web;
   }
-  if (lookup.hasOwnProperty("qslpic")) {
+  if (lookup.hasOwnProperty("qslpic"))
+  {
     lookup.image = lookup.qslpic;
     delete lookup.qslpic;
   }
-  if (lookup.hasOwnProperty("picture")) {
+  if (lookup.hasOwnProperty("picture"))
+  {
     lookup.image = lookup.picture;
     delete lookup.picture;
   }
-  if (lookup.hasOwnProperty("address")) {
+  if (lookup.hasOwnProperty("address"))
+  {
     lookup.addr1 = lookup.address;
     delete lookup.address;
   }
-  if (lookup.hasOwnProperty("adr_city")) {
+  if (lookup.hasOwnProperty("adr_city"))
+  {
     lookup.addr2 = lookup.adr_city;
     delete lookup.adr_city;
   }
-  if (lookup.hasOwnProperty("city")) {
+  if (lookup.hasOwnProperty("city"))
+  {
     lookup.addr2 = lookup.city;
     delete lookup.city;
   }
-  if (lookup.hasOwnProperty("itu")) {
+  if (lookup.hasOwnProperty("itu"))
+  {
     lookup.ituzone = lookup.itu;
     delete lookup.itu;
   }
-  if (lookup.hasOwnProperty("cq")) {
+  if (lookup.hasOwnProperty("cq"))
+  {
     lookup.cqzone = lookup.cq;
     delete lookup.cq;
   }
-  if (lookup.hasOwnProperty("adif")) {
+  if (lookup.hasOwnProperty("adif"))
+  {
     lookup.dxcc = lookup.adif;
     delete lookup.adif;
   }
-  if (!lookup.hasOwnProperty("dxcc")) {
+  if (!lookup.hasOwnProperty("dxcc"))
+  {
     lookup.dxcc = callsignToDxcc(lookup.call.toUpperCase());
   }
-  if (lookup.hasOwnProperty("adr_name")) {
+  if (lookup.hasOwnProperty("adr_name"))
+  {
     lookup.name = lookup.adr_name;
     delete lookup.adr_name;
   }
-  if (lookup.hasOwnProperty("adr_street1")) {
+  if (lookup.hasOwnProperty("adr_street1"))
+  {
     lookup.addr1 = lookup.adr_street1;
     delete lookup.adr_street1;
   }
-  if (lookup.hasOwnProperty("us_state")) {
+  if (lookup.hasOwnProperty("us_state"))
+  {
     lookup.state = lookup.us_state;
     delete lookup.us_state;
   }
-  if (lookup.hasOwnProperty("oblast")) {
+  if (lookup.hasOwnProperty("oblast"))
+  {
     lookup.state = lookup.oblast;
     delete lookup.oblast;
   }
-  if (lookup.hasOwnProperty("district")) {
+  if (lookup.hasOwnProperty("district"))
+  {
     lookup.state = lookup.district;
     delete lookup.district;
   }
-  if (lookup.hasOwnProperty("adr_zip")) {
+  if (lookup.hasOwnProperty("adr_zip"))
+  {
     lookup.zip = lookup.adr_zip;
     delete lookup.adr_zip;
   }
-  if (lookup.hasOwnProperty("adr_country")) {
+  if (lookup.hasOwnProperty("adr_country"))
+  {
     lookup.country = lookup.adr_country;
     delete lookup.adr_country;
   }
-  if (lookup.hasOwnProperty("us_county")) {
+  if (lookup.hasOwnProperty("us_county"))
+  {
     lookup.county = lookup.us_county;
     delete lookup.us_county;
   }
-  if (lookup.hasOwnProperty("qsldirect")) {
+  if (lookup.hasOwnProperty("qsldirect"))
+  {
     lookup.mqsl = lookup.qsldirect;
     delete lookup.qsldirect;
   }
-  if (lookup.hasOwnProperty("qsl")) {
+  if (lookup.hasOwnProperty("qsl"))
+  {
     lookup.bqsl = lookup.qsl;
     delete lookup.qsl;
   }
-  if (lookup.hasOwnProperty("utc_offset")) {
+  if (lookup.hasOwnProperty("utc_offset"))
+  {
     lookup.GMTOffset = lookup.utc_offset;
     delete lookup.utc_offset;
   }
 
-  if (lookup.hasOwnProperty("land")) {
+  if (lookup.hasOwnProperty("land"))
+  {
     lookup.country = lookup.land;
     delete lookup.land;
   }
 
   if ("grid" in lookup) lookup.grid = lookup.grid.toUpperCase();
 
-  if (lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county")) {
+  if (lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county"))
+  {
     var foundCounty = false;
 
-    if (lookup.cnty == null) {
+    if (lookup.cnty == null)
+    {
       lookup.county = lookup.state + ", " + lookup.county;
       lookup.cnty = lookup.county.toUpperCase().replaceAll(" ", "");
     }
 
-    if (lookup.cnty in g_countyData) {
-      for (var hash in g_liveCallsigns) {
+    if (lookup.cnty in g_countyData)
+    {
+      for (var hash in g_liveCallsigns)
+      {
         if (
           g_liveCallsigns[hash].DEcall == lookup.call &&
           g_liveCallsigns[hash].state == "US-" + lookup.state
-        ) {
+        )
+        {
           g_liveCallsigns[hash].cnty = lookup.cnty;
           g_liveCallsigns[hash].qual = true;
           foundCounty = true;
         }
       }
-      if (foundCounty) {
+      if (foundCounty)
+      {
         goProcessRoster();
       }
-    } else {
-      //console.log( "bad county: " + lookup.cnty);
+    }
+    else
+    {
+      // console.log( "bad county: " + lookup.cnty);
       lookup.cnty = null;
     }
   }
@@ -12741,7 +14760,8 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
   );
   lookup.fname = "";
 
-  if (cacheable) {
+  if (cacheable)
+  {
     lookup.cached = timeNowSec();
     addLookupObjectToIndexedDB(lookup);
   }
@@ -12749,7 +14769,8 @@ function cacheLookupObject(lookup, gridPass, cacheable = false) {
   displayLookupObject(lookup, gridPass, cacheable);
 }
 
-function displayLookupObject(lookup, gridPass, fromCache = false) {
+function displayLookupObject(lookup, gridPass, fromCache = false)
+{
   var worker = "";
 
   var thisCall = getLookProp(lookup, "call").toUpperCase();
@@ -12762,23 +14783,28 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
   worker += "</td>";
   worker += "<td align='center' style='margin:0;padding:0'>";
   if (lookup.dxcc > 0 && lookup.dxcc in g_dxccToGeoData)
+  {
     worker +=
       "<img style='padding-top:4px' src='./img/flags/24/" +
       g_worldGeoData[g_dxccToGeoData[lookup.dxcc]].flag +
       "'>";
+  }
   worker += "</td>";
   worker += "<td rowspan=6>";
   var image = getLookProp(lookup, "image");
   if (image.length > 0)
+  {
     worker +=
       "<img style='border:1px solid gray' class='roundBorder' width='220px' src='" +
       image +
       "'>";
+  }
   worker += "</td>";
   worker += "</tr>";
 
   g_lastLookupAddress = "";
-  if (getLookProp(lookup, "addrAttn").length > 0) {
+  if (getLookProp(lookup, "addrAttn").length > 0)
+  {
     worker += "<tr>";
     worker += "<td>";
     worker += getLookProp(lookup, "addrAttn");
@@ -12822,7 +14848,8 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
   worker += "<tr>";
   worker += "<td>";
   var email = getLookProp(lookup, "email");
-  if (email.length > 0) {
+  if (email.length > 0)
+  {
     worker +=
       "<div style='cursor:pointer;font-weight:bold;vertical-align:top' onclick='window.opener.mailThem(\"" +
       email +
@@ -12842,7 +14869,8 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
   worker = "";
   worker += "<table align='center' class='bioTable' >";
   worker += "<tr><th colspan=2>Details</th></tr>";
-  if (getLookProp(lookup, "url").length > 0) {
+  if (getLookProp(lookup, "url").length > 0)
+  {
     worker += "<tr>";
     worker += "<td>Website</td>";
     worker += "<td  >";
@@ -12853,7 +14881,8 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
     worker += "</td>";
     worker += "</tr>";
   }
-  if (Number(getLookProp(lookup, "bio")) > 0) {
+  if (Number(getLookProp(lookup, "bio")) > 0)
+  {
     worker += "<tr>";
     worker += "<td>Biography</td>";
     worker += "<td>";
@@ -12872,14 +14901,16 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
     getLookProp(lookup, "efdate"),
     getLookProp(lookup, "expdate")
   );
-  if (dates.length > 0) {
+  if (dates.length > 0)
+  {
     worker += "<tr><td>Effective Dates</td><td>" + dates + "</td></tr>";
   }
   var Aliases = joinCommaIf(
     getLookProp(lookup, "aliases"),
     getLookProp(lookup, "p_call")
   );
-  if (Aliases.length > 0) {
+  if (Aliases.length > 0)
+  {
     worker +=
       "<tr title='" +
       Aliases +
@@ -12906,7 +14937,8 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
     getLookProp(lookup, "gtGrid").length > 0 &&
     getLookProp(lookup, "gtGrid").toUpperCase() !=
       getLookProp(lookup, "grid").toUpperCase()
-  ) {
+  )
+  {
     worker += makeRow("GT Grid", lookup, "gtGrid");
   }
 
@@ -12920,26 +14952,30 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
   worker += makeRow("Prefix", lookup, "prefix");
   worker += lookup.source;
 
-  if (g_callsignLookups.lotwUseEnable == true && thisCall in g_lotwCallsigns) {
-    lookup["ulotw"] =
+  if (g_callsignLookups.lotwUseEnable == true && thisCall in g_lotwCallsigns)
+  {
+    lookup.ulotw =
       "&#10004; (" +
       userDayString(g_lotwCallsigns[thisCall] * 86400 * 1000) +
       ")";
     worker += makeRow("LoTW Member", lookup, "ulotw");
   }
-  if (g_callsignLookups.eqslUseEnable == true && thisCall in g_eqslCallsigns) {
-    lookup["ueqsl"] = "&#10004;";
+  if (g_callsignLookups.eqslUseEnable == true && thisCall in g_eqslCallsigns)
+  {
+    lookup.ueqsl = "&#10004;";
     worker += makeRow("eQSL Member", lookup, "ueqsl");
   }
-  if (g_callsignLookups.oqrsUseEnable == true && thisCall in g_oqrsCallsigns) {
-    lookup["uoqrs"] = "&#10004;";
+  if (g_callsignLookups.oqrsUseEnable == true && thisCall in g_oqrsCallsigns)
+  {
+    lookup.uoqrs = "&#10004;";
     worker += makeRow("ClubLog OQRS", lookup, "uoqrs");
   }
 
-  if (fromCache) {
+  if (fromCache)
+  {
     worker +=
       "<tr><td>Cached Record</td><td>" +
-      userTimeString(lookup["cached"] * 1000) +
+      userTimeString(lookup.cached * 1000) +
       "</td></tr>";
   }
 
@@ -12950,7 +14986,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
     "</div>";
 
   var genMessage =
-    '<tr><td colspan=2><div title="Clear" class="button" onclick="window.opener.clearLookup();" >Clear</div> <div title="Generate Messages" class="button" onclick="window.opener.setCallAndGrid(\'' +
+    "<tr><td colspan=2><div title=\"Clear\" class=\"button\" onclick=\"window.opener.clearLookup();\" >Clear</div> <div title=\"Generate Messages\" class=\"button\" onclick=\"window.opener.setCallAndGrid('" +
     getLookProp(lookup, "call") +
     "','" +
     getLookProp(lookup, "grid") +
@@ -12969,8 +15005,10 @@ function displayLookupObject(lookup, gridPass, fromCache = false) {
   setLookupDivHeight("lookupBoxDiv", getLookupWindowHeight() + "px");
 }
 
-function clearLookup() {
-  if (g_lookupWindowHandle) {
+function clearLookup()
+{
+  if (g_lookupWindowHandle)
+  {
     g_lookupWindowHandle.window.lookupCallsignInput.value = "";
     lookupValidateCallByElement("lookupCallsignInput");
     setLookupDiv("lookupLocalDiv", "");
@@ -12979,30 +15017,32 @@ function clearLookup() {
   }
 }
 
-function addTextToClipboard(data) {
+function addTextToClipboard(data)
+{
   navigator.clipboard.writeText(data);
 }
 
-function saveToCsv(lookup) {
+function saveToCsv(lookup)
+{
   var name = joinSpaceIf(
     getLookProp(lookup, "fname"),
     getLookProp(lookup, "name")
   );
   var addr1 = getLookProp(lookup, "addr1");
   var addr2 =
-    '"' +
+    "\"" +
     joinCommaIf(
       getLookProp(lookup, "addr2"),
       joinSpaceIf(getLookProp(lookup, "state"), getLookProp(lookup, "zip"))
     ) +
-    '"';
+    "\"";
 
   var country = getLookProp(lookup, "country");
   if (
     getLookProp(lookup, "land").length > 0 &&
     country != getLookProp(lookup, "land")
   )
-    country = getLookProp(lookup, "land");
+  { country = getLookProp(lookup, "land"); }
   if (country == "United States") country = "";
 
   tryToWriteAdifToDocFolder(
@@ -13012,9 +15052,11 @@ function saveToCsv(lookup) {
   );
 }
 
-function makeYesNoRow(first, object, key) {
+function makeYesNoRow(first, object, key)
+{
   var value = getLookProp(object, key);
-  if (value.length > 0) {
+  if (value.length > 0)
+  {
     var test = value.toUpperCase();
     if (test == "Y") return "<tr><td>" + first + "</td><td>Yes</td></tr>";
     if (test == "N") return "<tr><td>" + first + "</td><td>No</td></tr>";
@@ -13030,10 +15072,13 @@ function makeYesNoRow(first, object, key) {
   return "";
 }
 
-function makeRow(first, object, key, clip = false) {
+function makeRow(first, object, key, clip = false)
+{
   var value = getLookProp(object, key);
-  if (value.length > 0) {
-    if (clip) {
+  if (value.length > 0)
+  {
+    if (clip)
+    {
       return (
         "<tr><td>" +
         first +
@@ -13043,7 +15088,9 @@ function makeRow(first, object, key, clip = false) {
         object[key].substr(0, 45) +
         "</td></tr>"
       );
-    } else {
+    }
+    else
+    {
       return (
         "<tr><td>" +
         first +
@@ -13056,19 +15103,23 @@ function makeRow(first, object, key, clip = false) {
   return "";
 }
 
-function getLookProp(object, key) {
+function getLookProp(object, key)
+{
   return object.hasOwnProperty(key) ? object[key] : "";
 }
 
-function joinSpaceIf(camera1, camera2) {
+function joinSpaceIf(camera1, camera2)
+{
   if (camera1.length > 0 && camera2.length > 0) return camera1 + " " + camera2;
   if (camera1.length > 0) return camera1;
   if (camera2.length > 0) return camera2;
   return "";
 }
 
-function joinCommaIf(camera1, camera2) {
-  if (camera1.length > 0 && camera2.length > 0) {
+function joinCommaIf(camera1, camera2)
+{
+  if (camera1.length > 0 && camera2.length > 0)
+  {
     if (camera1.indexOf(",") > -1) return camera1 + " " + camera2;
     else return camera1 + ", " + camera2;
   }
@@ -13077,13 +15128,15 @@ function joinCommaIf(camera1, camera2) {
   return "";
 }
 
-function joinIfBothWithDash(camera1, camera2) {
+function joinIfBothWithDash(camera1, camera2)
+{
   if (camera1.length > 0 && camera2.length > 0)
-    return camera1 + " / " + camera2;
+  { return camera1 + " / " + camera2; }
   return "";
 }
 
-function startLookup(call, grid) {
+function startLookup(call, grid)
+{
   if (call == "-") return;
   if (grid == "-") grid = "";
 
@@ -13092,51 +15145,63 @@ function startLookup(call, grid) {
   lookupCallsign(call, grid);
 }
 
-function searchLogForCallsign(call) {
+function searchLogForCallsign(call)
+{
   setLookupDiv("lookupLocalDiv", "");
   var list = Object.values(g_QSOhash)
-    .filter(function (value) {
+    .filter(function (value)
+    {
       return value.DEcall == call;
     })
     .sort(myBandCompare);
 
-  if (list.length > 0) {
+  if (list.length > 0)
+  {
     var work = {};
     var conf = {};
     var lastTime = 0;
     var lastRow = null;
     var dxcc = list[0].dxcc;
 
-    for (row in list) {
+    for (row in list)
+    {
       var what = list[row].band + "," + list[row].mode;
-      if (list[row].time > lastTime) {
+      if (list[row].time > lastTime)
+      {
         lastRow = row;
         lastTime = list[row].time;
       }
-      if (list[row].confirmed) {
+      if (list[row].confirmed)
+      {
         conf[what] = g_pskColors[list[row].band];
         if (what in work) delete work[what];
-      } else if (!(what in conf)) work[what] = g_pskColors[list[row].band];
+      }
+      else if (!(what in conf)) work[what] = g_pskColors[list[row].band];
     }
     var worker =
       "<div class='mapItemNoSize'><table align='center' class='darkTable'>";
-    if (Object.keys(work).length > 0) {
+    if (Object.keys(work).length > 0)
+    {
       worker += "<tr><th style='color:yellow'>Worked</th><td>";
       var k = Object.keys(work).sort();
-      for (var key in k) {
+      for (var key in k)
+      {
         worker += "<font color='#" + work[k[key]] + "'>" + k[key] + " </font>";
       }
       worker += "</td></tr>";
     }
-    if (Object.keys(conf).length > 0) {
+    if (Object.keys(conf).length > 0)
+    {
       worker += "<tr><th style='color:lightgreen'>Confirmed</th><td>";
       var k = Object.keys(conf).sort();
-      for (var key in k) {
+      for (var key in k)
+      {
         worker += "<font color='#" + conf[k[key]] + "'>" + k[key] + " </font>";
       }
       worker += "</td></tr>";
     }
-    if (lastRow) {
+    if (lastRow)
+    {
       worker += "<tr><th style='color:cyan'>Last QSO</th><td>";
       worker +=
         "<font color='#" +
@@ -13156,11 +15221,13 @@ function searchLogForCallsign(call) {
       " (" +
       g_worldGeoData[g_dxccToGeoData[dxcc]].pp +
       ")</th><td>";
-    for (var band in g_colorBands) {
-      if (String(dxcc) + g_colorBands[band] in g_tracker.worked.dxcc) {
+    for (var band in g_colorBands)
+    {
+      if (String(dxcc) + g_colorBands[band] in g_tracker.worked.dxcc)
+      {
         var strike = "";
         if (String(dxcc) + g_colorBands[band] in g_tracker.confirmed.dxcc)
-          strike = "text-decoration: underline overline;";
+        { strike = "text-decoration: underline overline;"; }
         worker +=
           "<div style='" +
           strike +
@@ -13179,18 +15246,23 @@ function searchLogForCallsign(call) {
   list = null;
 }
 
-function startGenMessages(call, grid, instance = null) {
+function startGenMessages(call, grid, instance = null)
+{
   if (call == "-") return;
   if (grid == "-") grid = "";
 
   setCallAndGrid(call, grid, instance);
 }
 
-function is_dir(path) {
-  try {
+function is_dir(path)
+{
+  try
+  {
     var stat = fs.lstatSync(path);
     return stat.isDirectory();
-  } catch (e) {
+  }
+  catch (e)
+  {
     // lstatSync throws an error if path doesn't exist
     return false;
   }
@@ -13201,19 +15273,26 @@ function is_dir(path) {
 // user directory if they have the same name and size in the
 // system directory.
 //
-function purgeUserFiles(userDir, systemDir) {
+function purgeUserFiles(userDir, systemDir)
+{
   var userFiles = fs.readdirSync(userDir);
   var systemFiles = fs.readdirSync(systemDir);
-  userFiles.forEach((filename) => {
-    if (systemFiles.includes(filename)) {
+  userFiles.forEach((filename) =>
+  {
+    if (systemFiles.includes(filename))
+    {
       var userPath = path.join(userDir, filename);
       var systemPath = path.join(systemDir, filename);
       console.log(userPath + " -- " + systemPath);
-      if (fs.statSync(userPath).size == fs.statSync(systemPath).size) {
+      if (fs.statSync(userPath).size == fs.statSync(systemPath).size)
+      {
         console.log("removing duplicate user media " + filename);
-        try {
+        try
+        {
           fs.unlinkSync(userPath);
-        } catch (e) {
+        }
+        catch (e)
+        {
           console.log(e);
         }
       }
@@ -13221,18 +15300,23 @@ function purgeUserFiles(userDir, systemDir) {
   });
 }
 
-function mediaCheck() {
+function mediaCheck()
+{
   var homeDir =
     g_platform == "windows" ? process.env.USERPROFILE : process.env.HOME;
 
   g_appData = path.join(homeDir, "Dokumente");
-  if (!is_dir(g_appData)) {
+  if (!is_dir(g_appData))
+  {
     g_appData = path.join(homeDir, "Documents");
-    if (!is_dir(g_appData)) {
-      if (g_appSettings.savedAppData != null) {
+    if (!is_dir(g_appData))
+    {
+      if (g_appSettings.savedAppData != null)
+      {
         g_appData = g_appSettings.savedAppData;
         if (!is_dir(g_appData)) return false;
-      } else return false;
+      }
+      else return false;
     }
   }
 
@@ -13244,20 +15328,25 @@ function mediaCheck() {
 
   g_NWappData = path.join(nw.App.dataPath, "Ginternal");
 
-  try {
+  try
+  {
     var userdirs = [
       g_appData,
       g_NWappData,
       g_screenshotDir,
       g_scriptDir,
-      g_userMediaDir,
+      g_userMediaDir
     ];
-    for (var dir of userdirs) {
-      if (!fs.existsSync(dir)) {
+    for (var dir of userdirs)
+    {
+      if (!fs.existsSync(dir))
+      {
         fs.mkdirSync(dir);
       }
     }
-  } catch (e) {
+  }
+  catch (e)
+  {
     alert(
       "Unable to create or access " +
         g_appData +
@@ -13293,7 +15382,8 @@ function mediaCheck() {
     fs.readdirSync(g_userMediaDir),
     fs.readdirSync(g_gtMediaDir)
   );
-  mediaFiles.forEach((filename) => {
+  mediaFiles.forEach((filename) =>
+  {
     var noExt = path.parse(filename).name;
     logEventMedia.appendChild(newOption(filename, noExt));
     alertMediaSelect.appendChild(newOption(filename, noExt));
@@ -13309,7 +15399,8 @@ function mediaCheck() {
 
   var modeData = fs.readFileSync("./data/modes.json");
   g_modes = JSON.parse(modeData);
-  for (var key in g_modes) {
+  for (var key in g_modes)
+  {
     gtModeFilter.appendChild(newOption(key));
   }
 
@@ -13324,45 +15415,55 @@ function mediaCheck() {
   // Old log filename, no longer referenced
   tryToDeleteLog("lotw.adif");
 
-  try {
-    if (fs.existsSync(g_NWappData + "internal_qso.json")) {
+  try
+  {
+    if (fs.existsSync(g_NWappData + "internal_qso.json"))
+    {
       var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
 
-      if (typeof data.version != "undefined" && data.version == gtVersion) {
+      if (typeof data.version != "undefined" && data.version == gtVersion)
+      {
         g_tracker = data.tracker;
 
-        if (typeof g_tracker.worked.px == "undefined") {
+        if (typeof g_tracker.worked.px == "undefined")
+        {
           g_tracker.worked.px = {};
           g_tracker.confirmed.px = {};
         }
 
         g_QSOhash = data.g_QSOhash;
 
-        for (var i in g_QSOhash) {
+        for (var i in g_QSOhash)
+        {
           if (
             typeof g_QSOhash[i].px == "undefined" ||
             g_QSOhash[i].px == null
-          ) {
+          )
+          {
             if (g_QSOhash[i].dxcc != -1)
-              g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall);
+            { g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall); }
             else g_QSOhash[i].px = null;
           }
           g_QSOcount++;
           if (g_QSOhash[i].confirmed) g_QSLcount++;
         }
-      } else {
+      }
+      else
+      {
         clearLogFilesAndCounts();
       }
 
       fs.unlinkSync(g_NWappData + "internal_qso.json");
     }
     loadReceptionReports();
-  } catch (e) {}
+  }
+  catch (e) {}
 
   return true;
 }
 
-function newOption(value, text) {
+function newOption(value, text)
+{
   if (typeof text == "undefined") text = value;
   var option = document.createElement("option");
   option.value = value;
@@ -13371,47 +15472,58 @@ function newOption(value, text) {
 }
 
 var g_rosterSpot = false;
-function setRosterSpot(enabled) {
+function setRosterSpot(enabled)
+{
   g_rosterSpot = enabled;
 }
 
-function saveReceptionReports() {
-  try {
+function saveReceptionReports()
+{
+  try
+  {
     fs.writeFileSync(
       g_NWappData + "spots.json",
       JSON.stringify(g_receptionReports)
     );
-  } catch (e) {}
+  }
+  catch (e) {}
 }
 
-function loadReceptionReports() {
-  try {
+function loadReceptionReports()
+{
+  try
+  {
     var clear = true;
-    if (fs.existsSync(g_NWappData + "spots.json")) {
+    if (fs.existsSync(g_NWappData + "spots.json"))
+    {
       g_receptionReports = JSON.parse(
         fs.readFileSync(g_NWappData + "spots.json")
       );
       if (timeNowSec() - g_receptionReports.lastDownloadTimeSec <= 86400)
-        clear = false;
+      { clear = false; }
     }
 
-    if (clear == true) {
+    if (clear == true)
+    {
       g_receptionReports = {
         lastDownloadTimeSec: 0,
         lastSequenceNumber: "0",
-        spots: {},
+        spots: {}
       };
     }
-  } catch (e) {
+  }
+  catch (e)
+  {
     g_receptionReports = {
       lastDownloadTimeSec: 0,
       lastSequenceNumber: "0",
-      spots: {},
+      spots: {}
     };
   }
 }
 
-function pskSpotCheck(timeSec) {
+function pskSpotCheck(timeSec)
+{
   if (g_mapSettings.offlineMode == true) return;
 
   if (myDEcall == null || myDEcall == "NOCALL" || myDEcall == "") return;
@@ -13419,7 +15531,8 @@ function pskSpotCheck(timeSec) {
   if (
     timeSec - g_receptionReports.lastDownloadTimeSec > 120 &&
     (g_spotsEnabled == 1 || g_rosterSpot)
-  ) {
+  )
+  {
     g_receptionReports.lastDownloadTimeSec = timeSec;
     localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
     spotRefreshDiv.innerHTML = "..refreshing..";
@@ -13435,28 +15548,36 @@ function pskSpotCheck(timeSec) {
       "https",
       443
     );
-  } else if (g_spotsEnabled == 1) {
+  }
+  else if (g_spotsEnabled == 1)
+  {
     spotRefreshDiv.innerHTML =
       "Refresh: " +
       Number(120 - (timeSec - g_receptionReports.lastDownloadTimeSec)).toDHMS();
   }
 }
 
-function pskSpotResults(buffer, flag) {
+function pskSpotResults(buffer, flag)
+{
   var oParser = new DOMParser();
   var oDOM = oParser.parseFromString(buffer, "text/xml");
   var result = "";
-  if (oDOM != null) {
+  if (oDOM != null)
+  {
     var json = XML2jsobj(oDOM.documentElement);
-    if (typeof json.lastSequenceNumber != "undefined") {
+    if (typeof json.lastSequenceNumber != "undefined")
+    {
       g_receptionReports.lastSequenceNumber = json.lastSequenceNumber.value;
 
-      if (typeof json.receptionReport != "undefined") {
-        for (var key in json.receptionReport) {
+      if (typeof json.receptionReport != "undefined")
+      {
+        for (var key in json.receptionReport)
+        {
           if (
             typeof json.receptionReport[key].frequency != "undefined" &&
             typeof json.receptionReport[key].sNR != "undefined"
-          ) {
+          )
+          {
             var report;
             var call = json.receptionReport[key].receiverCallsign;
             var mode = json.receptionReport[key].mode;
@@ -13466,14 +15587,17 @@ function pskSpotResults(buffer, flag) {
             ).formatBand();
             var hash = call + mode + band + grid.substr(0, 4);
 
-            if (hash in g_receptionReports.spots) {
+            if (hash in g_receptionReports.spots)
+            {
               report = g_receptionReports.spots[hash];
               if (
                 parseInt(json.receptionReport[key].flowStartSeconds) <
                 report.when
               )
-                continue;
-            } else {
+              { continue; }
+            }
+            else
+            {
               report = g_receptionReports.spots[hash] = {};
               report.call = call;
               report.band = band;
@@ -13483,9 +15607,11 @@ function pskSpotResults(buffer, flag) {
             if (
               typeof json.receptionReport[key].receiverCallsign != "undefined"
             )
+            {
               report.dxcc = callsignToDxcc(
                 json.receptionReport[key].receiverCallsign
               );
+            }
             else report.dxcc = -1;
             report.when = parseInt(json.receptionReport[key].flowStartSeconds);
             report.snr = json.receptionReport[key].sNR;
@@ -13511,9 +15637,12 @@ function pskSpotResults(buffer, flag) {
 
 var g_oamsSpotTimeout = null;
 
-function addNewOAMSSpot(cid, db) {
-  if (cid in g_gtFlagPins) {
-    if (g_oamsSpotTimeout !== null) {
+function addNewOAMSSpot(cid, db)
+{
+  if (cid in g_gtFlagPins)
+  {
+    if (g_oamsSpotTimeout !== null)
+    {
       clearTimeout(g_oamsSpotTimeout);
       g_oamsSpotTimeout = null;
     }
@@ -13524,9 +15653,12 @@ function addNewOAMSSpot(cid, db) {
     var band = g_gtFlagPins[cid].band;
     var hash = call + mode + band + grid.substr(0, 4);
 
-    if (hash in g_receptionReports.spots) {
+    if (hash in g_receptionReports.spots)
+    {
       report = g_receptionReports.spots[hash];
-    } else {
+    }
+    else
+    {
       report = g_receptionReports.spots[hash] = {};
       report.call = call;
       report.band = band;
@@ -13548,7 +15680,8 @@ function addNewOAMSSpot(cid, db) {
   }
 }
 
-function spotFeature(center) {
+function spotFeature(center)
+{
   return new ol.Feature(
     ol.geom.Polygon.circular(center, 30000, 63).transform(
       "EPSG:4326",
@@ -13559,7 +15692,8 @@ function spotFeature(center) {
 
 var g_spotTotalCount = 0;
 
-function createSpot(report, key, fromPoint, addToLayer = true) {
+function createSpot(report, key, fromPoint, addToLayer = true)
+{
   var LL = squareToLatLongAll(report.grid);
 
   var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
@@ -13576,26 +15710,27 @@ function createSpot(report, key, fromPoint, addToLayer = true) {
       ? g_receptionSettings.pathNightColor
       : g_receptionSettings.pathColor;
 
-  if (workingColor != -1) {
+  if (workingColor != -1)
+  {
     var testColor =
       workingColor < 1
         ? "#0000000"
         : workingColor == 361
-        ? "#FFFFFF"
-        : "hsla(" + workingColor + ", 100%, 50%," + report.color / 255 + ")";
+          ? "#FFFFFF"
+          : "hsla(" + workingColor + ", 100%, 50%," + report.color / 255 + ")";
     if (workingColor < 1 || workingColor == 361)
-      spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color);
+    { spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color); }
     else spotColor = testColor;
   }
 
   featureStyle = new ol.style.Style({
     fill: new ol.style.Fill({
-      color: spotColor,
+      color: spotColor
     }),
     stroke: new ol.style.Stroke({
       color: "#000000FF",
-      width: 0.25,
-    }),
+      width: 0.25
+    })
   });
   spot.setStyle(featureStyle);
   spot.spot = key;
@@ -13608,34 +15743,36 @@ function createSpot(report, key, fromPoint, addToLayer = true) {
 
   var pointFeature = new ol.Feature({
     geometry: lonLat,
-    weight: report.color / 255, // e.g. temperature
+    weight: report.color / 255 // e.g. temperature
   });
 
   g_layerSources["psk-heat"].addFeature(pointFeature);
 
-  if (g_receptionSettings.viewPaths && g_receptionSettings.spotWidth > 0) {
+  if (g_receptionSettings.viewPaths && g_receptionSettings.spotWidth > 0)
+  {
     var strokeWeight = g_receptionSettings.spotWidth;
 
     var flightColor =
       workingColor == -1
         ? colorNoAlpha + "BB"
         : g_mapSettings.nightMapEnable && g_nightTime
-        ? g_spotNightFlightColor
-        : g_spotFlightColor;
+          ? g_spotNightFlightColor
+          : g_spotFlightColor;
 
     var feature = flightFeature(
       [fromPoint, toPoint],
       {
         weight: strokeWeight,
         color: flightColor,
-        steps: 75,
+        steps: 75
       },
       "psk-flights",
       false
     );
   }
 }
-function redrawSpots() {
+function redrawSpots()
+{
   var shouldSave = false;
   var now = timeNowSec();
   g_spotTotalCount = 0;
@@ -13646,17 +15783,20 @@ function redrawSpots() {
 
   var fromPoint = getPoint(myRawGrid);
 
-  if (g_receptionSettings.mergeSpots == false) {
+  if (g_receptionSettings.mergeSpots == false)
+  {
     var spot = iconFeature(fromPoint, g_gtFlagIcon, 100);
 
     g_layerSources["psk-spots"].addFeature(spot);
     g_layerSources["psk-heat"].addFeature(spot);
   }
 
-  for (var key in g_receptionReports.spots) {
+  for (var key in g_receptionReports.spots)
+  {
     report = g_receptionReports.spots[key];
 
-    if (now - report.when > 86400) {
+    if (now - report.when > 86400)
+    {
       delete g_receptionReports.spots[key];
       shouldSave = true;
       continue;
@@ -13668,37 +15808,45 @@ function redrawSpots() {
           ? myBand == report.band
           : g_appSettings.gtBandFilter == report.band)) &&
       validateMapMode(report.mode)
-    ) {
-      if (now - report.when <= g_receptionSettings.viewHistoryTimeSec) {
+    )
+    {
+      if (now - report.when <= g_receptionSettings.viewHistoryTimeSec)
+      {
         createSpot(report, key, fromPoint);
         g_spotTotalCount++;
       }
     }
   }
-  if (shouldSave) {
+  if (shouldSave)
+  {
     saveReceptionReports();
   }
 
   updateSpotCountDiv();
 }
 
-function updateSpotCountDiv() {
+function updateSpotCountDiv()
+{
   spotCountDiv.innerHTML = "Spots: " + g_spotTotalCount;
 }
 
 var g_spotFlightColor = "#FFFFFFBB";
 var g_spotNightFlightColor = "#FFFFFFBB";
 
-function changeSpotValues() {
+function changeSpotValues()
+{
   g_receptionSettings.viewHistoryTimeSec =
     parseInt(spotHistoryTimeValue.value) * 60;
   spotHistoryTimeTd.innerHTML =
     "Max Age: " + Number(g_receptionSettings.viewHistoryTimeSec).toDHM();
   g_receptionSettings.viewPaths = spotPathsValue.checked;
 
-  if (g_receptionSettings.viewPaths) {
+  if (g_receptionSettings.viewPaths)
+  {
     spotPathWidthDiv.style.display = "inline-block";
-  } else {
+  }
+  else
+  {
     spotPathWidthDiv.style.display = "none";
   }
 
@@ -13710,7 +15858,8 @@ function changeSpotValues() {
   if (g_rosterSpot) goProcessRoster();
 }
 
-function mapTransChange() {
+function mapTransChange()
+{
   g_mapSettings.mapTrans = mapTransValue.value;
 
   mapTransTd.innerHTML =
@@ -13719,95 +15868,110 @@ function mapTransChange() {
     "rgba(0,0,0, " + g_mapSettings.mapTrans + ")";
 }
 
-function spotPathChange() {
+function spotPathChange()
+{
   g_receptionSettings.pathColor = spotPathColorValue.value;
   var pathColor =
     g_receptionSettings.pathColor < 1
       ? "#000"
       : g_receptionSettings.pathColor == 361
-      ? "#FFF"
-      : "hsl(" + g_receptionSettings.pathColor + ", 100%, 50%)";
-  if (g_receptionSettings.pathColor > 0) {
+        ? "#FFF"
+        : "hsl(" + g_receptionSettings.pathColor + ", 100%, 50%)";
+  if (g_receptionSettings.pathColor > 0)
+  {
     spotPathColorDiv.style.color = "#000";
     spotPathColorDiv.style.backgroundColor = pathColor;
-  } else {
+  }
+  else
+  {
     spotPathColorDiv.style.color = "#FFF";
     spotPathColorDiv.style.backgroundColor = pathColor;
   }
   if (g_receptionSettings.pathColor == -1)
-    spotPathInfoTd.innerHTML = "PSK-Reporter Palette";
+  { spotPathInfoTd.innerHTML = "PSK-Reporter Palette"; }
   else spotPathInfoTd.innerHTML = "";
 
   g_spotFlightColor =
     g_receptionSettings.pathColor < 1
       ? "#0000000BB"
       : g_receptionSettings.pathColor == 361
-      ? "#FFFFFFBB"
-      : "hsla(" + g_receptionSettings.pathColor + ", 100%, 50%,0.73)";
+        ? "#FFFFFFBB"
+        : "hsla(" + g_receptionSettings.pathColor + ", 100%, 50%,0.73)";
 
   g_receptionSettings.pathNightColor = spotNightPathColorValue.value;
   var pathNightColor =
     g_receptionSettings.pathNightColor < 1
       ? "#000"
       : g_receptionSettings.pathNightColor == 361
-      ? "#FFF"
-      : "hsl(" + g_receptionSettings.pathNightColor + ", 100%, 50%)";
-  if (g_receptionSettings.pathNightColor > 0) {
+        ? "#FFF"
+        : "hsl(" + g_receptionSettings.pathNightColor + ", 100%, 50%)";
+  if (g_receptionSettings.pathNightColor > 0)
+  {
     spotNightPathColorDiv.style.color = "#000";
     spotNightPathColorDiv.style.backgroundColor = pathNightColor;
-  } else {
+  }
+  else
+  {
     spotNightPathColorDiv.style.color = "#FFF";
     spotNightPathColorDiv.style.backgroundColor = pathNightColor;
   }
   if (g_receptionSettings.pathNightColor == -1)
-    spotNightPathInfoTd.innerHTML = "PSK-Reporter Palette";
+  { spotNightPathInfoTd.innerHTML = "PSK-Reporter Palette"; }
   else spotNightPathInfoTd.innerHTML = "";
 
   g_spotNightFlightColor =
     g_receptionSettings.pathNightColor < 1
       ? "#0000000BB"
       : g_receptionSettings.pathNightColor == 361
-      ? "#FFFFFFBB"
-      : "hsla(" + g_receptionSettings.pathNightColor + ", 100%, 50%,0.73)";
+        ? "#FFFFFFBB"
+        : "hsla(" + g_receptionSettings.pathNightColor + ", 100%, 50%,0.73)";
 
   spotWidthTd.innerHTML = g_receptionSettings.spotWidth = spotWidthValue.value;
 
   localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
 }
 
-function toggleSpotOverGrids() {
-  spotMergeValue.checked = spotMergeValue.checked == true ? false : true;
+function toggleSpotOverGrids()
+{
+  spotMergeValue.checked = spotMergeValue.checked != true;
   changeSpotValues();
   redrawSpots();
 }
 
-function toggleMergeOverlay() {
-  mergeOverlayValue.checked = mergeOverlayValue.checked == true ? false : true;
+function toggleMergeOverlay()
+{
+  mergeOverlayValue.checked = mergeOverlayValue.checked != true;
   changeMergeOverlayValue();
 }
 
-function toggleSpotPaths() {
+function toggleSpotPaths()
+{
   var spotPaths = spotPathsValue.checked == true ? 1 : 0;
   spotPaths ^= 1;
-  spotPathsValue.checked = spotPaths == 1 ? true : false;
+  spotPathsValue.checked = spotPaths == 1;
   g_receptionSettings.viewPaths = spotPathsValue.checked;
   localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
 
-  if (g_receptionSettings.viewPaths) {
+  if (g_receptionSettings.viewPaths)
+  {
     spotPathWidthDiv.style.display = "inline-block";
-  } else {
+  }
+  else
+  {
     spotPathWidthDiv.style.display = "none";
   }
   redrawSpots();
 }
 
-function toggleHeatSpots() {
+function toggleHeatSpots()
+{
   g_heatEnabled ^= 1;
   g_appSettings.heatEnabled = g_heatEnabled;
   updateSpotView();
 }
 
-function togglePskSpots() {
+function togglePskSpots()
+{
   g_spotsEnabled ^= 1;
   g_appSettings.spotsEnabled = g_spotsEnabled;
   pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
@@ -13815,33 +15979,45 @@ function togglePskSpots() {
   updateSpotView();
 }
 
-function toggleCRScript() {
+function toggleCRScript()
+{
   g_crScript ^= 1;
   g_appSettings.crScript = g_crScript;
   if (g_crScript == 1)
+  {
     addLastTraffic(
       "<font style='color:lightgreen'>Call Roster Script Enabled</font>"
     );
+  }
   else
+  {
     addLastTraffic(
       "<font style='color:yellow'>Call Roster Script Disabled</font>"
     );
+  }
   goProcessRoster();
 }
 
-function updateSpotView(leaveCount = true) {
-  if (g_spotsEnabled == 1) {
-    if (g_receptionSettings.mergeSpots == false) {
-      for (var key in g_layerVectors) {
+function updateSpotView(leaveCount = true)
+{
+  if (g_spotsEnabled == 1)
+  {
+    if (g_receptionSettings.mergeSpots == false)
+    {
+      for (var key in g_layerVectors)
+      {
         g_layerVectors[key].setVisible(false);
       }
     }
-    if (g_heatEnabled == 0) {
+    if (g_heatEnabled == 0)
+    {
       g_layerVectors["psk-spots"].setVisible(true);
       g_layerVectors["psk-flights"].setVisible(true);
       g_layerVectors["psk-hop"].setVisible(true);
       g_layerVectors["psk-heat"].setVisible(false);
-    } else {
+    }
+    else
+    {
       g_layerVectors["psk-spots"].setVisible(false);
       g_layerVectors["psk-flights"].setVisible(false);
       g_layerVectors["psk-hop"].setVisible(false);
@@ -13850,7 +16026,9 @@ function updateSpotView(leaveCount = true) {
 
     SpotsDiv.style.display = "block";
     if (leaveCount == false) spotRefreshDiv.innerHTML = "&nbsp;";
-  } else {
+  }
+  else
+  {
     g_layerVectors["psk-spots"].setVisible(false);
     g_layerVectors["psk-flights"].setVisible(false);
     g_layerVectors["psk-hop"].setVisible(false);
@@ -13858,53 +16036,66 @@ function updateSpotView(leaveCount = true) {
     SpotsDiv.style.display = "none";
     spotRefreshDiv.innerHTML = "&nbsp;";
   }
-  g_layerVectors["strikes"].setVisible(true);
+  g_layerVectors.strikes.setVisible(true);
 }
 
-function gotoDonate() {
+function gotoDonate()
+{
   var gui = require("nw.gui");
   gui.Shell.openExternal("https://gridtracker.org/donations/");
 }
 
-function changeRosterTime() {
+function changeRosterTime()
+{
   g_mapSettings.rosterTime = rosterTime.value;
   setRosterTimeView();
   saveMapSettings();
   goProcessRoster();
 }
 
-function changeRosterTop(butt) {
+function changeRosterTop(butt)
+{
   g_appSettings.rosterAlwaysOnTop = butt.checked;
   setRosterTop();
 }
 
-function setRosterTop() {
-  if (g_callRosterWindowHandle) {
-    try {
+function setRosterTop()
+{
+  if (g_callRosterWindowHandle)
+  {
+    try
+    {
       g_callRosterWindowHandle.setAlwaysOnTop(g_appSettings.rosterAlwaysOnTop);
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function setRosterTimeView() {
+function setRosterTimeView()
+{
   rosterTime.value = g_mapSettings.rosterTime;
   rosterTimeTd.innerHTML = Number(rosterTime.value).toDHMS();
 }
 
-function getSpotTime(hash) {
-  if (hash in g_receptionReports.spots) {
+function getSpotTime(hash)
+{
+  if (hash in g_receptionReports.spots)
+  {
     return g_receptionReports.spots[hash];
-  } else return null;
+  }
+  else return null;
 }
 
-function setGridOpacity() {
+function setGridOpacity()
+{
   opacityValue.value = g_mapSettings.gridAlpha;
   showOpacityTd.innerHTML =
     parseInt((g_mapSettings.gridAlpha / 255) * 100) + "%";
   g_gridAlpha = parseInt(g_mapSettings.gridAlpha).toString(16);
 }
 
-function changeGridOpacity() {
+function changeGridOpacity()
+{
   g_mapSettings.gridAlpha = opacityValue.value;
   showOpacityTd.innerHTML =
     parseInt((g_mapSettings.gridAlpha / 255) * 100) + "%";
@@ -13912,7 +16103,8 @@ function changeGridOpacity() {
   saveMapSettings();
 }
 
-function currentTimeStampString() {
+function currentTimeStampString()
+{
   var now = new Date();
   return (
     now.getFullYear() +
@@ -13929,15 +16121,18 @@ function currentTimeStampString() {
   );
 }
 
-function showNativeFolder(fn) {
+function showNativeFolder(fn)
+{
   nw.Shell.showItemInFolder(decodeURI(fn));
 }
 
-function makeScreenshots() {
+function makeScreenshots()
+{
   var win = gui.Window.get();
 
   win.capturePage(
-    function (buffer) {
+    function (buffer)
+    {
       var clipboard = nw.Clipboard.get();
       clipboard.set(buffer, "png", true);
     },
@@ -13945,8 +16140,10 @@ function makeScreenshots() {
   );
 
   win.capturePage(
-    function (buffer) {
-      try {
+    function (buffer)
+    {
+      try
+      {
         var fn =
           g_screenshotDir + "Screenshot " + currentTimeStampString() + ".png";
         fs.writeFileSync(fn, buffer);
@@ -13955,7 +16152,9 @@ function makeScreenshots() {
             encodeURI(fn).trim() +
             "\");''>Saved Screenshot</font>"
         );
-      } catch (e) {
+      }
+      catch (e)
+      {
         addLastTraffic(
           "<font style='color:red'>Screenshot write failed</font>"
         );
@@ -13965,10 +16164,11 @@ function makeScreenshots() {
   );
 }
 
-window.addEventListener("load", function () {
+window.addEventListener("load", function ()
+{
   picker.attach({
     target: "workingDateValue",
     container: "pick-inline",
-    fire: "workingDateChanged",
+    fire: "workingDateChanged"
   });
 });

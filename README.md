@@ -13,16 +13,11 @@ among other things.
 
 ### Code Formatting
 
-We use `prettier` to enforce code formatting rules, and we follow
-the [JavaScript Standard Style](https://standardjs.com/)
+We use `eslint` to enforce code formatting rules.
 
 You can use all kinds of plugins and configurations in your text editor to verify these rules, and even reformat code
 automatically, but if you want to run on the command line, you can (after running `npm install`) run the
-`npm run prettier-check` command to verify the formatting of all files, or `npm run prettier-write` to reformat
-all files to match the standard.
-
-If you want to know more about why these tools are useful,
-[watch this talk](https://www.youtube.com/watch?v=kuHfMw8j4xk)
+`npm run lint-check` command to verify the formatting of all files, or `npm run lint-fix` to reformat all files to match the standard.
 
 # Developer Environment Setup
 

@@ -11,8 +11,10 @@ var g_audioSettings = Object();
 var g_speechAvailable = false;
 var g_alertSettings = Object();
 
-function loadAlerts() {
-  if (typeof localStorage.classicAlertsVersion == "undefined") {
+function loadAlerts()
+{
+  if (typeof localStorage.classicAlertsVersion == "undefined")
+  {
     g_classicAlerts = {
       huntCallsign: false,
       huntGrid: false,
@@ -43,7 +45,7 @@ function loadAlerts() {
       huntDXCCNotifyMedia: "none",
       huntCQzNotifyMedia: "none",
       huntITUzNotifyMedia: "none",
-      huntStatesNotifyMedia: "none",
+      huntStatesNotifyMedia: "none"
     };
     localStorage.classicAlerts = JSON.stringify(g_classicAlerts);
 
@@ -69,23 +71,28 @@ function loadAlerts() {
 
     localStorage.alertSettings = JSON.stringify(g_alertSettings);
     localStorage.classicAlertsVersion = gtVersion;
-  } else {
+  }
+  else
+  {
     g_classicAlerts = JSON.parse(localStorage.classicAlerts);
     g_alertSettings = JSON.parse(localStorage.alertSettings);
   }
 
-  if (typeof g_alertSettings.reference == "undefined") {
+  if (typeof g_alertSettings.reference == "undefined")
+  {
     g_alertSettings.reference = 0;
 
     localStorage.alertSettings = JSON.stringify(g_alertSettings);
   }
 
-  if (typeof g_alertSettings.logEventMedia == "undefined") {
+  if (typeof g_alertSettings.logEventMedia == "undefined")
+  {
     g_alertSettings.logEventMedia = "Ping-coin.mp3";
     localStorage.alertSettings = JSON.stringify(g_alertSettings);
   }
 
-  if (typeof g_classicAlerts.huntRoster == "undefined") {
+  if (typeof g_classicAlerts.huntRoster == "undefined")
+  {
     g_classicAlerts.huntRoster = false;
     g_classicAlerts.huntRosterNotify = 1;
     g_classicAlerts.huntRosterNotifyWord = "New hit";
@@ -96,7 +103,8 @@ function loadAlerts() {
 
   loadClassicAlertView();
 
-  if (typeof localStorage.savedAlerts == "undefined") {
+  if (typeof localStorage.savedAlerts == "undefined")
+  {
     g_alerts = {
       popup: {
         value: "QRZ",
@@ -108,8 +116,8 @@ function loadAlerts() {
         lastMessage: "",
         lastTime: 0,
         fired: 0,
-        needAck: 0,
-      },
+        needAck: 0
+      }
     };
 
     g_speechSettings = Object();
@@ -121,9 +129,12 @@ function loadAlerts() {
     g_speechSettings.phonetics = true;
     g_audioSettings.volume = 1;
     saveAlerts();
-  } else {
+  }
+  else
+  {
     g_alerts = JSON.parse(localStorage.savedAlerts);
-    for (var key in g_alerts) {
+    for (var key in g_alerts)
+    {
       if (
         g_alerts[key].type != 0 &&
         g_alerts[key].type != 2 &&
@@ -131,14 +142,15 @@ function loadAlerts() {
         g_alerts[key].type != 5 &&
         g_alerts[key].type != 6
       )
-        delete g_alerts[key];
+      { delete g_alerts[key]; }
       if (g_alerts[key].repeat == 3) delete g_alerts[key];
     }
     g_speechSettings = JSON.parse(localStorage.speechSettings);
     g_audioSettings = JSON.parse(localStorage.audioSettings);
   }
 
-  if (g_speechSettings.voice > 0) {
+  if (g_speechSettings.voice > 0)
+  {
     alertVoiceInput.value = g_speechSettings.voice - 1;
   }
 
@@ -179,12 +191,14 @@ function loadAlerts() {
   setAlertVisual();
 }
 
-function newLogEventSetting(obj) {
+function newLogEventSetting(obj)
+{
   g_alertSettings.logEventMedia = obj.value;
   localStorage.alertSettings = JSON.stringify(g_alertSettings);
 }
 
-function exceptionValuesChanged() {
+function exceptionValuesChanged()
+{
   setAlertVisual();
 
   g_alertSettings.requireGrid = wantGrid.checked;
@@ -212,71 +226,87 @@ function exceptionValuesChanged() {
   localStorage.alertSettings = JSON.stringify(g_alertSettings);
 }
 
-function hashMaker(band, mode) {
-  //"Current Band & Mode"
+function hashMaker(band, mode)
+{
+  // "Current Band & Mode"
   if (g_alertSettings.reference == 0) return band + mode;
 
-  //"Current Band, Any Mode"
+  // "Current Band, Any Mode"
   if (g_alertSettings.reference == 1) return band;
 
-  //"Current Band, Any Digi Mode"
+  // "Current Band, Any Digi Mode"
   if (g_alertSettings.reference == 2) return band + "dg";
 
-  //"Current Mode, Any Band"
+  // "Current Mode, Any Band"
   if (g_alertSettings.reference == 3) return mode;
 
-  //"Any Band, Any Mode"
+  // "Any Band, Any Mode"
   if (g_alertSettings.reference == 4) return "";
 
-  //"Any Band, Any Digit Mode"
+  // "Any Band, Any Digit Mode"
   if (g_alertSettings.reference == 5) return "dg";
 }
 
-function setAlertVisual() {
-  if (wantMaxDT.checked == true) {
+function setAlertVisual()
+{
+  if (wantMaxDT.checked == true)
+  {
     maxDT.style.display = "block";
     maxDTView.style.display = "block";
-  } else {
+  }
+  else
+  {
     maxDT.style.display = "none";
     maxDTView.style.display = "none";
   }
-  if (wantMinDB.checked == true) {
+  if (wantMinDB.checked == true)
+  {
     minDb.style.display = "block";
     minDbView.style.display = "block";
-  } else {
+  }
+  else
+  {
     minDb.style.display = "none";
     minDbView.style.display = "none";
   }
-  if (wantMinFreq.checked == true) {
+  if (wantMinFreq.checked == true)
+  {
     minFreq.style.display = "block";
     minFreqView.style.display = "block";
-  } else {
+  }
+  else
+  {
     minFreq.style.display = "none";
     minFreqView.style.display = "none";
   }
-  if (wantMaxFreq.checked == true) {
+  if (wantMaxFreq.checked == true)
+  {
     maxFreq.style.display = "block";
     maxFreqView.style.display = "block";
-  } else {
+  }
+  else
+  {
     maxFreq.style.display = "none";
     maxFreqView.style.display = "none";
   }
 
   if (g_callsignLookups.lotwUseEnable == true)
-    usesLoTWDiv.style.display = "block";
+  { usesLoTWDiv.style.display = "block"; }
   else usesLoTWDiv.style.display = "none";
 
   if (g_callsignLookups.eqslUseEnable == true)
-    useseQSLDiv.style.display = "block";
+  { useseQSLDiv.style.display = "block"; }
   else useseQSLDiv.style.display = "none";
 }
 
-function saveAlertSettings() {
+function saveAlertSettings()
+{
   localStorage.speechSettings = JSON.stringify(g_speechSettings);
   localStorage.audioSettings = JSON.stringify(g_audioSettings);
 }
 
-function saveAlerts() {
+function saveAlerts()
+{
   localStorage.savedAlerts = JSON.stringify(g_alerts);
 
   saveAlertSettings();
@@ -284,7 +314,8 @@ function saveAlerts() {
 
 var g_testAudioTimer = null;
 
-function changeAudioValues() {
+function changeAudioValues()
+{
   if (g_testAudioTimer) clearTimeout(g_testAudioTimer);
 
   g_audioSettings.volume = audioVolume.value;
@@ -294,11 +325,13 @@ function changeAudioValues() {
   saveAlertSettings();
 }
 
-function playTestFile() {
+function playTestFile()
+{
   playAlertMediaFile("Sysenter-7.mp3");
 }
 
-function changeSpeechValues() {
+function changeSpeechValues()
+{
   chrome.tts.stop();
 
   g_speechSettings.volume = speechVolume.value;
@@ -313,30 +346,38 @@ function changeSpeechValues() {
   saveAlertSettings();
 }
 
-function addNewAlert() {
+function addNewAlert()
+{
   var error = "<font color='green'>Added</font>";
   var valid = true;
   var filename = "";
   var shortname = "";
-  if (alertNotifySelect.value == 0) {
-    if (alertMediaSelect.value == "none") {
+  if (alertNotifySelect.value == 0)
+  {
+    if (alertMediaSelect.value == "none")
+    {
       valid = false;
       error = "Select File!";
-    } else {
+    }
+    else
+    {
       filename = alertMediaSelect.value;
       shortname = alertMediaSelect.selectedOptions[0].innerText;
     }
   }
-  if (valid) {
-    if (alertTypeSelect.value == 0 || alertTypeSelect.value == 5) {
+  if (valid)
+  {
+    if (alertTypeSelect.value == 0 || alertTypeSelect.value == 5)
+    {
       valid = ValidateCallsign(alertValueInput, null);
-      if (!valid) {
+      if (!valid)
+      {
         error = "Invalid Callsign";
-      } else {
       }
     }
   }
-  if (valid) {
+  if (valid)
+  {
     valid = addAlert(
       alertValueInput.value,
       alertTypeSelect.value,
@@ -345,7 +386,8 @@ function addNewAlert() {
       filename,
       shortname
     );
-    if (!valid) {
+    if (!valid)
+    {
       error = "Duplicate!";
     }
   }
@@ -353,10 +395,12 @@ function addNewAlert() {
   displayAlerts();
 }
 
-function addAlert(value, type, notify, repeat, filename, shortname) {
+function addAlert(value, type, notify, repeat, filename, shortname)
+{
   var newKey = unique(value + type + notify + repeat + filename);
 
-  if (!g_alerts.hasOwnProperty(newKey)) {
+  if (!g_alerts.hasOwnProperty(newKey))
+  {
     var alertItem = Object();
     alertItem.value = value;
     alertItem.type = type;
@@ -376,13 +420,15 @@ function addAlert(value, type, notify, repeat, filename, shortname) {
   return false; // we have this alert already
 }
 
-function deleteAlert(key) {
+function deleteAlert(key)
+{
   delete g_alerts[key];
   saveAlerts();
   displayAlerts();
 }
 
-function resetAlert(key) {
+function resetAlert(key)
+{
   g_alerts[key].lastMessage = "";
   g_alerts[key].lastTime = 0;
   g_alerts[key].fired = 0;
@@ -390,11 +436,14 @@ function resetAlert(key) {
   displayAlerts();
 }
 
-function processAlertMessage(decodeWords, message, band, mode) {
+function processAlertMessage(decodeWords, message, band, mode)
+{
   if (Object.keys(g_alerts).length == 0)
+  {
     // no alerts, don't bother
     return false;
-
+  }
+  else
   {
     var CQ = false;
     var validQTH = false;
@@ -404,17 +453,22 @@ function processAlertMessage(decodeWords, message, band, mode) {
 
     // Grab the last word in the decoded message
     var grid = decodeWords[decodeWords.length - 1].trim();
-    if (grid.length == 4) {
+    if (grid.length == 4)
+    {
       // maybe it's a grid
       var LETTERS = grid.substr(0, 2);
       var NUMBERS = grid.substr(2, 2);
 
-      if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS)) {
+      if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
+      {
         theirGrid = LETTERS + NUMBERS;
 
-        if (theirGrid != "RR73") {
+        if (theirGrid != "RR73")
+        {
           validQTH = true;
-        } else {
+        }
+        else
+        {
           theirGrid = null;
           validQTH = false;
         }
@@ -423,29 +477,32 @@ function processAlertMessage(decodeWords, message, band, mode) {
 
     if (validQTH) msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
     if (validQTH == false && decodeWords.length == 3)
-      msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
+    { msgDEcallsign = decodeWords[decodeWords.length - 2].trim(); }
     if (validQTH == false && decodeWords.length == 2)
-      msgDEcallsign = decodeWords[decodeWords.length - 1].trim();
-    if (decodeWords[0] == "CQ") {
+    { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
+    if (decodeWords[0] == "CQ")
+    {
       CQ = true;
     }
-    if (decodeWords.length >= 3 && CQ == true && validQTH == false) {
+    if (decodeWords.length >= 3 && CQ == true && validQTH == false)
+    {
       if (validateNumAndLetter(decodeWords[decodeWords.length - 1].trim()))
-        msgDEcallsign = decodeWords[decodeWords.length - 1].trim();
+      { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
       else msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
     }
 
-    if (decodeWords.length >= 4 && CQ == false) {
+    if (decodeWords.length >= 4 && CQ == false)
+    {
       msgDEcallsign = decodeWords[1];
     }
 
     var okayToAlert = true;
 
     if (msgDEcallsign + band + mode in g_liveCallsigns)
-      found_callsign = g_liveCallsigns[msgDEcallsign + band + mode];
+    { found_callsign = g_liveCallsigns[msgDEcallsign + band + mode]; }
 
     if (okayToAlert == true)
-      return checkAlerts(msgDEcallsign, theirGrid, message, found_callsign);
+    { return checkAlerts(msgDEcallsign, theirGrid, message, found_callsign); }
   }
   return false;
 }
@@ -457,61 +514,81 @@ function checkAlerts(
   callsignRecord,
   band,
   mode
-) {
+)
+{
   var hadAlert = false;
-  for (var key in g_alerts) {
+  for (var key in g_alerts)
+  {
     var nalert = g_alerts[key];
-    if (nalert.type == 0) {
+    if (nalert.type == 0)
+    {
       // callsign exatch match
-      if (DEcallsign == nalert.value) {
+      if (DEcallsign == nalert.value)
+      {
         handleAlert(nalert, DEcallsign, originalMessage, callsignRecord);
         hadAlert = true;
       }
-    } else if (grid && nalert.type == 2) {
+    }
+    else if (grid && nalert.type == 2)
+    {
       // gridsquare
       if (
         !(DEcallsign + band + mode in g_tracker.worked.call) &&
         grid.indexOf(nalert.value) == 0
-      ) {
+      )
+      {
         handleAlert(nalert, DEcallsign, originalMessage, callsignRecord, grid);
         hadAlert = true;
       }
-    } else if (nalert.type == 4) {
+    }
+    else if (nalert.type == 4)
+    {
       // QRZ
-      if (myDEcall.length > 0 && originalMessage.indexOf(myDEcall + " ") == 0) {
+      if (myDEcall.length > 0 && originalMessage.indexOf(myDEcall + " ") == 0)
+      {
         handleAlert(nalert, DEcallsign, originalMessage, callsignRecord);
         hadAlert = true;
       }
-    } else if (nalert.type == 5) {
+    }
+    else if (nalert.type == 5)
+    {
       // callsign partial
       if (
         !(DEcallsign + band + mode in g_tracker.worked.call) &&
         DEcallsign.indexOf(nalert.value) == 0
-      ) {
+      )
+      {
         handleAlert(nalert, DEcallsign, originalMessage, callsignRecord);
         hadAlert = true;
       }
-    } else if (nalert.type == 6) {
+    }
+    else if (nalert.type == 6)
+    {
       // callsign regex
-      try {
+      try
+      {
         if (
           !(DEcallsign + band + mode in g_tracker.worked.call) &&
           DEcallsign.match(nalert.value)
-        ) {
+        )
+        {
           handleAlert(nalert, DEcallsign, originalMessage, callsignRecord);
           hadAlert = true;
         }
-      } catch (e) {}
+      }
+      catch (e) {}
     }
   }
-  if (hadAlert) {
+  if (hadAlert)
+  {
     displayAlerts();
     return true;
   }
   return false;
 }
 
-function handleAlert(nAlert, target, lastMessage, callsignRecord, grid) {
+function handleAlert(nAlert, target, lastMessage, callsignRecord, grid)
+{
   if (nAlert.fired > 0 && nAlert.repeat == 0) return;
 
   if (nAlert.fired == 1 && nAlert.repeat == 1) return;
@@ -519,12 +596,14 @@ function handleAlert(nAlert, target, lastMessage, callsignRecord, grid) {
   nAlert.lastMessage = lastMessage;
   nAlert.lastTime = timeNowSec();
 
-  if (callsignRecord != null) {
+  if (callsignRecord != null)
+  {
     if (
       typeof callsignRecord.rect != "undefined" &&
       callsignRecord.rect != null &&
       nAlert.notify == 3
-    ) {
+    )
+    {
       // Fix me
       g_map
         .getView()
@@ -536,19 +615,22 @@ function handleAlert(nAlert, target, lastMessage, callsignRecord, grid) {
 
   if (nAlert.notify == 2) nAlert.needAck = 1;
 
-  if (nAlert.type == 0 || nAlert.type == 5 || nAlert.type == 6) {
+  if (nAlert.type == 0 || nAlert.type == 5 || nAlert.type == 6)
+  {
     if (nAlert.notify == 0) playAlertMediaFile(nAlert.filename);
     if (nAlert.notify == 1) speakAlertString("Callsign", target, null);
     if (nAlert.notify == 2) displayAlertPopUp("Seeking", target, null);
   }
 
-  if (nAlert.type == 2) {
+  if (nAlert.type == 2)
+  {
     if (nAlert.notify == 0) playAlertMediaFile(nAlert.filename);
     if (nAlert.notify == 1) speakAlertString("Grid square", grid, null);
     if (nAlert.notify == 2) displayAlertPopUp("Gridsquare", grid, target);
   }
 
-  if (nAlert.type == 4) {
+  if (nAlert.type == 4)
+  {
     if (nAlert.notify == 0) playAlertMediaFile(nAlert.filename);
     if (nAlert.notify == 1) speakQRZString(target, "Calling", myDEcall);
     if (nAlert.notify == 2) displayAlertPopUp("QRZ", null, null);
@@ -556,7 +638,8 @@ function handleAlert(nAlert, target, lastMessage, callsignRecord, grid) {
   nAlert.fired++;
 }
 
-function playAlertMediaFile(filename, overrideMute) {
+function playAlertMediaFile(filename, overrideMute)
+{
   if (g_appSettings.alertMute && !overrideMute) return;
 
   var fpath = path.join(g_userMediaDir, filename);
@@ -569,12 +652,15 @@ function playAlertMediaFile(filename, overrideMute) {
   audio.play();
 }
 
-function stringToPhonetics(string) {
+function stringToPhonetics(string)
+{
   var newMsg = "";
-  for (var x = 0; x < string.length; x++) {
+  for (var x = 0; x < string.length; x++)
+  {
     if (g_speechSettings.phonetics == true)
-      newMsg += g_phonetics[string.substr(x, 1)];
-    else {
+    { newMsg += g_phonetics[string.substr(x, 1)]; }
+    else
+    {
       if (string.substr(x, 1) == " ") newMsg += ", ";
       else newMsg += string.substr(x, 1);
     }
@@ -584,19 +670,22 @@ function stringToPhonetics(string) {
   return newMsg;
 }
 
-function speakQRZString(caller, words, you) {
-  if (g_appSettings.alertMute == 0) {
+function speakQRZString(caller, words, you)
+{
+  if (g_appSettings.alertMute == 0)
+  {
     var sCaller = "";
     var sYou = "";
     if (caller) sCaller = stringToPhonetics(caller);
     if (you) sYou = stringToPhonetics(you);
 
-    if (g_speechAvailable) {
+    if (g_speechAvailable)
+    {
       var speak = sCaller.trim() + ", " + words.trim() + ", " + sYou.trim();
       var msg = new SpeechSynthesisUtterance(speak);
       msg.lang = g_localeString;
       if (g_speechSettings.voice > 0)
-        msg.voice = g_voices[g_speechSettings.voice - 1];
+      { msg.voice = g_voices[g_speechSettings.voice - 1]; }
       msg.rate = g_speechSettings.rate;
       msg.pitch = g_speechSettings.pitch;
       msg.volume = g_speechSettings.volume;
@@ -605,19 +694,22 @@ function speakQRZString(caller, words, you) {
   }
 }
 
-function speakAlertString(what, message, target) {
-  if (g_appSettings.alertMute == 0) {
+function speakAlertString(what, message, target)
+{
+  if (g_appSettings.alertMute == 0)
+  {
     var sMsg = "";
     var sTarget = "";
     if (message) sMsg = stringToPhonetics(message);
     if (target) sTarget = stringToPhonetics(target);
 
-    if (g_speechAvailable) {
+    if (g_speechAvailable)
+    {
       var speak = what.trim() + ", " + sMsg.trim() + ", " + sTarget.trim();
       var msg = new SpeechSynthesisUtterance(speak);
       msg.lang = g_localeString;
       if (g_speechSettings.voice > 0)
-        msg.voice = g_voices[g_speechSettings.voice - 1];
+      { msg.voice = g_voices[g_speechSettings.voice - 1]; }
       msg.rate = g_speechSettings.rate;
       msg.pitch = g_speechSettings.pitch;
       msg.volume = g_speechSettings.volume;
@@ -628,13 +720,16 @@ function speakAlertString(what, message, target) {
 
 var g_alertFlasher = null;
 
-function unflashAlertPopUp() {
+function unflashAlertPopUp()
+{
   var worker = "";
   var acount = 0;
   alertsPopDiv.style.backgroundColor = "#000";
 
-  if (Object.keys(g_alerts).length > 0) {
-    for (var key in g_alerts) {
+  if (Object.keys(g_alerts).length > 0)
+  {
+    for (var key in g_alerts)
+    {
       if (g_alerts[key].needAck) acount++;
     }
 
@@ -656,21 +751,25 @@ function unflashAlertPopUp() {
     worker += "<th>When</th>";
     worker += "</tr>";
 
-    for (var key in g_alerts) {
-      if (g_alerts[key].needAck) {
+    for (var key in g_alerts)
+    {
+      if (g_alerts[key].needAck)
+      {
         worker += "<tr>";
         worker += "<td>" + g_alertTypeOptions[g_alerts[key].type] + "</td>";
         if (g_alerts[key].type == 0)
-          worker += "<td style='color:yellow'>" + g_alerts[key].value + "</td>";
+        { worker += "<td style='color:yellow'>" + g_alerts[key].value + "</td>"; }
         if (g_alerts[key].type == 2)
-          worker += "<td style='color:red'>" + g_alerts[key].value + "</td>";
+        { worker += "<td style='color:red'>" + g_alerts[key].value + "</td>"; }
         if (g_alerts[key].type == 4)
-          worker += "<td style='color:cyan'>" + myDEcall + "</td>";
+        { worker += "<td style='color:cyan'>" + myDEcall + "</td>"; }
         if (g_alerts[key].type == 5)
+        {
           worker +=
             "<td style='color:lightgreen'>" + g_alerts[key].value + "*</td>";
+        }
         if (g_alerts[key].type == 6)
-          worker += "<td style='color:pink'>" + g_alerts[key].value + "</td>";
+        { worker += "<td style='color:pink'>" + g_alerts[key].value + "</td>"; }
 
         worker += "<td>" + g_alertValueOptions[g_alerts[key].notify] + "</td>";
         worker += "<td>" + g_alertRepeatOptions[g_alerts[key].repeat] + "</td>";
@@ -699,7 +798,8 @@ function unflashAlertPopUp() {
   g_alertFlasher = null;
 }
 
-function displayAlertPopUp(what, message, target) {
+function displayAlertPopUp(what, message, target)
+{
   if (g_alertFlasher) clearTimeout(g_alertFlasher);
 
   alertPopListDiv.innerHTML =
@@ -709,48 +809,63 @@ function displayAlertPopUp(what, message, target) {
   g_alertFlasher = setTimeout(unflashAlertPopUp, 100);
 }
 
-function ackAlerts() {
+function ackAlerts()
+{
   alertsPopDiv.style.display = "none";
-  for (var key in g_alerts) {
+  for (var key in g_alerts)
+  {
     g_alerts[key].needAck = 0;
   }
 }
 
-function alertTypeChanged() {
+function alertTypeChanged()
+{
   addError.innerHTML = "";
-  if (alertTypeSelect.value == 0 || alertTypeSelect.value == 5) {
+  if (alertTypeSelect.value == 0 || alertTypeSelect.value == 5)
+  {
     alertValueSelect.innerHTML = "";
     alertValueSelect.innerHTML =
-      '<input id="alertValueInput" type="text" class="inputTextValue" maxlength="12"  size="5" oninput="ValidateCallsign(this,null);" / >';
+      "<input id=\"alertValueInput\" type=\"text\" class=\"inputTextValue\" maxlength=\"12\"  size=\"5\" oninput=\"ValidateCallsign(this,null);\" / >";
     ValidateCallsign(alertValueInput, null);
-  } else if (alertTypeSelect.value == 2) {
+  }
+  else if (alertTypeSelect.value == 2)
+  {
     alertValueSelect.innerHTML = "";
     alertValueSelect.innerHTML =
-      '<input id="alertValueInput" type="text" class="inputTextValue"  maxlength="6" size="3" oninput="ValidateGridsquareOnly4(this,null);" / >';
+      "<input id=\"alertValueInput\" type=\"text\" class=\"inputTextValue\"  maxlength=\"6\" size=\"3\" oninput=\"ValidateGridsquareOnly4(this,null);\" / >";
     ValidateGridsquareOnly4(alertValueInput, null);
-  } else if (alertTypeSelect.value == 4) {
+  }
+  else if (alertTypeSelect.value == 4)
+  {
     alertValueSelect.innerHTML =
-      '<input id="alertValueInput" disabled="true" type="text" class="inputTextValue" value="' +
+      "<input id=\"alertValueInput\" disabled=\"true\" type=\"text\" class=\"inputTextValue\" value=\"" +
       myDEcall +
-      '" maxlength="12"  size="5" oninput="ValidateCallsign(this,null);" / >';
+      "\" maxlength=\"12\"  size=\"5\" oninput=\"ValidateCallsign(this,null);\" / >";
     ValidateCallsign(alertValueInput, null);
-  } else if (alertTypeSelect.value == 6) {
+  }
+  else if (alertTypeSelect.value == 6)
+  {
     alertValueSelect.innerHTML = "";
     alertValueSelect.innerHTML =
-      '<input id="alertValueInput" type="text" class="inputTextValue" size="12" value="^" oninput="ValidateText(this);" / >';
+      "<input id=\"alertValueInput\" type=\"text\" class=\"inputTextValue\" size=\"12\" value=\"^\" oninput=\"ValidateText(this);\" / >";
     ValidateText(alertValueInput);
   }
 }
 
-function alertNotifyChanged(who = "") {
+function alertNotifyChanged(who = "")
+{
   addError.innerHTML = "";
 
-  if (alertNotifySelect.value == 0) {
+  if (alertNotifySelect.value == 0)
+  {
     alertMediaSelect.style.display = "block";
-    if (who == "media") {
+    if (who == "media")
+    {
       playAlertMediaFile(alertMediaSelect.value);
     }
-  } else {
+  }
+  else
+  {
     alertMediaSelect.style.display = "none";
   }
 }
@@ -779,10 +894,12 @@ g_alertRepeatOptions["1"] = "Once";
 g_alertRepeatOptions["2"] = "Inf";
 g_alertRepeatOptions["3"] = "Inf(Session)";
 
-function displayAlerts() {
+function displayAlerts()
+{
   var worker = "";
 
-  if (Object.keys(g_alerts).length > 0) {
+  if (Object.keys(g_alerts).length > 0)
+  {
     worker +=
       "<div style='padding-right:8px;overflow:auto;overflow-x:hidden;height:" +
       Math.min(Object.keys(g_alerts).length * 24 + 23, 312) +
@@ -803,20 +920,23 @@ function displayAlerts() {
     worker += "<th>Delete</th>";
     worker += "</tr>";
 
-    for (var key in g_alerts) {
+    for (var key in g_alerts)
+    {
       worker += "<tr>";
       worker += "<td>" + g_alertTypeOptions[g_alerts[key].type] + "</td>";
       if (g_alerts[key].type == 0)
-        worker += "<td style='color:yellow'>" + g_alerts[key].value + "</td>";
+      { worker += "<td style='color:yellow'>" + g_alerts[key].value + "</td>"; }
       if (g_alerts[key].type == 2)
-        worker += "<td style='color:red'>" + g_alerts[key].value + "</td>";
+      { worker += "<td style='color:red'>" + g_alerts[key].value + "</td>"; }
       if (g_alerts[key].type == 4)
-        worker += "<td style='color:cyan'>" + myDEcall + "</td>";
+      { worker += "<td style='color:cyan'>" + myDEcall + "</td>"; }
       if (g_alerts[key].type == 5)
+      {
         worker +=
           "<td style='color:lightgreen'>" + g_alerts[key].value + "*</td>";
+      }
       if (g_alerts[key].type == 6)
-        worker += "<td style='color:pink'>" + g_alerts[key].value + "</td>";
+      { worker += "<td style='color:pink'>" + g_alerts[key].value + "</td>"; }
 
       worker += "<td>" + g_alertValueOptions[g_alerts[key].notify] + "</td>";
       worker += "<td>" + g_alertRepeatOptions[g_alerts[key].repeat] + "</td>";
@@ -850,51 +970,71 @@ function displayAlerts() {
   alertListDiv.innerHTML = worker;
 }
 
-function loadClassicAlertView() {
-  for (node in g_classicAlerts) {
+function loadClassicAlertView()
+{
+  for (node in g_classicAlerts)
+  {
     what = document.getElementById(node);
-    if (what != null) {
-      if (what.type == "select-one" || what.type == "text") {
+    if (what != null)
+    {
+      if (what.type == "select-one" || what.type == "text")
+      {
         what.value = g_classicAlerts[node];
-        if (what.id.endsWith("Notify")) {
+        if (what.id.endsWith("Notify"))
+        {
           var mediaNode = document.getElementById(what.id + "Media");
           var wordNode = document.getElementById(what.id + "Word");
-          if (what.value == "0") {
+          if (what.value == "0")
+          {
             mediaNode.style.display = "block";
             wordNode.style.display = "none";
-          } else {
+          }
+          else
+          {
             mediaNode.style.display = "none";
             wordNode.style.display = "block";
           }
         }
-        if (what.type == "text") {
+        if (what.type == "text")
+        {
           ValidateText(what);
         }
-      } else if (what.type == "checkbox") {
+      }
+      else if (what.type == "checkbox")
+      {
         what.checked = g_classicAlerts[node];
       }
     }
   }
 }
 
-function wantedChanged(what) {
-  if (what.type == "select-one" || what.type == "text") {
+function wantedChanged(what)
+{
+  if (what.type == "select-one" || what.type == "text")
+  {
     g_classicAlerts[what.id] = what.value;
-    if (what.id.endsWith("Notify")) {
+    if (what.id.endsWith("Notify"))
+    {
       var mediaNode = document.getElementById(what.id + "Media");
       var wordNode = document.getElementById(what.id + "Word");
-      if (what.value == "0") {
+      if (what.value == "0")
+      {
         mediaNode.style.display = "block";
         wordNode.style.display = "none";
-      } else {
+      }
+      else
+      {
         mediaNode.style.display = "none";
         wordNode.style.display = "block";
       }
     }
-    if (what.id.endsWith("Media")) {
+    if (what.id.endsWith("Media"))
+    {
       if (what.value != "none") playAlertMediaFile(what.value);
     }
-  } else if (what.type == "checkbox") {
+  }
+  else if (what.type == "checkbox")
+  {
     g_classicAlerts[what.id] = what.checked;
   }
   localStorage.classicAlerts = JSON.stringify(g_classicAlerts);
@@ -906,7 +1046,7 @@ var g_classic_alert_count_template = {
   huntDXCC: 0,
   huntCQz: 0,
   huntITUz: 0,
-  huntStates: 0,
+  huntStates: 0
 };
 
 var g_classic_alert_counts = Object.assign({}, g_classic_alert_count_template);
@@ -917,7 +1057,7 @@ var g_classic_alert_functions = {
   huntDXCC: alertCheckDXCC,
   huntCQz: alertCheckCQz,
   huntITUz: alertCheckITUz,
-  huntStates: alertCheckStates,
+  huntStates: alertCheckStates
 };
 
 var g_classic_alert_words = {
@@ -926,20 +1066,26 @@ var g_classic_alert_words = {
   huntDXCC: "DXCC",
   huntCQz: "CQ Zone",
   huntITUz: "I-T-U Zone",
-  huntStates: "State",
+  huntStates: "State"
 };
 
-function processClassicAlerts() {
-  for (key in g_classic_alert_counts) {
+function processClassicAlerts()
+{
+  for (key in g_classic_alert_counts)
+  {
     if (
       document.getElementById(key).checked == true &&
       g_classic_alert_counts[key] > 0
-    ) {
+    )
+    {
       var notify = document.getElementById(key + "Notify").value;
-      if (notify == "0") {
+      if (notify == "0")
+      {
         var media = document.getElementById(key + "Notify" + "Media").value;
         if (media != "none") playAlertMediaFile(media);
-      } else if (notify == "1") {
+      }
+      else if (notify == "1")
+      {
         speakAlertString(
           document.getElementById(key + "Notify" + "Word").value
         );
@@ -949,57 +1095,66 @@ function processClassicAlerts() {
   g_classic_alert_counts = Object.assign({}, g_classic_alert_count_template);
 }
 
-function checkClassicAlerts(CQ, callObj, message, DXcall) {
+function checkClassicAlerts(CQ, callObj, message, DXcall)
+{
   var didAlert = false;
   if (g_alertSettings.cqOnly == true && CQ == false) return didAlert;
 
   if (g_alertSettings.requireGrid == true && callObj.grid.length != 4)
-    return didAlert;
+  { return didAlert; }
 
   if (g_alertSettings.wantMinDB == true && message.SR < g_alertSettings.minDb)
-    return didAlert;
+  { return didAlert; }
 
   if (
     g_alertSettings.wantMaxDT == true &&
     Math.abs(message.DT) > g_alertSettings.maxDT
   )
-    return didAlert;
+  { return didAlert; }
 
   if (
     g_alertSettings.wantMinFreq == true &&
     message.DF < g_alertSettings.minFreq
   )
-    return didAlert;
+  { return didAlert; }
 
   if (
     g_alertSettings.wantMaxFreq == true &&
     message.DF > g_alertSettings.maxFreq
   )
-    return didAlert;
+  { return didAlert; }
 
-  if (DXcall == "CQ RU") {
+  if (DXcall == "CQ RU")
+  {
     if (g_alertSettings.noRoundUp == true) return didAlert;
-  } else {
+  }
+  else
+  {
     if (g_alertSettings.onlyRoundUp == true) return didAlert;
   }
 
-  if (callObj.dxcc == g_myDXCC) {
+  if (callObj.dxcc == g_myDXCC)
+  {
     if (g_alertSettings.noMyDxcc == true) return didAlert;
-  } else {
+  }
+  else
+  {
     if (g_alertSettings.onlyMyDxcc == true) return didAlert;
   }
 
   if (
     g_callsignLookups.lotwUseEnable == true &&
     g_alertSettings.usesLoTW == true
-  ) {
+  )
+  {
     if (!(callObj.DEcall in g_lotwCallsigns)) return didAlert;
   }
 
   if (
     g_callsignLookups.eqslUseEnable == true &&
     g_alertSettings.useseQSL == true
-  ) {
+  )
+  {
     if (!(callObj.DEcall in g_eqslCallsigns)) return didAlert;
   }
 
@@ -1009,10 +1164,12 @@ function checkClassicAlerts(CQ, callObj, message, DXcall) {
     callObj.DEcall + hashMaker(callObj.band, callObj.mode) in
     g_tracker.worked.call
   )
-    return didAlert;
+  { return didAlert; }
 
-  for (key in g_classic_alert_functions) {
-    if (document.getElementById(key).checked == true) {
+  for (key in g_classic_alert_functions)
+  {
+    if (document.getElementById(key).checked == true)
+    {
       var alerted = g_classic_alert_functions[key](key, callObj);
       if (alerted == true) didAlert = true;
       g_classic_alert_counts[key] += alerted;
@@ -1022,7 +1179,8 @@ function checkClassicAlerts(CQ, callObj, message, DXcall) {
   return didAlert;
 }
 
-function alertCheckCallsign(key, callObj) {
+function alertCheckCallsign(key, callObj)
+{
   var status = document.getElementById(key + "Need").value;
 
   if (
@@ -1030,18 +1188,19 @@ function alertCheckCallsign(key, callObj) {
     callObj.DEcall + hashMaker(callObj.band, callObj.mode) in
       g_tracker.worked.call
   )
-    return 0;
+  { return 0; }
   if (
     status == "confirmed" &&
     callObj.DEcall + hashMaker(callObj.band, callObj.mode) in
       g_tracker.confirmed.call
   )
-    return 0;
+  { return 0; }
 
   return 1;
 }
 
-function alertCheckGrid(key, callObj) {
+function alertCheckGrid(key, callObj)
+{
   var status = document.getElementById(key + "Need").value;
   if (callObj.grid.length == 0) return 0;
 
@@ -1050,18 +1209,19 @@ function alertCheckGrid(key, callObj) {
     callObj.grid + hashMaker(callObj.band, callObj.mode) in
       g_tracker.worked.grid
   )
-    return 0;
+  { return 0; }
   if (
     status == "confirmed" &&
     callObj.grid + hashMaker(callObj.band, callObj.mode) in
       g_tracker.confirmed.grid
   )
-    return 0;
+  { return 0; }
 
   return 1;
 }
 
-function alertCheckDXCC(key, callObj) {
+function alertCheckDXCC(key, callObj)
+{
   var status = document.getElementById(key + "Need").value;
 
   if (
@@ -1069,23 +1229,25 @@ function alertCheckDXCC(key, callObj) {
     String(callObj.dxcc) + hashMaker(callObj.band, callObj.mode) in
       g_tracker.worked.dxcc
   )
-    return 0;
+  { return 0; }
   if (
     status == "confirmed" &&
     String(callObj.dxcc) + hashMaker(callObj.band, callObj.mode) in
       g_tracker.confirmed.dxcc
   )
-    return 0;
+  { return 0; }
 
   return 1;
 }
 
-function alertCheckCQz(key, callObj) {
+function alertCheckCQz(key, callObj)
+{
   var workedTotal = (confirmedTotal = callObj.cqza.length);
   if (workedTotal == 0) return 0;
 
   var workedFound = (confirmedFound = 0);
-  for (index in callObj.cqza) {
+  for (index in callObj.cqza)
+  {
     var hash = callObj.cqza[index] + hashMaker(callObj.band, callObj.mode);
     if (hash in g_tracker.worked.cqz) workedFound++;
 
@@ -1100,12 +1262,14 @@ function alertCheckCQz(key, callObj) {
   return 1;
 }
 
-function alertCheckITUz(key, callObj) {
+function alertCheckITUz(key, callObj)
+{
   var workedTotal = (confirmedTotal = callObj.ituza.length);
   if (workedTotal == 0) return 0;
 
   var workedFound = (confirmedFound = 0);
-  for (index in callObj.ituza) {
+  for (index in callObj.ituza)
+  {
     var hash = callObj.ituza[index] + hashMaker(callObj.band, callObj.mode);
     if (hash in g_tracker.worked.ituz) workedFound++;
 
@@ -1120,9 +1284,12 @@ function alertCheckITUz(key, callObj) {
   return 1;
 }
 
-function alertCheckStates(key, callObj) {
-  if (callObj.dxcc == 291 || callObj.dxcc == 110 || callObj.dxcc == 6) {
-    if (callObj.state in g_StateData) {
+function alertCheckStates(key, callObj)
+{
+  if (callObj.dxcc == 291 || callObj.dxcc == 110 || callObj.dxcc == 6)
+  {
+    if (callObj.state in g_StateData)
+    {
       var hash = callObj.state + hashMaker(callObj.band, callObj.mode);
       var status = document.getElementById(key + "Need").value;
 

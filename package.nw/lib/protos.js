@@ -3,7 +3,8 @@
 // See LICENSE for more information.
 
 // Incoming is already   float fixed (  14.037 ) for 14,037,000hz
-Number.prototype.formatBand = function () {
+Number.prototype.formatBand = function ()
+{
   var freq = this;
   var bands = [
     "OOB",
@@ -73,7 +74,7 @@ Number.prototype.formatBand = function () {
     224,
     "1.5m",
     225,
-    "1.5m",
+    "1.5m"
   ];
 
   var newFreq = parseInt(freq);
@@ -87,12 +88,14 @@ Number.prototype.formatBand = function () {
   else return "OOB";
 };
 
-Number.prototype.formatMhz = function (n, x) {
+Number.prototype.formatMhz = function (n, x)
+{
   var re = "\\d(?=(\\d{" + (x || 3) + "})+" + (n > 0 ? "\\." : "$") + ")";
   return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, "g"), "$&.");
 };
 
-Number.prototype.formatSignalReport = function () {
+Number.prototype.formatSignalReport = function ()
+{
   var val = this;
   var report = String();
 
@@ -101,12 +104,14 @@ Number.prototype.formatSignalReport = function () {
   return report;
 };
 
-String.prototype.formatCallsign = function () {
+String.prototype.formatCallsign = function ()
+{
   var re = new RegExp("0", "g");
   return this.replace(re, "Ø");
 };
 
-Number.prototype.toDHMS = function () {
+Number.prototype.toDHMS = function ()
+{
   var seconds = this;
   var days = Math.floor(seconds / (3600 * 24));
   seconds -= days * 3600 * 24;
@@ -124,7 +129,8 @@ Number.prototype.toDHMS = function () {
   return val;
 };
 
-Number.prototype.toDHM = function () {
+Number.prototype.toDHM = function ()
+{
   var seconds = this;
   var days = Math.floor(seconds / (3600 * 24));
   seconds -= days * 3600 * 24;
@@ -140,7 +146,8 @@ Number.prototype.toDHM = function () {
   return val;
 };
 
-Number.prototype.toYM = function () {
+Number.prototype.toYM = function ()
+{
   var months = this;
   var years = parseInt(Math.floor(months / 12));
   months -= years * 12;
@@ -151,7 +158,8 @@ Number.prototype.toYM = function () {
   return total == "" ? "any" : total;
 };
 
-Number.prototype.toHMS = function () {
+Number.prototype.toHMS = function ()
+{
   var seconds = this;
   var days = Math.floor(seconds / (3600 * 24));
   seconds -= days * 3600 * 24;
@@ -167,20 +175,25 @@ Number.prototype.toHMS = function () {
   return val;
 };
 
-String.prototype.toProperCase = function () {
-  return this.replace(/\w\S*/g, function (txt) {
+String.prototype.toProperCase = function ()
+{
+  return this.replace(/\w\S*/g, function (txt)
+  {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 };
 
-Number.prototype.pad = function (size) {
+Number.prototype.pad = function (size)
+{
   var s = String(this);
-  while (s.length < (size || 2)) {
+  while (s.length < (size || 2))
+  {
     s = "0" + s;
   }
   return s;
 };
 
-String.prototype.replaceAll = function (str1, str2) {
+String.prototype.replaceAll = function (str1, str2)
+{
   return this.split(str1).join(str2);
 };

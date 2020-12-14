@@ -47,13 +47,13 @@ var g_callsignDatabaseUSplus = {};
 var g_developerMode = process.versions["nw-flavor"] == "sdk";
 
 var g_modeColors = {};
-g_modeColors["FT4"] = "1111FF";
-g_modeColors["FT8"] = "11FF11";
-g_modeColors["JT4"] = "EE1111";
-g_modeColors["JT9"] = "7CFC00";
-g_modeColors["JT65"] = "E550E5";
-g_modeColors["QRA64"] = "FF00FF";
-g_modeColors["MSK144"] = "4949FF";
+g_modeColors.FT4 = "1111FF";
+g_modeColors.FT8 = "11FF11";
+g_modeColors.JT4 = "EE1111";
+g_modeColors.JT9 = "7CFC00";
+g_modeColors.JT65 = "E550E5";
+g_modeColors.QRA64 = "FF00FF";
+g_modeColors.MSK144 = "4949FF";
 
 var g_defaultSettings = {
   callsign: "all",
@@ -95,7 +95,7 @@ var g_defaultSettings = {
     huntCont: false,
     huntPX: false,
     huntQRZ: true,
-    huntOAMS: false,
+    huntOAMS: false
   },
   columns: {
     Band: false,
@@ -121,7 +121,7 @@ var g_defaultSettings = {
     Spot: false,
     Life: false,
     OAMS: true,
-    Age: true,
+    Age: true
   },
   reference: 0,
   controls: true,
@@ -129,24 +129,28 @@ var g_defaultSettings = {
   compact: false,
   settingProfiles: false,
   lastSortIndex: 6,
-  lastSortReverse: 1,
+  lastSortReverse: 1
 };
 
-document.addEventListener("dragover", function (event) {
+document.addEventListener("dragover", function (event)
+{
   event.preventDefault();
 });
 
-document.addEventListener("drop", function (event) {
+document.addEventListener("drop", function (event)
+{
   event.preventDefault();
 });
 
 window.addEventListener("message", receiveMessage, false);
 
-if (typeof localStorage.blockedCQ == "undefined") {
+if (typeof localStorage.blockedCQ == "undefined")
+{
   localStorage.blockedCQ = "{}";
 }
 
-if (typeof localStorage.awardTracker == "undefined") {
+if (typeof localStorage.awardTracker == "undefined")
+{
   localStorage.awardTracker = "{}";
   g_rosterSettings = {};
   writeRosterSettings();
@@ -154,25 +158,30 @@ if (typeof localStorage.awardTracker == "undefined") {
 
 g_awardTracker = JSON.parse(localStorage.awardTracker);
 
-if (typeof localStorage.blockedCalls != "undefined") {
+if (typeof localStorage.blockedCalls != "undefined")
+{
   g_blockedCalls = JSON.parse(localStorage.blockedCalls);
   g_blockedCQ = JSON.parse(localStorage.blockedCQ);
   g_blockedDxcc = JSON.parse(localStorage.blockedDxcc);
 }
 
-function storeBlocks() {
+function storeBlocks()
+{
   localStorage.blockedCalls = JSON.stringify(g_blockedCalls);
   localStorage.blockedCQ = JSON.stringify(g_blockedCQ);
   localStorage.blockedDxcc = JSON.stringify(g_blockedDxcc);
 }
 
-function storeAwardTracker() {
+function storeAwardTracker()
+{
   localStorage.awardTracker = JSON.stringify(g_awardTracker);
 }
 
-function loadSettings() {
+function loadSettings()
+{
   var readSettings = {};
-  if (typeof localStorage.rosterSettings != "undefined") {
+  if (typeof localStorage.rosterSettings != "undefined")
+  {
     readSettings = JSON.parse(localStorage.rosterSettings);
   }
   g_rosterSettings = deepmerge(g_defaultSettings, readSettings);
@@ -182,45 +191,55 @@ function loadSettings() {
   writeRosterSettings();
 }
 
-function writeRosterSettings() {
+function writeRosterSettings()
+{
   localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
 }
 
-function isKnownCallsignDXCC(dxcc) {
+function isKnownCallsignDXCC(dxcc)
+{
   if (dxcc in g_callsignDatabaseDXCC) return true;
   return false;
 }
 
-function isKnownCallsignUS(dxcc) {
+function isKnownCallsignUS(dxcc)
+{
   if (dxcc in g_callsignDatabaseUS) return true;
   return false;
 }
 
-function isKnownCallsignUSplus(dxcc) {
+function isKnownCallsignUSplus(dxcc)
+{
   if (dxcc in g_callsignDatabaseUSplus) return true;
   return false;
 }
 
-function timeNowSec() {
+function timeNowSec()
+{
   return parseInt(Date.now() / 1000);
 }
 
-function lockNewWindows() {
-  if (typeof nw != "undefined") {
+function lockNewWindows()
+{
+  if (typeof nw != "undefined")
+  {
     var gui = require("nw.gui");
     var win = gui.Window.get();
-    win.on("new-win-policy", function (frame, url, policy) {
+    win.on("new-win-policy", function (frame, url, policy)
+    {
       gui.Shell.openExternal(url);
       policy.ignore();
     });
   }
 }
 
-function myCallCompare(a, b) {
+function myCallCompare(a, b)
+{
   return a.DEcall.localeCompare(b.DEcall);
 }
 
-function myGridCompare(a, b) {
+function myGridCompare(a, b)
+{
   var gridA = a.grid ? a.grid : "0";
   var gridB = b.grid ? b.grid : "0";
 
@@ -229,59 +248,69 @@ function myGridCompare(a, b) {
   return 0;
 }
 
-function myDxccCompare(a, b) {
+function myDxccCompare(a, b)
+{
   return window.opener.myDxccCompare(a, b);
 }
 
-function myTimeCompare(a, b) {
+function myTimeCompare(a, b)
+{
   if (a.age > b.age) return 1;
   if (a.age < b.age) return -1;
   return 0;
 }
 
-function myLifeCompare(a, b) {
+function myLifeCompare(a, b)
+{
   if (a.life > b.life) return 1;
   if (a.life < b.life) return -1;
   return 0;
 }
 
-function mySpotCompare(a, b) {
+function mySpotCompare(a, b)
+{
   if (a.spot.when > b.spot.when) return 1;
   if (a.spot.when < b.spot.when) return -1;
   return 0;
 }
 
-function myDbCompare(a, b) {
+function myDbCompare(a, b)
+{
   if (a.RSTsent > b.RSTsent) return 1;
   if (a.RSTsent < b.RSTsent) return -1;
   return 0;
 }
 
-function myFreqCompare(a, b) {
+function myFreqCompare(a, b)
+{
   if (a.delta > b.delta) return 1;
   if (a.delta < b.delta) return -1;
   return 0;
 }
 
-function myDTCompare(a, b) {
+function myDTCompare(a, b)
+{
   if (a.dt > b.dt) return 1;
   if (a.dt < b.dt) return -1;
   return 0;
 }
 
-function myDistanceCompare(a, b) {
+function myDistanceCompare(a, b)
+{
   if (a.distance > b.distance) return 1;
   if (a.distance < b.distance) return -1;
   return 0;
 }
 
-function myHeadingCompare(a, b) {
+function myHeadingCompare(a, b)
+{
   if (a.heading > b.heading) return 1;
   if (a.heading < b.heading) return -1;
   return 0;
 }
 
-function myStateCompare(a, b) {
+function myStateCompare(a, b)
+{
   if (a.state == null) return 1;
   if (b.state == null) return -1;
   if (a.state > b.state) return 1;
@@ -289,11 +318,13 @@ function myStateCompare(a, b) {
   return 0;
 }
 
-function myCQCompare(a, b) {
+function myCQCompare(a, b)
+{
   return a.DXcall.localeCompare(b.DXcall);
 }
 
-function myWPXCompare(a, b) {
+function myWPXCompare(a, b)
+{
   if (a.px == null) return 1;
   if (b.px == null) return -1;
   if (a.px > b.px) return 1;
@@ -301,7 +332,8 @@ function myWPXCompare(a, b) {
   return 0;
 }
 
-function myCntyCompare(a, b) {
+function myCntyCompare(a, b)
+{
   if (a.cnty == null) return 1;
   if (b.cnty == null) return -1;
   if (a.cnty.substr(3) > b.cnty.substr(3)) return 1;
@@ -309,14 +341,16 @@ function myCntyCompare(a, b) {
   return 0;
 }
 
-function myContCompare(a, b) {
+function myContCompare(a, b)
+{
   if (a.cont == null) return 1;
   if (b.cont == null) return -1;
   if (a.cont > b.cont) return 1;
   if (a.cont < b.cont) return -1;
   return 0;
 }
-function myGTCompare(a, b) {
+function myGTCompare(a, b)
+{
   if (a.style.gt != 0 && b.style.gt == 0) return 1;
   if (a.style.gt == 0 && b.style.gt != 0) return -1;
   return 0;
@@ -339,14 +373,18 @@ var r_sortFunction = [
   mySpotCompare,
   myGTCompare,
   myCntyCompare,
-  myContCompare,
+  myContCompare
 ];
 
-function showRosterBox(sortIndex) {
-  if (g_rosterSettings.lastSortIndex != sortIndex) {
+function showRosterBox(sortIndex)
+{
+  if (g_rosterSettings.lastSortIndex != sortIndex)
+  {
     g_rosterSettings.lastSortIndex = sortIndex;
     g_rosterSettings.lastSortReverse = 0;
-  } else {
+  }
+  else
+  {
     g_rosterSettings.lastSortReverse ^= 1;
   }
 
@@ -355,33 +393,36 @@ function showRosterBox(sortIndex) {
   window.opener.goProcessRoster();
 }
 
-function hashMaker(band, mode) {
-  //"Current Band & Mode"
+function hashMaker(band, mode)
+{
+  // "Current Band & Mode"
   if (g_rosterSettings.reference == 0 || g_rosterSettings.reference == 6)
-    return band + mode;
+  { return band + mode; }
 
-  //"Current Band, Any Mode"
+  // "Current Band, Any Mode"
   if (g_rosterSettings.reference == 1) return band;
 
-  //"Current Band, Any Digi Mode"
+  // "Current Band, Any Digi Mode"
   if (g_rosterSettings.reference == 2) return band + "dg";
 
-  //"Current Mode, Any Band"
+  // "Current Mode, Any Band"
   if (g_rosterSettings.reference == 3) return mode;
 
-  //"Any Band, Any Mode"
+  // "Any Band, Any Mode"
   if (g_rosterSettings.reference == 4) return "";
 
-  //"Any Band, Any Digi Mode"
+  // "Any Band, Any Digi Mode"
   if (g_rosterSettings.reference == 5) return "dg";
 }
 
-function processRoster(roster) {
+function processRoster(roster)
+{
   callRoster = roster;
   viewRoster();
 }
 
-function viewRoster() {
+function viewRoster()
+{
   var bands = Object();
   var modes = Object();
 
@@ -391,11 +432,13 @@ function viewRoster() {
 
   document.title = window.opener.makeTitleInfo(false);
 
-  if (callMode == "hits") {
+  if (callMode == "hits")
+  {
     callMode = "all";
     onlyHits = true;
   }
-  if (referenceNeed.value == 6) {
+  if (referenceNeed.value == 6)
+  {
     callMode = "all";
     onlyHits = false;
     isAwardTracker = true;
@@ -407,38 +450,45 @@ function viewRoster() {
     window.opener.g_appSettings.gtShareEnable == "true" &&
     window.opener.g_appSettings.gtMsgEnable == "true";
 
-  if (window.opener.g_callsignLookups.lotwUseEnable == true) {
+  if (window.opener.g_callsignLookups.lotwUseEnable == true)
+  {
     usesLoTWDiv.style.display = "inline-block";
-    if (g_rosterSettings.usesLoTW == true) {
+    if (g_rosterSettings.usesLoTW == true)
+    {
       maxLoTW.style.display = "inline-block";
       maxLoTWView.style.display = "inline-block";
-    } else {
+    }
+    else
+    {
       maxLoTW.style.display = "none";
       maxLoTWView.style.display = "none";
     }
-  } else {
+  }
+  else
+  {
     usesLoTWDiv.style.display = "none";
     maxLoTW.style.display = "none";
     maxLoTWView.style.display = "none";
   }
 
   if (window.opener.g_callsignLookups.eqslUseEnable == true)
-    useseQSLDiv.style.display = "block";
+  { useseQSLDiv.style.display = "block"; }
   else useseQSLDiv.style.display = "none";
 
   if (window.opener.g_callsignLookups.oqrsUseEnable == true)
-    usesOQRSDiv.style.display = "block";
+  { usesOQRSDiv.style.display = "block"; }
   else usesOQRSDiv.style.display = "none";
 
   if (g_rosterSettings.columns.Spot == true)
-    onlySpotDiv.style.display = "block";
+  { onlySpotDiv.style.display = "block"; }
   else onlySpotDiv.style.display = "none";
 
   if (callMode == "all") allOnlyNewDiv.style.display = "block";
   else allOnlyNewDiv.style.display = "none";
 
   var now = timeNowSec();
-  for (callHash in callRoster) {
+  for (var callHash in callRoster)
+  {
     var call = callRoster[callHash].DEcall;
 
     callRoster[callHash].tx = true;
@@ -449,7 +499,8 @@ function viewRoster() {
     if (
       now - callRoster[callHash].callObj.age >
       window.opener.g_mapSettings.rosterTime
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       callRoster[callHash].alerted = false;
       callRoster[callHash].callObj.qrz = false;
@@ -459,11 +510,13 @@ function viewRoster() {
     if (
       window.opener.g_instances[callRoster[callHash].callObj.instance]
         .crEnable == false
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
-    if (call in g_blockedCalls) {
+    if (call in g_blockedCalls)
+    {
       callRoster[callHash].tx = false;
       continue;
     }
@@ -473,96 +526,121 @@ function viewRoster() {
         " from " +
         window.opener.g_dxccToAltName[callRoster[callHash].callObj.dxcc] in
         g_blockedCQ
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
-    if (callRoster[callHash].callObj.dxcc in g_blockedDxcc) {
+    if (callRoster[callHash].callObj.dxcc in g_blockedDxcc)
+    {
       callRoster[callHash].tx = false;
       continue;
     }
     if (
       g_rosterSettings.cqOnly == true &&
       callRoster[callHash].callObj.CQ == false
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
     if (
       g_rosterSettings.useRegex &&
       g_rosterSettings.callsignRegex.length > 0
-    ) {
-      try {
-        if (!call.match(g_rosterSettings.callsignRegex)) {
+    )
+    {
+      try
+      {
+        if (!call.match(g_rosterSettings.callsignRegex))
+        {
           callRoster[callHash].tx = false;
           continue;
         }
-      } catch (e) {}
+      }
+      catch (e) {}
     }
     if (
       g_rosterSettings.requireGrid == true &&
       callRoster[callHash].callObj.grid.length != 4
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
     if (
       g_rosterSettings.wantMinDB == true &&
       callRoster[callHash].message.SR < g_rosterSettings.minDb
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
     if (
       g_rosterSettings.wantMaxDT == true &&
       Math.abs(callRoster[callHash].message.DT) > g_rosterSettings.maxDT
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
     if (
       g_rosterSettings.wantMinFreq == true &&
       callRoster[callHash].message.DF < g_rosterSettings.minFreq
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
     if (
       g_rosterSettings.wantMaxFreq == true &&
       callRoster[callHash].message.DF > g_rosterSettings.maxFreq
-    ) {
+    )
+    {
       callRoster[callHash].tx = false;
       continue;
     }
 
-    if (g_rosterSettings.noMsg == true) {
-      try {
+    if (g_rosterSettings.noMsg == true)
+    {
+      try
+      {
         if (
           callRoster[callHash].callObj.msg.match(g_rosterSettings.noMsgValue)
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
-      } catch (e) {}
+      }
+      catch (e) {}
     }
-    if (g_rosterSettings.onlyMsg == true) {
-      try {
+    if (g_rosterSettings.onlyMsg == true)
+    {
+      try
+      {
         if (
           !callRoster[callHash].callObj.msg.match(g_rosterSettings.onlyMsgValue)
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
-      } catch (e) {}
+      }
+      catch (e) {}
     }
 
-    if (callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC) {
-      if (g_rosterSettings.noMyDxcc == true) {
+    if (callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC)
+    {
+      if (g_rosterSettings.noMyDxcc == true)
+      {
         callRoster[callHash].tx = false;
         continue;
       }
-    } else {
-      if (g_rosterSettings.onlyMyDxcc == true) {
+    }
+    else
+    {
+      if (g_rosterSettings.onlyMyDxcc == true)
+      {
         callRoster[callHash].tx = false;
         continue;
       }
@@ -571,14 +649,18 @@ function viewRoster() {
     if (
       window.opener.g_callsignLookups.lotwUseEnable == true &&
       g_rosterSettings.usesLoTW == true
-    ) {
-      if (!(call in window.opener.g_lotwCallsigns)) {
+    )
+    {
+      if (!(call in window.opener.g_lotwCallsigns))
+      {
         callRoster[callHash].tx = false;
         continue;
       }
-      if (g_rosterSettings.maxLoTW < 27) {
+      if (g_rosterSettings.maxLoTW < 27)
+      {
         var months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
-        if (months > g_rosterSettings.maxLoTW) {
+        if (months > g_rosterSettings.maxLoTW)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -588,8 +670,10 @@ function viewRoster() {
     if (
       window.opener.g_callsignLookups.eqslUseEnable == true &&
       g_rosterSettings.useseQSL == true
-    ) {
-      if (!(call in window.opener.g_eqslCallsigns)) {
+    )
+    {
+      if (!(call in window.opener.g_eqslCallsigns))
+      {
         callRoster[callHash].tx = false;
         continue;
       }
@@ -598,63 +682,73 @@ function viewRoster() {
     if (
       window.opener.g_callsignLookups.oqrsUseEnable == true &&
       g_rosterSettings.usesOQRS == true
-    ) {
-      if (!(call in window.opener.g_oqrsCallsigns)) {
+    )
+    {
+      if (!(call in window.opener.g_oqrsCallsigns))
+      {
         callRoster[callHash].tx = false;
         continue;
       }
     }
 
-    if (callMode != "all") {
+    if (callMode != "all")
+    {
       if (
         callRoster[callHash].DXcall == "CQ DX" &&
         callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC
-      ) {
+      )
+      {
         callRoster[callHash].tx = false;
         continue;
       }
 
+      var hash =
+        call +
+        hashMaker(
+          callRoster[callHash].callObj.band,
+          callRoster[callHash].callObj.mode
+        );
+      if (callMode == "worked" && hash in g_worked.call)
       {
-        var hash =
-          call +
-          hashMaker(
-            callRoster[callHash].callObj.band,
-            callRoster[callHash].callObj.mode
-          );
-        if (callMode == "worked" && hash in g_worked.call) {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-        if (callMode == "confirmed" && hash in g_confirmed.call) {
-          callRoster[callHash].tx = false;
-          continue;
-        }
+        callRoster[callHash].tx = false;
+        continue;
       }
-      if (g_rosterSettings.hunting == "grid") {
+      if (callMode == "confirmed" && hash in g_confirmed.call)
+      {
+        callRoster[callHash].tx = false;
+        continue;
+      }
+
+      if (g_rosterSettings.hunting == "grid")
+      {
         var hash =
           callRoster[callHash].callObj.grid.substr(0, 4) +
           hashMaker(
             callRoster[callHash].callObj.band,
             callRoster[callHash].callObj.mode
           );
-        if (g_rosterSettings.huntNeed == "worked" && hash in g_worked.grid) {
+        if (g_rosterSettings.huntNeed == "worked" && hash in g_worked.grid)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
         if (
           g_rosterSettings.huntNeed == "confirmed" &&
           hash in g_confirmed.grid
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
-        if (callRoster[callHash].callObj.grid.length == 0) {
+        if (callRoster[callHash].callObj.grid.length == 0)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
         continue;
       }
-      if (g_rosterSettings.hunting == "dxcc") {
+      if (g_rosterSettings.hunting == "dxcc")
+      {
         var hash =
           String(callRoster[callHash].callObj.dxcc) +
           hashMaker(
@@ -662,7 +756,8 @@ function viewRoster() {
             callRoster[callHash].callObj.mode
           );
 
-        if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.dxcc)) {
+        if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.dxcc))
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -670,7 +765,8 @@ function viewRoster() {
         if (
           g_rosterSettings.huntNeed == "confirmed" &&
           hash in g_confirmed.dxcc
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -678,15 +774,19 @@ function viewRoster() {
         continue;
       }
 
-      if (g_rosterSettings.hunting == "dxccs" && r_currentDXCCs != -1) {
-        if (callRoster[callHash].callObj.dxcc != r_currentDXCCs) {
+      if (g_rosterSettings.hunting == "dxccs" && r_currentDXCCs != -1)
+      {
+        if (callRoster[callHash].callObj.dxcc != r_currentDXCCs)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
       }
 
-      if (g_rosterSettings.hunting == "wpx") {
-        if (String(callRoster[callHash].callObj.px) == null) {
+      if (g_rosterSettings.hunting == "wpx")
+      {
+        if (String(callRoster[callHash].callObj.px) == null)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -697,7 +797,8 @@ function viewRoster() {
             callRoster[callHash].callObj.mode
           );
 
-        if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.px)) {
+        if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.px))
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -705,7 +806,8 @@ function viewRoster() {
         if (
           g_rosterSettings.huntNeed == "confirmed" &&
           hash in g_confirmed.px
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -713,15 +815,18 @@ function viewRoster() {
         continue;
       }
 
-      if (g_rosterSettings.hunting == "cq") {
+      if (g_rosterSettings.hunting == "cq")
+      {
         var workedTotal = (confirmedTotal =
           callRoster[callHash].callObj.cqza.length);
-        if (workedTotal == 0) {
+        if (workedTotal == 0)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
         var workedFound = (confirmedFound = 0);
-        for (index in callRoster[callHash].callObj.cqza) {
+        for (index in callRoster[callHash].callObj.cqza)
+        {
           var hash =
             callRoster[callHash].callObj.cqza[index] +
             hashMaker(
@@ -735,14 +840,16 @@ function viewRoster() {
         if (
           g_rosterSettings.huntNeed == "worked" &&
           workedFound == workedTotal
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
         if (
           g_rosterSettings.huntNeed == "confirmed" &&
           confirmedFound == confirmedTotal
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -750,15 +857,18 @@ function viewRoster() {
         continue;
       }
 
-      if (g_rosterSettings.hunting == "itu") {
+      if (g_rosterSettings.hunting == "itu")
+      {
         var workedTotal = (confirmedTotal =
           callRoster[callHash].callObj.ituza.length);
-        if (workedTotal == 0) {
+        if (workedTotal == 0)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
         var workedFound = (confirmedFound = 0);
-        for (index in callRoster[callHash].callObj.ituza) {
+        for (index in callRoster[callHash].callObj.ituza)
+        {
           var hash =
             callRoster[callHash].callObj.ituza[index] +
             hashMaker(
@@ -772,18 +882,21 @@ function viewRoster() {
         if (
           g_rosterSettings.huntNeed == "worked" &&
           workedFound == workedTotal
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
         if (
           g_rosterSettings.huntNeed == "confirmed" &&
           confirmedFound == confirmedTotal
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
-        if (callRoster[callHash].callObj.grid.length == 0) {
+        if (callRoster[callHash].callObj.grid.length == 0)
+        {
           callRoster[callHash].tx = false;
           continue;
         }
@@ -793,11 +906,14 @@ function viewRoster() {
       if (
         g_rosterSettings.hunting == "usstates" &&
         window.opener.g_callsignLookups.ulsUseEnable == true
-      ) {
+      )
+      {
         var state = callRoster[callHash].callObj.state;
         var finalDxcc = callRoster[callHash].callObj.dxcc;
-        if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6) {
-          if (state in window.opener.g_StateData) {
+        if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
+        {
+          if (state in window.opener.g_StateData)
+          {
             var hash =
               state +
               hashMaker(
@@ -808,7 +924,8 @@ function viewRoster() {
             if (
               g_rosterSettings.huntNeed == "worked" &&
               hash in g_worked.state
-            ) {
+            )
+            {
               callRoster[callHash].tx = false;
               continue;
             }
@@ -816,35 +933,47 @@ function viewRoster() {
             if (
               g_rosterSettings.huntNeed == "confirmed" &&
               hash in g_confirmed.state
-            ) {
+            )
+            {
               callRoster[callHash].tx = false;
               continue;
             }
-          } else callRoster[callHash].tx = false;
-        } else callRoster[callHash].tx = false;
+          }
+          else callRoster[callHash].tx = false;
+        }
+        else callRoster[callHash].tx = false;
 
         continue;
       }
 
-      if (g_rosterSettings.hunting == "usstate" && g_currentUSCallsigns) {
-        if (call in g_currentUSCallsigns) {
-        } else {
+      if (g_rosterSettings.hunting == "usstate" && g_currentUSCallsigns)
+      {
+        if (call in g_currentUSCallsigns)
+        {
+          // Do Nothing
+        }
+        else
+        {
           callRoster[callHash].tx = false;
           continue;
         }
         continue;
       }
     }
-    if (isAwardTracker) {
+    if (isAwardTracker)
+    {
       var tx = false;
       var baseHash = hashMaker(
         callRoster[callHash].callObj.band,
         callRoster[callHash].callObj.mode
       );
-      for (var award in g_awardTracker) {
-        if (g_awardTracker[award].enable) {
+      for (var award in g_awardTracker)
+      {
+        if (g_awardTracker[award].enable)
+        {
           tx = testAward(award, callRoster[callHash].callObj, baseHash);
-          if (tx) {
+          if (tx)
+          {
             var x = g_awardTracker[award];
             callRoster[callHash].callObj.awardReason =
               g_awards[x.sponsor].awards[x.name].tooltip +
@@ -867,17 +996,20 @@ function viewRoster() {
   var row = "#000000";
   var bold = "#000000;text-shadow: 0px 0px 1px black;";
   var unconf = "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
-  for (var callHash in callRoster) {
+  for (var callHash in callRoster)
+  {
     // Special case check for called station
     if (
       callRoster[callHash].callObj.qrz == true &&
       callRoster[callHash].tx == false
-    ) {
+    )
+    {
       // The instance has to be enabled
       if (
         window.opener.g_instances[callRoster[callHash].callObj.instance]
           .crEnable == true
-      ) {
+      )
+      {
         // Calling us, but we wouldn't normally display
         // If they are not ignored or we're in a QSO with them, var it through
 
@@ -886,7 +1018,8 @@ function viewRoster() {
             !(callRoster[callHash].callObj.dxcc in g_blockedDxcc)) ||
           window.opener.g_instances[callRoster[callHash].callObj.instance]
             .status.DXcall == callRoster[callHash].DEcall
-        ) {
+        )
+        {
           callRoster[callHash].tx = true;
         }
       }
@@ -895,7 +1028,8 @@ function viewRoster() {
     if (
       callRoster[callHash].callObj.dxcc != -1 &&
       callRoster[callHash].tx == true
-    ) {
+    )
+    {
       var workHash = hashMaker(
         callRoster[callHash].callObj.band,
         callRoster[callHash].callObj.mode
@@ -921,7 +1055,7 @@ function viewRoster() {
       var wpx = "#FFFF00";
 
       hasGtPin = false;
-      shouldAlert = false;
+      var shouldAlert = false;
       var callsignBg,
         gridBg,
         callingBg,
@@ -949,11 +1083,13 @@ function viewRoster() {
       callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = cqzConf = ituzConf = wpxConf =
         "";
 
-      if (testHash in g_worked.call) {
+      if (testHash in g_worked.call)
+      {
         didWork = true;
 
         callConf = unconf + callsign + inversionAlpha + ";";
-        if (testHash in g_confirmed.call) {
+        if (testHash in g_confirmed.call)
+        {
           callPointer = "text-decoration: line-through; ";
           callConf = "";
         }
@@ -964,24 +1100,30 @@ function viewRoster() {
         window.opener.g_gtCallsigns[call] in window.opener.g_gtFlagPins &&
         window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[call]].canmsg ==
           true
-      ) {
+      )
+      {
         // grab the CID
         colorObject.gt = window.opener.g_gtCallsigns[call];
         hasGtPin = true;
-      } else colorObject.gt = 0;
+      }
+      else colorObject.gt = 0;
 
-      if (callMode == "all") {
+      if (callMode == "all")
+      {
         if (
           allOnlyNew.checked == true &&
           didWork &&
           callRoster[callHash].callObj.qrz == false
-        ) {
+        )
+        {
           callRoster[callHash].tx = false;
           continue;
         }
 
-        if (huntCallsign.checked == true) {
-          if (g_rosterSettings.huntNeed == "worked" && didWork) {
+        if (huntCallsign.checked == true)
+        {
+          if (g_rosterSettings.huntNeed == "worked" && didWork)
+          {
             callRoster[callHash].callObj.reason.push("call");
             callConf = unconf + callsign + inversionAlpha + ";";
           }
@@ -989,17 +1131,22 @@ function viewRoster() {
             didWork &&
             g_rosterSettings.huntNeed == "confirmed" &&
             !(testHash in g_confirmed.call)
-          ) {
+          )
+          {
             shouldAlert = true;
             callRoster[callHash].callObj.reason.push("call");
             callConf = unconf + callsign + inversionAlpha + ";";
-          } else if (
+          }
+          else if (
             didWork &&
             g_rosterSettings.huntNeed == "confirmed" &&
             testHash in g_confirmed.call
-          ) {
+          )
+          {
             callConf = "";
-          } else if (!didWork) {
+          }
+          else if (!didWork)
+          {
             shouldAlert = true;
             callConf = "";
             callsignBg = callsign + inversionAlpha;
@@ -1010,12 +1157,14 @@ function viewRoster() {
         if (
           huntQRZ.checked == true &&
           callRoster[callHash].callObj.qrz == true
-        ) {
+        )
+        {
           shouldAlert = true;
           callRoster[callHash].callObj.reason.push("qrz");
         }
 
-        if (huntOAMS.checked == true && hasGtPin == true) {
+        if (huntOAMS.checked == true && hasGtPin == true)
+        {
           shouldAlert = true;
           callRoster[callHash].callObj.reason.push("oams");
         }
@@ -1023,45 +1172,55 @@ function viewRoster() {
         if (
           huntGrid.checked == true &&
           callRoster[callHash].callObj.grid.length > 1
-        ) {
+        )
+        {
           var hash = callRoster[callHash].callObj.grid.substr(0, 4) + workHash;
           if (
             (g_rosterSettings.huntNeed == "worked" &&
               !(hash in g_worked.grid)) ||
             (g_rosterSettings.huntNeed == "confirmed" &&
               !(hash in g_confirmed.grid))
-          ) {
+          )
+          {
             shouldAlert = true;
             callRoster[callHash].callObj.reason.push("grid");
 
             if (
               g_rosterSettings.huntNeed == "confirmed" &&
               hash in g_worked.grid
-            ) {
+            )
+            {
               gridConf = unconf + grid + inversionAlpha + ";";
-            } else {
+            }
+            else
+            {
               gridBg = grid + inversionAlpha;
               grid = bold;
             }
           }
         }
-        if (huntDXCC.checked == true) {
+        if (huntDXCC.checked == true)
+        {
           var hash = String(callRoster[callHash].callObj.dxcc) + workHash;
           if (
             (g_rosterSettings.huntNeed == "worked" &&
               !(hash in g_worked.dxcc)) ||
             (g_rosterSettings.huntNeed == "confirmed" &&
               !(hash in g_confirmed.dxcc))
-          ) {
+          )
+          {
             shouldAlert = true;
             callRoster[callHash].callObj.reason.push("dxcc");
 
             if (
               g_rosterSettings.huntNeed == "confirmed" &&
               hash in g_worked.dxcc
-            ) {
+            )
+            {
               dxccConf = unconf + dxcc + inversionAlpha + ";";
-            } else {
+            }
+            else
+            {
               dxccBg = dxcc + inversionAlpha;
               dxcc = bold;
             }
@@ -1070,27 +1229,34 @@ function viewRoster() {
         if (
           huntState.checked == true &&
           window.opener.g_callsignLookups.ulsUseEnable == true
-        ) {
+        )
+        {
           var stateSearch = callRoster[callHash].callObj.state;
           var finalDxcc = callRoster[callHash].callObj.dxcc;
-          if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6) {
-            if (stateSearch in window.opener.g_StateData) {
+          if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
+          {
+            if (stateSearch in window.opener.g_StateData)
+            {
               var hash = stateSearch + workHash;
               if (
                 (g_rosterSettings.huntNeed == "worked" &&
                   !(hash in g_worked.state)) ||
                 (g_rosterSettings.huntNeed == "confirmed" &&
                   !(hash in g_confirmed.state))
-              ) {
+              )
+              {
                 shouldAlert = true;
                 callRoster[callHash].callObj.reason.push("usstates");
 
                 if (
                   g_rosterSettings.huntNeed == "confirmed" &&
                   hash in g_worked.state
-                ) {
+                )
+                {
                   stateConf = unconf + state + inversionAlpha + ";";
-                } else {
+                }
+                else
+                {
                   stateBg = state + inversionAlpha;
                   state = bold;
                 }
@@ -1101,7 +1267,8 @@ function viewRoster() {
         if (
           huntCounty.checked == true &&
           window.opener.g_callsignLookups.ulsUseEnable == true
-        ) {
+        )
+        {
           var finalDxcc = callRoster[callHash].callObj.dxcc;
           if (
             callRoster[callHash].callObj.cnty &&
@@ -1110,7 +1277,8 @@ function viewRoster() {
               finalDxcc == 6 ||
               finalDxcc == 202) &&
             callRoster[callHash].callObj.cnty.length > 0
-          ) {
+          )
+          {
             var hash = callRoster[callHash].callObj.cnty + workHash;
 
             if (
@@ -1119,45 +1287,56 @@ function viewRoster() {
               (g_rosterSettings.huntNeed == "confirmed" &&
                 !(hash in g_confirmed.cnty)) ||
               callRoster[callHash].callObj.qual == false
-            ) {
-              if (callRoster[callHash].callObj.qual == false) {
+            )
+            {
+              if (callRoster[callHash].callObj.qual == false)
+              {
                 var counties =
                   window.opener.g_zipToCounty[
                     callRoster[callHash].callObj.zipcode
                   ];
                 var foundHit = false;
-                for (var cnt in counties) {
+                for (var cnt in counties)
+                {
                   var hh = counties[cnt] + workHash;
                   callRoster[callHash].callObj.cnty = counties[cnt];
                   if (
                     g_rosterSettings.huntNeed == "worked" &&
                     !(hh in g_worked.cnty)
-                  ) {
+                  )
+                  {
                     foundHit = true;
                     break;
                   }
                   if (
                     g_rosterSettings.huntNeed == "confirmed" &&
                     !(hh in g_confirmed.cnty)
-                  ) {
+                  )
+                  {
                     foundHit = true;
                     break;
                   }
                 }
                 if (foundHit) shouldAlert = true;
-              } else {
+              }
+              else
+              {
                 shouldAlert = true;
               }
 
-              if (shouldAlert) {
+              if (shouldAlert)
+              {
                 callRoster[callHash].callObj.reason.push("uscnty");
 
                 if (
                   g_rosterSettings.huntNeed == "confirmed" &&
                   hash in g_worked.cnty
-                ) {
+                )
+                {
                   cntyConf = unconf + cnty + inversionAlpha + ";";
-                } else {
+                }
+                else
+                {
                   cntyBg = cnty + inversionAlpha;
                   cnty = bold;
                 }
@@ -1165,11 +1344,13 @@ function viewRoster() {
             }
           }
         }
-        if (huntCQz.checked == true) {
+        if (huntCQz.checked == true)
+        {
           var workedTotal = (confirmedTotal =
             callRoster[callHash].callObj.cqza.length);
           var workedFound = (confirmedFound = 0);
-          for (index in callRoster[callHash].callObj.cqza) {
+          for (index in callRoster[callHash].callObj.cqza)
+          {
             var hash = callRoster[callHash].callObj.cqza[index] + workHash;
             if (hash in g_worked.cqz) workedFound++;
 
@@ -1180,26 +1361,32 @@ function viewRoster() {
               workedFound != workedTotal) ||
             (g_rosterSettings.huntNeed == "confirmed" &&
               confirmedFound != confirmedTotal)
-          ) {
+          )
+          {
             shouldAlert = true;
             callRoster[callHash].callObj.reason.push("cq");
 
             if (
               g_rosterSettings.huntNeed == "confirmed" &&
               workedFound == workedTotal
-            ) {
+            )
+            {
               cqzConf = unconf + cqz + inversionAlpha + ";";
-            } else {
+            }
+            else
+            {
               cqzBg = cqz + inversionAlpha;
               cqz = bold;
             }
           }
         }
-        if (huntITUz.checked == true) {
+        if (huntITUz.checked == true)
+        {
           var workedTotal = (confirmedTotal =
             callRoster[callHash].callObj.ituza.length);
           var workedFound = (confirmedFound = 0);
-          for (index in callRoster[callHash].callObj.ituza) {
+          for (index in callRoster[callHash].callObj.ituza)
+          {
             var hash = callRoster[callHash].callObj.ituza[index] + workHash;
             if (hash in g_worked.ituz) workedFound++;
 
@@ -1210,56 +1397,70 @@ function viewRoster() {
               workedFound != workedTotal) ||
             (g_rosterSettings.huntNeed == "confirmed" &&
               confirmedFound != confirmedTotal)
-          ) {
+          )
+          {
             shouldAlert = true;
             callRoster[callHash].callObj.reason.push("itu");
             if (
               g_rosterSettings.huntNeed == "confirmed" &&
               workedFound == workedTotal
-            ) {
+            )
+            {
               ituzConf = unconf + ituz + inversionAlpha + ";";
-            } else {
+            }
+            else
+            {
               ituzBg = ituz + inversionAlpha;
               ituz = bold;
             }
           }
         }
-        if (huntPX.checked == true && callRoster[callHash].callObj.px) {
+        if (huntPX.checked == true && callRoster[callHash].callObj.px)
+        {
           var hash = String(callRoster[callHash].callObj.px) + workHash;
           if (
             (g_rosterSettings.huntNeed == "worked" && !(hash in g_worked.px)) ||
             (g_rosterSettings.huntNeed == "confirmed" &&
               !(hash in g_confirmed.px))
-          ) {
+          )
+          {
             shouldAlert = true;
             callRoster[callHash].callObj.reason.push("wpx");
             if (
               g_rosterSettings.huntNeed == "confirmed" &&
               hash in g_worked.px
-            ) {
+            )
+            {
               wpxConf = unconf + wpx + inversionAlpha + ";";
-            } else {
+            }
+            else
+            {
               wpxBg = wpx + inversionAlpha;
               wpx = bold;
             }
           }
         }
-        if (huntCont.checked == true && callRoster[callHash].callObj.cont) {
+        if (huntCont.checked == true && callRoster[callHash].callObj.cont)
+        {
           var hash = String(callRoster[callHash].callObj.cont) + workHash;
           if (
             (g_rosterSettings.huntNeed == "worked" &&
               !(hash in g_worked.cont)) ||
             (g_rosterSettings.huntNeed == "confirmed" &&
               !(hash in g_confirmed.cont))
-          ) {
+          )
+          {
             shouldAlert = true;
             callRoster[callHash].callObj.reason.push("cont");
             if (
               g_rosterSettings.huntNeed == "confirmed" &&
               hash in g_worked.cont
-            ) {
+            )
+            {
               contConf = unconf + cont + inversionAlpha + ";";
-            } else {
+            }
+            else
+            {
               contBg = cont + inversionAlpha;
               cont = bold;
             }
@@ -1267,13 +1468,16 @@ function viewRoster() {
         }
       }
 
-      if (callRoster[callHash].callObj.DXcall == window.opener.myDEcall) {
+      if (callRoster[callHash].callObj.DXcall == window.opener.myDEcall)
+      {
         callingBg = "#0000FF" + inversionAlpha;
         calling = "#FFFF00;text-shadow: 0px 0px 2px #FFFF00";
-      } else if (
+      }
+      else if (
         callRoster[callHash].callObj.CQ == true &&
         g_rosterSettings.cqOnly == false
-      ) {
+      )
+      {
         callingBg = calling + inversionAlpha;
         calling = bold;
       }
@@ -1366,17 +1570,20 @@ function viewRoster() {
 
       callRoster[callHash].callObj.style = colorObject;
 
-      if (g_rosterSettings.columns.Spot) {
+      if (g_rosterSettings.columns.Spot)
+      {
         callRoster[callHash].callObj.spot = window.opener.getSpotTime(
           callRoster[callHash].callObj.DEcall +
             callRoster[callHash].callObj.mode +
             callRoster[callHash].callObj.band +
             callRoster[callHash].callObj.grid
         );
-        if (callRoster[callHash].callObj.spot == null) {
+        if (callRoster[callHash].callObj.spot == null)
+        {
           callRoster[callHash].callObj.spot = { when: 0, snr: 0 };
         }
-      } else callRoster[callHash].callObj.spot = { when: 0, snr: 0 };
+      }
+      else callRoster[callHash].callObj.spot = { when: 0, snr: 0 };
 
       modes[callRoster[callHash].callObj.mode] = true;
       bands[callRoster[callHash].callObj.band] = true;
@@ -1385,130 +1592,173 @@ function viewRoster() {
     }
   }
 
-  if (g_rosterSettings.compact == false) {
+  if (g_rosterSettings.compact == false)
+  {
     newCallList.sort(r_sortFunction[g_rosterSettings.lastSortIndex]);
-    if (g_rosterSettings.lastSortReverse == 1) {
+    if (g_rosterSettings.lastSortReverse == 1)
+    {
       newCallList.reverse();
     }
-  } else {
+  }
+  else
+  {
     // Age sort for now... make this happen Tag
     newCallList.sort(r_sortFunction[6]).reverse();
   }
 
   var showBands =
-    (Object.keys(bands).length > 1 ? true : false) ||
+    (Object.keys(bands).length > 1) ||
     g_rosterSettings.columns.Band;
   var showModes =
-    (Object.keys(modes).length > 1 ? true : false) ||
+    (Object.keys(modes).length > 1) ||
     g_rosterSettings.columns.Mode;
 
   var worker = "";
 
-  if (g_rosterSettings.compact == false) {
+  if (g_rosterSettings.compact == false)
+  {
     worker = "<table id='callTable' class='rosterTable' align=left>";
 
     worker +=
       "<thead><th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
 
-    if (showBands) {
+    if (showBands)
+    {
       worker += "<th onclick='' >Band</th>";
     }
-    if (showModes) {
+    if (showModes)
+    {
       worker += "<th onclick='' >Mode</th>";
     }
 
     worker +=
       "<th style='cursor:pointer;' onclick='showRosterBox(1);'  >Grid</th>";
     if (g_rosterSettings.columns.Calling)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(10);' >Calling</th>";
+    }
     if (g_rosterSettings.columns.Msg) worker += "<th >Msg</th>";
     if (g_rosterSettings.columns.DXCC)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(5);' >DXCC</th>";
+    }
     if (g_rosterSettings.columns.Flag)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(5);' >Flag</th>";
+    }
     if (g_rosterSettings.columns.State)
+    {
       worker +=
         "<th  style='cursor:pointer;' onclick='showRosterBox(9);'  >State</th>";
+    }
     if (g_rosterSettings.columns.County)
+    {
       worker +=
         "<th  style='cursor:pointer;' onclick='showRosterBox(15);' >County</th>";
+    }
     if (g_rosterSettings.columns.Cont)
+    {
       worker +=
         "<th  style='cursor:pointer;' onclick='showRosterBox(16);' >Cont</th>";
+    }
     if (g_rosterSettings.columns.dB)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(2);' >dB</th>";
+    }
     if (g_rosterSettings.columns.Freq)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(4);' >Freq</th>";
+    }
     if (g_rosterSettings.columns.DT)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(3);' >DT</th>";
+    }
     if (g_rosterSettings.columns.Dist)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(7);' >Dist(" +
         window.opener.distanceUnit.value.toLowerCase() +
         ")</th>";
+    }
     if (g_rosterSettings.columns.Azim)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(8);' >Azim</th>";
+    }
     if (g_rosterSettings.columns.CQz) worker += "<th>CQz</th>";
     if (g_rosterSettings.columns.ITUz) worker += "<th>ITUz</th>";
     if (g_rosterSettings.columns.PX)
+    {
       worker +=
         "<th  style='cursor:pointer;' onclick='showRosterBox(11);'>PX</th>";
+    }
 
     if (
       window.opener.g_callsignLookups.lotwUseEnable == true &&
       g_rosterSettings.columns.LoTW
     )
-      worker += "<th  >LoTW</th>";
+    { worker += "<th  >LoTW</th>"; }
     if (
       window.opener.g_callsignLookups.eqslUseEnable == true &&
       g_rosterSettings.columns.eQSL
     )
-      worker += "<th >eQSL</th>";
+    { worker += "<th >eQSL</th>"; }
     if (
       window.opener.g_callsignLookups.oqrsUseEnable == true &&
       g_rosterSettings.columns.OQRS
     )
-      worker += "<th >OQRS</th>";
+    { worker += "<th >OQRS</th>"; }
 
     if (g_rosterSettings.columns.Spot)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(13);' >Spot</th>";
+    }
 
     if (g_rosterSettings.columns.Life)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(12);' >Life</th>";
+    }
 
     if (g_rosterSettings.columns.OAMS)
+    {
       worker +=
         "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAM</th>";
+    }
 
     if (g_rosterSettings.columns.Age)
+    {
       worker +=
         "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th></thead>";
-  } else {
+    }
+  }
+  else
+  {
     worker =
-      '<div id="buttonsDiv" style="margin-left:0px;white-space:normal;">';
+      "<div id=\"buttonsDiv\" style=\"margin-left:0px;white-space:normal;\">";
   }
 
   var shouldAlert = 0;
 
-  for (var x in newCallList) {
+  for (var x in newCallList)
+  {
     if (
       newCallList[x].shouldAlert == false &&
       onlyHits == true &&
       newCallList[x].qrz == false
     )
-      continue;
+    { continue; }
 
     var spotString = "";
-    if (g_rosterSettings.columns.Spot && newCallList[x].qrz == false) {
+    if (g_rosterSettings.columns.Spot && newCallList[x].qrz == false)
+    {
       spotString = getSpotString(newCallList[x]);
       if (g_rosterSettings.onlySpot && spotString == "") continue;
     }
@@ -1530,21 +1780,26 @@ function viewRoster() {
     var thisCall = newCallList[x].DEcall;
 
     if (thisCall.match("^[A-Z][0-9][A-Z](/w+)?$"))
-      newCallList[x].style.callsign = "class='oneByOne'";
+    { newCallList[x].style.callsign = "class='oneByOne'"; }
     if (
       thisCall ==
       window.opener.g_instances[newCallList[x].instance].status.DXcall
-    ) {
+    )
+    {
       if (
         window.opener.g_instances[newCallList[x].instance].status.TxEnabled == 1
-      ) {
+      )
+      {
         newCallList[x].style.callsign = "class='dxCalling'";
-      } else {
+      }
+      else
+      {
         newCallList[x].style.callsign = "class='dxCaller'";
       }
     }
 
-    if (g_rosterSettings.compact == false) {
+    if (g_rosterSettings.compact == false)
+    {
       var thisHash = thisCall + newCallList[x].band + newCallList[x].mode;
 
       worker += "<tbody><tr id='" + thisHash + "'>";
@@ -1561,7 +1816,8 @@ function viewRoster() {
         thisCall.formatCallsign() +
         "</td>";
 
-      if (showBands) {
+      if (showBands)
+      {
         worker +=
           "<td style='color:#" +
           window.opener.g_pskColors[newCallList[x].band] +
@@ -1569,10 +1825,11 @@ function viewRoster() {
           newCallList[x].band +
           "</td>";
       }
-      if (showModes) {
+      if (showModes)
+      {
         var color = "888888";
         if (newCallList[x].mode in g_modeColors)
-          color = g_modeColors[newCallList[x].mode];
+        { color = g_modeColors[newCallList[x].mode]; }
         worker +=
           "<td  style='color:#" + color + "' >" + newCallList[x].mode + "</td>";
       }
@@ -1585,7 +1842,8 @@ function viewRoster() {
         "\")' >" +
         grid +
         "</td>";
-      if (g_rosterSettings.columns.Calling) {
+      if (g_rosterSettings.columns.Calling)
+      {
         var lookString = newCallList[x].CQ ? "name='CQ'" : "name='Calling'";
         worker +=
           "<td " +
@@ -1597,9 +1855,10 @@ function viewRoster() {
           "</td>";
       }
       if (g_rosterSettings.columns.Msg)
-        worker += "<td>" + newCallList[x].msg + "</td>";
+      { worker += "<td>" + newCallList[x].msg + "</td>"; }
 
       if (g_rosterSettings.columns.DXCC)
+      {
         worker +=
           "<td name='DXCC (" +
           newCallList[x].dxcc +
@@ -1612,29 +1871,35 @@ function viewRoster() {
             window.opener.g_dxccToGeoData[newCallList[x].dxcc]
           ].pp +
           ")</td>";
+      }
       if (g_rosterSettings.columns.Flag)
+      {
         worker +=
           "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
           geo.flag +
           "'></td>";
+      }
       if (g_rosterSettings.columns.State)
+      {
         worker +=
           "<td align='center' " +
           newCallList[x].style.state +
           " >" +
           (newCallList[x].state ? newCallList[x].state.substr(3) : "") +
           "</td>";
+      }
       if (g_rosterSettings.columns.County)
+      {
         worker +=
           "<td align='center' " +
           newCallList[x].style.cnty +
           " " +
           (newCallList[x].cnty
             ? newCallList[x].qual
-              ? ""
-              : "onClick='window.opener.lookupCallsign(\"" +
+                ? ""
+                : "onClick='window.opener.lookupCallsign(\"" +
                 thisCall +
-                '","' +
+                "\",\"" +
                 grid +
                 "\")'"
             : "") +
@@ -1645,24 +1910,30 @@ function viewRoster() {
               (newCallList[x].qual ? "" : " ~")
             : "") +
           "</td>";
+      }
       if (g_rosterSettings.columns.Cont)
+      {
         worker +=
           "<td align='center' " +
           newCallList[x].style.cont +
           " >" +
           (newCallList[x].cont ? newCallList[x].cont : "") +
           "</td>";
+      }
 
       if (g_rosterSettings.columns.dB)
+      {
         worker +=
           "<td style='color:#DD44DD'><b>" +
           newCallList[x].RSTsent +
           "</b></td>";
+      }
       if (g_rosterSettings.columns.Freq)
-        worker += "<td style='color:#00FF00'>" + newCallList[x].delta + "</td>";
+      { worker += "<td style='color:#00FF00'>" + newCallList[x].delta + "</td>"; }
       if (g_rosterSettings.columns.DT)
-        worker += "<td style='color:#1E90FF'>" + newCallList[x].dt + "</td>";
+      { worker += "<td style='color:#1E90FF'>" + newCallList[x].dt + "</td>"; }
       if (g_rosterSettings.columns.Dist)
+      {
         worker +=
           "<td style='color:cyan'>" +
           parseInt(
@@ -1670,81 +1941,106 @@ function viewRoster() {
               MyCircle.validateRadius(window.opener.distanceUnit.value)
           ) +
           "</td>";
+      }
       if (g_rosterSettings.columns.Azim)
+      {
         worker +=
           "<td style='color:yellow'>" +
           parseInt(newCallList[x].heading) +
           "</td>";
+      }
 
       if (g_rosterSettings.columns.CQz)
+      {
         worker +=
           "<td " +
           newCallList[x].style.cqz +
           ">" +
           newCallList[x].cqza.join(",") +
           "</td>";
+      }
       if (g_rosterSettings.columns.ITUz)
+      {
         worker +=
           "<td " +
           newCallList[x].style.ituz +
           ">" +
           newCallList[x].ituza.join(",") +
           "</td>";
+      }
 
       if (g_rosterSettings.columns.PX)
+      {
         worker +=
           "<td " +
           newCallList[x].style.px +
           ">" +
           (newCallList[x].px ? newCallList[x].px : "") +
           "</td>";
+      }
 
       if (
         window.opener.g_callsignLookups.lotwUseEnable == true &&
         g_rosterSettings.columns.LoTW
-      ) {
-        if (thisCall in window.opener.g_lotwCallsigns) {
-          if (g_rosterSettings.maxLoTW < 27) {
+      )
+      {
+        if (thisCall in window.opener.g_lotwCallsigns)
+        {
+          if (g_rosterSettings.maxLoTW < 27)
+          {
             var months = (g_day - window.opener.g_lotwCallsigns[thisCall]) / 30;
             if (months > g_rosterSettings.maxLoTW)
+            {
               worker +=
                 "<td  style='color:yellow' align='center' title='Has not uploaded a QSO in " +
                 Number(months).toYM() +
                 "'>?</td>";
+            }
             else
+            {
               worker +=
                 "<td  style='color:#0F0' align='center' title='  Last Upload&#10;" +
                 window.opener.userDayString(
                   window.opener.g_lotwCallsigns[thisCall] * 86400000
                 ) +
                 "'>&#10004;</td>";
-          } else
+            }
+          }
+          else
+          {
             worker +=
               "<td  style='color:#0F0' align='center' title='  Last Upload&#10;" +
               window.opener.userDayString(
                 window.opener.g_lotwCallsigns[thisCall] * 86400000
               ) +
               "'>&#10004;</td>";
-        } else worker += "<td></td>";
+          }
+        }
+        else worker += "<td></td>";
       }
       if (
         window.opener.g_callsignLookups.eqslUseEnable == true &&
         g_rosterSettings.columns.eQSL
       )
+      {
         worker +=
           "<td  style='color:#0F0;' align='center'>" +
           (thisCall in window.opener.g_eqslCallsigns ? "&#10004;" : "") +
           "</td>";
+      }
       if (
         window.opener.g_callsignLookups.oqrsUseEnable == true &&
         g_rosterSettings.columns.OQRS
       )
+      {
         worker +=
           "<td  style='color:#0F0;' align='center'>" +
           (thisCall in window.opener.g_oqrsCallsigns ? "&#10004;" : "") +
           "</td>";
+      }
 
       if (g_rosterSettings.columns.Spot)
+      {
         worker +=
           "<td style='color:#EEE;' class='spotCol' id='sp" +
           thisCall +
@@ -1753,7 +2049,9 @@ function viewRoster() {
           "'>" +
           spotString +
           "</td>";
+      }
       if (g_rosterSettings.columns.Life)
+      {
         worker +=
           "<td style='color:#EEE;' class='lifeCol' id='lm" +
           thisCall +
@@ -1762,24 +2060,32 @@ function viewRoster() {
           "'>" +
           (timeNowSec() - newCallList[x].life).toDHMS() +
           "</td>";
+      }
 
-      if (g_rosterSettings.columns.OAMS) {
-        if (newCallList[x].style.gt != 0) {
-          if (newCallList[x].reason.includes("oams")) {
+      if (g_rosterSettings.columns.OAMS)
+      {
+        if (newCallList[x].style.gt != 0)
+        {
+          if (newCallList[x].reason.includes("oams"))
+          {
             worker +=
               "<td align='center' style='margin:0;padding:0;cursor:pointer;background-clip:content-box;box-shadow: 0 0 4px 4px inset #2222FFFF;' onClick='openChatToCid(\"" +
               newCallList[x].style.gt +
               "\")'><img height='16px' style='' src='./img/gt_chat.png'></td>";
-          } else {
+          }
+          else
+          {
             worker +=
               "<td align='center' style='margin:0;padding:0;cursor:pointer;' onClick='openChatToCid(\"" +
               newCallList[x].style.gt +
               "\")'><img height='16px' style='' src='./img/gt_chat.png'></td>";
           }
-        } else worker += "<td></td>";
+        }
+        else worker += "<td></td>";
       }
 
       if (g_rosterSettings.columns.Age)
+      {
         worker +=
           "<td style='color:#EEE' class='timeCol' id='tm" +
           thisCall +
@@ -1788,9 +2094,12 @@ function viewRoster() {
           "'>" +
           (timeNowSec() - newCallList[x].age).toDHMS() +
           "</td>";
+      }
 
       worker += "</tr></tbody>";
-    } else {
+    }
+    else
+    {
       var tt =
         newCallList[x].RSTsent +
         "&#13256;, " +
@@ -1832,7 +2141,8 @@ function viewRoster() {
       worker += "</div>";
     }
 
-    if (g_rosterSettings.realtime == false) {
+    if (g_rosterSettings.realtime == false)
+    {
       var call = newCallList[x].DEcall;
       g_scriptReport[call] = Object.assign({}, newCallList[x]);
       g_scriptReport[call].dxccName =
@@ -1850,7 +2160,8 @@ function viewRoster() {
       delete g_scriptReport[call].qso;
       delete g_scriptReport[call].instance;
 
-      if (callMode != "all") {
+      if (callMode != "all")
+      {
         g_scriptReport[call].shouldAlert = true;
         g_scriptReport[call].reason.push(g_rosterSettings.hunting);
       }
@@ -1860,10 +2171,13 @@ function viewRoster() {
       newCallList[x].alerted == false &&
       callMode == "all" &&
       newCallList[x].shouldAlert == true
-    ) {
+    )
+    {
       newCallList[x].alerted = true;
       shouldAlert++;
-    } else if (newCallList[x].alerted == false && callMode != "all") {
+    }
+    else if (newCallList[x].alerted == false && callMode != "all")
+    {
       newCallList[x].alerted = true;
       shouldAlert++;
     }
@@ -1871,11 +2185,14 @@ function viewRoster() {
     newCallList[x].shouldAlert = false;
   }
 
-  if (g_rosterSettings.compact == false) {
+  if (g_rosterSettings.compact == false)
+  {
     worker += "</table>";
     RosterTable.innerHTML = worker;
     callTable.style.width = parseInt(window.innerWidth) - 6 + "px";
-  } else {
+  }
+  else
+  {
     RosterTable.innerHTML = worker + "</div>";
     buttonsDiv.style.width = parseInt(window.innerWidth) - 6 + "px";
   }
@@ -1884,15 +2201,19 @@ function viewRoster() {
   var scriptExists = false;
   var script = "cr-alert.sh";
 
-  try {
-    if (fs.existsSync(dirPath)) {
-      if (window.opener.g_platform == "windows") {
+  try
+  {
+    if (fs.existsSync(dirPath))
+    {
+      if (window.opener.g_platform == "windows")
+      {
         script = "cr-alert.bat";
       }
       if (
         fs.existsSync(dirPath + script) &&
         g_rosterSettings.realtime == false
-      ) {
+      )
+      {
         scriptExists = true;
         scriptIcon.innerHTML =
           "<div class='buttonScript' onclick='window.opener.toggleCRScript();'>" +
@@ -1901,19 +2222,27 @@ function viewRoster() {
             : "<font color='yellow'>Script Disabled</font>") +
           "</div>";
         scriptIcon.style.display = "block";
-      } else {
+      }
+      else
+      {
         scriptIcon.style.display = "none";
       }
     }
-  } catch (e) {}
+  }
+  catch (e) {}
 
-  if (shouldAlert > 0) {
-    if (window.opener.g_classicAlerts.huntRoster == true) {
+  if (shouldAlert > 0)
+  {
+    if (window.opener.g_classicAlerts.huntRoster == true)
+    {
       var notify = window.opener.huntRosterNotify.value;
-      if (notify == "0") {
+      if (notify == "0")
+      {
         var media = window.opener.huntRosterNotifyMedia.value;
         if (media != "none") window.opener.playAlertMediaFile(media);
-      } else if (notify == "1") {
+      }
+      else if (notify == "1")
+      {
         window.opener.speakAlertString(
           window.opener.huntRosterNotifyWord.value
         );
@@ -1924,8 +2253,10 @@ function viewRoster() {
       g_rosterSettings.realtime == false &&
       scriptExists &&
       window.opener.g_crScript == 1
-    ) {
-      try {
+    )
+    {
+      try
+      {
         fs.writeFileSync(
           dirPath + "cr-alert.json",
           JSON.stringify(g_scriptReport, null, 2)
@@ -1936,45 +2267,57 @@ function viewRoster() {
         var child = cp.spawn(thisProc, [], {
           detached: true,
           cwd: dirPath.slice(0, -1),
-          stdio: ["ignore", "ignore", "ignore"],
+          stdio: ["ignore", "ignore", "ignore"]
         });
         child.unref();
-      } catch (e) {
+      }
+      catch (e)
+      {
         conosle.log(e);
       }
       g_scriptReport = Object();
-    } else g_scriptReport = Object();
+    }
+    else g_scriptReport = Object();
   }
 }
 
-function realtimeRoster() {
+function realtimeRoster()
+{
   var now = timeNowSec();
   g_day = now / 86400;
 
   if (g_rosterSettings.realtime == false) return;
 
   var timeCols = document.getElementsByClassName("timeCol");
-  for (var x in timeCols) {
-    if (typeof timeCols[x].id != "undefined") {
+  for (var x in timeCols)
+  {
+    if (typeof timeCols[x].id != "undefined")
+    {
       var when = now - callRoster[timeCols[x].id.substr(2)].callObj.age;
       timeCols[x].innerHTML = when.toDHMS();
     }
   }
   var lifeCols = document.getElementsByClassName("lifeCol");
-  for (var x in lifeCols) {
-    if (typeof lifeCols[x].id != "undefined") {
+  for (var x in lifeCols)
+  {
+    if (typeof lifeCols[x].id != "undefined")
+    {
       var when = now - callRoster[lifeCols[x].id.substr(2)].callObj.life;
       lifeCols[x].innerHTML = when.toDHMS();
     }
   }
-  if (g_rosterSettings.columns.Spot) {
+  if (g_rosterSettings.columns.Spot)
+  {
     var spotCols = document.getElementsByClassName("spotCol");
-    for (var x in spotCols) {
-      if (typeof spotCols[x].id != "undefined") {
+    for (var x in spotCols)
+    {
+      if (typeof spotCols[x].id != "undefined")
+      {
         spotCols[x].innerHTML = getSpotString(
           callRoster[spotCols[x].id.substr(2)].callObj
         );
-        if (g_rosterSettings.onlySpot && spotCols[x].innerHTML == "") {
+        if (g_rosterSettings.onlySpot && spotCols[x].innerHTML == "")
+        {
           viewRoster();
           return;
         }
@@ -1983,74 +2326,88 @@ function realtimeRoster() {
   }
 }
 
-function getSpotString(callObj) {
+function getSpotString(callObj)
+{
   var result = "";
-  if (callObj.spot && callObj.spot.when > 0) {
+  if (callObj.spot && callObj.spot.when > 0)
+  {
     when = timeNowSec() - callObj.spot.when;
     if (when <= window.opener.g_receptionSettings.viewHistoryTimeSec)
-      result = parseInt(when).toDHMS();
+    { result = parseInt(when).toDHMS(); }
   }
   if (result) result += " / " + callObj.spot.snr;
   return result;
 }
 
-function openChatToCid(cid) {
+function openChatToCid(cid)
+{
   window.opener.showMessaging(true, cid);
 }
 
-function initiateQso(thisHash) {
+function initiateQso(thisHash)
+{
   window.opener.initiateQso(thisHash);
 }
 
-function callLookup(thisHash, grid) {
+function callLookup(thisHash, grid)
+{
   window.opener.startLookup(
     callRoster[thisHash].DEcall,
     callRoster[thisHash].grid
   );
 }
 
-function callingLookup(thisHash, grid) {
+function callingLookup(thisHash, grid)
+{
   var thisCall = callRoster[thisHash].DXcall;
   window.opener.startLookup(thisCall, grid);
 }
 
-function callGenMessage(thisHash, grid) {
+function callGenMessage(thisHash, grid)
+{
   var thisCall = callRoster[thisHash].DEcall;
   var instance = callRoster[thisHash].callObj.instance;
 
   window.opener.startGenMessages(thisCall, grid, instance);
 }
 
-function callingGenMessage(thisHash, grid) {
+function callingGenMessage(thisHash, grid)
+{
   var thisCall = callRoster[thisHash].DXcall;
   var instance = callRoster[thisHash].callObj.instance;
 
   window.opener.startGenMessages(thisCall, grid, instance);
 }
 
-function centerOn(grid) {
+function centerOn(grid)
+{
   window.opener.centerOn(grid);
 }
 
-function instanceChange(what) {
+function instanceChange(what)
+{
   window.opener.g_instances[what.id].crEnable = what.checked;
   window.opener.goProcessRoster();
 }
 
-function updateInstances() {
-  if (window.opener.g_instancesIndex.length > 1) {
+function updateInstances()
+{
+  if (window.opener.g_instancesIndex.length > 1)
+  {
     var instances = window.opener.g_instances;
 
     var worker = "";
 
     var keys = Object.keys(instances).sort();
-    for (var key in keys) {
+    for (var key in keys)
+    {
       var inst = keys[key];
       var sp = inst.split(" - ");
       var shortInst = sp[sp.length - 1].substring(0, 18);
       var color = "blue";
 
-      if (instances[inst].open == false) {
+      if (instances[inst].open == false)
+      {
         color = "purple";
       }
       worker +=
@@ -2066,36 +2423,47 @@ function updateInstances() {
     }
     instancesDiv.innerHTML = worker;
     instancesDiv.style.display = "block";
-  } else instancesDiv.style.display = "none";
+  }
+  else instancesDiv.style.display = "none";
 }
 
-function processStatus(newMessage) {
-  if (newMessage.Transmitting == 0) {
+function processStatus(newMessage)
+{
+  if (newMessage.Transmitting == 0)
+  {
     // Not Transmitting
-    if (newMessage.Decoding == 1) {
+    if (newMessage.Decoding == 1)
+    {
       // Decoding
       txrxdec.style.backgroundColor = "Blue";
       txrxdec.style.borderColor = "Cyan";
       txrxdec.innerHTML = "DECODE";
-    } else {
+    }
+    else
+    {
       txrxdec.style.backgroundColor = "Green";
       txrxdec.style.borderColor = "GreenYellow";
       txrxdec.innerHTML = "RECEIVE";
     }
-  } else {
+  }
+  else
+  {
     txrxdec.style.backgroundColor = "Red";
     txrxdec.style.borderColor = "Orange";
     txrxdec.innerHTML = "TRANSMIT";
   }
 }
 
-function toTitleCase(str) {
-  return str.replace(/\w\S*/g, function (txt) {
+function toTitleCase(str)
+{
+  return str.replace(/\w\S*/g, function (txt)
+  {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }
 
-function newOption(value, text) {
+function newOption(value, text)
+{
   if (typeof text == "undefined") text = value;
   var option = document.createElement("option");
   option.value = value;
@@ -2110,7 +2478,8 @@ function createSelectOptions(
   altName = null,
   defaultValue = null,
   checkSponsor = null
-) {
+)
+{
   var selector = document.getElementById(selectElementString);
   selector.innerHTML = "";
 
@@ -2123,22 +2492,25 @@ function createSelectOptions(
   selector.appendChild(option);
 
   var obj = null;
-  if (forObject) {
+  if (forObject)
+  {
     obj = Object.keys(forObject).sort();
   }
-  for (var k in obj) {
+  for (var k in obj)
+  {
     var opt = obj[k];
     var option = document.createElement("option");
     option.value = opt;
     option.text = altName ? forObject[opt][altName] : opt;
     if (checkSponsor && opt + "-" + checkSponsor in g_awardTracker)
-      option.disabled = true;
+    { option.disabled = true; }
 
     selector.appendChild(option);
   }
 }
 
-function awardSponsorChanged() {
+function awardSponsorChanged()
+{
   awardName.style.display = "";
   createSelectOptions(
     "awardName",
@@ -2150,7 +2522,8 @@ function awardSponsorChanged() {
   );
 }
 
-function awardNameChanged() {
+function awardNameChanged()
+{
   var awardToAdd = newAwardTrackerObject(
     awardSponsor.value,
     awardName.value,
@@ -2158,7 +2531,8 @@ function awardNameChanged() {
   );
 
   var hash = awardToAdd.name + "-" + awardToAdd.sponsor;
-  if (!(hash in g_awardTracker)) {
+  if (!(hash in g_awardTracker))
+  {
     g_awardTracker[hash] = awardToAdd;
     storeAwardTracker();
     processAward(hash);
@@ -2175,9 +2549,10 @@ function awardNameChanged() {
   );
 }
 
-function updateAwardList(target = null) {
+function updateAwardList(target = null)
+{
   var worker =
-    '<table id="awardTable" class="awardTableCSS" style="padding:0;margin:0;margin-top:-5px;" >';
+    "<table id=\"awardTable\" class=\"awardTableCSS\" style=\"padding:0;margin:0;margin-top:-5px;\" >";
   worker += "<tr style='font-size:smaller'>";
   worker += "<td align='left'>";
   worker += "Name";
@@ -2199,7 +2574,8 @@ function updateAwardList(target = null) {
 
   var keys = Object.keys(g_awardTracker).sort();
 
-  for (var key in keys) {
+  for (var key in keys)
+  {
     var award = g_awardTracker[keys[key]];
     var rule = g_awards[award.sponsor].awards[award.name].rule;
     var row = awardTable.insertRow();
@@ -2217,16 +2593,19 @@ function updateAwardList(target = null) {
       g_awards[award.sponsor].sponsor +
       ")\n";
     tooltip += toTitleCase(award.test.qsl_req) + " QSO\n";
-    for (var mode in award.comp.counts) {
+    for (var mode in award.comp.counts)
+    {
       tooltip += mode + "\n";
-      for (var count in award.comp.counts[mode]) {
+      for (var count in award.comp.counts[mode])
+      {
         endorseTotal++;
-        if (award.comp.counts[mode][count].per == 100) {
+        if (award.comp.counts[mode][count].per == 100)
+        {
           baseAward = true;
           endorseCount++;
         }
         if (award.comp.counts[mode][count].num > baseCount)
-          baseCount = award.comp.counts[mode][count].num;
+        { baseCount = award.comp.counts[mode][count].num; }
 
         tooltip +=
           "\t" +
@@ -2237,16 +2616,20 @@ function updateAwardList(target = null) {
           award.comp.counts[mode][count].per +
           "%)\n";
         var wrk = "";
-        if (Object.keys(award.comp.endorse).length > 0) {
-          for (var band in award.comp.endorse[mode]) {
+        if (Object.keys(award.comp.endorse).length > 0)
+        {
+          for (var band in award.comp.endorse[mode])
+          {
             endorseTotal++;
-            if (award.comp.endorse[mode][band][count] == true) {
+            if (award.comp.endorse[mode][band][count] == true)
+            {
               endorseCount++;
               wrk += band + " ";
             }
           }
         }
-        if (wrk.length > 0) {
+        if (wrk.length > 0)
+        {
           tooltip += "\t\t" + wrk + "\n";
         }
       }
@@ -2266,10 +2649,10 @@ function updateAwardList(target = null) {
         (allEndorse
           ? "<img src='./img/award-trophy.svg' height='18px'>"
           : baseAward
-          ? "<img src='./img/award-medal.svg' height='16px'>"
-          : baseCount > 0
-          ? "<img src='./img/award-tally.svg' height='16px'>"
-          : "<img src='./img/award-empty.svg' height='14px'>"),
+            ? "<img src='./img/award-medal.svg' height='16px'>"
+            : baseCount > 0
+              ? "<img src='./img/award-tally.svg' height='16px'>"
+              : "<img src='./img/award-empty.svg' height='14px'>"),
       tooltip
     );
     createCell(
@@ -2287,7 +2670,8 @@ function updateAwardList(target = null) {
   }
 }
 
-function deleteAwardTracker(sender) {
+function deleteAwardTracker(sender)
+{
   var id = sender.parentNode.parentNode.id;
   delete g_awardTracker[id];
   storeAwardTracker();
@@ -2296,7 +2680,8 @@ function deleteAwardTracker(sender) {
   window.opener.goProcessRoster();
 }
 
-function awardCheckboxChanged(sender) {
+function awardCheckboxChanged(sender)
+{
   var awardId = sender.target.parentNode.parentNode.id;
   g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] =
     sender.target.checked;
@@ -2304,7 +2689,8 @@ function awardCheckboxChanged(sender) {
   window.opener.goProcessRoster();
 }
 
-function awardValueChanged(sender) {
+function awardValueChanged(sender)
+{
   var awardId = sender.target.parentNode.parentNode.id;
   g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] =
     sender.target.value;
@@ -2319,24 +2705,29 @@ function createCell(
   data = null,
   title = null,
   checkbox = false
-) {
+)
+{
   var cell = row.insertCell();
   if (data == null) cell.innerHTML = value;
   if (title) cell.title = title;
-  if (checkbox) {
+  if (checkbox)
+  {
     var x = document.createElement("INPUT");
     x.setAttribute("type", "checkbox");
     x.checked = value;
     x.name = target;
     x.addEventListener("change", awardCheckboxChanged);
     cell.appendChild(x);
-  } else if (data) {
+  }
+  else if (data)
+  {
     cell.appendChild(createAwardSelector(cell, target, value, data));
   }
   return cell;
 }
 
-function createCellHtml(row, html, title = null) {
+function createCellHtml(row, html, title = null)
+{
   var cell = row.insertCell();
   cell.innerHTML = html;
   if (title) cell.title = title;
@@ -2344,16 +2735,18 @@ function createCellHtml(row, html, title = null) {
   return cell;
 }
 
-function createAwardSelector(cell, target, value, forObject) {
+function createAwardSelector(cell, target, value, forObject)
+{
   var selector = document.createElement("select");
   selector.name = target;
   selector.value = value;
-  selector.disabled = forObject.length == 1 ? true : false;
+  selector.disabled = forObject.length == 1;
   selector.style.margin = "0px";
   selector.style.padding = "1px";
   if (selector.disabled) selector.style.cursor = "auto";
   selector.addEventListener("change", awardValueChanged);
-  for (var opt in forObject) {
+  for (var opt in forObject)
+  {
     var option = document.createElement("option");
     option.value = forObject[opt];
     if (option.value == "Phone" || option.value == "CW") option.disabled = true;
@@ -2363,74 +2756,92 @@ function createAwardSelector(cell, target, value, forObject) {
   return selector;
 }
 
-function resetAwardAdd() {
+function resetAwardAdd()
+{
   awardName.style.display = "none";
   createSelectOptions("awardName", "Select Award", null);
   createSelectOptions("awardSponsor", "Select Sponsor", g_awards, "sponsor");
 }
 
-function openAwardPopup() {
+function openAwardPopup()
+{
   awardHunterDiv.style.zIndex = 100;
   resetAwardAdd();
 }
 
-function closeAwardPopup() {
+function closeAwardPopup()
+{
   awardHunterDiv.style.zIndex = -1;
   resetAwardAdd();
 }
 
-function toggleMoreControls() {
+function toggleMoreControls()
+{
   g_rosterSettings.controlsExtended = !g_rosterSettings.controlsExtended;
   localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
 
   setVisual();
 }
 
-function setVisual() {
+function setVisual()
+{
   HuntNeedControls.style.display = "none";
   HuntStateControls.style.display = "none";
   HuntDXCCsControls.style.display = "none";
 
-  if (g_rosterSettings.controls) {
-    if (g_rosterSettings.controlsExtended) {
+  if (g_rosterSettings.controls)
+  {
+    if (g_rosterSettings.controlsExtended)
+    {
       RosterControls.className = "extended";
-    } else {
+    }
+    else
+    {
       RosterControls.className = "normal";
     }
-  } else {
+  }
+  else
+  {
     RosterControls.className = "hidden";
   }
 
   // Award Hunter
-  if (referenceNeed.value == 6) {
-    /*for ( key in g_rosterSettings.wanted )
-		{
-			document.getElementById(key).checked = true;
-			var t = key.replace("hunt","");
-			if ( t in g_rosterSettings.columns )
-				g_rosterSettings.columns[t] = true;
-		}*/
+  if (referenceNeed.value == 6)
+  {
+    /* for ( key in g_rosterSettings.wanted )
+    {
+      document.getElementById(key).checked = true;
+      var t = key.replace("hunt","");
+      if ( t in g_rosterSettings.columns )
+        g_rosterSettings.columns[t] = true;
+    } */
 
     HuntingControls.style.display = "none";
     CallsignsControls.style.display = "none";
     AwardTrackerControls.style.display = "";
     huntingMatrixDiv.style.display = "";
     updateAwardList();
-  } else {
-    for (key in g_rosterSettings.wanted) {
+  }
+  else
+  {
+    for (var key in g_rosterSettings.wanted)
+    {
       if (document.getElementById(key))
-        document.getElementById(key).checked = g_rosterSettings.wanted[key];
+      { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
     }
 
     AwardTrackerControls.style.display = "none";
     HuntingControls.style.display = "";
     CallsignsControls.style.display = "";
     closeAwardPopup();
-    if (callsignNeed.value == "all" || callsignNeed.value == "hits") {
+    if (callsignNeed.value == "all" || callsignNeed.value == "hits")
+    {
       huntingMatrixDiv.style.display = "";
       HuntNeedControls.style.display = "block";
       HuntModeControls.style.display = "none";
-    } else {
+    }
+    else
+    {
       huntingMatrixDiv.style.display = "none";
       HuntModeControls.style.display = "block";
 
@@ -2438,104 +2849,133 @@ function setVisual() {
         huntMode.value != "callsign" &&
         huntMode.value != "usstate" &&
         huntMode.value != "dxccs"
-      ) {
+      )
+      {
         HuntNeedControls.style.display = "block";
       }
-      if (huntMode.value == "usstate") {
+      if (huntMode.value == "usstate")
+      {
         HuntStateControls.style.display = "block";
       }
-      if (huntMode.value == "usstates") {
+      if (huntMode.value == "usstates")
+      {
         HuntNeedControls.style.display = "block";
       }
-      if (huntMode.value == "dxccs") {
+      if (huntMode.value == "dxccs")
+      {
         HuntDXCCsControls.style.display = "block";
       }
     }
   }
-  if (wantMaxDT.checked == true) {
+  if (wantMaxDT.checked == true)
+  {
     maxDT.style.display = "block";
     maxDTView.style.display = "block";
-  } else {
+  }
+  else
+  {
     maxDT.style.display = "none";
     maxDTView.style.display = "none";
   }
-  if (wantMinDB.checked == true) {
+  if (wantMinDB.checked == true)
+  {
     minDb.style.display = "block";
     minDbView.style.display = "block";
-  } else {
+  }
+  else
+  {
     minDb.style.display = "none";
     minDbView.style.display = "none";
   }
-  if (wantMinFreq.checked == true) {
+  if (wantMinFreq.checked == true)
+  {
     minFreq.style.display = "block";
     minFreqView.style.display = "block";
-  } else {
+  }
+  else
+  {
     minFreq.style.display = "none";
     minFreqView.style.display = "none";
   }
-  if (wantMaxFreq.checked == true) {
+  if (wantMaxFreq.checked == true)
+  {
     maxFreq.style.display = "block";
     maxFreqView.style.display = "block";
-  } else {
+  }
+  else
+  {
     maxFreq.style.display = "none";
     maxFreqView.style.display = "none";
   }
 
-  if (useRegex.checked == true) {
+  if (useRegex.checked == true)
+  {
     callsignRegex.style.display = "inline-block";
-  } else {
+  }
+  else
+  {
     callsignRegex.style.display = "none";
   }
 
-  if (window.opener.g_callsignLookups.lotwUseEnable == true) {
+  if (window.opener.g_callsignLookups.lotwUseEnable == true)
+  {
     usesLoTWDiv.style.display = "inline-block";
-    if (g_rosterSettings.usesLoTW == true) {
+    if (g_rosterSettings.usesLoTW == true)
+    {
       maxLoTW.style.display = "inline-block";
       maxLoTWView.style.display = "inline-block";
-    } else {
+    }
+    else
+    {
       maxLoTW.style.display = "none";
       maxLoTWView.style.display = "none";
     }
-  } else {
+  }
+  else
+  {
     usesLoTWDiv.style.display = "none";
     maxLoTW.style.display = "none";
     maxLoTWView.style.display = "none";
   }
 
   if (window.opener.g_callsignLookups.eqslUseEnable == true)
-    useseQSLDiv.style.display = "block";
+  { useseQSLDiv.style.display = "block"; }
   else useseQSLDiv.style.display = "none";
 
   if (window.opener.g_callsignLookups.oqrsUseEnable == true)
-    usesOQRSDiv.style.display = "block";
+  { usesOQRSDiv.style.display = "block"; }
   else usesOQRSDiv.style.display = "none";
 
   if (g_rosterSettings.columns.Spot == true)
-    onlySpotDiv.style.display = "block";
+  { onlySpotDiv.style.display = "block"; }
   else onlySpotDiv.style.display = "none";
 
   if (g_rosterSettings.callsign == "all" || g_rosterSettings.callsign == "hits")
-    allOnlyNewDiv.style.display = "block";
+  { allOnlyNewDiv.style.display = "block"; }
   else allOnlyNewDiv.style.display = "none";
 
   resize();
 }
 
-function wantedChanged(element) {
+function wantedChanged(element)
+{
   g_rosterSettings.wanted[element.id] = element.checked;
 
-  if (element.checked == true) {
+  if (element.checked == true)
+  {
     var t = element.id.replace("hunt", "");
 
-    if (t in g_rosterSettings.columns) {
+    if (t in g_rosterSettings.columns)
+    {
       g_rosterSettings.columns[t] = true;
 
-      for (var i = 0; i < g_menu.items.length; ++i) {
+      for (var i = 0; i < g_menu.items.length; ++i)
+      {
         if (
           typeof g_menu.items[i].checked != "undefined" &&
           g_menu.items[i].label == t
         )
-          g_menu.items[i].checked = true;
+        { g_menu.items[i].checked = true; }
       }
     }
   }
@@ -2543,13 +2983,15 @@ function wantedChanged(element) {
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (var callHash in window.opener.g_callRoster) {
+  for (var callHash in window.opener.g_callRoster)
+  {
     window.opener.g_callRoster[callHash].callObj.alerted = false;
   }
   window.opener.goProcessRoster();
 }
 
-function valuesChanged() {
+function valuesChanged()
+{
   setVisual();
 
   g_rosterSettings.callsign = callsignNeed.value;
@@ -2579,7 +3021,8 @@ function valuesChanged() {
     noMsg.checked &&
     onlyMsg.checked &&
     noMsgValue.value == onlyMsgValue.value
-  ) {
+  )
+  {
     if (g_rosterSettings.noMsg) noMsg.checked = false;
     else onlyMsg.checked = false;
   }
@@ -2600,43 +3043,51 @@ function valuesChanged() {
 
   g_scriptReport = Object();
   for (var callHash in window.opener.g_callRoster)
-    window.opener.g_callRoster[callHash].callObj.alerted = false;
+  { window.opener.g_callRoster[callHash].callObj.alerted = false; }
   window.opener.goProcessRoster();
 }
 
-function getBuffer(file_url, callback, flag, mode, port, cookie) {
+function getBuffer(file_url, callback, flag, mode, port, cookie)
+{
   var url = require("url");
   var http = require(mode);
   var fileBuffer = null;
   var options = null;
-  if (cookie != null) {
+  if (cookie != null)
+  {
     options = {
-      host: url.parse(file_url).host,
+      host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
       port: port,
-      path: url.parse(file_url).path,
+      path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
       headers: {
-        Cookie: cookie,
-      },
-    };
-  } else {
-    options = {
-      host: url.parse(file_url).host,
-      port: port,
-      path: url.parse(file_url).path,
+        Cookie: cookie
+      }
     };
   }
-  http.get(options, function (res) {
+  else
+  {
+    options = {
+      host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
+      port: port,
+      path: url.parse(file_url).path // eslint-disable-line node/no-deprecated-api
+    };
+  }
+  http.get(options, function (res)
+  {
     var fsize = res.headers["content-length"];
     var cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
-      cookies = res.headers["set-cookie"];
+    { cookies = res.headers["set-cookie"]; }
     res
-      .on("data", function (data) {
+      .on("data", function (data)
+      {
         if (fileBuffer == null) fileBuffer = data;
         else fileBuffer += data;
       })
-      .on("end", function () {
-        if (typeof callback === "function") {
+      .on("end", function ()
+      {
+        if (typeof callback === "function")
+        {
           // Call it, since we have confirmed it is callable
           callback(fileBuffer, flag, cookies);
         }
@@ -2645,21 +3096,25 @@ function getBuffer(file_url, callback, flag, mode, port, cookie) {
   });
 }
 
-function callsignResult(buffer, flag) {
+function callsignResult(buffer, flag)
+{
   var rawData = JSON.parse(buffer);
   r_currentUSState = flag;
 
   g_currentUSCallsigns = Object();
-  for (key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
+  for (var key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
 
   window.opener.goProcessRoster();
 }
 
-function stateChangedValue(what) {
-  if (r_currentUSState != stateSelect.value && stateSelect.value != "") {
+function stateChangedValue(what)
+{
+  if (r_currentUSState != stateSelect.value && stateSelect.value != "")
+  {
     r_currentUSState = stateSelect.value;
 
-    if (window.opener.g_mapSettings.offlineMode == false) {
+    if (window.opener.g_mapSettings.offlineMode == false)
+    {
       var callState = r_currentUSState.replace("CN-", "");
       getBuffer(
         "http://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
@@ -2668,7 +3123,9 @@ function stateChangedValue(what) {
         "http",
         80
       );
-    } else {
+    }
+    else
+    {
       window.opener.goProcessRoster();
       r_currentUSState = "";
       g_currentUSCallsigns = null;
@@ -2678,7 +3135,8 @@ function stateChangedValue(what) {
     }
   }
 
-  if (stateSelect.value == "") {
+  if (stateSelect.value == "")
+  {
     r_currentUSState = "";
     g_currentUSCallsigns = null;
 
@@ -2686,26 +3144,31 @@ function stateChangedValue(what) {
   }
 }
 
-function DXCCsChangedValue(what) {
+function DXCCsChangedValue(what)
+{
   r_currentDXCCs = DXCCsSelect.value;
   window.opener.goProcessRoster();
 }
 
-function initDXCCSelector() {
-  var items = Object.keys(window.opener.g_dxccToAltName).sort(function (a, b) {
+function initDXCCSelector()
+{
+  var items = Object.keys(window.opener.g_dxccToAltName).sort(function (a, b)
+  {
     return window.opener.g_dxccToAltName[a].localeCompare(
       window.opener.g_dxccToAltName[b]
     );
   });
   var newSelect = document.getElementById("DXCCsSelect");
 
-  for (var i in items) {
+  for (var i in items)
+  {
     var key = items[i];
 
     if (
       window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].geo !=
       "deleted"
-    ) {
+    )
+    {
       var option = document.createElement("option");
       option.value = key;
       option.text =
@@ -2720,16 +3183,21 @@ function initDXCCSelector() {
   newSelect.oninput = DXCCsChangedValue;
 }
 
-function manifestResult(buffer, flag) {
+function manifestResult(buffer, flag)
+{
   r_callsignManifest = JSON.parse(buffer);
   var newSelect = document.getElementById("stateSelect");
 
-  for (key in r_callsignManifest.cnt) {
+  for (var key in r_callsignManifest.cnt)
+  {
     var option = document.createElement("option");
-    if (window.opener.g_enums[key]) {
+    if (window.opener.g_enums[key])
+    {
       option.value = key;
       option.text = window.opener.g_enums[key];
-    } else {
+    }
+    else
+    {
       option.value = "CN-" + key;
       option.text = window.opener.g_enums["CN-" + key];
     }
@@ -2742,7 +3210,8 @@ function receiveMessage(event) {}
 
 var g_tracker = {};
 
-function updateWorked() {
+function updateWorked()
+{
   g_worked = window.opener.g_tracker.worked;
   g_confirmed = window.opener.g_tracker.confirmed;
   g_modes = window.opener.g_modes;
@@ -2752,152 +3221,171 @@ function updateWorked() {
   processAllAwardTrackers();
 }
 
-function deleteCallsignIgnore(key) {
+function deleteCallsignIgnore(key)
+{
   delete g_blockedCalls[key];
   storeBlocks();
   openIgnoreEdit();
   window.opener.goProcessRoster();
 }
 
-function deleteDxccIgnore(key) {
+function deleteDxccIgnore(key)
+{
   delete g_blockedDxcc[key];
   storeBlocks();
   openIgnoreEdit();
   window.opener.goProcessRoster();
 }
 
-function deleteCQIgnore(key) {
+function deleteCQIgnore(key)
+{
   delete g_blockedCQ[key];
   storeBlocks();
   openIgnoreEdit();
   window.opener.goProcessRoster();
 }
 
-function clearAllCallsignIgnores() {
+function clearAllCallsignIgnores()
+{
   g_blockedCalls = Object();
   storeBlocks();
   openIgnoreEdit();
   window.opener.goProcessRoster();
 }
 
-function clearAllDxccIgnores() {
+function clearAllDxccIgnores()
+{
   g_blockedDxcc = Object();
   storeBlocks();
   openIgnoreEdit();
   window.opener.goProcessRoster();
 }
 
-function clearAllCQIgnores() {
+function clearAllCQIgnores()
+{
   g_blockedCQ = Object();
   storeBlocks();
   openIgnoreEdit();
   window.opener.goProcessRoster();
 }
 
-function closeEditIgnores() {
+function closeEditIgnores()
+{
   mainCallRoster.style.display = "block";
   editView.style.display = "none";
 }
 
-function openIgnoreEdit() {
+function openIgnoreEdit()
+{
   mainCallRoster.style.display = "none";
   editView.style.display = "inline-block";
   var worker = "";
   var clearString = "<th>none</th>";
-  {
-    if (Object.keys(g_blockedCalls).length > 0)
-      clearString =
-        "<th style='cursor:pointer;' onclick='clearAllCallsignIgnores()'>Clear All</th>";
-    worker +=
-      "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
-      (window.innerHeight - 135) +
-      "px;'><table class='darkTable' align=center><tr><th align=left>Callsigns</th>" +
-      clearString +
-      "</tr>";
-    Object.keys(g_blockedCalls)
-      .sort()
-      .forEach(function (key, i) {
-        worker +=
-          "<tr><td align=left style='color:#FFFF00;' >" +
-          key +
-          "</td><td style='cursor:pointer;' onclick='deleteCallsignIgnore(\"" +
-          key +
-          "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-      });
-    worker += "</table></div>";
-  }
 
+  if (Object.keys(g_blockedCalls).length > 0)
   {
-    clearString = "<th>none</th>";
-    if (Object.keys(g_blockedCQ).length > 0)
-      clearString =
-        "<th style='cursor:pointer;' onclick='clearAllCQIgnores()'>Clear All</th>";
-    worker +=
-      "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
-      (window.innerHeight - 135) +
-      "px;'><table class='darkTable' align=center><tr><th align=left>CQ</th>" +
-      clearString +
-      "</tr>";
-    Object.keys(g_blockedCQ)
-      .sort()
-      .forEach(function (key, i) {
-        worker +=
-          "<tr><td align=left style='color:cyan;' >" +
-          key +
-          "</td><td style='cursor:pointer;' onclick='deleteCQIgnore(\"" +
-          key +
-          "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-      });
-    worker += "</table></div>";
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllCallsignIgnores()'>Clear All</th>";
   }
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>Callsigns</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedCalls)
+    .sort()
+    .forEach(function (key, i)
+    {
+      worker +=
+        "<tr><td align=left style='color:#FFFF00;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteCallsignIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
 
+  clearString = "<th>none</th>";
+  if (Object.keys(g_blockedCQ).length > 0)
   {
-    clearString = "<th>none</th>";
-    if (Object.keys(g_blockedDxcc).length > 0)
-      clearString =
-        "<th style='cursor:pointer;' onclick='clearAllDxccIgnores()'>Clear All</th>";
-    worker +=
-      "<div  style='margin:10px;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
-      (window.innerHeight - 135) +
-      "px;'><table class='darkTable' align=center><tr><th align=left>DXCCs</th>" +
-      clearString +
-      "</tr>";
-    Object.keys(g_blockedDxcc)
-      .sort()
-      .forEach(function (key, i) {
-        worker +=
-          "<tr><td align=left style='color:#FFA500' >" +
-          window.opener.g_dxccToAltName[key] +
-          " (" +
-          window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp +
-          ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" +
-          key +
-          "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-      });
-    worker += "</table></div>";
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllCQIgnores()'>Clear All</th>";
   }
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>CQ</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedCQ)
+    .sort()
+    .forEach(function (key, i)
+    {
+      worker +=
+        "<tr><td align=left style='color:cyan;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteCQIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
+  clearString = "<th>none</th>";
+  if (Object.keys(g_blockedDxcc).length > 0)
+  {
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllDxccIgnores()'>Clear All</th>";
+  }
+  worker +=
+    "<div  style='margin:10px;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>DXCCs</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedDxcc)
+    .sort()
+    .forEach(function (key, i)
+    {
+      worker +=
+        "<tr><td align=left style='color:#FFA500' >" +
+        window.opener.g_dxccToAltName[key] +
+        " (" +
+        window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp +
+        ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
   editTables.innerHTML = worker;
 }
 
-function onMyKeyDown(event) {
-  if (!g_regFocus) {
+function onMyKeyDown(event)
+{
+  if (!g_regFocus)
+  {
     window.opener.onMyKeyDown(event);
   }
 }
 
-function checkForEnter(ele) {
-  if (event.key === "Enter") {
+function checkForEnter(ele)
+{
+  if (event.key === "Enter")
+  {
     ele.blur();
   }
 }
 
-function resize() {
+function resize()
+{
   if (editView.style.display == "inline-block") openIgnoreEdit();
 
   window.opener.goProcessRoster();
 }
 
-function init() {
+function init()
+{
   g_callsignDatabaseDXCC = window.opener.g_callsignDatabaseDXCC;
   g_callsignDatabaseUS = window.opener.g_callsignDatabaseUS;
   g_callsignDatabaseUSplus = window.opener.g_callsignDatabaseUSplus;
@@ -2906,13 +3394,14 @@ function init() {
 
   updateWorked();
 
-  //addAllAwards();
+  // addAllAwards();
 
   window.addEventListener("message", receiveMessage, false);
 
   lockNewWindows();
 
   if (window.opener.g_mapSettings.offlineMode == false)
+  {
     getBuffer(
       "http://app.gridtracker.org/callsigns/manifest.json",
       manifestResult,
@@ -2920,14 +3409,16 @@ function init() {
       "http",
       80
     );
+  }
 
   loadSettings();
 
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
-  for (key in g_rosterSettings.wanted) {
+  for (var key in g_rosterSettings.wanted)
+  {
     if (document.getElementById(key))
-      document.getElementById(key).checked = g_rosterSettings.wanted[key];
+    { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
   }
 
   g_menu = new nw.Menu();
@@ -2936,11 +3427,15 @@ function init() {
   var item = new nw.MenuItem({
     type: "normal",
     label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
-    click: function () {
-      if (this.label == "Hide Controls") {
+    click: function ()
+    {
+      if (this.label == "Hide Controls")
+      {
         this.label = "Show Controls";
         g_rosterSettings.controls = false;
-      } else {
+      }
+      else
+      {
         this.label = "Hide Controls";
         g_rosterSettings.controls = true;
       }
@@ -2949,18 +3444,22 @@ function init() {
         : "Show Controls";
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       setVisual();
-    },
+    }
   });
   g_menu.append(item);
 
   item = new nw.MenuItem({
     type: "normal",
     label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
-    click: function () {
-      if (this.label == "Hide Controls") {
+    click: function ()
+    {
+      if (this.label == "Hide Controls")
+      {
         this.label = "Show Controls";
         g_rosterSettings.controls = false;
-      } else {
+      }
+      else
+      {
         this.label = "Hide Controls";
         g_rosterSettings.controls = true;
       }
@@ -2969,29 +3468,31 @@ function init() {
         : "Show Controls";
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       setVisual();
-    },
+    }
   });
   g_compactMenu.append(item);
 
   item = new nw.MenuItem({
     type: "normal",
     label: "Compact Mode",
-    click: function () {
+    click: function ()
+    {
       g_rosterSettings.compact = true;
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       resize();
-    },
+    }
   });
   g_menu.append(item);
 
   item = new nw.MenuItem({
     type: "normal",
     label: "Roster Mode",
-    click: function () {
+    click: function ()
+    {
       g_rosterSettings.compact = false;
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       resize();
-    },
+    }
   });
   g_compactMenu.append(item);
 
@@ -3000,9 +3501,10 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Lookup",
-    click: function () {
+    click: function ()
+    {
       callLookup(g_targetHash, "");
-    },
+    }
   });
 
   g_callMenu.append(item);
@@ -3010,9 +3512,10 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Gen Msgs",
-    click: function () {
+    click: function ()
+    {
       callGenMessage(g_targetHash, "");
-    },
+    }
   });
 
   g_callMenu.append(item);
@@ -3024,12 +3527,13 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Ignore Call",
-    click: function () {
+    click: function ()
+    {
       var thisCall = callRoster[g_targetHash].DEcall;
       g_blockedCalls[thisCall] = true;
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
 
   g_callMenu.append(item);
@@ -3039,9 +3543,10 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Lookup",
-    click: function () {
+    click: function ()
+    {
       callingLookup(g_targetHash, "");
-    },
+    }
   });
 
   g_callingMenu.append(item);
@@ -3049,9 +3554,10 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Gen Msgs",
-    click: function () {
+    click: function ()
+    {
       callingGenMessage(g_targetHash, "");
-    },
+    }
   });
 
   g_callingMenu.append(item);
@@ -3063,30 +3569,33 @@ function init() {
     type: "checkbox",
     label: "Realtime",
     checked: g_rosterSettings.realtime,
-    click: function () {
+    click: function ()
+    {
       g_rosterSettings.realtime = this.checked;
       writeRosterSettings();
       window.opener.goProcessRoster();
-    },
+    }
   });
   g_menu.append(item);
 
   item = new nw.MenuItem({ type: "separator" });
   g_menu.append(item);
 
-  for (var key in g_rosterSettings.columns) {
+  for (var key in g_rosterSettings.columns)
+  {
     var itemx = new nw.MenuItem({
       type: "checkbox",
       label: key,
       checked: g_rosterSettings.columns[key],
-      click: function () {
+      click: function ()
+      {
         g_rosterSettings.columns[this.label] = this.checked;
         if (this.label == "Spot")
-          window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
+        { window.opener.setRosterSpot(g_rosterSettings.columns.Spot); }
         writeRosterSettings();
         window.opener.goProcessRoster();
         resize();
-      },
+      }
     });
 
     g_menu.append(itemx);
@@ -3099,11 +3608,12 @@ function init() {
     type: "normal",
     label: "Clear Call Ignore",
     enabled: false,
-    click: function () {
+    click: function ()
+    {
       g_blockedCalls = Object();
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
   g_menu.append(g_clearIgnores);
 
@@ -3111,11 +3621,12 @@ function init() {
     type: "normal",
     label: "Clear Ignore",
     enabled: false,
-    click: function () {
+    click: function ()
+    {
       g_blockedCalls = Object();
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
   g_callMenu.append(g_clearIgnoresCall);
 
@@ -3124,7 +3635,8 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Ignore CQ from DXCC",
-    click: function () {
+    click: function ()
+    {
       g_blockedCQ[
         callRoster[g_targetCQ].DXcall +
           " from " +
@@ -3132,7 +3644,7 @@ function init() {
       ] = true;
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
 
   g_CQMenu.append(item);
@@ -3140,11 +3652,12 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Ignore CQ from All",
-    click: function () {
+    click: function ()
+    {
       g_blockedCQ[callRoster[g_targetCQ].DXcall + " from All"] = true;
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
 
   g_CQMenu.append(item);
@@ -3153,11 +3666,12 @@ function init() {
     type: "normal",
     label: "Clear CQ Ignore",
     enabled: false,
-    click: function () {
+    click: function ()
+    {
       g_blockedCQ = Object();
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
   g_menu.append(g_clearCQIgnoreMainMenu);
 
@@ -3165,11 +3679,12 @@ function init() {
     type: "normal",
     label: "Clear Ignore",
     enabled: false,
-    click: function () {
+    click: function ()
+    {
       g_blockedCQ = Object();
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
   g_CQMenu.append(g_clearCQIgnore);
 
@@ -3177,9 +3692,10 @@ function init() {
     type: "normal",
     label: "Edit Ignores",
     enabled: true,
-    click: function () {
+    click: function ()
+    {
       openIgnoreEdit();
-    },
+    }
   });
   g_CQMenu.append(item);
 
@@ -3188,11 +3704,12 @@ function init() {
   item = new nw.MenuItem({
     type: "normal",
     label: "Ignore DXCC",
-    click: function () {
+    click: function ()
+    {
       g_blockedDxcc[g_targetDxcc] = true;
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
 
   g_dxccMenu.append(item);
@@ -3201,11 +3718,12 @@ function init() {
     type: "normal",
     label: "Clear DXCC Ignore",
     enabled: false,
-    click: function () {
+    click: function ()
+    {
       g_blockedDxcc = Object();
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
   g_menu.append(g_clearDxccIgnoreMainMenu);
 
@@ -3213,11 +3731,12 @@ function init() {
     type: "normal",
     label: "Clear Ignore",
     enabled: false,
-    click: function () {
+    click: function ()
+    {
       g_blockedDxcc = Object();
       storeBlocks();
       window.opener.goProcessRoster();
-    },
+    }
   });
   g_dxccMenu.append(g_clearDxccIgnore);
 
@@ -3225,9 +3744,10 @@ function init() {
     type: "normal",
     label: "Edit Ignores",
     enabled: true,
-    click: function () {
+    click: function ()
+    {
       openIgnoreEdit();
-    },
+    }
   });
   g_menu.append(item);
 
@@ -3235,9 +3755,10 @@ function init() {
     type: "normal",
     label: "Edit Ignores",
     enabled: true,
-    click: function () {
+    click: function ()
+    {
       openIgnoreEdit();
-    },
+    }
   });
   g_callMenu.append(item);
 
@@ -3245,9 +3766,10 @@ function init() {
     type: "normal",
     label: "Edit Ignores",
     enabled: true,
-    click: function () {
+    click: function ()
+    {
       openIgnoreEdit();
-    },
+    }
   });
   g_dxccMenu.append(item);
 
@@ -3299,143 +3821,176 @@ function init() {
   updateInstances();
 }
 
-function handleContextMenu(ev) {
+function handleContextMenu(ev)
+{
   if (editView.style.display == "inline-block") return false;
 
   var mouseX = Math.round(ev.x);
   var mouseY = Math.round(ev.y);
 
   var len = Object.keys(g_blockedCalls).length;
-  if (len > 0) {
+  if (len > 0)
+  {
     g_clearIgnores.enabled = true;
     g_clearIgnores.label =
       "Clear Call Ignore" + (len > 1 ? "s (" + len + ")" : "");
     g_clearIgnoresCall.enabled = true;
     g_clearIgnoresCall.label =
       "Clear Ignore" + (len > 1 ? "s (" + len + ")" : "");
-  } else {
+  }
+  else
+  {
     g_clearIgnores.label = "Clear Call Ignore";
     g_clearIgnores.enabled = false;
     g_clearIgnoresCall.label = "Clear Ignore";
     g_clearIgnoresCall.enabled = false;
   }
   len = Object.keys(g_blockedDxcc).length;
-  if (len > 0) {
+  if (len > 0)
+  {
     g_clearDxccIgnoreMainMenu.enabled = true;
     g_clearDxccIgnoreMainMenu.label =
       "Clear DXCC Ignore" + (len > 1 ? "s (" + len + ")" : "");
     g_clearDxccIgnore.enabled = true;
     g_clearDxccIgnore.label =
       "Clear Ignore" + (len > 1 ? "s (" + len + ")" : "");
-  } else {
+  }
+  else
+  {
     g_clearDxccIgnoreMainMenu.label = "Clear DXCC Ignore";
     g_clearDxccIgnoreMainMenu.enabled = false;
     g_clearDxccIgnore.label = "Clear Ignore";
     g_clearDxccIgnore.enabled = false;
   }
   len = Object.keys(g_blockedCQ).length;
-  if (len > 0) {
+  if (len > 0)
+  {
     g_clearCQIgnoreMainMenu.enabled = true;
     g_clearCQIgnoreMainMenu.label =
       "Clear CQ Ignore" + (len > 1 ? "s (" + len + ")" : "");
     g_clearCQIgnore.enabled = true;
     g_clearCQIgnore.label = "Clear Ignore" + (len > 1 ? "s (" + len + ")" : "");
-  } else {
+  }
+  else
+  {
     g_clearCQIgnoreMainMenu.label = "Clear CQ Ignore";
     g_clearCQIgnoreMainMenu.enabled = false;
     g_clearCQIgnore.label = "Clear Ignore";
     g_clearCQIgnore.enabled = false;
   }
-  if (typeof ev.target != "undefined") {
+  if (typeof ev.target != "undefined")
+  {
     var name = ev.target.getAttribute("name");
-    if (name == "Callsign") {
+    if (name == "Callsign")
+    {
       g_targetHash = ev.target.parentNode.id;
       g_callMenu.popup(mouseX, mouseY);
-    } else if (name == "Calling") {
+    }
+    else if (name == "Calling")
+    {
       g_targetHash = ev.target.parentNode.id;
       g_callingMenu.popup(mouseX, mouseY);
-    } else if (name == "CQ") {
-      if (callRoster[ev.target.parentNode.id].DXcall != "CQ") {
+    }
+    else if (name == "CQ")
+    {
+      if (callRoster[ev.target.parentNode.id].DXcall != "CQ")
+      {
         g_targetCQ = ev.target.parentNode.id;
         g_CQMenu.popup(mouseX, mouseY);
       }
-    } else if (name && name.startsWith("DXCC")) {
+    }
+    else if (name && name.startsWith("DXCC"))
+    {
       var dxcca = name.split("(");
       var dxcc = parseInt(dxcca[1]);
       g_targetDxcc = dxcc;
       g_dxccMenu.popup(mouseX, mouseY);
-    } else {
-      if (g_rosterSettings.compact == false) {
+    }
+    else
+    {
+      if (g_rosterSettings.compact == false)
+      {
         g_menu.popup(mouseX, mouseY);
-      } else {
+      }
+      else
+      {
         g_compactMenu.popup(mouseX, mouseY);
       }
     }
-  } else {
-    if (g_rosterSettings.compact == false) {
+  }
+  else
+  {
+    if (g_rosterSettings.compact == false)
+    {
       g_menu.popup(mouseX, mouseY);
-    } else {
+    }
+    else
+    {
       g_compactMenu.popup(mouseX, mouseY);
     }
   }
 
-  if (!g_developerMode) {
+  if (!g_developerMode)
+  {
     ev.preventDefault();
   }
 
   return false;
 }
 
-function getTypeFromMode(mode) {
-  if (mode in g_modes) {
+function getTypeFromMode(mode)
+{
+  if (mode in g_modes)
+  {
     if (g_modes[mode] == true) return "Digital";
     else if (g_modes_phone[mode] == true) return "Phone";
   }
   return "";
 }
 
-function testAward(awardName, obj, baseHash) {
+function testAward(awardName, obj, baseHash)
+{
   if (
     g_awardTracker[awardName].test.dxcc &&
     g_awardTracker[awardName].rule.dxcc.indexOf(obj.dxcc) == -1
   )
-    return false;
+  { return false; }
 
   if (
     g_awardTracker[awardName].test.mode &&
     g_awardTracker[awardName].rule.mode.indexOf(obj.mode) == -1
   )
-    return false;
+  { return false; }
 
   if (
     g_awardTracker[awardName].test.band &&
     g_awardTracker[awardName].rule.band.indexOf(obj.band) == -1
   )
-    return false;
+  { return false; }
 
   if (
     g_awardTracker[awardName].test.DEcall &&
     g_awardTracker[awardName].rule.call.indexOf(obj.DEcall) == -1
   )
-    return false;
+  { return false; }
 
   if (
     g_awardTracker[awardName].test.cont &&
     g_awardTracker[awardName].rule.cont.indexOf(obj.cont) == -1
   )
-    return false;
+  { return false; }
 
   if (
     g_awardTracker[awardName].test.prop &&
     g_awardTracker[awardName].rule.propMode != obj.propMode
   )
-    return false;
+  { return false; }
 
   if (
     g_awardTracker[awardName].test.sat &&
     g_awardTracker[awardName].rule.satName.indexOf(obj.satName) == -1
   )
-    return false;
+  { return false; }
 
   return g_awardTypes[g_awardTracker[awardName].rule.type].test(
     g_awardTracker[awardName],
@@ -3444,7 +3999,8 @@ function testAward(awardName, obj, baseHash) {
   );
 }
 
-function processAward(awardName) {
+function processAward(awardName)
+{
   var award =
     g_awards[g_awardTracker[awardName].sponsor].awards[
       g_awardTracker[awardName].name
@@ -3495,7 +4051,8 @@ function processAward(awardName) {
 
   g_awardTracker[awardName].stat = {};
 
-  for (var i in window.opener.g_QSOhash) {
+  for (var i in window.opener.g_QSOhash)
+  {
     var obj = window.opener.g_QSOhash[i];
 
     if (test.confirmed && !obj.confirmed) continue;
@@ -3526,36 +4083,41 @@ function processAward(awardName) {
   g_awardTracker[awardName].stat = {};
 }
 
-function newAwardCountObject() {
+function newAwardCountObject()
+{
   var statCountObject = {};
 
   statCountObject.bands = {};
-  statCountObject.bands["Mixed"] = {};
-  statCountObject.bands["Digital"] = {};
-  statCountObject.bands["Phone"] = {};
+  statCountObject.bands.Mixed = {};
+  statCountObject.bands.Digital = {};
+  statCountObject.bands.Phone = {};
   statCountObject.modes = {};
-  statCountObject.modes["Mixed"] = {};
-  statCountObject.modes["Digital"] = {};
-  statCountObject.modes["Phone"] = {};
+  statCountObject.modes.Mixed = {};
+  statCountObject.modes.Digital = {};
+  statCountObject.modes.Phone = {};
   statCountObject.unique = null;
   return statCountObject;
 }
 
-function workAwardObject(obj, band, mode, isDigital, isPhone, unique = null) {
-  obj.bands["Mixed"][band] = ~~obj.bands["Mixed"][band] + 1;
+function workAwardObject(obj, band, mode, isDigital, isPhone, unique = null)
+{
+  obj.bands.Mixed[band] = ~~obj.bands.Mixed[band] + 1;
   if (!(mode in obj.bands)) obj.bands[mode] = {};
   obj.bands[mode][band] = ~~obj.bands[mode][band] + 1;
-  obj.modes["Mixed"][mode] = ~~obj.modes["Mixed"][mode] + 1;
+  obj.modes.Mixed[mode] = ~~obj.modes.Mixed[mode] + 1;
 
-  if (isDigital) {
-    obj.bands["Digital"][band] = ~~obj.bands["Digital"][band] + 1;
-    obj.modes["Digital"][mode] = ~~obj.modes["Digital"][mode] + 1;
+  if (isDigital)
+  {
+    obj.bands.Digital[band] = ~~obj.bands.Digital[band] + 1;
+    obj.modes.Digital[mode] = ~~obj.modes.Digital[mode] + 1;
   }
-  if (isPhone) {
-    obj.bands["Phone"][band] = ~~obj.bands["Phone"][band] + 1;
-    obj.modes["Phone"][mode] = ~~obj.modes["Phone"][mode] + 1;
+  if (isPhone)
+  {
+    obj.bands.Phone[band] = ~~obj.bands.Phone[band] + 1;
+    obj.modes.Phone[mode] = ~~obj.modes.Phone[mode] + 1;
   }
-  if (unique) {
+  if (unique)
+  {
     if (obj.unique == null) obj.unique = {};
     if (!(unique in obj.unique)) obj.unique[unique] = newAwardCountObject();
     workAwardObject(obj.unique[unique], band, mode, isDigital, isPhone);
@@ -3563,7 +4125,8 @@ function workAwardObject(obj, band, mode, isDigital, isPhone, unique = null) {
   return true;
 }
 
-function buildAwardTypeHandlers() {
+function buildAwardTypeHandlers()
+{
   g_awardTypes = {
     IOTA: { name: "Islands On The Air" },
     call: { name: "Callsign" },
@@ -3585,80 +4148,82 @@ function buildAwardTypeHandlers() {
     cont2band: { name: "Continents per Band" },
     calls2band: { name: "Stations per Band" },
     dxcc2band: { name: "DXCC per Band" },
-    states2band: { name: "States per Band" },
+    states2band: { name: "States per Band" }
   };
 
-  g_awardTypes["IOTA"].score = scoreAIOTA;
-  g_awardTypes["call"].score = scoreAcall;
-  g_awardTypes["callarea"].score = scoreAcallarea;
-  g_awardTypes["calls2dxcc"].score = scoreAcalls2dxcc;
-  g_awardTypes["cnty"].score = scoreAcnty;
-  g_awardTypes["cont"].score = scoreAcont;
-  g_awardTypes["cont5"].score = scoreAcont5;
-  g_awardTypes["cont52band"].score = scoreAcont52band;
-  g_awardTypes["cqz"].score = scoreAcqz;
-  g_awardTypes["dxcc"].score = scoreAdxcc;
-  g_awardTypes["grids"].score = scoreAgrids;
-  g_awardTypes["numsfx"].score = scoreAnumsfx;
-  g_awardTypes["px"].score = scoreApx;
-  g_awardTypes["pxa"].score = scoreApxa;
-  g_awardTypes["pxplus"].score = scoreApxplus;
-  g_awardTypes["sfx"].score = scoreAsfx;
-  g_awardTypes["states"].score = scoreAstates;
-  g_awardTypes["cont2band"].score = scoreAcont2band;
-  g_awardTypes["calls2band"].score = scoreAcalls2band;
-  g_awardTypes["dxcc2band"].score = scoreAdxcc2band;
-  g_awardTypes["states2band"].score = scoreAstates2band;
+  g_awardTypes.IOTA.score = scoreAIOTA;
+  g_awardTypes.call.score = scoreAcall;
+  g_awardTypes.callarea.score = scoreAcallarea;
+  g_awardTypes.calls2dxcc.score = scoreAcalls2dxcc;
+  g_awardTypes.cnty.score = scoreAcnty;
+  g_awardTypes.cont.score = scoreAcont;
+  g_awardTypes.cont5.score = scoreAcont5;
+  g_awardTypes.cont52band.score = scoreAcont52band;
+  g_awardTypes.cqz.score = scoreAcqz;
+  g_awardTypes.dxcc.score = scoreAdxcc;
+  g_awardTypes.grids.score = scoreAgrids;
+  g_awardTypes.numsfx.score = scoreAnumsfx;
+  g_awardTypes.px.score = scoreApx;
+  g_awardTypes.pxa.score = scoreApxa;
+  g_awardTypes.pxplus.score = scoreApxplus;
+  g_awardTypes.sfx.score = scoreAsfx;
+  g_awardTypes.states.score = scoreAstates;
+  g_awardTypes.cont2band.score = scoreAcont2band;
+  g_awardTypes.calls2band.score = scoreAcalls2band;
+  g_awardTypes.dxcc2band.score = scoreAdxcc2band;
+  g_awardTypes.states2band.score = scoreAstates2band;
 
-  g_awardTypes["IOTA"].test = testAIOTA;
-  g_awardTypes["call"].test = testAcall;
-  g_awardTypes["callarea"].test = testAcallarea;
-  g_awardTypes["calls2dxcc"].test = testAcalls2dxcc;
-  g_awardTypes["cnty"].test = testAcnty;
-  g_awardTypes["cont"].test = testAcont;
-  g_awardTypes["cont5"].test = testAcont5;
-  g_awardTypes["cont52band"].test = testAcont52band;
-  g_awardTypes["cqz"].test = testAcqz;
-  g_awardTypes["dxcc"].test = testAdxcc;
-  g_awardTypes["grids"].test = testAgrids;
-  g_awardTypes["numsfx"].test = testAnumsfx;
-  g_awardTypes["px"].test = testApx;
-  g_awardTypes["pxa"].test = testApxa;
-  g_awardTypes["pxplus"].test = testApxplus;
-  g_awardTypes["sfx"].test = testAsfx;
-  g_awardTypes["states"].test = testAstates;
-  g_awardTypes["cont2band"].test = testAcont2band;
-  g_awardTypes["calls2band"].test = testAcalls2band;
-  g_awardTypes["dxcc2band"].test = testAdxcc2band;
-  g_awardTypes["states2band"].test = testAstates2band;
+  g_awardTypes.IOTA.test = testAIOTA;
+  g_awardTypes.call.test = testAcall;
+  g_awardTypes.callarea.test = testAcallarea;
+  g_awardTypes.calls2dxcc.test = testAcalls2dxcc;
+  g_awardTypes.cnty.test = testAcnty;
+  g_awardTypes.cont.test = testAcont;
+  g_awardTypes.cont5.test = testAcont5;
+  g_awardTypes.cont52band.test = testAcont52band;
+  g_awardTypes.cqz.test = testAcqz;
+  g_awardTypes.dxcc.test = testAdxcc;
+  g_awardTypes.grids.test = testAgrids;
+  g_awardTypes.numsfx.test = testAnumsfx;
+  g_awardTypes.px.test = testApx;
+  g_awardTypes.pxa.test = testApxa;
+  g_awardTypes.pxplus.test = testApxplus;
+  g_awardTypes.sfx.test = testAsfx;
+  g_awardTypes.states.test = testAstates;
+  g_awardTypes.cont2band.test = testAcont2band;
+  g_awardTypes.calls2band.test = testAcalls2band;
+  g_awardTypes.dxcc2band.test = testAdxcc2band;
+  g_awardTypes.states2band.test = testAstates2band;
 
-  g_awardTypes["IOTA"].compile = singleCompile;
-  g_awardTypes["call"].compile = singleCompile;
-  g_awardTypes["callarea"].compile = singleCompile;
-  g_awardTypes["calls2dxcc"].compile = doubleCompile;
-  g_awardTypes["cnty"].compile = singleCompile;
-  g_awardTypes["cont"].compile = singleCompile;
-  g_awardTypes["cont5"].compile = singleCompile;
-  g_awardTypes["cont52band"].compile = doubleCompile;
-  g_awardTypes["cqz"].compile = singleCompile;
-  g_awardTypes["dxcc"].compile = singleCompile;
-  g_awardTypes["grids"].compile = singleCompile;
-  g_awardTypes["numsfx"].compile = singleCompile;
-  g_awardTypes["px"].compile = singleCompile;
-  g_awardTypes["pxa"].compile = singleCompile;
-  g_awardTypes["pxplus"].compile = singleCompile;
-  g_awardTypes["sfx"].compile = singleCompile;
-  g_awardTypes["states"].compile = singleCompile;
-  g_awardTypes["cont2band"].compile = doubleCompile;
-  g_awardTypes["calls2band"].compile = doubleCompile;
-  g_awardTypes["dxcc2band"].compile = doubleCompile;
-  g_awardTypes["states2band"].compile = doubleCompile;
+  g_awardTypes.IOTA.compile = singleCompile;
+  g_awardTypes.call.compile = singleCompile;
+  g_awardTypes.callarea.compile = singleCompile;
+  g_awardTypes.calls2dxcc.compile = doubleCompile;
+  g_awardTypes.cnty.compile = singleCompile;
+  g_awardTypes.cont.compile = singleCompile;
+  g_awardTypes.cont5.compile = singleCompile;
+  g_awardTypes.cont52band.compile = doubleCompile;
+  g_awardTypes.cqz.compile = singleCompile;
+  g_awardTypes.dxcc.compile = singleCompile;
+  g_awardTypes.grids.compile = singleCompile;
+  g_awardTypes.numsfx.compile = singleCompile;
+  g_awardTypes.px.compile = singleCompile;
+  g_awardTypes.pxa.compile = singleCompile;
+  g_awardTypes.pxplus.compile = singleCompile;
+  g_awardTypes.sfx.compile = singleCompile;
+  g_awardTypes.states.compile = singleCompile;
+  g_awardTypes.cont2band.compile = doubleCompile;
+  g_awardTypes.calls2band.compile = doubleCompile;
+  g_awardTypes.dxcc2band.compile = doubleCompile;
+  g_awardTypes.states2band.compile = doubleCompile;
 }
 
-function scoreAstates(award, obj) {
-  if (obj.state) {
+function scoreAstates(award, obj)
+{
+  if (obj.state)
+  {
     if (!(obj.state in award.stat))
-      award.stat[obj.state] = newAwardCountObject();
+    { award.stat[obj.state] = newAwardCountObject(); }
     return workAwardObject(
       award.stat[obj.state],
       obj.band,
@@ -3670,15 +4235,19 @@ function scoreAstates(award, obj) {
   return false;
 }
 
-function testAstates(award, obj, baseHash) {
-  if (obj.state && obj.state + baseHash in g_tracker[award.test.look].state) {
+function testAstates(award, obj, baseHash)
+{
+  if (obj.state && obj.state + baseHash in g_tracker[award.test.look].state)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAstates2band(award, obj) {
-  if (obj.state) {
+function scoreAstates2band(award, obj)
+{
+  if (obj.state)
+  {
     if (!(obj.band in award.stat)) award.stat[obj.band] = newAwardCountObject();
     return workAwardObject(
       award.stat[obj.band],
@@ -3692,14 +4261,17 @@ function scoreAstates2band(award, obj) {
   return false;
 }
 
-function testAstates2band(award, obj, baseHash) {
-  if (obj.state && obj.state + baseHash in g_tracker[award.test.look].state) {
+function testAstates2band(award, obj, baseHash)
+{
+  if (obj.state && obj.state + baseHash in g_tracker[award.test.look].state)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAdxcc(award, obj) {
+function scoreAdxcc(award, obj)
+{
   if (!(obj.dxcc in award.stat)) award.stat[obj.dxcc] = newAwardCountObject();
   return workAwardObject(
     award.stat[obj.dxcc],
@@ -3710,15 +4282,19 @@ function scoreAdxcc(award, obj) {
   );
 }
 
-function testAdxcc(award, obj, baseHash) {
-  if (String(obj.dxcc) + baseHash in g_tracker[award.test.look].dxcc) {
+function testAdxcc(award, obj, baseHash)
+{
+  if (String(obj.dxcc) + baseHash in g_tracker[award.test.look].dxcc)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAcont(award, obj) {
-  if (obj.cont) {
+function scoreAcont(award, obj)
+{
+  if (obj.cont)
+  {
     var cont = obj.cont;
     if (cont == "AN") cont = "OC";
     if (!(cont in award.stat)) award.stat[cont] = newAwardCountObject();
@@ -3733,20 +4309,25 @@ function scoreAcont(award, obj) {
   return false;
 }
 
-function testAcont(award, obj, baseHash) {
-  if (obj.cont) {
+function testAcont(award, obj, baseHash)
+{
+  if (obj.cont)
+  {
     var cont = obj.cont;
     if (cont == "AN") cont = "OC";
 
-    if (cont + baseHash in g_tracker[award.test.look].cont) {
+    if (cont + baseHash in g_tracker[award.test.look].cont)
+    {
       return false;
     }
   }
   return true;
 }
 
-function scoreAcont5(award, obj, baseHash) {
-  if (obj.cont) {
+function scoreAcont5(award, obj, baseHash)
+{
+  if (obj.cont)
+  {
     var cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
@@ -3763,20 +4344,24 @@ function scoreAcont5(award, obj, baseHash) {
   return false;
 }
 
-function testAcont5(award, obj, baseHash) {
-  if (obj.cont) {
+function testAcont5(award, obj, baseHash)
+{
+  if (obj.cont)
+  {
     var cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
-    if (cont + baseHash in g_tracker[award.test.look].cont) {
+    if (cont + baseHash in g_tracker[award.test.look].cont)
+    {
       return false;
     }
   }
   return true;
 }
 
-function scoreAcont2band(award, obj) {
+function scoreAcont2band(award, obj)
+{
   if (!(obj.band in award.stat)) award.stat[obj.band] = newAwardCountObject();
 
   return workAwardObject(
@@ -3789,20 +4374,25 @@ function scoreAcont2band(award, obj) {
   );
 }
 
-function testAcont2band(award, obj, baseHash) {
-  if (obj.cont) {
+function testAcont2band(award, obj, baseHash)
+{
+  if (obj.cont)
+  {
     var cont = obj.cont;
     if (cont == "AN") cont = "OC";
 
-    if (cont + baseHash in g_tracker[award.test.look].cont) {
+    if (cont + baseHash in g_tracker[award.test.look].cont)
+    {
       return false;
     }
   }
   return true;
 }
 
-function scoreAcont52band(award, obj) {
-  if (obj.cont) {
+function scoreAcont52band(award, obj)
+{
+  if (obj.cont)
+  {
     var cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
@@ -3820,21 +4410,26 @@ function scoreAcont52band(award, obj) {
   return false;
 }
 
-function testAcont52band(award, obj, baseHash) {
-  if (obj.cont) {
+function testAcont52band(award, obj, baseHash)
+{
+  if (obj.cont)
+  {
     var cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
-    if (cont + baseHash in g_tracker[award.test.look].cont) {
+    if (cont + baseHash in g_tracker[award.test.look].cont)
+    {
       return false;
     }
   }
   return true;
 }
 
-function scoreAgrids(award, obj) {
-  if (obj.grid) {
+function scoreAgrids(award, obj)
+{
+  if (obj.grid)
+  {
     var grid = obj.grid.substr(0, 4);
 
     if (!(grid in award.stat)) award.stat[grid] = newAwardCountObject();
@@ -3849,15 +4444,19 @@ function scoreAgrids(award, obj) {
   return false;
 }
 
-function testAgrids(award, obj, baseHash) {
-  if (obj.grid && obj.grid + baseHash in g_tracker[award.test.look].grid) {
+function testAgrids(award, obj, baseHash)
+{
+  if (obj.grid && obj.grid + baseHash in g_tracker[award.test.look].grid)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAcnty(award, obj) {
-  if (obj.cnty) {
+function scoreAcnty(award, obj)
+{
+  if (obj.cnty)
+  {
     if (!(obj.cnty in award.stat)) award.stat[obj.cnty] = newAwardCountObject();
     return workAwardObject(
       award.stat[obj.cnty],
@@ -3870,17 +4469,21 @@ function scoreAcnty(award, obj) {
   return false;
 }
 
-function testAcnty(award, obj, baseHash) {
-  if (obj.cnty && obj.cnty + baseHash in g_tracker[award.test.look].cnty) {
+function testAcnty(award, obj, baseHash)
+{
+  if (obj.cnty && obj.cnty + baseHash in g_tracker[award.test.look].cnty)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAcall(award, obj) {
+function scoreAcall(award, obj)
+{
   var call = obj.DEcall;
 
-  if (call.indexOf("/") > -1) {
+  if (call.indexOf("/") > -1)
+  {
     if (call.endsWith("/MM")) return false;
     call = call.replace("/P", "").replace("/R", "").replace("/QRP");
   }
@@ -3895,21 +4498,25 @@ function scoreAcall(award, obj) {
   );
 }
 
-function testAcall(award, obj, baseHash) {
+function testAcall(award, obj, baseHash)
+{
   if (obj.DEcall.indexOf("/") > -1 && obj.DEcall.endsWith("/MM")) return false;
 
-  if (obj.DEcall + baseHash in g_tracker[award.test.look].call) {
+  if (obj.DEcall + baseHash in g_tracker[award.test.look].call)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAIOTA(award, obj) {
-  if (obj.IOTA) {
+function scoreAIOTA(award, obj)
+{
+  if (obj.IOTA)
+  {
     var test = g_awards[award.sponsor].awards[award.name];
 
     if ("IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1)
-      return false;
+    { return false; }
 
     if (!(obj.IOTA in award.stat)) award.stat[obj.IOTA] = newAwardCountObject();
     return workAwardObject(
@@ -3924,25 +4531,28 @@ function scoreAIOTA(award, obj) {
 }
 
 // NO IOTA YET
-function testAIOTA(award, obj, baseHash) {
-  /*if ( obj.IOTA )
-	{
-		var test = g_awards[award.sponsor].awards[award.name];
+function testAIOTA(award, obj, baseHash)
+{
+  /* if ( obj.IOTA )
+  {
+    var test = g_awards[award.sponsor].awards[award.name];
 
-		if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
-			return false;
+    if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
+      return false;
 
-	}*/
+  } */
 
   return false;
 }
 
-function scoreAcallarea(award, obj) {
-  if (obj.zone != null) {
+function scoreAcallarea(award, obj)
+{
+  if (obj.zone != null)
+  {
     var test = g_awards[award.sponsor].awards[award.name];
 
     if ("zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1)
-      return false;
+    { return false; }
 
     if (!(obj.zone in award.stat)) award.stat[obj.zone] = newAwardCountObject();
     return workAwardObject(
@@ -3956,21 +4566,26 @@ function scoreAcallarea(award, obj) {
   return false;
 }
 
-function testAcallarea(award, obj, baseHash) {
-  if (obj.zone != null) {
+function testAcallarea(award, obj, baseHash)
+{
+  if (obj.zone != null)
+  {
     var test = g_awards[award.sponsor].awards[award.name];
 
     if ("zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1)
-      return false;
+    { return false; }
   }
   return true;
 }
 
-function scoreApx(award, obj) {
-  if (obj.px) {
+function scoreApx(award, obj)
+{
+  if (obj.px)
+  {
     var test = g_awards[award.sponsor].awards[award.name];
     var px = obj.px;
-    if ("px" in test.rule) {
+    if ("px" in test.rule)
+    {
       px = px.substr(0, test.rule.px[0].length);
       if (test.rule.px.indexOf(px) == -1) return false;
     }
@@ -3987,27 +4602,35 @@ function scoreApx(award, obj) {
   return false;
 }
 
-function testApx(award, obj, baseHash) {
-  if (obj.px) {
+function testApx(award, obj, baseHash)
+{
+  if (obj.px)
+  {
     var test = g_awards[award.sponsor].awards[award.name];
     var px = obj.px;
-    if ("px" in test.rule) {
+    if ("px" in test.rule)
+    {
       px = px.substr(0, test.rule.px[0].length);
       if (test.rule.px.indexOf(px) == -1) return false;
     }
 
-    if (String(obj.px) + baseHash in g_tracker[award.test.look].px) {
+    if (String(obj.px) + baseHash in g_tracker[award.test.look].px)
+    {
       return false;
     }
   }
   return true;
 }
 
-function scoreApxa(award, obj) {
-  if (obj.px) {
+function scoreApxa(award, obj)
+{
+  if (obj.px)
+  {
     var test = g_awards[award.sponsor].awards[award.name];
-    for (var i in test.rule.pxa) {
-      if (test.rule.pxa[i].indexOf(obj.px) > -1) {
+    for (var i in test.rule.pxa)
+    {
+      if (test.rule.pxa[i].indexOf(obj.px) > -1)
+      {
         if (!(i in award.stat)) award.stat[i] = newAwardCountObject();
         return workAwardObject(
           award.stat[i],
@@ -4022,14 +4645,21 @@ function scoreApxa(award, obj) {
   return false;
 }
 
-function testApxa(award, obj, baseHash) {
-  if (obj.px) {
+function testApxa(award, obj, baseHash)
+{
+  if (obj.px)
+  {
     var test = g_awards[award.sponsor].awards[award.name];
-    for (var i in test.rule.pxa) {
-      if (test.rule.pxa[i].indexOf(obj.px) > -1) {
-        if (String(obj.px) + baseHash in g_tracker[award.test.look].px) {
+    for (var i in test.rule.pxa)
+    {
+      if (test.rule.pxa[i].indexOf(obj.px) > -1)
+      {
+        if (String(obj.px) + baseHash in g_tracker[award.test.look].px)
+        {
           return false;
-        } else {
+        }
+        else
+        {
           return true;
         }
       }
@@ -4038,12 +4668,16 @@ function testApxa(award, obj, baseHash) {
   return false;
 }
 
-function scoreAsfx(award, obj) {
+function scoreAsfx(award, obj)
+{
   var test = g_awards[award.sponsor].awards[award.name];
   var suf = obj.DEcall.replace(obj.px, "");
-  for (var i in test.rule.sfx) {
-    for (var s in test.rule.sfx[i]) {
-      if (suf.indexOf(test.rule.sfx[i][s]) == 0) {
+  for (var i in test.rule.sfx)
+  {
+    for (var s in test.rule.sfx[i])
+    {
+      if (suf.indexOf(test.rule.sfx[i][s]) == 0)
+      {
         if (!(i in award.stat)) award.stat[i] = newAwardCountObject();
         return workAwardObject(
           award.stat[i],
@@ -4059,12 +4693,16 @@ function scoreAsfx(award, obj) {
   return false;
 }
 
-function testAsfx(award, obj, baseHash) {
+function testAsfx(award, obj, baseHash)
+{
   var test = g_awards[award.sponsor].awards[award.name];
   var suf = obj.DEcall.replace(obj.px, "");
-  for (var i in test.rule.sfx) {
-    for (var s in test.rule.sfx[i]) {
-      if (suf.indexOf(test.rule.sfx[i][s]) == 0) {
+  for (var i in test.rule.sfx)
+  {
+    for (var s in test.rule.sfx[i])
+    {
+      if (suf.indexOf(test.rule.sfx[i][s]) == 0)
+      {
         return false;
       }
     }
@@ -4073,7 +4711,8 @@ function testAsfx(award, obj, baseHash) {
   return true;
 }
 
-function scoreAcalls2dxcc(award, obj) {
+function scoreAcalls2dxcc(award, obj)
+{
   if (!(obj.dxcc in award.stat)) award.stat[obj.dxcc] = newAwardCountObject();
 
   return workAwardObject(
@@ -4086,14 +4725,17 @@ function scoreAcalls2dxcc(award, obj) {
   );
 }
 
-function testAcalls2dxcc(award, obj, baseHash) {
-  if (obj.DEcall + baseHash in g_tracker[award.test.look].call) {
+function testAcalls2dxcc(award, obj, baseHash)
+{
+  if (obj.DEcall + baseHash in g_tracker[award.test.look].call)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAcalls2band(award, obj) {
+function scoreAcalls2band(award, obj)
+{
   if (!(obj.band in award.stat)) award.stat[obj.band] = newAwardCountObject();
 
   return workAwardObject(
@@ -4106,14 +4748,17 @@ function scoreAcalls2band(award, obj) {
   );
 }
 
-function testAcalls2band(award, obj, baseHash) {
-  if (obj.DEcall + baseHash in g_tracker[award.test.look].call) {
+function testAcalls2band(award, obj, baseHash)
+{
+  if (obj.DEcall + baseHash in g_tracker[award.test.look].call)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAdxcc2band(award, obj) {
+function scoreAdxcc2band(award, obj)
+{
   if (!(obj.band in award.stat)) award.stat[obj.band] = newAwardCountObject();
 
   return workAwardObject(
@@ -4126,15 +4771,19 @@ function scoreAdxcc2band(award, obj) {
   );
 }
 
-function testAdxcc2band(award, obj, baseHash) {
-  if (String(obj.dxcc) + baseHash in g_tracker[award.test.look].dxcc) {
+function testAdxcc2band(award, obj, baseHash)
+{
+  if (String(obj.dxcc) + baseHash in g_tracker[award.test.look].dxcc)
+  {
     return false;
   }
   return true;
 }
 
-function scoreAcqz(award, obj) {
-  if (obj.cqz) {
+function scoreAcqz(award, obj)
+{
+  if (obj.cqz)
+  {
     if (!(obj.cqz in award.stat)) award.stat[obj.cqz] = newAwardCountObject();
 
     return workAwardObject(
@@ -4148,10 +4797,13 @@ function scoreAcqz(award, obj) {
   return false;
 }
 
-function testAcqz(award, obj, baseHash) {
-  if (obj.cqza) {
+function testAcqz(award, obj, baseHash)
+{
+  if (obj.cqza)
+  {
     var x = 0;
-    for (var z in obj.cqza) {
+    for (var z in obj.cqza)
+    {
       if (obj.cqza[z] + baseHash in g_tracker[award.test.look].cqz) x++;
     }
     if (obj.cqza.length == x) return false;
@@ -4159,14 +4811,18 @@ function testAcqz(award, obj, baseHash) {
   return true;
 }
 
-function scoreAnumsfx(award, obj) {
+function scoreAnumsfx(award, obj)
+{
   var test = g_awards[award.sponsor].awards[award.name];
   var px = obj.px.substr(0, obj.px.length - 1);
   var suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (var i in test.rule.numsfx) {
-    for (var s in test.rule.numsfx[i]) {
-      if (suf.indexOf(test.rule.numsfx[i][s]) == 0) {
+  for (var i in test.rule.numsfx)
+  {
+    for (var s in test.rule.numsfx[i])
+    {
+      if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
+      {
         if (!(i in award.stat)) award.stat[i] = newAwardCountObject();
         return workAwardObject(
           award.stat[i],
@@ -4182,14 +4838,18 @@ function scoreAnumsfx(award, obj) {
   return false;
 }
 
-function testAnumsfx(award, obj) {
+function testAnumsfx(award, obj)
+{
   var test = g_awards[award.sponsor].awards[award.name];
   var px = obj.px.substr(0, obj.px.length - 1);
   var suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (var i in test.rule.numsfx) {
-    for (var s in test.rule.numsfx[i]) {
-      if (suf.indexOf(test.rule.numsfx[i][s]) == 0) {
+  for (var i in test.rule.numsfx)
+  {
+    for (var s in test.rule.numsfx[i])
+    {
+      if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
+      {
         return false;
       }
     }
@@ -4198,12 +4858,16 @@ function testAnumsfx(award, obj) {
   return true;
 }
 
-function scoreApxplus(award, obj) {
+function scoreApxplus(award, obj)
+{
   var test = g_awards[award.sponsor].awards[award.name];
 
-  if (test.rule.pxplus) {
-    for (var i in test.rule.pxplus) {
-      if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0) {
+  if (test.rule.pxplus)
+  {
+    for (var i in test.rule.pxplus)
+    {
+      if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
+      {
         if (!(i in award.stat)) award.stat[i] = newAwardCountObject();
         return workAwardObject(
           award.stat[i],
@@ -4218,12 +4882,16 @@ function scoreApxplus(award, obj) {
   return false;
 }
 
-function testApxplus(award, obj) {
+function testApxplus(award, obj)
+{
   var test = g_awards[award.sponsor].awards[award.name];
 
-  if (test.rule.pxplus) {
-    for (var i in test.rule.pxplus) {
-      if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0) {
+  if (test.rule.pxplus)
+  {
+    for (var i in test.rule.pxplus)
+    {
+      if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
+      {
         return false;
       }
     }
@@ -4231,36 +4899,46 @@ function testApxplus(award, obj) {
   return true;
 }
 
-function loadAwardJson() {
+function loadAwardJson()
+{
   g_awards = {};
   var fs = require("fs");
-  if (fs.existsSync("./data/awards.json")) {
+  if (fs.existsSync("./data/awards.json"))
+  {
     fileBuf = fs.readFileSync("./data/awards.json");
-    try {
+    try
+    {
       g_awards = JSON.parse(fileBuf);
-      //fs.writeFileSync("./data/awards.json", JSON.stringify(g_awards,null,2));
+      // fs.writeFileSync("./data/awards.json", JSON.stringify(g_awards,null,2));
 
-      for (var sp in g_awards) {
-        for (var aw in g_awards[sp].awards) {
+      for (var sp in g_awards)
+      {
+        for (var aw in g_awards[sp].awards)
+        {
           if (!("unique" in g_awards[sp].awards[aw].rule))
-            g_awards[sp].awards[aw].rule.unique = 1;
+          { g_awards[sp].awards[aw].rule.unique = 1; }
 
-          if (g_awards[sp].awards[aw].rule.band[0] == "Mixed") {
+          if (g_awards[sp].awards[aw].rule.band[0] == "Mixed")
+          {
             g_awards[sp].awards[aw].rule.band.shift();
           }
 
-          if (g_awards[sp].awards[aw].rule.band.length == 0) {
+          if (g_awards[sp].awards[aw].rule.band.length == 0)
+          {
             g_awards[sp].awards[aw].rule.band = [];
-            for (var key in g_awards[sp].mixed) {
+            for (var key in g_awards[sp].mixed)
+            {
               g_awards[sp].awards[aw].rule.band.push(g_awards[sp].mixed[key]);
             }
           }
           if (
             g_awards[sp].awards[aw].rule.endorse.length == 1 &&
             g_awards[sp].awards[aw].rule.endorse[0] == "Mixed"
-          ) {
+          )
+          {
             g_awards[sp].awards[aw].rule.endorse = [];
-            for (var key in g_awards[sp].mixed) {
+            for (var key in g_awards[sp].mixed)
+            {
               g_awards[sp].awards[aw].rule.endorse.push(
                 g_awards[sp].mixed[key]
               );
@@ -4270,17 +4948,22 @@ function loadAwardJson() {
       }
 
       buildAwardTypeHandlers();
-    } catch (e) {
+    }
+    catch (e)
+    {
       alert("Core awards.json : " + e);
       g_awards = {};
     }
-    delete filebuf;
-  } else alert("Missing core awards.json");
+  }
+  else alert("Missing core awards.json");
 }
 
-function processAllAwardTrackers() {
-  for (var tracker in g_awardTracker) {
-    if (!(g_awardTracker[tracker].sponsor in g_awards)) {
+function processAllAwardTrackers()
+{
+  for (var tracker in g_awardTracker)
+  {
+    if (!(g_awardTracker[tracker].sponsor in g_awards))
+    {
       delete g_awardTracker[tracker];
       continue;
     }
@@ -4289,7 +4972,8 @@ function processAllAwardTrackers() {
         g_awardTracker[tracker].name in
         g_awards[g_awardTracker[tracker].sponsor].awards
       )
-    ) {
+    )
+    {
       delete g_awardTracker[tracker];
       continue;
     }
@@ -4298,27 +4982,32 @@ function processAllAwardTrackers() {
   updateAwardList();
 }
 
-function newAwardTrackerObject(sponsor, award, enable) {
+function newAwardTrackerObject(sponsor, award, enable)
+{
   var newAward = {};
   newAward.sponsor = sponsor;
   newAward.name = award;
   newAward.enable = enable;
   newAward.mode = g_awards[sponsor].awards[award].rule.mode[0];
   newAward.band = g_awards[sponsor].awards[award].rule.band[0];
-  (newAward.count = g_awards[sponsor].awards[award].rule.count[0]),
-    (newAward.stat = {});
+  newAward.count = g_awards[sponsor].awards[award].rule.count[0];
+  newAward.stat = {};
   newAward.comp = {};
   newAward.test = {};
   return newAward;
 }
 
-function addAllAwards() {
-  for (var sponsor in g_awards) {
-    for (var award in g_awards[sponsor].awards) {
+function addAllAwards()
+{
+  for (var sponsor in g_awards)
+  {
+    for (var award in g_awards[sponsor].awards)
+    {
       var awardToAdd = newAwardTrackerObject(sponsor, award, true);
 
       var hash = awardToAdd.name + "-" + awardToAdd.sponsor;
-      if (!(hash in g_awardTracker)) {
+      if (!(hash in g_awardTracker))
+      {
         g_awardTracker[hash] = awardToAdd;
         processAward(hash);
         storeAwardTracker();
@@ -4329,14 +5018,16 @@ function addAllAwards() {
   window.opener.goProcessRoster();
 }
 
-function delAllAwards() {
+function delAllAwards()
+{
   g_awardTracker = {};
   storeAwardTracker();
   updateAwardList();
   window.opener.goProcessRoster();
 }
 
-function newCompileCountObject() {
+function newCompileCountObject()
+{
   var compileCountObject = {};
   compileCountObject.bands = {};
   compileCountObject.modes = {};
@@ -4345,47 +5036,57 @@ function newCompileCountObject() {
   return compileCountObject;
 }
 
-function singleCompile(award, obj) {
+function singleCompile(award, obj)
+{
   var test = g_awards[award.sponsor].awards[award.name];
   var rule = test.rule;
   var comp = newCompileCountObject();
-  for (var mode in rule.mode) {
+  for (var mode in rule.mode)
+  {
     comp.modes[rule.mode[mode]] = 0;
     comp.bands[rule.mode[mode]] = {};
 
-    for (var band in rule.band) {
+    for (var band in rule.band)
+    {
       comp.bands[rule.mode[mode]][rule.band[band]] = 0;
     }
-    for (var key in obj) {
+    for (var key in obj)
+    {
       if (
         rule.mode[mode] in obj[key].bands &&
         Object.keys(obj[key].bands[rule.mode[mode]]).length
-      ) {
+      )
+      {
         comp.modes[rule.mode[mode]] += 1;
 
-        for (var band in rule.band) {
+        for (var band in rule.band)
+        {
           if (rule.band[band] in obj[key].bands[rule.mode[mode]])
-            comp.bands[rule.mode[mode]][rule.band[band]] += 1;
+          { comp.bands[rule.mode[mode]][rule.band[band]] += 1; }
         }
       }
     }
   }
 
-  for (var mode in comp.modes) {
+  for (var mode in comp.modes)
+  {
     comp.endorse[mode] = {};
     comp.counts[mode] = {};
-    for (var cnts in rule.count) {
+    for (var cnts in rule.count)
+    {
       comp.counts[mode][rule.count[cnts]] = {
         num: comp.modes[mode],
         per: parseInt(
           Math.min(100, (comp.modes[mode] / rule.count[cnts]) * 100.0)
-        ),
+        )
       };
     }
 
-    for (var endorse in rule.endorse) {
+    for (var endorse in rule.endorse)
+    {
       comp.endorse[mode][rule.endorse[endorse]] = {};
-      for (var cnts in rule.count) {
+      for (var cnts in rule.count)
+      {
         comp.endorse[mode][rule.endorse[endorse]][rule.count[cnts]] =
           comp.bands[mode][rule.endorse[endorse]] >= rule.count[cnts];
       }
@@ -4395,34 +5096,43 @@ function singleCompile(award, obj) {
   return comp;
 }
 
-function doubleCompile(award, firstLevel) {
+function doubleCompile(award, firstLevel)
+{
   var test = g_awards[award.sponsor].awards[award.name];
   var rule = test.rule;
 
-  for (var k in firstLevel) {
+  for (var k in firstLevel)
+  {
     firstLevel[k].bands = {};
-    //firstLevel[k].modes = {};
+    // firstLevel[k].modes = {};
     var obj = singleCompile(award, firstLevel[k].unique);
 
-    for (var mode in obj.bands) {
-      for (var cnt in test.rule.count) {
+    for (var mode in obj.bands)
+    {
+      for (var cnt in test.rule.count)
+      {
         if (obj.counts[mode][test.rule.count[cnt]].num >= test.rule.unique)
-          for (var band in obj.bands[mode]) {
+        {
+          for (var band in obj.bands[mode])
+          {
             if (!(mode in firstLevel[k].bands)) firstLevel[k].bands[mode] = {};
 
             if (obj.bands[mode][band] > 0)
+            {
               firstLevel[k].bands[mode][band] =
                 ~~firstLevel[k].bands[mode][band] + 1;
+            }
           }
+        }
       }
     }
-    /*for ( var mode in obj.modes )
-		{
-			if ( !(mode in firstLevel[k].modes) )
-				firstLevel[k].modes[mode] = 0;
-			if ( obj.modes[mode] > 0 )
-				firstLevel[k].modes[mode] +=  1;
-		}*/
+    /* for ( var mode in obj.modes )
+    {
+      if ( !(mode in firstLevel[k].modes) )
+        firstLevel[k].modes[mode] = 0;
+      if ( obj.modes[mode] > 0 )
+        firstLevel[k].modes[mode] +=  1;
+    } */
 
     delete firstLevel[k].unique;
     firstLevel[k].unique = null;

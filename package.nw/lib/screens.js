@@ -8,7 +8,8 @@ var g_screenLost = false;
 var g_windowInfo = {};
 var g_initialScreenCount = nw.Screen.screens.length;
 
-function setWindowInfo() {
+function setWindowInfo()
+{
   // if we've lost a screen, stop saving our info
   if (g_screenLost) return;
   var win = nw.Window.get();
@@ -20,24 +21,29 @@ function setWindowInfo() {
   g_windowInfo = windowInfo;
 }
 
-function clearAllScreenTimers() {
-  if (g_windowMoveTimer != null) {
+function clearAllScreenTimers()
+{
+  if (g_windowMoveTimer != null)
+  {
     clearTimeout(g_windowMoveTimer);
     g_windowMoveTimer = null;
   }
-  if (g_windowResizeTimer != null) {
+  if (g_windowResizeTimer != null)
+  {
     clearTimeout(g_windowResizeTimer);
     g_windowResizeTimer = null;
   }
 }
 
 var screenCB = {
-  onDisplayAdded: function (screen) {
+  onDisplayAdded: function (screen)
+  {
     clearAllScreenTimers();
     if (
       g_screenLost == true &&
       g_initialScreenCount == nw.Screen.screens.length
-    ) {
+    )
+    {
       // Lets restore the position now
       var win = nw.Window.get();
       win.x = g_windowInfo.x;
@@ -48,15 +54,18 @@ var screenCB = {
     }
   },
 
-  onDisplayRemoved: function (screen) {
+  onDisplayRemoved: function (screen)
+  {
     clearAllScreenTimers();
-    if (g_initialScreenCount != nw.Screen.screens.length) {
+    if (g_initialScreenCount != nw.Screen.screens.length)
+    {
       g_screenLost = true;
     }
-  },
+  }
 };
 
-function saveScreenSettings() {
+function saveScreenSettings()
+{
   var setting = { showing: g_isShowing, zoomLevel: s_zoomLevel };
 
   s_screenSettings = JSON.parse(localStorage.screenSettings);
@@ -71,18 +80,22 @@ nw.Screen.on("displayRemoved", screenCB.onDisplayRemoved);
 
 var g_isShowing = false;
 
-nw.Window.get().on("loaded", function () {
+nw.Window.get().on("loaded", function ()
+{
   s_title = document.title.substr(0, 16).trim();
   g_isShowing = false;
-  if (typeof localStorage.screenSettings == "undefined") {
+  if (typeof localStorage.screenSettings == "undefined")
+  {
     localStorage.screenSettings = "{}";
   }
   s_screenSettings = JSON.parse(localStorage.screenSettings);
 
-  if (!(s_title in s_screenSettings)) {
+  if (!(s_title in s_screenSettings))
+  {
     saveScreenSettings();
   }
-  if (!("zoomLevel" in s_screenSettings[s_title])) {
+  if (!("zoomLevel" in s_screenSettings[s_title]))
+  {
     saveScreenSettings();
   }
   g_isShowing = s_screenSettings[s_title].showing;
@@ -98,16 +111,20 @@ nw.Window.get().on("loaded", function () {
 });
 
 var g_windowMoveTimer = null;
-nw.Window.get().on("move", function (x, y) {
-  if (g_windowMoveTimer != null) {
+nw.Window.get().on("move", function (x, y)
+{
+  if (g_windowMoveTimer != null)
+  {
     clearTimeout(g_windowMoveTimer);
   }
   g_windowMoveTimer = setTimeout(setWindowInfo, 1000);
 });
 
 var g_windowResizeTimer = null;
-nw.Window.get().on("resize", function (w, h) {
-  if (g_windowResizeTimer != null) {
+nw.Window.get().on("resize", function (w, h)
+{
+  if (g_windowResizeTimer != null)
+  {
     clearTimeout(g_windowResizeTimer);
   }
   g_windowResizeTimer = setTimeout(setWindowInfo, 1000);
@@ -119,31 +136,37 @@ var g_zoomKeys = {
   NumpadAdd: increaseZoom,
   Equal: increaseZoom,
   Numpad0: resetZoom,
-  Digit0: resetZoom,
+  Digit0: resetZoom
 };
 
-function onZoomControlDown(event) {
-  if (event.ctrlKey) {
-    if (event.code in g_zoomKeys) {
+function onZoomControlDown(event)
+{
+  if (event.ctrlKey)
+  {
+    if (event.code in g_zoomKeys)
+    {
       g_zoomKeys[event.code]();
     }
   }
 }
 
-function reduceZoom() {
+function reduceZoom()
+{
   s_zoomLevel -= 0.2;
   nw.Window.get().zoomLevel = s_zoomLevel;
   saveScreenSettings();
 }
 
-function increaseZoom() {
+function increaseZoom()
+{
   s_zoomLevel += 0.2;
   nw.Window.get().zoomLevel = s_zoomLevel;
 
   saveScreenSettings();
 }
 
-function resetZoom() {
+function resetZoom()
+{
   s_zoomLevel = 0;
   nw.Window.get().zoomLevel = s_zoomLevel;
   saveScreenSettings();

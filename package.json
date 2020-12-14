@@ -2,13 +2,18 @@
   "name": "gridtracker-development",
   "version": "1.0.0",
   "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
     "nwjs-builder-phoenix": "^1.15.0",
     "prettier": "^2.2.1"
   },
   "scripts": {
-    "test": "npm run prettier-check",
-    "prettier-check": "npx prettier --check package.nw",
-    "prettier-write": "npx prettier --write package.nw",
+    "test": "eslint package.nw",
+    "lint-check": "eslint --fix package.nw",
+    "lint-fix": "eslint --fix package.nw",
     "dist": "build --concurrent --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 package.nw",
     "distsome": "build --debug --tasks linux-x64,mac-x64 package.nw",
     "start": "run package.nw"

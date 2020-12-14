@@ -48,7 +48,6 @@ function findAdiField(row, field) {
       var newLen = newLenSearch[0];
       value = secondSplitArray[1].slice(0, newLen);
     }
-    delete secondSplitArray;
   }
   return value;
 }
@@ -369,10 +368,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
     }
   }
 
-  delete rawAdiBuffer;
-
-  delete activeAdifArray;
-
   redrawGrids();
   updateCountStats();
   updateLogbook();
@@ -591,7 +586,6 @@ function qrzCallback(buffer, flag) {
       tryToWriteAdifToDocFolder("qrz.adif", htmlString);
 
       onAdiLoadComplete(htmlString, true, "qrz.adif", true);
-      delete htmlString;
     }
   }
 }
@@ -1111,14 +1105,13 @@ function getABuffer(
   let fileBuffer = null;
   let options = null;
 
-  {
-    options = {
-      host: url.parse(file_url).host,
-      port: port,
-      path: url.parse(file_url).path,
-      method: "get",
-    };
-  }
+  options = {
+    host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
+    port: port,
+    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
+    method: "get"
+  };
+
   if (typeof stringOfFlag != "undefined") window[stringOfFlag] = true;
   if (typeof imgToGray != "undefined") {
     imgToGray.parentNode.style.background =
@@ -1209,9 +1202,9 @@ function getAPostBuffer(
   var fileBuffer = null;
 
   var options = {
-    host: url.parse(file_url).host,
+    host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
     port: port,
-    path: url.parse(file_url).path,
+    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
     method: "post",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -1277,7 +1270,7 @@ function getAPostBuffer(
     });
   });
 
-  req.on("error", function (err) {
+  req.on("error", function (err) { // eslint-disable-line node/handle-callback-err
     window[stringOfFlag] = false;
     if (typeof imgToGray != "undefined") {
       imgToGray.parentNode.style.background = "";
@@ -1292,7 +1285,7 @@ function getAPostBuffer(
 function sendUdpMessage(msg, length, port, address) {
   var dgram = require("dgram");
   var socket = dgram.createSocket({ type: "udp4", reuseAddr: true });
-  socket.send(msg, 0, length, port, address, (err) => {
+  socket.send(msg, 0, length, port, address, (err) => { // eslint-disable-line node/handle-callback-err
     socket.close();
   });
 }
@@ -1897,7 +1890,7 @@ function sendLotwLogEntry(report) {
     child_process.execFile(
       g_trustedQslSettings.binaryFile,
       options,
-      (error, stdout, stderr) => {
+      (error, stdout, stderr) => { // eslint-disable-line node/handle-callback-err
         if (stderr.indexOf("Final Status: Success") < 0) {
           alert(stderr);
           addLastTraffic("<font style='color:red'>Fail log to TQSL</font>");
@@ -2235,13 +2228,13 @@ function getPostJSONBuffer(
   try {
     var postData = JSON.stringify(theData);
     var url = require("url");
-    var protocol = url.parse(file_url).protocol;
+    var protocol = url.parse(file_url).protocol; // eslint-disable-line node/no-deprecated-api
     var http = require(protocol.replace(":", ""));
     var fileBuffer = null;
     var options = {
-      host: url.parse(file_url).hostname,
-      port: url.parse(file_url).port,
-      path: url.parse(file_url).path,
+      host: url.parse(file_url).hostname, // eslint-disable-line node/no-deprecated-api
+      port: url.parse(file_url).port, // eslint-disable-line node/no-deprecated-api
+      path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -2273,7 +2266,7 @@ function getPostJSONBuffer(
           req.abort();
         });
       });
-      req.on("error", function (err) {
+      req.on("error", function (err) { // eslint-disable-line node/handle-callback-err
         if (typeof timeoutCallback != "undefined")
           timeoutCallback(
             file_url,

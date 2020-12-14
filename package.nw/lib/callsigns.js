@@ -142,7 +142,7 @@ function processLotwCallsigns(result, flag) {
   //var result = String(buffer);
   var lines = Array();
   lines = result.split("\n");
-  delete result;
+
   var lotwCallsigns = Object();
   for (x in lines) {
     var breakout = lines[x].split(",");
@@ -160,7 +160,7 @@ function processLotwCallsigns(result, flag) {
       lotwCallsigns[breakout[0]] = parseInt(dateTime.getTime() / 1000) / 86400;
     }
   }
-  delete lines;
+
   g_callsignLookups.lotwLastUpdate = timeNowSec();
 
   var now = timeNowSec();
@@ -472,20 +472,20 @@ function getChunkedBuffer(
   var options = null;
   if (cookie != null) {
     options = {
-      host: url.parse(file_url).host,
+      host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
       port: port,
       followAllRedirects: true,
-      path: url.parse(file_url).path,
+      path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
       headers: {
         Cookie: cookie,
       },
     };
   } else {
     options = {
-      host: url.parse(file_url).host,
+      host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
       port: port,
       followAllRedirects: true,
-      path: url.parse(file_url).path,
+      path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
     };
   }
   http.get(options, function (res) {
@@ -502,7 +502,7 @@ function getChunkedBuffer(
         if (fileBuffer == null) {
           fileBuffer = callback(data, flag, cookies, true, isEnd);
         } else {
-          fileBuffer = callback(fileBuffer + data, flag, cookies, false, isEnd);
+          fileBuffer = callback(fileBuffer + data, flag, cookies, false, isEnd); // eslint-disable-line node/no-callback-literal
         }
       })
       .on("end", function () {})
@@ -584,7 +584,6 @@ function processulsCallsigns(data, flag, cookies, starting, finished) {
             }
           }
         }
-        delete lines;
         lines = null;
       });
     }
@@ -619,7 +618,7 @@ function processulsCallsigns(data, flag, cookies, starting, finished) {
     });
   }
 
-  return Buffer(returnBuffer);
+  return Buffer(returnBuffer); // eslint-disable-line node/no-deprecated-api
 }
 
 function lookupUsCallsign(object, writeState = false) {

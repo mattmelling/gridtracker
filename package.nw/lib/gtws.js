@@ -87,16 +87,13 @@ function gtConnectChat() {
       }
       if (typeof jsmesg.type == "undefined") {
         g_gtState = ChatState.error;
-        delete jsmesg;
         return;
       }
 
       if (jsmesg.type in g_chatRecvFunctions) {
         g_chatRecvFunctions[jsmesg.type](jsmesg);
-        delete jsmesg;
       } else {
         g_gtState = ChatState.error;
-        delete jsmesg;
         return;
       }
     }
@@ -132,7 +129,6 @@ function closeGtSocket() {
     if (g_gtChatSocket.readyState != WebSocket.CLOSED) g_gtChatSocket.close();
 
     if (g_gtChatSocket.readyState === WebSocket.CLOSED) {
-      delete g_gtChatSocket;
       g_gtChatSocket = null;
       g_gtState = ChatState.none;
     }
@@ -140,7 +136,6 @@ function closeGtSocket() {
 }
 
 function gtClosedSocket() {
-  delete g_gtChatSocket;
   g_gtChatSocket = null;
   g_gtState = ChatState.none;
 }
@@ -350,14 +345,14 @@ function makeGtPin(obj) {
 function gtChatNewList(jsmesg) {
   clearGtFlags();
 
-  for (cid in g_gtFlagPins) {
+  for (var cid in g_gtFlagPins) {
     g_gtFlagPins[cid].live = false;
     if (!(cid in g_gtMessages)) {
       delete g_gtFlagPins[cid];
     }
   }
 
-  for (key in jsmesg.data.calls) {
+  for (var key in jsmesg.data.calls) {
     var cid = jsmesg.data.cid[key];
     var id = jsmesg.data.id[key];
     if (id != myChatId) {
@@ -417,7 +412,7 @@ function gtChatMessage(jsmesg) {
     var cid = jsmesg.cid;
     jsmesg.when = Date.now();
     try {
-      jsmesg.msg = new Buffer.from(jsmesg.msg, "base64").toString("utf8");
+      jsmesg.msg = new Buffer.from(jsmesg.msg, "base64").toString("utf8"); // eslint-disable-line new-cap
       jsmesg.msg = htmlEntities(jsmesg.msg);
     } catch (e) {
       jsmesg.msg = "Corrupt message recieved";
@@ -446,7 +441,7 @@ function gtSendMessage(message, who) {
   msg.type = "mesg";
   msg.uuid = g_appSettings.chatUUID;
   msg.cid = who;
-  msg.msg = new Buffer.from(message).toString("base64");
+  msg.msg = new Buffer.from(message).toString("base64"); // eslint-disable-line new-cap
   sendGtJson(JSON.stringify(msg));
   msg.msg = htmlEntities(message);
   msg.id = 0;
@@ -567,15 +562,13 @@ function newChatMessage(id, jsmesg) {
 var g_lastChatMsgAlert = 0;
 
 function alertChatMessage() {
-  {
-    if (g_msgSettings.msgAlertSelect == 1) {
-      // Text to speech
-      speakAlertString(g_msgSettings.msgAlertWord);
-    }
-    if (g_msgSettings.msgAlertSelect == 2) {
-      // Audible
-      playAlertMediaFile(g_msgSettings.msgAlertMedia);
-    }
-    g_lastChatMsgAlert = timeNowSec();
+  if (g_msgSettings.msgAlertSelect == 1) {
+    // Text to speech
+    speakAlertString(g_msgSettings.msgAlertWord);
   }
+  if (g_msgSettings.msgAlertSelect == 2) {
+    // Audible
+    playAlertMediaFile(g_msgSettings.msgAlertMedia);
+  }
+  g_lastChatMsgAlert = timeNowSec();
 }

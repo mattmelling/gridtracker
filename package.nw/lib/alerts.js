@@ -332,7 +332,6 @@ function addNewAlert() {
       valid = ValidateCallsign(alertValueInput, null);
       if (!valid) {
         error = "Invalid Callsign";
-      } else {
       }
     }
   }
@@ -391,10 +390,11 @@ function resetAlert(key) {
 }
 
 function processAlertMessage(decodeWords, message, band, mode) {
-  if (Object.keys(g_alerts).length == 0)
+  if (Object.keys(g_alerts).length == 0) {
     // no alerts, don't bother
     return false;
-
+  }
+  else
   {
     var CQ = false;
     var validQTH = false;
@@ -439,7 +439,7 @@ function processAlertMessage(decodeWords, message, band, mode) {
       msgDEcallsign = decodeWords[1];
     }
 
-    var okayToAlert = true;
+  var okayToAlert = true;
 
     if (msgDEcallsign + band + mode in g_liveCallsigns)
       found_callsign = g_liveCallsigns[msgDEcallsign + band + mode];

@@ -288,15 +288,13 @@ function clearAndReload() {
   chrome.runtime.reload();
 }
 
-{
-  win.hide();
+win.hide();
 
-  win.on("close", function () {
-    saveAndCloseApp();
-  });
-  win.show();
-  win.setMinimumSize(200, 600);
-}
+win.on("close", function () {
+  saveAndCloseApp();
+});
+win.show();
+win.setMinimumSize(200, 600);
 
 var g_wsjtxProcessRunning = false;
 var g_jtdxProcessRunning = false;
@@ -1487,7 +1485,6 @@ function changePathWidth() {
 
     if (qrzPathWidthValue.value == 0) {
       g_layerSources["transmit"].clear();
-      delete g_transmitFlightPath;
       g_transmitFlightPath = null;
     } else {
       featureStroke.setWidth(qrzPathWidthValue.value);
@@ -2246,7 +2243,6 @@ function tempGridToBox(iQTH, oldGrid, borderColor, boxColor, layer) {
   if (oldGrid) {
     if (g_layerSources["temp"].hasFeature(oldGrid))
       g_layerSources["temp"].removeFeature(oldGrid);
-    delete oldGrid;
   }
   var bounds = [
     [LL.lo1, LL.la1],
@@ -3136,8 +3132,6 @@ function mouseUpGrid() {
     if (g_layerSources["temp"].hasFeature(g_tempGridBox))
       g_layerSources["temp"].removeFeature(g_tempGridBox);
   }
-
-  delete g_tempGridBox;
 
   g_tempGridBox = null;
 }
@@ -4536,7 +4530,6 @@ function setStrikeDistance() {
     try {
       g_strikeWebSocket.send(send);
     } catch (e) {
-      delete g_strikeWebSocket;
       g_strikeWebSocket = null;
     }
   } else {
@@ -4642,17 +4635,14 @@ function loadStrikes() {
         addLastTraffic(worker);
       }
     }
-    delete Strikes;
     delete evt.data;
   };
 
   g_strikeWebSocket.onerror = function () {
-    delete g_strikeWebSocket;
     g_strikeWebSocket = null;
   };
 
   g_strikeWebSocket.onclose = function () {
-    delete g_strikeWebSocket;
     g_strikeWebSocket = null;
   };
 }
@@ -4988,7 +4978,6 @@ function toggleNexrad() {
   if (g_nexradEnable == 1) {
     if (g_Nexrad != null) {
       g_map.removeLayer(g_Nexrad);
-      delete g_Nexrad;
     }
 
     g_Nexrad = createNexRad();
@@ -5003,7 +4992,6 @@ function toggleNexrad() {
     }
     if (g_Nexrad) {
       g_map.removeLayer(g_Nexrad);
-      delete g_Nexrad;
       g_Nexrad = null;
     }
   }
@@ -5842,8 +5830,6 @@ function fitViewBetweenPoints(points, maxZoom = 20) {
     padding: [75, 75, 75, 75],
   });
 
-  delete feature;
-  delete line;
 }
 
 var g_spotCollector = {};
@@ -6293,7 +6279,6 @@ function handleWsjtxDecode(newMessage) {
             if (dxcc != -1) {
               locality = g_worldGeoData[g_dxccToGeoData[dxcc]].geo;
               if (locality == "deleted") locality = null;
-            } else {
             }
           }
 
@@ -6827,8 +6812,8 @@ function myDxccCompare(a, b) {
 }
 
 function myDxccIntCompare(a, b) {
-  if (!a in g_dxccToAltName) return 0;
-  if (!b in g_dxccToAltName)
+  if (!(a in g_dxccToAltName)) return 0;
+  if (!(b in g_dxccToAltName))
     return g_dxccToAltName[a].localeCompare(g_dxccToAltName[b]);
 }
 
@@ -7059,253 +7044,253 @@ function showWorkedBox(sortIndex, nextPage, redraw) {
     var startIndex = g_qsoPage * g_qsoItemsPerPage;
     var endIndex = startIndex + g_qsoItemsPerPage;
     if (endIndex > ObjectCount) endIndex = ObjectCount;
-    {
-      var workHead = "<b> Entries (" + ObjectCount + ")</b>";
 
-      if (g_qsoPages > 1) {
-        workHead +=
-          "<br/><font  style='font-size:15px;' color='cyan' onClick='window.opener.showWorkedBox(" +
-          mySort +
-          ", -1);'>&#8678;&nbsp;</font>";
-        workHead +=
-          " Page " +
-          (g_qsoPage + 1) +
-          " of " +
-          g_qsoPages +
-          " (" +
-          (endIndex - startIndex) +
-          ") ";
-        workHead +=
-          "<font  style='font-size:16px;' color='cyan' onClick='window.opener.showWorkedBox(" +
-          mySort +
-          ", 1);'>&nbsp;&#8680;</font>";
-      }
-      setStatsDiv("workedHeadDiv", workHead);
+    var workHead = "<b> Entries (" + ObjectCount + ")</b>";
 
-      if (myObjects != null) {
-        var worker = "";
-        worker +=
-          "<table  id='logTable' style='white-space:nowrap;overflow:auto;overflow-x;hidden;' class='darkTable' align=center>";
-        worker += "<tr>";
-        worker +=
-          "<th><input type='text' id='searchWB' style='margin:0px' class='inputTextValue' value='" +
-          g_searchWB +
-          "' size='8' oninput='window.opener.showWorkedSearchChanged(this);' / ></th>";
-        worker +=
-          "<th><input type='text' id='searchGrid' style='margin:0px' class='inputTextValue' value='" +
-          g_gridSearch +
-          "' size='6' oninput='window.opener.showWorkedSearchGrid(this);' / ></th>";
-        worker += "<th><div id='bandFilterDiv'></div></th>";
-        worker += "<th><div id='modeFilterDiv'></div></th>";
-        worker += "<th><div id='qslFilterDiv'></div></th>";
-        worker += "<th></th>";
-        worker += "<th></th>";
-        worker += "<th colspan=2><div id='dxccFilterDiv'></div></th>";
-        worker += "</tr> ";
-        worker +=
-          "<tr><th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(0);'>Station</th>";
-        worker +=
-          "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(1);'>Grid</th>";
-        worker +=
-          "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(5);'>Band</th>";
-        worker +=
-          "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(2);'>Mode</th>";
-        worker +=
-          "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(6);'>QSL</th>";
-        worker += "<th align=center>Sent</th>";
-        worker += "<th align=center>Rcvd</th>";
-        worker +=
-          "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(3);'>DXCC</th>";
-        worker +=
-          "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(3);'>Flag</th>";
-        worker +=
-          "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(4);'>When</th>";
-        if (g_callsignLookups.lotwUseEnable == true) worker += "<th>LoTW</th>";
-        if (g_callsignLookups.eqslUseEnable == true) worker += "<th>eQSL</th>";
-        if (g_callsignLookups.oqrsUseEnable == true) worker += "<th>OQRS</th>";
-        worker += "</tr>";
-
-        var key = null;
-        for (var i = startIndex; i < endIndex; i++) {
-          key = list[i];
-          worker +=
-            "<tr  align=left><td  style='color:#ff0;cursor:pointer' onclick='window.opener.startLookup(\"" +
-            key.DEcall +
-            '","' +
-            key.grid +
-            "\");' >" +
-            key.DEcall.formatCallsign() +
-            "</td>";
-          worker +=
-            "<td style='color:cyan;' >" +
-            key.grid +
-            (key.vucc_grids.length ? ", " + key.vucc_grids.join(", ") : "") +
-            "</td>";
-          worker += "<td style='color:lightgreen'>" + key.band + "</td>";
-          worker += "<td style='color:lightblue'>" + key.mode + "</td>";
-          worker +=
-            "<td align=center>" + (key.confirmed ? "&#10004;" : "") + "</td>";
-          worker += "<td>" + key.RSTsent + "</td>";
-          worker += "<td>" + key.RSTrecv + "</td>";
-          worker +=
-            "<td style='color:orange'>" +
-            g_dxccToAltName[key.dxcc] +
-            " <font color='lightgreen'>(" +
-            (g_dxccToGeoData[key.dxcc] in g_worldGeoData
-              ? g_worldGeoData[g_dxccToGeoData[key.dxcc]].pp
-              : "?") +
-            ")</font></td>";
-          worker +=
-            "<td align=center style='margin:0;padding:0' ><img style='padding-top:4px' src='./img/flags/16/" +
-            (g_dxccToGeoData[key.dxcc] in g_worldGeoData
-              ? g_worldGeoData[g_dxccToGeoData[key.dxcc]].flag
-              : "_United Nations.png") +
-            "'></td>";
-          worker +=
-            "<td style='color:lightblue'>" +
-            userTimeString(key.time * 1000) +
-            "</td>";
-          if (g_callsignLookups.lotwUseEnable == true)
-            worker +=
-              "<td align=center>" +
-              (key.DEcall in g_lotwCallsigns ? "&#10004;" : "") +
-              "</td>";
-          if (g_callsignLookups.eqslUseEnable == true)
-            worker +=
-              "<td align=center>" +
-              (key.DEcall in g_eqslCallsigns ? "&#10004;" : "") +
-              "</td>";
-          if (g_callsignLookups.oqrsUseEnable == true)
-            worker +=
-              "<td align=center>" +
-              (key.DEcall in g_oqrsCallsigns ? "&#10004;" : "") +
-              "</td>";
-          worker += "</tr>";
-        }
-
-        worker += "</table>";
-
-        setStatsDiv("workedListDiv", worker);
-
-        statsValidateCallByElement("searchWB");
-        statsValidateCallByElement("searchGrid");
-
-        var newSelect = document.createElement("select");
-        newSelect.id = "bandFilter";
-        newSelect.title = "Band Filter";
-        var option = document.createElement("option");
-        option.value = "Mixed";
-        option.text = "Mixed";
-        newSelect.appendChild(option);
-        Object.keys(bands)
-          .sort(function (a, b) {
-            return parseInt(a) - parseInt(b);
-          })
-          .forEach(function (key) {
-            var option = document.createElement("option");
-            option.value = key;
-            option.text = key;
-            newSelect.appendChild(option);
-          });
-        statsAppendChild(
-          "bandFilterDiv",
-          newSelect,
-          "filterBandFunction",
-          g_filterBand,
-          true
-        );
-
-        newSelect = document.createElement("select");
-        newSelect.id = "modeFilter";
-        newSelect.title = "Mode Filter";
-        option = document.createElement("option");
-        option.value = "Mixed";
-        option.text = "Mixed";
-        newSelect.appendChild(option);
-
-        option = document.createElement("option");
-        option.value = "Phone";
-        option.text = "Phone";
-        newSelect.appendChild(option);
-
-        option = document.createElement("option");
-        option.value = "Digital";
-        option.text = "Digital";
-        newSelect.appendChild(option);
-
-        Object.keys(modes)
-          .sort()
-          .forEach(function (key) {
-            var option = document.createElement("option");
-            option.value = key;
-            option.text = key;
-            newSelect.appendChild(option);
-          });
-
-        statsAppendChild(
-          "modeFilterDiv",
-          newSelect,
-          "filterModeFunction",
-          g_filterMode,
-          true
-        );
-
-        newSelect = document.createElement("select");
-        newSelect.id = "dxccFilter";
-        newSelect.title = "DXCC Filter";
-        option = document.createElement("option");
-        option.value = 0;
-        option.text = "All";
-        newSelect.appendChild(option);
-
-        Object.keys(dxccs)
-          .sort()
-          .forEach(function (key) {
-            var option = document.createElement("option");
-            option.value = dxccs[key];
-            option.text = key;
-            newSelect.appendChild(option);
-          });
-
-        statsAppendChild(
-          "dxccFilterDiv",
-          newSelect,
-          "filterDxccFunction",
-          g_filterDxcc,
-          true
-        );
-
-        newSelect = document.createElement("select");
-        newSelect.id = "qslFilter";
-        newSelect.title = "QSL Filter";
-        option = document.createElement("option");
-        option.value = "All";
-        option.text = "All";
-        newSelect.appendChild(option);
-
-        option = document.createElement("option");
-        option.value = true;
-        option.text = "Yes";
-        newSelect.appendChild(option);
-
-        option = document.createElement("option");
-        option.value = false;
-        option.text = "No";
-        newSelect.appendChild(option);
-
-        statsAppendChild(
-          "qslFilterDiv",
-          newSelect,
-          "filterQSLFunction",
-          g_filterQSL,
-          true
-        );
-
-        statsFocus(g_lastSearchSelection);
-
-        setStatsDivHeight("workedListDiv", getStatsWindowHeight() - 6 + "px");
-      } else setStatsDiv("workedListDiv", "None");
+    if (g_qsoPages > 1) {
+      workHead +=
+        "<br/><font  style='font-size:15px;' color='cyan' onClick='window.opener.showWorkedBox(" +
+        mySort +
+        ", -1);'>&#8678;&nbsp;</font>";
+      workHead +=
+        " Page " +
+        (g_qsoPage + 1) +
+        " of " +
+        g_qsoPages +
+        " (" +
+        (endIndex - startIndex) +
+        ") ";
+      workHead +=
+        "<font  style='font-size:16px;' color='cyan' onClick='window.opener.showWorkedBox(" +
+        mySort +
+        ", 1);'>&nbsp;&#8680;</font>";
     }
+    setStatsDiv("workedHeadDiv", workHead);
+
+    if (myObjects != null) {
+      var worker = "";
+      worker +=
+        "<table  id='logTable' style='white-space:nowrap;overflow:auto;overflow-x;hidden;' class='darkTable' align=center>";
+      worker += "<tr>";
+      worker +=
+        "<th><input type='text' id='searchWB' style='margin:0px' class='inputTextValue' value='" +
+        g_searchWB +
+        "' size='8' oninput='window.opener.showWorkedSearchChanged(this);' / ></th>";
+      worker +=
+        "<th><input type='text' id='searchGrid' style='margin:0px' class='inputTextValue' value='" +
+        g_gridSearch +
+        "' size='6' oninput='window.opener.showWorkedSearchGrid(this);' / ></th>";
+      worker += "<th><div id='bandFilterDiv'></div></th>";
+      worker += "<th><div id='modeFilterDiv'></div></th>";
+      worker += "<th><div id='qslFilterDiv'></div></th>";
+      worker += "<th></th>";
+      worker += "<th></th>";
+      worker += "<th colspan=2><div id='dxccFilterDiv'></div></th>";
+      worker += "</tr> ";
+      worker +=
+        "<tr><th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(0);'>Station</th>";
+      worker +=
+        "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(1);'>Grid</th>";
+      worker +=
+        "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(5);'>Band</th>";
+      worker +=
+        "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(2);'>Mode</th>";
+      worker +=
+        "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(6);'>QSL</th>";
+      worker += "<th align=center>Sent</th>";
+      worker += "<th align=center>Rcvd</th>";
+      worker +=
+        "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(3);'>DXCC</th>";
+      worker +=
+        "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(3);'>Flag</th>";
+      worker +=
+        "<th style='cursor:pointer;' align=center onclick='window.opener.showWorkedBox(4);'>When</th>";
+      if (g_callsignLookups.lotwUseEnable == true) worker += "<th>LoTW</th>";
+      if (g_callsignLookups.eqslUseEnable == true) worker += "<th>eQSL</th>";
+      if (g_callsignLookups.oqrsUseEnable == true) worker += "<th>OQRS</th>";
+      worker += "</tr>";
+
+      var key = null;
+      for (var i = startIndex; i < endIndex; i++) {
+        key = list[i];
+        worker +=
+          "<tr  align=left><td  style='color:#ff0;cursor:pointer' onclick='window.opener.startLookup(\"" +
+          key.DEcall +
+          '","' +
+          key.grid +
+          "\");' >" +
+          key.DEcall.formatCallsign() +
+          "</td>";
+        worker +=
+          "<td style='color:cyan;' >" +
+          key.grid +
+          (key.vucc_grids.length ? ", " + key.vucc_grids.join(", ") : "") +
+          "</td>";
+        worker += "<td style='color:lightgreen'>" + key.band + "</td>";
+        worker += "<td style='color:lightblue'>" + key.mode + "</td>";
+        worker +=
+          "<td align=center>" + (key.confirmed ? "&#10004;" : "") + "</td>";
+        worker += "<td>" + key.RSTsent + "</td>";
+        worker += "<td>" + key.RSTrecv + "</td>";
+        worker +=
+          "<td style='color:orange'>" +
+          g_dxccToAltName[key.dxcc] +
+          " <font color='lightgreen'>(" +
+          (g_dxccToGeoData[key.dxcc] in g_worldGeoData
+            ? g_worldGeoData[g_dxccToGeoData[key.dxcc]].pp
+            : "?") +
+          ")</font></td>";
+        worker +=
+          "<td align=center style='margin:0;padding:0' ><img style='padding-top:4px' src='./img/flags/16/" +
+          (g_dxccToGeoData[key.dxcc] in g_worldGeoData
+            ? g_worldGeoData[g_dxccToGeoData[key.dxcc]].flag
+            : "_United Nations.png") +
+          "'></td>";
+        worker +=
+          "<td style='color:lightblue'>" +
+          userTimeString(key.time * 1000) +
+          "</td>";
+        if (g_callsignLookups.lotwUseEnable == true)
+          worker +=
+            "<td align=center>" +
+            (key.DEcall in g_lotwCallsigns ? "&#10004;" : "") +
+            "</td>";
+        if (g_callsignLookups.eqslUseEnable == true)
+          worker +=
+            "<td align=center>" +
+            (key.DEcall in g_eqslCallsigns ? "&#10004;" : "") +
+            "</td>";
+        if (g_callsignLookups.oqrsUseEnable == true)
+          worker +=
+            "<td align=center>" +
+            (key.DEcall in g_oqrsCallsigns ? "&#10004;" : "") +
+            "</td>";
+        worker += "</tr>";
+      }
+
+      worker += "</table>";
+
+      setStatsDiv("workedListDiv", worker);
+
+      statsValidateCallByElement("searchWB");
+      statsValidateCallByElement("searchGrid");
+
+      var newSelect = document.createElement("select");
+      newSelect.id = "bandFilter";
+      newSelect.title = "Band Filter";
+      var option = document.createElement("option");
+      option.value = "Mixed";
+      option.text = "Mixed";
+      newSelect.appendChild(option);
+      Object.keys(bands)
+        .sort(function (a, b) {
+          return parseInt(a) - parseInt(b);
+        })
+        .forEach(function (key) {
+          var option = document.createElement("option");
+          option.value = key;
+          option.text = key;
+          newSelect.appendChild(option);
+        });
+      statsAppendChild(
+        "bandFilterDiv",
+        newSelect,
+        "filterBandFunction",
+        g_filterBand,
+        true
+      );
+
+      newSelect = document.createElement("select");
+      newSelect.id = "modeFilter";
+      newSelect.title = "Mode Filter";
+      option = document.createElement("option");
+      option.value = "Mixed";
+      option.text = "Mixed";
+      newSelect.appendChild(option);
+
+      option = document.createElement("option");
+      option.value = "Phone";
+      option.text = "Phone";
+      newSelect.appendChild(option);
+
+      option = document.createElement("option");
+      option.value = "Digital";
+      option.text = "Digital";
+      newSelect.appendChild(option);
+
+      Object.keys(modes)
+        .sort()
+        .forEach(function (key) {
+          var option = document.createElement("option");
+          option.value = key;
+          option.text = key;
+          newSelect.appendChild(option);
+        });
+
+      statsAppendChild(
+        "modeFilterDiv",
+        newSelect,
+        "filterModeFunction",
+        g_filterMode,
+        true
+      );
+
+      newSelect = document.createElement("select");
+      newSelect.id = "dxccFilter";
+      newSelect.title = "DXCC Filter";
+      option = document.createElement("option");
+      option.value = 0;
+      option.text = "All";
+      newSelect.appendChild(option);
+
+      Object.keys(dxccs)
+        .sort()
+        .forEach(function (key) {
+          var option = document.createElement("option");
+          option.value = dxccs[key];
+          option.text = key;
+          newSelect.appendChild(option);
+        });
+
+      statsAppendChild(
+        "dxccFilterDiv",
+        newSelect,
+        "filterDxccFunction",
+        g_filterDxcc,
+        true
+      );
+
+      newSelect = document.createElement("select");
+      newSelect.id = "qslFilter";
+      newSelect.title = "QSL Filter";
+      option = document.createElement("option");
+      option.value = "All";
+      option.text = "All";
+      newSelect.appendChild(option);
+
+      option = document.createElement("option");
+      option.value = true;
+      option.text = "Yes";
+      newSelect.appendChild(option);
+
+      option = document.createElement("option");
+      option.value = false;
+      option.text = "No";
+      newSelect.appendChild(option);
+
+      statsAppendChild(
+        "qslFilterDiv",
+        newSelect,
+        "filterQSLFunction",
+        g_filterQSL,
+        true
+      );
+
+      statsFocus(g_lastSearchSelection);
+
+      setStatsDivHeight("workedListDiv", getStatsWindowHeight() - 6 + "px");
+    } else setStatsDiv("workedListDiv", "None");
+
     myObjects = null;
   } catch (e) {
     console.log(e);
@@ -7360,131 +7345,129 @@ function statsAppendChild(elementString, object, onInputString, defaultValue) {
   }
 }
 function showDXCCsBox() {
-  {
-    var worker = getCurrentBandModeHTML();
-    var confirmed = 0;
-    var worked = 0;
-    var needed = 0;
-    var List = {};
-    var ListConfirmed = {};
-    var ListNotWorked = {};
-    for (var key in g_worldGeoData) {
-      if (key != -1) {
-        if (g_worldGeoData[key].worked == true) {
-          var item = {};
-          item.dxcc = g_worldGeoData[key].dxcc;
+  var worker = getCurrentBandModeHTML();
+  var confirmed = 0;
+  var worked = 0;
+  var needed = 0;
+  var List = {};
+  var ListConfirmed = {};
+  var ListNotWorked = {};
+  for (var key in g_worldGeoData) {
+    if (key != -1) {
+      if (g_worldGeoData[key].worked == true) {
+        var item = {};
+        item.dxcc = g_worldGeoData[key].dxcc;
 
-          item.flag = g_worldGeoData[key].flag;
-          item.confirmed = g_worldGeoData[key].confirmed;
-          List[g_worldGeoData[key].name] = item;
-          worked++;
-        }
-        if (g_worldGeoData[key].confirmed == true) {
-          var item = {};
-          item.dxcc = g_worldGeoData[key].dxcc;
+        item.flag = g_worldGeoData[key].flag;
+        item.confirmed = g_worldGeoData[key].confirmed;
+        List[g_worldGeoData[key].name] = item;
+        worked++;
+      }
+      if (g_worldGeoData[key].confirmed == true) {
+        var item = {};
+        item.dxcc = g_worldGeoData[key].dxcc;
 
-          item.flag = g_worldGeoData[key].flag;
-          item.confirmed = g_worldGeoData[key].confirmed;
-          ListConfirmed[g_worldGeoData[key].name] = item;
-          confirmed++;
-        }
-        if (
-          g_worldGeoData[key].worked == false &&
-          g_worldGeoData[key].confirmed == false &&
-          g_worldGeoData[key].pp != "" &&
-          g_worldGeoData[key].geo != "deleted"
-        ) {
-          var item = {};
-          item.dxcc = g_worldGeoData[key].dxcc;
-          item.flag = g_worldGeoData[key].flag;
-          item.confirmed = g_worldGeoData[key].confirmed;
-          ListNotWorked[g_worldGeoData[key].name] = item;
-          needed++;
-        }
+        item.flag = g_worldGeoData[key].flag;
+        item.confirmed = g_worldGeoData[key].confirmed;
+        ListConfirmed[g_worldGeoData[key].name] = item;
+        confirmed++;
+      }
+      if (
+        g_worldGeoData[key].worked == false &&
+        g_worldGeoData[key].confirmed == false &&
+        g_worldGeoData[key].pp != "" &&
+        g_worldGeoData[key].geo != "deleted"
+      ) {
+        var item = {};
+        item.dxcc = g_worldGeoData[key].dxcc;
+        item.flag = g_worldGeoData[key].flag;
+        item.confirmed = g_worldGeoData[key].confirmed;
+        ListNotWorked[g_worldGeoData[key].name] = item;
+        needed++;
       }
     }
-
-    if (worked > 0) {
-      worker +=
-        "<div  style='vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
-        Math.min(Object.keys(List).length * 23 + 45, getStatsWindowHeight()) +
-        "px;'><table class='darkTable' align=center><tr><th colspan=5 style='font-weight:bold'>Worked (" +
-        worked +
-        ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
-      Object.keys(List)
-        .sort()
-        .forEach(function (key, i) {
-          var confirmed = List[key].confirmed
-            ? ""
-            : "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
-          worker +=
-            "<tr><td align=left style='color:#ff0;" +
-            confirmed +
-            "' >" +
-            key +
-            "</td>";
-
-          worker +=
-            "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
-            List[key].flag +
-            "'></td>";
-          worker +=
-            "<td align=left style='color:cyan;' >" + List[key].dxcc + "</td>";
-        });
-      worker += "</table></div>";
-    }
-    if (confirmed > 0) {
-      worker +=
-        "<div  style='padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
-        Math.min(
-          Object.keys(ListConfirmed).length * 23 + 45,
-          getStatsWindowHeight()
-        ) +
-        "px;'><table class='darkTable' align=center><tr><th colspan=5 style='font-weight:bold'>Confirmed (" +
-        confirmed +
-        ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
-      Object.keys(ListConfirmed)
-        .sort()
-        .forEach(function (key, i) {
-          worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-          worker +=
-            "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
-            ListConfirmed[key].flag +
-            "'></td>";
-          worker +=
-            "<td align=left style='color:cyan;' >" +
-            ListConfirmed[key].dxcc +
-            "</td>";
-        });
-      worker += "</table></div>";
-    }
-    if (needed > 0) {
-      worker +=
-        "<div  style='vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
-        Math.min(
-          Object.keys(ListNotWorked).length * 23 + 45,
-          getStatsWindowHeight()
-        ) +
-        "px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Needed (" +
-        needed +
-        ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
-      Object.keys(ListNotWorked)
-        .sort()
-        .forEach(function (key, i) {
-          worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
-          worker +=
-            "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
-            ListNotWorked[key].flag +
-            "'></td>";
-          worker +=
-            "<td align=left style='color:cyan;' >" +
-            ListNotWorked[key].dxcc +
-            "</td>";
-        });
-      worker += "</table></div>";
-    }
-    setStatsDiv("dxccListDiv", worker);
   }
+
+  if (worked > 0) {
+    worker +=
+      "<div  style='vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+      Math.min(Object.keys(List).length * 23 + 45, getStatsWindowHeight()) +
+      "px;'><table class='darkTable' align=center><tr><th colspan=5 style='font-weight:bold'>Worked (" +
+      worked +
+      ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
+    Object.keys(List)
+      .sort()
+      .forEach(function (key, i) {
+        var confirmed = List[key].confirmed
+          ? ""
+          : "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
+        worker +=
+          "<tr><td align=left style='color:#ff0;" +
+          confirmed +
+          "' >" +
+          key +
+          "</td>";
+
+        worker +=
+          "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
+          List[key].flag +
+          "'></td>";
+        worker +=
+          "<td align=left style='color:cyan;' >" + List[key].dxcc + "</td>";
+      });
+    worker += "</table></div>";
+  }
+  if (confirmed > 0) {
+    worker +=
+      "<div  style='padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+      Math.min(
+        Object.keys(ListConfirmed).length * 23 + 45,
+        getStatsWindowHeight()
+      ) +
+      "px;'><table class='darkTable' align=center><tr><th colspan=5 style='font-weight:bold'>Confirmed (" +
+      confirmed +
+      ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
+    Object.keys(ListConfirmed)
+      .sort()
+      .forEach(function (key, i) {
+        worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
+        worker +=
+          "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
+          ListConfirmed[key].flag +
+          "'></td>";
+        worker +=
+          "<td align=left style='color:cyan;' >" +
+          ListConfirmed[key].dxcc +
+          "</td>";
+      });
+    worker += "</table></div>";
+  }
+  if (needed > 0) {
+    worker +=
+      "<div  style='vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
+      Math.min(
+        Object.keys(ListNotWorked).length * 23 + 45,
+        getStatsWindowHeight()
+      ) +
+      "px;'><table class='darkTable' align=center><tr><th colspan=3 style='font-weight:bold'>Needed (" +
+      needed +
+      ")</th><tr><th align=left>Name</th><th>Flag</th><th align=left>DXCC</th></tr>";
+    Object.keys(ListNotWorked)
+      .sort()
+      .forEach(function (key, i) {
+        worker += "<tr><td align=left style='color:#ff0;' >" + key + "</td>";
+        worker +=
+          "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
+          ListNotWorked[key].flag +
+          "'></td>";
+        worker +=
+          "<td align=left style='color:cyan;' >" +
+          ListNotWorked[key].dxcc +
+          "</td>";
+      });
+    worker += "</table></div>";
+  }
+  setStatsDiv("dxccListDiv", worker);
 }
 
 function showCQzoneBox() {
@@ -7682,12 +7665,10 @@ function showRootInfoBox() {
 }
 
 function showSettingsBox() {
-  {
-    updateRunningProcesses();
-    helpDiv.style.display = "none";
-    g_helpShow = false;
-    rootSettingsDiv.style.display = "inline-block";
-  }
+  updateRunningProcesses();
+  helpDiv.style.display = "none";
+  g_helpShow = false;
+  rootSettingsDiv.style.display = "inline-block";
 }
 
 function toggleBaWindow(event) {
@@ -9524,36 +9505,34 @@ function renderBandActivity() {
       var blockMyBand = "";
       if (band == myBand) blockMyBand = " class='myBand' ";
 
-      {
-        var title =
-          "Score: " +
-          bandData[band].score +
-          " Spots: " +
-          bandData[band].spots +
-          "\nTx: " +
-          bandData[band].tx +
-          "\tRx: " +
-          bandData[band].rx;
-        buffer +=
-          "<div title='" +
-          title +
-          "' style='display:inline-block;margin:1px;' class='aBand'>";
-        buffer +=
-          "<div style='height: " +
-          (bandData[band].score * scaleFactor + 1) +
-          "px;' class='barTx'></div>";
-        buffer +=
-          "<div style='height: " +
-          (bandData[band].spots * scaleFactor + 1) +
-          "px;' class='barRx'></div>";
-        buffer +=
-          "<div style='font-size:10px' " +
-          blockMyBand +
-          ">" +
-          parseInt(band) +
-          "</div>";
-        buffer += "</div>";
-      }
+      var title =
+        "Score: " +
+        bandData[band].score +
+        " Spots: " +
+        bandData[band].spots +
+        "\nTx: " +
+        bandData[band].tx +
+        "\tRx: " +
+        bandData[band].rx;
+      buffer +=
+        "<div title='" +
+        title +
+        "' style='display:inline-block;margin:1px;' class='aBand'>";
+      buffer +=
+        "<div style='height: " +
+        (bandData[band].score * scaleFactor + 1) +
+        "px;' class='barTx'></div>";
+      buffer +=
+        "<div style='height: " +
+        (bandData[band].spots * scaleFactor + 1) +
+        "px;' class='barRx'></div>";
+      buffer +=
+        "<div style='font-size:10px' " +
+        blockMyBand +
+        ">" +
+        parseInt(band) +
+        "</div>";
+      buffer += "</div>";
     }
   } else {
     buffer = "..no data yet..";
@@ -10313,7 +10292,6 @@ function loadMaidenHeadData() {
       var dxcc = dxccGeo.features[key].properties.dxcc_entity_code;
       g_worldGeoData[g_dxccToGeoData[dxcc]].geo = dxccGeo.features[key];
     }
-    delete dxccGeo;
     file = "./data/counties.json";
     files = fs.readFileSync(file);
     var countyData = JSON.parse(files);
@@ -10560,8 +10538,6 @@ function loadMaidenHeadData() {
         g_wacZones[name].confirmed_modes = {};
       }
     }
-
-    delete fileBuf;
   }
 }
 
@@ -10594,7 +10570,6 @@ function toggleTimezones() {
   } else {
     if (g_timezoneLayer != null) {
       g_map.removeLayer(g_timezoneLayer);
-      delete g_timezoneLayer;
       g_timezoneLayer = null;
     }
   }
@@ -10806,10 +10781,10 @@ function getBuffer(file_url, callback, flag, mode, port, cache = null) {
   var options = null;
 
   options = {
-    host: url.parse(file_url).host,
+    host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
     port: port,
     followAllRedirects: true,
-    path: url.parse(file_url).path,
+    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
   };
 
   http.get(options, function (res) {
@@ -10851,9 +10826,9 @@ function getPostBuffer(
   var http = require(mode);
   var fileBuffer = null;
   var options = {
-    host: url.parse(file_url).host,
+    host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
     port: port,
-    path: url.parse(file_url).path,
+    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
     method: "post",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -10889,7 +10864,7 @@ function getPostBuffer(
         req.abort();
       });
     });
-    req.on("error", function (err) {
+    req.on("error", function (err) { // eslint-disable-line node/handle-callback-err
       if (typeof timeoutCallback != "undefined")
         timeoutCallback(
           file_url,
@@ -11863,7 +11838,8 @@ function updateWsjtxListener(port) {
     g_wsjtUdpSocketError = true;
   });
   g_wsjtUdpServer.on("message", function (message, remote) {
-    if (g_closing == true) true;
+    // if (g_closing == true) true;
+
     if (
       typeof udpForwardEnable != "undefined" &&
       udpForwardEnable.checked == true
@@ -12261,7 +12237,7 @@ function continueWithLookup(callsign, gridPass) {
 }
 function callookResults(buffer, gridPass) {
   var results = JSON.parse(buffer);
-  if (typeof results.status != undefined) {
+  if (typeof results.status != "undefined") {
     if (results.status == "VALID") {
       var callObject = {};
       var dxcc = callsignToDxcc(results.current.callsign);
@@ -13200,7 +13176,6 @@ function searchLogForCallsign(call) {
     setLookupDiv("lookupLocalDiv", worker);
   }
 
-  delete list;
   list = null;
 }
 
@@ -13379,7 +13354,6 @@ function mediaCheck() {
         clearLogFilesAndCounts();
       }
 
-      delete data;
       fs.unlinkSync(g_NWappData + "internal_qso.json");
     }
     loadReceptionReports();

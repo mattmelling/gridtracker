@@ -438,7 +438,7 @@ function viewRoster() {
   else allOnlyNewDiv.style.display = "none";
 
   var now = timeNowSec();
-  for (callHash in callRoster) {
+  for (var callHash in callRoster) {
     var call = callRoster[callHash].DEcall;
 
     callRoster[callHash].tx = true;
@@ -614,22 +614,21 @@ function viewRoster() {
         continue;
       }
 
-      {
-        var hash =
-          call +
-          hashMaker(
-            callRoster[callHash].callObj.band,
-            callRoster[callHash].callObj.mode
-          );
-        if (callMode == "worked" && hash in g_worked.call) {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-        if (callMode == "confirmed" && hash in g_confirmed.call) {
-          callRoster[callHash].tx = false;
-          continue;
-        }
+      var hash =
+        call +
+        hashMaker(
+          callRoster[callHash].callObj.band,
+          callRoster[callHash].callObj.mode
+        );
+      if (callMode == "worked" && hash in g_worked.call) {
+        callRoster[callHash].tx = false;
+        continue;
       }
+      if (callMode == "confirmed" && hash in g_confirmed.call) {
+        callRoster[callHash].tx = false;
+        continue;
+      }
+
       if (g_rosterSettings.hunting == "grid") {
         var hash =
           callRoster[callHash].callObj.grid.substr(0, 4) +
@@ -828,6 +827,7 @@ function viewRoster() {
 
       if (g_rosterSettings.hunting == "usstate" && g_currentUSCallsigns) {
         if (call in g_currentUSCallsigns) {
+          // Do Nothing
         } else {
           callRoster[callHash].tx = false;
           continue;
@@ -921,7 +921,7 @@ function viewRoster() {
       var wpx = "#FFFF00";
 
       hasGtPin = false;
-      shouldAlert = false;
+      var shouldAlert = false;
       var callsignBg,
         gridBg,
         callingBg,
@@ -2407,13 +2407,13 @@ function setVisual() {
 
   // Award Hunter
   if (referenceNeed.value == 6) {
-    /*for ( key in g_rosterSettings.wanted )
-		{
-			document.getElementById(key).checked = true;
-			var t = key.replace("hunt","");
-			if ( t in g_rosterSettings.columns )
-				g_rosterSettings.columns[t] = true;
-		}*/
+    /* for ( key in g_rosterSettings.wanted )
+    {
+      document.getElementById(key).checked = true;
+      var t = key.replace("hunt","");
+      if ( t in g_rosterSettings.columns )
+        g_rosterSettings.columns[t] = true;
+    } */
 
     HuntingControls.style.display = "none";
     CallsignsControls.style.display = "none";
@@ -2421,7 +2421,7 @@ function setVisual() {
     huntingMatrixDiv.style.display = "";
     updateAwardList();
   } else {
-    for (key in g_rosterSettings.wanted) {
+    for (var key in g_rosterSettings.wanted) {
       if (document.getElementById(key))
         document.getElementById(key).checked = g_rosterSettings.wanted[key];
     }
@@ -2615,18 +2615,18 @@ function getBuffer(file_url, callback, flag, mode, port, cookie) {
   var options = null;
   if (cookie != null) {
     options = {
-      host: url.parse(file_url).host,
+      host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
       port: port,
-      path: url.parse(file_url).path,
+      path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
       headers: {
         Cookie: cookie,
       },
     };
   } else {
     options = {
-      host: url.parse(file_url).host,
+      host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
       port: port,
-      path: url.parse(file_url).path,
+      path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
     };
   }
   http.get(options, function (res) {
@@ -2654,7 +2654,7 @@ function callsignResult(buffer, flag) {
   r_currentUSState = flag;
 
   g_currentUSCallsigns = Object();
-  for (key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
+  for (var key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
 
   window.opener.goProcessRoster();
 }
@@ -2728,7 +2728,7 @@ function manifestResult(buffer, flag) {
   r_callsignManifest = JSON.parse(buffer);
   var newSelect = document.getElementById("stateSelect");
 
-  for (key in r_callsignManifest.cnt) {
+  for (var key in r_callsignManifest.cnt) {
     var option = document.createElement("option");
     if (window.opener.g_enums[key]) {
       option.value = key;
@@ -2808,78 +2808,74 @@ function openIgnoreEdit() {
   editView.style.display = "inline-block";
   var worker = "";
   var clearString = "<th>none</th>";
-  {
-    if (Object.keys(g_blockedCalls).length > 0)
-      clearString =
-        "<th style='cursor:pointer;' onclick='clearAllCallsignIgnores()'>Clear All</th>";
-    worker +=
-      "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
-      (window.innerHeight - 135) +
-      "px;'><table class='darkTable' align=center><tr><th align=left>Callsigns</th>" +
-      clearString +
-      "</tr>";
-    Object.keys(g_blockedCalls)
-      .sort()
-      .forEach(function (key, i) {
-        worker +=
-          "<tr><td align=left style='color:#FFFF00;' >" +
-          key +
-          "</td><td style='cursor:pointer;' onclick='deleteCallsignIgnore(\"" +
-          key +
-          "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-      });
-    worker += "</table></div>";
-  }
 
-  {
-    clearString = "<th>none</th>";
-    if (Object.keys(g_blockedCQ).length > 0)
-      clearString =
-        "<th style='cursor:pointer;' onclick='clearAllCQIgnores()'>Clear All</th>";
-    worker +=
-      "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
-      (window.innerHeight - 135) +
-      "px;'><table class='darkTable' align=center><tr><th align=left>CQ</th>" +
-      clearString +
-      "</tr>";
-    Object.keys(g_blockedCQ)
-      .sort()
-      .forEach(function (key, i) {
-        worker +=
-          "<tr><td align=left style='color:cyan;' >" +
-          key +
-          "</td><td style='cursor:pointer;' onclick='deleteCQIgnore(\"" +
-          key +
-          "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-      });
-    worker += "</table></div>";
-  }
+  if (Object.keys(g_blockedCalls).length > 0)
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllCallsignIgnores()'>Clear All</th>";
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>Callsigns</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedCalls)
+    .sort()
+    .forEach(function (key, i) {
+      worker +=
+        "<tr><td align=left style='color:#FFFF00;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteCallsignIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
 
-  {
-    clearString = "<th>none</th>";
-    if (Object.keys(g_blockedDxcc).length > 0)
-      clearString =
-        "<th style='cursor:pointer;' onclick='clearAllDxccIgnores()'>Clear All</th>";
-    worker +=
-      "<div  style='margin:10px;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
-      (window.innerHeight - 135) +
-      "px;'><table class='darkTable' align=center><tr><th align=left>DXCCs</th>" +
-      clearString +
-      "</tr>";
-    Object.keys(g_blockedDxcc)
-      .sort()
-      .forEach(function (key, i) {
-        worker +=
-          "<tr><td align=left style='color:#FFA500' >" +
-          window.opener.g_dxccToAltName[key] +
-          " (" +
-          window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp +
-          ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" +
-          key +
-          "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
-      });
-    worker += "</table></div>";
-  }
+  clearString = "<th>none</th>";
+  if (Object.keys(g_blockedCQ).length > 0)
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllCQIgnores()'>Clear All</th>";
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>CQ</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedCQ)
+    .sort()
+    .forEach(function (key, i) {
+      worker +=
+        "<tr><td align=left style='color:cyan;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteCQIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
+  clearString = "<th>none</th>";
+  if (Object.keys(g_blockedDxcc).length > 0)
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllDxccIgnores()'>Clear All</th>";
+  worker +=
+    "<div  style='margin:10px;vertical-align:top;display:inline-block;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>DXCCs</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedDxcc)
+    .sort()
+    .forEach(function (key, i) {
+      worker +=
+        "<tr><td align=left style='color:#FFA500' >" +
+        window.opener.g_dxccToAltName[key] +
+        " (" +
+        window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp +
+        ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
   editTables.innerHTML = worker;
 }
 
@@ -2929,7 +2925,7 @@ function init() {
 
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
-  for (key in g_rosterSettings.wanted) {
+  for (var key in g_rosterSettings.wanted) {
     if (document.getElementById(key))
       document.getElementById(key).checked = g_rosterSettings.wanted[key];
   }
@@ -3930,13 +3926,13 @@ function scoreAIOTA(award, obj) {
 // NO IOTA YET
 function testAIOTA(award, obj, baseHash) {
   /*if ( obj.IOTA )
-	{
-		var test = g_awards[award.sponsor].awards[award.name];
+  {
+    var test = g_awards[award.sponsor].awards[award.name];
 
-		if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
-			return false;
+    if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
+      return false;
 
-	}*/
+  }*/
 
   return false;
 }
@@ -4278,7 +4274,6 @@ function loadAwardJson() {
       alert("Core awards.json : " + e);
       g_awards = {};
     }
-    delete filebuf;
   } else alert("Missing core awards.json");
 }
 
@@ -4309,8 +4304,8 @@ function newAwardTrackerObject(sponsor, award, enable) {
   newAward.enable = enable;
   newAward.mode = g_awards[sponsor].awards[award].rule.mode[0];
   newAward.band = g_awards[sponsor].awards[award].rule.band[0];
-  (newAward.count = g_awards[sponsor].awards[award].rule.count[0]),
-    (newAward.stat = {});
+  newAward.count = g_awards[sponsor].awards[award].rule.count[0];
+  newAward.stat = {};
   newAward.comp = {};
   newAward.test = {};
   return newAward;
@@ -4421,12 +4416,12 @@ function doubleCompile(award, firstLevel) {
       }
     }
     /*for ( var mode in obj.modes )
-		{
-			if ( !(mode in firstLevel[k].modes) )
-				firstLevel[k].modes[mode] = 0;
-			if ( obj.modes[mode] > 0 )
-				firstLevel[k].modes[mode] +=  1;
-		}*/
+    {
+      if ( !(mode in firstLevel[k].modes) )
+        firstLevel[k].modes[mode] = 0;
+      if ( obj.modes[mode] > 0 )
+        firstLevel[k].modes[mode] +=  1;
+    }*/
 
     delete firstLevel[k].unique;
     firstLevel[k].unique = null;

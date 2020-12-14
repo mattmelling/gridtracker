@@ -4,32 +4,36 @@
 
 var selectStartupLink = null;
 
-function dragOverHandler(ev) {
+function dragOverHandler(ev)
+{
   // Prevent default behavior (Prevent file from being opened)
   ev.preventDefault();
 }
 
-function dropHandler(ev) {
+function dropHandler(ev)
+{
   // Prevent default behavior (Prevent file from being opened)
   ev.preventDefault();
-  if (ev.dataTransfer.items) {
+  if (ev.dataTransfer.items)
+  {
     // Use DataTransferItemList interface to access the file(s)
-    for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+    for (var i = 0; i < ev.dataTransfer.items.length; i++)
+    {
       // If dropped items aren't files, reject them
       Entry = ev.dataTransfer.items[i].webkitGetAsEntry();
-      if (Entry && typeof Entry.isFile != "undefined" && Entry.isFile == true) {
+      if (Entry && typeof Entry.isFile != "undefined" && Entry.isFile == true)
+      {
         var filename = ev.dataTransfer.items[i].getAsFile().path;
         var test = filename.toLowerCase();
         var valid = test.endsWith(".adi")
           ? true
           : test.endsWith(".adif")
-          ? true
-          : test.endsWith(".log")
-          ? true
-          : test.endsWith(".txt")
-          ? true
-          : false;
-        if (valid && fs.existsSync(filename)) {
+            ? true
+            : test.endsWith(".log")
+              ? true
+              : !!test.endsWith(".txt");
+        if (valid && fs.existsSync(filename))
+        {
           onAdiLoadComplete(fs.readFileSync(filename, "UTF-8"), false);
         }
       }
@@ -37,23 +41,26 @@ function dropHandler(ev) {
   }
 }
 
-function findAdiField(row, field) {
+function findAdiField(row, field)
+{
   var value = "";
   var regex = new RegExp("<" + field + ":", "i");
   var firstSplitArray = row.split(regex);
-  if (firstSplitArray && firstSplitArray.length == 2) {
+  if (firstSplitArray && firstSplitArray.length == 2)
+  {
     var secondSplitArray = firstSplitArray[1].split(">");
-    if (secondSplitArray.length > 1) {
+    if (secondSplitArray.length > 1)
+    {
       var newLenSearch = secondSplitArray[0].split(":");
       var newLen = newLenSearch[0];
       value = secondSplitArray[1].slice(0, newLen);
     }
-    delete secondSplitArray;
   }
   return value;
 }
 
-function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
+function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
+{
   let rawAdiBuffer = "";
   if (typeof adiBuffer == "object") rawAdiBuffer = String(adiBuffer);
   else rawAdiBuffer = adiBuffer;
@@ -63,7 +70,8 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
 
   if (rawAdiBuffer.indexOf("PSKReporter") > -1) activeAdifLogMode = false;
 
-  if (rawAdiBuffer.length > 1) {
+  if (rawAdiBuffer.length > 1)
+  {
     let regex = new RegExp("<EOR>", "i");
     activeAdifArray = rawAdiBuffer.split(regex);
   }
@@ -71,11 +79,14 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
   let dateTime = new Date();
   let dupes = 0;
 
-  for (let x = 0; x < activeAdifArray.length; x++) {
+  for (let x = 0; x < activeAdifArray.length; x++)
+  {
     let finalMode = "";
 
-    if (activeAdifArray[x].length > 3) {
-      if (activeAdifLogMode) {
+    if (activeAdifArray[x].length > 3)
+    {
+      if (activeAdifLogMode)
+      {
         let confirmed = false;
         let finalGrid = findAdiField(
           activeAdifArray[x],
@@ -100,7 +111,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
           g_appSettings.workingCallsignEnable &&
           !(finalDEcall in g_appSettings.workingCallsigns)
         )
-          continue;
+        { continue; }
         let finalRSTsent = findAdiField(activeAdifArray[x], "RST_SENT");
         let finalRSTrecv = findAdiField(activeAdifArray[x], "RST_RCVD");
         let finalBand = findAdiField(activeAdifArray[x], "BAND").toLowerCase();
@@ -123,16 +134,18 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
         if (finalCont.length == 0) finalCont = null;
         let finalCnty = findAdiField(activeAdifArray[x], "CNTY").toUpperCase();
         if (finalCnty.length == 0) finalCnty = null;
-        else {
+        else
+        {
           finalCnty = finalCnty.replaceAll(" ", "");
         }
         let finalMode = findAdiField(activeAdifArray[x], "MODE").toUpperCase();
         let subMode = findAdiField(activeAdifArray[x], "SUBMODE");
         if (subMode == "FT4" && (finalMode == "MFSK" || finalMode == "DATA"))
-          finalMode = "FT4";
+        { finalMode = "FT4"; }
         if (subMode == "JS8" && finalMode == "MFSK") finalMode = "JS8";
 
-        if (finalBand == "oob" || finalBand == "") {
+        if (finalBand == "oob" || finalBand == "")
+        {
           finalBand = Number(
             findAdiField(activeAdifArray[x], "FREQ")
           ).formatBand();
@@ -143,13 +156,13 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
         let finalQslMsgIntl = findAdiField(activeAdifArray[x], "QSLMSG_INTL");
         if (finalQslMsg.length > 1) finalMsg = finalQslMsg;
         if (finalQslMsgIntl.length > 1 && finalMsg == "")
-          finalMsg = finalQslMsgIntl;
+        { finalMsg = finalQslMsgIntl; }
 
         let finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
         if (finalDxcc == 0) finalDxcc = Number(callsignToDxcc(finalDXcall));
 
         if (!(finalDxcc in g_dxccToGeoData))
-          finalDxcc = Number(callsignToDxcc(finalDXcall));
+        { finalDxcc = Number(callsignToDxcc(finalDXcall)); }
 
         // If my callsign isn't present, it must be for me anyway
 
@@ -157,13 +170,13 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
         if (finalCqZone.length == 1) finalCqZone = "0" + finalCqZone;
 
         if (parseInt(finalCqZone) < 1 || parseInt(finalCqZone) > 40)
-          finalCqZone = "";
+        { finalCqZone = ""; }
         finalCqZone = String(finalCqZone);
         let finalItuZone = findAdiField(activeAdifArray[x], "ITUZ");
         if (finalItuZone.length == 1) finalItuZone = "0" + finalItuZone;
 
         if (parseInt(finalItuZone) < 1 || parseInt(finalItuZone) > 90)
-          finalItuZone = "";
+        { finalItuZone = ""; }
         finalItuZone = String(finalItuZone);
 
         let finalIOTA = findAdiField(activeAdifArray[x], "IOTA").toUpperCase();
@@ -187,7 +200,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
           lotw_qsl_rcvd == "V" ||
           lotwConfirmed1 == "Y"
         )
-          confirmed = true;
+        { confirmed = true; }
 
         let dateTime = new Date(
           Date.UTC(
@@ -206,24 +219,28 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
           g_appSettings.workingDateEnable &&
           finalTime < g_appSettings.workingDate
         )
-          continue;
+        { continue; }
 
         finalGrid = finalGrid.substr(0, 6);
         if (!validateGridFromString(finalGrid)) finalGrid = "";
-        if (finalGrid == "" && vuccGrids != "") {
+        if (finalGrid == "" && vuccGrids != "")
+        {
           finalVucc = vuccGrids.split(",");
           finalGrid = finalVucc[0];
           finalVucc.shift();
         }
         let isDigital = false;
         let isPhone = false;
-        if (finalMode in g_modes) {
+        if (finalMode in g_modes)
+        {
           isDigital = g_modes[finalMode];
         }
-        if (finalMode in g_modes_phone) {
+        if (finalMode in g_modes_phone)
+        {
           isPhone = g_modes_phone[finalMode];
         }
         if (finalDXcall != "")
+        {
           addDeDx(
             finalGrid,
             finalDXcall,
@@ -252,7 +269,10 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
             finalIOTA,
             finalSatName
           );
-      } else {
+        }
+      }
+      else
+      {
         let finalMyGrid = findAdiField(
           activeAdifArray[x],
           "MY_GRIDSQUARE"
@@ -272,7 +292,8 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
         ).formatBand();
         let finalMsg = "-";
         let finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
-        if (finalDxcc == 0) {
+        if (finalDxcc == 0)
+        {
           if (finalDXcall == myDEcall) finalDxcc = callsignToDxcc(finalDEcall);
           else finalDxcc = callsignToDxcc(finalDXcall);
         }
@@ -294,8 +315,10 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
           finalGrid != "" &&
           finalDXcall != "" &&
           validateGridFromString(finalGrid)
-        ) {
+        )
+        {
           if (finalDXcall == myDEcall)
+          {
             addDeDx(
               finalMyGrid,
               finalDEcall,
@@ -318,7 +341,9 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
               null,
               null
             );
+          }
           else if (finalDEcall == myDEcall)
+          {
             addDeDx(
               finalGrid,
               finalDXcall,
@@ -341,7 +366,9 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
               null,
               null
             );
+          }
           else
+          {
             addDeDx(
               finalGrid,
               finalDXcall,
@@ -364,20 +391,18 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
               null,
               null
             );
+          }
         }
       }
     }
   }
 
-  delete rawAdiBuffer;
-
-  delete activeAdifArray;
-
   redrawGrids();
   updateCountStats();
   updateLogbook();
 
-  if (g_fromDirectCallNoFileDialog == false) {
+  if (g_fromDirectCallNoFileDialog == false)
+  {
     fileSelector.setAttribute("type", "");
     fileSelector.setAttribute("type", "file");
     fileSelector.setAttribute("accept", ".adi,");
@@ -389,15 +414,22 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile) {
   goProcessRoster();
 }
 
-function clubLogCallback(buffer, flag, cookie) {
+function clubLogCallback(buffer, flag, cookie)
+{
   var rawAdiBuffer = String(buffer);
-  if (rawAdiBuffer.indexOf("Invalid login") > -1) {
+  if (rawAdiBuffer.indexOf("Invalid login") > -1)
+  {
     if (flag) clubTestResult.innerHTML = "Invalid";
-  } else if (buffer == null) {
+  }
+  else if (buffer == null)
+  {
     if (flag) clubTestResult.innerHTML = "Unknown Error";
-  } else {
+  }
+  else
+  {
     if (flag) clubTestResult.innerHTML = "Passed";
-    else {
+    else
+    {
       g_fromDirectCallNoFileDialog = true;
 
       rawAdiBuffer = cleanAndPrepADIF("clublog.adif", rawAdiBuffer);
@@ -410,14 +442,16 @@ function clubLogCallback(buffer, flag, cookie) {
 }
 
 var g_isGettingClub = false;
-function grabClubLog(test) {
-  if (g_isGettingClub == false) {
+function grabClubLog(test)
+{
+  if (g_isGettingClub == false)
+  {
     if (test) clubTestResult.innerHTML = "Testing";
 
     var postData = {
       email: clubEmail.value,
       password: clubPassword.value,
-      call: clubCall.value,
+      call: clubCall.value
     };
     getAPostBuffer(
       "https://clublog.org/getadif.php",
@@ -432,22 +466,30 @@ function grabClubLog(test) {
   }
 }
 
-function tryToWriteAdifToDocFolder(filename, buffer, append = false) {
+function tryToWriteAdifToDocFolder(filename, buffer, append = false)
+{
   var finalFile = g_appData + g_dirSeperator + filename;
-  try {
-    if (append == false) {
+  try
+  {
+    if (append == false)
+    {
       fs.writeFileSync(finalFile, buffer);
       return buffer;
-    } else {
+    }
+    else
+    {
       fs.appendFileSync(finalFile, buffer);
       return fs.readFileSync(finalFile);
     }
-  } catch (e) {
+  }
+  catch (e)
+  {
     return false;
   }
 }
 
-function cleanAndPrepADIF(name, adiBuffer, reverse = false, noheader = false) {
+function cleanAndPrepADIF(name, adiBuffer, reverse = false, noheader = false)
+{
   var rawAdiBuffer = adiBuffer;
   var regex = new RegExp("<APP_LOTW_EOF>", "i");
   rawAdiBuffer = rawAdiBuffer.replace(regex, "");
@@ -459,17 +501,23 @@ function cleanAndPrepADIF(name, adiBuffer, reverse = false, noheader = false) {
 
   if (noheader == false) finalBuffer = name + "<EOH>\r\n";
 
-  if (adiArray.length > 1) {
+  if (adiArray.length > 1)
+  {
     regex = new RegExp("<EOR>", "i");
     activeAdifArray = adiArray[1].split(regex);
 
-    if (reverse == false) {
-      for (var x = 0; x < activeAdifArray.length - 1; x++) {
+    if (reverse == false)
+    {
+      for (var x = 0; x < activeAdifArray.length - 1; x++)
+      {
         var row = activeAdifArray[x].replace(/[\n\r]/g, "");
         if (row.length > 0) finalBuffer += row + "<EOR>\r\n";
       }
-    } else {
-      for (var x = activeAdifArray.length - 1; x > -1; x--) {
+    }
+    else
+    {
+      for (var x = activeAdifArray.length - 1; x > -1; x--)
+      {
         var row = activeAdifArray[x].replace(/[\n\r]/g, "");
         if (row.length > 0) finalBuffer += row + "<EOR>\r\n";
       }
@@ -479,14 +527,17 @@ function cleanAndPrepADIF(name, adiBuffer, reverse = false, noheader = false) {
   return finalBuffer;
 }
 
-function addZero(i) {
-  if (i < 10) {
+function addZero(i)
+{
+  if (i < 10)
+  {
     i = "0" + i;
   }
   return i;
 }
 
-function getUTCString(d) {
+function getUTCString(d)
+{
   var Y = d.getUTCFullYear();
   var M = addZero(d.getUTCMonth() + 1);
   var D = addZero(d.getUTCDate());
@@ -496,13 +547,18 @@ function getUTCString(d) {
   return Y + "-" + M + "-" + D + " " + h + ":" + m + ":" + s;
 }
 
-function lotwCallback(buffer, flag) {
+function lotwCallback(buffer, flag)
+{
   var rawAdiBuffer = String(buffer);
-  if (rawAdiBuffer.indexOf("password incorrect") > -1) {
+  if (rawAdiBuffer.indexOf("password incorrect") > -1)
+  {
     if (flag) lotwTestResult.innerHTML = "Invalid";
-  } else {
+  }
+  else
+  {
     if (flag) lotwTestResult.innerHTML = "Passed";
-    else {
+    else
+    {
       var shouldAppend = false;
       g_fromDirectCallNoFileDialog = true;
 
@@ -524,34 +580,45 @@ function lotwCallback(buffer, flag) {
   }
 }
 
-function shouldWeAppendInsteadOfCreate(filename) {
+function shouldWeAppendInsteadOfCreate(filename)
+{
   var finalFile = g_appData + g_dirSeperator + filename;
-  try {
+  try
+  {
     if (fs.existsSync(finalFile)) return true;
     else return false;
-  } catch (e) {
+  }
+  catch (e)
+  {
     return false;
   }
 }
 
-function tryToDeleteLog(filename) {
+function tryToDeleteLog(filename)
+{
   var finalFile = g_appData + g_dirSeperator + filename;
-  try {
-    if (fs.existsSync(finalFile)) {
+  try
+  {
+    if (fs.existsSync(finalFile))
+    {
       fs.unlinkSync(finalFile);
     }
-  } catch (e) {}
+  }
+  catch (e) {}
 }
 
 var g_lotwCount = 0;
 
 var g_isGettingLOTW = false;
 
-function grabLOtWLog(test) {
-  if (g_isGettingLOTW == false) {
+function grabLOtWLog(test)
+{
+  if (g_isGettingLOTW == false)
+  {
     var lastQSLDateString =
       "&qso_qsorxsince=1945-01-01&qso_qslsince=1945-01-01";
-    if (test == true) {
+    if (test == true)
+    {
       lotwTestResult.innerHTML = "Testing";
       lastQSLDateString = "&qso_qsosince=2100-01-01";
     }
@@ -574,13 +641,20 @@ function grabLOtWLog(test) {
   }
 }
 
-function qrzCallback(buffer, flag) {
-  if (buffer.indexOf("invalid api key") > -1) {
+function qrzCallback(buffer, flag)
+{
+  if (buffer.indexOf("invalid api key") > -1)
+  {
     if (flag) qrzTestResult.innerHTML = "Invalid";
-  } else {
-    if (flag) {
+  }
+  else
+  {
+    if (flag)
+    {
       qrzTestResult.innerHTML = "Passed";
-    } else {
+    }
+    else
+    {
       g_fromDirectCallNoFileDialog = true;
       var htmlString = String(buffer).replace(/&lt;/g, "<");
       htmlString = htmlString.replace(/&gt;/g, ">");
@@ -591,16 +665,18 @@ function qrzCallback(buffer, flag) {
       tryToWriteAdifToDocFolder("qrz.adif", htmlString);
 
       onAdiLoadComplete(htmlString, true, "qrz.adif", true);
-      delete htmlString;
     }
   }
 }
 
 var g_isGettingQRZCom = false;
-function grabQrzComLog(test) {
-  if (g_isGettingQRZCom == false) {
+function grabQrzComLog(test)
+{
+  if (g_isGettingQRZCom == false)
+  {
     var action = "FETCH";
-    if (test) {
+    if (test)
+    {
       qrzTestResult.innerHTML = "Testing";
       action = "STATUS";
     }
@@ -621,28 +697,37 @@ function grabQrzComLog(test) {
   }
 }
 
-function ValidateQrzApi(inputText) {
+function ValidateQrzApi(inputText)
+{
   inputText.value = inputText.value.toUpperCase();
-  if (inputText.value.length == 19) {
+  if (inputText.value.length == 19)
+  {
     var passed = false;
     var dashcount = 0;
-    for (var i = 0; i < inputText.value.length; i++) {
+    for (var i = 0; i < inputText.value.length; i++)
+    {
       if (inputText.value[i] == "-") dashcount++;
     }
-    if (dashcount == 3) {
+    if (dashcount == 3)
+    {
       passed = true;
     }
-    if (passed) {
+    if (passed)
+    {
       inputText.style.color = "#FF0";
       inputText.style.backgroundColor = "green";
 
       return true;
-    } else {
+    }
+    else
+    {
       inputText.style.color = "white";
       inputText.style.backgroundColor = "red";
       return false;
     }
-  } else {
+  }
+  else
+  {
     inputText.style.color = "white";
     inputText.style.backgroundColor = "red";
 
@@ -650,19 +735,24 @@ function ValidateQrzApi(inputText) {
   }
 }
 
-function ValidateText(inputText) {
-  if (inputText.value.length > 0) {
+function ValidateText(inputText)
+{
+  if (inputText.value.length > 0)
+  {
     inputText.style.color = "#FF0";
     inputText.style.backgroundColor = "green";
     return true;
-  } else {
+  }
+  else
+  {
     inputText.style.color = "white";
     inputText.style.backgroundColor = "red";
     return false;
   }
 }
 
-function pskCallback(buffer, flag) {
+function pskCallback(buffer, flag)
+{
   g_fromDirectCallNoFileDialog = true;
   var rawAdiBuffer = String(buffer);
 
@@ -671,10 +761,12 @@ function pskCallback(buffer, flag) {
 
 var g_isGettingPsk = false;
 
-function grabPsk24() {
+function grabPsk24()
+{
   if (g_isGettingPsk == true) return;
 
-  if (myDEcall.length > 0 && myDEcall != "NOCALL") {
+  if (myDEcall.length > 0 && myDEcall != "NOCALL")
+  {
     var days = 1;
     if (pskImg.src == 1) days = 7;
     getABuffer(
@@ -692,12 +784,16 @@ function grabPsk24() {
   }
 }
 
-function adifMenuCheckBoxChanged(what) {
-  g_adifLogSettings["menu"][what.id] = what.checked;
+function adifMenuCheckBoxChanged(what)
+{
+  g_adifLogSettings.menu[what.id] = what.checked;
   var menuItem = what.id + "Div";
-  if (what.checked == true) {
+  if (what.checked == true)
+  {
     document.getElementById(menuItem).style.display = "inline-block";
-  } else {
+  }
+  else
+  {
     document.getElementById(menuItem).style.display = "none";
   }
 
@@ -706,20 +802,26 @@ function adifMenuCheckBoxChanged(what) {
   if (what == buttonAdifCheckBox) setAdifStartup(loadAdifCheckBox);
 }
 
-function adifStartupCheckBoxChanged(what) {
-  g_adifLogSettings["startup"][what.id] = what.checked;
+function adifStartupCheckBoxChanged(what)
+{
+  g_adifLogSettings.startup[what.id] = what.checked;
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 
   if (what == loadAdifCheckBox) setAdifStartup(loadAdifCheckBox);
 }
 
-function adifLogQsoCheckBoxChanged(what) {
-  g_adifLogSettings["qsolog"][what.id] = what.checked;
-  if (what.id == "logLOTWqsoCheckBox") {
-    if (what.checked == true) {
+function adifLogQsoCheckBoxChanged(what)
+{
+  g_adifLogSettings.qsolog[what.id] = what.checked;
+  if (what.id == "logLOTWqsoCheckBox")
+  {
+    if (what.checked == true)
+    {
       lotwUpload.style.display = "inline-block";
       trustedTestButton.style.display = "inline-block";
-    } else {
+    }
+    else
+    {
       lotwUpload.style.display = "none";
       trustedTestButton.style.display = "none";
     }
@@ -727,34 +829,44 @@ function adifLogQsoCheckBoxChanged(what) {
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 }
 
-function adifNicknameCheckBoxChanged(what) {
-  g_adifLogSettings["nickname"][what.id] = what.checked;
-  if (what.id == "nicknameeQSLCheckBox") {
-    if (what.checked == true) {
+function adifNicknameCheckBoxChanged(what)
+{
+  g_adifLogSettings.nickname[what.id] = what.checked;
+  if (what.id == "nicknameeQSLCheckBox")
+  {
+    if (what.checked == true)
+    {
       eQSLNickname.style.display = "inline-block";
-    } else {
+    }
+    else
+    {
       eQSLNickname.style.display = "none";
     }
   }
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 }
 
-function adifTextValueChange(what) {
-  g_adifLogSettings["text"][what.id] = what.value;
+function adifTextValueChange(what)
+{
+  g_adifLogSettings.text[what.id] = what.value;
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 }
 
 var fileSelector = document.createElement("input");
 fileSelector.setAttribute("type", "file");
 fileSelector.setAttribute("accept", ".adi,.adif");
-fileSelector.onchange = function () {
-  if (this.files && this.files[0]) {
+fileSelector.onchange = function ()
+{
+  if (this.files && this.files[0])
+  {
     path = this.value.replace(this.files[0].name, "");
     fileSelector.setAttribute("nwworkingdir", path);
 
     var reader = new FileReader();
-    reader.onload = function (e) {
-      if (e.target.error == null) {
+    reader.onload = function (e)
+    {
+      if (e.target.error == null)
+      {
         onAdiLoadComplete(e.target.result, false);
       }
     };
@@ -763,7 +875,8 @@ fileSelector.onchange = function () {
   }
 };
 
-function adifLoadDialog() {
+function adifLoadDialog()
+{
   var exists = fileSelector.getAttribute("nwworkingdir");
 
   fileSelector.setAttribute("nwworkingdir", g_appData);
@@ -776,9 +889,12 @@ function adifLoadDialog() {
 var startupFileSelector = document.createElement("input");
 startupFileSelector.setAttribute("type", "file");
 startupFileSelector.setAttribute("accept", ".adi,.adif");
-startupFileSelector.onchange = function () {
-  if (this.files && this.files[0]) {
-    for (var i in g_startupLogs) {
+startupFileSelector.onchange = function ()
+{
+  if (this.files && this.files[0])
+  {
+    for (var i in g_startupLogs)
+    {
       if (this.value == g_startupLogs[i].file) return;
     }
     var newObject = Object();
@@ -794,8 +910,10 @@ startupFileSelector.onchange = function () {
   }
 };
 
-function start_and_end(str) {
-  if (str.length > 31) {
+function start_and_end(str)
+{
+  if (str.length > 31)
+  {
     return (
       str.substr(0, 16) + " ... " + str.substr(str.length - 15, str.length)
     );
@@ -803,13 +921,16 @@ function start_and_end(str) {
   return str;
 }
 
-function setFileSelectors() {
+function setFileSelectors()
+{
   selectStartupLink = document.getElementById("selectAdifButton");
-  selectStartupLink.onclick = function () {
+  selectStartupLink.onclick = function ()
+  {
     var exists = startupFileSelector.getAttribute("nwworkingdir");
-    if (exists == null) {
+    if (exists == null)
+    {
       if (g_workingIniPath.length > 1)
-        startupFileSelector.setAttribute("nwworkingdir", g_appData);
+      { startupFileSelector.setAttribute("nwworkingdir", g_appData); }
     }
 
     startupFileSelector.click();
@@ -817,7 +938,8 @@ function setFileSelectors() {
   };
 
   selectTqsl = document.getElementById("selectTQSLButton");
-  selectTqsl.onclick = function () {
+  selectTqsl.onclick = function ()
+  {
     tqslFileSelector.click();
     return false;
   };
@@ -827,8 +949,10 @@ function setFileSelectors() {
 var tqslFileSelector = document.createElement("input");
 tqslFileSelector.setAttribute("type", "file");
 tqslFileSelector.setAttribute("accept", "*");
-tqslFileSelector.onchange = function () {
-  if (this.files && this.files[0]) {
+tqslFileSelector.onchange = function ()
+{
+  if (this.files && this.files[0])
+  {
     g_trustedQslSettings.binaryFile = this.files[0].path;
     var fs = require("fs");
 
@@ -836,13 +960,18 @@ tqslFileSelector.onchange = function () {
       fs.existsSync(g_trustedQslSettings.binaryFile) &&
       (g_trustedQslSettings.binaryFile.endsWith("tqsl.exe") ||
         g_trustedQslSettings.binaryFile.endsWith("tqsl"))
-    ) {
+    )
+    {
       g_trustedQslSettings.binaryFileValid = true;
-    } else g_trustedQslSettings.binaryFileValid = false;
+    }
+    else g_trustedQslSettings.binaryFileValid = false;
 
-    if (g_trustedQslSettings.binaryFileValid == true) {
+    if (g_trustedQslSettings.binaryFileValid == true)
+    {
       tqslFileDiv.style.backgroundColor = "blue";
-    } else {
+    }
+    else
+    {
       tqslFileDiv.style.backgroundColor = "red";
     }
 
@@ -851,10 +980,12 @@ tqslFileSelector.onchange = function () {
   }
 };
 
-function loadGtQSOLogFile() {
+function loadGtQSOLogFile()
+{
   var fs = require("fs");
 
-  if (fs.existsSync(g_qsoLogFile)) {
+  if (fs.existsSync(g_qsoLogFile))
+  {
     var rawAdiBuffer = fs.readFileSync(g_qsoLogFile);
 
     g_fromDirectCallNoFileDialog = true;
@@ -863,47 +994,62 @@ function loadGtQSOLogFile() {
   }
 }
 
-function loadWsjtLogFile() {
+function loadWsjtLogFile()
+{
   var fs = require("fs");
-  if (fs.existsSync(g_workingIniPath + "wsjtx_log.adi")) {
+  if (fs.existsSync(g_workingIniPath + "wsjtx_log.adi"))
+  {
     var rawAdiBuffer = fs.readFileSync(g_workingIniPath + "wsjtx_log.adi");
     g_fromDirectCallNoFileDialog = true;
     onAdiLoadComplete(rawAdiBuffer, false);
   }
 }
 
-function findTrustedQSLPaths() {
+function findTrustedQSLPaths()
+{
   var process = require("process");
   var base = null;
 
-  if (g_trustedQslSettings.stationFileValid == true) {
+  if (g_trustedQslSettings.stationFileValid == true)
+  {
     // double check the presence of the station_data;
-    if (!fs.existsSync(g_trustedQslSettings.stationFile)) {
+    if (!fs.existsSync(g_trustedQslSettings.stationFile))
+    {
       g_trustedQslSettings.stationFileValid = false;
     }
   }
-  if (g_trustedQslSettings.stationFileValid == false) {
-    if (g_platform == "windows") {
+  if (g_trustedQslSettings.stationFileValid == false)
+  {
+    if (g_platform == "windows")
+    {
       base = process.env.APPDATA + "\\TrustedQSL\\station_data";
-      if (fs.existsSync(base)) {
+      if (fs.existsSync(base))
+      {
         g_trustedQslSettings.stationFile = base;
         g_trustedQslSettings.stationFileValid = true;
-      } else {
+      }
+      else
+      {
         base = process.env.LOCALAPPDATA + "\\TrustedQSL\\station_data";
-        if (fs.existsSync(base)) {
+        if (fs.existsSync(base))
+        {
           g_trustedQslSettings.stationFile = base;
           g_trustedQslSettings.stationFileValid = true;
         }
       }
-    } else {
+    }
+    else
+    {
       base = process.env.HOME + "/.tqsl/station_data";
-      if (fs.existsSync(base)) {
+      if (fs.existsSync(base))
+      {
         g_trustedQslSettings.stationFile = base;
         g_trustedQslSettings.stationFileValid = true;
       }
     }
   }
-  if (g_trustedQslSettings.stationFileValid == true) {
+  if (g_trustedQslSettings.stationFileValid == true)
+  {
     var validate = false;
     var option = document.createElement("option");
     option.value = "";
@@ -914,69 +1060,95 @@ function findTrustedQSLPaths() {
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(buffer, "text/xml");
     var x = xmlDoc.getElementsByTagName("StationData");
-    for (var i = 0; i < x.length; i++) {
+    for (var i = 0; i < x.length; i++)
+    {
       option = document.createElement("option");
       option.value = x[i].getAttribute("name");
       option.text = x[i].getAttribute("name");
-      if (option.value == g_adifLogSettings.text.lotwStation) {
+      if (option.value == g_adifLogSettings.text.lotwStation)
+      {
         option.selected = true;
         validate = true;
       }
       lotwStation.appendChild(option);
     }
-    if (validate) {
+    if (validate)
+    {
       ValidateText(lotwStation);
     }
   }
 
-  if (g_trustedQslSettings.binaryFileValid == true) {
+  if (g_trustedQslSettings.binaryFileValid == true)
+  {
     // double check the presence of the TrustedQSL binary;
-    if (!fs.existsSync(g_trustedQslSettings.binaryFile)) {
+    if (!fs.existsSync(g_trustedQslSettings.binaryFile))
+    {
       g_trustedQslSettings.binaryFileValid = false;
     }
   }
-  if (g_trustedQslSettings.binaryFileValid == false || g_platform == "mac") {
-    if (g_platform == "windows") {
+  if (g_trustedQslSettings.binaryFileValid == false || g_platform == "mac")
+  {
+    if (g_platform == "windows")
+    {
       base = process.env["ProgramFiles(x86)"] + "\\TrustedQSL\\tqsl.exe";
-      if (fs.existsSync(base)) {
+      if (fs.existsSync(base))
+      {
         g_trustedQslSettings.binaryFile = base;
         g_trustedQslSettings.binaryFileValid = true;
       }
-    } else if (g_platform == "mac") {
+    }
+    else if (g_platform == "mac")
+    {
       base = "/Applications/TrustedQSL/tqsl.app/Contents/MacOS/tqsl";
-      if (fs.existsSync(base)) {
+      if (fs.existsSync(base))
+      {
         g_trustedQslSettings.binaryFile = base;
         g_trustedQslSettings.binaryFileValid = true;
-      } else {
+      }
+      else
+      {
         base =
           process.env.HOME +
           "/Applications/TrustedQSL/tqsl.app/Contents/MacOS/tqsl";
-        if (fs.existsSync(base)) {
+        if (fs.existsSync(base))
+        {
           g_trustedQslSettings.binaryFile = base;
           g_trustedQslSettings.binaryFileValid = true;
-        } else {
+        }
+        else
+        {
           base =
             process.env.HOME + "/Applications/tqsl.app/Contents/MacOS/tqsl";
-          if (fs.existsSync(base)) {
+          if (fs.existsSync(base))
+          {
             g_trustedQslSettings.binaryFile = base;
             g_trustedQslSettings.binaryFileValid = true;
-          } else {
+          }
+          else
+          {
             base = "/Applications/tqsl.app/Contents/MacOS/tqsl";
-            if (fs.existsSync(base)) {
+            if (fs.existsSync(base))
+            {
               g_trustedQslSettings.binaryFile = base;
               g_trustedQslSettings.binaryFileValid = true;
-            } else {
+            }
+            else
+            {
               base =
                 process.env.HOME +
                 "/Desktop/TrustedQSL/tqsl.app/Contents/MacOS/tqsl";
-              if (fs.existsSync(base)) {
+              if (fs.existsSync(base))
+              {
                 g_trustedQslSettings.binaryFile = base;
                 g_trustedQslSettings.binaryFileValid = true;
-              } else {
+              }
+              else
+              {
                 base =
                   process.env.HOME +
                   "/Applications/Ham Radio/tqsl.app/Contents/MacOS/tqsl";
-                if (fs.existsSync(base)) {
+                if (fs.existsSync(base))
+                {
                   g_trustedQslSettings.binaryFile = base;
                   g_trustedQslSettings.binaryFileValid = true;
                 }
@@ -985,14 +1157,20 @@ function findTrustedQSLPaths() {
           }
         }
       }
-    } else if (g_platform == "linux") {
+    }
+    else if (g_platform == "linux")
+    {
       base = "/usr/bin/tqsl";
-      if (fs.existsSync(base)) {
+      if (fs.existsSync(base))
+      {
         g_trustedQslSettings.binaryFile = base;
         g_trustedQslSettings.binaryFileValid = true;
-      } else {
+      }
+      else
+      {
         base = "/usr/local/bin/tqsl";
-        if (fs.existsSync(base)) {
+        if (fs.existsSync(base))
+        {
           g_trustedQslSettings.binaryFile = base;
           g_trustedQslSettings.binaryFileValid = true;
         }
@@ -1002,44 +1180,58 @@ function findTrustedQSLPaths() {
   localStorage.trustedQslSettings = JSON.stringify(g_trustedQslSettings);
 }
 
-function startupAdifLoadFunction() {
+function startupAdifLoadFunction()
+{
   var fs = require("fs");
 
-  for (var i in g_startupLogs) {
-    try {
-      if (fs.existsSync(g_startupLogs[i].file)) {
+  for (var i in g_startupLogs)
+  {
+    try
+    {
+      if (fs.existsSync(g_startupLogs[i].file))
+      {
         var rawAdiBuffer = fs.readFileSync(g_startupLogs[i].file);
         g_fromDirectCallNoFileDialog = true;
         onAdiLoadComplete(rawAdiBuffer, false);
       }
-    } catch (e) {}
+    }
+    catch (e) {}
   }
 }
 
-function setAdifStartup(checkbox) {
+function setAdifStartup(checkbox)
+{
   if (g_trustedQslSettings.binaryFile == null)
-    g_trustedQslSettings.binaryFile = "";
+  { g_trustedQslSettings.binaryFile = ""; }
 
   if (
     g_trustedQslSettings.binaryFile.endsWith("tqsl.exe") ||
     g_trustedQslSettings.binaryFile.endsWith("tqsl")
-  ) {
+  )
+  {
     g_trustedQslSettings.binaryFileValid = true;
-  } else g_trustedQslSettings.binaryFileValid = false;
+  }
+  else g_trustedQslSettings.binaryFileValid = false;
 
-  if (g_trustedQslSettings.binaryFileValid == true) {
+  if (g_trustedQslSettings.binaryFileValid == true)
+  {
     tqslFileDiv.style.backgroundColor = "blue";
-  } else {
+  }
+  else
+  {
     tqslFileDiv.style.backgroundColor = "red";
   }
   tqslFileDiv.innerHTML =
     "<b>" + start_and_end(g_trustedQslSettings.binaryFile) + "</b>";
 
-  if (buttonAdifCheckBox.checked || loadAdifCheckBox.checked) {
+  if (buttonAdifCheckBox.checked || loadAdifCheckBox.checked)
+  {
     var worker = "";
-    if (g_startupLogs.length > 0) {
+    if (g_startupLogs.length > 0)
+    {
       worker += "<table class='darkTable'>";
-      for (var i in g_startupLogs) {
+      for (var i in g_startupLogs)
+      {
         worker +=
           "<tr title='" +
           g_startupLogs[i].file +
@@ -1050,12 +1242,16 @@ function setAdifStartup(checkbox) {
           ")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px;cursor:pointer'></td></tr>";
       }
       worker += "</table>";
-    } else {
+    }
+    else
+    {
       worker = "No file(s) selected";
     }
     startupLogFileDiv.innerHTML = worker;
     selectFileOnStartupDiv.style.display = "block";
-  } else {
+  }
+  else
+  {
     startupLogFileDiv.innerHTML = "No file(s) selected";
     startupFileSelector.setAttribute("type", "");
     startupFileSelector.setAttribute("type", "file");
@@ -1065,15 +1261,18 @@ function setAdifStartup(checkbox) {
   }
 }
 
-function removeStartupLog(i) {
-  if (i in g_startupLogs) {
+function removeStartupLog(i)
+{
+  if (i in g_startupLogs)
+  {
     g_startupLogs.splice(i, 1);
     localStorage.startupLogs = JSON.stringify(g_startupLogs);
     setAdifStartup(loadAdifCheckBox);
   }
 }
 
-function startupAdifLoadCheck() {
+function startupAdifLoadCheck()
+{
   logEventMedia.value = g_alertSettings.logEventMedia;
 
   loadWsjtLogFile();
@@ -1081,9 +1280,10 @@ function startupAdifLoadCheck() {
   if (loadGTCheckBox.checked == true) loadGtQSOLogFile();
 
   if (loadAdifCheckBox.checked == true && g_startupLogs.length > 0)
-    startupAdifLoadFunction();
+  { startupAdifLoadFunction(); }
 
-  if (g_mapSettings.offlineMode == false) {
+  if (g_mapSettings.offlineMode == false)
+  {
     if (g_appSettings.gtFlagImgSrc == 1) showGtFlags();
 
     if (loadLOTWCheckBox.checked == true) grabLOtWLog(false);
@@ -1105,39 +1305,43 @@ function getABuffer(
   imgToGray,
   stringOfFlag,
   timeoutX
-) {
+)
+{
   let url = require("url");
   let http = require(mode);
   let fileBuffer = null;
   let options = null;
 
-  {
-    options = {
-      host: url.parse(file_url).host,
-      port: port,
-      path: url.parse(file_url).path,
-      method: "get",
-    };
-  }
+  options = {
+    host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
+    port: port,
+    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
+    method: "get"
+  };
+
   if (typeof stringOfFlag != "undefined") window[stringOfFlag] = true;
-  if (typeof imgToGray != "undefined") {
+  if (typeof imgToGray != "undefined")
+  {
     imgToGray.parentNode.style.background =
       "linear-gradient(grey 0%, black 0% 100% )";
     imgToGray.style.webkitFilter = "invert(100%) grayscale(1)";
   }
 
-  let req = http.request(options, function (res) {
+  let req = http.request(options, function (res)
+  {
     let fsize = res.headers["content-length"];
     let cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
-      cookies = res.headers["set-cookie"];
+    { cookies = res.headers["set-cookie"]; }
 
     res
-      .on("data", function (data) {
+      .on("data", function (data)
+      {
         if (fileBuffer == null) fileBuffer = data;
         else fileBuffer += data;
 
-        if (typeof imgToGray != "undefined") {
+        if (typeof imgToGray != "undefined")
+        {
           let percent = 0;
           if (fsize > 0) percent = parseInt((fileBuffer.length / fsize) * 100);
           else percent = parseInt(((fileBuffer.length / 100000) * 100) % 100);
@@ -1149,41 +1353,53 @@ function getABuffer(
             "% 100% )";
         }
       })
-      .on("end", function () {
-        if (typeof callback === "function") {
+      .on("end", function ()
+      {
+        if (typeof callback === "function")
+        {
           // Call it, since we have confirmed it is callable
           callback(fileBuffer, flag, cookies);
         }
-        if (typeof stringOfFlag != "undefined") {
+        if (typeof stringOfFlag != "undefined")
+        {
           window[stringOfFlag] = false;
         }
-        if (typeof imgToGray != "undefined") {
+        if (typeof imgToGray != "undefined")
+        {
           imgToGray.parentNode.style.background = "";
           imgToGray.style.webkitFilter = "";
         }
       })
-      .on("error", function () {
-        if (typeof stringOfFlag != "undefined") {
+      .on("error", function ()
+      {
+        if (typeof stringOfFlag != "undefined")
+        {
           window[stringOfFlag] = false;
         }
-        if (typeof imgToGray != "undefined") {
+        if (typeof imgToGray != "undefined")
+        {
           imgToGray.parentNode.style.background = "";
           imgToGray.style.webkitFilter = "";
         }
       });
   });
 
-  req.on("socket", function (socket) {
-    socket.on("timeout", function () {
+  req.on("socket", function (socket)
+  {
+    socket.on("timeout", function ()
+    {
       req.abort();
     });
   });
 
-  req.on("error", function () {
-    if (typeof stringOfFlag != "undefined") {
+  req.on("error", function ()
+  {
+    if (typeof stringOfFlag != "undefined")
+    {
       window[stringOfFlag] = false;
     }
-    if (typeof imgToGray != "undefined") {
+    if (typeof imgToGray != "undefined")
+    {
       imgToGray.parentNode.style.background = "";
       imgToGray.style.webkitFilter = "";
     }
@@ -1201,7 +1417,8 @@ function getAPostBuffer(
   theData,
   imgToGray,
   stringOfFlag
-) {
+)
+{
   var querystring = require("querystring");
   var postData = querystring.stringify(theData);
   var url = require("url");
@@ -1209,36 +1426,40 @@ function getAPostBuffer(
   var fileBuffer = null;
 
   var options = {
-    host: url.parse(file_url).host,
+    host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
     port: port,
-    path: url.parse(file_url).path,
+    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
     method: "post",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": postData.length,
-    },
+      "Content-Length": postData.length
+    }
   };
 
   window[stringOfFlag] = true;
 
-  if (typeof imgToGray != "undefined") {
+  if (typeof imgToGray != "undefined")
+  {
     imgToGray.parentNode.style.background =
       "linear-gradient(grey 0%, black 0% 100% )";
     imgToGray.style.webkitFilter = "invert(100%) grayscale(1)";
   }
 
-  var req = http.request(options, function (res) {
+  var req = http.request(options, function (res)
+  {
     var fsize = res.headers["content-length"];
     var cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
-      cookies = res.headers["set-cookie"];
+    { cookies = res.headers["set-cookie"]; }
 
     res
-      .on("data", function (data) {
+      .on("data", function (data)
+      {
         if (fileBuffer == null) fileBuffer = data;
         else fileBuffer += data;
 
-        if (typeof imgToGray != "undefined") {
+        if (typeof imgToGray != "undefined")
+        {
           var percent = 0;
           if (fsize > 0) percent = parseInt((fileBuffer.length / fsize) * 100);
           else percent = parseInt(((fileBuffer.length / 100000) * 100) % 100);
@@ -1251,35 +1472,44 @@ function getAPostBuffer(
             "% 100% )";
         }
       })
-      .on("end", function () {
-        if (typeof callback === "function") {
+      .on("end", function ()
+      {
+        if (typeof callback === "function")
+        {
           // Call it, since we have confirmed it is callable
           callback(fileBuffer, flag, cookies);
           window[stringOfFlag] = false;
-          if (typeof imgToGray != "undefined") {
+          if (typeof imgToGray != "undefined")
+          {
             imgToGray.parentNode.style.background = "";
             imgToGray.style.webkitFilter = "";
           }
         }
       })
-      .on("error", function () {
+      .on("error", function ()
+      {
         window[stringOfFlag] = false;
-        if (typeof imgToGray != "undefined") {
+        if (typeof imgToGray != "undefined")
+        {
           imgToGray.parentNode.style.background = "";
           imgToGray.style.webkitFilter = "";
         }
       });
   });
 
-  req.on("socket", function (socket) {
-    socket.on("timeout", function () {
+  req.on("socket", function (socket)
+  {
+    socket.on("timeout", function ()
+    {
       req.abort();
     });
   });
 
-  req.on("error", function (err) {
+  req.on("error", function (err) // eslint-disable-line node/handle-callback-err
+  {
     window[stringOfFlag] = false;
-    if (typeof imgToGray != "undefined") {
+    if (typeof imgToGray != "undefined")
+    {
       imgToGray.parentNode.style.background = "";
       imgToGray.style.webkitFilter = "";
     }
@@ -1289,41 +1519,51 @@ function getAPostBuffer(
   req.end();
 }
 
-function sendUdpMessage(msg, length, port, address) {
+function sendUdpMessage(msg, length, port, address)
+{
   var dgram = require("dgram");
   var socket = dgram.createSocket({ type: "udp4", reuseAddr: true });
-  socket.send(msg, 0, length, port, address, (err) => {
+  socket.send(msg, 0, length, port, address, (err) => // eslint-disable-line node/handle-callback-err
+  {
     socket.close();
   });
 }
 
-function sendTcpMessage(msg, length, port, address) {
+function sendTcpMessage(msg, length, port, address)
+{
   var net = require("net");
   var client = new net.Socket();
   client.setTimeout(30000);
-  client.connect(port, address, function () {
+  client.connect(port, address, function ()
+  {
     client.write(msg);
   });
 
   client.on("close", function () {});
 }
 
-function valueToAdiField(field, value) {
+function valueToAdiField(field, value)
+{
   var adi = "<" + field + ":";
   adi += String(value).length + ">";
   adi += String(value) + " ";
   return adi;
 }
 
-function pad(value) {
-  if (value < 10) {
+function pad(value)
+{
+  if (value < 10)
+  {
     return "0" + value;
-  } else {
+  }
+  else
+  {
     return value;
   }
 }
 
-function HMSfromMilli(milli) {
+function HMSfromMilli(milli)
+{
   var seconds = parseInt(milli / 1000);
   var days = Math.floor(seconds / (3600 * 24));
   seconds -= days * 3600 * 24;
@@ -1336,7 +1576,8 @@ function HMSfromMilli(milli) {
   return String(val);
 }
 
-function colonHMSfromMilli(milli) {
+function colonHMSfromMilli(milli)
+{
   var seconds = parseInt(milli / 1000);
   var days = Math.floor(seconds / (3600 * 24));
   seconds -= days * 3600 * 24;
@@ -1349,7 +1590,8 @@ function colonHMSfromMilli(milli) {
   return String(val);
 }
 
-function colonHMSfromSeconds(secondsIn) {
+function colonHMSfromSeconds(secondsIn)
+{
   var seconds = secondsIn;
   var days = Math.floor(seconds / (3600 * 24));
   seconds -= days * 3600 * 24;
@@ -1362,7 +1604,8 @@ function colonHMSfromSeconds(secondsIn) {
   return String(val);
 }
 
-function convertToDate(julian) {
+function convertToDate(julian)
+{
   var DAY = 86400000;
   var HALF_DAY = DAY / 2;
   var UNIX_EPOCH_JULIAN_DATE = 2440587.5;
@@ -1376,7 +1619,8 @@ var lastReportHash = null;
 
 var g_oldStyleLogMessage = null;
 
-function oldSendToLogger() {
+function oldSendToLogger()
+{
   var newMessage = Object.assign({}, g_oldStyleLogMessage);
 
   var band = Number(newMessage.Frequency / 1000000).formatBand();
@@ -1384,7 +1628,8 @@ function oldSendToLogger() {
   if (
     newMessage.DXGrid.length == 0 &&
     newMessage.DXCall + band + newMessage.MO in g_liveCallsigns
-  ) {
+  )
+  {
     newMessage.DXGrid = g_liveCallsigns[
       newMessage.DXCall + band + newMessage.MO
     ].grid.substr(0, 4);
@@ -1424,24 +1669,29 @@ function oldSendToLogger() {
   report += valueToAdiField("GRIDSQUARE", newMessage.DXGrid);
 
   if (newMessage.Comments.length > 0)
-    report += valueToAdiField("COMMENT", newMessage.Comments);
+  { report += valueToAdiField("COMMENT", newMessage.Comments); }
 
   if (newMessage.Name.length > 0)
-    report += valueToAdiField("NAME", newMessage.Name);
+  { report += valueToAdiField("NAME", newMessage.Name); }
 
-  if (newMessage.Operatorcall.length > 0) {
+  if (newMessage.Operatorcall.length > 0)
+  {
     report += valueToAdiField("OPERATOR", newMessage.Operatorcall);
   }
 
-  if (newMessage.Mycall.length > 0) {
+  if (newMessage.Mycall.length > 0)
+  {
     report += valueToAdiField("STATION_CALLSIGN", newMessage.Mycall);
-  } else if (myDEcall != "NOCALL" && myDEcall.length > 0)
-    report += valueToAdiField("STATION_CALLSIGN", myDEcall);
+  }
+  else if (myDEcall != "NOCALL" && myDEcall.length > 0)
+  { report += valueToAdiField("STATION_CALLSIGN", myDEcall); }
 
-  if (newMessage.Mygrid.length > 0) {
+  if (newMessage.Mygrid.length > 0)
+  {
     report += valueToAdiField("MY_GRIDSQUARE", newMessage.Mygrid);
-  } else if (myDEGrid.length > 1)
-    report += valueToAdiField("MY_GRIDSQUARE", myDEGrid);
+  }
+  else if (myDEGrid.length > 1)
+  { report += valueToAdiField("MY_GRIDSQUARE", myDEGrid); }
 
   report += "<EOR>";
 
@@ -1456,115 +1706,138 @@ var g_adifLookupMap = {
   cqzone: "CQZ",
   ituzone: "ITUZ",
   email: "EMAIL",
-  county: "CNTY",
+  county: "CNTY"
 };
 
-function sendToLogger(ADIF) {
+function sendToLogger(ADIF)
+{
   let regex = new RegExp("<EOH>", "i");
   let record = parseADIFRecord(ADIF.split(regex)[1]);
-  let localMode = record["MODE"];
+  let localMode = record.MODE;
 
-  if (localMode == "MFSK" && "SUBMODE" in record) {
-    localMode = record["SUBMODE"];
+  if (localMode == "MFSK" && "SUBMODE" in record)
+  {
+    localMode = record.SUBMODE;
   }
 
   if (
-    (!("GRIDSQUARE" in record) || record["GRIDSQUARE"].length == 0) &&
-    record["CALL"] + record["BAND"] + localMode in g_liveCallsigns
-  ) {
-    record["GRIDSQUARE"] = g_liveCallsigns[
-      record["CALL"] + record["BAND"] + localMode
+    (!("GRIDSQUARE" in record) || record.GRIDSQUARE.length == 0) &&
+    record.CALL + record.BAND + localMode in g_liveCallsigns
+  )
+  {
+    record.GRIDSQUARE = g_liveCallsigns[
+      record.CALL + record.BAND + localMode
     ].grid.substr(0, 4);
   }
 
-  if ("TX_PWR" in record) {
-    record["TX_PWR"] = String(parseInt(record["TX_PWR"]));
+  if ("TX_PWR" in record)
+  {
+    record.TX_PWR = String(parseInt(record.TX_PWR));
   }
 
   if (
     (!("STATION_CALLSIGN" in record) ||
-      record["STATION_CALLSIGN"].length == 0) &&
+      record.STATION_CALLSIGN.length == 0) &&
     myDEcall != "NOCALL" &&
     myDEcall.length > 0
-  ) {
-    record["STATION_CALLSIGN"] = myDEcall;
+  )
+  {
+    record.STATION_CALLSIGN = myDEcall;
   }
 
   if (
-    (!("MY_GRIDSQUARE" in record) || record["MY_GRIDSQUARE"].length == 0) &&
+    (!("MY_GRIDSQUARE" in record) || record.MY_GRIDSQUARE.length == 0) &&
     myDEGrid.length > 1
-  ) {
-    record["MY_GRIDSQUARE"] = myDEGrid;
+  )
+  {
+    record.MY_GRIDSQUARE = myDEGrid;
   }
 
-  if (!("DXCC" in record)) {
-    let dxcc = callsignToDxcc(record["CALL"]);
+  if (!("DXCC" in record))
+  {
+    let dxcc = callsignToDxcc(record.CALL);
     if (dxcc == -1) dxcc = 0;
-    record["DXCC"] = String(dxcc);
+    record.DXCC = String(dxcc);
   }
 
-  if (!("COUNTRY" in record) && Number(record["DXCC"]) > 0) {
-    record["COUNTRY"] = g_dxccToADIFName[Number(record["DXCC"])];
+  if (!("COUNTRY" in record) && Number(record.DXCC) > 0)
+  {
+    record.COUNTRY = g_dxccToADIFName[Number(record.DXCC)];
   }
 
-  if (g_appSettings.lookupMerge == true) {
+  if (g_appSettings.lookupMerge == true)
+  {
     let request = g_Idb
       .transaction(["lookups"], "readwrite")
       .objectStore("lookups")
-      .get(record["CALL"]);
+      .get(record.CALL);
 
-    request.onsuccess = function (event) {
-      if (request.result) {
+    request.onsuccess = function (event)
+    {
+      if (request.result)
+      {
         let lookup = request.result;
-        for (let key in lookup) {
-          if (key in g_adifLookupMap) {
+        for (let key in lookup)
+        {
+          if (key in g_adifLookupMap)
+          {
             record[g_adifLookupMap[key]] = lookup[key];
           }
         }
-        if ("GRIDSQUARE" in record && "grid" in lookup) {
+        if ("GRIDSQUARE" in record && "grid" in lookup)
+        {
           if (
-            record["GRIDSQUARE"].substr(0, 4) == lookup["grid"].substr(0, 4)
-          ) {
-            record["GRIDSQUARE"] = lookup["grid"];
+            record.GRIDSQUARE.substr(0, 4) == lookup.grid.substr(0, 4)
+          )
+          {
+            record.GRIDSQUARE = lookup.grid;
           }
         }
         if (
           g_appSettings.lookupMissingGrid &&
           "grid" in lookup &&
-          (!("GRIDSQUARE" in record) || record["GRIDSQUARE"].length == 0)
-        ) {
-          record["GRIDSQUARE"] = lookup["grid"];
+          (!("GRIDSQUARE" in record) || record.GRIDSQUARE.length == 0)
+        )
+        {
+          record.GRIDSQUARE = lookup.grid;
         }
       }
       finishSendingReport(record, localMode);
     };
 
-    request.onerror = function (event) {
+    request.onerror = function (event)
+    {
       finishSendingReport(record, localMode);
     };
-  } else {
+  }
+  else
+  {
     finishSendingReport(record, localMode);
   }
 }
 
-function finishSendingReport(record, localMode) {
+function finishSendingReport(record, localMode)
+{
   let report = "";
 
-  let reportHash = record["CALL"] + record["MODE"] + localMode;
+  let reportHash = record.CALL + record.MODE + localMode;
 
-  for (let key in record) {
+  for (let key in record)
+  {
     report += "<" + key + ":" + record[key].length + ">" + record[key] + " ";
   }
   report += "<EOR>";
 
-  if (reportHash != lastReportHash) {
+  if (reportHash != lastReportHash)
+  {
     lastReportHash = reportHash;
 
     if (
       g_N1MMSettings.enable == true &&
       g_N1MMSettings.port > 1024 &&
       g_N1MMSettings.ip.length > 4
-    ) {
+    )
+    {
       sendUdpMessage(
         report,
         report.length,
@@ -1578,7 +1851,8 @@ function finishSendingReport(record, localMode) {
       g_log4OMSettings.enable == true &&
       g_log4OMSettings.port > 1024 &&
       g_log4OMSettings.ip.length > 4
-    ) {
+    )
+    {
       sendUdpMessage(
         "ADD " + report,
         report.length + 4,
@@ -1588,47 +1862,66 @@ function finishSendingReport(record, localMode) {
       addLastTraffic("<font style='color:white'>Logged to Log4OM</font>");
     }
 
-    try {
+    try
+    {
       onAdiLoadComplete("GT<EOH>" + report);
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception Internal Log</font>");
     }
-    try {
+    try
+    {
       // Log worthy
-      if (logGTqsoCheckBox.checked == true) {
+      if (logGTqsoCheckBox.checked == true)
+      {
         var fs = require("fs");
         fs.appendFileSync(g_qsoLogFile, report + "\r\n");
         addLastTraffic(
           "<font style='color:white'>Logged to GridTracker backup</font>"
         );
       }
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic(
         "<font style='color:red'>Exception GridTracker backup</font>"
       );
     }
 
-    try {
+    try
+    {
       sendQrzLogEntry(report);
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception QRZ Log</font>");
     }
 
-    try {
+    try
+    {
       sendClubLogEntry(report);
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception ClubLog Log</font>");
     }
 
-    try {
+    try
+    {
       sendHrdLogEntry(report);
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception HrdLog.net Log</font>");
     }
 
-    try {
+    try
+    {
       sendCloudlogEntry(report);
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception Cloudlog Log</font>");
     }
 
@@ -1636,11 +1929,15 @@ function finishSendingReport(record, localMode) {
       g_acLogSettings.enable == true &&
       g_acLogSettings.port > 0 &&
       g_acLogSettings.ip.length > 4
-    ) {
-      try {
+    )
+    {
+      try
+      {
         sendACLogMessage(record, g_acLogSettings.port, g_acLogSettings.ip);
         addLastTraffic("<font style='color:white'>Logged to N3FJP</font>");
-      } catch (e) {
+      }
+      catch (e)
+      {
         addLastTraffic("<font style='color:red'>Exception N3FJP Log</font>");
       }
     }
@@ -1649,15 +1946,19 @@ function finishSendingReport(record, localMode) {
       g_dxkLogSettings.enable == true &&
       g_dxkLogSettings.port > 0 &&
       g_dxkLogSettings.ip.length > 4
-    ) {
-      try {
+    )
+    {
+      try
+      {
         sendDXKeeperLogMessage(
           report,
           g_dxkLogSettings.port,
           g_dxkLogSettings.ip
         );
         addLastTraffic("<font style='color:white'>Logged to DXKeeper</font>");
-      } catch (e) {
+      }
+      catch (e)
+      {
         addLastTraffic("<font style='color:red'>Exception DXKeeper Log</font>");
       }
     }
@@ -1666,8 +1967,10 @@ function finishSendingReport(record, localMode) {
       g_HRDLogbookLogSettings.enable == true &&
       g_HRDLogbookLogSettings.port > 0 &&
       g_HRDLogbookLogSettings.ip.length > 4
-    ) {
-      try {
+    )
+    {
+      try
+      {
         sendHRDLogbookEntry(
           record,
           g_HRDLogbookLogSettings.port,
@@ -1676,14 +1979,19 @@ function finishSendingReport(record, localMode) {
         addLastTraffic(
           "<font style='color:white'>Logged to HRD Logbook</font>"
         );
-      } catch (e) {
+      }
+      catch (e)
+      {
         addLastTraffic("<font style='color:red'>Exception HRD Log</font>");
       }
     }
 
-    try {
+    try
+    {
       sendLotwLogEntry(report);
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception LoTW Log</font>");
     }
 
@@ -1691,32 +1999,44 @@ function finishSendingReport(record, localMode) {
       logeQSLQSOCheckBox.checked == true &&
       nicknameeQSLCheckBox.checked == true &&
       eQSLNickname.value.trim().length > 0
-    ) {
-      record["APP_EQSL_QTH_NICKNAME"] = eQSLNickname.value.trim();
+    )
+    {
+      record.APP_EQSL_QTH_NICKNAME = eQSLNickname.value.trim();
       report = "";
-      for (var key in record) {
+      for (var key in record)
+      {
         report +=
           "<" + key + ":" + record[key].length + ">" + record[key] + " ";
       }
       report += "<EOR>";
     }
 
-    try {
+    try
+    {
       sendeQSLEntry(report);
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception LoTW Log</font>");
     }
 
-    try {
+    try
+    {
       alertLogMessage();
-    } catch (e) {
+    }
+    catch (e)
+    {
       addLastTraffic("<font style='color:red'>Exception Alert Log</font>");
     }
 
-    if (lookupCloseLog.checked == true) {
-      try {
+    if (lookupCloseLog.checked == true)
+    {
+      try
+      {
         openLookupWindow(false);
-      } catch (e) {
+      }
+      catch (e)
+      {
         addLastTraffic("<font style='color:red'>Exception Hide Lookup</font>");
       }
     }
@@ -1725,57 +2045,81 @@ function finishSendingReport(record, localMode) {
   return report;
 }
 
-function alertLogMessage() {
-  if (logEventMedia.value != "none") {
+function alertLogMessage()
+{
+  if (logEventMedia.value != "none")
+  {
     playAlertMediaFile(logEventMedia.value);
   }
 }
 
-function eqslCallback(buffer, flag) {
+function eqslCallback(buffer, flag)
+{
   var result = String(buffer);
-  if (flag) {
-    if (result.indexOf("No such Username/Password found") != -1) {
+  if (flag)
+  {
+    if (result.indexOf("No such Username/Password found") != -1)
+    {
       eQSLTestResult.innerHTML = "Bad<br/>Password<br/>or<br/>Nickname";
       logeQSLQSOCheckBox.checked = false;
       adifLogQsoCheckBoxChanged(logeQSLQSOCheckBox);
-    } else if (result.indexOf("No such Callsign found") != -1) {
+    }
+    else if (result.indexOf("No such Callsign found") != -1)
+    {
       eQSLTestResult.innerHTML = "Unknown<br/>Callsign";
       logeQSLQSOCheckBox.checked = false;
       adifLogQsoCheckBoxChanged(logeQSLQSOCheckBox);
-    } else if (result.indexOf("Your ADIF log file has been built") != -1) {
+    }
+    else if (result.indexOf("Your ADIF log file has been built") != -1)
+    {
       eQSLTestResult.innerHTML = "Passed";
-    } else if (
+    }
+    else if (
       result.indexOf("specify the desired User by using the QTHNickname") != -1
-    ) {
+    )
+    {
       eQSLTestResult.innerHTML = "QTH Nickname<br/>Needed";
-    } else {
+    }
+    else
+    {
       eQSLTestResult.innerHTML = "Unknown<br/>Error";
       logeQSLQSOCheckBox.checked = false;
       adifLogQsoCheckBoxChanged(logeQSLQSOCheckBox);
     }
-  } else {
-    if (result.indexOf("Error: No match on eQSL_User/eQSL_Pswd") != -1) {
+  }
+  else
+  {
+    if (result.indexOf("Error: No match on eQSL_User/eQSL_Pswd") != -1)
+    {
       addLastTraffic(
         "<font style='color:red'>Fail log eQSL.cc (credentials)</font>"
       );
     }
     if (
       result.indexOf("specify the desired User by using the QTHNickname") != -1
-    ) {
+    )
+    {
       addLastTraffic(
         "<font style='color:red'>Fail log eQSL.cc (nickname)</font>"
       );
-    } else if (result.indexOf("Result: 0 out of 1 records") != -1) {
+    }
+    else if (result.indexOf("Result: 0 out of 1 records") != -1)
+    {
       addLastTraffic("<font style='color:red'>Fail log eQSL.cc (dupe)</font>");
-    } else if (result.indexOf("Result: 1 out of 1 records added") != -1) {
+    }
+    else if (result.indexOf("Result: 1 out of 1 records added") != -1)
+    {
       addLastTraffic("<font style='color:white'>Logged to eQSL.cc</font>");
-    } else {
+    }
+    else
+    {
       addLastTraffic("<font style='color:red'>Fail log eQSL.cc (?)</font>");
     }
   }
 }
 
-function eQSLTest(test) {
+function eQSLTest(test)
+{
   if (g_mapSettings.offlineMode == true) return;
 
   eQSLTestResult.innerHTML = "Testing";
@@ -1788,14 +2132,16 @@ function eQSLTest(test) {
     "&RcvdSince=2020101";
 
   if (nicknameeQSLCheckBox.checked == true)
-    fUrl += "&QTHNickname=" + encodeURIComponent(eQSLNickname.value);
+  { fUrl += "&QTHNickname=" + encodeURIComponent(eQSLNickname.value); }
   getABuffer(fUrl, eqslCallback, true, "https", 443);
 }
 
-function sendeQSLEntry(report) {
+function sendeQSLEntry(report)
+{
   if (g_mapSettings.offlineMode == true) return;
 
-  if (logeQSLQSOCheckBox.checked == true) {
+  if (logeQSLQSOCheckBox.checked == true)
+  {
     var pid = "GridTracker";
     var pver = String(gtVersion);
     var header = "<PROGRAMID:" + pid.length + ">" + pid + "\r\n";
@@ -1813,8 +2159,10 @@ function sendeQSLEntry(report) {
   }
 }
 
-function testTrustedQSL(test) {
-  if (g_mapSettings.offlineMode == true) {
+function testTrustedQSL(test)
+{
+  if (g_mapSettings.offlineMode == true)
+  {
     lotwTestResult.innerHTML = "Currently<br/>offline";
     return;
   }
@@ -1824,7 +2172,8 @@ function testTrustedQSL(test) {
     g_trustedQslSettings.binaryFileValid == true &&
     g_trustedQslSettings.stationFileValid == true &&
     lotwStation.value.length > 0
-  ) {
+  )
+  {
     lotwTestResult.innerHTML = "Testing Upload";
 
     var child_process = require("child_process");
@@ -1835,29 +2184,32 @@ function testTrustedQSL(test) {
     child_process.execFile(
       g_trustedQslSettings.binaryFile,
       options,
-      (error, stdout, stderr) => {
-        if (error) {
+      (error, stdout, stderr) =>
+      {
+        if (error)
+        {
           lotwTestResult.innerHTML = "Error encountered";
         }
         lotwTestResult.innerHTML = stderr;
       }
     );
-    return;
-  } else {
+  }
+  else
+  {
     var worker = "";
     if (g_trustedQslSettings.binaryFileValid == false)
-      worker += "Invalid tqsl executable<br/>";
+    { worker += "Invalid tqsl executable<br/>"; }
     if (g_trustedQslSettings.stationFileValid == false)
-      worker += "TrustQSL not installed<br/>";
+    { worker += "TrustQSL not installed<br/>"; }
     if (!ValidateText(lotwTrusted)) worker += "TQSL Password missing<br/>";
     if (!ValidateText(lotwStation)) worker += "Select Station<br/>";
     lotwTestResult.innerHTML = worker;
-    return;
   }
 }
 var g_trustTempPath = "";
 
-function sendLotwLogEntry(report) {
+function sendLotwLogEntry(report)
+{
   if (g_mapSettings.offlineMode == true) return;
 
   if (
@@ -1865,7 +2217,8 @@ function sendLotwLogEntry(report) {
     g_trustedQslSettings.binaryFileValid == true &&
     g_trustedQslSettings.stationFileValid == true &&
     lotwStation.value.length > 0
-  ) {
+  )
+  {
     var header =
       "Generated " + userTimeString(null) + " for " + myDEcall + "\r\n\r\n";
     var pid = "GridTracker";
@@ -1884,7 +2237,8 @@ function sendLotwLogEntry(report) {
     options.push("all");
     options.push("-l");
     options.push(lotwStation.value);
-    if (lotwTrusted.value.length > 0) {
+    if (lotwTrusted.value.length > 0)
+    {
       options.push("-p");
       options.push(lotwTrusted.value);
     }
@@ -1897,11 +2251,15 @@ function sendLotwLogEntry(report) {
     child_process.execFile(
       g_trustedQslSettings.binaryFile,
       options,
-      (error, stdout, stderr) => {
-        if (stderr.indexOf("Final Status: Success") < 0) {
+      (error, stdout, stderr) => // eslint-disable-line node/handle-callback-err
+      {
+        if (stderr.indexOf("Final Status: Success") < 0)
+        {
           alert(stderr);
           addLastTraffic("<font style='color:red'>Fail log to TQSL</font>");
-        } else {
+        }
+        else
+        {
           addLastTraffic("<font style='color:white'>Logged to TQSL</font>");
         }
         fs.unlinkSync(g_trustTempPath);
@@ -1910,7 +2268,8 @@ function sendLotwLogEntry(report) {
   }
 }
 
-function n1mmLoggerChanged() {
+function n1mmLoggerChanged()
+{
   g_N1MMSettings.enable = buttonN1MMCheckBox.checked;
   g_N1MMSettings.ip = N1MMIpInput.value;
   g_N1MMSettings.port = N1MMPortInput.value;
@@ -1918,7 +2277,8 @@ function n1mmLoggerChanged() {
   localStorage.N1MMSettings = JSON.stringify(g_N1MMSettings);
 }
 
-function log4OMLoggerChanged() {
+function log4OMLoggerChanged()
+{
   g_log4OMSettings.enable = buttonLog4OMCheckBox.checked;
   g_log4OMSettings.ip = log4OMIpInput.value;
   g_log4OMSettings.port = log4OMPortInput.value;
@@ -1926,7 +2286,8 @@ function log4OMLoggerChanged() {
   localStorage.log4OMSettings = JSON.stringify(g_log4OMSettings);
 }
 
-function acLogLoggerChanged() {
+function acLogLoggerChanged()
+{
   g_acLogSettings.enable = buttonacLogCheckBox.checked;
   g_acLogSettings.ip = acLogIpInput.value;
   g_acLogSettings.port = acLogPortInput.value;
@@ -1934,7 +2295,8 @@ function acLogLoggerChanged() {
   localStorage.acLogSettings = JSON.stringify(g_acLogSettings);
 }
 
-function dxkLogLoggerChanged() {
+function dxkLogLoggerChanged()
+{
   g_dxkLogSettings.enable = buttondxkLogCheckBox.checked;
   g_dxkLogSettings.ip = dxkLogIpInput.value;
   g_dxkLogSettings.port = dxkLogPortInput.value;
@@ -1942,7 +2304,8 @@ function dxkLogLoggerChanged() {
   localStorage.dxkLogSettings = JSON.stringify(g_dxkLogSettings);
 }
 
-function hrdLogbookLoggerChanged() {
+function hrdLogbookLoggerChanged()
+{
   g_HRDLogbookLogSettings.enable = buttonHrdLogbookCheckBox.checked;
   g_HRDLogbookLogSettings.ip = hrdLogbookIpInput.value;
   g_HRDLogbookLogSettings.port = hrdLogbookPortInput.value;
@@ -1960,54 +2323,74 @@ function CloudUrlErrorCallback(
   timeoutMs,
   timeoutCallback,
   message
-) {
+)
+{
   CloudlogTestResult.innerHTML = message;
 }
 
-function CloudlogSendLogResult(buffer, flag) {
-  if (flag && flag == true) {
-    if (buffer) {
-      if (buffer.indexOf("missing api key") > -1) {
+function CloudlogSendLogResult(buffer, flag)
+{
+  if (flag && flag == true)
+  {
+    if (buffer)
+    {
+      if (buffer.indexOf("missing api key") > -1)
+      {
         CloudlogTestResult.innerHTML = "API Key Invalid";
-      } else if (buffer.indexOf("created") > -1) {
+      }
+      else if (buffer.indexOf("created") > -1)
+      {
         CloudlogTestResult.innerHTML = "Passed";
-      } else {
+      }
+      else
+      {
         CloudlogTestResult.innerHTML = "Invalid Response";
       }
-    } else {
+    }
+    else
+    {
       CloudlogTestResult.innerHTML = "Invalid Response";
     }
-  } else {
+  }
+  else
+  {
     if (buffer && buffer.indexOf("created") > -1)
-      addLastTraffic("<font style='color:white'>Logged to Cloudlog</font>");
+    { addLastTraffic("<font style='color:white'>Logged to Cloudlog</font>"); }
     else addLastTraffic("<font style='color:red'>Fail log to Cloudlog</font>");
   }
 }
 
-function qrzSendLogResult(buffer, flag) {
-  if (typeof buffer != "undefined" && buffer != null) {
+function qrzSendLogResult(buffer, flag)
+{
+  if (typeof buffer != "undefined" && buffer != null)
+  {
     var data = String(buffer);
     var kv = data.split("&");
-    if (kv.length > 0) {
+    if (kv.length > 0)
+    {
       var arrData = Object();
-      for (var x in kv) {
+      for (var x in kv)
+      {
         var split = kv[x].split("=");
         arrData[split[0]] = split[1];
       }
       if (
-        typeof arrData["RESULT"] == "undefined" ||
-        arrData["RESULT"] != "OK"
-      ) {
+        typeof arrData.RESULT == "undefined" ||
+        arrData.RESULT != "OK"
+      )
+      {
         alert(
           "Error uploading QSO to QRZ.com (" +
-            (arrData["REASON"] || "Unknown error") +
+            (arrData.REASON || "Unknown error") +
             ")"
         );
         addLastTraffic("<font style='color:red'>Fail log to QRZ.com</font>");
-      } else
-        addLastTraffic("<font style='color:white'>Logged to QRZ.com</font>");
+      }
+      else
+      { addLastTraffic("<font style='color:white'>Logged to QRZ.com</font>"); }
     }
-  } else alert("Error uploading QSO to QRZ.com (No response)");
+  }
+  else alert("Error uploading QSO to QRZ.com (No response)");
 }
 
 function postDialogRetryCallback(
@@ -2020,8 +2403,10 @@ function postDialogRetryCallback(
   timeoutMs,
   timeoutCallback,
   who
-) {
-  if (window.confirm("Error sending QSO to " + who + ", retry?")) {
+)
+{
+  if (window.confirm("Error sending QSO to " + who + ", retry?"))
+  {
     getPostBuffer(
       file_url,
       callback,
@@ -2046,7 +2431,8 @@ function postRetryErrorCallaback(
   timeoutMs,
   timeoutCallback,
   who
-) {
+)
+{
   getPostBuffer(
     file_url,
     callback,
@@ -2060,15 +2446,18 @@ function postRetryErrorCallaback(
   );
 }
 
-function sendQrzLogEntry(report) {
+function sendQrzLogEntry(report)
+{
   if (g_mapSettings.offlineMode == true) return;
 
-  if (logQRZqsoCheckBox.checked == true && ValidateQrzApi(qrzApiKey)) {
-    if (typeof nw != "undefined") {
+  if (logQRZqsoCheckBox.checked == true && ValidateQrzApi(qrzApiKey))
+  {
+    if (typeof nw != "undefined")
+    {
       var postData = {
         KEY: qrzApiKey.value,
         ACTION: "INSERT",
-        ADIF: report,
+        ADIF: report
       };
       getPostBuffer(
         "https://logbook.qrz.com/api",
@@ -2085,21 +2474,25 @@ function sendQrzLogEntry(report) {
   }
 }
 
-function clubLogQsoResult(buffer, flag) {
+function clubLogQsoResult(buffer, flag)
+{
   addLastTraffic("<font style='color:white'>Logged to ClubLog.org</font>");
 }
 
-function sendClubLogEntry(report) {
+function sendClubLogEntry(report)
+{
   if (g_mapSettings.offlineMode == true) return;
 
-  if (logClubqsoCheckBox.checked == true) {
-    if (typeof nw != "undefined") {
+  if (logClubqsoCheckBox.checked == true)
+  {
+    if (typeof nw != "undefined")
+    {
       var postData = {
         email: clubEmail.value,
         password: clubPassword.value,
         callsign: clubCall.value,
         adif: report,
-        api: CLk,
+        api: CLk
       };
 
       getPostBuffer(
@@ -2117,11 +2510,14 @@ function sendClubLogEntry(report) {
   }
 }
 
-function sendCloudlogEntry(report) {
+function sendCloudlogEntry(report)
+{
   if (g_mapSettings.offlineMode == true) return;
 
-  if (logCloudlogQSOCheckBox.checked == true) {
-    if (typeof nw != "undefined") {
+  if (logCloudlogQSOCheckBox.checked == true)
+  {
+    if (typeof nw != "undefined")
+    {
       var postData = { key: CloudlogAPI.value, type: "adif", string: report };
       getPostJSONBuffer(
         CloudlogURL.value,
@@ -2138,31 +2534,40 @@ function sendCloudlogEntry(report) {
   }
 }
 
-function hrdSendLogResult(buffer, flag) {
-  if (flag && flag == true) {
-    if (buffer.indexOf("Unknown user") > -1) {
+function hrdSendLogResult(buffer, flag)
+{
+  if (flag && flag == true)
+  {
+    if (buffer.indexOf("Unknown user") > -1)
+    {
       HRDLogTestResult.innerHTML = "Failed";
       logHRDLOGqsoCheckBox.checked = false;
       adifLogQsoCheckBoxChanged(logHRDLOGqsoCheckBox);
-    } else HRDLogTestResult.innerHTML = "Passed";
-  } else {
+    }
+    else HRDLogTestResult.innerHTML = "Passed";
+  }
+  else
+  {
     if (buffer.indexOf("Unknown user") == -1)
-      addLastTraffic("<font style='color:white'>Logged to HRDLOG.net</font>");
+    { addLastTraffic("<font style='color:white'>Logged to HRDLOG.net</font>"); }
     else
-      addLastTraffic("<font style='color:red'>Fail log to HRDLOG.net</font>");
+    { addLastTraffic("<font style='color:red'>Fail log to HRDLOG.net</font>"); }
   }
 }
 
-function sendHrdLogEntry(report) {
+function sendHrdLogEntry(report)
+{
   if (g_mapSettings.offlineMode == true) return;
 
-  if (logHRDLOGqsoCheckBox.checked == true) {
-    if (typeof nw != "undefined") {
+  if (logHRDLOGqsoCheckBox.checked == true)
+  {
+    if (typeof nw != "undefined")
+    {
       var postData = {
         Callsign: HRDLOGCallsign.value,
         Code: HRDLOGUploadCode.value,
         App: "GridTracker " + gtVersion,
-        ADIFData: report,
+        ADIFData: report
       };
       getPostBuffer(
         "https://www.hrdlog.net/NewEntry.aspx",
@@ -2179,14 +2584,17 @@ function sendHrdLogEntry(report) {
   }
 }
 
-function hrdCredentialTest(test) {
-  if (test && test == true) {
+function hrdCredentialTest(test)
+{
+  if (test && test == true)
+  {
     HRDLogTestResult.innerHTML = "Testing";
 
-    if (typeof nw != "undefined") {
+    if (typeof nw != "undefined")
+    {
       var postData = {
         Callsign: HRDLOGCallsign.value,
-        Code: HRDLOGUploadCode.value,
+        Code: HRDLOGUploadCode.value
       };
       getPostBuffer(
         "https://www.hrdlog.net/NewEntry.aspx",
@@ -2200,11 +2608,14 @@ function hrdCredentialTest(test) {
   }
 }
 
-function ClublogTest(test) {
-  if (test && test == true) {
+function ClublogTest(test)
+{
+  if (test && test == true)
+  {
     CloudlogTestResult.innerHTML = "Testing";
 
-    if (typeof nw != "undefined") {
+    if (typeof nw != "undefined")
+    {
       var postData = { key: CloudlogAPI.value, type: "adif", string: "<eor>" };
       getPostJSONBuffer(
         CloudlogURL.value,
@@ -2231,50 +2642,61 @@ function getPostJSONBuffer(
   timeoutMs,
   timeoutCallback,
   who
-) {
-  try {
+)
+{
+  try
+  {
     var postData = JSON.stringify(theData);
     var url = require("url");
-    var protocol = url.parse(file_url).protocol;
+    var protocol = url.parse(file_url).protocol; // eslint-disable-line node/no-deprecated-api
     var http = require(protocol.replace(":", ""));
     var fileBuffer = null;
     var options = {
-      host: url.parse(file_url).hostname,
-      port: url.parse(file_url).port,
-      path: url.parse(file_url).path,
+      host: url.parse(file_url).hostname, // eslint-disable-line node/no-deprecated-api
+      port: url.parse(file_url).port, // eslint-disable-line node/no-deprecated-api
+      path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
       method: "post",
       headers: {
         "Content-Type": "application/json",
-        "Content-Length": postData.length,
-      },
+        "Content-Length": postData.length
+      }
     };
-    var req = http.request(options, function (res) {
+    var req = http.request(options, function (res)
+    {
       var fsize = res.headers["content-length"];
       var cookies = null;
       if (typeof res.headers["set-cookie"] != "undefined")
-        cookies = res.headers["set-cookie"];
+      { cookies = res.headers["set-cookie"]; }
       res
-        .on("data", function (data) {
+        .on("data", function (data)
+        {
           if (fileBuffer == null) fileBuffer = data;
           else fileBuffer += data;
         })
-        .on("end", function () {
-          if (typeof callback === "function") {
+        .on("end", function ()
+        {
+          if (typeof callback === "function")
+          {
             // Call it, since we have confirmed it is callable
             callback(fileBuffer, flag, cookies);
           }
         })
         .on("error", function () {});
     });
-    if (typeof timeoutMs == "number" && timeoutMs > 0) {
-      req.on("socket", function (socket) {
+    if (typeof timeoutMs == "number" && timeoutMs > 0)
+    {
+      req.on("socket", function (socket)
+      {
         socket.setTimeout(timeoutMs);
-        socket.on("timeout", function () {
+        socket.on("timeout", function ()
+        {
           req.abort();
         });
       });
-      req.on("error", function (err) {
+      req.on("error", function (err) // eslint-disable-line node/handle-callback-err
+      {
         if (typeof timeoutCallback != "undefined")
+        {
           timeoutCallback(
             file_url,
             callback,
@@ -2286,12 +2708,16 @@ function getPostJSONBuffer(
             timeoutCallback,
             who
           );
+        }
       });
     }
     req.write(postData);
     req.end();
-  } catch (e) {
+  }
+  catch (e)
+  {
     if (typeof timeoutCallback != "undefined")
+    {
       timeoutCallback(
         file_url,
         callback,
@@ -2303,17 +2729,20 @@ function getPostJSONBuffer(
         timeoutCallback,
         "Invalid Url"
       );
+    }
   }
 }
 
-function valueToXmlField(field, value) {
+function valueToXmlField(field, value)
+{
   var adi = "<" + field + ">";
   adi += String(value);
   adi += "</" + field + ">";
   return adi;
 }
 
-function aclUpdateControlValue(control, value) {
+function aclUpdateControlValue(control, value)
+{
   return (
     valueToXmlField(
       "CMD",
@@ -2324,18 +2753,21 @@ function aclUpdateControlValue(control, value) {
   );
 }
 
-function aclAction(action) {
+function aclAction(action)
+{
   return (
     valueToXmlField("CMD", "<ACTION>" + valueToXmlField("VALUE", action)) +
     "\r\n"
   );
 }
 
-function adifField(record, key) {
+function adifField(record, key)
+{
   if (key in record) return record[key];
   else return "";
 }
-function sendACLogMessage(record, port, address) {
+function sendACLogMessage(record, port, address)
+{
   var report = "";
 
   report += aclAction("CLEAR");
@@ -2347,12 +2779,14 @@ function sendACLogMessage(record, port, address) {
     adifField(record, "FREQ")
   );
   if (adifField(record, "SUBMODE").length > 0)
+  {
     report += aclUpdateControlValue(
       "TXTENTRYMODE",
       adifField(record, "SUBMODE")
     );
+  }
   else
-    report += aclUpdateControlValue("TXTENTRYMODE", adifField(record, "MODE"));
+  { report += aclUpdateControlValue("TXTENTRYMODE", adifField(record, "MODE")); }
 
   var date = adifField(record, "QSO_DATE");
   var dataString =
@@ -2406,12 +2840,15 @@ function sendACLogMessage(record, port, address) {
   report += aclUpdateControlValue("TXTENTRYCOUNTYR", adifField(record, "CNTY"));
 
   var sentSpcNum = false;
-  if (adifField(record, "SRX").length > 0) {
+  if (adifField(record, "SRX").length > 0)
+  {
     report += aclUpdateControlValue(
       "TXTENTRYSERIALNOR",
       adifField(record, "SRX")
     );
-  } else if (adifField(record, "CONTEST_ID").length > 0) {
+  }
+  else if (adifField(record, "CONTEST_ID").length > 0)
+  {
     report += aclUpdateControlValue(
       "TXTENTRYSPCNUM",
       adifField(record, "SRX_STRING")
@@ -2427,16 +2864,19 @@ function sendACLogMessage(record, port, address) {
     );
   }
 
-  if (adifField(record, "STATE").length > 0) {
+  if (adifField(record, "STATE").length > 0)
+  {
     report += aclUpdateControlValue(
       "TXTENTRYSTATE",
       adifField(record, "STATE")
     );
     if (sentSpcNum == false)
+    {
       report += aclUpdateControlValue(
         "TXTENTRYSPCNUM",
         adifField(record, "STATE")
       );
+    }
   }
 
   report += aclAction("ENTER");
@@ -2444,7 +2884,8 @@ function sendACLogMessage(record, port, address) {
   sendTcpMessage(report, report.length, port, address);
 }
 
-function sendDXKeeperLogMessage(newMessage, port, address) {
+function sendDXKeeperLogMessage(newMessage, port, address)
+{
   var report = "";
 
   report += valueToAdiField("command", "log");
@@ -2454,7 +2895,8 @@ function sendDXKeeperLogMessage(newMessage, port, address) {
   sendTcpMessage(report, report.length, Number(port) + 1, address);
 }
 
-function parseADIFRecord(adif) {
+function parseADIFRecord(adif)
+{
   var regex = new RegExp("<EOR>", "i");
   var newLine = adif.split(regex);
   var line = newLine[0].trim(); // Catch the naughty case of someone sending two records at the same time
@@ -2463,19 +2905,24 @@ function parseADIFRecord(adif) {
   // because strings are not escaped for adif.. ie:  :'s and <'s .. we have to walk from left to right
   // cheesy, but damn i'm tired of parsing things
   var x = 0;
-  while (line.length > 0) {
-    while (line.charAt(0) != "<" && line.length > 0) {
+  while (line.length > 0)
+  {
+    while (line.charAt(0) != "<" && line.length > 0)
+    {
       line = line.substr(1);
     }
-    if (line.length > 0) {
+    if (line.length > 0)
+    {
       line = line.substr(1);
       var where = line.indexOf(":");
-      if (where != -1) {
+      if (where != -1)
+      {
         var fieldName = line.substr(0, where).toUpperCase();
         line = line.substr(fieldName.length + 1);
         var fieldLength = parseInt(line);
         var end = line.indexOf(">");
-        if (end > 0) {
+        if (end > 0)
+        {
           line = line.substr(end + 1);
           var fieldValue = line.substr(0, fieldLength);
           line = line.substr(fieldLength);
@@ -2488,14 +2935,16 @@ function parseADIFRecord(adif) {
   return record;
 }
 
-function sendHRDLogbookEntry(report, port, address) {
+function sendHRDLogbookEntry(report, port, address)
+{
   var command = "ver\rdb add {";
   var items = Object.assign({}, report);
 
-  items["FREQ"] = items["FREQ"].split(".").join("");
+  items.FREQ = items.FREQ.split(".").join("");
 
-  for (var item in items) {
-    command += item + '="' + items[item] + '" ';
+  for (var item in items)
+  {
+    command += item + "=\"" + items[item] + "\" ";
   }
 
   command += "}\rexit\r";

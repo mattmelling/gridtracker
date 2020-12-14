@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 //! moment-timezone.js
 //! version : 0.5.31
 //! Copyright (c) JS Foundation and other contributors

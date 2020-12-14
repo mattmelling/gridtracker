@@ -1508,10 +1508,8 @@ function viewRoster() {
       continue;
 
     var spotString = "";
-    var spotSnr = null;
     if (g_rosterSettings.columns.Spot && newCallList[x].qrz == false) {
       spotString = getSpotString(newCallList[x]);
-      if (spotString != "") spotSnr = newCallList[x].spot.snr;
       if (g_rosterSettings.onlySpot && spotString == "") continue;
     }
     var grid =
@@ -1752,11 +1750,8 @@ function viewRoster() {
           thisCall +
           newCallList[x].band +
           newCallList[x].mode +
-          "' " +
-          (spotSnr ? "title='" + spotSnr + "'" : "") +
-          ">" +
+          "'>" +
           spotString +
-          (spotSnr ? " / " + spotSnr : "") +
           "</td>";
       if (g_rosterSettings.columns.Life)
         worker +=
@@ -1989,13 +1984,14 @@ function realtimeRoster() {
 }
 
 function getSpotString(callObj) {
+  var result = "";
   if (callObj.spot && callObj.spot.when > 0) {
     when = timeNowSec() - callObj.spot.when;
     if (when <= window.opener.g_receptionSettings.viewHistoryTimeSec)
-      return parseInt(when).toDHMS();
+      result = parseInt(when).toDHMS();
   }
-
-  return "";
+  if (result) result += " / " + callObj.spot.snr;
+  return result;
 }
 
 function openChatToCid(cid) {

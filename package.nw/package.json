@@ -19,9 +19,7 @@
     "plugin": true
   },
   "scripts": {
-    "test": "npm run prettier-check",
-    "prettier-check": "npx prettier --check .",
-    "prettier-write": "npx prettier --write .",
+    "test": "eslint .",
     "start": "run --mirror https://dl.nwjs.io/ ."
   },
   "build": {

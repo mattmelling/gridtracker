@@ -7,8 +7,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nwjs-builder-phoenix": "^1.15.0",
-    "prettier": "^2.2.1"
+    "nwjs-builder-phoenix": "^1.15.0"
   },
   "scripts": {
     "test": "eslint package.nw",

@@ -105,18 +105,42 @@
 
           <div id="scriptIcon" style="display: none; padding: 0; margin: 0"></div>
 
-        </div>
-
-        <div id="SecondaryRosterControls">
-
-          <div id="AwardTrackerControls" class="secondaryControlGroup">
-            <h3>Awards</h3>
-
+          <div id="AwardTrackerControls">
             <div id="AwardWantedList"></div>
 
             <div class="button" onclick="openAwardPopup()">Add Awards</div>
+
+            <div id="awardHunterDiv" style="display: none;">
+              <table style="padding: 15px">
+                <tr>
+                  <th align="center">New Award Tracker</th>
+                </tr>
+                <tr>
+                  <td align="left">
+                    <select id="awardSponsor" onchange="awardSponsorChanged();">
+                      <option value="" disabled selected>Sponsor</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left">
+                    <select id="awardName" onchange="awardNameChanged();">
+                      <option value="" disabled selected>Name</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <div class="button" style="margin: 3px" onclick="closeAwardPopup()">Done</div>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
 
+        </div>
+
+        <div id="SecondaryRosterControls">
           <div id="huntingMatrixDiv" class="secondaryControlGroup" style="border: 1px solid #066">
             <h3>Wanted</h3>
 
@@ -350,43 +374,5 @@
       <div class="button" style="margin-top: 5px" onclick="closeEditIgnores()">Close</div>
     </div>
 
-    <div
-      id="awardHunterDiv"
-      class="mapItem"
-      style="
-        background-color: black;
-        display: block;
-        position: absolute;
-        z-index: -499;
-        top: 10px;
-        left: 10px;
-        margin: auto;
-      "
-    >
-      <table style="padding: 15px">
-        <tr>
-          <th align="center">New Award Tracker</th>
-        </tr>
-        <tr>
-          <td align="left">
-            <select id="awardSponsor" onchange="awardSponsorChanged();">
-              <option value="" disabled selected>Sponsor</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td align="left">
-            <select id="awardName" onchange="awardNameChanged();">
-              <option value="" disabled selected>Name</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td align="center">
-            <div class="button" style="margin: 3px" onclick="closeAwardPopup()">Done</div>
-          </td>
-        </tr>
-      </table>
-    </div>
   </body>
 </html>

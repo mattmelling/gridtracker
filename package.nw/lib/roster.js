@@ -2763,13 +2763,13 @@ function resetAwardAdd()
 
 function openAwardPopup()
 {
-  awardHunterDiv.style.zIndex = 100;
+  awardHunterDiv.style.display = "";
   resetAwardAdd();
 }
 
 function closeAwardPopup()
 {
-  awardHunterDiv.style.zIndex = -1;
+  awardHunterDiv.style.display = "none";
   resetAwardAdd();
 }
 

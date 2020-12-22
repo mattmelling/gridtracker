@@ -248,6 +248,19 @@ body.roster {
   }
 }
 
+#RosterControls.normal #AwardTrackerControls {
+  display: none !important;
+}
+
+#RosterControls.extended #AwardTrackerControls {
+  margin-left: 8px;
+  width: 100%;
+}
+
+#awardTable {
+  width: 100%;
+}
+
 #RosterControls.extended #ShowFewerControlsLink {
   display: block;
 }

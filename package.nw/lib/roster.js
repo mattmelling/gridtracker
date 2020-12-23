@@ -3270,13 +3270,13 @@ function clearAllCQIgnores()
 
 function closeEditIgnores()
 {
-  mainCallRoster.style.display = "block";
+  MainCallRoster.style.display = "block";
   editView.style.display = "none";
 }
 
 function openIgnoreEdit()
 {
-  mainCallRoster.style.display = "none";
+  MainCallRoster.style.display = "none";
   editView.style.display = "inline-block";
   var worker = "";
   var clearString = "<th>none</th>";

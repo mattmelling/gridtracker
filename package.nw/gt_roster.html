@@ -27,25 +27,30 @@
   <body onload="init()" class="roster" oncontextmenu="return handleContextMenu(event);">
     <div id="MainCallRoster">
       <header id="RosterControls">
-        <div id="MainRosterControls">
-          <div id="TransmitControls">
-            <div
-              id="txrxdec"
-              style="
-                background-color: Green;
-                border-style: outset;
-                border-color: yellow;
-                border-width: 3px;
-                margin: 2px;
-              "
-              class="roundBorder"
-            >
-              Waiting…
-            </div>
-
-            <div class="button" style="margin: 3px" onclick="window.opener.haltAllTx(true);">Halt Tx</div>
+        <div id="TransmitControls">
+          <div
+            id="txrxdec"
+            style="
+              background-color: Green;
+              border-style: outset;
+              border-color: yellow;
+              border-width: 3px;
+              margin: 2px;
+            "
+            class="roundBorder"
+          >
+            Waiting…
           </div>
 
+          <div class="button" style="margin: 3px" onclick="window.opener.haltAllTx(true);">Halt Tx</div>
+        </div>
+
+        <div id="MoreLessControls">
+          <div class="link" onclick="toggleMoreControls()" id="ShowMoreControlsLink">More Controls</div>
+          <div class="link" onclick="toggleMoreControls()" id="ShowFewerControlsLink">Fewer Controls</div>
+        </div>
+
+        <div id="MainRosterControls">
           <div id="LogbookControls">
             <label>Logbook</label>
             <select id="referenceNeed" onchange="valuesChanged();">
@@ -69,308 +74,289 @@
             </select>
           </div>
 
-          <div id="HuntingControls">
+          <div id="HuntModeControls">
             <label>Hunting</label>
-            <div id="HuntModeControls">
-              <select id="huntMode" onchange="valuesChanged();" value="callsign">
-                <option value="callsign">Callsign</option>
-                <option value="grid">Grid</option>
-                <option value="dxcc">DXCC</option>
-                <option value="dxccs">DXCC (Single)</option>
-                <option value="cq">CQ Zone</option>
-                <option value="itu">ITU Zone</option>
-                <option value="usstates">US States (WAS)</option>
-                <option value="usstate">US State (Single)</option>
-                <option value="wpx">Prefix (WPX)</option>
-              </select>
-            </div>
-            <div id="HuntNeedControls">
-              <select id="huntNeed" onchange="valuesChanged();">
-                <option value="worked">New</option>
-                <option value="confirmed">New+Unconfirmed</option>
-              </select>
-            </div>
-            <div id="HuntStateControls">
-              <select id="stateSelect" style="margin-top: 2px" ;>
-                <option value="" selected="true">Select Territory</option>
-              </select>
-            </div>
-            <div id="HuntDXCCsControls" style="display: none">
-              <select id="DXCCsSelect" style="margin-top: 2px" ;>
-                <option value="-1" selected="true">Select DXCC</option>
-              </select>
-            </div>
+
+            <select id="huntMode" onchange="valuesChanged();" value="callsign">
+              <option value="callsign">Callsign</option>
+              <option value="grid">Grid</option>
+              <option value="dxcc">DXCC</option>
+              <option value="dxccs">DXCC (Single)</option>
+              <option value="cq">CQ Zone</option>
+              <option value="itu">ITU Zone</option>
+              <option value="usstates">US States (WAS)</option>
+              <option value="usstate">US State (Single)</option>
+              <option value="wpx">Prefix (WPX)</option>
+            </select>
+
+            <select id="huntNeed" onchange="valuesChanged();">
+              <option value="worked">New</option>
+              <option value="confirmed">New+Unconfirmed</option>
+            </select>
+
+            <select id="stateSelect" onchange="valuesChanged();">
+              <option value="" selected="true">Select Territory</option>
+            </select>
+
+            <select id="DXCCsSelect" onchange="valuesChanged();" id="HuntDXCCsControls">
+              <option value="-1" selected="true">Select DXCC</option>
+            </select>
           </div>
 
           <div id="scriptIcon" style="display: none; padding: 0; margin: 0"></div>
 
-          <div id="MoreLessControls">
-            <div class="link" onclick="toggleMoreControls()" id="ShowMoreControlsLink">More Controls</div>
-            <div class="link" onclick="toggleMoreControls()" id="ShowFewerControlsLink">Fewer Controls</div>
-          </div>
-        </div>
-
-        <div id="SecondaryRosterControls">
-          <div id="AwardTrackerControls" class="controlItem">
+          <div id="AwardTrackerControls">
             <div id="AwardWantedList"></div>
 
             <div class="button" onclick="openAwardPopup()">Add Awards</div>
+
+            <div id="awardHunterDiv" style="display: none;">
+              <table style="padding: 15px">
+                <tr>
+                  <th align="center">New Award Tracker</th>
+                </tr>
+                <tr>
+                  <td align="left">
+                    <select id="awardSponsor" onchange="awardSponsorChanged();">
+                      <option value="" disabled selected>Sponsor</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left">
+                    <select id="awardName" onchange="awardNameChanged();">
+                      <option value="" disabled selected>Name</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <div class="button" style="margin: 3px" onclick="closeAwardPopup()">Done</div>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
 
-          <div id="huntingMatrixDiv" class="controlItem" style="border: 1px solid #066">
-            <table style="border-collapse: collapse" title="Wanted">
-              <tr>
-                <th colspan="2">Wanted</th>
-              </tr>
-              <tr>
-                <td colspan="1">
-                  <label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);" />Callsign</label>
-                </td>
-                <td colspan="1">
-                  <label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" />CQz</label>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="1"><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);" />Grid</td>
-                <td colspan="1"><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" />ITUz</td>
-              </tr>
-              <tr>
-                <td colspan="1"><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);" />DXCC</td>
-                <td colspan="1"><input type="checkbox" id="huntState" onchange="wantedChanged(this);" />State</td>
-              </tr>
-              <tr>
-                <td colspan="1" title="Stations calling *you*">
-                  <input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);" />QRZ
-                </td>
-                <td colspan="1"><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" />County</td>
-              </tr>
-              <tr>
-                <td colspan="1"><input type="checkbox" id="huntPX" onchange="wantedChanged(this);" />WPX</td>
-                <td colspan="1"><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" />Cont</td>
-              </tr>
-              <tr>
-                <td colspan="1" title="Off-Air Message Service Users">
-                  <input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);" />OAMS
-                </td>
-              </tr>
-            </table>
+        </div>
+
+        <div id="SecondaryRosterControls">
+          <div id="huntingMatrixDiv" class="secondaryControlGroup">
+            <h3>Wanted</h3>
+
+            <div class='columns'>
+              <div>
+                <label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);" /> Callsign</label>
+              </div>
+              <div>
+                <label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" /> CQz</label>
+              </div>
+              <div>
+                <label><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);" /> Grid</label>
+              </div>
+              <div>
+                <label><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" /> ITUz</label>
+              </div>
+              <div>
+                <label ><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);" /> DXCC</label>
+              </div>
+              <div>
+                <label><input type="checkbox" id="huntState" onchange="wantedChanged(this);" /> State</label>
+              </div>
+              <div>
+                <label title="Stations calling *you*">
+                  <input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);" /> QRZ
+                </label>
+              </div>
+              <div>
+                <label><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" /> County</label>
+              </div>
+              <div>
+                <label><input type="checkbox" id="huntPX" onchange="wantedChanged(this);" /> WPX</label>
+              </div>
+              <div>
+                <label><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" /> Cont</label>
+              </div>
+              <div>
+                <label title="Off-Air Message Service Users">
+                  <input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);" /> OAMS
+                </label>
+              </div>
+            </div>
           </div>
-          <div id="exceptionDiv" class="controlItem" style="border: 1px solid #622">
-            <table style="border-collapse: collapse; margin: 0; padding: 0" title="Exceptions">
-              <tr>
-                <td>
-                  <table style="border-collapse: collapse">
-                    <tr>
-                      <td colspan="2">
-                        <label><input type="checkbox" id="cqOnly" onchange="valuesChanged();" />CQ Only</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <label><input type="checkbox" id="wantGrid" onchange="valuesChanged();" />Has Grid</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><input type="checkbox" id="wantMinDB" onchange="valuesChanged();" />Min dB</td>
-                      <td>
-                        <input
-                          type="range"
-                          min="-25"
-                          max="0"
-                          step="1"
-                          class="slider"
-                          id="minDb"
-                          oninput="valuesChanged();"
-                          style="width: 75px"
-                        />
-                      </td>
-                      <td align="center" id="minDbView" class="roundBorderValue">-24</td>
-                    </tr>
-                    <tr>
-                      <td><input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" />Max DT</td>
-                      <td>
-                        <input
-                          type="range"
-                          min="0.1"
-                          max="2"
-                          step="0.1"
-                          class="slider"
-                          id="maxDT"
-                          oninput="valuesChanged();"
-                          style="width: 75px"
-                        />
-                      </td>
-                      <td align="center" id="maxDTView" class="roundBorderValue">.5</td>
-                    </tr>
-                    <tr>
-                      <td><input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" />Min freq</td>
-                      <td>
-                        <input
-                          type="range"
-                          min="0"
-                          max="2500"
-                          step="10"
-                          class="slider"
-                          id="minFreq"
-                          oninput="valuesChanged();"
-                          style="width: 75px"
-                        />
-                      </td>
-                      <td align="center" id="minFreqView" class="roundBorderValue">400</td>
-                    </tr>
-                    <tr>
-                      <td><input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" />Max freq</td>
-                      <td>
-                        <input
-                          type="range"
-                          min="500"
-                          max="3500"
-                          step="10"
-                          class="slider"
-                          id="maxFreq"
-                          oninput="valuesChanged();"
-                          style="width: 75px"
-                        />
-                      </td>
-                      <td align="center" id="maxFreqView" class="roundBorderValue">3500</td>
-                    </tr>
-                    <tr>
-                      <td id="usesLoTWDiv">
-                        <input type="checkbox" id="usesLoTW" onchange="valuesChanged();" />Uses LoTW
-                      </td>
-                      <td>
-                        <input
-                          title="Max time since their last upload"
-                          type="range"
-                          min="3"
-                          max="27"
-                          step="3"
-                          class="slider"
-                          id="maxLoTW"
-                          oninput="valuesChanged();"
-                          style="width: 75px"
-                        />
-                      </td>
-                      <td
-                        title="Max time since their last upload"
-                        align="center"
-                        id="maxLoTWView"
-                        class="roundBorderValue"
-                        style="width: 35px"
-                      >
-                        3
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" id="onlySpotDiv" style="display: none">
-                        <input type="checkbox" id="onlySpot" onchange="valuesChanged();" />Spotted Me
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                <td>
-                  <table style="border-collapse: collapse">
-                    <tr>
-                      <td colspan="2">
-                        <input type="checkbox" id="noMyDxcc" onchange="onlyMyDxcc.checked=false; valuesChanged();" />Not
-                        My DXCC
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <input
-                          type="checkbox"
-                          id="onlyMyDxcc"
-                          onchange="noMyDxcc.checked=false; valuesChanged();"
-                        />Only My DXCC
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" id="useseQSLDiv" style="display: none">
-                        <input type="checkbox" id="useseQSL" onchange="valuesChanged();" />Uses eQSL
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" id="usesOQRSDiv" style="display: none">
-                        <input type="checkbox" id="usesOQRS" onchange="valuesChanged();" />Uses OQRS
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" id="allOnlyNewDiv" style="display: none">
-                        <input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" />Only New Calls
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" title="No Decodes Containing...">
-                        <input type="checkbox" id="noMsg" onchange="valuesChanged();" />No &nbsp;&nbsp;<input
-                          type="text"
-                          class="inputTextValue"
-                          size="5"
-                          id="noMsgValue"
-                          onfocus="g_regFocus=true;"
-                          onblur="g_regFocus=false;"
-                          oninput="valuesChanged();"
-                          style="background-color: green; color: yellow; margin: 0"
-                          onkeydown="checkForEnter(this);"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" title="Only Decodes Containing...">
-                        <input type="checkbox" id="onlyMsg" onchange="valuesChanged();" />Only<input
-                          type="text"
-                          class="inputTextValue"
-                          size="5"
-                          id="onlyMsgValue"
-                          onfocus="g_regFocus=true;"
-                          onblur="g_regFocus=false;"
-                          oninput="valuesChanged();"
-                          style="background-color: green; color: yellow; margin: 0"
-                          onkeydown="checkForEnter(this);"
-                        />
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="6" align="center">
-                  <table>
-                    <tr>
-                      <td>
-                        <label
-                          ><input
-                            type="checkbox"
-                            id="useRegex"
-                            title="Callsign Regular Expression"
-                            onchange="valuesChanged();"
-                          />
-                          <a
-                            title="Regular Expressions 101"
-                            href="https://regex101.com/?flavor=javascript"
-                            target="_blank"
-                            >Regex</a
-                          ></label
-                        >
-                        <input
-                          type="text"
-                          class="inputTextValue"
-                          size="12"
-                          id="callsignRegex"
-                          onfocus="g_regFocus=true;"
-                          onblur="g_regFocus=false;"
-                          oninput="valuesChanged();"
-                          style="display: none; background-color: green; color: yellow; margin: 0"
-                          onkeydown="checkForEnter(this);"
-                        />
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+
+          <div id="exceptionDiv" class="secondaryControlGroup">
+            <h3>Exceptions</h3>
+            <div class='columns'>
+              <div>
+                <label><input type="checkbox" id="cqOnly" onchange="valuesChanged();" /> CQ Only</label>
+              </div>
+
+              <div>
+                <label><input type="checkbox" id="wantGrid" onchange="valuesChanged();" /> Has Grid</label>
+              </div>
+
+              <div>
+                <label><input type="checkbox" id="wantMinDB" onchange="valuesChanged();" /> Min dB</label>
+                <input
+                  type="range"
+                  min="-25"
+                  max="0"
+                  step="1"
+                  class="slider"
+                  id="minDb"
+                  oninput="valuesChanged();"
+                />
+                <span id="minDbView" class="roundBorderValue">-24</span>
+              </div>
+
+              <div>
+                <label><input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" /> Max DT</label>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="2"
+                  step="0.1"
+                  class="slider"
+                  id="maxDT"
+                  oninput="valuesChanged();"
+                />
+                <span id="maxDTView" class="roundBorderValue">.5</span>
+              </div>
+
+              <div>
+                <label><input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" /> Min freq</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="2500"
+                  step="10"
+                  class="slider"
+                  id="minFreq"
+                  oninput="valuesChanged();"
+                />
+                <span id="minFreqView" class="roundBorderValue">400</span>
+              </div>
+
+              <div>
+                <label><input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" /> Max freq</label>
+                <input
+                  type="range"
+                  min="500"
+                  max="3500"
+                  step="10"
+                  class="slider"
+                  id="maxFreq"
+                  oninput="valuesChanged();"
+                />
+
+                <span id="maxFreqView" class="roundBorderValue">3500</span>
+              </div>
+
+              <div id="usesLoTWDiv">
+                <label><input type="checkbox" id="usesLoTW" onchange="valuesChanged();" /> Uses LoTW</label>
+
+                <input
+                  title="Max time since their last upload"
+                  type="range"
+                  min="3"
+                  max="27"
+                  step="3"
+                  class="slider"
+                  id="maxLoTW"
+                  oninput="valuesChanged();"
+                />
+                <span id="maxLoTWView" class="roundBorderValue" style="width: 35px;">3</span>
+              </div>
+
+              <div id="onlySpotDiv">
+                <label><input type="checkbox" id="onlySpot" onchange="valuesChanged();" /> Spotted Me</label>
+              </div>
+
+              <div>
+                <label>
+                  <input type="checkbox" id="noMyDxcc" onchange="onlyMyDxcc.checked=false; valuesChanged();" />
+                  Not My DXCC
+                </label>
+              </div>
+
+              <div>
+                <label>
+                  <input type="checkbox" id="onlyMyDxcc" onchange="noMyDxcc.checked=false; valuesChanged();" />
+                  Only My DXCC
+                </label>
+              </div>
+
+              <div id="useseQSLDiv">
+                <label><input type="checkbox" id="useseQSL" onchange="valuesChanged();" /> Uses eQSL</label>
+              </div>
+
+              <div id="usesOQRSDiv">
+                <label><input type="checkbox" id="usesOQRS" onchange="valuesChanged();" /> Uses OQRS</label>
+              </div>
+
+              <div id="allOnlyNewDiv">
+                <label><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" /> Only New Calls</label>
+              </div>
+
+              <div>
+                <label title="No Decodes Containing...">
+                  <input type="checkbox" id="noMsg" onchange="valuesChanged();" />
+                  No &nbsp;&nbsp;
+                </label>
+                <input
+                  type="text"
+                  class="inputTextValue"
+                  size="8"
+                  id="noMsgValue"
+                  onfocus="g_regFocus=true;"
+                  onblur="g_regFocus=false;"
+                  oninput="valuesChanged();"
+                  onkeydown="checkForEnter(this);"
+                />
+              </div>
+
+              <div>
+                <label title="Only Decodes Containing...">
+                  <input type="checkbox" id="onlyMsg" onchange="valuesChanged();" />
+                  Only
+                </label>
+                <input
+                  type="text"
+                  class="inputTextValue"
+                  size="8"
+                  id="onlyMsgValue"
+                  onfocus="g_regFocus=true;"
+                  onblur="g_regFocus=false;"
+                  oninput="valuesChanged();"
+                  onkeydown="checkForEnter(this);"
+                />
+              </div>
+
+              <div>
+                <label title="Callsign Regular Expression">
+                  <input type="checkbox" id="useRegex" onchange="valuesChanged();" />
+                  <a title="Regular Expressions 101" href="https://regex101.com/?flavor=javascript" target="_blank">
+                    Regex
+                  </a>
+                </label>
+
+                <input
+                  type="text"
+                  class="inputTextValue"
+                  size="12"
+                  id="callsignRegex"
+                  onfocus="g_regFocus=true;"
+                  onblur="g_regFocus=false;"
+                  oninput="valuesChanged();"
+                  onkeydown="checkForEnter(this);"
+                />
+              </div>
+            </div>
           </div>
-          <div id="instancesDiv" style="display: none"></div>
+
+          <div id="instancesDiv"></div>
+
         </div>
       </header>
 
@@ -388,43 +374,5 @@
       <div class="button" style="margin-top: 5px" onclick="closeEditIgnores()">Close</div>
     </div>
 
-    <div
-      id="awardHunterDiv"
-      class="mapItem"
-      style="
-        background-color: black;
-        display: block;
-        position: absolute;
-        z-index: -499;
-        top: 10px;
-        left: 10px;
-        margin: auto;
-      "
-    >
-      <table style="padding: 15px">
-        <tr>
-          <th align="center">New Award Tracker</th>
-        </tr>
-        <tr>
-          <td align="left">
-            <select id="awardSponsor" onchange="awardSponsorChanged();">
-              <option value="" disabled selected>Sponsor</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td align="left">
-            <select id="awardName" onchange="awardNameChanged();">
-              <option value="" disabled selected>Name</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td align="center">
-            <div class="button" style="margin: 3px" onclick="closeAwardPopup()">Done</div>
-          </td>
-        </tr>
-      </table>
-    </div>
   </body>
 </html>

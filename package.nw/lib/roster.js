@@ -452,11 +452,11 @@ function viewRoster()
 
   if (window.opener.g_callsignLookups.lotwUseEnable == true)
   {
-    usesLoTWDiv.style.display = "inline-block";
+    usesLoTWDiv.style.display = "";
     if (g_rosterSettings.usesLoTW == true)
     {
-      maxLoTW.style.display = "inline-block";
-      maxLoTWView.style.display = "inline-block";
+      maxLoTW.style.display = "";
+      maxLoTWView.style.display = "";
     }
     else
     {
@@ -472,18 +472,18 @@ function viewRoster()
   }
 
   if (window.opener.g_callsignLookups.eqslUseEnable == true)
-  { useseQSLDiv.style.display = "block"; }
+  { useseQSLDiv.style.display = ""; }
   else useseQSLDiv.style.display = "none";
 
   if (window.opener.g_callsignLookups.oqrsUseEnable == true)
-  { usesOQRSDiv.style.display = "block"; }
+  { usesOQRSDiv.style.display = ""; }
   else usesOQRSDiv.style.display = "none";
 
   if (g_rosterSettings.columns.Spot == true)
-  { onlySpotDiv.style.display = "block"; }
+  { onlySpotDiv.style.display = ""; }
   else onlySpotDiv.style.display = "none";
 
-  if (callMode == "all") allOnlyNewDiv.style.display = "block";
+  if (callMode == "all") allOnlyNewDiv.style.display = "";
   else allOnlyNewDiv.style.display = "none";
 
   var now = timeNowSec();
@@ -2189,12 +2189,10 @@ function viewRoster()
   {
     worker += "</table>";
     RosterTable.innerHTML = worker;
-    callTable.style.width = parseInt(window.innerWidth) - 6 + "px";
   }
   else
   {
     RosterTable.innerHTML = worker + "</div>";
-    buttonsDiv.style.width = parseInt(window.innerWidth) - 6 + "px";
   }
 
   var dirPath = window.opener.g_scriptDir;
@@ -2422,7 +2420,7 @@ function updateInstances()
         "</div>";
     }
     instancesDiv.innerHTML = worker;
-    instancesDiv.style.display = "block";
+    instancesDiv.style.display = "";
   }
   else instancesDiv.style.display = "none";
 }
@@ -2765,13 +2763,13 @@ function resetAwardAdd()
 
 function openAwardPopup()
 {
-  awardHunterDiv.style.zIndex = 100;
+  awardHunterDiv.style.display = "";
   resetAwardAdd();
 }
 
 function closeAwardPopup()
 {
-  awardHunterDiv.style.zIndex = -1;
+  awardHunterDiv.style.display = "none";
   resetAwardAdd();
 }
 
@@ -2785,9 +2783,9 @@ function toggleMoreControls()
 
 function setVisual()
 {
-  HuntNeedControls.style.display = "none";
-  HuntStateControls.style.display = "none";
-  HuntDXCCsControls.style.display = "none";
+  huntNeed.style.display = "none";
+  stateSelect.style.display = "none";
+  DXCCsSelect.style.display = "none";
 
   if (g_rosterSettings.controls)
   {
@@ -2816,7 +2814,7 @@ function setVisual()
         g_rosterSettings.columns[t] = true;
     } */
 
-    HuntingControls.style.display = "none";
+    HuntModeControls.style.display = "none";
     CallsignsControls.style.display = "none";
     AwardTrackerControls.style.display = "";
     huntingMatrixDiv.style.display = "";
@@ -2831,19 +2829,20 @@ function setVisual()
     }
 
     AwardTrackerControls.style.display = "none";
-    HuntingControls.style.display = "";
+    HuntModeControls.style.display = "";
+    huntMode.style.display = "";
     CallsignsControls.style.display = "";
     closeAwardPopup();
     if (callsignNeed.value == "all" || callsignNeed.value == "hits")
     {
       huntingMatrixDiv.style.display = "";
-      HuntNeedControls.style.display = "block";
-      HuntModeControls.style.display = "none";
+      huntNeed.style.display = "";
+      huntMode.style.display = "none";
     }
     else
     {
       huntingMatrixDiv.style.display = "none";
-      HuntModeControls.style.display = "block";
+      huntMode.style.display = "";
 
       if (
         huntMode.value != "callsign" &&
@@ -2851,26 +2850,26 @@ function setVisual()
         huntMode.value != "dxccs"
       )
       {
-        HuntNeedControls.style.display = "block";
+        huntNeed.style.display = "";
       }
       if (huntMode.value == "usstate")
       {
-        HuntStateControls.style.display = "block";
+        stateSelect.style.display = "";
       }
       if (huntMode.value == "usstates")
       {
-        HuntNeedControls.style.display = "block";
+        huntNeed.style.display = "";
       }
       if (huntMode.value == "dxccs")
       {
-        HuntDXCCsControls.style.display = "block";
+        DXCCsSelect.style.display = "";
       }
     }
   }
   if (wantMaxDT.checked == true)
   {
-    maxDT.style.display = "block";
-    maxDTView.style.display = "block";
+    maxDT.style.display = "";
+    maxDTView.style.display = "";
   }
   else
   {
@@ -2879,8 +2878,8 @@ function setVisual()
   }
   if (wantMinDB.checked == true)
   {
-    minDb.style.display = "block";
-    minDbView.style.display = "block";
+    minDb.style.display = "";
+    minDbView.style.display = "";
   }
   else
   {
@@ -2889,8 +2888,8 @@ function setVisual()
   }
   if (wantMinFreq.checked == true)
   {
-    minFreq.style.display = "block";
-    minFreqView.style.display = "block";
+    minFreq.style.display = "";
+    minFreqView.style.display = "";
   }
   else
   {
@@ -2899,8 +2898,8 @@ function setVisual()
   }
   if (wantMaxFreq.checked == true)
   {
-    maxFreq.style.display = "block";
-    maxFreqView.style.display = "block";
+    maxFreq.style.display = "";
+    maxFreqView.style.display = "";
   }
   else
   {
@@ -2910,7 +2909,7 @@ function setVisual()
 
   if (useRegex.checked == true)
   {
-    callsignRegex.style.display = "inline-block";
+    callsignRegex.style.display = "";
   }
   else
   {
@@ -2919,11 +2918,11 @@ function setVisual()
 
   if (window.opener.g_callsignLookups.lotwUseEnable == true)
   {
-    usesLoTWDiv.style.display = "inline-block";
+    usesLoTWDiv.style.display = "";
     if (g_rosterSettings.usesLoTW == true)
     {
-      maxLoTW.style.display = "inline-block";
-      maxLoTWView.style.display = "inline-block";
+      maxLoTW.style.display = "";
+      maxLoTWView.style.display = "";
     }
     else
     {
@@ -2939,19 +2938,19 @@ function setVisual()
   }
 
   if (window.opener.g_callsignLookups.eqslUseEnable == true)
-  { useseQSLDiv.style.display = "block"; }
+  { useseQSLDiv.style.display = ""; }
   else useseQSLDiv.style.display = "none";
 
   if (window.opener.g_callsignLookups.oqrsUseEnable == true)
-  { usesOQRSDiv.style.display = "block"; }
+  { usesOQRSDiv.style.display = ""; }
   else usesOQRSDiv.style.display = "none";
 
   if (g_rosterSettings.columns.Spot == true)
-  { onlySpotDiv.style.display = "block"; }
+  { onlySpotDiv.style.display = ""; }
   else onlySpotDiv.style.display = "none";
 
   if (g_rosterSettings.callsign == "all" || g_rosterSettings.callsign == "hits")
-  { allOnlyNewDiv.style.display = "block"; }
+  { allOnlyNewDiv.style.display = ""; }
   else allOnlyNewDiv.style.display = "none";
 
   resize();

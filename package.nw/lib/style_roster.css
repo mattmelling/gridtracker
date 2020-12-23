@@ -120,37 +120,50 @@ body.roster {
   flex: 1;
 }
 
-#MainRosterControls {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin: 2px;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-#MainRosterControls > div {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-#MainRosterControls label {
-  margin-right: 4px;
-}
-
-#AwardWantedList {
-  overflow: auto;
-  overflow-x: hidden;
-  max-height: 142px;
-}
-
 #RosterControls {
-  display: block;
+  display: grid;
 }
 
 #RosterControls.hidden {
   display: none;
+}
+
+#RosterControls.normal #SecondaryRosterControls {
+  display: none;
+}
+
+#RosterControls.normal {
+  min-height: 28px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+#RosterControls.normal #MainRosterControls {
+  margin-left: 160px;
+  margin-right: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#TransmitControls {
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 160px;
+  display: flex;
+  flex-direction: row;
+}
+
+#MoreLessControls {
+  position: absolute;
+  top: 7px;
+  right: 6px;
+  text-align: right;
 }
 
 #RosterControls.normal #ShowFewerControlsLink {
@@ -159,8 +172,95 @@ body.roster {
 #RosterControls.normal #ShowMoreControlsLink {
   display: block;
 }
-#RosterControls.normal #SecondaryRosterControls {
-  display: none;
+
+#RosterControls.normal #MainRosterControls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#RosterControls.extended {
+  margin-top: 7px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+#RosterControls.extended #MainRosterControls {
+  margin-top: 30px;
+  min-width: 210px;
+  flex: 0;
+}
+
+#RosterControls.extended #SecondaryRosterControls {
+  flex: 1;
+}
+
+#MainRosterControls label {
+  margin-right: 4px;
+  margin-left: 8px;
+}
+
+#RosterControls.extended #MainRosterControls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+#RosterControls.extended #MainRosterControls > div {
+  margin-bottom: 4px;
+}
+
+#RosterControls.extended #MainRosterControls select {
+  min-width: 140px;
+}
+
+#RosterControls.extended #HuntModeControls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+#AwardWantedList {
+  overflow: auto;
+  overflow-x: hidden;
+  max-height: 142px;
+}
+
+@media (max-width: 1050px) {
+  #RosterControls.normal #HuntModeControls {
+    display: none !important;
+  }
+}
+
+@media (max-width: 780px) {
+  #RosterControls.normal #CallsignsControls {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  #RosterControls.normal #LogbookControls {
+    display: none;
+  }
+}
+
+#RosterControls.normal #AwardTrackerControls {
+  display: none !important;
+}
+
+#RosterControls.extended #AwardTrackerControls {
+  margin-left: 8px;
+  width: 100%;
+}
+
+#awardTable {
+  width: 100%;
 }
 
 #RosterControls.extended #ShowFewerControlsLink {
@@ -170,9 +270,113 @@ body.roster {
   display: none;
 }
 #RosterControls.extended #SecondaryRosterControls {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-right: 8px;
+  margin-bottom: 4px;
 }
 
+@media (max-width: 650px) {
+  #RosterControls.extended #SecondaryRosterControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 850px) {
+  #RosterControls.extended {
+    margin-top: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  #RosterControls.extended #MainRosterControls {
+    align-self: flex-start;
+  }
+
+  #RosterControls.extended #SecondaryRosterControls {
+    width: 100%;
+  }
+}
+
+.secondaryControlGroup {
+  flex: 1;
+  margin-left: 8px;
+  padding: 0px;
+}
+
+#huntingMatrixDiv {
+  flex: 0.5;
+}
+
+#exceptionDiv {
+  flex: 1.5;
+}
+
+.secondaryControlGroup h3 {
+  text-align: left;
+  font-size: 12px;
+  margin: 0px;
+  margin-bottom: 2px;
+  padding: 0;
+}
+
+
+#huntingMatrixDiv h3 {
+  color: #099;
+  border-bottom: 2px solid #066;
+  margin-bottom: 2px;
+}
+
+#exceptionDiv h3 {
+  color: #944;
+  border-bottom: 2px solid #622;
+  margin-bottom: 2px;
+}
+
+.secondaryControlGroup .columns {
+  /* column-count: 2; */
+  max-height: 110px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+@media (min-width: 1100px) {
+  .secondaryControlGroup .columns {
+    max-height: 80px;
+  }
+}
+
+.secondaryControlGroup .columns > div {
+  text-align: left;
+  margin-bottom: 2px;
+}
+
+.secondaryControlGroup input.slider {
+  display: inline-block;
+  width: 75px;
+}
+
+.secondaryControlGroup input.inputTextValue {
+  background-color: green;
+  color: yellow;
+  padding: 2px;
+}
+
+.secondaryControlGroup .roundBorderValue {
+  padding: 2px;
+}
+
+#RosterTable > table {
+  width: 100%;
+}
 /* == Other Elements ====================================== */
 
 #txrxdec {
@@ -187,22 +391,6 @@ body.roster {
 .link:hover {
   color: #ffff00;
   text-decoration: underline;
-}
-
-.controlItem {
-  appearance: none;
-  margin: 0;
-  padding: 0;
-  padding-top: 1px;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  border-width: 1px;
-  border-color: #aaa;
-  border-style: inset;
-  border-radius: 4px;
-  display: inline-block;
-  transition: border-color;
-  vertical-align: top;
 }
 
 table.awardTableCSS {

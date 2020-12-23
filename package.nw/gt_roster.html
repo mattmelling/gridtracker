@@ -141,63 +141,63 @@
         </div>
 
         <div id="SecondaryRosterControls">
-          <div id="huntingMatrixDiv" class="secondaryControlGroup" style="border: 1px solid #066">
+          <div id="huntingMatrixDiv" class="secondaryControlGroup">
             <h3>Wanted</h3>
 
             <div class='columns'>
               <div>
-                <label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);" />Callsign</label>
+                <label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);" /> Callsign</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" />CQz</label>
+                <label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" /> CQz</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);" />Grid</label>
+                <label><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);" /> Grid</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" />ITUz</label>
+                <label><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" /> ITUz</label>
               </div>
               <div>
-                <label ><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);" />DXCC</label>
+                <label ><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);" /> DXCC</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntState" onchange="wantedChanged(this);" />State</label>
+                <label><input type="checkbox" id="huntState" onchange="wantedChanged(this);" /> State</label>
               </div>
               <div>
                 <label title="Stations calling *you*">
-                  <input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);" />QRZ
+                  <input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);" /> QRZ
                 </label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" />County</label>
+                <label><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" /> County</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntPX" onchange="wantedChanged(this);" />WPX</label>
+                <label><input type="checkbox" id="huntPX" onchange="wantedChanged(this);" /> WPX</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" />Cont</label>
+                <label><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" /> Cont</label>
               </div>
               <div>
                 <label title="Off-Air Message Service Users">
-                  <input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);" />OAMS
+                  <input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);" /> OAMS
                 </label>
               </div>
             </div>
           </div>
 
-          <div id="exceptionDiv" class="secondaryControlGroup" style="border: 1px solid #622">
+          <div id="exceptionDiv" class="secondaryControlGroup">
             <h3>Exceptions</h3>
             <div class='columns'>
               <div>
-                <label><input type="checkbox" id="cqOnly" onchange="valuesChanged();" />CQ Only</label>
+                <label><input type="checkbox" id="cqOnly" onchange="valuesChanged();" /> CQ Only</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantGrid" onchange="valuesChanged();" />Has Grid</label>
+                <label><input type="checkbox" id="wantGrid" onchange="valuesChanged();" /> Has Grid</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMinDB" onchange="valuesChanged();" />Min dB</label>
+                <label><input type="checkbox" id="wantMinDB" onchange="valuesChanged();" /> Min dB</label>
                 <input
                   type="range"
                   min="-25"
@@ -211,7 +211,7 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" />Max DT</label>
+                <label><input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" /> Max DT</label>
                 <input
                   type="range"
                   min="0.1"
@@ -225,7 +225,7 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" />Min freq</label>
+                <label><input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" /> Min freq</label>
                 <input
                   type="range"
                   min="0"
@@ -239,7 +239,7 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" />Max freq</label>
+                <label><input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" /> Max freq</label>
                 <input
                   type="range"
                   min="500"
@@ -254,7 +254,7 @@
               </div>
 
               <div id="usesLoTWDiv">
-                <label><input type="checkbox" id="usesLoTW" onchange="valuesChanged();" />Uses LoTW</label>
+                <label><input type="checkbox" id="usesLoTW" onchange="valuesChanged();" /> Uses LoTW</label>
 
                 <input
                   title="Max time since their last upload"
@@ -270,7 +270,7 @@
               </div>
 
               <div id="onlySpotDiv">
-                <label><input type="checkbox" id="onlySpot" onchange="valuesChanged();" />Spotted Me</label>
+                <label><input type="checkbox" id="onlySpot" onchange="valuesChanged();" /> Spotted Me</label>
               </div>
 
               <div>
@@ -288,15 +288,15 @@
               </div>
 
               <div id="useseQSLDiv">
-                <label><input type="checkbox" id="useseQSL" onchange="valuesChanged();" />Uses eQSL</label>
+                <label><input type="checkbox" id="useseQSL" onchange="valuesChanged();" /> Uses eQSL</label>
               </div>
 
               <div id="usesOQRSDiv">
-                <label><input type="checkbox" id="usesOQRS" onchange="valuesChanged();" />Uses OQRS</label>
+                <label><input type="checkbox" id="usesOQRS" onchange="valuesChanged();" /> Uses OQRS</label>
               </div>
 
               <div id="allOnlyNewDiv">
-                <label><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" />Only New Calls</label>
+                <label><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" /> Only New Calls</label>
               </div>
 
               <div>

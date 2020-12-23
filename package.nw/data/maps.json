@@ -226,5 +226,19 @@
     "minZoom": 0,
     "maxZoom": 5,
     "offline": true
+  },
+  {
+	"name": "HamGames by N0TTL (Intl)",
+	"url": "https://api.mapbox.com/styles/v1/n0ttl/ckgbfsz2912r719pmzcxg7dlp/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibjB0dGwiLCJhIjoiY2tnYmZtdGF1MDFoODJ6bzZpdHB4MDN5dSJ9.w4vcgcY5wk2CSvldKQfqyw",
+	"attributions": "Mapbox",
+	"minZoom": 0,
+	"maxZoom": 19
+  },
+  {
+	"name": "HamGames by N0TTL (No Labels)",
+	"url": "https://api.mapbox.com/styles/v1/n0ttl/ckikhtnf90yby18pfjapt94vg/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibjB0dGwiLCJhIjoiY2tnYmZtdGF1MDFoODJ6bzZpdHB4MDN5dSJ9.w4vcgcY5wk2CSvldKQfqyw",
+	"attributions": "Mapbox",
+	"minZoom": 0,
+	"maxZoom": 19
   }
 ]

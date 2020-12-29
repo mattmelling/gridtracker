@@ -226,5 +226,13 @@
     "minZoom": 0,
     "maxZoom": 5,
     "offline": true
+  },
+  {
+	"name": "HamGames by N0TTL (Intl)(Offline)",
+	"url": "/map/hamgames/{z}/{x}/{y}.png",
+	"attributions": "Mapbox",
+	"minZoom": 0,
+	"maxZoom": 5,
+	"offline": true
   }
 ]

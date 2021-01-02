@@ -2487,21 +2487,11 @@ function showMessaging(show = true, cid)
   {
     try
     {
-      if (g_chatWindowHandle.window.g_isShowing == false)
-      {
-        g_chatWindowHandle.window.g_isShowing = true;
-        g_chatWindowHandle.window.saveScreenSettings();
-        g_chatWindowHandle.show();
-        g_chatWindowHandle.focus();
-        if (typeof cid != "undefined") g_chatWindowHandle.window.openId(cid);
-      }
-      else
-      {
-        g_chatWindowHandle.window.g_isShowing = false;
-        g_chatWindowHandle.window.saveScreenSettings();
-        g_chatWindowHandle.window.closeMessageArea();
-        g_chatWindowHandle.hide();
-      }
+      g_chatWindowHandle.window.g_isShowing = true;
+      g_chatWindowHandle.window.saveScreenSettings();
+      g_chatWindowHandle.show();
+      g_chatWindowHandle.focus();
+      if (typeof cid != "undefined") g_chatWindowHandle.window.openId(cid);
     }
     catch (e) {}
   }

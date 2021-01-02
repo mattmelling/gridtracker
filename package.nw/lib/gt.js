@@ -4144,7 +4144,7 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash)
 
   var myDEzOffset = 0;
   var myDEbox = false;
-  if (iCQ)
+  if (DE == "CQ" || iCQ)
   {
     boxColor = g_legendColors.CQ + g_gridAlpha;
   }

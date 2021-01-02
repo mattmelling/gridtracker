@@ -88,7 +88,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <td>Legend</td>
             <td>
               <div
-                id="qsoDiv"
+                id="LegendDivQSO"
                 title="Grids with worked station(s) by you"
                 style="
                   padding-top: 2px;
@@ -104,7 +104,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </td>
             <td>
               <div
-                id="qslDiv"
+                id="LegendDivQSL"
                 title="Grids with confirmed station(s) by you"
                 style="
                   padding-top: 2px;
@@ -122,14 +122,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <tr>
             <td>
               <div
-                id="deDiv"
+                id="LegendDivQSX"
                 title="Grids with station(s) communicating with stations other than you"
                 style="
                   padding-top: 2px;
-                  border: 2px solid #0000ff;
+                  border: 2px solid #000000;
                   width: 42px;
                   height: 16px;
                   background-color: #000088;
+									color:#eee;
                 "
               >
                 QSX
@@ -137,11 +138,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </td>
             <td>
               <div
-                id="cxDiv"
+                id="LegendDivCQ"
                 title="Grids with station(s) calling CQ"
                 style="
                   padding-top: 2px;
-                  border: 2px solid #008888;
+                  border: 2px solid #000000;
                   width: 42px;
                   height: 16px;
                   background-color: #00ff00;
@@ -153,14 +154,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </td>
             <td>
               <div
-                id="cqdxDiv"
+                id="LegendDivCQDX"
                 title="Grids with station(s) calling CQ distance"
                 style="
                   padding-top: 2px;
-                  border: 2px solid #008888;
+                  border: 2px solid #000000;
                   width: 42px;
                   height: 16px;
-                  background-color: cyan;
+                  background-color: #00FFFF;
                   color: #000;
                 "
               >
@@ -171,7 +172,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <tr>
             <td>
               <div
-                id="qrzDiv"
+                id="LegendDivQRZ"
                 title="Grids with station(s) calling you!"
                 style="
                   padding-top: 2px;
@@ -187,7 +188,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </td>
             <td>
               <div
-                id="dxDiv"
+                id="LegendDivQTH"
                 title="Your home grid square!"
                 style="
                   padding-top: 2px;
@@ -203,11 +204,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </td>
             <td>
               <div
-                id="wsprDiv"
+                id="LegendDivWSPR"
                 title="WSPR Stations"
                 style="
                   padding-top: 2px;
-                  border: 2px solid grey;
+                  border: 2px solid black;
                   width: 42px;
                   height: 16px;
                   font-weight: bold;
@@ -1096,27 +1097,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         class="roundBorder"
       >
         <div class="settingstab">
-          <button id="generalbut" class="settingsTablinks active" onclick="openSettingsTab(event, 'udpSettingsDiv')">
-            General
-          </button>
-          <button id="lookupbut" class="settingsTablinks" onclick="openSettingsTab(event, 'lookupsSettingsDiv')">
-            Lookups
-          </button>
+          <button id="generalbut" class="settingsTablinks active" onclick="openSettingsTab(event, 'udpSettingsDiv')">General</button>
+          <button id="lookupbut" class="settingsTablinks" onclick="openSettingsTab(event, 'lookupsSettingsDiv')">Lookups</button>
           <button class="settingsTablinks" onclick="openSettingsTab(event, 'SpeechSettingsDiv')">Audio</button>
           <button class="settingsTablinks" onclick="openSettingsTab(event, 'mapSettingsDiv')">Map</button>
-          <button class="settingsTablinks" onclick="openSettingsTab(event, 'logSettingsDiv');">Logging</button>
+          <button class="settingsTablinks" onclick="openSettingsTab(event, 'gridSettingsDiv')">Grids</button>
+          <button class="settingsTablinks" onclick="openSettingsTab(event, 'logSettingsDiv')">Logging</button>
           <button class="settingsTablinks" onclick="openSettingsTab(event, 'alertsDiv')">Alerts</button>
           <button class="settingsTablinks" onclick="openSettingsTab(event, 'callRosterDiv')">Call Roster</button>
           <button class="settingsTablinks" onclick="openSettingsTab(event, 'chatSettingsDiv')">OAMS</button>
-          <button id="logbut" class="settingsTablinks" onclick="openSettingsTab(event, 'logbookSettingsDiv')">
-            Logbook
-          </button>
-          <button id="updatebut" class="settingsTablinks" onclick="openSettingsTab(event, 'updateSettingsDiv')">
-            Update
-          </button>
-          <button class="settingsTablinks" style="margin-right: 25px" onclick="openSettingsTab(event, 'aboutDiv')">
-            About
-          </button>
+          <button id="logbut" class="settingsTablinks" onclick="openSettingsTab(event, 'logbookSettingsDiv')">Logbook</button>
+          <button id="updatebut" class="settingsTablinks" onclick="openSettingsTab(event, 'updateSettingsDiv')">Update</button>
+          <button class="settingsTablinks" style="margin-right: 25px" onclick="openSettingsTab(event, 'aboutDiv')">About</button>
         </div>
         <div id="udpSettingsDiv" class="settingsTabcontent" style="display: block">
           <table align="center">
@@ -1742,6 +1734,200 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </div>
           </div>
         </div>
+        <div id="gridSettingsDiv" class="settingsTabcontent">
+        <div class="mapItem"style="padding:10px;">
+          <div class="mapItem" style="height:49px;">
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b><i>Gridsquare Colors</i></b>
+              </tr>
+              <tr align="center">
+                <td title="Reset Gridsquare Colors To Default">
+                  <div class="button" onclick="resetLegendColors()">Reset Colors</div>
+                </td>
+              </tr>
+            </table>
+          </div> 
+          
+          <div class="mapItem" id="QSOgridDiv" >
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b>QSO / Worked</b></td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                 <input type="color" id="QSOgridValue" value="#000000" oninput="changeLegendColor(this)" />
+                </td>
+              </tr>
+            </table>
+          </div>    
+          <div class="mapItem" id="QSLgridDiv" >
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b>QSL / Confirmed</b></td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                   <input type="color" id="QSLgridValue" value="#000000" oninput="changeLegendColor(this)" />
+                </td>
+              </tr>
+            </table>
+          </div>      
+          <div class="mapItem" id="QSXgridDiv" >
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b>QSX / Station-2-Station</b></td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                   <input type="color" id="QSXgridValue" value="#000000" oninput="changeLegendColor(this)" />
+                </td>
+              </tr>
+            </table>
+          </div>
+        <br />          
+          <div class="mapItem" id="CQgridDiv" >
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b>'CQ' Stations</b></td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                   <input type="color" id="CQgridValue" value="#000000" oninput="changeLegendColor(this)" />
+                </td>
+              </tr>
+            </table>
+          </div> 
+          
+          <div class="mapItem" id="CQDXgridDiv" >
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b>'CQ DX' Stations</b></td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                   <input type="color" id="CQDXgridValue" value="#000000" oninput="changeLegendColor(this)" />
+                </td>
+              </tr>
+            </table>
+          </div> 
+          <div class="mapItem" id="QRZgridDiv" >
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b>QRZ / Your Traffic</b></td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                  <input type="color" id="QRZgridValue" value="#000000" oninput="changeLegendColor(this)" />
+                </td>
+              </tr>
+            </table>
+          </div>      
+          <div class="mapItem" id="QTHgridDiv" >
+            <table align="center">
+              <tr align="center">
+                <td align="center"><b>QTH / Home Gridsquare</b></td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                  <input type="color" id="QTHgridValue" value="#000000" oninput="changeLegendColor(this)" />
+                </td>
+              </tr>
+            </table>
+          </div> 
+         
+          </div>
+          
+          <br />
+          <br />
+          <div class="mapItem">
+            <table align="center">
+              <tr>
+                <td title="Place RX Spots over Grid Layer">PSK-Spots Over Grids</td>
+              </tr>
+              <tr>
+                <td title="Place RX Spots over Grid Layer">
+                  <input type="checkbox" id="spotMergeValue" onclick="changeSpotValues();redrawSpots();" />
+                </td>
+              </tr>
+            </table>
+          </div>  
+          <div class="mapItem">
+            <table align="center">
+              <tr>
+                <td align="center">Grid Opacity</td>
+                <td align="left" id="showOpacityTd">10%</td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                  <input
+                    type="range"
+                    min="16"
+                    max="255"
+                    value="136"
+                    step="1"
+                    class="slider"
+                    id="opacityValue"
+                    oninput="changeGridOpacity()"
+                    onkeyup="redrawGrids()"
+                    onmouseup="redrawGrids()"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>  
+          <div class="mapItem">
+            <table align="center">
+              <tr>
+                <td align="center">Split QSL Grids</td>
+              </tr>
+              <tr align="center">
+                <td title="Toggle Split QSL Grids with Live Grids">
+                  <input type="checkbox" id="splitQSLValue" onclick="changeSplitQSL()" />
+                </td>
+              </tr>
+            </table>
+          </div>    
+          <div class="mapItem">
+            <table align="center">
+              <tr>
+                <td align="center">Auto Mouseover Grids</td>
+              </tr>
+              <tr align="center">
+                <td title="Toggle Auto Mouseover Grid Tables">
+                  <input type="checkbox" id="mouseOverValue" onclick="changeMouseOverValue()" />
+                </td>
+              </tr>
+            </table>
+          </div> 
+          <br/>          
+          <div class="mapItem" id="decayRateDiv">
+            <table align="center">
+              <tr align="center">
+                <td align="center">Live Grid Decay</td>
+              </tr>
+              <tr>
+                <td align="center" id="decayRateTd">10m</td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                  <input
+                    type="range"
+                    min="0"
+                    max="86400"
+                    value="600"
+                    step="60"
+                    class="slider"
+                    id="gridDecay"
+                    oninput="changeGridDecay()"
+                    onkeyup="redrawGrids()"
+                    onmouseup="redrawGrids()"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
         <div
           id="mapSettingsDiv"
           class="settingsTabcontent"
@@ -1786,27 +1972,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               </tr>
             </table>
           </div>
-          <div class="mapItem" id="decayRateDiv">
+          <div class="mapItem">
             <table align="center">
-              <tr align="center">
-                <td align="center">Live Grid Decay</td>
+              <tr>
+                <td align="center" colspan="2">Map Settings Transparency</td>
               </tr>
               <tr>
-                <td align="center" id="decayRateTd">10m</td>
+                <td align="center" id="mapTransTd">50%</td>
               </tr>
               <tr align="center">
                 <td colspan="2">
                   <input
                     type="range"
                     min="0"
-                    max="86400"
-                    value="600"
-                    step="60"
+                    max="1"
+                    value="0.5"
+                    step="0.01"
                     class="slider"
-                    id="gridDecay"
-                    oninput="changeGridDecay()"
-                    onkeyup="redrawGrids()"
-                    onmouseup="redrawGrids()"
+                    id="mapTransValue"
+                    oninput="mapTransChange();"
                   />
                 </td>
               </tr>
@@ -1945,56 +2129,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <div class="mapItem">
             <table align="center">
               <tr>
-                <td align="center">Grid Opacity</td>
-                <td align="left" id="showOpacityTd">10%</td>
-              </tr>
-              <tr align="center">
-                <td colspan="2">
-                  <input
-                    type="range"
-                    min="16"
-                    max="255"
-                    value="136"
-                    step="1"
-                    class="slider"
-                    id="opacityValue"
-                    oninput="changeGridOpacity()"
-                    onkeyup="redrawGrids()"
-                    onmouseup="redrawGrids()"
-                  />
-                </td>
-              </tr>
-            </table>
-          </div>
-
-          <div class="mapItem">
-            <table align="center">
-              <tr>
-                <td align="center">Split QSL Grids</td>
-              </tr>
-              <tr align="center">
-                <td title="Toggle Split QSL Grids with Live Grids">
-                  <input type="checkbox" id="splitQSLValue" onclick="changeSplitQSL()" />
-                </td>
-              </tr>
-            </table>
-          </div>
-          <br />
-          <div class="mapItem">
-            <table align="center">
-              <tr>
-                <td align="center">Grid Mouse-Over Tables</td>
-              </tr>
-              <tr align="center">
-                <td title="Toggle Grid Mouse-Over Tables">
-                  <input type="checkbox" id="mouseOverValue" onclick="changeMouseOverValue()" />
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div class="mapItem">
-            <table align="center">
-              <tr>
                 <td align="center">Merge Award Overlay</td>
               </tr>
               <tr align="center">
@@ -2016,6 +2150,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               </tr>
             </table>
           </div>
+          <br />
           <div class="mapItem">
             <table align="center">
               <tr>
@@ -2028,7 +2163,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               </tr>
             </table>
           </div>
-          <br />
           <div class="mapItem">
             <table align="center">
               <tr>
@@ -2066,18 +2200,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               </tr>
             </table>
           </div>
-          <div class="mapItem">
-            <table align="center">
-              <tr>
-                <td title="Place RX Spots over Grid Layer">PSK-Spots Over Grids</td>
-              </tr>
-              <tr>
-                <td title="Place RX Spots over Grid Layer">
-                  <input type="checkbox" id="spotMergeValue" onclick="changeSpotValues();redrawSpots();" />
-                </td>
-              </tr>
-            </table>
-          </div>
           <div class="mapItem" id="spotPathsDiv">
             <table align="center">
               <tr>
@@ -2090,7 +2212,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               </tr>
             </table>
           </div>
-          <br />
+          <br />       
           <div class="mapItem" id="spotPathWidthDiv">
             <table align="center">
               <tr>
@@ -2115,30 +2237,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               </tr>
             </table>
           </div>
-          <div class="mapItem">
-            <table align="center">
-              <tr>
-                <td align="center" colspan="2">Map Settings Transparency</td>
-              </tr>
-              <tr>
-                <td align="center" id="mapTransTd">50%</td>
-              </tr>
-              <tr align="center">
-                <td colspan="2">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    value="0.5"
-                    step="0.01"
-                    class="slider"
-                    id="mapTransValue"
-                    oninput="mapTransChange();"
-                  />
-                </td>
-              </tr>
-            </table>
-          </div>
+
+             <br />
           <div class="mapItem">
             <table align="center">
               <tr>

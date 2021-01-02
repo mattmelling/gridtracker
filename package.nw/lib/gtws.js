@@ -64,11 +64,11 @@ function gtConnectChat()
     return;
   }
 
-  var rnd = parseInt(Math.random() * 10) + 18260;
+  var rnd = parseInt(Math.random() * 10) + 18360;
   try
   {
     g_gtState = ChatState.connecting;
-    g_gtChatSocket = new WebSocket("wss://tagloomis.com:" + rnd);
+    g_gtChatSocket = new WebSocket("ws://oams.space:" + rnd);
   }
   catch (e)
   {
@@ -234,6 +234,7 @@ function gtChatSendStatus()
   msg.freq = myRawFreq;
   msg.mode = myMode;
   msg.band = myBand;
+  msg.src = "GT";
   msg.canmsg = g_appSettings.gtMsgEnable == true;
   msg.o = g_appSettings.gtSpotEnable == true ? 1 : 0;
   msg = JSON.stringify(msg);
@@ -323,6 +324,7 @@ function gtChatUpdateCall(jsmesg)
   g_gtFlagPins[cid].freq = jsmesg.freq;
   g_gtFlagPins[cid].band = jsmesg.band;
   g_gtFlagPins[cid].mode = jsmesg.mode;
+  g_gtFlagPins[cid].src = jsmesg.src;
   g_gtFlagPins[cid].canmsg = jsmesg.canmsg;
   g_gtFlagPins[cid].o = jsmesg.o;
   g_gtFlagPins[cid].dxcc = callsignToDxcc(jsmesg.call);
@@ -441,6 +443,7 @@ function gtChatNewList(jsmesg)
       g_gtFlagPins[cid].freq = jsmesg.data.freq[key];
       g_gtFlagPins[cid].band = jsmesg.data.band[key];
       g_gtFlagPins[cid].mode = jsmesg.data.mode[key];
+      g_gtFlagPins[cid].src = jsmesg.data.src[key];
       g_gtFlagPins[cid].cid = cid;
       g_gtFlagPins[cid].canmsg = jsmesg.data.canmsg[key];
       g_gtFlagPins[cid].o = jsmesg.data.o[key];

@@ -3844,6 +3844,7 @@ function handleContextMenu(ev)
     g_clearIgnoresCall.label = "Clear Ignore";
     g_clearIgnoresCall.enabled = false;
   }
+
   len = Object.keys(g_blockedDxcc).length;
   if (len > 0)
   {
@@ -3861,6 +3862,7 @@ function handleContextMenu(ev)
     g_clearDxccIgnore.label = "Clear Ignore";
     g_clearDxccIgnore.enabled = false;
   }
+
   len = Object.keys(g_blockedCQ).length;
   if (len > 0)
   {
@@ -3877,8 +3879,20 @@ function handleContextMenu(ev)
     g_clearCQIgnore.label = "Clear Ignore";
     g_clearCQIgnore.enabled = false;
   }
+
   if (typeof ev.target != "undefined")
   {
+    if (g_developerMode)
+    {
+      if ((ev.target.id === "ShowMoreControlsLink") ||
+        (ev.target.id === "ShowFewerControlsLink") ||
+        (ev.target.id === "txrxdec"))
+      {
+        // Allow event to bubble up so that NWJS will show the developer menu
+        return true;
+      }
+    }
+
     var name = ev.target.getAttribute("name");
     if (name == "Callsign")
     {
@@ -3929,10 +3943,7 @@ function handleContextMenu(ev)
     }
   }
 
-  if (!g_developerMode)
-  {
-    ev.preventDefault();
-  }
+  ev.preventDefault();
 
   return false;
 }

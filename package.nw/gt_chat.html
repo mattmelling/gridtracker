@@ -268,21 +268,17 @@
       }
 
       function makeCallsignRow(callObj, show) {
-        var oldRow = document.getElementById(callObj.cid);
+        let oldRow = document.getElementById(callObj.cid);
 
         if (!oldRow) {
-          var newCall = callObj.call.formatCallsign();
-
-          var x;
-          for (
-            x = 0;
-            x < allCallTable.rows.length && newCall.localeCompare(allCallTable.rows[x].cells[0].innerHTML) != -1;
-            x++
-          ) {
+          let newCall = callObj.call.formatCallsign();
+          let x = 0;
+          for (x = 0; x < allCallTable.rows.length &&  newCall > allCallTable.rows[x].cells[0].innerHTML; x++) 
+          {
             // just count
           }
 
-          var row = allCallTable.insertRow(x);
+          let row = allCallTable.insertRow(x);
           row.id = callObj.cid;
 
           row.style.cursor = "pointer";
@@ -290,7 +286,7 @@
           row.onclick = openIdCid;
           row.oncontextmenu = openLookupCid;
 
-          var td = row.insertCell();
+          let td = row.insertCell();
 
           td.className = callObj.live == false ? "rosterOff" : "rosterOn";
           td.innerHTML = newCall;
@@ -298,7 +294,7 @@
           td.onmouseout = onNoHoverCid;
 
           if (callObj.dxcc > 0 && callObj.dxcc in window.opener.g_dxccToGeoData) {
-            var imgClass = callObj.live == false ? "imgGray" : "imgNoFilter";
+            let imgClass = callObj.live == false ? "imgGray" : "imgNoFilter";
             td = row.insertCell();
             td.innerHTML =
               "<img class='" +
@@ -313,11 +309,11 @@
       }
 
       function showAllCallsigns() {
-        var count = 0;
-        for (var x in window.opener.g_gtFlagPins) {
-          var obj = window.opener.g_gtFlagPins[x];
+        let count = 0;
+        for (let x in window.opener.g_gtFlagPins) {
+          let obj = window.opener.g_gtFlagPins[x];
           if (obj.call != "" && obj.call != "NOCALL" && obj.canmsg == true) {
-            var show = true;
+            let show = true;
             try {
               if (searchBox.value.length > 0 && !obj.call.match(searchBox.value)) {
                 show = false;

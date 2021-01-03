@@ -61,6 +61,7 @@ var g_baWindowHandle = null;
 
 var g_appSettings = {};
 var g_mapSettings = {};
+var g_legendColors = {};
 var g_adifLogSettings = {};
 var g_msgSettings = {};
 var g_receptionSettings = {};
@@ -108,6 +109,7 @@ function loadAllSettings()
 
   g_appSettings = loadDefaultsAndMerge("appSettings", def_appSettings);
   g_mapSettings = loadDefaultsAndMerge("mapSettings", def_mapSettings);
+  g_legendColors = loadDefaultsAndMerge("legendColors", def_legendColors);
   g_adifLogSettings = loadDefaultsAndMerge(
     "adifLogSettings",
     def_adifLogSettings
@@ -220,6 +222,11 @@ function saveMapSettings()
   localStorage.mapSettings = JSON.stringify(g_mapSettings);
 }
 
+function saveLegendColors()
+{
+  localStorage.legendColors = JSON.stringify(g_legendColors);
+}
+
 function saveStartupLogs()
 {
   localStorage.startupLogs = JSON.stringify(g_startupLogs);
@@ -290,6 +297,7 @@ function saveAndCloseApp()
 
   saveAppSettings();
   saveMapSettings();
+  saveLegendColors();
 
   try
   {
@@ -403,7 +411,7 @@ var g_ignoreMessages = 0;
 var g_lastTimeSinceMessageInSeconds = timeNowSec();
 var g_loadQSOs = false;
 var g_fromDirectCallNoFileDialog = false;
-var g_qsoWorkedBorderColor = "#222222FF";
+var g_mainBorderColor = "#222222FF";
 var g_pushPinMode = false;
 var g_pskBandActivityTimerHandle = null;
 var g_workingIniPath = "";
@@ -2254,10 +2262,19 @@ function openConditionsWindow()
   {
     try
     {
-      g_conditionsWindowHandle.window.g_isShowing = true;
-      g_conditionsWindowHandle.window.saveScreenSettings();
-      g_conditionsWindowHandle.show();
-      g_conditionsWindowHandle.focus();
+      if (g_conditionsWindowHandle.window.g_isShowing == false)
+      {
+        g_conditionsWindowHandle.window.g_isShowing = true;
+        g_conditionsWindowHandle.window.saveScreenSettings();
+        g_conditionsWindowHandle.show();
+        g_conditionsWindowHandle.focus();
+      }
+      else
+      {
+        g_conditionsWindowHandle.window.g_isShowing = false;
+        g_conditionsWindowHandle.window.saveScreenSettings();
+        g_conditionsWindowHandle.hide();
+      }
     }
     catch (e) {}
   }
@@ -2335,11 +2352,20 @@ function openCallRosterWindow(show = true)
   {
     try
     {
-      g_callRosterWindowHandle.show();
-      g_callRosterWindowHandle.window.g_isShowing = true;
-      g_callRosterWindowHandle.window.saveScreenSettings();
-      g_callRosterWindowHandle.focus();
-      goProcessRoster();
+      if (g_callRosterWindowHandle.window.g_isShowing == false)
+      {
+        g_callRosterWindowHandle.show();
+        g_callRosterWindowHandle.window.g_isShowing = true;
+        g_callRosterWindowHandle.window.saveScreenSettings();
+        g_callRosterWindowHandle.focus();
+        goProcessRoster();
+      }
+      else
+      {
+        g_callRosterWindowHandle.window.g_isShowing = false;
+        g_callRosterWindowHandle.window.saveScreenSettings();
+        g_callRosterWindowHandle.hide();
+      }
     }
     catch (e) {}
   }
@@ -2408,10 +2434,19 @@ function openStatsWindow(show = true)
   {
     try
     {
-      g_statsWindowHandle.show();
-      g_statsWindowHandle.window.g_isShowing = true;
-      g_statsWindowHandle.window.saveScreenSettings();
-      g_statsWindowHandle.focus();
+      if (g_statsWindowHandle.window.g_isShowing == false)
+      {
+        g_statsWindowHandle.show();
+        g_statsWindowHandle.window.g_isShowing = true;
+        g_statsWindowHandle.window.saveScreenSettings();
+        g_statsWindowHandle.focus();
+      }
+      else
+      {
+        g_statsWindowHandle.window.g_isShowing = false;
+        g_statsWindowHandle.window.saveScreenSettings();
+        g_statsWindowHandle.hide();
+      }
     }
     catch (e) {}
   }
@@ -3914,21 +3949,19 @@ function qthToQsoBox(
 {
   if (g_appSettings.gridViewMode == 1) return null;
 
-  var borderColor = "#222288FF";
-  var boxColor = "#0000FF" + g_gridAlpha;
+  var borderColor = g_mainBorderColor;
+  var boxColor = g_legendColors.QSX + g_gridAlpha;
   var borderWeight = 0.5;
 
   var myDEzOffset = 10;
   var myDEbox = false;
   if (worked)
   {
-    boxColor = "#FFFF00" + g_gridAlpha;
-    borderColor = g_qsoWorkedBorderColor;
+    boxColor = g_legendColors.QSO + g_gridAlpha;
   }
   if (confirmed)
   {
-    boxColor = "#FF0000" + g_gridAlpha;
-    borderColor = g_qsoWorkedBorderColor;
+    boxColor = g_legendColors.QSL + g_gridAlpha;
   }
   if (wspr != null)
   {
@@ -4064,7 +4097,7 @@ function qthToQsoBox(
     if (worked && !rect.rectangle.worked) rect.rectangle.worked = worked;
     if (confirmed && !rect.rectangle.confirmed)
     { rect.rectangle.confirmed = confirmed; }
-    borderColor = g_qsoWorkedBorderColor;
+    borderColor = g_mainBorderColor;
     if (myDEbox) borderWeight = 1;
     zIndex = 2;
     if (rect.rectangle.size == 6)
@@ -4095,47 +4128,39 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash)
 {
   if (g_appSettings.gridViewMode == 2) return null;
 
-  var borderColor = "#222288FF";
-  var boxColor = "#1111FF" + g_gridAlpha;
+  var borderColor = g_mainBorderColor;
+  var boxColor = g_legendColors.QSX + g_gridAlpha;
   var borderWeight = 0.5;
 
   var myDEzOffset = 0;
   var myDEbox = false;
-  if (iCQ && iNew)
+  if (DE == "CQ" || iCQ)
   {
-    borderColor = "#008888FF";
-    boxColor = "#00FF00" + g_gridAlpha;
+    boxColor = g_legendColors.CQ + g_gridAlpha;
   }
-  else if (iCQ && !iNew)
-  {
-    borderColor = "#FFFF00FF";
-    boxColor = "#FFFF00" + g_gridAlpha;
-  }
+
   if (DE == myDEcall)
   {
     borderColor = "#FF0000FF";
-    boxColor = "#FFFF00" + g_gridAlpha;
+    boxColor = g_legendColors.QRZ + g_gridAlpha;
     borderWeight = 1.0;
     myDEzOffset = 20;
     myDEbox = true;
   }
   if (DE.indexOf("CQ DX") > -1)
   {
-    borderColor = "#008888FF";
-    boxColor = "#00FFFF" + g_gridAlpha;
+    boxColor = g_legendColors.CQDX + g_gridAlpha;
   }
   if (locked)
   {
-    boxColor = "#FFA500" + g_gridAlpha;
+    boxColor = g_legendColors.QTH + g_gridAlpha;
     borderColor = "#000000FF";
-
     borderOpacity = 1;
   }
   if (wspr != null)
   {
     boxColor = "hsl(" + wspr + ",100%,50%)";
     borderColor = "gray";
-    // borderWeight = 1;
   }
   var zIndex = 2;
   var returnRectangle = null;
@@ -12771,6 +12796,56 @@ function changeMapValues()
   displayLegend();
 }
 
+function setLegendColor(name, newColor)
+{
+  let legendBox = document.getElementById("LegendDiv" + name);
+  legendBox.style.backgroundColor = newColor;
+  legendBox.style.color = pickTextColorBasedOnBgColorAdvanced(newColor, "#EEEEEE", "#222222");
+}
+
+function setLegendGrid(name, newColor)
+{
+  document.getElementById(name + "gridValue").value = newColor;
+}
+
+function setLegendAndGridSettings()
+{
+  for (let key in g_legendColors)
+  {
+    setLegendColor(key, g_legendColors[key]);
+    setLegendGrid(key, g_legendColors[key]);
+  }
+}
+
+function resetLegendColors()
+{
+  for (let key in def_legendColors)
+  {
+    g_legendColors[key] = def_legendColors[key];
+  }
+
+  setLegendAndGridSettings();
+  saveLegendColors();
+  redrawGrids();
+}
+
+var g_redrawFromLegendTimeoutHandle = null;
+function changeLegendColor(source)
+{
+  let newColor = source.value;
+
+  let name = source.id.replace("gridValue", "");
+
+  setLegendColor(name, newColor);
+  g_legendColors[name] = newColor;
+
+  if (g_redrawFromLegendTimeoutHandle != null)
+  {
+    clearTimeout(g_redrawFromLegendTimeoutHandle);
+  }
+  g_redrawFromLegendTimeoutHandle = setTimeout(redrawGrids, 500);
+}
+
 function toggleLegend()
 {
   if (g_mapSettings.legend == true) g_mapSettings.legend = false;
@@ -13055,6 +13130,7 @@ function loadViewSettings()
 
   spotPathChange();
   setRosterTimeView();
+  setLegendAndGridSettings();
 }
 
 function loadMsgSettings()
@@ -15302,8 +15378,7 @@ function purgeUserFiles(userDir, systemDir)
 
 function mediaCheck()
 {
-  var homeDir =
-    g_platform == "windows" ? process.env.USERPROFILE : process.env.HOME;
+  var homeDir = (g_platform == "windows") ? process.env.USERPROFILE : process.env.HOME;
 
   g_appData = path.join(homeDir, "Dokumente");
   if (!is_dir(g_appData))
@@ -15773,25 +15848,25 @@ function createSpot(report, key, fromPoint, addToLayer = true)
 }
 function redrawSpots()
 {
-  var shouldSave = false;
-  var now = timeNowSec();
+  let shouldSave = false;
+  let now = timeNowSec();
   g_spotTotalCount = 0;
   g_layerSources["psk-spots"].clear();
   g_layerSources["psk-flights"].clear();
   g_layerSources["psk-hop"].clear();
   g_layerSources["psk-heat"].clear();
 
-  var fromPoint = getPoint(myRawGrid);
+  let fromPoint = getPoint(myRawGrid);
 
   if (g_receptionSettings.mergeSpots == false)
   {
-    var spot = iconFeature(fromPoint, g_gtFlagIcon, 100);
+    let spot = iconFeature(fromPoint, g_gtFlagIcon, 100);
 
     g_layerSources["psk-spots"].addFeature(spot);
     g_layerSources["psk-heat"].addFeature(spot);
   }
 
-  for (var key in g_receptionReports.spots)
+  for (let key in g_receptionReports.spots)
   {
     report = g_receptionReports.spots[key];
 
@@ -15835,10 +15910,8 @@ var g_spotNightFlightColor = "#FFFFFFBB";
 
 function changeSpotValues()
 {
-  g_receptionSettings.viewHistoryTimeSec =
-    parseInt(spotHistoryTimeValue.value) * 60;
-  spotHistoryTimeTd.innerHTML =
-    "Max Age: " + Number(g_receptionSettings.viewHistoryTimeSec).toDHM();
+  g_receptionSettings.viewHistoryTimeSec = parseInt(spotHistoryTimeValue.value) * 60;
+  spotHistoryTimeTd.innerHTML = "Max Age: " + Number(g_receptionSettings.viewHistoryTimeSec).toDHM();
   g_receptionSettings.viewPaths = spotPathsValue.checked;
 
   if (g_receptionSettings.viewPaths)
@@ -15862,21 +15935,19 @@ function mapTransChange()
 {
   g_mapSettings.mapTrans = mapTransValue.value;
 
-  mapTransTd.innerHTML =
-    String(100 - parseInt(((g_mapSettings.mapTrans * 255) / 255) * 100)) + "%";
-  mapSettingsDiv.style.backgroundColor =
-    "rgba(0,0,0, " + g_mapSettings.mapTrans + ")";
+  mapTransTd.innerHTML = String(100 - parseInt(((g_mapSettings.mapTrans * 255) / 255) * 100)) + "%";
+  mapSettingsDiv.style.backgroundColor = "rgba(0,0,0, " + g_mapSettings.mapTrans + ")";
 }
 
 function spotPathChange()
 {
   g_receptionSettings.pathColor = spotPathColorValue.value;
-  var pathColor =
-    g_receptionSettings.pathColor < 1
-      ? "#000"
-      : g_receptionSettings.pathColor == 361
-        ? "#FFF"
-        : "hsl(" + g_receptionSettings.pathColor + ", 100%, 50%)";
+  var pathColor = g_receptionSettings.pathColor < 1
+    ? "#000"
+    : g_receptionSettings.pathColor == 361
+      ? "#FFF"
+      : "hsl(" + g_receptionSettings.pathColor + ", 100%, 50%)";
+
   if (g_receptionSettings.pathColor > 0)
   {
     spotPathColorDiv.style.color = "#000";

@@ -848,6 +848,7 @@ function adifNicknameCheckBoxChanged(what)
 
 function adifTextValueChange(what)
 {
+  what.value = what.value.trim();
   g_adifLogSettings.text[what.id] = what.value;
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 }
@@ -1760,6 +1761,7 @@ function sendToLogger(ADIF)
     record.DXCC = String(dxcc);
   }
 
+  // Tag: This is going to bite us in the butt later, but leaving it alone.
   if (!("COUNTRY" in record) && Number(record.DXCC) > 0)
   {
     record.COUNTRY = g_dxccToADIFName[Number(record.DXCC)];
@@ -2070,13 +2072,11 @@ function eqslCallback(buffer, flag)
       logeQSLQSOCheckBox.checked = false;
       adifLogQsoCheckBoxChanged(logeQSLQSOCheckBox);
     }
-    else if (result.indexOf("Your ADIF log file has been built") != -1)
+    else if (result.indexOf("Your ADIF log file has been built") > -1 || result.indexOf("You have no log entries") > -1)
     {
       eQSLTestResult.innerHTML = "Passed";
     }
-    else if (
-      result.indexOf("specify the desired User by using the QTHNickname") != -1
-    )
+    else if (result.indexOf("specify the desired User by using the QTHNickname") != -1)
     {
       eQSLTestResult.innerHTML = "QTH Nickname<br/>Needed";
     }

@@ -26,7 +26,8 @@ var validSettings = [
   "speechSettings",
   "startupLogs",
   "trustedQslSettings",
-  "screenSettings"
+  "screenSettings",
+  "legendColors"
 ];
 
 var def_appSettings = {
@@ -52,7 +53,7 @@ var def_appSettings = {
   lookupLoginQrz: "",
   lookupLoginQth: "",
   lookupOnTx: false,
-  lookupCloseLog: true,
+  lookupCloseLog: false,
   lookupMerge: true,
   lookupMissingGrid: false,
   lookupPasswordCq: "",
@@ -194,7 +195,7 @@ var def_receptionSettings = {
   pathColor: -1,
   pathNightColor: 361,
   spotWidth: 0.8,
-  mergeSpots: false
+  mergeSpots: true
 };
 
 var def_N1MMSettings = {
@@ -246,4 +247,14 @@ var def_callsignLookups = {
 var def_bandActivity = {
   lastUpdate: {},
   lines: {}
+};
+
+var def_legendColors = {
+  QSO: "#EEEE00",
+  QSL: "#EE0000",
+  QSX: "#1111EE",
+  CQ: "#00FF00",
+  CQDX: "#00FFFF",
+  QRZ: "#FFFF00",
+  QTH: "#FFA600"
 };

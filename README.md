@@ -51,6 +51,11 @@ And now you can run GridTracker from your local repository with a command like
 
 To access the Developer Tools, right-click on an unused area of a window, or press F12.
 
+In the map window, most of the right column background areas will respond with the developer context menu.
+
+In the roster window, only the "Transmit/Receive" indicator on the left side, and the "more controls" link on the right
+will respond with the developer context menu.
+
 # Building for Distribution
 
 ## Docker Build Environment

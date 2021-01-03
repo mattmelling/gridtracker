@@ -15380,16 +15380,16 @@ function mediaCheck()
 {
   var homeDir = (g_platform == "windows") ? process.env.USERPROFILE : process.env.HOME;
 
-  g_appData = path.join(homeDir, "Dokumente");
+  g_appData = path.join(homeDir, "OneDrive\\Dokumente");
   if (!is_dir(g_appData))
   {
-    g_appData = path.join(homeDir, "Documents");
+    g_appData = path.join(homeDir, "OneDrive\\Documents");
     if (!is_dir(g_appData))
     {
-      g_appData = path.join(homeDir, "OneDrive\\Documents")
+      g_appData = path.join(homeDir, "Dokumente")
       if (!is_dir(g_appData))
       {
-        g_appData = path.join(homeDir, "OneDrive\\Dokumente")
+        g_appData = path.join(homeDir, "Documents")
         if (!is_dir(g_appData))
         {
           if (g_appSettings.savedAppData != null)

@@ -15386,12 +15386,23 @@ function mediaCheck()
     g_appData = path.join(homeDir, "Documents");
     if (!is_dir(g_appData))
     {
-      if (g_appSettings.savedAppData != null)
+      g_appData = path.join(homeDir, "OneDrive\\Documents")
+      if (!is_dir(g_appData))
       {
-        g_appData = g_appSettings.savedAppData;
-        if (!is_dir(g_appData)) return false;
+        g_appData = path.join(homeDir, "OneDrive\\Dokumente")
+        if (!is_dir(g_appData))
+        {
+          if (g_appSettings.savedAppData != null)
+          {
+            g_appData = g_appSettings.savedAppData;
+            if (!is_dir(g_appData)) return false;
+          }
+          else
+          {
+            return false;
+          }
+        }
       }
-      else return false;
     }
   }
 
@@ -15405,6 +15416,7 @@ function mediaCheck()
 
   try
   {
+    var tryDirectory = "";
     var userdirs = [
       g_appData,
       g_NWappData,
@@ -15416,6 +15428,7 @@ function mediaCheck()
     {
       if (!fs.existsSync(dir))
       {
+        tryDirectory = dir;
         fs.mkdirSync(dir);
       }
     }
@@ -15423,9 +15436,7 @@ function mediaCheck()
   catch (e)
   {
     alert(
-      "Unable to create or access " +
-        g_appData +
-        " folder.\r\nPermission violation, GT cannot continue"
+      "Unable to create or access " + tryDirectory + " folder.\r\nPermission violation, GT cannot continue"
     );
     nw.App.quit();
   }

@@ -8669,7 +8669,7 @@ function displayItemList(table, color)
     .forEach(function (key, i)
     {
       var style;
-      var name = typeof table[key].name !== 'undefined' ? table[key].name : key;
+      var name = typeof table[key].name !== 'undefined' ? key + " / " + table[key].name : key;
       if (table[key].confirmed == true)
       {
         style = "color:" + color + ";" + confirmed;

@@ -1,4 +1,4 @@
-// GridTracker ©2020 GridTracker.org
+// GridTracker ©2021 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
 const pjson = require("./package.json");

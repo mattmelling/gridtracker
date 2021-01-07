@@ -8669,6 +8669,7 @@ function displayItemList(table, color)
     .forEach(function (key, i)
     {
       var style;
+      var name = typeof table[key].name !== "undefined" ? key + " / " + table[key].name : key;
       if (table[key].confirmed == true)
       {
         style = "color:" + color + ";" + confirmed;
@@ -8683,7 +8684,7 @@ function displayItemList(table, color)
         style = "color:#000000;background-color:" + color + ";" + bold;
       }
       worker +=
-        "<tr><td align=left style='" + style + "'>" + key + "</td></tr>";
+        "<tr><td align=left style='" + style + "'>" + name + "</td></tr>";
     });
   worker += "</table></div>";
   return worker;

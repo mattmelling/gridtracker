@@ -1,4 +1,4 @@
-// GridTracker Copyright © 2020 GridTracker.org
+// GridTracker Copyright © 2021 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
 

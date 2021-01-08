@@ -15008,18 +15008,18 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
   worker += makeRow("County", lookup, "county");
   worker += makeRow("Latitude", lookup, "lat");
   worker += makeRow("Longitude", lookup, "lon");
-  if ( getLookProp(lookup, "lat").length > 0 &&  getLookProp(lookup, "lon").length > 0 )
+  if (getLookProp(lookup, "lat").length > 0 && getLookProp(lookup, "lon").length > 0)
   {
     worker += "<tr><td>Distance</td><td style='color:cyan'>" +
       parseInt(
         MyCircle.distance(
           g_myLat,
           g_myLon,
-          Number(lookup["lat"]), Number(lookup["lon"]),
+          Number(lookup.lat]), Number(lookup.lon),
           distanceUnit.value
         ) * MyCircle.validateRadius(distanceUnit.value)
       ) + distanceUnit.value.toLowerCase() + "</td></tr>";
-    let bearing = parseInt( MyCircle.bearing( g_myLat, g_myLon, Number(lookup["lat"]), Number(lookup["lon"]) ) );  
+    let bearing = parseInt(MyCircle.bearing(g_myLat, g_myLon, Number(lookup.lat), Number(lookup.lon)));  
     worker += "<tr><td>Azimuth</td><td style='color:yellow'>" + bearing + "&deg;</td></tr>";
   }
   worker += makeRow("Grid", lookup, "grid", true);

@@ -238,7 +238,7 @@ body.roster {
   }
 }
 
-@media (max-width: 780px) {
+@media (max-width: 735px) {
   #RosterControls.normal #CallsignsControls {
     display: none;
   }
@@ -285,7 +285,7 @@ body.roster {
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 735px) {
   #RosterControls.extended {
     margin-top: 7px;
     display: flex;

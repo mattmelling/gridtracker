@@ -469,16 +469,13 @@ function viewRoster()
     maxLoTWView.style.display = "none";
   }
 
-  if (window.opener.g_callsignLookups.eqslUseEnable == true)
-  { useseQSLDiv.style.display = ""; }
+  if (window.opener.g_callsignLookups.eqslUseEnable == true) useseQSLDiv.style.display = "";
   else useseQSLDiv.style.display = "none";
 
-  if (window.opener.g_callsignLookups.oqrsUseEnable == true)
-  { usesOQRSDiv.style.display = ""; }
+  if (window.opener.g_callsignLookups.oqrsUseEnable == true) usesOQRSDiv.style.display = "";
   else usesOQRSDiv.style.display = "none";
 
-  if (g_rosterSettings.columns.Spot == true)
-  { onlySpotDiv.style.display = ""; }
+  if (g_rosterSettings.columns.Spot == true) onlySpotDiv.style.display = "";
   else onlySpotDiv.style.display = "none";
 
   if (callMode == "all") allOnlyNewDiv.style.display = "";
@@ -494,10 +491,7 @@ function viewRoster()
     callRoster[callHash].callObj.reason = Array();
     callRoster[callHash].callObj.awardReason = "Callsign";
 
-    if (
-      now - callRoster[callHash].callObj.age >
-      window.opener.g_mapSettings.rosterTime
-    )
+    if (now - callRoster[callHash].callObj.age > window.opener.g_mapSettings.rosterTime)
     {
       callRoster[callHash].tx = false;
       callRoster[callHash].alerted = false;
@@ -505,10 +499,7 @@ function viewRoster()
       callRoster[callHash].callObj.reset = true;
       continue;
     }
-    if (
-      window.opener.g_instances[callRoster[callHash].callObj.instance]
-        .crEnable == false
-    )
+    if (window.opener.g_instances[callRoster[callHash].callObj.instance].crEnable == false)
     {
       callRoster[callHash].tx = false;
       continue;
@@ -520,10 +511,7 @@ function viewRoster()
     }
     if (
       callRoster[callHash].DXcall + " from All" in g_blockedCQ ||
-      callRoster[callHash].DXcall +
-        " from " +
-        window.opener.g_dxccToAltName[callRoster[callHash].callObj.dxcc] in
-        g_blockedCQ
+      callRoster[callHash].DXcall + " from " + window.opener.g_dxccToAltName[callRoster[callHash].callObj.dxcc] in g_blockedCQ
     )
     {
       callRoster[callHash].tx = false;
@@ -534,18 +522,12 @@ function viewRoster()
       callRoster[callHash].tx = false;
       continue;
     }
-    if (
-      g_rosterSettings.cqOnly == true &&
-      callRoster[callHash].callObj.CQ == false
-    )
+    if (g_rosterSettings.cqOnly == true && callRoster[callHash].callObj.CQ == false)
     {
       callRoster[callHash].tx = false;
       continue;
     }
-    if (
-      g_rosterSettings.useRegex &&
-      g_rosterSettings.callsignRegex.length > 0
-    )
+    if (g_rosterSettings.useRegex && g_rosterSettings.callsignRegex.length > 0)
     {
       try
       {
@@ -557,42 +539,27 @@ function viewRoster()
       }
       catch (e) {}
     }
-    if (
-      g_rosterSettings.requireGrid == true &&
-      callRoster[callHash].callObj.grid.length != 4
-    )
+    if (g_rosterSettings.requireGrid == true && callRoster[callHash].callObj.grid.length != 4)
     {
       callRoster[callHash].tx = false;
       continue;
     }
-    if (
-      g_rosterSettings.wantMinDB == true &&
-      callRoster[callHash].message.SR < g_rosterSettings.minDb
-    )
+    if (g_rosterSettings.wantMinDB == true && callRoster[callHash].message.SR < g_rosterSettings.minDb)
     {
       callRoster[callHash].tx = false;
       continue;
     }
-    if (
-      g_rosterSettings.wantMaxDT == true &&
-      Math.abs(callRoster[callHash].message.DT) > g_rosterSettings.maxDT
-    )
+    if (g_rosterSettings.wantMaxDT == true && Math.abs(callRoster[callHash].message.DT) > g_rosterSettings.maxDT)
     {
       callRoster[callHash].tx = false;
       continue;
     }
-    if (
-      g_rosterSettings.wantMinFreq == true &&
-      callRoster[callHash].message.DF < g_rosterSettings.minFreq
-    )
+    if (g_rosterSettings.wantMinFreq == true && callRoster[callHash].message.DF < g_rosterSettings.minFreq)
     {
       callRoster[callHash].tx = false;
       continue;
     }
-    if (
-      g_rosterSettings.wantMaxFreq == true &&
-      callRoster[callHash].message.DF > g_rosterSettings.maxFreq
-    )
+    if (g_rosterSettings.wantMaxFreq == true && callRoster[callHash].message.DF > g_rosterSettings.maxFreq)
     {
       callRoster[callHash].tx = false;
       continue;
@@ -602,9 +569,7 @@ function viewRoster()
     {
       try
       {
-        if (
-          callRoster[callHash].callObj.msg.match(g_rosterSettings.noMsgValue)
-        )
+        if (callRoster[callHash].callObj.msg.match(g_rosterSettings.noMsgValue))
         {
           callRoster[callHash].tx = false;
           continue;
@@ -616,9 +581,7 @@ function viewRoster()
     {
       try
       {
-        if (
-          !callRoster[callHash].callObj.msg.match(g_rosterSettings.onlyMsgValue)
-        )
+        if (!callRoster[callHash].callObj.msg.match(g_rosterSettings.onlyMsgValue))
         {
           callRoster[callHash].tx = false;
           continue;
@@ -644,10 +607,7 @@ function viewRoster()
       }
     }
 
-    if (
-      window.opener.g_callsignLookups.lotwUseEnable == true &&
-      g_rosterSettings.usesLoTW == true
-    )
+    if (window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.usesLoTW == true)
     {
       if (!(call in window.opener.g_lotwCallsigns))
       {
@@ -665,10 +625,7 @@ function viewRoster()
       }
     }
 
-    if (
-      window.opener.g_callsignLookups.eqslUseEnable == true &&
-      g_rosterSettings.useseQSL == true
-    )
+    if (window.opener.g_callsignLookups.eqslUseEnable == true && g_rosterSettings.useseQSL == true)
     {
       if (!(call in window.opener.g_eqslCallsigns))
       {
@@ -677,10 +634,7 @@ function viewRoster()
       }
     }
 
-    if (
-      window.opener.g_callsignLookups.oqrsUseEnable == true &&
-      g_rosterSettings.usesOQRS == true
-    )
+    if (window.opener.g_callsignLookups.oqrsUseEnable == true && g_rosterSettings.usesOQRS == true)
     {
       if (!(call in window.opener.g_oqrsCallsigns))
       {
@@ -691,10 +645,7 @@ function viewRoster()
 
     if (callMode != "all")
     {
-      if (
-        callRoster[callHash].DXcall == "CQ DX" &&
-        callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC
-      )
+      if (callRoster[callHash].DXcall == "CQ DX" && callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC)
       {
         callRoster[callHash].tx = false;
         continue;
@@ -730,10 +681,7 @@ function viewRoster()
           callRoster[callHash].tx = false;
           continue;
         }
-        if (
-          g_rosterSettings.huntNeed == "confirmed" &&
-          hash in g_confirmed.grid
-        )
+        if (g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.grid)
         {
           callRoster[callHash].tx = false;
           continue;
@@ -760,10 +708,7 @@ function viewRoster()
           continue;
         }
 
-        if (
-          g_rosterSettings.huntNeed == "confirmed" &&
-          hash in g_confirmed.dxcc
-        )
+        if (g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.dxcc)
         {
           callRoster[callHash].tx = false;
           continue;
@@ -801,10 +746,7 @@ function viewRoster()
           continue;
         }
 
-        if (
-          g_rosterSettings.huntNeed == "confirmed" &&
-          hash in g_confirmed.px
-        )
+        if (g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.px)
         {
           callRoster[callHash].tx = false;
           continue;
@@ -997,16 +939,10 @@ function viewRoster()
   for (var callHash in callRoster)
   {
     // Special case check for called station
-    if (
-      callRoster[callHash].callObj.qrz == true &&
-      callRoster[callHash].tx == false
-    )
+    if (callRoster[callHash].callObj.qrz == true && callRoster[callHash].tx == false)
     {
       // The instance has to be enabled
-      if (
-        window.opener.g_instances[callRoster[callHash].callObj.instance]
-          .crEnable == true
-      )
+      if (window.opener.g_instances[callRoster[callHash].callObj.instance].crEnable == true)
       {
         // Calling us, but we wouldn't normally display
         // If they are not ignored or we're in a QSO with them, var it through
@@ -1023,10 +959,7 @@ function viewRoster()
       }
     }
 
-    if (
-      callRoster[callHash].callObj.dxcc != -1 &&
-      callRoster[callHash].tx == true
-    )
+    if (callRoster[callHash].callObj.dxcc != -1 && callRoster[callHash].tx == true)
     {
       var workHash = hashMaker(
         callRoster[callHash].callObj.band,
@@ -1108,11 +1041,7 @@ function viewRoster()
 
       if (callMode == "all")
       {
-        if (
-          allOnlyNew.checked == true &&
-          didWork &&
-          callRoster[callHash].callObj.qrz == false
-        )
+        if (allOnlyNew.checked == true && didWork && callRoster[callHash].callObj.qrz == false)
         {
           callRoster[callHash].tx = false;
           continue;

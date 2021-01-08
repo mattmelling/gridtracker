@@ -132,6 +132,14 @@ var g_defaultSettings = {
   lastSortReverse: 1
 };
 
+const LOGBOOK_LIVE_BAND_LIVE_MODE = 0
+const LOGBOOK_LIVE_BAND_MIX_MODE = 1
+const LOGBOOK_LIVE_BAND_DIGI_MODE = 2
+const LOGBOOK_MIX_BAND_LIVE_MODE = 3
+const LOGBOOK_MIX_BAND_MIX_MODE = 4
+const LOGBOOK_MIX_BAND_DIGI_MODE = 5
+const LOGBOOK_AWARD_TRACKER = 6
+
 document.addEventListener("dragover", function (event)
 {
   event.preventDefault();
@@ -393,26 +401,23 @@ function showRosterBox(sortIndex)
   window.opener.goProcessRoster();
 }
 
-function hashMaker(band, mode)
+function hashMaker(start, callObj, reference)
 {
-  // "Current Band & Mode"
-  if (g_rosterSettings.reference == 0 || g_rosterSettings.reference == 6)
-  { return band + mode; }
+  if (reference == LOGBOOK_LIVE_BAND_LIVE_MODE) return `${start}${callObj.band}${callObj.mode}`;
 
-  // "Current Band, Any Mode"
-  if (g_rosterSettings.reference == 1) return band;
+  if (reference == LOGBOOK_AWARD_TRACKER) return `${start}${callObj.band}${callObj.mode}`;
 
-  // "Current Band, Any Digi Mode"
-  if (g_rosterSettings.reference == 2) return band + "dg";
+  if (reference == LOGBOOK_LIVE_BAND_MIX_MODE) return `${start}${callObj.band}`;
 
-  // "Current Mode, Any Band"
-  if (g_rosterSettings.reference == 3) return mode;
+  if (reference == LOGBOOK_LIVE_BAND_DIGI_MODE) return `${start}${callObj.band}dg`;
 
-  // "Any Band, Any Mode"
-  if (g_rosterSettings.reference == 4) return "";
+  if (reference == LOGBOOK_MIX_BAND_LIVE_MODE) return `${start}${callObj.mode}`;
 
-  // "Any Band, Any Digi Mode"
-  if (g_rosterSettings.reference == 5) return "dg";
+  if (reference == LOGBOOK_MIX_BAND_MIX_MODE) return `${start}`;
+
+  if (reference == LOGBOOK_MIX_BAND_DIGI_MODE) return `${start}dg`;
+
+  return "";
 }
 
 function processRoster(roster)
@@ -435,7 +440,7 @@ function viewRoster()
     callMode = "all";
     onlyHits = true;
   }
-  if (referenceNeed.value == 6)
+  if (referenceNeed.value == LOGBOOK_AWARD_TRACKER)
   {
     callMode = "all";
     onlyHits = false;
@@ -651,12 +656,7 @@ function viewRoster()
         continue;
       }
 
-      var hash =
-        call +
-        hashMaker(
-          callRoster[callHash].callObj.band,
-          callRoster[callHash].callObj.mode
-        );
+      var hash = hashMaker(call, callRoster[callHash].callObj, g_rosterSettings.reference);
       if (callMode == "worked" && hash in g_worked.call)
       {
         callRoster[callHash].tx = false;
@@ -670,12 +670,8 @@ function viewRoster()
 
       if (g_rosterSettings.hunting == "grid")
       {
-        var hash =
-          callRoster[callHash].callObj.grid.substr(0, 4) +
-          hashMaker(
-            callRoster[callHash].callObj.band,
-            callRoster[callHash].callObj.mode
-          );
+        var hash = hashMaker(callRoster[callHash].callObj.grid.substr(0, 4),
+          callRoster[callHash].callObj, g_rosterSettings.reference);
         if (g_rosterSettings.huntNeed == "worked" && hash in g_worked.grid)
         {
           callRoster[callHash].tx = false;
@@ -695,12 +691,8 @@ function viewRoster()
       }
       if (g_rosterSettings.hunting == "dxcc")
       {
-        var hash =
-          String(callRoster[callHash].callObj.dxcc) +
-          hashMaker(
-            callRoster[callHash].callObj.band,
-            callRoster[callHash].callObj.mode
-          );
+        var hash = hashMaker(String(callRoster[callHash].callObj.dxcc),
+          callRoster[callHash].callObj, g_rosterSettings.reference);
 
         if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.dxcc))
         {
@@ -733,12 +725,8 @@ function viewRoster()
           callRoster[callHash].tx = false;
           continue;
         }
-        var hash =
-          String(callRoster[callHash].callObj.px) +
-          hashMaker(
-            callRoster[callHash].callObj.band,
-            callRoster[callHash].callObj.mode
-          );
+        var hash = hashMaker(String(callRoster[callHash].callObj.px),
+          callRoster[callHash].callObj, g_rosterSettings.reference);
 
         if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.px))
         {
@@ -767,12 +755,9 @@ function viewRoster()
         var workedFound = (confirmedFound = 0);
         for (index in callRoster[callHash].callObj.cqza)
         {
-          var hash =
-            callRoster[callHash].callObj.cqza[index] +
-            hashMaker(
-              callRoster[callHash].callObj.band,
-              callRoster[callHash].callObj.mode
-            );
+          var hash = hashMaker(callRoster[callHash].callObj.cqza[index],
+            callRoster[callHash].callObj, g_rosterSettings.reference);
+
           if (hash in g_worked.cqz) workedFound++;
 
           if (hash in g_confirmed.cqz) confirmedFound++;
@@ -809,12 +794,9 @@ function viewRoster()
         var workedFound = (confirmedFound = 0);
         for (index in callRoster[callHash].callObj.ituza)
         {
-          var hash =
-            callRoster[callHash].callObj.ituza[index] +
-            hashMaker(
-              callRoster[callHash].callObj.band,
-              callRoster[callHash].callObj.mode
-            );
+          var hash = hashMaker(callRoster[callHash].callObj.ituza[index],
+            callRoster[callHash].callObj, g_rosterSettings.reference);
+
           if (hash in g_worked.ituz) workedFound++;
 
           if (hash in g_confirmed.ituz) confirmedFound++;
@@ -854,12 +836,7 @@ function viewRoster()
         {
           if (state in window.opener.g_StateData)
           {
-            var hash =
-              state +
-              hashMaker(
-                callRoster[callHash].callObj.band,
-                callRoster[callHash].callObj.mode
-              );
+            var hash = hashMaker(state, callRoster[callHash].callObj, g_rosterSettings.reference);
 
             if (
               g_rosterSettings.huntNeed == "worked" &&
@@ -903,10 +880,8 @@ function viewRoster()
     if (isAwardTracker)
     {
       var tx = false;
-      var baseHash = hashMaker(
-        callRoster[callHash].callObj.band,
-        callRoster[callHash].callObj.mode
-      );
+      var baseHash = hashMaker("", callRoster[callHash].callObj, g_rosterSettings.reference);
+
       for (var award in g_awardTracker)
       {
         if (g_awardTracker[award].enable)
@@ -961,10 +936,7 @@ function viewRoster()
 
     if (callRoster[callHash].callObj.dxcc != -1 && callRoster[callHash].tx == true)
     {
-      var workHash = hashMaker(
-        callRoster[callHash].callObj.band,
-        callRoster[callHash].callObj.mode
-      );
+      var workHash = hashMaker("", callRoster[callHash].callObj, g_rosterSettings.reference);
 
       var call = callRoster[callHash].DEcall;
       var testHash = call + workHash;
@@ -2727,7 +2699,7 @@ function setVisual()
   }
 
   // Award Hunter
-  if (referenceNeed.value == 6)
+  if (referenceNeed.value == LOGBOOK_AWARD_TRACKER)
   {
     /* for ( key in g_rosterSettings.wanted )
     {

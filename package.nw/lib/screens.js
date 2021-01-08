@@ -82,7 +82,6 @@ var g_isShowing = false;
 
 nw.Window.get().on("loaded", function ()
 {
-  s_title = document.title.substr(0, 16).trim();
   g_isShowing = false;
   if (typeof localStorage.screenSettings == "undefined")
   {
@@ -101,7 +100,7 @@ nw.Window.get().on("loaded", function ()
   g_isShowing = s_screenSettings[s_title].showing;
   nw.Window.get().zoomLevel = s_zoomLevel = s_screenSettings[s_title].zoomLevel;
 
-  if (g_isShowing || s_title == "GridTracker ©202") this.show();
+  if (g_isShowing || document.title == "GridTracker") this.show();
   else this.hide();
 
   g_initialScreenCount = nw.Screen.screens.length;

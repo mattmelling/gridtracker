@@ -139,6 +139,8 @@ const LOGBOOK_MIX_BAND_LIVE_MODE = 3
 const LOGBOOK_MIX_BAND_MIX_MODE = 4
 const LOGBOOK_MIX_BAND_DIGI_MODE = 5
 const LOGBOOK_AWARD_TRACKER = 6
+const LOGBOOK_LAYERED_MIX_MODE = 7
+const LOGBOOK_LAYERED_DIGI_MODE = 8
 
 document.addEventListener("dragover", function (event)
 {
@@ -416,6 +418,10 @@ function hashMaker(start, callObj, reference)
   if (reference == LOGBOOK_MIX_BAND_MIX_MODE) return `${start}`;
 
   if (reference == LOGBOOK_MIX_BAND_DIGI_MODE) return `${start}dg`;
+
+  if (reference == LOGBOOK_LAYERED_MIX_MODE) return `${start}`;
+
+  if (reference == LOGBOOK_LAYERED_DIGI_MODE) return `${start}dg`;
 
   return "";
 }

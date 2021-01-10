@@ -82,7 +82,7 @@ var g_isShowing = false;
 
 nw.Window.get().on("loaded", function ()
 {
-  // Use the first 16 bytes of the title(trimmed) as storage names 
+  // Use the first 16 bytes of the title(trimmed) as storage names
   // This cannot be changed as current installs (12,000+) use this naming convention
   s_title = document.title.substr(0, 16).trim();
   g_isShowing = false;
@@ -105,11 +105,11 @@ nw.Window.get().on("loaded", function ()
 
   // Check the first part of the string, only one window has "GridTracker" in the name.
   // It is reserved to the main app window.
-  if (g_isShowing || s_title.indexOf("GridTracker") == 0 )
+  if (g_isShowing || s_title.indexOf("GridTracker") == 0)
   {
     this.show();
   }
-  else 
+  else
   {
     this.hide();
   }

@@ -4430,7 +4430,7 @@ function changeStrikesAlert()
 
 function playStrikeAlert()
 {
-  switch (g_mapSettings.strikesAlert)
+  switch (Number(g_mapSettings.strikesAlert))
   {
     case 1:
       playAlertMediaFile("short-strike.wav", true);

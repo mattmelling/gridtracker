@@ -1860,17 +1860,13 @@ function viewRoster()
       if (g_rosterSettings.columns.DXCC)
       {
         worker +=
-          "<td name='DXCC (" +
+          "<td title='" + window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[newCallList[x].dxcc]].pp +
+          "' name='DXCC (" +
           newCallList[x].dxcc +
           ")' " +
           newCallList[x].style.dxcc +
           ">" +
-          window.opener.g_dxccToAltName[newCallList[x].dxcc] +
-          " (" +
-          window.opener.g_worldGeoData[
-            window.opener.g_dxccToGeoData[newCallList[x].dxcc]
-          ].pp +
-          ")</td>";
+          window.opener.g_dxccToAltName[newCallList[x].dxcc] + "</td>";
       }
       if (g_rosterSettings.columns.Flag)
       {

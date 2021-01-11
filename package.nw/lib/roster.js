@@ -430,8 +430,6 @@ function viewRoster()
   var onlyHits = false;
   var isAwardTracker = false;
 
-  document.title = window.opener.makeTitleInfo(false);
-
   if (callMode == "hits")
   {
     callMode = "all";

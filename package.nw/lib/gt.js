@@ -14088,6 +14088,7 @@ function lookupValueChanged(what)
     }
   }
   g_appSettings.lookupService = lookupService.value;
+  g_appSettings.lookupCallookPreferred = lookupCallookPreferred.value;
   lookupQrzTestResult.innerHTML = "";
   g_qrzLookupSessionId = null;
   if (lookupService.value == "CALLOOK")
@@ -14150,6 +14151,29 @@ function continueWithLookup(callsign, gridPass)
     "lookupInfoDiv",
     "Looking up <font color='cyan'>" + callsign + "</font>, please wait..."
   );
+
+  if (g_appSettings.lookupCallookPreferred) {
+    var dxcc = callsignToDxcc(callsign);
+    var where;
+    var ccode = 0;
+    if (dxcc in g_dxccToAltName)
+    {
+      where = g_dxccToAltName[dxcc];
+      ccode = g_worldGeoData[g_dxccToGeoData[dxcc]].ccode;
+    }
+    else where = "Unknown";
+    if (ccode == 840)
+    {
+      getBuffer(
+        "https://callook.info/" + callsign + "/json",
+        callookResults,
+        gridPass,
+        "https",
+        443,
+        true
+      );
+    }
+  }
   if (g_appSettings.lookupService != "CALLOOK")
   {
     g_qrzLookupCallsign = callsign;

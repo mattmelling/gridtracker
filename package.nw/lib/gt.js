@@ -10060,8 +10060,23 @@ function createDistanceTable(obj, name)
 
 function numberSort(a, b)
 {
-  if (parseInt(a) > parseInt(b)) return 1;
-  if (parseInt(b) > parseInt(a)) return -1;
+  // cut off 'm' from 80m or 70cm
+  var metersA = a.slice(0, -1);
+  var metersB = b.slice(0, -1);
+
+  // if last letter is c we have a centimeter band, multiply value with 0.01
+  if (metersA.slice(-1) == "c") {
+    metersA = 0.01 * parseInt(metersA);
+  } else {
+    metersA = parseInt(metersA);
+  }
+  if (metersB.slice(-1) == "c") {
+    metersB = 0.01 * parseInt(metersB);
+  } else {
+    metersA = parseInt(metersA);
+  }
+  if (metersA > metersB) return 1;
+  if (metersB > metersA) return -1;
   return 0;
 }
 

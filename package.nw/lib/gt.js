@@ -10065,14 +10065,20 @@ function numberSort(a, b)
   var metersB = b.slice(0, -1);
 
   // if last letter is c we have a centimeter band, multiply value with 0.01
-  if (metersA.slice(-1) == "c") {
+  if (metersA.slice(-1) == "c")
+  {
     metersA = 0.01 * parseInt(metersA);
-  } else {
+  }
+  else
+  {
     metersA = parseInt(metersA);
   }
-  if (metersB.slice(-1) == "c") {
+  if (metersB.slice(-1) == "c")
+  {
     metersB = 0.01 * parseInt(metersB);
-  } else {
+  }
+  else
+  {
     metersA = parseInt(metersA);
   }
   if (metersA > metersB) return 1;

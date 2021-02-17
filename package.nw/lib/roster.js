@@ -1889,13 +1889,14 @@ function viewRoster()
           newCallList[x].style.cnty +
           " " +
           (newCallList[x].cnty
-            ? newCallList[x].qual
+            ? (newCallList[x].qual
                 ? ""
                 : "onClick='window.opener.lookupCallsign(\"" +
-                thisCall +
-                "\",\"" +
-                grid +
-                "\")'"
+                  thisCall +
+                  "\",\"" +
+                  grid +
+                  "\")'"
+              )
             : "") +
           ">" +
           (newCallList[x].cnty
@@ -4030,8 +4031,8 @@ function processAward(awardName)
       g_awardTracker[awardName].name
     ].rule
       ? g_awards[g_awardTracker[awardName].sponsor].awards[
-          g_awardTracker[awardName].name
-        ].rule.qsl_req == "confirmed"
+        g_awardTracker[awardName].name
+      ].rule.qsl_req == "confirmed"
       : g_awards[g_awardTracker[awardName].sponsor].qsl_req == "confirmed";
 
   test.look = "confirmed";
@@ -4042,8 +4043,8 @@ function processAward(awardName)
       g_awardTracker[awardName].name
     ].rule
       ? g_awards[g_awardTracker[awardName].sponsor].awards[
-          g_awardTracker[awardName].name
-        ].rule.qsl_req
+        g_awardTracker[awardName].name
+      ].rule.qsl_req
       : g_awards[g_awardTracker[awardName].sponsor].qsl_req;
 
   test.DEcall = "call" in award.rule;

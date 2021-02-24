@@ -431,6 +431,7 @@ var g_wacZones = {};
 var g_wasZones = {};
 var g_ituZones = {};
 var g_dxccCount = {};
+var g_unconfirmedCalls = new Map();
 
 var g_tracker = {};
 
@@ -615,6 +616,41 @@ var g_soundCard = g_appSettings.soundCard;
 var g_gridAlpha = "88";
 
 if (typeof g_mapMemory[6] == "undefined") g_mapMemory[6] = g_mapMemory[0];
+
+class UnconfirmedCallsKey
+{
+  constructor(dxcc, band)
+  {
+    this._DXCC = dxcc;
+    this._BAND = band;
+  }
+
+  get dxcc()
+  {
+    return parseInt(this._DXCC);
+  }
+
+  set dxcc(dxcc)
+  {
+    this._DXCC = dxcc;
+  }
+
+  get band()
+  {
+    return this._BAND;
+  }
+
+  set band(band)
+  {
+    this._BAND = band;
+  }
+
+  get key()
+  {
+    return Symbol.for(`UnconfirmedCallsKey[${this.dxcc}:${this.band}]`);
+  }
+}
+var unconfirmedCallsSentinel = new UnconfirmedCallsKey(0, "");
 
 function qsoBackupFileInit()
 {
@@ -2082,7 +2118,7 @@ function createTooltTipTable(toolElement)
   }
   else
   {
-    if (Object.keys(toolElement.liveHash).length > 0)
+    if (toolElement.liveHash != null && Object.keys(toolElement.liveHash).length > 0)
     {
       worker +=
         "<tr align='center'><td>Call</td><td>Freq</td><td>Sent</td><td>Rcvd</td><td>Station</td><td>Mode</td><td>Band</td><td>Last Msg</td><td>DXCC</td><td>Time</td>";
@@ -2196,6 +2232,124 @@ function createTooltTipTable(toolElement)
   return newCallList.length;
 }
 
+// creates table for filling the pop-up winodw with log entries of unconfirmed qsos.
+function createTooltTipTableLogbook(toolElement)
+{
+  var myTooltip = document.getElementById("myTooltip");
+  var colspan = 10;
+  if (g_callsignLookups.lotwUseEnable == true) colspan++;
+  if (g_callsignLookups.eqslUseEnable == true) colspan++;
+  if (g_callsignLookups.oqrsUseEnable == true) colspan++;
+  if (toolElement.qso == true) colspan += 2;
+
+  var worker =
+    "<table id='tooltipTable' class='darkTable' ><tr><th colspan=" +
+    colspan +
+    " style='color:cyan'>" +
+    "Logbook entries" +
+    "</th></tr>";
+
+  worker +=
+    "<tr align='center'><td>Call</td><td>Freq</td><td>Sent</td><td>Rcvd</td><td>Station</td><td>Mode</td><td>Band</td><td>DXCC</td><td>Time</td>";
+
+  if (g_callsignLookups.lotwUseEnable == true) worker += "<td>LoTW</td>";
+  if (g_callsignLookups.eqslUseEnable == true) worker += "<td>eQSL</td>";
+  if (g_callsignLookups.oqrsUseEnable == true) worker += "<td>OQRS</td>";
+  worker += "</tr>";
+
+  var newCallList = Array();
+
+  toolElement.forEach(function (value, key, set)
+  {
+    newCallList.push(value);
+  });
+  newCallList.sort(compareCallsignTime).reverse();
+  for (var x = 0; x < newCallList.length; x++)
+  {
+    var callsign = newCallList[x];
+    var bgDX = " style='font-weight:bold;color:cyan;' ";
+    var bgDE = " style='font-weight:bold;color:yellow;' ";
+    if (callsign.DXcall == myDEcall)
+    { bgDX = " style='background-color:cyan;color:#000;font-weight:bold' "; }
+    if (callsign.DEcall == myDEcall)
+    { bgDE = " style='background-color:#FFFF00;color:#000;font-weight:bold' "; }
+    var ageString = "";
+    if (timeNowSec() - callsign.time < 3601)
+    { ageString = (timeNowSec() - callsign.time).toDHMS(); }
+    else
+    {
+      ageString = userTimeString(callsign.time * 1000);
+    }
+    worker += "<tr><td" + bgDE + ">";
+    worker +=
+      "<div style='display:inline-table;cursor:pointer' onclick='startLookup(\"" +
+      callsign.DEcall +
+      "\",\"" +
+      toolElement.qth +
+      "\");' >" +
+      callsign.DEcall.formatCallsign() +
+      "</div>";
+    worker += "</td>";
+    worker += "<td>" + (callsign.delta > -1 ? callsign.delta : "-") + "</td>";
+    worker += "<td>" + callsign.RSTsent + "</td>";
+    worker += "<td>" + callsign.RSTrecv + "</td>" + "<td" + bgDX + ">";
+    if (callsign.DXcall.indexOf("CQ") == 0 || callsign.DXcall == "-")
+    { worker += callsign.DXcall.formatCallsign(); }
+    else
+    {
+      worker +=
+        "<div  style='display:inline-table;cursor:pointer' onclick='startLookup(\"" +
+        callsign.DXcall +
+        "\",null);' >" +
+        callsign.DXcall.formatCallsign() +
+        "</div>";
+    }
+    worker +=
+      "</td>" +
+      "<td style='color:lightblue'>" +
+      callsign.mode +
+      "</td>" +
+      "<td style='color:lightgreen'>" +
+      callsign.band +
+      "</td>";
+    worker +=
+      "<td style='color:yellow'>" +
+      g_dxccToAltName[callsign.dxcc] +
+      " <font color='lightgreen'>(" +
+      g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].pp +
+      ")</font></td>" +
+      "<td align='center' style='color:lightblue' >" +
+      ageString +
+      "</td>";
+    if (g_callsignLookups.lotwUseEnable == true)
+    {
+      worker +=
+        "<td align='center'>" +
+        (callsign.DEcall in g_lotwCallsigns ? "&#10004;" : "") +
+        "</td>";
+    }
+    if (g_callsignLookups.eqslUseEnable == true)
+    {
+      worker +=
+        "<td align='center'>" +
+        (callsign.DEcall in g_eqslCallsigns ? "&#10004;" : "") +
+        "</td>";
+    }
+    if (g_callsignLookups.oqrsUseEnable == true)
+    {
+      worker +=
+        "<td align='center'>" +
+        (callsign.DEcall in g_oqrsCallsigns ? "&#10004;" : "") +
+        "</td>";
+    }
+    worker += "</tr>";
+  }
+  worker += "</table>";
+  myTooltip.innerHTML = worker;
+  g_passingToolTipTableString = worker;
+  return newCallList.length;
+}
+
 function renderTooltipWindow(feature)
 {
   if (g_popupWindowHandle != null)
@@ -2216,6 +2370,33 @@ function renderTooltipWindow(feature)
       g_popupWindowHandle.height = parseInt(positionInfo.height) + 50;
     }
     catch (e) {}
+  }
+}
+
+// renders the pop-window for logbook entries of unconfirmed qsos.
+function renderTooltipWindowLogbook(logbookEntries)
+{
+  if (g_popupWindowHandle != null)
+  {
+    try
+    {
+      createTooltTipTableLogbook(logbookEntries);
+      var adif = g_popupWindowHandle.window.document.getElementById(
+        "adifTable"
+      );
+      adif.innerHTML = g_passingToolTipTableString;
+      var myTooltip = document.getElementById("myTooltip");
+      var positionInfo = myTooltip.getBoundingClientRect();
+      g_popupWindowHandle.show();
+      g_popupWindowHandle.focus();
+
+      g_popupWindowHandle.width = parseInt(positionInfo.width) + 20;
+      g_popupWindowHandle.height = parseInt(positionInfo.height) + 50;
+    }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -8009,6 +8190,34 @@ function showWorkedBox(sortIndex, nextPage, redraw)
     {
       bands[list[key].band] = list[key].band;
       modes[list[key].mode] = list[key].mode;
+      var unconfirmedCallsKey = new UnconfirmedCallsKey(list[key].dxcc, list[key].band);
+      if (
+        g_unconfirmedCalls.has(unconfirmedCallsKey.key) &&
+         list[key].confirmed
+      )
+      {
+        g_unconfirmedCalls.set(unconfirmedCallsKey.key, unconfirmedCallsSentinel);
+      }
+      else if (
+        !list[key].confirmed &&
+        // check for sentinel object -- confirmed country. key needs to be kept in here so that
+        // an recent unconfirmed qso doesn't mark the key as unconfirmed
+        g_unconfirmedCalls.get(unconfirmedCallsKey.key) != unconfirmedCallsSentinel
+      )
+      {
+        var logs = g_unconfirmedCalls.get(unconfirmedCallsKey.key);
+        if (logs == undefined)
+        {
+          logs = new Set();
+          logs.add(list[key]);
+          g_unconfirmedCalls.set(unconfirmedCallsKey.key, logs);
+        }
+        else if (!logs.has(list[key]))
+        {
+          logs.add(list[key]);
+        }
+      }
+
       var pp =
         g_dxccToGeoData[list[key].dxcc] in g_worldGeoData
           ? g_worldGeoData[g_dxccToGeoData[list[key].dxcc]].pp
@@ -8506,13 +8715,13 @@ function showDXCCsBox()
       .sort()
       .forEach(function (key, i)
       {
-        var confirmed = List[key].confirmed
+        var rowStyle = List[key].confirmed
           ? ""
           : "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
+        var rowAttributes = List[key].confirmed ? "" : "id='unconfirmed" + List[key].dxcc + "Id'";
+
         worker +=
-          "<tr><td align=left style='color:#ff0;" +
-          confirmed +
-          "' >" +
+          "<tr><td align=left style='color:#ff0;" + rowStyle + "' " + rowAttributes + ">" +
           key +
           "</td>";
 
@@ -8580,6 +8789,61 @@ function showDXCCsBox()
     worker += "</table></div>";
   }
   setStatsDiv("dxccListDiv", worker);
+
+  Object.keys(List).forEach(function (key, i)
+  {
+    var band =
+          g_appSettings.gtBandFilter == "auto"
+            ? myBand
+            : g_appSettings.gtBandFilter.length == 0
+              ? ""
+              : g_appSettings.gtBandFilter;
+    var unconfirmedCallsKey = new UnconfirmedCallsKey(List[key].dxcc, band);
+    if (g_unconfirmedCalls.has(unconfirmedCallsKey.key) &&
+          g_unconfirmedCalls.get(unconfirmedCallsKey.key) != unconfirmedCallsSentinel
+    )
+    {
+      var onMousedown = function (e)
+      {
+        if (e.which === 1)
+        {
+          if (g_popupWindowHandle == null)
+          {
+            popupNewWindows();
+            var gui = require("nw.gui");
+            gui.Window.open(
+              "gt_popup.html",
+              {
+                show: false,
+                id: "GT-popup"
+              },
+              function (new_win)
+              {
+                g_popupWindowHandle = new_win;
+                new_win.on("loaded", function ()
+                {
+                  g_popupWindowHandle.show();
+                  renderTooltipWindowLogbook(g_unconfirmedCalls.get(unconfirmedCallsKey.key));
+                });
+                new_win.on("close", function ()
+                {
+                  g_popupWindowHandle.hide();
+                });
+              }
+            );
+            lockNewWindows();
+          }
+          else
+          {
+            renderTooltipWindowLogbook(g_unconfirmedCalls.get(unconfirmedCallsKey.key));
+          }
+        }
+      };
+      var unconfirmedTd = g_statsWindowHandle.window.document.getElementById("unconfirmed" + List[key].dxcc + "Id");
+      if (unconfirmedTd != null)
+      { unconfirmedTd.addEventListener("mousedown", onMousedown); }
+    }
+  });
 }
 
 function showCQzoneBox()

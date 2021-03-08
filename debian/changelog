@@ -1,3 +1,29 @@
+gridtracker (1.21.0307) unstable; urgency=medium
+
+  [ Paul Traina ]
+  * Cleaned up the title bar to show context information
+  * GT now recognizes JTDX on Mac
+  * PSK-Spot layer merged with Live/Logbook Grids by default
+  * Inputs in settings sanitized
+  * Fix spots when in realtime mode
+  * Added CQ zone name in reports
+  [ Tag Loomis ]
+  * Roster context menu active on entire window
+  * remote station distance and azimuth in lookup if available
+  [ Sebastian Delmont ]
+  * Changed layout of roster controls and made it simpler to hide and show them
+  * Allow roster window to be as narrow as WSJT-X narrowest window size
+  [ Mattew Chambers ]
+  * Call Roster is now labeled "GridTracker" and contains partial layer
+    information
+  [ Christian Bayer ]
+  * Fixed ordering of centimeter bands in stats window
+  * Clicking an unconfirmed DXCC in stats window now shows relevant log entries
+    in pop up window
+  * New Callook preference setting. if checked, US callsigns will always be
+    queried from Callook since it usually has more data than free QRZ lookup
+  * fixed CR alert script not being triggered for Awared Tracker hits
+
 gridtracker (1.20.1118) unstable; urgency=low
 
   * GridTracker is now Open Source! Copyright assigned to GridTracker.org and

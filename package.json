@@ -13,7 +13,7 @@
     "test": "eslint package.nw",
     "lint-check": "eslint package.nw",
     "lint-fix": "eslint --fix package.nw",
-    "dist": "build --concurrent --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 package.nw",
+    "dist": "build --concurrent --tasks win-x86,linux-x86,linux-x64,mac-x64 package.nw",
     "distsome": "build --debug --tasks linux-x64,mac-x64 package.nw",
     "start": "run package.nw"
   }

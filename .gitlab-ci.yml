@@ -61,7 +61,7 @@ packaging:
     - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
   artifacts:
     paths:
-      - build/
+      - artifacts/
     name: '$CI_COMMIT_REF_SLUG'
   cache:
     paths:
@@ -72,46 +72,40 @@ packaging:
         - package.json
         - package.nw/package.json
   script:
-    - mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
-    - mkdir -p build/debian build/rpm
-    - dpkg --add-architecture i386
-    - apt-get -qq update
-    - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
-    - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
-    - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm
-    - apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
+    - |
+      mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
+      mkdir -p artifacts/{debian,rpm}
+      dpkg --add-architecture i386
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
+      apt-get -qq update
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
+      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
     - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
-    - echo "Building native packages"
-    - npm install --prefer-offline
-    - npm run dist
-    - for dir in dist/*-linux-* ; do if [ -d $dir ] ; then tar -C dist -cjf ${dir}.tar.bz `basename $dir` ; fi ; done
-    - (cd dist ; mv *.exe *-mac-x64.zip *.tar.bz ../build)
-    - echo "Building Debian packages"
-    - dpkg-buildpackage -uc -us
-    - mv ../*.{deb,dsc,buildinfo,tar.xz,changes} build/debian/
-    - echo "Building RPM packages"
-    - rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.spec
-    - mv $HOME/rpmbuild/RPMS/noarch/gridtracker-*.noarch.rpm build/rpm
-
-# copy the assets over to our distribution storage (testing, tag = test_.*)
-gs_upload_testing:
-  stage: deploy
-  image: google/cloud-sdk:alpine
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^(test_).*/ && $GCLOUD_SERVICE_ACCOUNT != "/dev/null"'
-  script:
-    - gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_ACCOUNT
-    - cd build; gsutil -m rsync -r . $GCLOUD_TESTING_DEPLOY_PATH
-
-# copy the assets over to our distribution storage (full release, tag = v.*)
-gs_upload_release:
-  stage: deploy
-  image: google/cloud-sdk:alpine
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^(v).*/ && $GCLOUD_SERVICE_ACCOUNT != "/dev/null"'
-  script:
-    - gcloud auth activate-service-account --key-file $GCLOUD_SERVICE_ACCOUNT
-    - cd build; gsutil -m rsync -r . $GCLOUD_RELEASE_DEPLOY_PATH
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
+      npm install --prefer-offline
+      npm run dist
+      for dir in dist/*-linux-* ; do if [ -d $dir ] ; then tar -C dist -cjf ${dir}.tar.bz `basename $dir` ; fi ; done
+      echo `pwd`
+      (cd dist ; mv *.exe *-mac-x64.zip *.tar.bz ../artifacts)
+      echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:debian_build\r\e[0KBuilding Debian packages"
+      echo `pwd`
+      dpkg-buildpackage -uc -us
+      echo `pwd`
+      mv ../*.{deb,dsc,buildinfo,tar.xz,changes} artifacts/debian/
+      echo -e "\e[0Ksection_end:`date +%s`:debian_build\r\e[0K"
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:rpm_build\r\e[0KBuilding RPM packages"
+      rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.spec
+      mv $HOME/rpmbuild/RPMS/noarch/gridtracker-*.noarch.rpm artifacts/rpm
+      ls -laR artifacts
+      echo -e "\e[0Ksection_end:`date +%s`:rpm_build\r\e[0K"
 
 # copy the assets over to our distribution storage (testing, tag = test_.*)
 s3_upload_testing:
@@ -120,7 +114,7 @@ s3_upload_testing:
   rules:
     - if: '$CI_COMMIT_TAG =~ /^(test_).*/ && $AWS_ACCESS_KEY_ID != ""'
   script:
-    - cd build; aws s3 sync . $AWS_TESTING_DEPLOY_PATH
+    - cd artifacts; aws s3 sync . $AWS_TESTING_DEPLOY_PATH
 
 # copy the assets over to our distribution storage (full release, tag = v.*)
 s3_upload_release:
@@ -129,7 +123,7 @@ s3_upload_release:
   rules:
     - if: '$CI_COMMIT_TAG =~ /^(v).*/ && $AWS_ACCESS_KEY_ID != ""'
   script:
-    - cd build; aws s3 sync . $AWS_RELEASE_DEPLOY_PATH
+    - cd artifacts; aws s3 sync . $AWS_RELEASE_DEPLOY_PATH
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now

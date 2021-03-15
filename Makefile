@@ -29,4 +29,4 @@ install:
 	install -Dcm 644 LICENSE $(DOC)/LICENSE
 	mkdir -p $(LIB)
 	cp -r package.nw/* $(LIB)
-
+	cp -r dist/*-linux-x64/* $(LIB)

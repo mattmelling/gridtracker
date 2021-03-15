@@ -7,8 +7,8 @@ Standards-Version: 4.3.0
 Homepage: http://gridtracker.org/
 
 Package: gridtracker
-Architecture: all
-Depends: nwjs (>= 0.47.4), fonts-noto, ${misc:Depends}
+Architecture: any
+Depends: ${misc:Depends}
 Recommends: speech-dispatcher-espeak-ng
 Description: Companion program to WSJT-X/JTDX
  .

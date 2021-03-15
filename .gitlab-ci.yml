@@ -13,11 +13,6 @@ variables:
   GCLOUD_SERVICE_ACCOUNT: /dev/null
   GCLOUD_RELEASE_DEPLOY_PATH: gs://download.gridtracker.org/release/$CI_COMMIT_TAG
   GCLOUD_TESTING_DEPLOY_PATH: gs://download.gridtracker.org/testing/$CI_COMMIT_TAG
-  AWS_ACCESS_KEY_ID: ""
-  AWS_SECRET_ACCESS_KEY: ""
-  AWS_DEFAULT_REGION: ""
-  AWS_RELEASE_DEPLOY_PATH: s3://download.gridtracker.org/release/$CI_COMMIT_TAG
-  AWS_TESTING_DEPLOY_PATH: s3://download.gridtracker.org/testing/$CI_COMMIT_TAG
   NR0Q_SERVER_ADDRESS: ""
   NR0Q_SERVER_PASSWORD: ""
 
@@ -243,24 +238,6 @@ nr0q_upload_release:
       done
       ssh -o StrictHostKeyChecking=no gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/
 
-# copy the assets over to our distribution storage (testing, tag = test_.*)
-s3_upload_testing:
-  stage: deploy
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^(test_).*/ && $AWS_ACCESS_KEY_ID != ""'
-  script:
-    - cd artifacts; aws s3 sync . $AWS_TESTING_DEPLOY_PATH
-
-# copy the assets over to our distribution storage (full release, tag = v.*)
-s3_upload_release:
-  stage: deploy
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^(v).*/ && $AWS_ACCESS_KEY_ID != ""'
-  script:
-    - cd artifacts; aws s3 sync . $AWS_RELEASE_DEPLOY_PATH
-
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now
 source_release:
@@ -276,6 +253,6 @@ source_release:
     assets:
       links:
         - name: Binary images for $CI_COMMIT_TAG
-          url: https://download.gridtracker.org/release/$CI_COMMIT_TAG/
+          url: https://fleetwood.mchambersradio.com/gridtracker/$CI_COMMIT_TAG/
   script:
     - echo 'Release for $CI_COMMIT_TAG'

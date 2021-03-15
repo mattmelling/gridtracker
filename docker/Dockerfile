@@ -8,7 +8,7 @@ RUN dpkg --add-architecture i386 && \
     apt-get install -y npm wine wine32 && \
     apt-get install -y build-essential devscripts lintian diffutils patch \
             patchutils quilt git && \
-    apt-get install -y rpm
+    apt-get install -y rpm zip
 
 VOLUME /build/gridtracker
 VOLUME /build/dist

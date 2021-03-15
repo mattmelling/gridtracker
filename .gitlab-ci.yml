@@ -18,6 +18,8 @@ variables:
   AWS_DEFAULT_REGION: ""
   AWS_RELEASE_DEPLOY_PATH: s3://download.gridtracker.org/release/$CI_COMMIT_TAG
   AWS_TESTING_DEPLOY_PATH: s3://download.gridtracker.org/testing/$CI_COMMIT_TAG
+  NR0Q_SERVER_ADDRESS: ""
+  NR0Q_SERVER_PASSWORD: ""
 
 # nothing in this file ill be allowed to run automatically except for:
 # 1. merge requests
@@ -53,8 +55,7 @@ npm_test:
 
 
 # package binaries and create build artifacts that may be used in later stages
-
-packaging:
+intel-packaging:
   stage: package
   rules:
     # only do this with a manual tag starting with v or test_
@@ -74,38 +75,173 @@ packaging:
   script:
     - |
       mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
-      mkdir -p artifacts/{debian,rpm}
+      mkdir -p artifacts/rpm
       dpkg --add-architecture i386
     - |
       echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
       apt-get -qq update
       apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
       apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm zip wget
       apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
       echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
     - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
+    # Making our Windows, MacOS and distro agnostic Linux packages
     - |
       echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
       npm install --prefer-offline
       npm run dist
-      for dir in dist/*-linux-* ; do if [ -d $dir ] ; then tar -C dist -cjf ${dir}.tar.bz `basename $dir` ; fi ; done
-      echo `pwd`
-      (cd dist ; mv *.exe *-mac-x64.zip *.tar.bz ../artifacts)
+      chmod 755 dist/*-linux-*/GridTracker dist/*-linux-*/lib dist/*-linux-*/locales dist/*-linux-*/swiftshader/
+      for dir in dist/*-linux-* ; do
+        if [ -d $dir ] ; then
+          cp package.nw/img/gridtracker.png $dir/
+          tar -C dist -czf ${dir}.tar.gz `basename $dir`
+        fi
+      done
+      (cd dist ; mv *.exe *-mac-x64.zip *.tar.gz ../artifacts)
       echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
-    - |
-      echo -e "\e[0Ksection_start:`date +%s`:debian_build\r\e[0KBuilding Debian packages"
-      echo `pwd`
-      dpkg-buildpackage -uc -us
-      echo `pwd`
-      mv ../*.{deb,dsc,buildinfo,tar.xz,changes} artifacts/debian/
-      echo -e "\e[0Ksection_end:`date +%s`:debian_build\r\e[0K"
+    # This section handles making RPMs for Fedora/CentOS/RHEL
     - |
       echo -e "\e[0Ksection_start:`date +%s`:rpm_build\r\e[0KBuilding RPM packages"
-      rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.spec
-      mv $HOME/rpmbuild/RPMS/noarch/gridtracker-*.noarch.rpm artifacts/rpm
-      ls -laR artifacts
+      # mkdir -p $HOME/rpmbuild/SOURCES
+      # cp artifacts/*.tar.gz $HOME/rpmbuild/SOURCES/
+      setarch i386 rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.i386.spec
+      setarch x86_64 rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.x86_64.spec
+      mv $HOME/rpmbuild/RPMS/i386/*.rpm artifacts/rpm/
+      mv $HOME/rpmbuild/RPMS/x86_64/*.rpm artifacts/rpm/
       echo -e "\e[0Ksection_end:`date +%s`:rpm_build\r\e[0K"
+    # This section does debian DEBs
+    #- |
+    #  echo -e "\e[0Ksection_start:`date +%s`:debian_build\r\e[0KBuilding Debian packages"
+    #  dpkg-buildpackage -uc -us
+    #  mkdir artifacts/debian
+    #  mv ../*.{deb,dsc,buildinfo,tar.xz,changes} artifacts/debian/
+    #  echo -e "\e[0Ksection_end:`date +%s`:debian_build\r\e[0K"
+    - |
+      echo "we made packages!"
+      ls -laR artifacts
+
+arm-packaging:
+  stage: package
+  rules:
+    # only do this with a manual tag starting with v or test_
+    - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
+  artifacts:
+    paths:
+      - artifacts/
+    name: '$CI_COMMIT_REF_SLUG'
+  cache:
+    paths:
+      - .cache/
+      - node_modules/
+    key:
+      files:
+        - package.json
+        - package.nw/package.json
+  script:
+    - |
+      mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
+      mkdir -p artifacts/rpm
+      dpkg --add-architecture armhf
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
+      apt-get -qq update
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm zip wget
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
+      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
+    - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
+    # This is for ARM arch build
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:arm_build\r\e[0KBuilding ARM packages"
+      wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/nw49_2020-10-26/nw49_2020-10-26.tar.gz
+      tar -xf nw49_2020-10-26.tar.gz
+      tar -xf usr/docker/dist/nwjs-chromium-ffmpeg-branding/nwjs-v0.49.2-linux-arm.tar.gz
+      mv nwjs-v0.49.2-linux-arm/nw nwjs-v0.49.2-linux-arm/GridTracker
+      ls
+      version=`node ./version.js`
+      mkdir GridTracker-$version-linux-arm
+      cp -r nwjs-v0.49.2-linux-arm/* GridTracker-$version-linux-arm/
+      cp -r arm/* GridTracker-$version-linux-arm/
+      cp -r package.nw GridTracker-$version-linux-arm/
+      cp LICENSE GridTracker-$version-linux-arm/
+      tar -cjf GridTracker-$version-linux-arm.tar.gz GridTracker-$version-linux-arm
+      mv GridTracker-$version-linux-arm.tar.gz artifacts/
+    # This section handles making RPMs for Fedora/CentOS/RHEL
+    #- |
+      #  echo -e "\e[0Ksection_start:`date +%s`:rpm_build\r\e[0KBuilding RPM packages"
+      # mkdir -p $HOME/rpmbuild/SOURCES
+      # cp artifacts/*.tar.gz $HOME/rpmbuild/SOURCES/
+      #setarch --list
+      #setarch armhf rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.arm.spec
+      #mv $HOME/rpmbuild/RPMS/armv7l/*.rpm artifacts/rpm/
+      #echo -e "\e[0Ksection_end:`date +%s`:rpm_build\r\e[0K"
+    # This section does debian DEBs
+    #- |
+    #  echo -e "\e[0Ksection_start:`date +%s`:debian_build\r\e[0KBuilding Debian packages"
+    #  dpkg-buildpackage -uc -us
+    #  mkdir artifacts/debian
+    #  mv ../*.{deb,dsc,buildinfo,tar.xz,changes} artifacts/debian/
+    #  echo -e "\e[0Ksection_end:`date +%s`:debian_build\r\e[0K"
+    - |
+      echo "we made packages!"
+      ls -laR artifacts
+
+# copy test assets to NR0Q's server
+nr0q_upload_testing:
+  stage: deploy
+  image: alpine
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(test_).*/ && $NR0Q_SERVER_KEY != ""'
+  before_script:
+    - |
+      apk add openssh-client
+      eval $(ssh-agent -s)
+      echo "$NR0Q_SERVER_KEY" | tr -d '\r' | ssh-add -
+      mkdir -p ~/.ssh; chmod 700 ~/.ssh
+  script:
+    - |
+      cd artifacts
+      for FILE in *.*
+      do
+        echo "Calculating MD5 Hash for $FILE"
+        md5sum $FILE > $FILE.md5
+      done
+      for FILE in rpm/*.rpm
+      do
+        echo "Calculating MD5 Hash for $FILE"
+        md5sum $FILE > $FILE.md5
+      done
+
+      ssh -o StrictHostKeyChecking=no gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/ && ssh -o StrictHostKeyChecking=no gridtracker@$NR0Q_SERVER_ADDRESS "rm latest_test && ln -s $CI_COMMIT_TAG latest_test"
+
+# copy release assets to NR0Q's server
+nr0q_upload_release:
+  stage: deploy
+  image: alpine
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(v).*/ && $NR0Q_SERVER_KEY != ""'
+  before_script:
+    - |
+      apk add openssh-client
+      eval $(ssh-agent -s)
+      echo "$NR0Q_SERVER_KEY" | tr -d '\r' | ssh-add -
+      mkdir -p ~/.ssh; chmod 700 ~/.ssh
+  script:
+    - |
+      cd artifacts
+      for FILE in *.*
+      do
+        echo "Calculating MD5 Hash for $FILE"
+        md5sum $FILE > $FILE.md5
+      done
+      for FILE in rpm/*.rpm
+      do
+        echo "Calculating MD5 Hash for $FILE"
+        md5sum $FILE > $FILE.md5
+      done
+      ssh -o StrictHostKeyChecking=no gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/
 
 # copy the assets over to our distribution storage (testing, tag = test_.*)
 s3_upload_testing:

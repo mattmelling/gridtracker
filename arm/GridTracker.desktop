@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=GridTracker
+Comment=GridTracker
+GenericName=GridTracker, An Amateur Radio Companion
+Exec=/home/pi/Downloads/GridTracker/GridTracker
+Icon=/home/pi/Downloads/GridTracker/gridtracker.png
+Path=/home/pi/Downloads/GridTracker
+Type=Application
+Encoding=UTF-8
+Terminal=false
+Categories=None;

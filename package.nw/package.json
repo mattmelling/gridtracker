@@ -43,7 +43,6 @@
     },
     "nsis": {
       "installDirectory": "$PROGRAMFILES\\${_APPNAME}",
-      "RequestExecutionLevel": "admin",
       "diffUpdaters": false
     }
   }

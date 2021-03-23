@@ -1,3 +1,12 @@
+gridtracker (1.21.0322) unstable; urgency=medium
+  [Christian Bayer]
+  * Fixed windows packaging 
+  [Matthew Chambers]
+  * Fixed linux and arm packaging
+  This is the public release of 1.21.0307 release candidates
+
+ -- Matthew Chambers <nr0q@gridtracker.org>  Mon, 22 Mar 2021 20:30:00 -0500
+
 gridtracker (1.21.0307) unstable; urgency=medium
 
   [ Paul Traina ]

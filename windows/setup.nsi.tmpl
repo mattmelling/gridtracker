@@ -8,7 +8,7 @@ Name "GridTracker"
 BrandingText " Gridtracker.org : GridTracker Installer "
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 1.21.0307
+!define VERSION <placeholder
 !define COMPANY "Gridtracker.org"
 !define URL http://gridtracker.org
 #d
@@ -33,8 +33,7 @@ Var realkey
 
 
 # Installer pages
-#!define MUI_ICON "GridTracker-1.21.0307-win-x86/package.nw/gridview.ico"
-!define MUI_ICON "GridTracker-1.21.0307-win-x86/package.nw/gridview.ico"
+!define MUI_ICON "GridTracker-${VERSION}-win-x86/package.nw/gridview.ico"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_UNICON "${NSISDIR}/Contrib/Graphics/Icons/modern-uninstall-colorful.ico"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
@@ -78,19 +77,19 @@ SetDetailsPrint none
 	RMDir /r  "$INSTDIR"
 SetDetailsPrint both
 	SetOutPath $INSTDIR
-    File /x debug.log /x package.nw.zip /x package.zip /x nw.exe "GridTracker-1.21.0307-win-x86/*"
+    File /x debug.log /x package.nw.zip /x package.zip /x nw.exe "GridTracker-${VERSION}-win-x86/*"
 	SetOutPath $INSTDIR\locales
 SetDetailsPrint none
 	SetOverwrite on
-	File /r "GridTracker-1.21.0307-win-x86/locales/*"
+	File /r "GridTracker-${VERSION}-win-x86/locales/*"
 	
 	SetOutPath $INSTDIR\package.nw
 	SetOverwrite on
-	File /r "GridTracker-1.21.0307-win-x86/package.nw/*"
+	File /r "GridTracker-${VERSION}-win-x86/package.nw/*"
 	SetOverwrite on
 	
 	SetOutPath $INSTDIR\swiftshader
-	File /r "GridTracker-1.21.0307-win-x86/swiftshader/*"
+	File /r "GridTracker-${VERSION}-win-x86/swiftshader/*"
 	
 
 

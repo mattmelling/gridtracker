@@ -6,26 +6,33 @@ test -d ../dist/rpm || mkdir -p ../dist/rpm
 mv ../*.{deb,dsc,buildinfo,changes,tar.xz} ../dist/debian
 debian/rules clean
 npm install
-npm run dist
+npm run dist-win
+npm run dist-nix
 chmod 755 dist/*-linux-*/GridTracker dist/*-linux-*/lib dist/*-linux-*/locales dist/*-linux-*/swiftshader/
 for dir in dist/*-linux-* ; do
     if [ -d $dir ] ; then
-#        mkdir $dir/package.nw
-#        for file in package.nw/* ; do
-#          if [ `basename $file` = "lib" ] ; then
-#            continue      # skip lib dir
-#          fi
-#          mv $dir/`basename $file` $dir/package.nw
-#        done
-#        pushd .
-#        cd $dir/package.nw
-#        zip ../package.nw.zip -r *
-#        popd
-#        rm -Rf $dir/package.nw
-#        mv $dir/package.nw.zip $dir/package.nw
         tar -C dist -czf ${dir}.tar.gz `basename $dir`
     fi
 done
+for dir in dist/*-win-* ; do
+    if [ -d $dir ] ; then
+        mkdir $dir/package.nw
+        for file in package.nw/* ; do
+          mv $dir/`basename $file` $dir/package.nw
+        done
+    elif [  -f $dir ] && [[ "$dir" == *"win-x86-Setup.exe"* ]] ; then
+      echo "would delete broken installer $dir"
+      # rm $dir
+    fi
+done
+pwd
+sed "s#GridTracker-1.21.0307-win-x86/#`pwd`/dist/GridTracker-1.21.0307-win-x86/#g" windows/setup.nsi.tmpl > windows/setup.nsi.tmp
+sed "s#GridTracker-Installer.#`pwd`/dist/GridTracker-Installer.#g" windows/setup.nsi.tmp > windows/setup.nsi
+makensis windows/setup.nsi
+# clean up generated files
+rm windows/setup.nsi
+rm windows/setup.nsi.tmp
+
 mv dist/*{.exe,mac-x64.zip,.tar.gz} ../dist
 rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.i386.spec
 rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.x86_64.spec

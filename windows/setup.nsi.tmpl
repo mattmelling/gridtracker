@@ -1,0 +1,175 @@
+RequestExecutionLevel highest
+SetCompressor /SOLID LZMA
+!include Sections.nsh
+!include MUI2.nsh
+!include Registry.nsh
+Name "GridTracker"
+
+BrandingText " Gridtracker.org : GridTracker Installer "
+# General Symbol Definitions
+!define REGKEY "SOFTWARE\$(^Name)"
+!define VERSION 1.21.0307
+!define COMPANY "Gridtracker.org"
+!define URL http://gridtracker.org
+#d
+
+# MUI Symbol Definitions
+
+
+# Included files
+
+
+# Reserved Files
+
+ReserveFile "${NSISDIR}/Plugins/x86-unicode/registry.dll"
+
+# Variables
+Var StartMenuGroup
+Var response
+Var keysearch
+Var uninstallstring
+Var realkey
+
+
+
+# Installer pages
+#!define MUI_ICON "GridTracker-1.21.0307-win-x86/package.nw/gridview.ico"
+!define MUI_ICON "GridTracker-1.21.0307-win-x86/package.nw/gridview.ico"
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_UNICON "${NSISDIR}/Contrib/Graphics/Icons/modern-uninstall-colorful.ico"
+!define MUI_UNFINISHPAGE_NOAUTOCLOSE
+
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+
+
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+    
+
+!insertmacro MUI_PAGE_FINISH
+
+# Installer languages
+!insertmacro MUI_LANGUAGE English
+
+# Installer attributes
+OutFile "GridTracker-Installer.${VERSION}.exe"
+InstallDir "$PROGRAMFILES\GridTracker"
+CRCCheck on
+XPStyle on
+ShowInstDetails show
+VIProductVersion ${VERSION}.0
+VIAddVersionKey ProductName "GridTracker"
+VIAddVersionKey ProductVersion "${VERSION}"
+VIAddVersionKey CompanyName "${COMPANY}"
+VIAddVersionKey CompanyWebsite "${URL}"
+VIAddVersionKey FileVersion "${VERSION}"
+VIAddVersionKey FileDescription "An Amateur Radio Community"
+VIAddVersionKey LegalCopyright "2021 Gridtracker.org"
+InstallDirRegKey HKLM "${REGKEY}" Path
+ShowUninstDetails nevershow
+
+# Installer sections
+Section -Main SEC0000
+    SetOverwrite on
+    
+SetDetailsPrint none
+	RMDir /r  "$INSTDIR"
+SetDetailsPrint both
+	SetOutPath $INSTDIR
+    File /x debug.log /x package.nw.zip /x package.zip /x nw.exe "GridTracker-1.21.0307-win-x86/*"
+	SetOutPath $INSTDIR\locales
+SetDetailsPrint none
+	SetOverwrite on
+	File /r "GridTracker-1.21.0307-win-x86/locales/*"
+	
+	SetOutPath $INSTDIR\package.nw
+	SetOverwrite on
+	File /r "GridTracker-1.21.0307-win-x86/package.nw/*"
+	SetOverwrite on
+	
+	SetOutPath $INSTDIR\swiftshader
+	File /r "GridTracker-1.21.0307-win-x86/swiftshader/*"
+	
+
+
+
+SetDetailsPrint both
+	SetOutPath $INSTDIR
+    CreateDirectory "$SMPROGRAMS\GridTracker"
+	SetOutPath $INSTDIR
+    CreateShortCut "$SMPROGRAMS\GridTracker\GridTracker.lnk" $INSTDIR\GridTracker.exe
+	Delete /REBOOTOK "$SMPROGRAMS\GridTracker\Quickstart Guide.lnk"
+    CreateShortCut "$DESKTOP\GridTracker.lnk" "$INSTDIR\GridTracker.exe"
+
+
+WriteRegStr HKLM "${REGKEY}\Components" Main 1
+
+SectionEnd
+
+Section -post SEC0001
+    WriteRegStr HKLM "${REGKEY}" Path $INSTDIR
+    SetOutPath $INSTDIR
+    WriteUninstaller $INSTDIR\uninstall.exe
+    SetOutPath $SMPROGRAMS\GridTracker
+    CreateShortcut "$SMPROGRAMS\GridTracker\Uninstall $(^Name).lnk" $INSTDIR\uninstall.exe
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayVersion "${VERSION}"
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" Publisher "${COMPANY}"
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" URLInfoAbout "${URL}"
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayIcon $INSTDIR\uninstall.exe
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" UninstallString $INSTDIR\uninstall.exe
+    WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoModify 1
+    WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
+SectionEnd
+
+# Macro for selecting uninstaller sections
+!macro SELECT_UNSECTION SECTION_NAME UNSECTION_ID
+    Push $R0
+    ReadRegStr $R0 HKLM "${REGKEY}\Components" "${SECTION_NAME}"
+    StrCmp $R0 1 0 next${UNSECTION_ID}
+    !insertmacro SelectSection "${UNSECTION_ID}"
+    GoTo done${UNSECTION_ID}
+next${UNSECTION_ID}:
+    !insertmacro UnselectSection "${UNSECTION_ID}"
+done${UNSECTION_ID}:
+    Pop $R0
+!macroend
+
+# Uninstaller sections
+Section /o -un.Main UNSEC0000
+SetDetailsPrint none
+    RmDir /r /REBOOTOK $INSTDIR
+    DeleteRegValue HKLM "${REGKEY}\Components" Main
+SectionEnd
+
+Section -un.post UNSEC0001
+    DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
+    Delete /REBOOTOK "$SMPROGRAMS\GridTracker\GridTracker.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\GridTracker\Quickstart Guide.lnk"
+    Delete /REBOOTOK "$DESKTOP\GridTracker.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\GridTracker\Uninstall $(^Name).lnk" 
+    Delete /REBOOTOK $INSTDIR\uninstall.exe
+    DeleteRegValue HKLM "${REGKEY}" Path
+    DeleteRegKey /IfEmpty HKLM "${REGKEY}\Components"
+    DeleteRegKey /IfEmpty HKLM "${REGKEY}"
+SetDetailsPrint none
+    RmDir /REBOOTOK $SMPROGRAMS\GridTracker
+	RmDir /r $LOCALAPPDATA\GridTracker
+    RmDir /REBOOTOK $INSTDIR
+SetDetailsPrint both
+SectionEnd
+
+# Installer functions
+
+
+# Uninstaller functions
+Function un.onInit
+    ReadRegStr $INSTDIR HKLM "${REGKEY}" Path
+    StrCpy $StartMenuGroup "GridTracker"
+    !insertmacro SELECT_UNSECTION Main ${UNSEC0000}
+FunctionEnd
+
+
+

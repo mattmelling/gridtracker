@@ -48,8 +48,70 @@ npm_test:
 #     - echo "Do another parallel test here"
 #     - echo "For example run a lint test"
 
-
 # package binaries and create build artifacts that may be used in later stages
+win-packaging:
+  stage: package
+  rules:
+    # only do this with a manual tag starting with v or test_
+    - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
+  artifacts:
+    paths:
+      - artifacts/
+    name: '$CI_COMMIT_REF_SLUG'
+  cache:
+    paths:
+      - .cache/
+      - node_modules/
+    key:
+      files:
+        - package.json
+        - package.nw/package.json
+  script:
+    - |
+      mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
+      mkdir -p artifacts
+      dpkg --add-architecture i386
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
+      apt-get -qq update
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
+      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y zip nsis nsis nsis-pluginapi wget
+      wget https://nsis.sourceforge.io/mediawiki/images/4/47/Registry.zip
+      unzip Registry.zip
+      mv Desktop/Plugin/registry.dll /usr/share/nsis/Plugins/x86-unicode/
+      mv Desktop/Include/Registry.nsh /usr/share/nsis/Include/
+      rm -Rf Desktop PocketPC Source
+      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
+    - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
+    # Making our Windows, MacOS and distro agnostic Linux packages
+    - |
+      echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
+      npm install --prefer-offline
+      npm run dist-win
+      for dir in dist/*-win-* ; do
+          if [ -d $dir ] ; then
+              mkdir $dir/package.nw
+              for file in package.nw/* ; do
+                mv $dir/`basename $file` $dir/package.nw
+              done
+          elif [  -f $dir ] && [[ "$dir" == *"win-x86-Setup.exe"* ]] ; then
+            echo "would delete broken installer $dir"
+            # rm $dir
+          fi
+      done
+      # TODO infer new version from version.js and inject into nsis installer
+      ls dist/GridTracker-1.21.0307-win-x86/ -la
+      sed "s#GridTracker-1.21.0307-win-x86/#`pwd`/dist/GridTracker-1.21.0307-win-x86/#g" windows/setup.nsi.tmpl > windows/setup.nsi.tmp
+      sed "s#GridTracker-Installer.#`pwd`/dist/GridTracker-Installer.#g" windows/setup.nsi.tmp > windows/setup.nsi
+      makensis windows/setup.nsi
+      # clean up generated files
+      rm windows/setup.nsi
+      rm windows/setup.nsi.tmp
+      (cd dist ; mv *.exe ../artifacts)
+      echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
+
+
 intel-packaging:
   stage: package
   rules:
@@ -85,7 +147,7 @@ intel-packaging:
     - |
       echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
       npm install --prefer-offline
-      npm run dist
+      npm run dist-nix
       chmod 755 dist/*-linux-*/GridTracker dist/*-linux-*/lib dist/*-linux-*/locales dist/*-linux-*/swiftshader/
       for dir in dist/*-linux-* ; do
         if [ -d $dir ] ; then
@@ -93,7 +155,7 @@ intel-packaging:
           tar -C dist -czf ${dir}.tar.gz `basename $dir`
         fi
       done
-      (cd dist ; mv *.exe *-mac-x64.zip *.tar.gz ../artifacts)
+      (cd dist ; mv *-mac-x64.zip *.tar.gz ../artifacts)
       echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
     # This section handles making RPMs for Fedora/CentOS/RHEL
     - |

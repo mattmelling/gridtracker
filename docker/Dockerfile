@@ -8,7 +8,11 @@ RUN dpkg --add-architecture i386 && \
     apt-get install -y npm wine wine32 && \
     apt-get install -y build-essential devscripts lintian diffutils patch \
             patchutils quilt git && \
-    apt-get install -y rpm zip
+    apt-get install -y rpm zip nsis nsis nsis-pluginapi wget
+RUN wget https://nsis.sourceforge.io/mediawiki/images/4/47/Registry.zip && \
+    unzip Registry.zip && \
+    mv Desktop/Plugin/registry.dll /usr/share/nsis/Plugins/x86-unicode/ && \
+    mv Desktop/Include/Registry.nsh /usr/share/nsis/Include/
 
 VOLUME /build/gridtracker
 VOLUME /build/dist

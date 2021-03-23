@@ -43,7 +43,9 @@
     },
     "nsis": {
       "installDirectory": "$PROGRAMFILES\\${_APPNAME}",
-      "diffUpdaters": false
+      "RequestExecutionLevel": "admin",
+      "diffUpdaters": false,
+      "MUI_FINISHPAGE_RUN": ""
     }
   }
 }

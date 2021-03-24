@@ -6,6 +6,7 @@ LIB ?= $(DESTDIR)/usr/share/gridtracker
 APP ?= $(DESTDIR)/usr/share/applications
 MAN ?= $(DESTDIR)/usr/share/man/man1
 DOC ?= $(DESTDIR)/usr/share/doc/gridtracker
+NO_DIST_INSTALL ?=
 
 .PHONY: help
 help:
@@ -29,4 +30,7 @@ install:
 	install -Dcm 644 LICENSE $(DOC)/LICENSE
 	mkdir -p $(LIB)
 	cp -r package.nw/* $(LIB)
+ifndef NO_DIST_INSTALL
 	cp -r dist/*-linux-x64/* $(LIB)
+endif
+

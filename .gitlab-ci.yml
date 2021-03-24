@@ -224,7 +224,7 @@ arm-packaging:
       cp -r arm/* GridTracker-$version-linux-arm/
       cp -r package.nw GridTracker-$version-linux-arm/
       cp LICENSE GridTracker-$version-linux-arm/
-      tar -cjf GridTracker-$version-linux-arm.tar.gz GridTracker-$version-linux-arm
+      tar -czf GridTracker-$version-linux-arm.tar.gz GridTracker-$version-linux-arm
       mv GridTracker-$version-linux-arm.tar.gz artifacts/
     # This section handles making RPMs for Fedora/CentOS/RHEL
     #- |

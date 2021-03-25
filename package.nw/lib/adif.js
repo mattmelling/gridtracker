@@ -860,7 +860,7 @@ fileSelector.onchange = function ()
 {
   if (this.files && this.files[0])
   {
-    path = this.value.replace(this.files[0].name, "");
+    let path = this.value.replace(this.files[0].name, "");
     fileSelector.setAttribute("nwworkingdir", path);
 
     var reader = new FileReader();
@@ -904,7 +904,7 @@ startupFileSelector.onchange = function ()
     g_startupLogs.push(newObject);
     localStorage.startupLogs = JSON.stringify(g_startupLogs);
 
-    path = this.value.replace(this.files[0].name, "");
+    let path = this.value.replace(this.files[0].name, "");
     startupFileSelector.setAttribute("nwworkingdir", path);
 
     setAdifStartup(loadAdifCheckBox);

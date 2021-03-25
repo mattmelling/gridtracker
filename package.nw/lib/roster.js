@@ -958,8 +958,6 @@ function viewRoster()
         continue;
       }
     }
-
-    var shouldAlert = false;
     if (isAwardTracker)
     {
       var tx = false;
@@ -975,7 +973,6 @@ function viewRoster()
           if (tx)
           {
             var x = g_awardTracker[award];
-            shouldAlert = true;
             callRoster[callHash].callObj.awardReason =
               g_awards[x.sponsor].awards[x.name].tooltip +
               " (" +
@@ -1056,6 +1053,7 @@ function viewRoster()
       var wpx = "#FFFF00";
 
       hasGtPin = false;
+      var shouldAlert = false;
       var callsignBg,
         gridBg,
         callingBg,

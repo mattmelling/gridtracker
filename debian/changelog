@@ -1,3 +1,13 @@
+gridtracker (1.21.0324) unstable; urgency=medium
+  [Christian Bayer]
+  * Fixed #72 CR not filtering correctly
+  [Matthew Chambers]
+  * Fixed #71 bug with loading adif files
+  This is the hotfix release of the first public release of 1.21.0322
+
+ -- Christian Bayer <chrbayer84@googlemail.com>  Wed, 22 Mar 2021 22:00:00 -0500
+
+
 gridtracker (1.21.0322) unstable; urgency=medium
   [Christian Bayer]
   * Fixed windows packaging 

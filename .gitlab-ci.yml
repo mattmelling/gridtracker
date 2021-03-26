@@ -303,21 +303,20 @@ nr0q_upload_release:
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now
-# This section appears broke and is failing when ran, comment out for now
 
-#source_release:
-#  stage: deploy
-#  image: registry.gitlab.com/gitlab-org/release-cli:latest
-#  rules:
-#    - if: '$CI_COMMIT_TAG =~ /^(v).*/'
-#  release:
-#    tag_name: $CI_COMMIT_TAG
-#    name: GridTracker $CI_COMMIT_TAG
-#    description: GridTracker release $CI_COMMIT_TAG
-#    ref: '$CI_COMMIT_SHA'
-#    assets:
-#      links:
-#        - name: Binary images for $CI_COMMIT_TAG
-#          url: https://fleetwood.mchambersradio.com/gridtracker/$CI_COMMIT_TAG/
-#  script:
-#    - echo 'Release for $CI_COMMIT_TAG'
+source_release:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(v).*/'
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: GridTracker $CI_COMMIT_TAG
+    description: GridTracker release $CI_COMMIT_TAG
+    ref: '$CI_COMMIT_SHA'
+    assets:
+      links:
+        - name: Binary images for $CI_COMMIT_TAG
+          url: https://fleetwood.mchambersradio.com/gridtracker/$CI_COMMIT_TAG/
+  script:
+    - echo 'Release for $CI_COMMIT_TAG'

@@ -1,6 +1,7 @@
 gridtracker (1.21.0324) unstable; urgency=medium
   [Christian Bayer]
   * Fixed #72 CR not filtering correctly
+  * Fixed #63 blurry Windows icon
   [Matthew Chambers]
   * Fixed #71 bug with loading adif files
   This is the hotfix release of the first public release of 1.21.0322

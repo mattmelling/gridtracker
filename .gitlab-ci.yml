@@ -109,7 +109,7 @@ win-packaging:
       rm windows/setup.nsi
       rm windows/setup.nsi.tmp.1
       rm windows/setup.nsi.tmp.2
-      (cd dist ; mv *.exe ../artifacts)
+      (cd dist ; mv GridTracker-Installer.*.exe ../artifacts)
       echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
 
 

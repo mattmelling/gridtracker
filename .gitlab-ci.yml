@@ -84,13 +84,14 @@ win-packaging:
       rm -Rf Desktop PocketPC Source
       echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
     - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
-    # Making our Windows, MacOS and distro agnostic Linux packages
+    # Making our Windows packages
     - |
       echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
       npm install --prefer-offline
       npm run dist-win
       for dir in dist/*-win-* ; do
           if [ -d $dir ] ; then
+              rm $dir/locales/*.info
               mkdir $dir/package.nw
               for file in package.nw/* ; do
                 mv $dir/`basename $file` $dir/package.nw
@@ -144,7 +145,7 @@ intel-packaging:
       apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
       echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
     - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
-    # Making our Windows, MacOS and distro agnostic Linux packages
+    # Making our MacOS and distro agnostic Linux packages
     - |
       echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
       npm install --prefer-offline
@@ -153,6 +154,7 @@ intel-packaging:
       for dir in dist/*-linux-* ; do
         if [ -d $dir ] ; then
           cp package.nw/img/gridtracker.png $dir/
+          rm $dir/locales/*.info
           tar -C dist -czf ${dir}.tar.gz `basename $dir`
         fi
       done
@@ -216,6 +218,7 @@ arm-packaging:
       wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/nw49_2020-10-26/nw49_2020-10-26.tar.gz
       tar -xf nw49_2020-10-26.tar.gz
       tar -xf usr/docker/dist/nwjs-chromium-ffmpeg-branding/nwjs-v0.49.2-linux-arm.tar.gz
+      rm nwjs-v0.49.2-linux-arm/locales/*.info
       mv nwjs-v0.49.2-linux-arm/nw nwjs-v0.49.2-linux-arm/GridTracker
       ls
       version=`node ./version.js`
@@ -316,7 +319,9 @@ source_release:
     ref: '$CI_COMMIT_SHA'
     assets:
       links:
-        - name: Binary images for $CI_COMMIT_TAG
+        - name: Release Packages for $CI_COMMIT_TAG
           url: https://fleetwood.mchambersradio.com/gridtracker/$CI_COMMIT_TAG/
+          external: true
+          link_type: package
   script:
     - echo 'Release for $CI_COMMIT_TAG'

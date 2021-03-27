@@ -193,12 +193,18 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
           activeAdifArray[x],
           "LOTW_QSL_RCVD"
         ).toUpperCase();
+        let eqsl_qsl_rcvd = findAdiField(
+          activeAdifArray[x],
+          "EQSL_QSL_RCVD"
+        ).toUpperCase();
 
         if (
           qrzConfirmed == "C" ||
           lotw_qsl_rcvd == "Y" ||
           lotw_qsl_rcvd == "V" ||
-          lotwConfirmed1 == "Y"
+          lotwConfirmed1 == "Y" ||
+          eqsl_qsl_rcvd == "Y" ||
+          eqsl_qsl_rcvd == "V"
         )
         { confirmed = true; }
 

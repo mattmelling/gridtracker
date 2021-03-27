@@ -1,3 +1,8 @@
+gridtracker (1.21.0327) unstable; urgency=medium
+  This is the public release of the 1.21.0324 hotfix release candidates
+
+-- Matthew Chambers <nr0q@gridtracker.org> Fri, 27 Mar 2021 00:38:00 -0000
+
 gridtracker (1.21.0324) unstable; urgency=medium
   [Christian Bayer]
   * Fixed #72 CR not filtering correctly
@@ -7,7 +12,6 @@ gridtracker (1.21.0324) unstable; urgency=medium
   This is the hotfix release of the first public release of 1.21.0322
 
  -- Christian Bayer <chrbayer84@googlemail.com>  Wed, 22 Mar 2021 22:00:00 -0500
-
 
 gridtracker (1.21.0322) unstable; urgency=medium
   [Christian Bayer]

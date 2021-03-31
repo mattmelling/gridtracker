@@ -2337,10 +2337,19 @@ function createTooltTipTableLogbook(toolElement)
     }
     if (g_callsignLookups.oqrsUseEnable == true)
     {
-      worker +=
-        "<td align='center'>" +
-        (callsign.DEcall in g_oqrsCallsigns ? "&#10004;" : "") +
-        "</td>";
+      if (callsign.DEcall in g_oqrsCallsigns)
+      {
+        worker +=
+            "<td align='center' " +
+            "onClick='window.opener.openSite(\"https://clublog.org/logsearch/logsearch.php?log=" +
+            callsign.DEcall + "&call=" + callsign.DXcall + "&SubmitLogSearch=Show+contacts\");'>" +
+            "&#10004;&#128236;</td>";
+      }
+      else
+      {
+        worker +=
+            "<td align='center'></td>";
+      }
     }
     worker += "</tr>";
   }
@@ -14437,7 +14446,8 @@ function continueWithLookup(callsign, gridPass)
     "Looking up <font color='cyan'>" + callsign + "</font>, please wait..."
   );
 
-  if (g_appSettings.lookupCallookPreferred) {
+  if (g_appSettings.lookupCallookPreferred)
+  {
     var dxcc = callsignToDxcc(callsign);
     var where;
     var ccode = 0;

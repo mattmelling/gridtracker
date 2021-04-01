@@ -86,3 +86,6 @@ Final build results are left in:
         gridtracker-dist/
         gridtracker-dist/debian
 
+# Editing GeoJSON files
+
+We've had success using https://vector.rocks/ and then cleaning up the output with https://jsonformatter.org/

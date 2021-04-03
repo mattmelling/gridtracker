@@ -14437,7 +14437,8 @@ function continueWithLookup(callsign, gridPass)
     "Looking up <font color='cyan'>" + callsign + "</font>, please wait..."
   );
 
-  if (g_appSettings.lookupCallookPreferred) {
+  if (g_appSettings.lookupCallookPreferred)
+  {
     var dxcc = callsignToDxcc(callsign);
     var where;
     var ccode = 0;

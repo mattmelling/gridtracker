@@ -642,6 +642,16 @@ function playAlertMediaFile(filename, overrideMute)
 {
   if (g_appSettings.alertMute && !overrideMute) return;
 
+  // check if this is an alert stored with an older version of GT
+  // which has a full file path given.
+  if (path.isAbsolute(filename) && !fs.existsSync(filename)){
+    // full alert file name stored with old GT version referencing
+    // the user media dir. determine basename of the file and try
+    // constructing the path
+    filename = path.basename(filename);
+  }
+  // construct the path from the user media dir or
+  // fall back on the global media dir
   var fpath = path.join(g_userMediaDir, filename);
   if (!fs.existsSync(fpath)) fpath = path.join(g_gtMediaDir, filename);
 

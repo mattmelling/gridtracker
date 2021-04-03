@@ -60,6 +60,7 @@ var def_appSettings = {
   lookupPasswordQrz: "",
   lookupPasswordQth: "",
   lookupService: "CALLOOK",
+  lookupCallookPreferred: false,
   moonPath: 0,
   moonTrack: 0,
   mouseTrack: 0,

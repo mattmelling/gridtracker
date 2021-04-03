@@ -13401,6 +13401,7 @@ function loadViewSettings()
   spotMergeValue.checked = g_receptionSettings.mergeSpots;
 
   lookupOnTx.checked = g_appSettings.lookupOnTx;
+  lookupCallookPreferred.checked = g_appSettings.lookupCallookPreferred;
   lookupCloseLog.checked = g_appSettings.lookupCloseLog;
   lookupMerge.checked = g_appSettings.lookupMerge;
   lookupMissingGrid.checked = g_appSettings.lookupMissingGrid;
@@ -14382,7 +14383,7 @@ function lookupValueChanged(what)
     }
   }
   g_appSettings.lookupService = lookupService.value;
-  g_appSettings.lookupCallookPreferred = lookupCallookPreferred.value;
+  g_appSettings.lookupCallookPreferred = lookupCallookPreferred.checked;
   lookupQrzTestResult.innerHTML = "";
   g_qrzLookupSessionId = null;
   if (lookupService.value == "CALLOOK")

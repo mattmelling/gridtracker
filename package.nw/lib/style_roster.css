@@ -325,7 +325,6 @@ body.roster {
   padding: 0;
 }
 
-
 #huntingMatrixDiv h3 {
   color: #099;
   border-bottom: 2px solid #066;
@@ -372,6 +371,33 @@ body.roster {
 
 .secondaryControlGroup .roundBorderValue {
   padding: 2px;
+}
+
+#instancesWrapper {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-width: 80px;
+  max-width: 160px;
+  margin-top: 22px;
+  text-align: right;
+}
+#instancesWrapper h3 {
+  text-align: left;
+  font-size: 12px;
+  margin: 0px;
+  margin-bottom: 2px;
+  padding: 0;
+  text-align: right;
+}
+#instancesWrapper .button {
+  display: block;
+  margin: 1px;
+  padding: 2px;
+  border-width: 1px;
+  text-align: left;
 }
 
 #RosterTable > table {
@@ -520,3 +546,4 @@ table.rosterTable thead th:first-child {
 .rosterTable tr:hover td {
   box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
 }
+

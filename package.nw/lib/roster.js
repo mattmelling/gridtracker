@@ -2404,20 +2404,18 @@ function updateInstances()
         color = "purple";
       }
       worker +=
-        "<div class='button'  style='margin:1px;padding:2px;display:inline-block;background-color:" +
-        color +
-        ";;border-width:1px' ><input type='checkbox' id='" +
-        inst +
-        "' onchange='instanceChange(this);' " +
+        `<div class='button' style='background-color:${color};'>` +
+        `<input type='checkbox' id='${inst}' onchange='instanceChange(this);' ` +
         (instances[inst].crEnable ? "checked" : "") +
-        " >" +
-        shortInst +
-        "</div>";
+        `>&nbsp;${shortInst}</div>`
     }
     instancesDiv.innerHTML = worker;
-    instancesDiv.style.display = "";
+    instancesWrapper.style.display = "";
   }
-  else instancesDiv.style.display = "none";
+  else {
+    instancesDiv.innerHTML = "";
+    instancesWrapper.style.display = "none";
+  }
 }
 
 function processStatus(newMessage)

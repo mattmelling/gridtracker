@@ -1,7 +1,18 @@
+gridtracker (1.21.0407) unstable; urgency=medium
+  [Bug Fixes]
+  - mp3 alerts from previous versions now work correctly
+  - callook lookup preference now stored
+  - call roster WSJT-X/JTDX instance label/checkbox overlap fixed
+  [Enhancements]
+  - new icon to request ClubLog OQRS QSL
+  - add eQSL check in log file processing
+
+ -- Matthew Chambers <nr0q@gridtracker.org> Wed, 07 Apr 2021 00:00:00 -0000
+
 gridtracker (1.21.0327) unstable; urgency=medium
   This is the public release of the 1.21.0324 hotfix release candidates
 
--- Matthew Chambers <nr0q@gridtracker.org> Fri, 27 Mar 2021 00:38:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org> Fri, 27 Mar 2021 00:38:00 -0000
 
 gridtracker (1.21.0324) unstable; urgency=medium
   [Christian Bayer]

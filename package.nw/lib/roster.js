@@ -492,50 +492,69 @@ function viewRoster()
   if (callMode == "all") allOnlyNewDiv.style.display = "";
   else allOnlyNewDiv.style.display = "none";
 
+  var huntIndex, workedIndex
+  if (g_rosterSettings.huntNeed == "worked")
+  {
+    huntIndex = g_worked;
+    workedIndex = false;
+  }
+  else if (g_rosterSettings.huntNeed == "confirmed")
+  {
+    huntIndex = g_confirmed;
+    workedIndex = g_worked;
+  }
+  else
+  {
+    huntIndex = false;
+    workedIndex = false;
+  }
+
   var now = timeNowSec();
   for (var callHash in callRoster)
   {
-    var call = callRoster[callHash].DEcall;
+    var entry = callRoster[callHash];
 
-    callRoster[callHash].tx = true;
-    callRoster[callHash].callObj.shouldAlert = false;
-    callRoster[callHash].callObj.reason = Array();
-    callRoster[callHash].callObj.awardReason = "Callsign";
+    var call = entry.DEcall;
 
-    if (now - callRoster[callHash].callObj.age > window.opener.g_mapSettings.rosterTime)
+    entry.tx = true;
+    entry.callObj.shouldAlert = false;
+    entry.callObj.reason = Array();
+    entry.callObj.awardReason = "Callsign";
+
+    if (now - entry.callObj.age > window.opener.g_mapSettings.rosterTime)
     {
-      callRoster[callHash].tx = false;
-      callRoster[callHash].alerted = false;
-      callRoster[callHash].callObj.qrz = false;
-      callRoster[callHash].callObj.reset = true;
+      entry.tx = false;
+      entry.alerted = false;
+      entry.callObj.qrz = false;
+      entry.callObj.reset = true;
       continue;
     }
-    if (window.opener.g_instances[callRoster[callHash].callObj.instance].crEnable == false)
+    if (window.opener.g_instances[entry.callObj.instance].crEnable == false)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
     if (call in g_blockedCalls)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
     if (
-      callRoster[callHash].DXcall + " from All" in g_blockedCQ ||
-      callRoster[callHash].DXcall + " from " + window.opener.g_dxccToAltName[callRoster[callHash].callObj.dxcc] in g_blockedCQ
+      entry.DXcall + " from All" in g_blockedCQ ||
+      entry.DXcall + " from " + window.opener.g_dxccToAltName[entry.callObj.dxcc] in g_blockedCQ
     )
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
-    if (callRoster[callHash].callObj.dxcc in g_blockedDxcc)
+    if (entry.callObj.dxcc in g_blockedDxcc)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
-    if (g_rosterSettings.cqOnly == true && callRoster[callHash].callObj.CQ == false)
+    if (g_rosterSettings.cqOnly == true && entry.callObj.CQ == false)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
     if (g_rosterSettings.useRegex && g_rosterSettings.callsignRegex.length > 0)
@@ -544,35 +563,35 @@ function viewRoster()
       {
         if (!call.match(g_rosterSettings.callsignRegex))
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
       }
       catch (e) {}
     }
-    if (g_rosterSettings.requireGrid == true && callRoster[callHash].callObj.grid.length != 4)
+    if (g_rosterSettings.requireGrid == true && entry.callObj.grid.length != 4)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
-    if (g_rosterSettings.wantMinDB == true && callRoster[callHash].message.SR < g_rosterSettings.minDb)
+    if (g_rosterSettings.wantMinDB == true && entry.message.SR < g_rosterSettings.minDb)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
-    if (g_rosterSettings.wantMaxDT == true && Math.abs(callRoster[callHash].message.DT) > g_rosterSettings.maxDT)
+    if (g_rosterSettings.wantMaxDT == true && Math.abs(entry.message.DT) > g_rosterSettings.maxDT)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
-    if (g_rosterSettings.wantMinFreq == true && callRoster[callHash].message.DF < g_rosterSettings.minFreq)
+    if (g_rosterSettings.wantMinFreq == true && entry.message.DF < g_rosterSettings.minFreq)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
-    if (g_rosterSettings.wantMaxFreq == true && callRoster[callHash].message.DF > g_rosterSettings.maxFreq)
+    if (g_rosterSettings.wantMaxFreq == true && entry.message.DF > g_rosterSettings.maxFreq)
     {
-      callRoster[callHash].tx = false;
+      entry.tx = false;
       continue;
     }
 
@@ -580,9 +599,9 @@ function viewRoster()
     {
       try
       {
-        if (callRoster[callHash].callObj.msg.match(g_rosterSettings.noMsgValue))
+        if (entry.callObj.msg.match(g_rosterSettings.noMsgValue))
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
       }
@@ -592,20 +611,20 @@ function viewRoster()
     {
       try
       {
-        if (!callRoster[callHash].callObj.msg.match(g_rosterSettings.onlyMsgValue))
+        if (!entry.callObj.msg.match(g_rosterSettings.onlyMsgValue))
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
       }
       catch (e) {}
     }
 
-    if (callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC)
+    if (entry.callObj.dxcc == window.opener.g_myDXCC)
     {
       if (g_rosterSettings.noMyDxcc == true)
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
     }
@@ -613,7 +632,7 @@ function viewRoster()
     {
       if (g_rosterSettings.onlyMyDxcc == true)
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
     }
@@ -622,7 +641,7 @@ function viewRoster()
     {
       if (!(call in window.opener.g_lotwCallsigns))
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
       if (g_rosterSettings.maxLoTW < 27)
@@ -630,7 +649,7 @@ function viewRoster()
         var months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
         if (months > g_rosterSettings.maxLoTW)
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
       }
@@ -640,7 +659,7 @@ function viewRoster()
     {
       if (!(call in window.opener.g_eqslCallsigns))
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
     }
@@ -649,66 +668,55 @@ function viewRoster()
     {
       if (!(call in window.opener.g_oqrsCallsigns))
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
     }
 
     if (callMode != "all")
     {
-      if (callRoster[callHash].DXcall == "CQ DX" && callRoster[callHash].callObj.dxcc == window.opener.g_myDXCC)
+      if (entry.DXcall == "CQ DX" && entry.callObj.dxcc == window.opener.g_myDXCC)
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
 
-      var hash = hashMaker(call, callRoster[callHash].callObj, g_rosterSettings.reference);
+      var hash = hashMaker(call, entry.callObj, g_rosterSettings.reference);
       if (callMode == "worked" && hash in g_worked.call)
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
       if (callMode == "confirmed" && hash in g_confirmed.call)
       {
-        callRoster[callHash].tx = false;
+        entry.tx = false;
         continue;
       }
 
       if (g_rosterSettings.hunting == "grid")
       {
-        var hash = hashMaker(callRoster[callHash].callObj.grid.substr(0, 4),
-          callRoster[callHash].callObj, g_rosterSettings.reference);
-        if (g_rosterSettings.huntNeed == "worked" && hash in g_worked.grid)
+        var hash = hashMaker(entry.callObj.grid.substr(0, 4),
+          entry.callObj, g_rosterSettings.reference);
+        if (huntIndex && hash in huntIndex.grid)
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
-        if (g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.grid)
+        if (entry.callObj.grid.length == 0)
         {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-        if (callRoster[callHash].callObj.grid.length == 0)
-        {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
         continue;
       }
       if (g_rosterSettings.hunting == "dxcc")
       {
-        var hash = hashMaker(String(callRoster[callHash].callObj.dxcc),
-          callRoster[callHash].callObj, g_rosterSettings.reference);
+        var hash = hashMaker(String(entry.callObj.dxcc),
+          entry.callObj, g_rosterSettings.reference);
 
-        if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.dxcc))
+        if (huntIndex && (hash in huntIndex.dxcc))
         {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-
-        if (g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.dxcc)
-        {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
 
@@ -717,32 +725,26 @@ function viewRoster()
 
       if (g_rosterSettings.hunting == "dxccs" && r_currentDXCCs != -1)
       {
-        if (callRoster[callHash].callObj.dxcc != r_currentDXCCs)
+        if (entry.callObj.dxcc != r_currentDXCCs)
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
       }
 
       if (g_rosterSettings.hunting == "wpx")
       {
-        if (String(callRoster[callHash].callObj.px) == null)
+        if (String(entry.callObj.px) == null)
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
-        var hash = hashMaker(String(callRoster[callHash].callObj.px),
-          callRoster[callHash].callObj, g_rosterSettings.reference);
+        var hash = hashMaker(String(entry.callObj.px),
+          entry.callObj, g_rosterSettings.reference);
 
-        if ((g_rosterSettings.huntNeed == "worked") & (hash in g_worked.px))
+        if (huntIndex && (hash in huntIndex.px))
         {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-
-        if (g_rosterSettings.huntNeed == "confirmed" && hash in g_confirmed.px)
-        {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
 
@@ -751,37 +753,22 @@ function viewRoster()
 
       if (g_rosterSettings.hunting == "cq")
       {
-        var workedTotal = (confirmedTotal =
-          callRoster[callHash].callObj.cqza.length);
-        if (workedTotal == 0)
+        var huntTotal = entry.callObj.cqza.length;
+        if (huntTotal == 0 || !huntIndex)
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
-        var workedFound = (confirmedFound = 0);
-        for (index in callRoster[callHash].callObj.cqza)
+        var huntFound = 0;
+        for (index in entry.callObj.cqza)
         {
-          var hash = hashMaker(callRoster[callHash].callObj.cqza[index],
-            callRoster[callHash].callObj, g_rosterSettings.reference);
+          var hash = hashMaker(entry.callObj.cqza[index], entry.callObj, g_rosterSettings.reference);
 
-          if (hash in g_worked.cqz) workedFound++;
-
-          if (hash in g_confirmed.cqz) confirmedFound++;
+          if (hash in huntIndex.cqz) huntFound++;
         }
-        if (
-          g_rosterSettings.huntNeed == "worked" &&
-          workedFound == workedTotal
-        )
+        if (huntFound == huntTotal)
         {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-        if (
-          g_rosterSettings.huntNeed == "confirmed" &&
-          confirmedFound == confirmedTotal
-        )
-        {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
 
@@ -790,81 +777,52 @@ function viewRoster()
 
       if (g_rosterSettings.hunting == "itu")
       {
-        var workedTotal = (confirmedTotal =
-          callRoster[callHash].callObj.ituza.length);
-        if (workedTotal == 0)
+        var huntTotal = entry.callObj.ituza.length;
+        if (huntTotal == 0 || !huntIndex)
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
-        var workedFound = (confirmedFound = 0);
-        for (index in callRoster[callHash].callObj.ituza)
+        var huntFound = 0;
+        for (index in entry.callObj.ituza)
         {
-          var hash = hashMaker(callRoster[callHash].callObj.ituza[index],
-            callRoster[callHash].callObj, g_rosterSettings.reference);
+          var hash = hashMaker(entry.callObj.ituza[index], entry.callObj, g_rosterSettings.reference);
 
-          if (hash in g_worked.ituz) workedFound++;
+          if (hash in huntIndex.ituz) huntFound++;
+        }
+        if (huntFound == huntTotal)
+        {
+          entry.tx = false;
+          continue;
+        }
 
-          if (hash in g_confirmed.ituz) confirmedFound++;
-        }
-        if (
-          g_rosterSettings.huntNeed == "worked" &&
-          workedFound == workedTotal
-        )
+        if (entry.callObj.grid.length == 0)
         {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-        if (
-          g_rosterSettings.huntNeed == "confirmed" &&
-          confirmedFound == confirmedTotal
-        )
-        {
-          callRoster[callHash].tx = false;
-          continue;
-        }
-        if (callRoster[callHash].callObj.grid.length == 0)
-        {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
         continue;
       }
 
-      if (
-        g_rosterSettings.hunting == "usstates" &&
-        window.opener.g_callsignLookups.ulsUseEnable == true
-      )
+      if (g_rosterSettings.hunting == "usstates" && window.opener.g_callsignLookups.ulsUseEnable == true)
       {
-        var state = callRoster[callHash].callObj.state;
-        var finalDxcc = callRoster[callHash].callObj.dxcc;
+        var state = entry.callObj.state;
+        var finalDxcc = entry.callObj.dxcc;
         if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
         {
           if (state in window.opener.g_StateData)
           {
-            var hash = hashMaker(state, callRoster[callHash].callObj, g_rosterSettings.reference);
+            var hash = hashMaker(state, entry.callObj, g_rosterSettings.reference);
 
-            if (
-              g_rosterSettings.huntNeed == "worked" &&
-              hash in g_worked.state
-            )
+            if (huntIndex && hash in huntIndex.state)
             {
-              callRoster[callHash].tx = false;
-              continue;
-            }
-
-            if (
-              g_rosterSettings.huntNeed == "confirmed" &&
-              hash in g_confirmed.state
-            )
-            {
-              callRoster[callHash].tx = false;
+              entry.tx = false;
               continue;
             }
           }
-          else callRoster[callHash].tx = false;
+          else entry.tx = false;
         }
-        else callRoster[callHash].tx = false;
+        else entry.tx = false;
 
         continue;
       }
@@ -877,7 +835,7 @@ function viewRoster()
         }
         else
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
         continue;
@@ -886,17 +844,17 @@ function viewRoster()
     if (isAwardTracker)
     {
       var tx = false;
-      var baseHash = hashMaker("", callRoster[callHash].callObj, g_rosterSettings.reference);
+      var baseHash = hashMaker("", entry.callObj, g_rosterSettings.reference);
 
       for (var award in g_awardTracker)
       {
         if (g_awardTracker[award].enable)
         {
-          tx = testAward(award, callRoster[callHash].callObj, baseHash);
+          tx = testAward(award, entry.callObj, baseHash);
           if (tx)
           {
             var x = g_awardTracker[award];
-            callRoster[callHash].callObj.awardReason =
+            entry.callObj.awardReason =
               g_awards[x.sponsor].awards[x.name].tooltip +
               " (" +
               g_awards[x.sponsor].sponsor +
@@ -906,7 +864,7 @@ function viewRoster()
           }
         }
       }
-      callRoster[callHash].tx = tx;
+      entry.tx = tx;
     }
   }
 
@@ -919,37 +877,34 @@ function viewRoster()
   var unconf = "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
   for (var callHash in callRoster)
   {
+    var entry = callRoster[callHash];
+
     // Special case check for called station
-    if (callRoster[callHash].callObj.qrz == true && callRoster[callHash].tx == false)
+    if (entry.callObj.qrz == true && entry.tx == false)
     {
       // The instance has to be enabled
-      if (window.opener.g_instances[callRoster[callHash].callObj.instance].crEnable == true)
+      if (window.opener.g_instances[entry.callObj.instance].crEnable == true)
       {
         // Calling us, but we wouldn't normally display
         // If they are not ignored or we're in a QSO with them, var it through
 
-        if (
-          (!(callRoster[callHash].DEcall in g_blockedCalls) &&
-            !(callRoster[callHash].callObj.dxcc in g_blockedDxcc)) ||
-          window.opener.g_instances[callRoster[callHash].callObj.instance]
-            .status.DXcall == callRoster[callHash].DEcall
-        )
+        if ((!(entry.DEcall in g_blockedCalls) && !(entry.callObj.dxcc in g_blockedDxcc)) ||
+          window.opener.g_instances[entry.callObj.instance].status.DXcall == entry.DEcall)
         {
-          callRoster[callHash].tx = true;
+          entry.tx = true;
         }
       }
     }
 
-    if (callRoster[callHash].callObj.dxcc != -1 && callRoster[callHash].tx == true)
+    if (entry.callObj.dxcc != -1 && entry.tx == true)
     {
-      var workHash = hashMaker("", callRoster[callHash].callObj, g_rosterSettings.reference);
+      var workHash = hashMaker("", entry.callObj, g_rosterSettings.reference);
 
-      var call = callRoster[callHash].DEcall;
+      var call = entry.DEcall;
       var testHash = call + workHash;
       var colorObject = Object();
 
-      var callPointer =
-        callRoster[callHash].callObj.CQ == true ? "cursor:pointer" : "";
+      var callPointer = entry.callObj.CQ == true ? "cursor:pointer" : "";
       var didWork = false;
 
       var callsign = "#FFFF00";
@@ -965,27 +920,8 @@ function viewRoster()
 
       hasGtPin = false;
       var shouldAlert = false;
-      var callsignBg,
-        gridBg,
-        callingBg,
-        dxccBg,
-        stateBg,
-        cntyBg,
-        contBg,
-        cqzBg,
-        ituzBg,
-        wpxBg,
-        gtBg;
-      var callConf,
-        gridConf,
-        callingConf,
-        dxccConf,
-        stateConf,
-        cntyConf,
-        contConf,
-        cqzConf,
-        ituzConf,
-        wpxConf;
+      var callsignBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
+      var callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, cqzConf, ituzConf, wpxConf;
 
       callsignBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
 
@@ -1007,21 +943,23 @@ function viewRoster()
       if (
         call in window.opener.g_gtCallsigns &&
         window.opener.g_gtCallsigns[call] in window.opener.g_gtFlagPins &&
-        window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[call]].canmsg ==
-          true
+        window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[call]].canmsg == true
       )
       {
         // grab the CID
         colorObject.gt = window.opener.g_gtCallsigns[call];
         hasGtPin = true;
       }
-      else colorObject.gt = 0;
+      else
+      {
+        colorObject.gt = 0;
+      }
 
       if (callMode == "all")
       {
-        if (allOnlyNew.checked == true && didWork && callRoster[callHash].callObj.qrz == false)
+        if (allOnlyNew.checked == true && didWork && entry.callObj.qrz == false)
         {
-          callRoster[callHash].tx = false;
+          entry.tx = false;
           continue;
         }
 
@@ -1029,24 +967,17 @@ function viewRoster()
         {
           if (g_rosterSettings.huntNeed == "worked" && didWork)
           {
-            callRoster[callHash].callObj.reason.push("call");
+            entry.callObj.reason.push("call");
             callConf = unconf + callsign + inversionAlpha + ";";
           }
-          if (
-            didWork &&
-            g_rosterSettings.huntNeed == "confirmed" &&
-            !(testHash in g_confirmed.call)
-          )
+
+          if (didWork && g_rosterSettings.huntNeed == "confirmed" && !(testHash in g_confirmed.call))
           {
             shouldAlert = true;
-            callRoster[callHash].callObj.reason.push("call");
+            entry.callObj.reason.push("call");
             callConf = unconf + callsign + inversionAlpha + ";";
           }
-          else if (
-            didWork &&
-            g_rosterSettings.huntNeed == "confirmed" &&
-            testHash in g_confirmed.call
-          )
+          else if (didWork && g_rosterSettings.huntNeed == "confirmed" && testHash in g_confirmed.call)
           {
             callConf = "";
           }
@@ -1059,41 +990,27 @@ function viewRoster()
           }
         }
 
-        if (
-          huntQRZ.checked == true &&
-          callRoster[callHash].callObj.qrz == true
-        )
+        if (huntQRZ.checked == true && entry.callObj.qrz == true)
         {
           shouldAlert = true;
-          callRoster[callHash].callObj.reason.push("qrz");
+          entry.callObj.reason.push("qrz");
         }
 
         if (huntOAMS.checked == true && hasGtPin == true)
         {
           shouldAlert = true;
-          callRoster[callHash].callObj.reason.push("oams");
+          entry.callObj.reason.push("oams");
         }
 
-        if (
-          huntGrid.checked == true &&
-          callRoster[callHash].callObj.grid.length > 1
-        )
+        if (huntGrid.checked == true && entry.callObj.grid.length > 1)
         {
-          var hash = callRoster[callHash].callObj.grid.substr(0, 4) + workHash;
-          if (
-            (g_rosterSettings.huntNeed == "worked" &&
-              !(hash in g_worked.grid)) ||
-            (g_rosterSettings.huntNeed == "confirmed" &&
-              !(hash in g_confirmed.grid))
-          )
+          var hash = entry.callObj.grid.substr(0, 4) + workHash;
+          if (huntIndex && !(hash in huntIndex.grid))
           {
             shouldAlert = true;
-            callRoster[callHash].callObj.reason.push("grid");
+            entry.callObj.reason.push("grid");
 
-            if (
-              g_rosterSettings.huntNeed == "confirmed" &&
-              hash in g_worked.grid
-            )
+            if (workedIndex && hash in workedIndex.grid)
             {
               gridConf = unconf + grid + inversionAlpha + ";";
             }
@@ -1104,23 +1021,16 @@ function viewRoster()
             }
           }
         }
+
         if (huntDXCC.checked == true)
         {
-          var hash = String(callRoster[callHash].callObj.dxcc) + workHash;
-          if (
-            (g_rosterSettings.huntNeed == "worked" &&
-              !(hash in g_worked.dxcc)) ||
-            (g_rosterSettings.huntNeed == "confirmed" &&
-              !(hash in g_confirmed.dxcc))
-          )
+          var hash = String(entry.callObj.dxcc) + workHash;
+          if (huntIndex && !(hash in huntIndex.dxcc))
           {
             shouldAlert = true;
-            callRoster[callHash].callObj.reason.push("dxcc");
+            entry.callObj.reason.push("dxcc");
 
-            if (
-              g_rosterSettings.huntNeed == "confirmed" &&
-              hash in g_worked.dxcc
-            )
+            if (workedIndex && hash in workedIndex.dxcc)
             {
               dxccConf = unconf + dxcc + inversionAlpha + ";";
             }
@@ -1131,32 +1041,21 @@ function viewRoster()
             }
           }
         }
-        if (
-          huntState.checked == true &&
-          window.opener.g_callsignLookups.ulsUseEnable == true
-        )
+        if (huntState.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
-          var stateSearch = callRoster[callHash].callObj.state;
-          var finalDxcc = callRoster[callHash].callObj.dxcc;
+          var stateSearch = entry.callObj.state;
+          var finalDxcc = entry.callObj.dxcc;
           if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
           {
             if (stateSearch in window.opener.g_StateData)
             {
               var hash = stateSearch + workHash;
-              if (
-                (g_rosterSettings.huntNeed == "worked" &&
-                  !(hash in g_worked.state)) ||
-                (g_rosterSettings.huntNeed == "confirmed" &&
-                  !(hash in g_confirmed.state))
-              )
+              if (huntIndex && !(hash in huntIndex.state))
               {
                 shouldAlert = true;
-                callRoster[callHash].callObj.reason.push("usstates");
+                entry.callObj.reason.push("usstates");
 
-                if (
-                  g_rosterSettings.huntNeed == "confirmed" &&
-                  hash in g_worked.state
-                )
+                if (workedIndex && hash in workedIndex.state)
                 {
                   stateConf = unconf + state + inversionAlpha + ";";
                 }
@@ -1169,54 +1068,29 @@ function viewRoster()
             }
           }
         }
-        if (
-          huntCounty.checked == true &&
-          window.opener.g_callsignLookups.ulsUseEnable == true
-        )
+
+        if (huntCounty.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
-          var finalDxcc = callRoster[callHash].callObj.dxcc;
+          var finalDxcc = entry.callObj.dxcc;
           if (
-            callRoster[callHash].callObj.cnty &&
-            (finalDxcc == 291 ||
-              finalDxcc == 110 ||
-              finalDxcc == 6 ||
-              finalDxcc == 202) &&
-            callRoster[callHash].callObj.cnty.length > 0
+            entry.callObj.cnty &&
+            (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6 || finalDxcc == 202) &&
+            entry.callObj.cnty.length > 0
           )
           {
-            var hash = callRoster[callHash].callObj.cnty + workHash;
+            var hash = entry.callObj.cnty + workHash;
 
-            if (
-              (g_rosterSettings.huntNeed == "worked" &&
-                !(hash in g_worked.cnty)) ||
-              (g_rosterSettings.huntNeed == "confirmed" &&
-                !(hash in g_confirmed.cnty)) ||
-              callRoster[callHash].callObj.qual == false
-            )
+            if ((huntIndex && !(hash in huntIndex.cnty)) || entry.callObj.qual == false)
             {
-              if (callRoster[callHash].callObj.qual == false)
+              if (entry.callObj.qual == false)
               {
-                var counties =
-                  window.opener.g_zipToCounty[
-                    callRoster[callHash].callObj.zipcode
-                  ];
+                var counties = window.opener.g_zipToCounty[entry.callObj.zipcode];
                 var foundHit = false;
                 for (var cnt in counties)
                 {
                   var hh = counties[cnt] + workHash;
-                  callRoster[callHash].callObj.cnty = counties[cnt];
-                  if (
-                    g_rosterSettings.huntNeed == "worked" &&
-                    !(hh in g_worked.cnty)
-                  )
-                  {
-                    foundHit = true;
-                    break;
-                  }
-                  if (
-                    g_rosterSettings.huntNeed == "confirmed" &&
-                    !(hh in g_confirmed.cnty)
-                  )
+                  entry.callObj.cnty = counties[cnt];
+                  if (huntIndex && !(hh in huntIndex.cnty))
                   {
                     foundHit = true;
                     break;
@@ -1231,12 +1105,9 @@ function viewRoster()
 
               if (shouldAlert)
               {
-                callRoster[callHash].callObj.reason.push("uscnty");
+                entry.callObj.reason.push("uscnty");
 
-                if (
-                  g_rosterSettings.huntNeed == "confirmed" &&
-                  hash in g_worked.cnty
-                )
+                if (workedIndex && hash in workedIndex.cnty)
                 {
                   cntyConf = unconf + cnty + inversionAlpha + ";";
                 }
@@ -1249,32 +1120,25 @@ function viewRoster()
             }
           }
         }
+
         if (huntCQz.checked == true)
         {
-          var workedTotal = (confirmedTotal =
-            callRoster[callHash].callObj.cqza.length);
-          var workedFound = (confirmedFound = 0);
-          for (index in callRoster[callHash].callObj.cqza)
-          {
-            var hash = callRoster[callHash].callObj.cqza[index] + workHash;
-            if (hash in g_worked.cqz) workedFound++;
+          var huntTotal = entry.callObj.cqza.length;
+          var huntFound = 0, workedFound = 0;
 
-            if (hash in g_confirmed.cqz) confirmedFound++;
+          for (index in entry.callObj.cqza)
+          {
+            var hash = entry.callObj.cqza[index] + workHash;
+            if (huntIndex && hash in huntIndex.cqz) huntFound++;
+
+            if (workedIndex && hash in workedIndex.cqz) workedFound++;
           }
-          if (
-            (g_rosterSettings.huntNeed == "worked" &&
-              workedFound != workedTotal) ||
-            (g_rosterSettings.huntNeed == "confirmed" &&
-              confirmedFound != confirmedTotal)
-          )
+          if (huntFound != huntTotal)
           {
             shouldAlert = true;
-            callRoster[callHash].callObj.reason.push("cq");
+            entry.callObj.reason.push("cq");
 
-            if (
-              g_rosterSettings.huntNeed == "confirmed" &&
-              workedFound == workedTotal
-            )
+            if (workedIndex && workedFound == huntTotal)
             {
               cqzConf = unconf + cqz + inversionAlpha + ";";
             }
@@ -1285,31 +1149,24 @@ function viewRoster()
             }
           }
         }
+
         if (huntITUz.checked == true)
         {
-          var workedTotal = (confirmedTotal =
-            callRoster[callHash].callObj.ituza.length);
-          var workedFound = (confirmedFound = 0);
-          for (index in callRoster[callHash].callObj.ituza)
-          {
-            var hash = callRoster[callHash].callObj.ituza[index] + workHash;
-            if (hash in g_worked.ituz) workedFound++;
+          var huntTotal = entry.callObj.ituza.length;
+          var huntFound = 0, workedFound = 0;
 
-            if (hash in g_confirmed.ituz) confirmedFound++;
+          for (index in entry.callObj.ituza)
+          {
+            var hash = entry.callObj.ituza[index] + workHash;
+            if (huntIndex && hash in huntIndex.ituz) huntFound++;
+
+            if (workedIndex && hash in workedIndex.ituz) workedFound++;
           }
-          if (
-            (g_rosterSettings.huntNeed == "worked" &&
-              workedFound != workedTotal) ||
-            (g_rosterSettings.huntNeed == "confirmed" &&
-              confirmedFound != confirmedTotal)
-          )
+          if (huntFound != huntTotal)
           {
             shouldAlert = true;
-            callRoster[callHash].callObj.reason.push("itu");
-            if (
-              g_rosterSettings.huntNeed == "confirmed" &&
-              workedFound == workedTotal
-            )
+            entry.callObj.reason.push("itu");
+            if (workedIndex && workedFound == huntTotal)
             {
               ituzConf = unconf + ituz + inversionAlpha + ";";
             }
@@ -1320,21 +1177,15 @@ function viewRoster()
             }
           }
         }
-        if (huntPX.checked == true && callRoster[callHash].callObj.px)
+
+        if (huntPX.checked == true && entry.callObj.px)
         {
-          var hash = String(callRoster[callHash].callObj.px) + workHash;
-          if (
-            (g_rosterSettings.huntNeed == "worked" && !(hash in g_worked.px)) ||
-            (g_rosterSettings.huntNeed == "confirmed" &&
-              !(hash in g_confirmed.px))
-          )
+          var hash = String(entry.callObj.px) + workHash;
+          if (huntIndex && !(hash in huntIndex.px))
           {
             shouldAlert = true;
-            callRoster[callHash].callObj.reason.push("wpx");
-            if (
-              g_rosterSettings.huntNeed == "confirmed" &&
-              hash in g_worked.px
-            )
+            entry.callObj.reason.push("wpx");
+            if (workedIndex && hash in workedIndex.px)
             {
               wpxConf = unconf + wpx + inversionAlpha + ";";
             }
@@ -1345,22 +1196,15 @@ function viewRoster()
             }
           }
         }
-        if (huntCont.checked == true && callRoster[callHash].callObj.cont)
+
+        if (huntCont.checked == true && entry.callObj.cont)
         {
-          var hash = String(callRoster[callHash].callObj.cont) + workHash;
-          if (
-            (g_rosterSettings.huntNeed == "worked" &&
-              !(hash in g_worked.cont)) ||
-            (g_rosterSettings.huntNeed == "confirmed" &&
-              !(hash in g_confirmed.cont))
-          )
+          var hash = String(entry.callObj.cont) + workHash;
+          if (huntIndex && !(hash in huntIndex.cont))
           {
             shouldAlert = true;
-            callRoster[callHash].callObj.reason.push("cont");
-            if (
-              g_rosterSettings.huntNeed == "confirmed" &&
-              hash in g_worked.cont
-            )
+            entry.callObj.reason.push("cont");
+            if (workedIndex && hash in g_worked.cont)
             {
               contConf = unconf + cont + inversionAlpha + ";";
             }
@@ -1373,127 +1217,54 @@ function viewRoster()
         }
       }
 
-      if (callRoster[callHash].callObj.DXcall == window.opener.myDEcall)
+      if (entry.callObj.DXcall == window.opener.myDEcall)
       {
         callingBg = "#0000FF" + inversionAlpha;
         calling = "#FFFF00;text-shadow: 0px 0px 2px #FFFF00";
       }
-      else if (
-        callRoster[callHash].callObj.CQ == true &&
-        g_rosterSettings.cqOnly == false
-      )
+      else if (entry.callObj.CQ == true && g_rosterSettings.cqOnly == false)
       {
         callingBg = calling + inversionAlpha;
         calling = bold;
       }
 
-      colorObject.callsign =
-        "style='" +
-        callConf +
-        "background-color:" +
-        callsignBg +
-        ";color:" +
-        callsign +
-        ";" +
-        callPointer +
-        "'";
-      colorObject.grid =
-        "style='" +
-        gridConf +
-        "background-color:" +
-        gridBg +
-        ";color:" +
-        grid +
-        ";cursor:pointer'";
-      colorObject.calling =
-        "style='" +
-        callingConf +
-        "background-color:" +
-        callingBg +
-        ";color:" +
-        calling +
-        "'";
-      colorObject.dxcc =
-        "style='" +
-        dxccConf +
-        "background-color:" +
-        dxccBg +
-        ";color:" +
-        dxcc +
-        "'";
-      colorObject.state =
-        "style='" +
-        stateConf +
-        "background-color:" +
-        stateBg +
-        ";color:" +
-        state +
-        "'";
-      colorObject.cnty =
-        "style='" +
-        cntyConf +
-        "background-color:" +
-        cntyBg +
-        ";color:" +
-        cnty +
-        "'";
-      colorObject.cont =
-        "style='" +
-        contConf +
-        "background-color:" +
-        contBg +
-        ";color:" +
-        cont +
-        "'";
-      colorObject.cqz =
-        "style='" +
-        cqzConf +
-        "background-color:" +
-        cqzBg +
-        ";color:" +
-        cqz +
-        "'";
-      colorObject.ituz =
-        "style='" +
-        ituzConf +
-        "background-color:" +
-        ituzBg +
-        ";color:" +
-        ituz +
-        "'";
-      colorObject.px =
-        "style='" +
-        wpxConf +
-        "background-color:" +
-        wpxBg +
-        ";color:" +
-        wpx +
-        "'";
+      colorObject.callsign = "style='" + callConf + "background-color:" + callsignBg + ";color:" +
+        callsign + ";" + callPointer + "'";
+      colorObject.grid = "style='" + gridConf + "background-color:" + gridBg + ";color:" + grid + ";cursor:pointer'";
+      colorObject.calling = "style='" + callingConf + "background-color:" + callingBg + ";color:" + calling + "'";
+      colorObject.dxcc = "style='" + dxccConf + "background-color:" + dxccBg + ";color:" + dxcc + "'";
+      colorObject.state = "style='" + stateConf + "background-color:" + stateBg + ";color:" + state + "'";
+      colorObject.cnty = "style='" + cntyConf + "background-color:" + cntyBg + ";color:" + cnty + "'";
+      colorObject.cont = "style='" + contConf + "background-color:" + contBg + ";color:" + cont + "'";
+      colorObject.cqz = "style='" + cqzConf + "background-color:" + cqzBg + ";color:" + cqz + "'";
+      colorObject.ituz = "style='" + ituzConf + "background-color:" + ituzBg + ";color:" + ituz + "'";
+      colorObject.px = "style='" + wpxConf + "background-color:" + wpxBg + ";color:" + wpx + "'";
+
       if (didWork && shouldAlert) shouldAlert = false;
 
-      callRoster[callHash].callObj.shouldAlert = shouldAlert;
+      entry.callObj.shouldAlert = shouldAlert;
 
-      callRoster[callHash].callObj.style = colorObject;
+      entry.callObj.style = colorObject;
 
       if (g_rosterSettings.columns.Spot)
       {
-        callRoster[callHash].callObj.spot = window.opener.getSpotTime(
-          callRoster[callHash].callObj.DEcall +
-            callRoster[callHash].callObj.mode +
-            callRoster[callHash].callObj.band +
-            callRoster[callHash].callObj.grid
+        entry.callObj.spot = window.opener.getSpotTime(
+          entry.callObj.DEcall + entry.callObj.mode + entry.callObj.band + entry.callObj.grid
         );
-        if (callRoster[callHash].callObj.spot == null)
+        if (entry.callObj.spot == null)
         {
-          callRoster[callHash].callObj.spot = { when: 0, snr: 0 };
+          entry.callObj.spot = { when: 0, snr: 0 };
         }
       }
-      else callRoster[callHash].callObj.spot = { when: 0, snr: 0 };
+      else
+      {
+        entry.callObj.spot = { when: 0, snr: 0 };
+      }
 
-      modes[callRoster[callHash].callObj.mode] = true;
-      bands[callRoster[callHash].callObj.band] = true;
+      modes[entry.callObj.mode] = true;
+      bands[entry.callObj.band] = true;
 
-      newCallList.push(callRoster[callHash].callObj);
+      newCallList.push(entry.callObj);
     }
   }
 
@@ -1511,12 +1282,8 @@ function viewRoster()
     newCallList.sort(r_sortFunction[6]).reverse();
   }
 
-  var showBands =
-    (Object.keys(bands).length > 1) ||
-    g_rosterSettings.columns.Band;
-  var showModes =
-    (Object.keys(modes).length > 1) ||
-    g_rosterSettings.columns.Mode;
+  var showBands = (Object.keys(bands).length > 1) || g_rosterSettings.columns.Band;
+  var showModes = (Object.keys(modes).length > 1) || g_rosterSettings.columns.Mode;
 
   var worker = "";
 
@@ -1524,141 +1291,95 @@ function viewRoster()
   {
     worker = "<table id='callTable' class='rosterTable' align=left>";
 
-    worker +=
-      "<thead><th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
+    worker += "<thead><th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
 
     if (showBands)
-    {
-      worker += "<th onclick='' >Band</th>";
-    }
-    if (showModes)
-    {
-      worker += "<th onclick='' >Mode</th>";
-    }
+    { worker += "<th onclick='' >Band</th>"; }
 
-    worker +=
-      "<th style='cursor:pointer;' onclick='showRosterBox(1);'  >Grid</th>";
+    if (showModes)
+    { worker += "<th onclick='' >Mode</th>"; }
+
+    worker += "<th style='cursor:pointer;' onclick='showRosterBox(1);'  >Grid</th>";
+
     if (g_rosterSettings.columns.Calling)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(10);' >Calling</th>";
-    }
-    if (g_rosterSettings.columns.Msg) worker += "<th >Msg</th>";
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(10);' >Calling</th>"; }
+
+    if (g_rosterSettings.columns.Msg)
+    { worker += "<th >Msg</th>"; }
+
     if (g_rosterSettings.columns.DXCC)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(5);' >DXCC</th>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >DXCC</th>"; }
+
     if (g_rosterSettings.columns.Flag)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(5);' >Flag</th>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >Flag</th>"; }
+
     if (g_rosterSettings.columns.State)
-    {
-      worker +=
-        "<th  style='cursor:pointer;' onclick='showRosterBox(9);'  >State</th>";
-    }
+    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(9);'  >State</th>"; }
+
     if (g_rosterSettings.columns.County)
-    {
-      worker +=
-        "<th  style='cursor:pointer;' onclick='showRosterBox(15);' >County</th>";
-    }
+    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(15);' >County</th>"; }
+
     if (g_rosterSettings.columns.Cont)
-    {
-      worker +=
-        "<th  style='cursor:pointer;' onclick='showRosterBox(16);' >Cont</th>";
-    }
+    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(16);' >Cont</th>"; }
+
     if (g_rosterSettings.columns.dB)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(2);' >dB</th>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(2);' >dB</th>"; }
+
     if (g_rosterSettings.columns.Freq)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(4);' >Freq</th>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(4);' >Freq</th>"; }
+
     if (g_rosterSettings.columns.DT)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(3);' >DT</th>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(3);' >DT</th>"; }
+
     if (g_rosterSettings.columns.Dist)
     {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(7);' >Dist(" +
-        window.opener.distanceUnit.value.toLowerCase() +
-        ")</th>";
-    }
-    if (g_rosterSettings.columns.Azim)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(8);' >Azim</th>";
-    }
-    if (g_rosterSettings.columns.CQz) worker += "<th>CQz</th>";
-    if (g_rosterSettings.columns.ITUz) worker += "<th>ITUz</th>";
-    if (g_rosterSettings.columns.PX)
-    {
-      worker +=
-        "<th  style='cursor:pointer;' onclick='showRosterBox(11);'>PX</th>";
+      worker += "<th style='cursor:pointer;' onclick='showRosterBox(7);' >Dist(" +
+        window.opener.distanceUnit.value.toLowerCase() + ")</th>";
     }
 
-    if (
-      window.opener.g_callsignLookups.lotwUseEnable == true &&
-      g_rosterSettings.columns.LoTW
-    )
+    if (g_rosterSettings.columns.Azim)
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(8);' >Azim</th>"; }
+
+    if (g_rosterSettings.columns.CQz)
+    { worker += "<th>CQz</th>"; }
+
+    if (g_rosterSettings.columns.ITUz)
+    { worker += "<th>ITUz</th>"; }
+
+    if (g_rosterSettings.columns.PX)
+    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(11);'>PX</th>"; }
+
+    if (window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.columns.LoTW)
     { worker += "<th  >LoTW</th>"; }
-    if (
-      window.opener.g_callsignLookups.eqslUseEnable == true &&
-      g_rosterSettings.columns.eQSL
-    )
+
+    if (window.opener.g_callsignLookups.eqslUseEnable == true && g_rosterSettings.columns.eQSL)
     { worker += "<th >eQSL</th>"; }
-    if (
-      window.opener.g_callsignLookups.oqrsUseEnable == true &&
-      g_rosterSettings.columns.OQRS
-    )
+
+    if (window.opener.g_callsignLookups.oqrsUseEnable == true && g_rosterSettings.columns.OQRS)
     { worker += "<th >OQRS</th>"; }
 
     if (g_rosterSettings.columns.Spot)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(13);' >Spot</th>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(13);' >Spot</th>"; }
 
     if (g_rosterSettings.columns.Life)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(12);' >Life</th>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(12);' >Life</th>"; }
 
     if (g_rosterSettings.columns.OAMS)
-    {
-      worker +=
-        "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAM</th>";
-    }
+    { worker += "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAM</th>"; }
 
     if (g_rosterSettings.columns.Age)
-    {
-      worker +=
-        "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th></thead>";
-    }
+    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th></thead>"; }
   }
   else
   {
-    worker =
-      "<div id=\"buttonsDiv\" style=\"margin-left:0px;white-space:normal;\">";
+    worker = "<div id=\"buttonsDiv\" style=\"margin-left:0px;white-space:normal;\">";
   }
 
   var shouldAlert = 0;
 
   for (var x in newCallList)
   {
-    if (
-      newCallList[x].shouldAlert == false &&
-      onlyHits == true &&
-      newCallList[x].qrz == false
-    )
+    if (newCallList[x].shouldAlert == false && onlyHits == true && newCallList[x].qrz == false)
     { continue; }
 
     var spotString = "";
@@ -1667,33 +1388,18 @@ function viewRoster()
       spotString = getSpotString(newCallList[x]);
       if (g_rosterSettings.onlySpot && spotString == "") continue;
     }
-    var grid =
-      newCallList[x].grid.length > 1 ? newCallList[x].grid.substr(0, 4) : "-";
+    var grid = newCallList[x].grid.length > 1 ? newCallList[x].grid.substr(0, 4) : "-";
 
-    var geo =
-      window.opener.g_worldGeoData[
-        window.opener.g_dxccToGeoData[newCallList[x].dxcc]
-      ];
-    var cqzone =
-      grid in window.opener.g_gridToCQZone
-        ? window.opener.g_gridToCQZone[grid].join(", ")
-        : "-";
-    var ituzone =
-      grid in window.opener.g_gridToITUZone
-        ? window.opener.g_gridToITUZone[grid].join(", ")
-        : "-";
+    var geo = window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[newCallList[x].dxcc]];
+    var cqzone = grid in window.opener.g_gridToCQZone ? window.opener.g_gridToCQZone[grid].join(", ") : "-";
+    var ituzone = grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-";
     var thisCall = newCallList[x].DEcall;
 
     if (thisCall.match("^[A-Z][0-9][A-Z](/w+)?$"))
     { newCallList[x].style.callsign = "class='oneByOne'"; }
-    if (
-      thisCall ==
-      window.opener.g_instances[newCallList[x].instance].status.DXcall
-    )
+    if (thisCall == window.opener.g_instances[newCallList[x].instance].status.DXcall)
     {
-      if (
-        window.opener.g_instances[newCallList[x].instance].status.TxEnabled == 1
-      )
+      if (window.opener.g_instances[newCallList[x].instance].status.TxEnabled == 1)
       {
         newCallList[x].style.callsign = "class='dxCalling'";
       }

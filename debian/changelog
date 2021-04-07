@@ -2,7 +2,7 @@ gridtracker (1.21.0407) unstable; urgency=medium
   [Bug Fixes]
   - mp3 alerts from previous versions now work correctly
   - callook lookup preference now stored
-  - call roster WSJT-X/JTDX instance label overlap fixed
+  - call roster WSJT-X/JTDX instance label/checkbox overlap fixed
   [Enhancements]
   - new icon to request ClubLog OQRS QSL
   - add eQSL check in log file processing

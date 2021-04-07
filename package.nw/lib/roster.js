@@ -2412,7 +2412,8 @@ function updateInstances()
     instancesDiv.innerHTML = worker;
     instancesWrapper.style.display = "";
   }
-  else {
+  else
+  {
     instancesDiv.innerHTML = "";
     instancesWrapper.style.display = "none";
   }

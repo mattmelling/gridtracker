@@ -1923,115 +1923,122 @@ function splitNoParen(s)
 
 function createSpotTipTable(toolElement)
 {
-  var now = timeNowSec();
-  var myTooltip = document.getElementById("myTooltip");
-  var worker = "";
-  if (toolElement.spot in g_receptionReports.spots)
+  try
   {
-    g_layerSources["psk-hop"].clear();
-    var report = g_receptionReports.spots[toolElement.spot];
-
-    var LL = squareToLatLongAll(myRawGrid);
-    var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-    var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-    var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
-
-    worker =
-      "<table id='tooltipTable' class='darkTable' ><tr><th colspan=2 style='color:cyan'>Rx Spot</th></tr>";
-    worker +=
-      "<tr><td>Age</td><td>" +
-      Number(now - report.when).toDHMS() +
-      "</td></tr>";
-    worker +=
-      "<tr><td>dB</td><td style='color:#DD44DD' >" +
-      Number(report.snr).formatSignalReport() +
-      "</td></tr>";
-    worker +=
-      "<tr><td>Call</td><td style='color:#ff0' >" +
-      report.call.formatCallsign() +
-      "</td></tr>";
-
-    if (report.dxcc > 0)
+    var now = timeNowSec();
+    var myTooltip = document.getElementById("myTooltip");
+    var worker = "";
+    if (toolElement.spot in g_receptionReports.spots)
     {
+      g_layerSources["psk-hop"].clear();
+      var report = g_receptionReports.spots[toolElement.spot];
+
+      var LL = squareToLatLongAll(myRawGrid);
+      var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
+      var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
+      var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
+
+      worker =
+        "<table id='tooltipTable' class='darkTable' ><tr><th colspan=2 style='color:cyan'>Rx Spot</th></tr>";
       worker +=
-        "<tr><td>DXCC</td><td style='color:orange;'>" +
-        g_dxccToAltName[report.dxcc] +
-        " <font color='lightgreen'>(" +
-        g_worldGeoData[g_dxccToGeoData[report.dxcc]].pp +
-        ")</font></td>";
-    }
+        "<tr><td>Age</td><td>" +
+        Number(now - report.when).toDHMS() +
+        "</td></tr>";
+      worker +=
+        "<tr><td>dB</td><td style='color:#DD44DD' >" +
+        Number(report.snr).formatSignalReport() +
+        "</td></tr>";
+      worker +=
+        "<tr><td>Call</td><td style='color:#ff0' >" +
+        report.call.formatCallsign() +
+        "</td></tr>";
 
-    worker +=
-      "<tr><td>Grid</td><td style='color:cyan;cursor:pointer' >" +
-      report.grid +
-      "</td></tr>";
-    worker +=
-      "<tr><td>Freq</td><td style='color:lightgreen' >" +
-      report.freq.formatMhz() +
-      " <font color='yellow'>(" +
-      report.band +
-      ")</font></td></tr>";
-    worker +=
-      "<tr><td>Mode</td><td style='color:orange' >" +
-      report.mode +
-      "</td></tr>";
+      if (report.dxcc > 0)
+      {
+        worker +=
+          "<tr><td>DXCC</td><td style='color:orange;'>" +
+          g_dxccToAltName[report.dxcc] +
+          " <font color='lightgreen'>(" +
+          g_worldGeoData[g_dxccToGeoData[report.dxcc]].pp +
+          ")</font></td>";
+      }
 
-    LL = squareToLatLongAll(report.grid);
+      worker +=
+        "<tr><td>Grid</td><td style='color:cyan;cursor:pointer' >" +
+        report.grid +
+        "</td></tr>";
+      worker +=
+        "<tr><td>Freq</td><td style='color:lightgreen' >" +
+        report.freq.formatMhz() +
+        " <font color='yellow'>(" +
+        report.band +
+        ")</font></td></tr>";
+      worker +=
+        "<tr><td>Mode</td><td style='color:orange' >" +
+        report.mode +
+        "</td></tr>";
 
-    report.bearing = parseInt(
-      MyCircle.bearing(
-        g_myLat,
-        g_myLon,
-        LL.la2 - (LL.la2 - LL.la1) / 2,
-        LL.lo2 - (LL.lo2 - LL.lo1) / 2
-      )
-    );
-    worker +=
-      "<tr><td>Dist</td><td style='color:cyan'>" +
-      parseInt(
-        MyCircle.distance(
+      LL = squareToLatLongAll(report.grid);
+
+      report.bearing = parseInt(
+        MyCircle.bearing(
           g_myLat,
           g_myLon,
           LL.la2 - (LL.la2 - LL.la1) / 2,
-          LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-          distanceUnit.value
-        ) * MyCircle.validateRadius(distanceUnit.value)
-      ) +
-      distanceUnit.value.toLowerCase() +
-      "</td></tr>";
-    worker +=
-      "<tr><td>Azim</td><td style='color:yellow'>" +
-      report.bearing +
-      "&deg;</td></tr>";
+          LL.lo2 - (LL.lo2 - LL.lo1) / 2
+        )
+      );
+      worker +=
+        "<tr><td>Dist</td><td style='color:cyan'>" +
+        parseInt(
+          MyCircle.distance(
+            g_myLat,
+            g_myLon,
+            LL.la2 - (LL.la2 - LL.la1) / 2,
+            LL.lo2 - (LL.lo2 - LL.lo1) / 2,
+            distanceUnit.value
+          ) * MyCircle.validateRadius(distanceUnit.value)
+        ) +
+        distanceUnit.value.toLowerCase() +
+        "</td></tr>";
+      worker +=
+        "<tr><td>Azim</td><td style='color:yellow'>" +
+        report.bearing +
+        "&deg;</td></tr>";
 
-    worker +=
-      "<tr><td>Time</td><td>" +
-      userTimeString(report.when * 1000) +
-      "</td></tr>";
+      worker +=
+        "<tr><td>Time</td><td>" +
+        userTimeString(report.when * 1000) +
+        "</td></tr>";
 
-    worker += "</table>";
+      worker += "</table>";
 
-    var strokeWeight = pathWidthValue.value;
+      var strokeWeight = pathWidthValue.value;
 
-    Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-    Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
+      Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
+      Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
 
-    var toPoint = ol.proj.fromLonLat([Lon, Lat]);
+      var toPoint = ol.proj.fromLonLat([Lon, Lat]);
 
-    var feature = flightFeature(
-      [fromPoint, toPoint],
-      {
-        weight: strokeWeight,
-        color: getQrzPathColor(),
-        steps: 75
-      },
-      "psk-hop",
-      false
-    );
+      var feature = flightFeature(
+        [fromPoint, toPoint],
+        {
+          weight: strokeWeight,
+          color: getQrzPathColor(),
+          steps: 75
+        },
+        "psk-hop",
+        false
+      );
+    }
+    myTooltip.innerHTML = worker;
+    g_passingToolTipTableString = worker;
+    return 10;
   }
-  myTooltip.innerHTML = worker;
-  g_passingToolTipTableString = worker;
-  return 10;
+  catch (err)
+  {
+    console.log("Unexpected error at createSpotTipTable", toolElement, err)
+  }
 }
 
 function createTooltTipTable(toolElement)
@@ -6818,17 +6825,24 @@ function handleWsjtxStatus(newMessage)
 
         if (toPoint)
         {
-          g_transmitFlightPath = flightFeature(
-            [fromPoint, toPoint],
-            {
-              weight: strokeWeight,
-              color: strokeColor,
-              steps: 75,
-              zIndex: 90
-            },
-            "transmit",
-            true
-          );
+          try
+          {
+            g_transmitFlightPath = flightFeature(
+              [fromPoint, toPoint],
+              {
+                weight: strokeWeight,
+                color: strokeColor,
+                steps: 75,
+                zIndex: 90
+              },
+              "transmit",
+              true
+            );
+          }
+          catch (err)
+          {
+            console.log("Unexpected error inside handleWsjtxStatus", err)
+          }
         }
       }
       g_weAreDecoding = false;
@@ -7309,23 +7323,30 @@ function handleWsjtxDecode(newMessage)
               var fromPoint = getPoint(callsign.grid);
               var toPoint = getPoint(DEcallsign.grid);
 
-              flightPath = flightFeature(
-                [fromPoint, toPoint],
-                {
-                  weight: strokeWeight,
-                  color: strokeColor,
-                  steps: 75,
-                  zIndex: 90
-                },
-                "flight",
-                true
-              );
+              try
+              {
+                flightPath = flightFeature(
+                  [fromPoint, toPoint],
+                  {
+                    weight: strokeWeight,
+                    color: strokeColor,
+                    steps: 75,
+                    zIndex: 90
+                  },
+                  "flight",
+                  true
+                );
 
-              flightPath.age = g_timeNow + g_flightDuration;
-              flightPath.isShapeFlight = 0;
-              flightPath.isQRZ = isQRZ;
+                flightPath.age = g_timeNow + g_flightDuration;
+                flightPath.isShapeFlight = 0;
+                flightPath.isQRZ = isQRZ;
 
-              g_flightPaths.push(flightPath);
+                g_flightPaths.push(flightPath);
+              }
+              catch (err)
+              {
+                console.log("Unexpected error inside handleWsjtxDecode 1", err)
+              }
             }
           }
         }
@@ -7350,23 +7371,30 @@ function handleWsjtxDecode(newMessage)
             var Lon = g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].lon;
             var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
 
-            flightPath = flightFeature(
-              [fromPoint, toPoint],
-              {
-                weight: strokeWeight,
-                color: strokeColor,
-                steps: 75,
-                zIndex: 90
-              },
-              "flight",
-              true
-            );
+            try
+            {
+              flightPath = flightFeature(
+                [fromPoint, toPoint],
+                {
+                  weight: strokeWeight,
+                  color: strokeColor,
+                  steps: 75,
+                  zIndex: 90
+                },
+                "flight",
+                true
+              );
 
-            flightPath.age = g_timeNow + g_flightDuration;
-            flightPath.isShapeFlight = 0;
-            flightPath.isQRZ = isQRZ;
+              flightPath.age = g_timeNow + g_flightDuration;
+              flightPath.isShapeFlight = 0;
+              flightPath.isQRZ = isQRZ;
 
-            g_flightPaths.push(flightPath);
+              g_flightPaths.push(flightPath);
+            }
+            catch (err)
+            {
+              console.log("Unexpected error inside handleWsjtxDecode 2", err)
+            }
 
             var feature = shapeFeature(
               "qrz",
@@ -7445,22 +7473,29 @@ function handleWsjtxDecode(newMessage)
             var fromPoint = getPoint(callsign.grid);
             var toPoint = ol.proj.fromLonLat(locality.properties.center);
 
-            flightPath = flightFeature(
-              [fromPoint, toPoint],
-              {
-                weight: strokeWeight,
-                color: strokeColor,
-                steps: 75,
-                zIndex: 90
-              },
-              "flight",
-              true
-            );
+            try
+            {
+              flightPath = flightFeature(
+                [fromPoint, toPoint],
+                {
+                  weight: strokeWeight,
+                  color: strokeColor,
+                  steps: 75,
+                  zIndex: 90
+                },
+                "flight",
+                true
+              );
 
-            flightPath.age = g_timeNow + g_flightDuration;
-            flightPath.isShapeFlight = 0;
-            flightPath.isQRZ = false;
-            g_flightPaths.push(flightPath);
+              flightPath.age = g_timeNow + g_flightDuration;
+              flightPath.isShapeFlight = 0;
+              flightPath.isQRZ = false;
+              g_flightPaths.push(flightPath);
+            }
+            catch (err)
+            {
+              console.log("Unexpected error inside handleWsjtxDecode 3", err)
+            }
           }
         }
       }
@@ -16115,83 +16150,91 @@ var g_spotTotalCount = 0;
 
 function createSpot(report, key, fromPoint, addToLayer = true)
 {
-  var LL = squareToLatLongAll(report.grid);
-
-  var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-  var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-
-  var spot = spotFeature([Lon, Lat]);
-
-  var colorNoAlpha = "#" + g_bandToColor[report.band];
-  var colorAlpha = intAlphaToRGB(colorNoAlpha, report.color);
-  var spotColor = colorAlpha;
-
-  var workingColor =
-    g_mapSettings.nightMapEnable && g_nightTime
-      ? g_receptionSettings.pathNightColor
-      : g_receptionSettings.pathColor;
-
-  if (workingColor != -1)
+  try
   {
-    var testColor =
-      workingColor < 1
-        ? "#0000000"
-        : workingColor == 361
-          ? "#FFFFFF"
-          : "hsla(" + workingColor + ", 100%, 50%," + report.color / 255 + ")";
-    if (workingColor < 1 || workingColor == 361)
-    { spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color); }
-    else spotColor = testColor;
+    var LL = squareToLatLongAll(report.grid);
+
+    var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
+    var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
+
+    var spot = spotFeature([Lon, Lat]);
+
+    var colorNoAlpha = "#" + g_bandToColor[report.band];
+    var colorAlpha = intAlphaToRGB(colorNoAlpha, report.color);
+    var spotColor = colorAlpha;
+
+    var workingColor =
+      g_mapSettings.nightMapEnable && g_nightTime
+        ? g_receptionSettings.pathNightColor
+        : g_receptionSettings.pathColor;
+
+    if (workingColor != -1)
+    {
+      var testColor =
+        workingColor < 1
+          ? "#0000000"
+          : workingColor == 361
+            ? "#FFFFFF"
+            : "hsla(" + workingColor + ", 100%, 50%," + report.color / 255 + ")";
+      if (workingColor < 1 || workingColor == 361)
+      { spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color); }
+      else spotColor = testColor;
+    }
+
+    featureStyle = new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: spotColor
+      }),
+      stroke: new ol.style.Stroke({
+        color: "#000000FF",
+        width: 0.25
+      })
+    });
+    spot.setStyle(featureStyle);
+    spot.spot = key;
+    spot.size = 6; // Mouseover detection
+    g_layerSources["psk-spots"].addFeature(spot);
+
+    var toPoint = ol.proj.fromLonLat([Lon, Lat]);
+
+    var lonLat = new ol.geom.Point(toPoint);
+
+    var pointFeature = new ol.Feature({
+      geometry: lonLat,
+      weight: report.color / 255 // e.g. temperature
+    });
+
+    g_layerSources["psk-heat"].addFeature(pointFeature);
+
+    if (g_receptionSettings.viewPaths && g_receptionSettings.spotWidth > 0)
+    {
+      var strokeWeight = g_receptionSettings.spotWidth;
+
+      var flightColor =
+        workingColor == -1
+          ? colorNoAlpha + "BB"
+          : g_mapSettings.nightMapEnable && g_nightTime
+            ? g_spotNightFlightColor
+            : g_spotFlightColor;
+
+      var feature = flightFeature(
+        [fromPoint, toPoint],
+        {
+          weight: strokeWeight,
+          color: flightColor,
+          steps: 75
+        },
+        "psk-flights",
+        false
+      );
+    }
   }
-
-  featureStyle = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: spotColor
-    }),
-    stroke: new ol.style.Stroke({
-      color: "#000000FF",
-      width: 0.25
-    })
-  });
-  spot.setStyle(featureStyle);
-  spot.spot = key;
-  spot.size = 6; // Mouseover detection
-  g_layerSources["psk-spots"].addFeature(spot);
-
-  var toPoint = ol.proj.fromLonLat([Lon, Lat]);
-
-  var lonLat = new ol.geom.Point(toPoint);
-
-  var pointFeature = new ol.Feature({
-    geometry: lonLat,
-    weight: report.color / 255 // e.g. temperature
-  });
-
-  g_layerSources["psk-heat"].addFeature(pointFeature);
-
-  if (g_receptionSettings.viewPaths && g_receptionSettings.spotWidth > 0)
+  catch (err)
   {
-    var strokeWeight = g_receptionSettings.spotWidth;
-
-    var flightColor =
-      workingColor == -1
-        ? colorNoAlpha + "BB"
-        : g_mapSettings.nightMapEnable && g_nightTime
-          ? g_spotNightFlightColor
-          : g_spotFlightColor;
-
-    var feature = flightFeature(
-      [fromPoint, toPoint],
-      {
-        weight: strokeWeight,
-        color: flightColor,
-        steps: 75
-      },
-      "psk-flights",
-      false
-    );
+    console.log("Unexpected error inside createSpot", report, err)
   }
 }
+
 function redrawSpots()
 {
   let shouldSave = false;

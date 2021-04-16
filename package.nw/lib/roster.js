@@ -1330,21 +1330,35 @@ function viewRoster()
         // Hunting for WPX (Prefixes)
         if (huntPX.checked == true && callObj.px)
         {
-          var hash = String(callObj.px) + (layeredMode ? layeredHashSuffix : workHashSuffix);
+          var hash = String(callObj.px) + workHashSuffix;
+          var layeredHash = layeredMode && (String(callObj.px) + layeredHashSuffix)
 
           if (huntIndex && !(hash in huntIndex.px))
           {
             shouldAlert = true;
+
             callObj.reason.push("wpx");
-            if (workedIndex && hash in workedIndex.px)
+
+            if (workedIndex && hash in workedIndex.px && !(layeredMode && layeredHash in huntIndex.px))
             {
-              callObj.hunting.wpx = "hunted-but-worked";
-              wpxConf = unconf + wpx + inversionAlpha + ";";
+              callObj.hunting.px = "hunted-but-worked";
+              wpxConf = `${unconf}${wpx}${inversionAlpha};`;
+            }
+            else if (layeredMode && layeredHash in huntIndex.px)
+            {
+              callObj.hunting.px = "hunted-but-mixed";
+              wpxBg = `${wpx}${inversionAlpha};${layeredStyle}`;
+              wpx = bold;
+            }
+            else if (layeredMode && layeredHash in workedIndex.px)
+            {
+              callObj.hunting.px = "hunted-but-worked-mixed";
+              wpxConf = `${unconf}${wpx}${inversionAlpha};${layeredStyle}`;
             }
             else
             {
-              callObj.hunting.wpx = "hunted";
-              wpxBg = wpx + inversionAlpha;
+              callObj.hunting.px = "hunted";
+              wpxBg = `${wpx}${inversionAlpha}`;
               wpx = bold;
             }
           }

@@ -884,9 +884,12 @@ function viewRoster()
   var newCallList = Array();
   var inversionAlpha = "DD";
   var row = "#000000";
-  var bold = "#000000;text-shadow: 0px 0px 1px black;";
+  var bold = "#000000;font-weight: bold;";
   var unconf = "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
-  var layeredStyle = "opacity: 55%;";
+  var layeredAlpha = "77";
+  var layeredInversionAlpha = "66";
+  var layeredUnconf = "background-clip:content-box;box-shadow: 0 0 4px 3px inset ";
+  var layeredUnconfAlpha = "AA";
 
   // Second loop, hunting and highlighting
   for (var callHash in callRoster)
@@ -929,7 +932,7 @@ function viewRoster()
       }
       var workHash = workHashSuffix; // TODO: Remove after replacing all occurrences with Suffix
 
-      var call = entry.DEcall;
+      var callsign = entry.DEcall;
 
       callObj.hunting = {}
       callObj.callFlags = {}
@@ -940,7 +943,7 @@ function viewRoster()
 
       var didWork = false;
 
-      var callsign = "#FFFF00";
+      var call = "#FFFF00";
       var grid = "#00FFFF";
       var calling = "#90EE90";
       var dxcc = "#FFA500";
@@ -953,41 +956,39 @@ function viewRoster()
 
       hasGtPin = false;
       var shouldAlert = false;
-      var callsignBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
+      var callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
       var callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, cqzConf, ituzConf, wpxConf;
 
-      callsignBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
+      callBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
 
       callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = cqzConf = ituzConf = wpxConf =
         "";
 
-      var hash = call + workHashSuffix;
-      var layeredHash = layeredHashSuffix && (call + layeredHashSuffix)
+      var hash = callsign + workHashSuffix;
+      var layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
 
       // Call worked in current logbook settings, regardless of hunting mode
       if (hash in g_worked.call)
       {
         callObj.callFlags.worked = true;
         didWork = true;
-        callConf = unconf + callsign + inversionAlpha + ";";
-        if (hash in g_confirmed.call)
-        {
-          callObj.callFlags.confirmed = true;
-          callPointer = "text-decoration: line-through; ";
-          callConf = "";
-        }
+        callConf = `${unconf}${call}${inversionAlpha};`;
+
+        callObj.callFlags.confirmed = true;
+        callPointer = "text-decoration: line-through; ";
+        callConf = "";
       }
 
       // Calls that have OAMS chat support
       if (
-        call in window.opener.g_gtCallsigns &&
-        window.opener.g_gtCallsigns[call] in window.opener.g_gtFlagPins &&
-        window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[call]].canmsg == true
+        callsign in window.opener.g_gtCallsigns &&
+        window.opener.g_gtCallsigns[callsign] in window.opener.g_gtFlagPins &&
+        window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[callsign]].canmsg == true
       )
       {
         callObj.callFlags.oams = true;
         // grab the CID
-        colorObject.gt = window.opener.g_gtCallsigns[call];
+        colorObject.gt = window.opener.g_gtCallsigns[callsign];
         hasGtPin = true;
       }
       else
@@ -1011,8 +1012,8 @@ function viewRoster()
         // Hunting for callsigns
         if (huntCallsign.checked == true)
         {
-          var hash = call + workHashSuffix;
-          var layeredHash = layeredMode && (call + layeredHashSuffix)
+          var hash = callsign + workHashSuffix;
+          var layeredHash = layeredMode && (callsign + layeredHashSuffix)
 
           if (huntIndex && !(hash in huntIndex.call))
           {
@@ -1020,30 +1021,54 @@ function viewRoster()
 
             callObj.reason.push("call");
 
-            if (workedIndex && hash in workedIndex.call && !(layeredMode && layeredHash in huntIndex.call))
+            if (workedIndex && hash in workedIndex.call)
             {
-              callObj.hunting.call = "hunted-but-worked";
-              callConf = `${unconf}${callsign}${inversionAlpha};`;
-            }
-            else if (layeredMode && layeredHash in huntIndex.call)
-            {
-              callObj.hunting.call = "hunted-but-mixed";
-              callsignBg = `${callsign}${inversionAlpha};${layeredStyle}`;
-              callsign = bold;
-            }
-            else if (layeredMode && layeredHash in workedIndex.call)
-            {
-              callObj.hunting.call = "hunted-but-worked-mixed";
-              callConf = `${unconf}${callsign}${inversionAlpha};${layeredStyle}`;
+              if (layeredMode && layeredHash in huntIndex.call)
+              {
+                callObj.hunting.call = "worked-and-mixed";
+                callConf = `${layeredUnconf}${call}${layeredUnconfAlpha};`;
+                callBg = `${call}${layeredInversionAlpha}`;
+                call = bold;
+              }
+              // /* Currently we don't have a way to figure out
+              //  * if the call is worked only in this band or also others,
+              //  * so we cannot cover this particular combination
+              //  * and have to default to just showing it as plain "worked"
+              //  */
+              // else if (layeredMode && layeredHash in workedIndex.call)
+              // {
+              //   callObj.hunting.call = "worked-and-mixed-worked";
+              //   callConf = `${layeredUnconf}${call}${layeredAlpha};`;
+              // }
+              else
+              {
+                callObj.hunting.call = "worked";
+                callConf = `${unconf}${call}${inversionAlpha};`;
+              }
             }
             else
             {
-              callObj.hunting.call = "hunted";
-              callsignBg = `${callsign}${inversionAlpha};`;
-              callsign = bold;
+              if (layeredMode && layeredHash in huntIndex.call)
+              {
+                callObj.hunting.call = "mixed";
+                callBg = `${call}${layeredAlpha};`;
+                call = bold;
+              }
+              else if (layeredMode && layeredHash in workedIndex.call)
+              {
+                callObj.hunting.call = "mixed-worked";
+                callConf = `${unconf}${call}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.call = "hunted";
+                callBg = `${call}${inversionAlpha};`;
+                call = bold;
+              }
             }
           }
         }
+        console.log(`${callsign}: ${callObj.hunting.call}`)
 
         // Hunting for "stations calling you"
         if (huntQRZ.checked == true && callObj.qrz == true)
@@ -1073,30 +1098,44 @@ function viewRoster()
 
             callObj.reason.push("grid");
 
-            if (workedIndex && hash in workedIndex.grid && !(layeredMode && layeredHash in huntIndex.grid))
+            if (workedIndex && hash in workedIndex.grid)
             {
-              callObj.hunting.grid = "hunted-but-worked";
-              gridConf = `${unconf}${grid}${inversionAlpha};`;
-            }
-            else if (layeredMode && layeredHash in huntIndex.grid)
-            {
-              callObj.hunting.grid = "hunted-but-mixed";
-              gridBg = `${grid}${inversionAlpha};${layeredStyle}`;
-              grid = bold;
-            }
-            else if (layeredMode && layeredHash in workedIndex.grid)
-            {
-              callObj.hunting.grid = "hunted-but-worked-mixed";
-              gridConf = `${unconf}${grid}${inversionAlpha};${layeredStyle}`;
+              if (layeredMode && layeredHash in huntIndex.grid)
+              {
+                callObj.hunting.grid = "worked-and-mixed";
+                gridConf = `${layeredUnconf}${grid}${layeredUnconfAlpha};`;
+                gridBg = `${grid}${layeredInversionAlpha}`;
+                grid = bold;
+              }
+              else
+              {
+                callObj.hunting.grid = "worked";
+                gridConf = `${unconf}${grid}${inversionAlpha};`;
+              }
             }
             else
             {
-              callObj.hunting.grid = "hunted";
-              gridBg = `${grid}${inversionAlpha}`;
-              grid = bold;
+              if (layeredMode && layeredHash in huntIndex.grid)
+              {
+                callObj.hunting.grid = "mixed";
+                gridBg = `${grid}${layeredAlpha};`;
+                grid = bold;
+              }
+              else if (layeredMode && layeredHash in workedIndex.grid)
+              {
+                callObj.hunting.grid = "mixed-worked";
+                gridConf = `${unconf}${grid}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.grid = "hunted";
+                gridBg = `${grid}${inversionAlpha};`;
+                grid = bold;
+              }
             }
           }
         }
+        console.log(`${callObj.grid.substr(0, 4)}: ${callObj.hunting.grid}`)
 
         // Hunting for DXCC
         if (huntDXCC.checked == true)
@@ -1110,27 +1149,40 @@ function viewRoster()
 
             callObj.reason.push("dxcc");
 
-            if (workedIndex && hash in workedIndex.dxcc && !(layeredMode && layeredHash in huntIndex.dxcc))
+            if (workedIndex && hash in workedIndex.dxcc)
             {
-              callObj.hunting.dxcc = "hunted-but-worked";
-              dxccConf = `${unconf}${dxcc}${inversionAlpha};`;
-            }
-            else if (layeredMode && layeredHash in huntIndex.dxcc)
-            {
-              callObj.hunting.dxcc = "hunted-but-mixed";
-              dxccBg = `${dxcc}${inversionAlpha};${layeredStyle}`;
-              dxcc = bold;
-            }
-            else if (layeredMode && layeredHash in workedIndex.dxcc)
-            {
-              callObj.hunting.grid = "hunted-but-worked-mixed";
-              dxccConf = `${unconf}${dxcc}${inversionAlpha};${layeredStyle}`;
+              if (layeredMode && layeredHash in huntIndex.dxcc)
+              {
+                callObj.hunting.dxcc = "worked-and-mixed";
+                dxccConf = `${layeredUnconf}${dxcc}${layeredUnconfAlpha};`;
+                dxccBg = `${dxcc}${layeredInversionAlpha}`;
+                dxcc = bold;
+              }
+              else
+              {
+                callObj.hunting.dxcc = "worked";
+                dxccConf = `${unconf}${dxcc}${inversionAlpha};`;
+              }
             }
             else
             {
-              callObj.hunting.grid = "hunted";
-              dxccBg = `${dxcc}${inversionAlpha}`;
-              dxcc = bold;
+              if (layeredMode && layeredHash in huntIndex.dxcc)
+              {
+                callObj.hunting.dxcc = "mixed";
+                dxccBg = `${dxcc}${layeredAlpha};`;
+                dxcc = bold;
+              }
+              else if (layeredMode && layeredHash in workedIndex.dxcc)
+              {
+                callObj.hunting.dxcc = "mixed-worked";
+                dxccConf = `${unconf}${dxcc}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.dxcc = "hunted";
+                dxccBg = `${dxcc}${inversionAlpha};`;
+                dxcc = bold;
+              }
             }
           }
         }
@@ -1153,27 +1205,40 @@ function viewRoster()
 
                 callObj.reason.push("state");
 
-                if (workedIndex && hash in workedIndex.state && !(layeredMode && layeredHash in huntIndex.state))
+                if (workedIndex && hash in workedIndex.state)
                 {
-                  callObj.hunting.state = "hunted-but-worked";
-                  stateConf = `${unconf}${state}${inversionAlpha};`;
-                }
-                else if (layeredMode && layeredHash in huntIndex.state)
-                {
-                  callObj.hunting.state = "hunted-but-mixed";
-                  stateBg = `${state}${inversionAlpha};${layeredStyle}`;
-                  state = bold;
-                }
-                else if (layeredMode && layeredHash in workedIndex.state)
-                {
-                  callObj.hunting.state = "hunted-but-worked-mixed";
-                  stateConf = `${unconf}${state}${inversionAlpha};${layeredStyle}`;
+                  if (layeredMode && layeredHash in huntIndex.state)
+                  {
+                    callObj.hunting.state = "worked-and-mixed";
+                    stateConf = `${layeredUnconf}${state}${layeredUnconfAlpha};`;
+                    stateBg = `${state}${layeredInversionAlpha}`;
+                    state = bold;
+                  }
+                  else
+                  {
+                    callObj.hunting.state = "worked";
+                    stateConf = `${unconf}${state}${inversionAlpha};`;
+                  }
                 }
                 else
                 {
-                  callObj.hunting.state = "hunted";
-                  stateBg = `${state}${inversionAlpha}`;
-                  state = bold;
+                  if (layeredMode && layeredHash in huntIndex.state)
+                  {
+                    callObj.hunting.state = "mixed";
+                    stateBg = `${state}${layeredAlpha};`;
+                    state = bold;
+                  }
+                  else if (layeredMode && layeredHash in workedIndex.state)
+                  {
+                    callObj.hunting.state = "mixed-worked";
+                    stateConf = `${unconf}${state}${layeredAlpha};`;
+                  }
+                  else
+                  {
+                    callObj.hunting.state = "hunted";
+                    stateBg = `${state}${inversionAlpha};`;
+                    state = bold;
+                  }
                 }
               }
             }
@@ -1217,17 +1282,17 @@ function viewRoster()
 
               if (shouldAlert)
               {
-                callObj.reason.push("uscnty");
+                callObj.reason.push("cnty");
 
                 if (workedIndex && hash in workedIndex.cnty)
                 {
-                  callObj.hunting.county = "hunted-but-worked";
-                  cntyConf = unconf + cnty + inversionAlpha + ";";
+                  callObj.hunting.cnty = "worked";
+                  cntyConf = `${unconf}${cnty}${inversionAlpha};`;
                 }
                 else
                 {
-                  callObj.hunting.county = "hunted";
-                  cntyBg = cnty + inversionAlpha;
+                  callObj.hunting.cnty = "hunted";
+                  cntyBg = `${cnty}${inversionAlpha}`;
                   cnty = bold;
                 }
               }
@@ -1254,29 +1319,42 @@ function viewRoster()
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
-            callObj.reason.push("cq");
+            callObj.reason.push("cqz");
 
-            if (workedIndex && workedFound == huntTotal && !(layeredMode && layeredFound == huntTotal))
+            if (workedIndex && workedFound == huntTotal)
             {
-              callObj.hunting.cqz = "hunted-but-worked";
-              cqzConf = `${unconf}${cqz}${inversionAlpha};`;
-            }
-            else if (layeredMode && layeredFound == huntTotal)
-            {
-              callObj.hunting.cqz = "hunted-but-mixed";
-              cqzBg = `${cqz}${inversionAlpha};${layeredStyle}`;
-              cqz = bold;
-            }
-            else if (layeredMode && layeredWorkedFound == huntTotal)
-            {
-              callObj.hunting.cqz = "hunted-but-worked-mixed";
-              cqzConf = `${unconf}${cqz}${inversionAlpha};${layeredStyle}`;
+              if (layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.cqz = "worked-and-mixed";
+                cqzConf = `${layeredUnconf}${cqz}${layeredUnconfAlpha};`;
+                cqzBg = `${cqz}${layeredInversionAlpha}`;
+                cqz = bold;
+              }
+              else
+              {
+                callObj.hunting.cqz = "worked";
+                cqzConf = `${unconf}${qrz}${inversionAlpha};`;
+              }
             }
             else
             {
-              callObj.hunting.cqz = "hunted";
-              cqzBg = `${cqz}${inversionAlpha}`;
-              cqz = bold;
+              if (layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.cqz = "mixed";
+                cqzBg = `${cqz}${layeredAlpha};`;
+                cqz = bold;
+              }
+              else if (layeredMode && layeredWorkedFound == huntTotal)
+              {
+                callObj.hunting.cqz = "mixed-worked";
+                cqzConf = `${unconf}${cqz}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.cqz = "hunted";
+                cqzBg = `${cqz}${inversionAlpha};`;
+                cqz = bold;
+              }
             }
           }
         }
@@ -1300,29 +1378,42 @@ function viewRoster()
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
-            callObj.reason.push("cq");
+            callObj.reason.push("ituz");
 
-            if (workedIndex && workedFound == huntTotal && !(layeredMode && layeredFound == huntTotal))
+            if (workedIndex && workedFound == huntTotal)
             {
-              callObj.hunting.ituz = "hunted-but-worked";
-              ituzConf = `${unconf}${ituz}${inversionAlpha};`;
-            }
-            else if (layeredMode && layeredFound == huntTotal)
-            {
-              callObj.hunting.ituz = "hunted-but-mixed";
-              ituzBg = `${ituz}${inversionAlpha};${layeredStyle}`;
-              ituz = bold;
-            }
-            else if (layeredMode && layeredWorkedFound == huntTotal)
-            {
-              callObj.hunting.ituz = "hunted-but-worked-mixed";
-              ituzConf = `${unconf}${ituz}${inversionAlpha};${layeredStyle}`;
+              if (layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.ituz = "worked-and-mixed";
+                ituzConf = `${layeredUnconf}${ituz}${layeredUnconfAlpha};`;
+                ituzBg = `${ituz}${layeredInversionAlpha}`;
+                ituz = bold;
+              }
+              else
+              {
+                callObj.hunting.ituz = "worked";
+                ituzConf = `${unconf}${ituz}${inversionAlpha};`;
+              }
             }
             else
             {
-              callObj.hunting.ituz = "hunted";
-              ituzBg = `${ituz}${inversionAlpha}`;
-              ituz = bold;
+              if (layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.ituz = "mixed";
+                ituzBg = `${ituz}${layeredAlpha};`;
+                ituz = bold;
+              }
+              else if (layeredMode && layeredWorkedFound == huntTotal)
+              {
+                callObj.hunting.ituz = "mixed-worked";
+                ituzConf = `${unconf}${ituz}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.ituz = "hunted";
+                ituzBg = `${ituz}${inversionAlpha};`;
+                ituz = bold;
+              }
             }
           }
         }
@@ -1339,27 +1430,40 @@ function viewRoster()
 
             callObj.reason.push("wpx");
 
-            if (workedIndex && hash in workedIndex.px && !(layeredMode && layeredHash in huntIndex.px))
+            if (workedIndex && hash in workedIndex.px)
             {
-              callObj.hunting.px = "hunted-but-worked";
-              wpxConf = `${unconf}${wpx}${inversionAlpha};`;
-            }
-            else if (layeredMode && layeredHash in huntIndex.px)
-            {
-              callObj.hunting.px = "hunted-but-mixed";
-              wpxBg = `${wpx}${inversionAlpha};${layeredStyle}`;
-              wpx = bold;
-            }
-            else if (layeredMode && layeredHash in workedIndex.px)
-            {
-              callObj.hunting.px = "hunted-but-worked-mixed";
-              wpxConf = `${unconf}${wpx}${inversionAlpha};${layeredStyle}`;
+              if (layeredMode && layeredHash in huntIndex.px)
+              {
+                callObj.hunting.wpx = "worked-and-mixed";
+                wpxConf = `${layeredUnconf}${wpx}${layeredUnconfAlpha};`;
+                wpxBg = `${wpx}${layeredInversionAlpha}`;
+                wpx = bold;
+              }
+              else
+              {
+                callObj.hunting.wpx = "worked";
+                wpxConf = `${unconf}${wpx}${inversionAlpha};`;
+              }
             }
             else
             {
-              callObj.hunting.px = "hunted";
-              wpxBg = `${wpx}${inversionAlpha}`;
-              wpx = bold;
+              if (layeredMode && layeredHash in huntIndex.px)
+              {
+                callObj.hunting.wpx = "mixed";
+                wpxBg = `${wpx}${layeredAlpha};`;
+                wpx = bold;
+              }
+              else if (layeredMode && layeredHash in workedIndex.px)
+              {
+                callObj.hunting.wpx = "mixed-worked";
+                wpxConf = `${unconf}${wpx}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.wpx = "hunted";
+                wpxBg = `${wpx}${inversionAlpha};`;
+                wpx = bold;
+              }
             }
           }
         }
@@ -1376,27 +1480,40 @@ function viewRoster()
 
             callObj.reason.push("cont");
 
-            if (workedIndex && hash in workedIndex.cont && !(layeredMode && layeredHash in huntIndex.cont))
+            if (workedIndex && hash in workedIndex.cont)
             {
-              callObj.hunting.cont = "hunted-but-worked";
-              contConf = `${unconf}${cont}${inversionAlpha};`;
-            }
-            else if (layeredMode && layeredHash in huntIndex.cont)
-            {
-              callObj.hunting.cont = "hunted-but-mixed";
-              contBg = `${cont}${inversionAlpha};${layeredStyle}`;
-              cont = bold;
-            }
-            else if (layeredMode && layeredHash in workedIndex.cont)
-            {
-              callObj.hunting.cont = "hunted-but-worked-mixed";
-              contConf = `${unconf}${cont}${inversionAlpha};${layeredStyle}`;
+              if (layeredMode && layeredHash in huntIndex.cont)
+              {
+                callObj.hunting.cont = "worked-and-mixed";
+                contConf = `${layeredUnconf}${cont}${layeredUnconfAlpha};`;
+                contBg = `${cont}${layeredInversionAlpha}`;
+                cont = bold;
+              }
+              else
+              {
+                callObj.hunting.cont = "worked";
+                contConf = `${unconf}${cont}${inversionAlpha};`;
+              }
             }
             else
             {
-              callObj.hunting.cont = "hunted";
-              contBg = `${cont}${inversionAlpha}`;
-              cont = bold;
+              if (layeredMode && layeredHash in huntIndex.cont)
+              {
+                callObj.hunting.cont = "mixed";
+                contBg = `${cont}${layeredAlpha};`;
+                cont = bold;
+              }
+              else if (layeredMode && layeredHash in workedIndex.cont)
+              {
+                callObj.hunting.cont = "mixed-worked";
+                contConf = `${unconf}${cont}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.cont = "hunted";
+                contBg = `${cont}${inversionAlpha};`;
+                cont = bold;
+              }
             }
           }
         }
@@ -1415,8 +1532,8 @@ function viewRoster()
       }
 
       // Assemble all styles
-      colorObject.callsign = "style='" + callConf + "background-color:" + callsignBg + ";color:" +
-        callsign + ";" + callPointer + "'";
+      colorObject.call = "style='" + callConf + "background-color:" + callBg + ";color:" +
+        call + ";" + callPointer + "'";
       colorObject.grid = "style='" + gridConf + "background-color:" + gridBg + ";color:" + grid + ";cursor:pointer'";
       colorObject.calling = "style='" + callingConf + "background-color:" + callingBg + ";color:" + calling + "'";
       colorObject.dxcc = "style='" + dxccConf + "background-color:" + dxccBg + ";color:" + dxcc + "'";
@@ -1589,16 +1706,16 @@ function viewRoster()
     var thisCall = callObj.DEcall;
 
     if (thisCall.match("^[A-Z][0-9][A-Z](/w+)?$"))
-    { callObj.style.callsign = "class='oneByOne'"; }
+    { callObj.style.call = "class='oneByOne'"; }
     if (thisCall == window.opener.g_instances[callObj.instance].status.DXcall)
     {
       if (window.opener.g_instances[callObj.instance].status.TxEnabled == 1)
       {
-        callObj.style.callsign = "class='dxCalling'";
+        callObj.style.call = "class='dxCalling'";
       }
       else
       {
-        callObj.style.callsign = "class='dxCaller'";
+        callObj.style.call = "class='dxCaller'";
       }
     }
 
@@ -1611,7 +1728,7 @@ function viewRoster()
         "<td title='" +
         callObj.awardReason +
         "' name='Callsign' align=left " +
-        callObj.style.callsign +
+        callObj.style.call +
         " onClick='initiateQso(\"" +
         thisCall +
         callObj.band +
@@ -1927,7 +2044,7 @@ function viewRoster()
         "'>";
       worker +=
         "<div class='compactCallsign' name='Callsign' " +
-        callObj.style.callsign +
+        callObj.style.call +
         " >" +
         thisCall.formatCallsign() +
         "</div>";

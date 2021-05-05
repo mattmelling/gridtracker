@@ -16038,6 +16038,9 @@ function pskSpotResults(buffer, flag)
             var call = json.receptionReport[key].receiverCallsign;
             var mode = json.receptionReport[key].mode;
             var grid = json.receptionReport[key].receiverLocator.substr(0, 6);
+            if (grid.length < 4) {
+              continue;
+            }
             var band = Number(
               parseInt(json.receptionReport[key].frequency) / 1000000
             ).formatBand();
@@ -16154,6 +16157,11 @@ function createSpot(report, key, fromPoint, addToLayer = true)
   {
     var LL = squareToLatLongAll(report.grid);
 
+    if (isNaN(LL.la1)) {
+      // Bad value in grid, don't map //
+      return;
+    }
+
     var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
     var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
 
@@ -16259,7 +16267,7 @@ function redrawSpots()
   {
     report = g_receptionReports.spots[key];
 
-    if (now - report.when > 86400)
+    if ((now - report.when > 86400) || (report.grid.length < 4))
     {
       delete g_receptionReports.spots[key];
       shouldSave = true;

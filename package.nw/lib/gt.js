@@ -15906,7 +15906,7 @@ function mediaCheck()
       }
       else
       {
-        clearLogFilesAndCounts();
+        //clearLogFilesAndCounts();
       }
 
       fs.unlinkSync(g_NWappData + "internal_qso.json");

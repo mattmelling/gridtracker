@@ -15908,7 +15908,7 @@ function mediaCheck()
   }
   catch (e)
   {
-     clearLogFilesAndCounts();
+    clearLogFilesAndCounts();
   }
 
   return true;

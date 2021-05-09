@@ -67,8 +67,11 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
 
   let activeAdifArray = Array();
   let activeAdifLogMode = true;
+  let eQSLfile = false;
 
   if (rawAdiBuffer.indexOf("PSKReporter") > -1) activeAdifLogMode = false;
+
+  if (rawAdiBuffer.indexOf("Received eQSLs") > -1) eQSLfile = true;
 
   if (rawAdiBuffer.length > 1)
   {
@@ -204,7 +207,8 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
           lotw_qsl_rcvd == "V" ||
           lotwConfirmed1 == "Y" ||
           eqsl_qsl_rcvd == "Y" ||
-          eqsl_qsl_rcvd == "V"
+          eqsl_qsl_rcvd == "V" ||
+          eQSLfile == true
         )
         { confirmed = true; }
 

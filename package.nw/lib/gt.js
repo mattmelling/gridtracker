@@ -15877,43 +15877,39 @@ function mediaCheck()
     {
       var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
 
-      if (typeof data.version != "undefined" && data.version == gtVersion)
+      g_tracker = data.tracker;
+
+      if (typeof g_tracker.worked.px == "undefined")
       {
-        g_tracker = data.tracker;
-
-        if (typeof g_tracker.worked.px == "undefined")
-        {
-          g_tracker.worked.px = {};
-          g_tracker.confirmed.px = {};
-        }
-
-        g_QSOhash = data.g_QSOhash;
-
-        for (var i in g_QSOhash)
-        {
-          if (
-            typeof g_QSOhash[i].px == "undefined" ||
-            g_QSOhash[i].px == null
-          )
-          {
-            if (g_QSOhash[i].dxcc != -1)
-            { g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall); }
-            else g_QSOhash[i].px = null;
-          }
-          g_QSOcount++;
-          if (g_QSOhash[i].confirmed) g_QSLcount++;
-        }
+        g_tracker.worked.px = {};
+        g_tracker.confirmed.px = {};
       }
-      else
+
+      g_QSOhash = data.g_QSOhash;
+
+      for (var i in g_QSOhash)
       {
-        clearLogFilesAndCounts();
+        if (
+          typeof g_QSOhash[i].px == "undefined" ||
+          g_QSOhash[i].px == null
+        )
+        {
+          if (g_QSOhash[i].dxcc != -1)
+          { g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall); }
+          else g_QSOhash[i].px = null;
+        }
+        g_QSOcount++;
+        if (g_QSOhash[i].confirmed) g_QSLcount++;
       }
 
       fs.unlinkSync(g_NWappData + "internal_qso.json");
     }
     loadReceptionReports();
   }
-  catch (e) {}
+  catch (e)
+  {
+    clearLogFilesAndCounts();
+  }
 
   return true;
 }
@@ -15984,10 +15980,7 @@ function pskSpotCheck(timeSec)
 
   if (myDEcall == null || myDEcall == "NOCALL" || myDEcall == "") return;
 
-  if (
-    timeSec - g_receptionReports.lastDownloadTimeSec > 120 &&
-    (g_spotsEnabled == 1 || g_rosterSpot)
-  )
+  if ((g_spotsEnabled == 1 || g_rosterSpot) && (timeSec - g_receptionReports.lastDownloadTimeSec > 120 || g_receptionReports.lastDownloadTimeSec > timeSec))
   {
     g_receptionReports.lastDownloadTimeSec = timeSec;
     localStorage.receptionSettings = JSON.stringify(g_receptionSettings);

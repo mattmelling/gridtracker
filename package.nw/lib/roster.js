@@ -885,10 +885,10 @@ function viewRoster()
   var inversionAlpha = "DD";
   var row = "#000000";
   var bold = "#000000;font-weight: bold;";
-  var unconf = "background-clip:content-box;box-shadow: 0 0 8px 3px inset ";
+  var unconf = "background-clip:padding-box;box-shadow: 0 0 7px 3px inset ";
   var layeredAlpha = "77";
   var layeredInversionAlpha = "66";
-  var layeredUnconf = "background-clip:content-box;box-shadow: 0 0 4px 3px inset ";
+  var layeredUnconf = "background-clip:padding-box;box-shadow: 0 0 4px 2px inset ";
   var layeredUnconfAlpha = "AA";
 
   // Second loop, hunting and highlighting
@@ -1068,7 +1068,6 @@ function viewRoster()
             }
           }
         }
-        console.log(`${callsign}: ${callObj.hunting.call}`)
 
         // Hunting for "stations calling you"
         if (huntQRZ.checked == true && callObj.qrz == true)
@@ -1135,7 +1134,6 @@ function viewRoster()
             }
           }
         }
-        console.log(`${callObj.grid.substr(0, 4)}: ${callObj.hunting.grid}`)
 
         // Hunting for DXCC
         if (huntDXCC.checked == true)

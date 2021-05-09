@@ -121,6 +121,7 @@ function loadAllSettings()
       String(gtVersion) != String(g_startVersion))
   {
     g_msgSettings.msgActionSelect = 1;
+    localStorage.msgSettings = JSON.stringify(g_msgSettings);
   }
   g_receptionSettings = loadDefaultsAndMerge(
     "receptionSettings",

@@ -15870,13 +15870,13 @@ function mediaCheck()
 
   // Old log filename, no longer referenced
   tryToDeleteLog("lotw.adif");
-  
+
   try
   {
     if (fs.existsSync(g_NWappData + "internal_qso.json"))
     {
       var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
- 
+
       g_tracker = data.tracker;
 
       if (typeof g_tracker.worked.px == "undefined")
@@ -15901,12 +15901,12 @@ function mediaCheck()
         g_QSOcount++;
         if (g_QSOhash[i].confirmed) g_QSLcount++;
       }
-    
+
       fs.unlinkSync(g_NWappData + "internal_qso.json");
     }
     loadReceptionReports();
   }
-  catch (e) 
+  catch (e)
   {
      clearLogFilesAndCounts();
   }

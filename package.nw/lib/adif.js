@@ -70,9 +70,9 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
   let eQSLfile = false;
 
   if (rawAdiBuffer.indexOf("PSKReporter") > -1) activeAdifLogMode = false;
-  
+
   if (rawAdiBuffer.indexOf("Received eQSLs") > -1) eQSLfile = true;
-  
+
   if (rawAdiBuffer.length > 1)
   {
     let regex = new RegExp("<EOR>", "i");

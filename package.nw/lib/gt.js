@@ -15980,10 +15980,7 @@ function pskSpotCheck(timeSec)
 
   if (myDEcall == null || myDEcall == "NOCALL" || myDEcall == "") return;
 
-  if (
-    timeSec - g_receptionReports.lastDownloadTimeSec > 120 &&
-    (g_spotsEnabled == 1 || g_rosterSpot)
-  )
+  if ((g_spotsEnabled == 1 || g_rosterSpot) && (timeSec - g_receptionReports.lastDownloadTimeSec > 120 || g_receptionReports.lastDownloadTimeSec > timeSec))
   {
     g_receptionReports.lastDownloadTimeSec = timeSec;
     localStorage.receptionSettings = JSON.stringify(g_receptionSettings);

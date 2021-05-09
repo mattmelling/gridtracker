@@ -183,7 +183,7 @@ var def_msgSettings = {
   msgAlertWord: "New chat message",
   msgAlertMedia: "none",
   msgFrequencySelect: 0,
-  msgActionSelect: 0,
+  msgActionSelect: 1,
   msgAwaySelect: 0,
   msgAwayText: "I am away from the shack at the moment"
 };

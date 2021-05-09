@@ -115,6 +115,13 @@ function loadAllSettings()
     def_adifLogSettings
   );
   g_msgSettings = loadDefaultsAndMerge("msgSettings", def_msgSettings);
+  // one-time override of oams pop-up messages: if pop-ups disabled
+  // and new version, reset msgActionSelect to 1 (pop up)
+  if (g_msgSettings.msgActionSelect == 0 &&
+      String(gtVersion) != String(g_startVersion))
+  {
+    g_msgSettings.msgActionSelect = 1;
+  }
   g_receptionSettings = loadDefaultsAndMerge(
     "receptionSettings",
     def_receptionSettings
@@ -16038,7 +16045,8 @@ function pskSpotResults(buffer, flag)
             var call = json.receptionReport[key].receiverCallsign;
             var mode = json.receptionReport[key].mode;
             var grid = json.receptionReport[key].receiverLocator.substr(0, 6);
-            if (grid.length < 4) {
+            if (grid.length < 4)
+            {
               continue;
             }
             var band = Number(
@@ -16157,7 +16165,8 @@ function createSpot(report, key, fromPoint, addToLayer = true)
   {
     var LL = squareToLatLongAll(report.grid);
 
-    if (isNaN(LL.la1)) {
+    if (isNaN(LL.la1))
+    {
       // Bad value in grid, don't map //
       return;
     }

@@ -2639,12 +2639,12 @@ function updateAwardList(target = null)
       row,
       "<p style='margin:0;' >" +
         (allEndorse
-          ? "<img src='./img/award-trophy.svg' height='18px'>"
+          ? "<img src='./img/award-trophy.png' height='18px'>"
           : baseAward
-            ? "<img src='./img/award-medal.svg' height='16px'>"
+            ? "<img src='./img/award-medal.png' height='16px'>"
             : baseCount > 0
-              ? "<img src='./img/award-tally.svg' height='16px'>"
-              : "<img src='./img/award-empty.svg' height='14px'>"),
+              ? "<img src='./img/award-tally.png' height='16px'>"
+              : "<img src='./img/award-empty.png' height='14px'>"),
       tooltip
     );
     createCell(
@@ -2657,7 +2657,7 @@ function updateAwardList(target = null)
     );
     createCellHtml(
       row,
-      "<p title='Remove Tracker' onclick='deleteAwardTracker(this)' style='margin:0;cursor:pointer;'><img src='./img/award-delete.svg' height='16px'>"
+      "<p title='Remove Tracker' onclick='deleteAwardTracker(this)' style='margin:0;cursor:pointer;'><img src='./img/award-delete.png' height='16px'>"
     );
   }
 }

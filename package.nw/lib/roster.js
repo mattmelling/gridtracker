@@ -974,9 +974,12 @@ function viewRoster()
         didWork = true;
         callConf = `${unconf}${call}${inversionAlpha};`;
 
-        callObj.callFlags.confirmed = true;
-        callPointer = "text-decoration: line-through; ";
-        callConf = "";
+        if (hash in g_confirmed.call)
+        {
+          callObj.callFlags.confirmed = true;
+          callPointer = "text-decoration: line-through; ";
+          callConf = "";
+        }
       }
 
       // Calls that have OAMS chat support

@@ -345,6 +345,38 @@
         "sponsor": "ERC",
         "tooltip": "Different African Stations"
       },
+      "DIM": {
+        "name": "DIM - Worked Different Stations",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "count": [
+            500,
+            1000,
+            2000,
+            2000,
+            3000,
+            6000,
+            10000,
+            11000,
+            12000,
+            13000,
+            15000,
+            18000,
+            20000,
+            22000,
+            25000
+          ],
+          "endorse": [],
+          "mode": [
+            "Digital"
+          ],
+          "type": "call"
+        },
+        "sponsor": "ERC",
+        "tooltip": "Worked Different Stations"
+      },
       "DPA": {
         "name": "DPA - Africa",
         "rule": {
@@ -1061,15 +1093,14 @@
         "tooltip": "Worked Different Australian Stations"
       },
       "WDAS": {
-        "name": "WDAS - Asia",
+        "name": "WDAS - Worked Different Asia Stations",
         "rule": {
           "band": [
             "Mixed"
           ],
           "cont": "AS",
           "count": [
-            2,
-            5,
+            25,
             50,
             75,
             100,
@@ -1080,7 +1111,11 @@
             500,
             600,
             750,
-            1000
+            1000,
+            1250,
+            1500,
+            1750,
+            2000
           ],
           "endorse": [
             "6m",
@@ -1100,7 +1135,48 @@
           "type": "call"
         },
         "sponsor": "ERC",
-        "tooltip": "Asia"
+        "tooltip": "Worked Different Asia Stations"
+      },
+      "WDBR": {
+        "name": "WDBR - Worked Different Brazil Stations",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "count": [
+            25,
+            50,
+            100,
+            200,
+            300,
+            400,
+            500,
+            740,
+            1000
+          ],
+          "dxcc": [
+            108
+          ],
+          "endorse": [
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "17m",
+            "20m",
+            "30m",
+            "40m",
+            "60m",
+            "80m",
+            "160m"
+          ],
+          "mode": [
+            "Digital"
+          ],
+          "type": "call"
+        },
+        "sponsor": "ERC",
+        "tooltip": "Worked Different Brazil Stations"
       },
       "WDBV": {
         "name": "WDBV - Worked Different China Stations",
@@ -1416,7 +1492,7 @@
         "tooltip": "Worked Different Spanish Stations"
       },
       "WDEU": {
-        "name": "WDEU - Europe",
+        "name": "WDEU - Worked Different Europe Stations",
         "rule": {
           "band": [
             "Mixed"
@@ -1436,7 +1512,17 @@
             3500,
             4000,
             4500,
-            5000
+            5000,
+            7500,
+            10000,
+            12500,
+            15000,
+            17500,
+            20000,
+            22500,
+            25000,
+            27500,
+            30000
           ],
           "endorse": [],
           "mode": [
@@ -1445,7 +1531,49 @@
           "type": "call"
         },
         "sponsor": "ERC",
-        "tooltip": "Europe"
+        "tooltip": "Worked Different Europe Stations"
+      },
+      "WDEA8": {
+        "name": "WDEA8 - Worked Different Canary Islands Stations",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "count": [
+            5,
+            10,
+            15,
+            25,
+            50,
+            75,
+            100,
+            150,
+            200,
+            250
+          ],
+          "dxcc": [
+            29
+          ],
+          "endorse": [
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "17m",
+            "20m",
+            "30m",
+            "40m",
+            "60m",
+            "80m",
+            "160m"
+          ],
+          "mode": [
+            "Digital"
+          ],
+          "type": "call"
+        },
+        "sponsor": "ERC",
+        "tooltip": "Worked Different Canary Islands Stations"
       },
       "WDFR": {
         "name": "WDFR - Worked Different French Stations",
@@ -2149,6 +2277,50 @@
         "sponsor": "ERC",
         "tooltip": "Worked Different Belgium Stations"
       },
+      "WDSA": {
+        "name": "WDSA - Worked Different South America Stations",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "count": [
+            50,
+            100,
+            150,
+            200,
+            250,
+            300,
+            400,
+            500,
+            750,
+            1000,
+            1250,
+            1500
+          ],
+          "cont": [
+            "SA"
+          ],
+          "endorse": [
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "17m",
+            "20m",
+            "30m",
+            "40m",
+            "60m",
+            "80m",
+            "160m"
+          ],
+          "mode": [
+            "Digital"
+          ],
+          "type": "call"
+        },
+        "sponsor": "ERC",
+        "tooltip": "Worked Different South America Stations"
+      },
       "WDSP": {
         "name": "WDSP - Worked Different Poland Stations",
         "rule": {
@@ -2230,6 +2402,44 @@
         },
         "sponsor": "ERC",
         "tooltip": "Worked Different Greece Stations"
+      },
+      "WDTA": {
+        "name": "WDTA - Worked Different Turkey Stations",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "count": [
+            15,
+            25,
+            50,
+            75,
+            100,
+            150
+          ],
+          "dxcc": [
+            390
+          ],
+          "endorse": [
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "17m",
+            "20m",
+            "30m",
+            "40m",
+            "60m",
+            "80m",
+            "160m"
+          ],
+          "mode": [
+            "Digital"
+          ],
+          "type": "call"
+        },
+        "sponsor": "ERC",
+        "tooltip": "Worked Different Turkey Stations"
       },
       "WDTI": {
         "name": "WDTI - Worked Different Costa Rica Stations",
@@ -2398,6 +2608,49 @@
         "sponsor": "ERC",
         "tooltip": "Worked Different Brunei Stations"
       },
+      "WDVE": {
+        "name": "WDVE - Worked Different Canada Stations",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "count": [
+            25,
+            50,
+            75,
+            100,
+            150,
+            200,
+            300,
+            400,
+            500,
+            750,
+            1000
+          ],
+          "dxcc": [
+            1
+          ],
+          "endorse": [
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "17m",
+            "20m",
+            "30m",
+            "40m",
+            "60m",
+            "80m",
+            "160m"
+          ],
+          "mode": [
+            "Digital"
+          ],
+          "type": "call"
+        },
+        "sponsor": "ERC",
+        "tooltip": "Worked Different Canada Stations"
+      },
       "WDVU": {
         "name": "WDVU - Worked Different India Stations",
         "rule": {
@@ -2477,6 +2730,48 @@
         },
         "sponsor": "ERC",
         "tooltip": "Worked Different Indonesia YB9 Stations"
+      },
+      "WDYO": {
+        "name": "WDYO - Worked Different Romania Stations",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "count": [
+            25,
+            50,
+            75,
+            100,
+            200,
+            300,
+            400,
+            500,
+            750,
+            1000
+          ],
+          "dxcc": [
+            275
+          ],
+          "endorse": [
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "17m",
+            "20m",
+            "30m",
+            "40m",
+            "60m",
+            "80m",
+            "160m"
+          ],
+          "mode": [
+            "Digital"
+          ],
+          "type": "call"
+        },
+        "sponsor": "ERC",
+        "tooltip": "Worked Different Romania Stations"
       },
       "WDYV": {
         "name": "WDYV - Worked Different Venezuela Stations",

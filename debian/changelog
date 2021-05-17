@@ -1,3 +1,15 @@
+gridtracker (1.21.0517) unstable; urgency=medium
+  [Bug Fixes]
+  - Fix SVG icons not rendering on certain Windows 10 installs
+  - Fix PSK spot time skew
+  - Fix eQSL ADIF support
+  - Fix clearing of logs after installing new version of GridTracker
+  [Enhancements]
+  - Update Award Tracker with new FT8DMC and European ROS Club awards
+  - Improvements to the callroster
+  - Make settings icon a toggle that both opens and closes the settings pane
+
+ -- Matthew Chambers <nr0q@gridtracker.org> Mon, 17 May 2021 02:30:00 -0000
 gridtracker (1.21.0407) unstable; urgency=medium
   [Bug Fixes]
   - mp3 alerts from previous versions now work correctly

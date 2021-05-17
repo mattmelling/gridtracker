@@ -1159,8 +1159,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                           id="multicastIpInput"
                           type="text"
                           class="inputTextValue"
-                          maxlength="15"
-                          size="10"
+                          maxlength="255"
+                          size="16"
                           onkeypress="return validIpKeys(event.charCode);"
                           oninput=" if ( ValidateMulticast(this) ) setMulticastIp();   "
                         />
@@ -1199,8 +1199,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                           id="udpForwardIpInput"
                           type="text"
                           class="inputTextValue"
-                          maxlength="15"
-                          size="10"
+                          maxlength="255"
+                          size="16"
                           onkeypress="return validIpKeys(event.charCode);"
                           oninput=" if ( ValidateIPaddress(this, udpForwardEnable) ) setForwardIp();   "
                         />
@@ -1249,8 +1249,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                           id="homeQTHInput"
                           type="text"
                           class="inputTextValue"
-                          maxlength="6"
-                          size="3"
+                          maxlength="8"
+                          size="8"
                           oninput="{ if ( ValidateGridsquare(this,null) ) { setCenterGridsquare(); }}"
                         />
                       </td>

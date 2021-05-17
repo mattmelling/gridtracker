@@ -9110,10 +9110,18 @@ function showRootInfoBox()
 
 function showSettingsBox()
 {
-  updateRunningProcesses();
-  helpDiv.style.display = "none";
-  g_helpShow = false;
-  rootSettingsDiv.style.display = "inline-block";
+  if (rootSettingsDiv.style.display == "inline-block")
+  {
+    updateRunningProcesses();
+    rootSettingsDiv.style.display = "none";
+  }
+  else
+  {
+    updateRunningProcesses();
+    helpDiv.style.display = "none";
+    g_helpShow = false;
+    rootSettingsDiv.style.display = "inline-block";
+  }
 }
 
 function toggleBaWindow(event)

@@ -434,6 +434,9 @@ var g_dxccCount = {};
 var g_unconfirmedCalls = new Map();
 
 var g_tracker = {};
+var g_lastTrasmissionTimeSec = timeNowSec();
+
+const PSKREPORTER_INTERVAL_IN_SECONDS = 5 * 60;
 
 initQSOdata();
 
@@ -6767,6 +6770,8 @@ function handleWsjtxStatus(newMessage)
     }
     else
     {
+      g_lastTrasmissionTimeSec = g_timeNow;
+
       txrxdec.style.backgroundColor = "Red";
       txrxdec.style.borderColor = "Orange";
       txrxdec.innerHTML = "TRANSMIT";
@@ -15988,18 +15993,22 @@ function pskSpotCheck(timeSec)
 
   if (myDEcall == null || myDEcall == "NOCALL" || myDEcall == "") return;
 
-  if ((g_spotsEnabled == 1 || g_rosterSpot) && (timeSec - g_receptionReports.lastDownloadTimeSec > 120 || g_receptionReports.lastDownloadTimeSec > timeSec))
+  if (
+    (g_spotsEnabled == 1 || g_rosterSpot) &&
+    (g_receptionReports.lastDownloadTimeSec < g_lastTrasmissionTimeSec) &&
+    (
+      timeSec - g_receptionReports.lastDownloadTimeSec > PSKREPORTER_INTERVAL_IN_SECONDS ||
+      g_receptionReports.lastDownloadTimeSec > timeSec
+    )
+  )
   {
     g_receptionReports.lastDownloadTimeSec = timeSec;
     localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
-    spotRefreshDiv.innerHTML = "..refreshing..";
+    spotRefreshDiv.innerHTML = "…refreshing…";
     getBuffer(
-      "https://retrieve.pskreporter.info/query?rronly=1&lastseqno=" +
-        g_receptionReports.lastSequenceNumber +
-        "&senderCallsign=" +
-        encodeURIComponent(myRawCall) +
-        "&appcontact=" +
-        encodeURIComponent("contact@gridtracker.org"),
+      `https://retrieve.pskreporter.info/query?rronly=1&lastseqno=${g_receptionReports.lastSequenceNumber}` +
+        `&senderCallsign=${encodeURIComponent(myRawCall)}` +
+        `&appcontact=${encodeURIComponent(`GT-${pjson.version}`)}`,
       pskSpotResults,
       null,
       "https",
@@ -16008,9 +16017,19 @@ function pskSpotCheck(timeSec)
   }
   else if (g_spotsEnabled == 1)
   {
-    spotRefreshDiv.innerHTML =
-      "Refresh: " +
-      Number(120 - (timeSec - g_receptionReports.lastDownloadTimeSec)).toDHMS();
+    if (
+      g_lastTrasmissionTimeSec < g_receptionReports.lastDownloadTimeSec &&
+      (timeSec - g_receptionReports.lastDownloadTimeSec) > PSKREPORTER_INTERVAL_IN_SECONDS
+    )
+    {
+      spotRefreshDiv.innerHTML = "No recent TX"
+    }
+    else
+    {
+      spotRefreshDiv.innerHTML =
+        "Refresh: " +
+        Number(PSKREPORTER_INTERVAL_IN_SECONDS - (timeSec - g_receptionReports.lastDownloadTimeSec)).toDHMS();
+    }
   }
 }
 

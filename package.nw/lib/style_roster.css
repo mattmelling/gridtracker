@@ -551,5 +551,10 @@ table.rosterTable thead th:first-child {
   float: right;
   font-size: 70%;
   padding-left: 3px;
-  padding-rright: 3px;
+  padding-right: 3px;
+}
+
+.ackBadge {
+  padding: 0;
+  width: 1em;
 }

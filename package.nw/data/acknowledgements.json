@@ -1,54 +1,54 @@
 {
   "N0TTL": {
-    "badge": "⭐️",
+    "badge": "img/emojis/star.png",
     "message": "Creator of GridTracker"
   },
   "K1JT": {
-    "badge": "⭐️",
+    "badge": "img/emojis/star.png",
     "message": "Creator of FT8 and WSJT-X"
   },
   "N2VFL": {
-    "badge": "🏆",
+    "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"
   },
   "NR0Q": {
-    "badge": "🏆",
+    "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"
   },
   "KF5QHQ": {
-    "badge": "🏆",
+    "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"
   },
   "WA4YA": {
-    "badge": "🏆",
+    "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"
   },
   "KI2D": {
-    "badge": "🥃",
+    "badge": "img/emojis/flatbread.png",
     "message": "GridTracker Developer"
   },
   "K5TUX": {
-    "badge": "🐧",
+    "badge": "img/emojis/penguin.png",
     "message": "GridTracker Partner"
   },
   "KA0AZS": {
-    "badge": "🍕",
+    "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
   "G1MIC": {
-    "badge": "🍕",
+    "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
   "KD0YTE": {
-    "badge": "🍕",
+    "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
   "W4IPA": {
-    "badge": "🍕",
+    "badge": "img/emojis/tumbler-glass.png",
     "message": "GridTracker Tester"
   },
   "W5AFK": {
-    "badge": "🍕",
+    "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   }
 }

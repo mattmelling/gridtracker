@@ -713,6 +713,11 @@ a {
   /* animation: fadeEffect .3s;  Fading effect takes 1 second */
 }
 
+.lookupAckBadge {
+  padding: 0;
+  width: 1em;
+}
+
 table.darkTable {
   border-collapse: collapse;
   border: 1px solid #888;

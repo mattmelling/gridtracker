@@ -15621,7 +15621,7 @@ function searchLogForCallsign(call)
   if (g_acknowledgedCalls[call])
   {
     worker = `<h3>GridTracker would like to acknowledge ${call}: ` +
-      `${g_acknowledgedCalls[call].badge} ${g_acknowledgedCalls[call].message}</h3>`
+      `<img class='lookupAckBadge' src='${g_acknowledgedCalls[call].badge}'> ${g_acknowledgedCalls[call].message}</h3>`
   }
 
   if (list.length > 0)
@@ -16069,7 +16069,8 @@ function pskSpotResults(buffer, flag)
             var call = json.receptionReport[key].receiverCallsign;
             var mode = json.receptionReport[key].mode;
             var grid = json.receptionReport[key].receiverLocator.substr(0, 6);
-            if (grid.length < 4) {
+            if (grid.length < 4)
+            {
               continue;
             }
             var band = Number(
@@ -16188,7 +16189,8 @@ function createSpot(report, key, fromPoint, addToLayer = true)
   {
     var LL = squareToLatLongAll(report.grid);
 
-    if (isNaN(LL.la1)) {
+    if (isNaN(LL.la1))
+    {
       // Bad value in grid, don't map //
       return;
     }

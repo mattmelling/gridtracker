@@ -1728,8 +1728,8 @@ function viewRoster()
       var callStr = thisCall.formatCallsign()
       if (acks[thisCall])
       {
-        callStr = `${callStr} <span class='acknowledged'>${acks[thisCall].badge}</span>`
-        callObj.awardReason += ` - ${acks[thisCall].badge} ${acks[thisCall].message}`
+        callStr = `${callStr} <span class='acknowledged'><img class='ackBadge' src='${acks[thisCall].badge}'></span>`
+        callObj.awardReason += ` - ${acks[thisCall].message}`
       }
 
       worker += "<tbody><tr id='" + thisHash + "'>";

@@ -97,6 +97,8 @@ var g_callsignDatabaseUSplus = {
   202: true
 };
 
+var g_acknowledgedCalls = require("./data/acknowledgements.json");
+
 function loadAllSettings()
 {
   for (var x in localStorage)
@@ -15614,6 +15616,14 @@ function searchLogForCallsign(call)
     })
     .sort(myBandCompare);
 
+  var worker = ""
+
+  if (g_acknowledgedCalls[call])
+  {
+    worker = `<h3>GridTracker would like to acknowledge ${call}: ` +
+      `${g_acknowledgedCalls[call].badge} ${g_acknowledgedCalls[call].message}</h3>`
+  }
+
   if (list.length > 0)
   {
     var work = {};
@@ -15637,7 +15647,7 @@ function searchLogForCallsign(call)
       }
       else if (!(what in conf)) work[what] = g_pskColors[list[row].band];
     }
-    var worker =
+    worker +=
       "<div class='mapItemNoSize'><table align='center' class='darkTable'>";
     if (Object.keys(work).length > 0)
     {
@@ -15699,8 +15709,9 @@ function searchLogForCallsign(call)
     }
 
     worker += "</td></tr></table></div>";
-    setLookupDiv("lookupLocalDiv", worker);
   }
+
+  setLookupDiv("lookupLocalDiv", worker);
 
   list = null;
 }

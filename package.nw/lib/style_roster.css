@@ -547,3 +547,9 @@ table.rosterTable thead th:first-child {
   box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
 }
 
+.acknowledged {
+  float: right;
+  font-size: 70%;
+  padding-left: 3px;
+  padding-rright: 3px;
+}

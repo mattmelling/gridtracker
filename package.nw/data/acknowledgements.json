@@ -7,6 +7,10 @@
     "badge": "img/emojis/star.png",
     "message": "Creator of FT8 and WSJT-X"
   },
+  "K9AN": {
+    "badge": "img/emojis/star.png",
+    "message": "Co-Creator of FT8"
+  },
   "N2VFL": {
     "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"

@@ -8,7 +8,7 @@ gridtracker (1.21.0520) unstable; urgency=medium
   [Enhancements]
   - Update Award Tracker with new FT8DMC and European ROS Club awards
   - Improvements to the callroster
-  - Add recognition of contributors to GridTracker within the Call Roster
+  - Add recognition of contributors to GridTracker within the Call Roster and lookup window
   - Make settings icon a toggle that both opens and closes the settings pane
   - Grid and IP Address Fields are slightly wider
 

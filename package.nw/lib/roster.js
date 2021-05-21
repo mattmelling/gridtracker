@@ -1722,7 +1722,15 @@ function viewRoster()
 
     if (g_rosterSettings.compact == false)
     {
+      var acks = window.opener.g_acknowledgedCalls
+
       var thisHash = thisCall + callObj.band + callObj.mode;
+      var callStr = thisCall.formatCallsign()
+      if (acks[thisCall])
+      {
+        callStr = `${callStr} <span class='acknowledged'><img class='ackBadge' src='${acks[thisCall].badge}'></span>`
+        callObj.awardReason += ` - ${acks[thisCall].message}`
+      }
 
       worker += "<tbody><tr id='" + thisHash + "'>";
       worker +=
@@ -1735,7 +1743,7 @@ function viewRoster()
         callObj.band +
         callObj.mode +
         "\")'>" +
-        thisCall.formatCallsign() +
+        callStr +
         "</td>";
 
       if (showBands)

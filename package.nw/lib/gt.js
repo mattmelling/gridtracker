@@ -117,6 +117,14 @@ function loadAllSettings()
     def_adifLogSettings
   );
   g_msgSettings = loadDefaultsAndMerge("msgSettings", def_msgSettings);
+  // one-time override of oams pop-up messages: if pop-ups disabled
+  // and new version, reset msgActionSelect to 1 (pop up)
+  if (g_msgSettings.msgActionSelect == 0 &&
+      String(gtVersion) != String(g_startVersion))
+  {
+    g_msgSettings.msgActionSelect = 1;
+    localStorage.msgSettings = JSON.stringify(g_msgSettings);
+  }
   g_receptionSettings = loadDefaultsAndMerge(
     "receptionSettings",
     def_receptionSettings

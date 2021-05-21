@@ -1,3 +1,18 @@
+gridtracker (1.21.0520) unstable; urgency=medium
+  [Bug Fixes]
+  - Fix PSK Reporter poll time to 5min , add TX idle timeout and time skew to reduce the load GridTracker makes on the PSK Reporter server
+  - Fix SVG icons not rendering on certain Windows 10 installs
+  - Fix eQSL ADIF support
+  - Fix clearing of logs after installing new version of GridTracker
+  - Fix hightlighting whole country of Somalia on map
+  [Enhancements]
+  - Update Award Tracker with new FT8DMC and European ROS Club awards
+  - Improvements to the callroster
+  - Add recognition of contributors to GridTracker within the Call Roster and lookup window
+  - Make settings icon a toggle that both opens and closes the settings pane
+  - Grid and IP Address Fields are slightly wider
+
+ -- Matthew Chambers <nr0q@gridtracker.org> Mon, 17 May 2021 02:30:00 -0000
 gridtracker (1.21.0407) unstable; urgency=medium
   [Bug Fixes]
   - mp3 alerts from previous versions now work correctly

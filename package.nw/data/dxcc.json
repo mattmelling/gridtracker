@@ -36252,7 +36252,10 @@
         "dxcc_prefix":"VP9",
         "dxcc_name":"Bermuda",
         "dxcc_entity_code":64,
-        "center":"-64.80109739368999,32.48937062434891"
+        "center": [
+          -64.80109739368999,
+          32.48937062434891
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -36320,7 +36323,10 @@
         "dxcc_prefix":"HK0",
         "dxcc_name":"San Andres & Providencia",
         "dxcc_entity_code":216,
-        "center":"-80.63404968754762,14.8764648022794"
+        "center": [
+          -80.63404968754762,
+          14.8764648022794
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -36452,7 +36458,10 @@
         "dxcc_prefix":"VP5",
         "dxcc_name":"Turks & Caicos Is.",
         "dxcc_entity_code":89,
-        "center":"-71.71264543006654,21.621568758897467"
+        "center": [
+          -71.71264543006654,
+          21.621568758897467
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -36528,7 +36537,10 @@
         "dxcc_prefix":"C6",
         "dxcc_name":"Bahamas",
         "dxcc_entity_code":60,
-        "center":"-76.66666666666667,24.336285993040647"
+        "center": [
+          -76.66666666666667,
+          24.336285993040647
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -36708,7 +36720,10 @@
         "dxcc_prefix":"VP2V",
         "dxcc_name":"British Virgin Is.",
         "dxcc_entity_code":65,
-        "center":"-64.3682365493065,18.56586113057611"
+        "center": [
+          -64.3682365493065,
+          18.56586113057611
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -36808,7 +36823,10 @@
         "dxcc_prefix":"KP3, KP4",
         "dxcc_name":"Puerto Rico",
         "dxcc_entity_code":202,
-        "center":"-66.48986434994666,18.288227614374364"
+        "center": [
+          -66.48986434994666,
+          18.288227614374364
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -36924,7 +36942,10 @@
         "dxcc_prefix":"FJ, TO",
         "dxcc_name":"St. Barthelemy",
         "dxcc_entity_code":516,
-        "center":"-62.81273409884113,17.899436881632525"
+        "center": [
+          -62.81273409884113,
+          17.899436881632525
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -36980,7 +37001,10 @@
         "dxcc_prefix":"V4",
         "dxcc_name":"St. Kitts & Nevis",
         "dxcc_entity_code":249,
-        "center":"-62.64386827512367,17.26216013215648"
+        "center": [
+          -62.64386827512367,
+          17.26216013215648
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37132,7 +37156,10 @@
         "dxcc_prefix":"VP2M",
         "dxcc_name":"Montserrat",
         "dxcc_entity_code":96,
-        "center":"-62.17751359040798,16.776791048435626"
+        "center": [
+          -62.17751359040798,
+          16.776791048435626
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37196,7 +37223,10 @@
         "dxcc_prefix":"FG, TO",
         "dxcc_name":"Guadeloupe",
         "dxcc_entity_code":79,
-        "center":"-61.51094853426815,16.184383569047682"
+        "center": [
+          -61.51094853426815,
+          16.184383569047682
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37276,7 +37306,10 @@
         "dxcc_prefix":"J7",
         "dxcc_name":"Dominica",
         "dxcc_entity_code":95,
-        "center":"-61.36462937560332,15.496214334920978"
+        "center": [
+          -61.36462937560332,
+          15.496214334920978
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37344,7 +37377,10 @@
         "dxcc_prefix":"FM, TO",
         "dxcc_name":"Martinique",
         "dxcc_entity_code":84,
-        "center":"-61.00966993513861,14.657248399657036"
+        "center": [
+          -61.00966993513861,
+          14.657248399657036
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37420,7 +37456,10 @@
         "dxcc_prefix":"J6",
         "dxcc_name":"St. Lucia",
         "dxcc_entity_code":97,
-        "center":"-60.98799302274382,13.900994724780503"
+        "center": [
+          -60.98799302274382,
+          13.900994724780503
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37492,7 +37531,10 @@
         "dxcc_prefix":"8P",
         "dxcc_name":"Barbados",
         "dxcc_entity_code":62,
-        "center":"-59.607896266942134,13.205581842321735"
+        "center": [
+          -59.607896266942134,
+          13.205581842321735
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37556,7 +37598,10 @@
         "dxcc_prefix":"J8",
         "dxcc_name":"St. Vincent",
         "dxcc_entity_code":98,
-        "center":"-61.20476214669172,13.240752144043384"
+        "center": [
+          -61.20476214669172,
+          13.240752144043384
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37628,7 +37673,10 @@
         "dxcc_prefix":"J3",
         "dxcc_name":"Grenada",
         "dxcc_entity_code":77,
-        "center":"-61.75887821978356,12.149939402872548"
+        "center": [
+          -61.75887821978356,
+          12.149939402872548
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37700,7 +37748,10 @@
         "dxcc_prefix":"YV0",
         "dxcc_name":"Aves I.",
         "dxcc_entity_code":17,
-        "center":"-63.62254072731812,15.66847579303652"
+        "center": [
+          -63.62254072731812,
+          15.66847579303652
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37764,7 +37815,10 @@
         "dxcc_prefix":"KG4",
         "dxcc_name":"Guantanamo Bay",
         "dxcc_entity_code":105,
-        "center":"-75.15927450083828,19.92931743907232"
+        "center": [
+          -75.15927450083828,
+          19.92931743907232
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -37840,7 +37894,10 @@
         "dxcc_prefix":"CM, CO",
         "dxcc_name":"Cuba",
         "dxcc_entity_code":70,
-        "center":"-78.33561957018748,21.668161998529385"
+        "center": [
+          -78.33561957018748,
+          21.668161998529385
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38044,7 +38101,10 @@
         "dxcc_prefix":"KP1",
         "dxcc_name":"Navassa I.",
         "dxcc_entity_code":182,
-        "center":"-75.05088993886433,18.393678277500243"
+        "center": [
+          -75.05088993886433,
+          18.393678277500243
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38116,7 +38176,10 @@
         "dxcc_prefix":"KP5",
         "dxcc_name":"Desecheo I.",
         "dxcc_entity_code":43,
-        "center":"-67.46532540771224,18.45023499082599"
+        "center": [
+          -67.46532540771224,
+          18.45023499082599
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38184,7 +38247,10 @@
         "dxcc_prefix":"KP2",
         "dxcc_name":"Virgin Is.",
         "dxcc_entity_code":285,
-        "center":"-64.78280749885687,17.754856960562208"
+        "center": [
+          -64.78280749885687,
+          17.754856960562208
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38304,7 +38370,10 @@
         "dxcc_prefix":"PJ7",
         "dxcc_name":"St Maarten",
         "dxcc_entity_code":518,
-        "center":"-63.05109092978303,18.02841905665771"
+        "center": [
+          -63.05109092978303,
+          18.02841905665771
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38372,7 +38441,10 @@
         "dxcc_prefix":"PJ5, PJ6",
         "dxcc_name":"Saba & St. Eustatius",
         "dxcc_entity_code":519,
-        "center":"-63.0996186678191,17.57861310815197"
+        "center": [
+          -63.0996186678191,
+          17.57861310815197
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38424,7 +38496,10 @@
         "dxcc_prefix":"VP2E",
         "dxcc_name":"Anguilla",
         "dxcc_entity_code":12,
-        "center":"-63.173296753543674,18.38082188736351"
+        "center": [
+          -63.173296753543674,
+          18.38082188736351
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38492,7 +38567,10 @@
         "dxcc_prefix":"FS, TO",
         "dxcc_name":"Saint Martin",
         "dxcc_entity_code":213,
-        "center":"-63.03967263848042,18.090839686210003"
+        "center": [
+          -63.03967263848042,
+          18.090839686210003
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38556,7 +38634,10 @@
         "dxcc_prefix":"PJ2",
         "dxcc_name":"Curacao",
         "dxcc_entity_code":517,
-        "center":"-68.87974394147234,12.126098063540823"
+        "center": [
+          -68.87974394147234,
+          12.126098063540823
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38620,7 +38701,10 @@
         "dxcc_prefix":"PJ4",
         "dxcc_name":"Bonaire",
         "dxcc_entity_code":520,
-        "center":"-68.29446730681298,12.17377860655374"
+        "center": [
+          -68.29446730681298,
+          12.17377860655374
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38676,7 +38760,10 @@
         "dxcc_prefix":"P4",
         "dxcc_name":"Aruba",
         "dxcc_entity_code":91,
-        "center":"-70.0259106843469,12.602514599287943"
+        "center": [
+          -70.0259106843469,
+          12.602514599287943
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -38736,7 +38823,10 @@
         "dxcc_prefix":"YV-YY, 4M",
         "dxcc_name":"Venezuela",
         "dxcc_entity_code":148,
-        "center":"-66.05090687395214,7.392904316541021"
+        "center": [
+          -66.05090687395214,
+          7.392904316541021
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -39136,7 +39226,10 @@
         "dxcc_prefix":"9Y, 9Z",
         "dxcc_name":"Trinidad & Tobago",
         "dxcc_entity_code":90,
-        "center":"-61.539399481786305,10.643929274152228"
+        "center": [
+          -61.539399481786305,
+          10.643929274152228
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -39192,7 +39285,10 @@
         "dxcc_prefix":"V3",
         "dxcc_name":"Belize",
         "dxcc_entity_code":66,
-        "center":"-88.63283036122542,17.05676611138483"
+        "center": [
+          -88.63283036122542,
+          17.05676611138483
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -39276,7 +39372,10 @@
         "dxcc_prefix":"HK0",
         "dxcc_name":"Malpelo I.",
         "dxcc_entity_code":161,
-        "center":"-81.63389727175735,3.996146520355751"
+        "center": [
+          -81.63389727175735,
+          3.996146520355751
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -39340,7 +39439,10 @@
         "dxcc_prefix":"4U1U_UN",
         "dxcc_name":"United Nations HQ",
         "dxcc_entity_code":289,
-        "center":"-73.967649,40.750272"
+        "center": [
+          -73.967649,
+          40.750272
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -39410,7 +39512,10 @@
         "dxcc_prefix":"CY9",
         "dxcc_name":"St. Paul I.",
         "dxcc_entity_code":252,
-        "center":"-170.284167,57.125"
+        "center": [
+          -170.284167,
+          57.125
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -39478,7 +39583,10 @@
         "dxcc_prefix":"FP",
         "dxcc_name":"St. Pierre & Miquelon",
         "dxcc_entity_code":277,
-        "center":"-56.31458619112939,47.04397972429109"
+        "center": [
+          -56.31458619112939,
+          47.04397972429109
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -39542,7 +39650,10 @@
         "dxcc_prefix":"K, W, N, AA-AK",
         "dxcc_name":"United States of America",
         "dxcc_entity_code":291,
-        "center":"-99.53703703703708,40.1357500646171"
+        "center": [
+          -99.53703703703708,
+          40.1357500646171
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -39996,7 +40107,10 @@
         "dxcc_prefix":"VA-VG, VO, VY",
         "dxcc_name":"Canada",
         "dxcc_entity_code":1,
-        "center":"-100.64814814814818,55.932488305291855"
+        "center": [
+          -100.64814814814818,
+          55.932488305291855
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -42162,7 +42276,10 @@
         "dxcc_prefix":"CU",
         "dxcc_name":"Azores",
         "dxcc_entity_code":149,
-        "center":"-27.855509830818466,38.67136393188696"
+        "center": [
+          -27.855509830818466,
+          38.67136393188696
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -42250,7 +42367,10 @@
         "dxcc_prefix":"CT3",
         "dxcc_name":"Madeira Is.",
         "dxcc_entity_code":256,
-        "center":"-16.99588477366256,32.92029745097433"
+        "center": [
+          -16.99588477366256,
+          32.92029745097433
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -42318,7 +42438,10 @@
         "dxcc_prefix":"EA8-EH8",
         "dxcc_name":"Canary Is.",
         "dxcc_entity_code":29,
-        "center":"-15.76131687242799,28.318532922774367"
+        "center": [
+          -15.76131687242799,
+          28.318532922774367
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -42470,7 +42593,10 @@
         "dxcc_prefix":"ZB2",
         "dxcc_name":"Gibraltar",
         "dxcc_entity_code":233,
-        "center":"-5.35,36.133333"
+        "center": [
+          -5.35,
+          36.133333
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -42522,7 +42648,10 @@
         "dxcc_prefix":"EA9-EH9",
         "dxcc_name":"Ceuta & Melilla",
         "dxcc_entity_code":32,
-        "center":"-5.315556,35.888333"
+        "center": [
+          -5.315556,
+          35.888333
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -42728,7 +42857,10 @@
         "dxcc_prefix":"EA6-EH6",
         "dxcc_name":"Balearic Is.",
         "dxcc_entity_code":21,
-        "center":"2.825788751714678,39.72024279482304"
+        "center": [
+          2.825788751714678,
+          39.72024279482304
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -42820,7 +42952,10 @@
         "dxcc_prefix":"C3",
         "dxcc_name":"Andorra",
         "dxcc_entity_code":203,
-        "center":"1.622155610876843,42.565036867075946"
+        "center": [
+          1.622155610876843,
+          42.565036867075946
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -42884,7 +43019,10 @@
         "dxcc_prefix":"EA-EH",
         "dxcc_name":"Spain",
         "dxcc_entity_code":281,
-        "center":"-4.012345679012349,40.559154598116976"
+        "center": [
+          -4.012345679012349,
+          40.559154598116976
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -43132,7 +43270,10 @@
         "dxcc_prefix":"3A",
         "dxcc_name":"Monaco",
         "dxcc_entity_code":260,
-        "center":"14.259259259259265,47.72198976138523"
+        "center": [
+          14.259259259259265,
+          47.72198976138523
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -43196,7 +43337,10 @@
         "dxcc_prefix":"T7",
         "dxcc_name":"San Marino",
         "dxcc_entity_code":278,
-        "center":"12.433333,43.933333"
+        "center": [
+          12.433333,
+          43.933333
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -43268,7 +43412,10 @@
         "dxcc_prefix":"HV",
         "dxcc_name":"Vatican",
         "dxcc_entity_code":295,
-        "center":"12.453333,41.903333"
+        "center": [
+          12.453333,
+          41.903333
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -43332,7 +43479,10 @@
         "dxcc_prefix":"1A (Unofficial)",
         "dxcc_name":"Sovereign Military Order of Malta",
         "dxcc_entity_code":246,
-        "center":"12.480572,41.905192"
+        "center": [
+          12.480572,
+          41.905192
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -43392,7 +43542,10 @@
         "dxcc_prefix":"I",
         "dxcc_name":"Italy",
         "dxcc_entity_code":248,
-        "center":"12.04389574759945,43.21370806481059"
+        "center": [
+          12.04389574759945,
+          43.21370806481059
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -43870,7 +44023,10 @@
         "dxcc_prefix":"SV/A",
         "dxcc_name":"Mount Athos",
         "dxcc_entity_code":180,
-        "center":"24.17924096936442,40.327162946933925"
+        "center": [
+          24.17924096936442,
+          40.327162946933925
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -43926,7 +44082,10 @@
         "dxcc_prefix":"SV-SZ, J4",
         "dxcc_name":"Greece",
         "dxcc_entity_code":236,
-        "center":"21.740588324950462,39.37235706451992"
+        "center": [
+          21.740588324950462,
+          39.37235706451992
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -44122,7 +44281,10 @@
         "dxcc_prefix":"SV5, J45",
         "dxcc_name":"Dodecanese",
         "dxcc_entity_code":45,
-        "center":"27.00807803688462,36.46814942998131"
+        "center": [
+          27.00807803688462,
+          36.46814942998131
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -44278,7 +44440,10 @@
         "dxcc_prefix":"TA, TC",
         "dxcc_name":"Turkey",
         "dxcc_entity_code":390,
-        "center":"27.227556774881872,41.39683132470057"
+        "center": [
+          27.227556774881872,
+          41.39683132470057
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -44596,7 +44761,10 @@
         "dxcc_prefix":"ZC4",
         "dxcc_name":"UK Sovereign Base Areas on Cyprus",
         "dxcc_entity_code":283,
-        "center":"33.779579169340195,34.988108821063875"
+        "center": [
+          33.779579169340195,
+          34.988108821063875
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -44654,7 +44822,10 @@
         "dxcc_prefix":"5B, C4, P3",
         "dxcc_name":"Cyprus",
         "dxcc_entity_code":215,
-        "center":"32.763298277701566,34.9434518252706"
+        "center": [
+          32.763298277701566,
+          34.9434518252706
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -44770,7 +44941,10 @@
         "dxcc_prefix":"HB0",
         "dxcc_name":"Liechtenstein",
         "dxcc_entity_code":251,
-        "center":"9.535432907886296,47.14738202317682"
+        "center": [
+          9.535432907886296,
+          47.14738202317682
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -44830,7 +45004,10 @@
         "dxcc_prefix":"OE",
         "dxcc_name":"Austria",
         "dxcc_entity_code":206,
-        "center":"14.259259259259265,47.72198976138523"
+        "center": [
+          14.259259259259265,
+          47.72198976138523
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -44998,7 +45175,10 @@
         "dxcc_prefix":"HB",
         "dxcc_name":"Switzerland",
         "dxcc_entity_code":287,
-        "center":"8.203017832647463,46.93169112186115"
+        "center": [
+          8.203017832647463,
+          46.93169112186115
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -45154,7 +45334,10 @@
         "dxcc_prefix":"4U_ITU",
         "dxcc_name":"ITU HQ",
         "dxcc_entity_code":117,
-        "center":"6.137621339744736,46.220955643392585"
+        "center": [
+          6.137621339744736,
+          46.220955643392585
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -45216,7 +45399,10 @@
         "dxcc_prefix":"LX",
         "dxcc_name":"Luxembourg",
         "dxcc_entity_code":254,
-        "center":"5.938119189147995,49.80231992981862"
+        "center": [
+          5.938119189147995,
+          49.80231992981862
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -45284,7 +45470,10 @@
         "dxcc_prefix":"ON-OT",
         "dxcc_name":"Belgium",
         "dxcc_entity_code":209,
-        "center":"4.746227709190669,50.68732411157481"
+        "center": [
+          4.746227709190669,
+          50.68732411157481
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -45368,7 +45557,10 @@
         "dxcc_prefix":"DA-DR",
         "dxcc_name":"Federal Republic of Germany",
         "dxcc_entity_code":230,
-        "center":"9.739368998628255,51.274575098118106"
+        "center": [
+          9.739368998628255,
+          51.274575098118106
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -45628,7 +45820,10 @@
         "dxcc_prefix":"F",
         "dxcc_name":"France",
         "dxcc_entity_code":227,
-        "center":"2.407407407407407,46.88483457834579"
+        "center": [
+          2.407407407407407,
+          46.88483457834579
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -45924,7 +46119,10 @@
         "dxcc_prefix":"G, GX, M",
         "dxcc_name":"England",
         "dxcc_entity_code":223,
-        "center":"-0.9259259259259296,52.61884235823834"
+        "center": [
+          -0.9259259259259296,
+          52.61884235823834
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -46236,7 +46434,10 @@
         "dxcc_prefix":"GM, GS",
         "dxcc_name":"Scotland",
         "dxcc_entity_code":279,
-        "center":"-4.471879286694103,56.71589490275045"
+        "center": [
+          -4.471879286694103,
+          56.71589490275045
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -46452,7 +46653,10 @@
         "dxcc_prefix":"TF",
         "dxcc_name":"Iceland",
         "dxcc_entity_code":242,
-        "center":"-18.580246913580247,64.83571405592735"
+        "center": [
+          -18.580246913580247,
+          64.83571405592735
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -46704,7 +46908,10 @@
         "dxcc_prefix":"E4",
         "dxcc_name":"Palestine",
         "dxcc_entity_code":510,
-        "center":"35.27104608037393,32.03569939219524"
+        "center": [
+          35.27104608037393,
+          32.03569939219524
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -46768,7 +46975,10 @@
         "dxcc_prefix":"4X, 4Z",
         "dxcc_name":"Israel",
         "dxcc_entity_code":336,
-        "center":"34.880861657267694,31.065910517787543"
+        "center": [
+          34.880861657267694,
+          31.065910517787543
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -46884,7 +47094,10 @@
         "dxcc_prefix":"JY",
         "dxcc_name":"Jordan",
         "dxcc_entity_code":342,
-        "center":"36.40603566529492,31.71470993204386"
+        "center": [
+          36.40603566529492,
+          31.71470993204386
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -46988,7 +47201,10 @@
         "dxcc_prefix":"SU",
         "dxcc_name":"Egypt",
         "dxcc_entity_code":478,
-        "center":"30.013717421124827,26.573775785924298"
+        "center": [
+          30.013717421124827,
+          26.573775785924298
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -47172,7 +47388,10 @@
         "dxcc_prefix":"OD",
         "dxcc_name":"Lebanon",
         "dxcc_entity_code":354,
-        "center":"35.69374587207235,33.863666729112026"
+        "center": [
+          35.69374587207235,
+          33.863666729112026
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -47240,7 +47459,10 @@
         "dxcc_prefix":"YK",
         "dxcc_name":"Syria",
         "dxcc_entity_code":384,
-        "center":"38.43621399176954,35.237774551746256"
+        "center": [
+          38.43621399176954,
+          35.237774551746256
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -47376,7 +47598,10 @@
         "dxcc_prefix":"A7",
         "dxcc_name":"Qatar",
         "dxcc_entity_code":376,
-        "center":"51.15683584819387,25.423069474343762"
+        "center": [
+          51.15683584819387,
+          25.423069474343762
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -47440,7 +47665,10 @@
         "dxcc_prefix":"A9",
         "dxcc_name":"Bahrain",
         "dxcc_entity_code":304,
-        "center":"50.608139003200726,26.180519750016686"
+        "center": [
+          50.608139003200726,
+          26.180519750016686
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -47500,7 +47728,10 @@
         "dxcc_prefix":"HZ",
         "dxcc_name":"Saudi Arabia",
         "dxcc_entity_code":378,
-        "center":"45.48696844993141,23.357687763572528"
+        "center": [
+          45.48696844993141,
+          23.357687763572528
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -47820,7 +48051,10 @@
         "dxcc_prefix":"C5",
         "dxcc_name":"The Gambia",
         "dxcc_entity_code":422,
-        "center":"-15.665294924554182,13.53488329107438"
+        "center": [
+          -15.665294924554182,
+          13.53488329107438
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -47900,7 +48134,10 @@
         "dxcc_prefix":"6V, 6W",
         "dxcc_name":"Senegal",
         "dxcc_entity_code":456,
-        "center":"-14.458161865569272,14.758587038281874"
+        "center": [
+          -14.458161865569272,
+          14.758587038281874
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48088,7 +48325,10 @@
         "dxcc_prefix":"CN",
         "dxcc_name":"Morocco",
         "dxcc_entity_code":446,
-        "center":"-10.082304526748976,28.68018729419576"
+        "center": [
+          -10.082304526748976,
+          28.68018729419576
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48372,7 +48612,10 @@
         "dxcc_prefix":"5T",
         "dxcc_name":"Mauritania",
         "dxcc_entity_code":444,
-        "center":"-10.562414266117969,19.683308045399514"
+        "center": [
+          -10.562414266117969,
+          19.683308045399514
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48544,7 +48787,10 @@
         "dxcc_prefix":"S0",
         "dxcc_name":"Western Sahara",
         "dxcc_entity_code":302,
-        "center":"-12.222222222222227,24.035967349184517"
+        "center": [
+          -12.222222222222227,
+          24.035967349184517
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48672,7 +48918,10 @@
         "dxcc_prefix":"ZD8",
         "dxcc_name":"Ascension I.",
         "dxcc_entity_code":205,
-        "center":"-14.467306812985823,-7.94877290883754"
+        "center": [
+          -14.467306812985823,
+          -7.94877290883754
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48744,7 +48993,10 @@
         "dxcc_prefix":"ZD7",
         "dxcc_name":"St. Helena",
         "dxcc_entity_code":250,
-        "center":"-5.761316872427983,-15.88750753624791"
+        "center": [
+          -5.761316872427983,
+          -15.88750753624791
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48816,7 +49068,10 @@
         "dxcc_prefix":"S9",
         "dxcc_name":"Sao Tome & Principe",
         "dxcc_entity_code":219,
-        "center":"6.895290352080474,0.8047289136386837"
+        "center": [
+          6.895290352080474,
+          0.8047289136386837
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48876,7 +49131,10 @@
         "dxcc_prefix":"3C0",
         "dxcc_name":"Annobon I.",
         "dxcc_entity_code":195,
-        "center":"5.6149977137631435,-1.4264644118711374"
+        "center": [
+          5.6149977137631435,
+          -1.4264644118711374
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -48940,7 +49198,10 @@
         "dxcc_prefix":"ZD9",
         "dxcc_name":"Tristan da Cunha & Gough I.",
         "dxcc_entity_code":274,
-        "center":"-10.013717421124825,-40.22483307510095"
+        "center": [
+          -10.013717421124825,
+          -40.22483307510095
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -49066,7 +49327,10 @@
         "dxcc_prefix":"3Y",
         "dxcc_name":"Bouvet",
         "dxcc_entity_code":24,
-        "center":"3.39582380734646,-54.41024340725154"
+        "center": [
+          3.39582380734646,
+          -54.41024340725154
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49126,7 +49390,10 @@
         "dxcc_prefix":"VP8",
         "dxcc_name":"Falkland Is.",
         "dxcc_entity_code":141,
-        "center":"-59.451303155006855,-51.65060960928611"
+        "center": [
+          -59.451303155006855,
+          -51.65060960928611
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49194,7 +49461,10 @@
         "dxcc_prefix":"CE0",
         "dxcc_name":"Juan Fernandez Is.",
         "dxcc_entity_code":125,
-        "center":"-79.79423868312757,-33.60847777610798"
+        "center": [
+          -79.79423868312757,
+          -33.60847777610798
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49250,7 +49520,10 @@
         "dxcc_prefix":"CE0",
         "dxcc_name":"San Felix & San Ambrosio",
         "dxcc_entity_code":217,
-        "center":"-80.12345679012347,-26.34453905415765"
+        "center": [
+          -80.12345679012347,
+          -26.34453905415765
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49318,7 +49591,10 @@
         "dxcc_prefix":"FT/J, FT/E, TO",
         "dxcc_name":"Juan de Nova, Europa",
         "dxcc_entity_code":124,
-        "center":"42.63984148757811,-16.963487360906456"
+        "center": [
+          42.63984148757811,
+          -16.963487360906456
+      ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -49428,7 +49704,10 @@
         "dxcc_prefix":"FH, TO",
         "dxcc_name":"Mayotte",
         "dxcc_entity_code":169,
-        "center":"45.078494131992066,-12.697692822566268"
+        "center": [
+          45.078494131992066,
+          -12.697692822566268
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49496,7 +49775,10 @@
         "dxcc_prefix":"D6",
         "dxcc_name":"Comoros",
         "dxcc_entity_code":411,
-        "center":"43.68846212467611,-12.269113986095064"
+        "center": [
+          43.68846212467611,
+          -12.269113986095064
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49612,7 +49894,10 @@
         "dxcc_prefix":"FT/G, TO",
         "dxcc_name":"Glorioso Is.",
         "dxcc_entity_code":99,
-        "center":"47.224508459076354,-11.529382041726222"
+        "center": [
+          47.224508459076354,
+          -11.529382041726222
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49672,7 +49957,10 @@
         "dxcc_prefix":"FT/T, TO",
         "dxcc_name":"Tromelin I.",
         "dxcc_entity_code":276,
-        "center":"54.45816186556929,-15.869915528394685"
+        "center": [
+          54.45816186556929,
+          -15.869915528394685
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49728,7 +50016,10 @@
         "dxcc_prefix":"3B6, 3B7",
         "dxcc_name":"Agalega & St. Brandon Is.",
         "dxcc_entity_code":4,
-        "center":"59.451303155006855,-16.397000903751035"
+        "center": [
+          59.451303155006855,
+          -16.397000903751035
+      ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -49868,7 +50159,10 @@
         "dxcc_prefix":"FR, TO",
         "dxcc_name":"Reunion I.",
         "dxcc_entity_code":453,
-        "center":"55.50068587105625,-21.020822423114538"
+        "center": [
+          55.50068587105625,
+          -21.020822423114538
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -49944,7 +50238,10 @@
         "dxcc_prefix":"3B8",
         "dxcc_name":"Mauritius",
         "dxcc_entity_code":165,
-        "center":"57.75034293552812,-20.2505911140305"
+        "center": [
+          57.75034293552812,
+          -20.2505911140305
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50020,7 +50317,10 @@
         "dxcc_prefix":"3B9",
         "dxcc_name":"Rodriguez I.",
         "dxcc_entity_code":207,
-        "center":"63.34705075445817,-19.73496328511436"
+        "center": [
+          63.34705075445817,
+          -19.73496328511436
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50084,7 +50384,10 @@
         "dxcc_prefix":"ZS8",
         "dxcc_name":"Prince Edward & Marion Is.",
         "dxcc_entity_code":201,
-        "center":"37.73340784771972,-46.904392041921504"
+        "center": [
+          37.73340784771972,
+          -46.904392041921504
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50144,7 +50447,10 @@
         "dxcc_prefix":"FT/W",
         "dxcc_name":"Crozet I.",
         "dxcc_entity_code":41,
-        "center":"50.98613016308491,-46.32742942812778"
+        "center": [
+          50.98613016308491,
+          -46.32742942812778
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50224,7 +50530,10 @@
         "dxcc_prefix":"VP8, LU",
         "dxcc_name":"South Orkney Is.",
         "dxcc_entity_code":238,
-        "center":"-45.34979423868312,-60.59301923576971"
+        "center": [
+          -45.34979423868312,
+          -60.59301923576971
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50292,7 +50601,10 @@
         "dxcc_prefix":"VP8, LU",
         "dxcc_name":"South Georgia I.",
         "dxcc_entity_code":235,
-        "center":"-36.75925925925926,-54.344995170504056"
+        "center": [
+          -36.75925925925926,
+          -54.344995170504056
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50360,7 +50672,10 @@
         "dxcc_prefix":"FT/X",
         "dxcc_name":"Kerguelen Is.",
         "dxcc_entity_code":131,
-        "center":"77.51054209216068,-38.25126858643041"
+        "center": [
+          77.51054209216068,
+          -38.25126858643041
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50432,7 +50747,10 @@
         "dxcc_prefix":"VK0",
         "dxcc_name":"Heard I.",
         "dxcc_entity_code":111,
-        "center":"73.49794238683126,-52.95896205831255"
+        "center": [
+          73.49794238683126,
+          -52.95896205831255
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50504,7 +50822,10 @@
         "dxcc_prefix":"FT/Z",
         "dxcc_name":"Amsterdam & St. Paul Is.",
         "dxcc_entity_code":10,
-        "center":"77.51054209216068,-38.25126858643041"
+        "center": [
+          77.51054209216068,
+          -38.25126858643041
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50564,7 +50885,10 @@
         "dxcc_prefix":"VQ9",
         "dxcc_name":"Chagos Is.",
         "dxcc_entity_code":33,
-        "center":"71.5775034293553,-6.351832584684203"
+        "center": [
+          71.5775034293553,
+          -6.351832584684203
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50624,7 +50948,10 @@
         "dxcc_prefix":"VK9C",
         "dxcc_name":"Cocos (Keeling) Is.",
         "dxcc_entity_code":38,
-        "center":"96.84702535182643,-12.155237188391553"
+        "center": [
+          96.84702535182643,
+          -12.155237188391553
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50688,7 +51015,10 @@
         "dxcc_prefix":"VK9X",
         "dxcc_name":"Christmas I.",
         "dxcc_entity_code":35,
-        "center":"105.62414266117969,-10.404166416718084"
+        "center": [
+          105.62414266117969,
+          -10.404166416718084
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50748,7 +51078,10 @@
         "dxcc_prefix":"None",
         "dxcc_name":"Spratly Is.",
         "dxcc_entity_code":247,
-        "center":"114.44444444444443,9.74688452371069"
+        "center": [
+          114.44444444444443,
+          9.74688452371069
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50812,7 +51145,10 @@
         "dxcc_prefix":"V8",
         "dxcc_name":"Brunei Darussalam",
         "dxcc_entity_code":345,
-        "center":"114.91473183288453,4.731020069937742"
+        "center": [
+          114.91473183288453,
+          4.731020069937742
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -50872,7 +51208,10 @@
         "dxcc_prefix":"9M6, 9M8",
         "dxcc_name":"East Malaysia",
         "dxcc_entity_code":46,
-        "center":"113.33333333333333,2.742436464403923"
+        "center": [
+          113.33333333333333,
+          2.742436464403923
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -51032,7 +51371,10 @@
         "dxcc_prefix":"9V",
         "dxcc_name":"Singapore",
         "dxcc_entity_code":381,
-        "center":"103.79718538840623,1.3330098408909663"
+        "center": [
+          103.79718538840623,
+          1.3330098408909663
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -51096,7 +51438,10 @@
         "dxcc_prefix":"9M2, 9M4",
         "dxcc_name":"West Malaysia",
         "dxcc_entity_code":299,
-        "center":"102.01646090534979,4.604090582312168"
+        "center": [
+          102.01646090534979,
+          4.604090582312168
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -51216,7 +51561,10 @@
         "dxcc_prefix":"B",
         "dxcc_name":"China",
         "dxcc_entity_code":318,
-        "center":"103.98148148148151,34.393144339806355"
+        "center": [
+          103.98148148148151,
+          34.393144339806355
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -52198,7 +52546,10 @@
         "dxcc_prefix":"VR",
         "dxcc_name":"Hong Kong",
         "dxcc_entity_code":321,
-        "center":"114.18381344307268,22.414094599590783"
+        "center": [
+          114.18381344307268,
+          22.414094599590783
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -52262,7 +52613,10 @@
         "dxcc_prefix":"XX9",
         "dxcc_name":"Macao",
         "dxcc_entity_code":152,
-        "center":"113.542436,22.193182"
+        "center": [
+          113.542436,
+          22.193182
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -52318,7 +52672,10 @@
         "dxcc_prefix":"BV9P",
         "dxcc_name":"Pratas I.",
         "dxcc_entity_code":505,
-        "center":"116.74439871970733,20.78161356717223"
+        "center": [
+          116.74439871970733,
+          20.78161356717223
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -52378,7 +52735,10 @@
         "dxcc_prefix":"BS7",
         "dxcc_name":"Scarborough Reef",
         "dxcc_entity_code":506,
-        "center":"117.76863283036123,15.28852689750839"
+        "center": [
+          117.76863283036123,
+          15.28852689750839
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -52430,7 +52790,10 @@
         "dxcc_prefix":"DU-DZ, 4D-4I",
         "dxcc_name":"Philippines",
         "dxcc_entity_code":375,
-        "center":"118.64654778235025,9.972131417391026"
+        "center": [
+          118.64654778235025,
+          9.972131417391026
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -52916,7 +53279,10 @@
         "dxcc_prefix":"VK0",
         "dxcc_name":"Macquarie I.",
         "dxcc_entity_code":153,
-        "center":"158.84773662551441,-54.601393678482594"
+        "center": [
+          158.84773662551441,
+          -54.601393678482594
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -52976,7 +53342,10 @@
         "dxcc_prefix":"ZL9",
         "dxcc_name":"New Zealand Subantarctic Islands",
         "dxcc_entity_code":16,
-        "center":"165.98079561042525,-50.67573508006514"
+        "center": [
+          165.98079561042525,
+          -50.67573508006514
+      ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -53190,7 +53559,10 @@
         "dxcc_prefix":"KL, AL, NL, WL",
         "dxcc_name":"Alaska",
         "dxcc_entity_code":6,
-        "center":"-151.9444444444445,64.91434252406415"
+        "center": [
+          -151.9444444444445,
+          64.91434252406415
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -53820,7 +54192,10 @@
         "dxcc_prefix":"XA-XI",
         "dxcc_name":"Mexico",
         "dxcc_entity_code":50,
-        "center":"-102.12962962962966,23.90435627714976"
+        "center": [
+          -102.12962962962966,
+          23.90435627714976
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54468,7 +54843,10 @@
         "dxcc_prefix":"FO, TX",
         "dxcc_name":"Clipperton I.",
         "dxcc_entity_code":36,
-        "center":"-109.27297668038408,10.260219948775855"
+        "center": [
+          -109.27297668038408,
+          10.260219948775855
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54540,7 +54918,10 @@
         "dxcc_prefix":"XA4-XI4",
         "dxcc_name":"Revillagigedo",
         "dxcc_entity_code":204,
-        "center":"-112.23593964334704,19.010286867390647"
+        "center": [
+          -112.23593964334704,
+          19.010286867390647
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54632,7 +55013,10 @@
         "dxcc_prefix":"CE0",
         "dxcc_name":"Easter I.",
         "dxcc_entity_code":47,
-        "center":"-109.31870141746685,-27.193674058809528"
+        "center": [
+          -109.31870141746685,
+          -27.193674058809528
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54700,7 +55084,10 @@
         "dxcc_prefix":"3Y",
         "dxcc_name":"Peter 1 I.",
         "dxcc_entity_code":199,
-        "center":"-90.55326931870141,-68.84020992864185"
+        "center": [
+          -90.55326931870141,
+          -68.84020992864185
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54764,7 +55151,10 @@
         "dxcc_prefix":"VP6",
         "dxcc_name":"Ducie I.",
         "dxcc_entity_code":513,
-        "center":"-124.78585581466241,-24.690375733557588"
+        "center": [
+          -124.78585581466241,
+          -24.690375733557588
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54828,7 +55218,10 @@
         "dxcc_prefix":"TI9",
         "dxcc_name":"Cocos I.",
         "dxcc_entity_code":37,
-        "center":"-87.04770614235635,5.551421661968277"
+        "center": [
+          -87.04770614235635,
+          5.551421661968277
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54896,7 +55289,10 @@
         "dxcc_prefix":"VP6",
         "dxcc_name":"Pitcairn I.",
         "dxcc_entity_code":172,
-        "center":"-130.10211857948485,-25.059111102923353"
+        "center": [
+          -130.10211857948485,
+          -25.059111102923353
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -54960,7 +55356,10 @@
         "dxcc_prefix":"FO, TO",
         "dxcc_name":"Austral Is.",
         "dxcc_entity_code":508,
-        "center":"-151.4814814814815,-22.29568730542931"
+        "center": [
+          -151.4814814814815,
+          -22.29568730542931
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -55038,7 +55437,10 @@
         "dxcc_prefix":"E5",
         "dxcc_name":"South Cook Is.",
         "dxcc_entity_code":234,
-        "center":"-158.2304526748971,-19.915624863099694"
+        "center": [
+          -158.2304526748971,
+          -19.915624863099694
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -55108,7 +55510,10 @@
         "dxcc_prefix":"T32",
         "dxcc_name":"E. Kiribati (Line Is.)",
         "dxcc_entity_code":48,
-        "center":"-160.45267489711932,4.6861247670443475"
+        "center": [
+          -160.45267489711932,
+          4.6861247670443475
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -55274,7 +55679,10 @@
         "dxcc_prefix":"E5",
         "dxcc_name":"North Cook Is.",
         "dxcc_entity_code":191,
-        "center":"-161.02880658436214,-9.990144492126305"
+        "center": [
+          -161.02880658436214,
+          -9.990144492126305
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -55364,7 +55772,10 @@
         "dxcc_prefix":"FO, TX",
         "dxcc_name":"Marquesas Is.",
         "dxcc_entity_code":509,
-        "center":"-139.9588477366255,-9.016056467309696"
+        "center": [
+          -139.9588477366255,
+          -9.016056467309696
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55432,7 +55843,10 @@
         "dxcc_prefix":"KH6, KH7",
         "dxcc_name":"Hawaii",
         "dxcc_entity_code":110,
-        "center":"-156.43956713915563,20.838602621546954"
+        "center": [
+          -156.43956713915563,
+          20.838602621546954
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -55518,7 +55932,10 @@
         "dxcc_prefix":"KH3",
         "dxcc_name":"Johnston I.",
         "dxcc_entity_code":123,
-        "center":"-169.41015089163238,16.71257170046863"
+        "center": [
+          -169.41015089163238,
+          16.71257170046863
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55574,7 +55991,10 @@
         "dxcc_prefix":"KH4",
         "dxcc_name":"Midway I.",
         "dxcc_entity_code":174,
-        "center":"-177.38827075818392,28.25977775301854"
+        "center": [
+          -177.38827075818392,
+          28.25977775301854
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55630,7 +56050,10 @@
         "dxcc_prefix":"KH7K",
         "dxcc_name":"Kure I.",
         "dxcc_entity_code":138,
-        "center":"-178.2976975180061,28.389815150417206"
+        "center": [
+          -178.2976975180061,
+          28.389815150417206
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55686,7 +56109,10 @@
         "dxcc_prefix":"ZL7",
         "dxcc_name":"Chatham Is.",
         "dxcc_entity_code":34,
-        "center":"-176.74897119341563,-43.79079512075513"
+        "center": [
+          -176.74897119341563,
+          -43.79079512075513
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55742,7 +56168,10 @@
         "dxcc_prefix":"E6",
         "dxcc_name":"Niue",
         "dxcc_entity_code":188,
-        "center":"-169.9131229995428,-18.958401684407605"
+        "center": [
+          -169.9131229995428,
+          -18.958401684407605
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55794,7 +56223,10 @@
         "dxcc_prefix":"A3",
         "dxcc_name":"Tonga",
         "dxcc_entity_code":160,
-        "center":"-175.02057613168722,-19.838223624605902"
+        "center": [
+          -175.02057613168722,
+          -19.838223624605902
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55886,7 +56318,10 @@
         "dxcc_prefix":"ZL8",
         "dxcc_name":"Kermadec Is.",
         "dxcc_entity_code":133,
-        "center":"-178.39506172839504,-30.32761761233737"
+        "center": [
+          -178.39506172839504,
+          -30.32761761233737
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -55946,7 +56381,10 @@
         "dxcc_prefix":"KH8",
         "dxcc_name":"American Samoa",
         "dxcc_entity_code":9,
-        "center":"-169.62048468221315,-14.12095435042562"
+        "center": [
+          -169.62048468221315,
+          -14.12095435042562
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56010,7 +56448,10 @@
         "dxcc_prefix":"FW",
         "dxcc_name":"Wallis & Futuna Is.",
         "dxcc_entity_code":298,
-        "center":"-177.631458619113,-13.908008633750711"
+        "center": [
+          -177.631458619113,
+          -13.908008633750711
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56078,7 +56519,10 @@
         "dxcc_prefix":"ZK3",
         "dxcc_name":"Tokelau Is.",
         "dxcc_entity_code":270,
-        "center":"-171.88843164151808,-8.997992102417214"
+        "center": [
+          -171.88843164151808,
+          -8.997992102417214
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56138,7 +56582,10 @@
         "dxcc_prefix":"KH8",
         "dxcc_name":"Swains I.",
         "dxcc_entity_code":515,
-        "center":"-171.19341563786008,-11.051091557125972"
+        "center": [
+          -171.19341563786008,
+          -11.051091557125972
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56194,7 +56641,10 @@
         "dxcc_prefix":"T31",
         "dxcc_name":"C. Kiribati (British Phoenix Is.)",
         "dxcc_entity_code":31,
-        "center":"-171.52263374485597,-3.509463297900396"
+        "center": [
+          -171.52263374485597,
+          -3.509463297900396
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -56260,7 +56710,10 @@
         "dxcc_prefix":"KH1",
         "dxcc_name":"Baker & Howland Is.",
         "dxcc_entity_code":20,
-        "center":"-176.549093251493,0.48384434314837677"
+        "center": [
+          -176.549093251493,
+          0.48384434314837677
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56320,7 +56773,10 @@
         "dxcc_prefix":"KH5",
         "dxcc_name":"Palmyra & Jarvis Is.",
         "dxcc_entity_code":197,
-        "center":"-160.0411522633745,-0.24691281599523052"
+        "center": [
+          -160.0411522633745,
+          -0.24691281599523052
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -56410,7 +56866,10 @@
         "dxcc_prefix":"5W",
         "dxcc_name":"Samoa",
         "dxcc_entity_code":190,
-        "center":"-172.10791037951537,-13.801462043237919"
+        "center": [
+          -172.10791037951537,
+          -13.801462043237919
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56470,7 +56929,10 @@
         "dxcc_prefix":"T8",
         "dxcc_name":"Palau",
         "dxcc_entity_code":22,
-        "center":"134.47543565513385,7.409026557884673"
+        "center": [
+          134.47543565513385,
+          7.409026557884673
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -56608,7 +57070,10 @@
         "dxcc_prefix":"V6",
         "dxcc_name":"Micronesia",
         "dxcc_entity_code":173,
-        "center":"142.2039323273891,7.223585482852656"
+        "center": [
+          142.2039323273891,
+          7.223585482852656
+        ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -56850,7 +57315,10 @@
         "dxcc_prefix":"VK9W",
         "dxcc_name":"Willis I.",
         "dxcc_entity_code":303,
-        "center":"149.9588477366255,-16.098491291459595"
+        "center": [
+          149.9588477366255,
+          -16.098491291459595
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56906,7 +57374,10 @@
         "dxcc_prefix":"VK9M",
         "dxcc_name":"Mellish Reef",
         "dxcc_entity_code":171,
-        "center":"155.811614083219,-17.289758757324236"
+        "center": [
+          155.811614083219,
+          -17.289758757324236
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -56966,7 +57437,10 @@
         "dxcc_prefix":"VK9L",
         "dxcc_name":"Lord Howe I.",
         "dxcc_entity_code":147,
-        "center":"159.06721536351165,-31.496631498976733"
+        "center": [
+          159.06721536351165,
+          -31.496631498976733
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57030,7 +57504,10 @@
         "dxcc_prefix":"VK9N",
         "dxcc_name":"Norfolk I.",
         "dxcc_entity_code":189,
-        "center":"167.84636488340195,-28.936607198410243"
+        "center": [
+          167.84636488340195,
+          -28.936607198410243
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57082,7 +57559,10 @@
         "dxcc_prefix":"FK, TX",
         "dxcc_name":"New Caledonia",
         "dxcc_entity_code":162,
-        "center":"165.47325102880657,-21.07203173407723"
+        "center": [
+          165.47325102880657,
+          -21.07203173407723
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57150,7 +57630,10 @@
         "dxcc_prefix":"H40",
         "dxcc_name":"Temotu Province",
         "dxcc_entity_code":507,
-        "center":"166.46090534979425,-10.637937482175971"
+        "center": [
+          166.46090534979425,
+          -10.637937482175971
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57334,7 +57817,10 @@
         "dxcc_prefix":"H4",
         "dxcc_name":"Solomon Is.",
         "dxcc_entity_code":185,
-        "center":"159.7859404901014,-9.33370610944084"
+        "center": [
+          159.7859404901014,
+          -9.33370610944084
+      ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -57436,7 +57922,10 @@
         "dxcc_prefix":"C2",
         "dxcc_name":"Nauru",
         "dxcc_entity_code":157,
-        "center":"166.90951582583952,-0.4226959573314275"
+        "center": [
+          166.90951582583952,
+          -0.4226959573314275
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57488,7 +57977,10 @@
         "dxcc_prefix":"T33",
         "dxcc_name":"Banaba I. (Ocean I.)",
         "dxcc_entity_code":490,
-        "center":"169.51074531321444,-0.8291129611792343"
+        "center": [
+          169.51074531321444,
+          -0.8291129611792343
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57544,7 +58036,10 @@
         "dxcc_prefix":"JD1",
         "dxcc_name":"Ogasawara",
         "dxcc_entity_code":192,
-        "center":"142.1653203271859,27.1032582682778"
+        "center": [
+          142.1653203271859,
+          27.1032582682778
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57616,7 +58111,10 @@
         "dxcc_prefix":"4W",
         "dxcc_name":"Timor-Leste",
         "dxcc_entity_code":511,
-        "center":"125.77757455672408,-8.761065430199181"
+        "center": [
+          125.77757455672408,
+          -8.761065430199181
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57676,7 +58174,10 @@
         "dxcc_prefix":"KH0",
         "dxcc_name":"Mariana Is.",
         "dxcc_entity_code":166,
-        "center":"145.67901234567898,16.48471121840069"
+        "center": [
+          145.67901234567898,
+          16.48471121840069
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57824,7 +58325,10 @@
         "dxcc_prefix":"T30",
         "dxcc_name":"W. Kiribati (Gilbert Is.)",
         "dxcc_entity_code":301,
-        "center":"173.7860082304527,0.24691281599525894"
+        "center": [
+          173.7860082304527,
+          0.24691281599525894
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -57944,7 +58448,10 @@
         "dxcc_prefix":"T2",
         "dxcc_name":"Tuvalu",
         "dxcc_entity_code":282,
-        "center":"178.39506172839504,-7.957829892568569"
+        "center": [
+          178.39506172839504,
+          -7.957829892568569
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58072,7 +58579,10 @@
         "dxcc_prefix":"YJ",
         "dxcc_name":"Vanuatu",
         "dxcc_entity_code":158,
-        "center":"166.8724279835391,-15.05021684444823"
+        "center": [
+          166.8724279835391,
+          -15.05021684444823
+      ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -58126,7 +58636,10 @@
         "dxcc_prefix":"T5, 6O",
         "dxcc_name":"Somalia",
         "dxcc_entity_code":232,
-        "center":"45.84362139917695,4.330575919388011"
+        "center": [
+          45.84362139917695,
+          4.330575919388011
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58330,7 +58843,10 @@
         "dxcc_prefix":"S7",
         "dxcc_name":"Seychelles",
         "dxcc_entity_code":379,
-        "center":"50.89163237311385,-9.395196694906943"
+        "center": [
+          50.89163237311385,
+          -9.395196694906943
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58618,7 +59134,10 @@
         "dxcc_prefix":"PP0-PY0F",
         "dxcc_name":"Fernando de Noronha",
         "dxcc_entity_code":56,
-        "center":"-32.427983539094654,-3.8380044398004287"
+        "center": [
+          -32.427983539094654,
+          -3.8380044398004287
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58690,7 +59209,10 @@
         "dxcc_prefix":"PP0-PY0S",
         "dxcc_name":"St. Peter & St. Paul Rocks",
         "dxcc_entity_code":253,
-        "center":"-29.355281207133064,0.9144559159400387"
+        "center": [
+          -29.355281207133064,
+          0.9144559159400387
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58762,7 +59284,10 @@
         "dxcc_prefix":"PP0-PY0T",
         "dxcc_name":"Trindade & Martim Vaz Is.",
         "dxcc_entity_code":273,
-        "center":"-29.318701417466844,-20.43922902630665"
+        "center": [
+          -29.318701417466844,
+          -20.43922902630665
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58842,7 +59367,10 @@
         "dxcc_prefix":"3D2",
         "dxcc_name":"Rotuma I.",
         "dxcc_entity_code":460,
-        "center":"177.07818930041154,-12.412052317734833"
+        "center": [
+          177.07818930041154,
+          -12.412052317734833
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58898,7 +59426,10 @@
         "dxcc_prefix":"3D2",
         "dxcc_name":"Conway Reef",
         "dxcc_entity_code":489,
-        "center":"174.6090534979424,-21.761617869297453"
+        "center": [
+          174.6090534979424,
+          -21.761617869297453
+      ]
       },
       "geometry":{
         "type":"Polygon",
@@ -58950,7 +59481,10 @@
         "dxcc_prefix":"3D2",
         "dxcc_name":"Fiji",
         "dxcc_entity_code":176,
-        "center":"177.97896662094192,-17.638694376458602"
+        "center": [
+          177.97896662094192,
+          -17.638694376458602
+      ]
       },
       "geometry":{
         "type":"MultiPolygon",
@@ -59016,7 +59550,10 @@
         "dxcc_prefix":"KH9",
         "dxcc_name":"Wake I.",
         "dxcc_entity_code":297,
-        "center":"166.61416789446054,19.337237310744925"
+        "center": [
+          166.61416789446054,
+          19.337237310744925
+        ]
       },
       "geometry":{
         "type":"Polygon",
@@ -59080,7 +59617,10 @@
         "dxcc_prefix":"JD1",
         "dxcc_name":"Minami Torishima",
         "dxcc_entity_code":177,
-        "center":"153.9759258318421,24.282680163886155"
+        "center": [
+          153.9759258318421,
+          24.282680163886155
+        ]
       },
       "geometry":{
         "type":"Polygon",

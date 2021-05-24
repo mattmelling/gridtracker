@@ -1672,7 +1672,7 @@ function viewRoster()
     { worker += "<th style='cursor:pointer;' onclick='showRosterBox(12);' >Life</th>"; }
 
     if (g_rosterSettings.columns.OAMS)
-    { worker += "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAM</th>"; }
+    { worker += "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAMS</th>"; }
 
     if (g_rosterSettings.columns.Age)
     { worker += "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th></thead>"; }

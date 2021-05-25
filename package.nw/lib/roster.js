@@ -1334,7 +1334,7 @@ function viewRoster()
               else
               {
                 callObj.hunting.cqz = "worked";
-                cqzConf = `${unconf}${qrz}${inversionAlpha};`;
+                cqzConf = `${unconf}${cqz}${inversionAlpha};`;
               }
             }
             else
@@ -2216,7 +2216,7 @@ function realtimeRoster()
   var timeCols = document.getElementsByClassName("timeCol");
   for (var x in timeCols)
   {
-    if (typeof timeCols[x].id != "undefined")
+    if ((typeof timeCols[x].id != "undefined") && (typeof callRoster[timeCols[x].id.substr(2)] != "undefined"))
     {
       var when = now - callRoster[timeCols[x].id.substr(2)].callObj.age;
       timeCols[x].innerHTML = when.toDHMS();
@@ -2225,7 +2225,7 @@ function realtimeRoster()
   var lifeCols = document.getElementsByClassName("lifeCol");
   for (var x in lifeCols)
   {
-    if (typeof lifeCols[x].id != "undefined")
+    if ((typeof lifeCols[x].id != "undefined") && (typeof callRoster[lifeCols[x].id.substr(2)] != "undefined"))
     {
       var when = now - callRoster[lifeCols[x].id.substr(2)].callObj.life;
       lifeCols[x].innerHTML = when.toDHMS();
@@ -2236,7 +2236,7 @@ function realtimeRoster()
     var spotCols = document.getElementsByClassName("spotCol");
     for (var x in spotCols)
     {
-      if (typeof spotCols[x].id != "undefined")
+      if ((typeof spotCols[x].id != "undefined") && (typeof callRoster[spotCols[x].id.substr(2)] != "undefined"))
       {
         spotCols[x].innerHTML = getSpotString(
           callRoster[spotCols[x].id.substr(2)].callObj

@@ -1574,6 +1574,29 @@ function viewRoster()
     }
   }
 
+  // Show the roster count in the window title
+
+  var totalCount = Object.keys(callRoster).length;
+  var visibleCount = newCallList.length;
+  var huntedCount = newCallList.filter(obj => Object.keys(obj.hunting).length > 0).length
+  var countParts = [];
+
+  if (totalCount != visibleCount)
+  {
+    countParts.push(`${totalCount} heard`);
+  }
+
+  countParts.push(`${visibleCount} in roster`);
+
+  if (huntedCount != visibleCount)
+  {
+    countParts.push(`${huntedCount} wanted`);
+  }
+
+  window.document.title = `Call Roster: ${countParts.join(" • ")}`;
+
+  // Render the roster
+
   if (g_rosterSettings.compact == false)
   {
     newCallList.sort(r_sortFunction[g_rosterSettings.lastSortIndex]);

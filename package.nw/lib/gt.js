@@ -16044,7 +16044,8 @@ function pskSpotCheck(timeSec)
       (timeSec - g_receptionReports.lastDownloadTimeSec) > PSKREPORTER_INTERVAL_IN_SECONDS
     )
     {
-      spotRefreshDiv.innerHTML = "No recent TX"
+      spotRefreshDiv.innerHTML = "No recent TX";
+      redrawSpots();
     }
     else
     {

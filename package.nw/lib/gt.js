@@ -179,7 +179,6 @@ var g_flightDuration = 30;
 var g_crScript = g_appSettings.crScript;
 var g_spotsEnabled = g_appSettings.spotsEnabled;
 var g_heatEnabled = g_appSettings.heatEnabled;
-var g_spotRefreshRequired = false;
 
 var g_myLat = g_mapSettings.latitude;
 var g_myLon = g_mapSettings.longitude;
@@ -16028,9 +16027,6 @@ function pskSpotCheck(timeSec)
     g_receptionReports.lastDownloadTimeSec = timeSec;
     localStorage.receptionSettings = JSON.stringify(g_receptionSettings);
     spotRefreshDiv.innerHTML = "…refreshing…";
-    // set refresh indicator. since we don't poll pskreporter if user doesn't tx we need
-    // a flag to refresh spots once after tx window exceeded
-    g_spotRefreshRequired = true;
     getBuffer(
       `https://retrieve.pskreporter.info/query?rronly=1&lastseqno=${g_receptionReports.lastSequenceNumber}` +
         `&senderCallsign=${encodeURIComponent(myRawCall)}` +
@@ -16049,12 +16045,6 @@ function pskSpotCheck(timeSec)
     )
     {
       spotRefreshDiv.innerHTML = "No recent TX";
-      // refresh spots once after tx window exceeded. flip the flag after that
-      if (g_spotRefreshRequired)
-      {
-        g_spotRefreshRequired = false;
-        redrawSpots();
-      }
     }
     else
     {
@@ -16694,3 +16684,11 @@ window.addEventListener("load", function ()
     fire: "workingDateChanged"
   });
 });
+
+function refreshSpotsNoTx()
+{
+  redrawSpots();
+}
+
+setInterval(refreshSpotsNoTx, 300000);
+setTimeout(refreshSpotsNoTx, 300000);

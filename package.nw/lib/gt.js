@@ -16045,7 +16045,6 @@ function pskSpotCheck(timeSec)
     )
     {
       spotRefreshDiv.innerHTML = "No recent TX";
-      redrawSpots();
     }
     else
     {
@@ -16685,3 +16684,11 @@ window.addEventListener("load", function ()
     fire: "workingDateChanged"
   });
 });
+
+function refreshSpotsNoTx()
+{
+  redrawSpots();
+}
+
+setInterval(refreshSpotsNoTx, 300000);
+setTimeout(refreshSpotsNoTx, 300000);

@@ -1,3 +1,16 @@
+gridtracker (1.21.0530) unstable; urgency=medium
+  [Bug Fixes]
+  - Fix spots layer not refreshing/clearing when TX idle
+  - Mark /MM as not DXCC per ARRL DXCC rules
+  - Fix bug that causes call roster to stick
+  - Fix typo in Call Roster "OAMS" heading
+  - Fix DXCC GeoJSON centers that broke DXCC based map pathes
+  - Fix mislabel of Eswatini
+  [Enhancements]
+  - Add statistical information to call roster title bar
+
+ -- Matthew Chambers <nr0q@gridtracker.org> Sat, 30 May 2021 00:10:00 -0000
+
 gridtracker (1.21.0520) unstable; urgency=medium
   [Bug Fixes]
   - Fix PSK Reporter poll time to 5min , add TX idle timeout and time skew to reduce the load GridTracker makes on the PSK Reporter server
@@ -13,6 +26,7 @@ gridtracker (1.21.0520) unstable; urgency=medium
   - Grid and IP Address Fields are slightly wider
 
  -- Matthew Chambers <nr0q@gridtracker.org> Mon, 17 May 2021 02:30:00 -0000
+
 gridtracker (1.21.0407) unstable; urgency=medium
   [Bug Fixes]
   - mp3 alerts from previous versions now work correctly

@@ -1,4 +1,4 @@
-gridtracker (1.21.0529) unstable; urgency=medium
+gridtracker (1.21.0530) unstable; urgency=medium
   [Bug Fixes]
   - Fix spots layer not refreshing/clearing when TX idle
   - Mark /MM as not DXCC per ARRL DXCC rules
@@ -9,7 +9,7 @@ gridtracker (1.21.0529) unstable; urgency=medium
   [Enhancements]
   - Add statistical information to call roster title bar
 
- -- Matthew Chambers <nr0q@gridtracker.org> Sat, 29 May 2021 23:50:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org> Sat, 30 May 2021 00:10:00 -0000
 
 gridtracker (1.21.0520) unstable; urgency=medium
   [Bug Fixes]

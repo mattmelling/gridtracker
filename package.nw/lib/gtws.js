@@ -540,6 +540,7 @@ function gtChatSendUUID()
   msg.type = "uuid";
   if (g_appSettings.chatUUID != "") msg.uuid = g_appSettings.chatUUID;
   msg.call = myDEcall;
+  msg.ver = gtShortVersion;
 
   sendGtJson(JSON.stringify(msg));
 }

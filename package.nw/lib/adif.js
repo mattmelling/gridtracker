@@ -1297,7 +1297,7 @@ function startupAdifLoadCheck()
   {
     if (g_appSettings.gtFlagImgSrc == 1) showGtFlags();
 
-    // Commented out to stop execution on startup 
+    // Commented out to stop execution on startup
     // if (loadLOTWCheckBox.checked == true) grabLOtWLog(false);
 
     if (loadQRZCheckBox.checked == true) grabQrzComLog(false);

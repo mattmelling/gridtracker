@@ -1,3 +1,11 @@
+gridtracker (1.21.0613) unstable; urgency=medium
+  [Bug Fixes]
+  - Fix pulling down LoTW log at start-up causing issue for other programs that are trying to sync LoTW logs.
+  [Enhancements]
+  - Updated list of contributors
+
+ -- Matthew Chambers <nr0q@gridtracker.org> Sun, 13 June 2021 03:04:00 -0000
+
 gridtracker (1.21.0530) unstable; urgency=medium
   [Bug Fixes]
   - Fix spots layer not refreshing/clearing when TX idle

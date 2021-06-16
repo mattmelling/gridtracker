@@ -86,6 +86,36 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
   {
     let finalMode = "";
 
+    let appLoTW_RXQSO = findAdiField(
+      activeAdifArray[x],
+      "APP_LoTW_RXQSO"
+    );
+
+    if (appLoTW_RXQSO != "")
+    {
+      let dRXQSO = Date.parse(appLoTW_RXQSO);
+      let dLastLOTW_QSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
+      if ((isNaN(dRXQSO) == false) && (isNaN(dLastLOTW_QSO) == false) && (dRXQSO > dLastLOTW_QSO))
+      {
+        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+      }
+    }
+
+    let appLoTW_RXQSL = findAdiField(
+      activeAdifArray[x],
+      "APP_LoTW_RXQSL"
+    );
+
+    if (appLoTW_RXQSL != "")
+    {
+      let dRXQSL = Date.parse(appLoTW_RXQSL);
+      let dLastLOTW_QSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
+      if ((isNaN(dRXQSL) == false) && (isNaN(dLastLOTW_QSL) == false) && (dRXQSL > dLastLOTW_QSL))
+      {
+        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+      }
+    }
+
     if (activeAdifArray[x].length > 3)
     {
       if (activeAdifLogMode)
@@ -572,6 +602,16 @@ function lotwCallback(buffer, flag)
       var shouldAppend = false;
       g_fromDirectCallNoFileDialog = true;
 
+      // Extract header showing last fetched date from call
+      var lotwQSHeader = rawAdiBuffer.match(/^<APP_LoTW_LAST(QSL|QSORX):\d+>(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})/m);
+      if (lotwQSHeader !== null)
+      {
+        if (lotwQSHeader[1].toUpperCase() == "QSORX")
+        { g_adifLogSettings.lastFetch.lotw_qso = lotwQSHeader[2] }
+        elseif(lotwQSHeader[1].toUpperCase() == "QSL")
+        g_adifLogSettings.lastFetch.lotw_qsl = lotwQSHeader[2];
+      }
+
       rawAdiBuffer = cleanAndPrepADIF(
         "lotw.adif",
         rawAdiBuffer,
@@ -623,16 +663,26 @@ var g_isGettingLOTW = false;
 
 function grabLOtWLog(test)
 {
-  if (g_isGettingLOTW == false)
+  var dLoTWQSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
+  var dLoTWQSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
+  var tmpDate = ((new Date().getTime()) - 300);
+
+  // Be nice to LoTW and only fetch if last fetch was > 5 mins ago
+  if ((g_isGettingLOTW == false) &&
+  (((isNaN(dLoTWQSO) == false) && (dLoTWQSO < tmpDate)) ||
+  ((isNaN(dLoTWQSL) == false) && (dLoTWQSL < tmpDate))
+  ))
   {
     var lastQSLDateString =
-      "&qso_qsorxsince=1945-01-01&qso_qslsince=1945-01-01";
+      "&qso_qsorxsince=" + g_adifLogSettings.lastFetch.lotw_qso +
+      "&qso_qslsince=" + g_adifLogSettings.lastFetch.lotw_qsl;
     if (test == true)
     {
       lotwTestResult.innerHTML = "Testing";
       lastQSLDateString = "&qso_qsosince=2100-01-01";
     }
 
+    // Fetch QSOs
     getABuffer(
       "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
         lotwLogin.value +
@@ -648,6 +698,27 @@ function grabLOtWLog(test)
       "g_isGettingLOTW",
       120000
     );
+
+    // Fetch QSLs
+    var tQSO = setTimeout(function()
+    {
+      if (test == false) lotwLogLoaded = true;
+      getABuffer(
+        "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
+          lotwLogin.value +
+          "&password=" +
+          encodeURIComponent(lotwPassword.value) +
+          "&qso_query=1&qso_qsl=yes&qso_qsldetail=yes&qso_withown=yes" +
+          lastQSLDateString,
+        lotwCallback,
+        test,
+        "https",
+        443,
+        lotwLogImg,
+        "g_isGettingLOTW",
+        120000
+      );
+    }, 10000);
   }
 }
 
@@ -1005,6 +1076,22 @@ function loadGtQSOLogFile()
   }
 }
 
+var lotwLogLoaded = false;
+function loadLoTWLogFile()
+{
+  var fs = require("fs");
+
+  if (fs.existsSync(g_LoTWLogFile))
+  {
+    var rawAdiBuffer = fs.readFileSync(g_LoTWLogFile);
+
+    g_fromDirectCallNoFileDialog = true;
+
+    onAdiLoadComplete(rawAdiBuffer, false);
+    lotwLogLoaded = true;
+  }
+}
+
 function loadWsjtLogFile()
 {
   var fs = require("fs");
@@ -1297,8 +1384,11 @@ function startupAdifLoadCheck()
   {
     if (g_appSettings.gtFlagImgSrc == 1) showGtFlags();
 
-    // Commented out to stop execution on startup
-    // if (loadLOTWCheckBox.checked == true) grabLOtWLog(false);
+    if (loadLOTWCheckBox.checked == true)
+    {
+      loadLoTWLogFile();
+      grabLOtWLog(false);
+    }
 
     if (loadQRZCheckBox.checked == true) grabQrzComLog(false);
 

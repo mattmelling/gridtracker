@@ -504,6 +504,7 @@ var g_NWappData = "";
 var g_screenshotDir = "";
 var g_scriptDir = "";
 var g_qsoLogFile = "";
+var g_LoTWLogFile = "";
 var g_userMediaDir = "";
 var g_gtMediaDir = path.resolve("./media");
 var g_localeString = navigator.language;
@@ -5130,6 +5131,8 @@ function clearLogFilesAndCounts()
   tryToDeleteLog("qrz.adif");
   tryToDeleteLog("clublog.adif");
   g_adifLogSettings.downloads = {};
+  g_adifLogSettings.lastFetch.lotw_qso = "1940-01-01";
+  g_adifLogSettings.lastFetch.lotw_qsl = "1940-01-01";
   localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
 }
 
@@ -12174,7 +12177,8 @@ function callsignToDxcc(insign)
     var end = parts.length - 1;
     if (ancPrefixes.includes(parts[end]))
     {
-      if (parts[end].toUpperCase() == "MM") {
+      if (parts[end].toUpperCase() == "MM")
+      {
         return -1;
       }
       parts.pop();
@@ -15852,6 +15856,7 @@ function mediaCheck()
   g_scriptDir += g_dirSeperator;
 
   g_qsoLogFile = path.join(g_appData, "GridTracker_QSO.adif");
+  g_LoTWLogFile = path.join(g_appData, "lotw.adif");
 
   logEventMedia.appendChild(newOption("none", "None"));
   msgAlertMedia.appendChild(newOption("none", "Select File"));

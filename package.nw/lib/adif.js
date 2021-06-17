@@ -112,7 +112,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
       let dLastLOTW_QSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
       if ((isNaN(dRXQSL) == false) && (isNaN(dLastLOTW_QSL) == false) && (dRXQSL > dLastLOTW_QSL))
       {
-        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+        g_adifLogSettings.lastFetch.lotw_qsl = appLoTW_RXQSL;
       }
     }
 
@@ -607,9 +607,13 @@ function lotwCallback(buffer, flag)
       if (lotwQSHeader !== null)
       {
         if (lotwQSHeader[1].toUpperCase() == "QSORX")
-        { g_adifLogSettings.lastFetch.lotw_qso = lotwQSHeader[2] }
-        elseif(lotwQSHeader[1].toUpperCase() == "QSL")
-        g_adifLogSettings.lastFetch.lotw_qsl = lotwQSHeader[2];
+        {
+          g_adifLogSettings.lastFetch.lotw_qso = lotwQSHeader[2]
+        }
+        else if (lotwQSHeader[1].toUpperCase() == "QSL")
+        {
+          g_adifLogSettings.lastFetch.lotw_qsl = lotwQSHeader[2];
+        }
       }
 
       rawAdiBuffer = cleanAndPrepADIF(
@@ -663,62 +667,88 @@ var g_isGettingLOTW = false;
 
 function grabLOtWLog(test)
 {
-  var dLoTWQSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
-  var dLoTWQSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
-  var tmpDate = ((new Date().getTime()) - 300);
+  var lastQSLDateString = "";
 
-  // Be nice to LoTW and only fetch if last fetch was > 5 mins ago
-  if ((g_isGettingLOTW == false) &&
-  (((isNaN(dLoTWQSO) == false) && (dLoTWQSO < tmpDate)) ||
-  ((isNaN(dLoTWQSL) == false) && (dLoTWQSL < tmpDate))
-  ))
+  if (test == true && g_isGettingLOTW == false)
   {
-    var lastQSLDateString =
-      "&qso_qsorxsince=" + g_adifLogSettings.lastFetch.lotw_qso +
-      "&qso_qslsince=" + g_adifLogSettings.lastFetch.lotw_qsl;
-    if (test == true)
-    {
-      lotwTestResult.innerHTML = "Testing";
-      lastQSLDateString = "&qso_qsosince=2100-01-01";
-    }
+    lotwTestResult.innerHTML = "Testing";
+    lastQSLDateString = "&qso_qsosince=2100-01-01";
 
-    // Fetch QSOs
+    // Fetch Test Results
     getABuffer(
       "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
-        lotwLogin.value +
-        "&password=" +
-        encodeURIComponent(lotwPassword.value) +
-        "&qso_query=1&qso_qsl=no&qso_qsldetail=yes&qso_withown=yes" +
-        lastQSLDateString,
+      lotwLogin.value +
+      "&password=" +
+      encodeURIComponent(lotwPassword.value) +
+      "&qso_query=1&qso_qsl=no&qso_qsldetail=yes&qso_withown=yes" +
+      lastQSLDateString,
       lotwCallback,
       test,
       "https",
       443,
       lotwLogImg,
       "g_isGettingLOTW",
+      150000
+    );
+  }
+
+  if (test == false)
+  {
+    setTimeout(grabLoTWQSO, 500);
+    setTimeout(grabLoTWQSL, 10000);
+  }
+}
+
+function grabLoTWQSO()
+{
+  var dLoTWQSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
+  var tmpDate = ((new Date().getTime()) - 300);
+
+  if ((g_isGettingLOTW == false) && ((isNaN(dLoTWQSO) == false) && (dLoTWQSO < tmpDate)))
+  {
+    // Fetch QSOs
+    lastQSLDateString = "&qso_qsorxsince=" + g_adifLogSettings.lastFetch.lotw_qso;
+    getABuffer(
+      "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
+      lotwLogin.value +
+      "&password=" +
+      encodeURIComponent(lotwPassword.value) +
+      "&qso_query=1&qso_qsl=no&qso_qsldetail=yes&qso_withown=yes" +
+      lastQSLDateString,
+      lotwCallback,
+      false,
+      "https",
+      443,
+      lotwLogImg,
+      "g_isGettingLOTW",
       120000
     );
+  }
+}
 
-    // Fetch QSLs
-    var tQSO = setTimeout(function()
-    {
-      if (test == false) lotwLogLoaded = true;
-      getABuffer(
-        "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
-          lotwLogin.value +
-          "&password=" +
-          encodeURIComponent(lotwPassword.value) +
-          "&qso_query=1&qso_qsl=yes&qso_qsldetail=yes&qso_withown=yes" +
-          lastQSLDateString,
-        lotwCallback,
-        test,
-        "https",
-        443,
-        lotwLogImg,
-        "g_isGettingLOTW",
-        120000
-      );
-    }, 10000);
+function grabLoTWQSL()
+{
+  var dLoTWQSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
+  var tmpDate = ((new Date().getTime()) - 300);
+
+  if ((g_isGettingLOTW == false) && ((isNaN(dLoTWQSL) == false) && (dLoTWQSL < tmpDate)))
+  {
+    lastQSLDateString = "&qso_qslsince=" + g_adifLogSettings.lastFetch.lotw_qsl;
+    getABuffer(
+      "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
+      lotwLogin.value +
+      "&password=" +
+      encodeURIComponent(lotwPassword.value) +
+      "&qso_query=1&qso_qsl=yes&qso_qsldetail=yes&qso_withown=yes" +
+      lastQSLDateString,
+      lotwCallback,
+      false,
+      "https",
+      443,
+      lotwLogImg,
+      "g_isGettingLOTW",
+      120000
+    );
   }
 }
 
@@ -1457,11 +1487,6 @@ function getABuffer(
       })
       .on("end", function ()
       {
-        if (typeof callback === "function")
-        {
-          // Call it, since we have confirmed it is callable
-          callback(fileBuffer, flag, cookies);
-        }
         if (typeof stringOfFlag != "undefined")
         {
           window[stringOfFlag] = false;
@@ -1470,6 +1495,11 @@ function getABuffer(
         {
           imgToGray.parentNode.style.background = "";
           imgToGray.style.webkitFilter = "";
+        }
+        if (typeof callback === "function")
+        {
+          // Call it, since we have confirmed it is callable
+          callback(fileBuffer, flag, cookies);
         }
       })
       .on("error", function ()

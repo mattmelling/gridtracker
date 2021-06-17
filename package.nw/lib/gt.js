@@ -237,6 +237,11 @@ function saveLegendColors()
   localStorage.legendColors = JSON.stringify(g_legendColors);
 }
 
+function saveAdifSettings()
+{
+  localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
+}
+
 function saveStartupLogs()
 {
   localStorage.startupLogs = JSON.stringify(g_startupLogs);
@@ -306,6 +311,7 @@ function saveAndCloseApp()
   }
 
   saveAppSettings();
+  saveAdifSettings();
   saveMapSettings();
   saveLegendColors();
 
@@ -5133,7 +5139,7 @@ function clearLogFilesAndCounts()
   g_adifLogSettings.downloads = {};
   g_adifLogSettings.lastFetch.lotw_qso = "1940-01-01";
   g_adifLogSettings.lastFetch.lotw_qsl = "1940-01-01";
-  localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
+  saveAdifSettings();
 }
 
 function getCurrentBandModeHTML()

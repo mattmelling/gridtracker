@@ -6,8 +6,7 @@ var gtVersion = parseInt(pjson.version.replace(/\./g, ""));
 var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
-if (typeof localStorage.currentVersion != "undefined")
-{ g_startVersion = localStorage.currentVersion; }
+if (typeof localStorage.currentVersion != "undefined") { g_startVersion = localStorage.currentVersion; }
 
 if (
   typeof localStorage.currentVersion == "undefined" ||
@@ -97,7 +96,7 @@ var g_callsignDatabaseUSplus = {
   202: true
 };
 
-var g_acknowledgedCalls = require("./data/acknowledgements.json");
+var g_acknowledgedCalls = {};
 
 function loadAllSettings()
 {
@@ -120,7 +119,7 @@ function loadAllSettings()
   // one-time override of oams pop-up messages: if pop-ups disabled
   // and new version, reset msgActionSelect to 1 (pop up)
   if (g_msgSettings.msgActionSelect == 0 &&
-      String(gtVersion) != String(g_startVersion))
+    String(gtVersion) != String(g_startVersion))
   {
     g_msgSettings.msgActionSelect = 1;
     localStorage.msgSettings = JSON.stringify(g_msgSettings);
@@ -237,6 +236,11 @@ function saveLegendColors()
   localStorage.legendColors = JSON.stringify(g_legendColors);
 }
 
+function saveAdifSettings()
+{
+  localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
+}
+
 function saveStartupLogs()
 {
   localStorage.startupLogs = JSON.stringify(g_startupLogs);
@@ -306,6 +310,7 @@ function saveAndCloseApp()
   }
 
   saveAppSettings();
+  saveAdifSettings();
   saveMapSettings();
   saveLegendColors();
 
@@ -324,7 +329,7 @@ function saveAndCloseApp()
     g_baWindowHandle.window.close(true);
     g_callRosterWindowHandle.window.close(true);
   }
-  catch (e) {}
+  catch (e) { }
   nw.App.quit();
 }
 
@@ -504,6 +509,7 @@ var g_NWappData = "";
 var g_screenshotDir = "";
 var g_scriptDir = "";
 var g_qsoLogFile = "";
+var g_LoTWLogFile = "";
 var g_userMediaDir = "";
 var g_gtMediaDir = path.resolve("./media");
 var g_localeString = navigator.language;
@@ -800,8 +806,7 @@ function toggleOffline()
     if (g_appSettings.gtShareEnable == true)
     {
       gtFlagButton.style.display = "inline-block";
-      if (g_appSettings.gtMsgEnable == true)
-      { msgButton.style.display = "inline-block"; }
+      if (g_appSettings.gtMsgEnable == true) { msgButton.style.display = "inline-block"; }
       else msgButton.style.display = "none";
     }
     else
@@ -876,8 +881,7 @@ function toggleTime()
 
 function dateToString(dateTime)
 {
-  if (g_appSettings.useLocalTime == 1)
-  { return dateTime.toLocaleString().replace(/,/g, ""); }
+  if (g_appSettings.useLocalTime == 1) { return dateTime.toLocaleString().replace(/,/g, ""); }
   else return dateTime.toUTCString().replace(/GMT/g, "UTC").replace(/,/g, "");
 }
 
@@ -903,6 +907,28 @@ function userTimeString(Msec)
   return dateToString(dateTime);
 }
 
+function dateToISO8601(dString, tZone)
+{
+  var retDate = "";
+  var tZone = (typeof tZone !== "undefined") ? tZone : "Z";
+  var dateParts = dString.match(/(\d{4}-\d{2}-\d{2})(\s+(\d{2}:\d{2}:\d{2}))?/);
+
+  if (dateParts !== null)
+  {
+    retDate = dateParts[1]
+    if ((typeof dateParts[3]) !== "undefined")
+    {
+      retDate += "T" + dateParts[3] + ".000" + tZone;
+    }
+    else
+    {
+      retDate += "T00:00:00.000" + tZone;
+    }
+  }
+
+  return retDate;
+}
+
 function getWpx(callsign)
 {
   var prefix = null;
@@ -921,8 +947,7 @@ function getWpx(callsign)
   {
     if (/\d/.test(callsign.charAt(prefixEnd)))
     {
-      while (prefixEnd + 1 != end && /\d/.test(callsign.charAt(prefixEnd + 1)))
-      { prefixEnd++; }
+      while (prefixEnd + 1 != end && /\d/.test(callsign.charAt(prefixEnd + 1))) { prefixEnd++; }
       foundPrefix = true;
       break;
     }
@@ -940,8 +965,7 @@ function setState(details)
   {
     var isDigi = details.digital;
 
-    if (details.state.substr(0, 2) != "US")
-    { details.state = "US-" + details.state; }
+    if (details.state.substr(0, 2) != "US") { details.state = "US-" + details.state; }
 
     g_tracker.worked.state[details.state + details.band + details.mode] = true;
     g_tracker.worked.state[details.state] = true;
@@ -1074,8 +1098,7 @@ function addDeDx(
           details.grid.length < 6 &&
           (details.grid.substr(0, 4) == finalGrid.substr(0, 4) ||
             details.grid.length == 0)
-        )
-        { details.grid = finalGrid; }
+        ) { details.grid = finalGrid; }
       }
       if (finalRSTsent.length > 0) details.RSTsent = finalRSTsent;
       if (finalRSTrecv.length > 0) details.RSTrecv = finalRSTrecv;
@@ -1127,8 +1150,7 @@ function addDeDx(
     if (details.dxcc > 0 && details.px == null)
     {
       details.px = getWpx(finalDXcall);
-      if (details.px)
-      { details.zone = Number(details.px.charAt(details.px.length - 1)); }
+      if (details.px) { details.zone = Number(details.px.charAt(details.px.length - 1)); }
     }
 
     if (
@@ -1500,8 +1522,7 @@ function addDeDx(
       if (newCallsign.cont == null)
       {
         newCallsign.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
-        if (newCallsign.dxcc == 390 && newCallsign.zone == 1)
-        { newCallsign.cont = "EU"; }
+        if (newCallsign.dxcc == 390 && newCallsign.zone == 1) { newCallsign.cont = "EU"; }
       }
     }
     if (finalRSTsent != null)
@@ -1572,8 +1593,7 @@ function addDeDx(
       if (
         finalGrid.length == callsign.grid.length &&
         finalGrid != callsign.grid
-      )
-      { callsign.grid = finalGrid; }
+      ) { callsign.grid = finalGrid; }
       if (finalRSTsent != null) callsign.RSTsent = finalRSTsent;
       if (finalRSTrecv != null) callsign.RSTrecv = finalRSTrecv;
       callsign.vucc_grids = [];
@@ -1595,8 +1615,7 @@ function timeoutSetUdpPort()
 
 function setUdpPort()
 {
-  if (g_setNewUdpPortTimeoutHandle != null)
-  { window.clearTimeout(g_setNewUdpPortTimeoutHandle); }
+  if (g_setNewUdpPortTimeoutHandle != null) { window.clearTimeout(g_setNewUdpPortTimeoutHandle); }
   lastMsgTimeDiv.innerHTML = "..setting..";
   g_setNewUdpPortTimeoutHandle = window.setTimeout(timeoutSetUdpPort, 1000);
 }
@@ -1683,8 +1702,7 @@ function changePathWidth()
 
     if (width == 0)
     {
-      if (typeof g_flightPaths[i].Arrow != "undefined")
-      { g_layerSources.flight.removeFeature(g_flightPaths[i].Arrow); }
+      if (typeof g_flightPaths[i].Arrow != "undefined") { g_layerSources.flight.removeFeature(g_flightPaths[i].Arrow); }
       g_layerSources.flight.removeFeature(g_flightPaths[i]);
       delete g_flightPaths[i];
       g_flightPaths[i] = null;
@@ -2095,8 +2113,7 @@ function createTooltTipTable(toolElement)
             added = true;
           }
         }
-        if (added == true)
-        { worker = worker.substr(0, worker.length - " / ".length); }
+        if (added == true) { worker = worker.substr(0, worker.length - " / ".length); }
         worker += "</font>)";
       }
       if (x + 1 < g_gridToDXCC[toolElement.qth].length) worker += ", ";
@@ -2131,8 +2148,7 @@ function createTooltTipTable(toolElement)
     {
       for (var KeyIsCall in g_liveGrids[toolElement.qth].rectangle.liveHash)
       {
-        if (KeyIsCall in g_liveCallsigns && g_appSettings.gridViewMode == 3)
-        { newCallList.push(g_liveCallsigns[KeyIsCall]); }
+        if (KeyIsCall in g_liveCallsigns && g_appSettings.gridViewMode == 3) { newCallList.push(g_liveCallsigns[KeyIsCall]); }
       }
     }
   }
@@ -2150,8 +2166,7 @@ function createTooltTipTable(toolElement)
     }
     for (var KeyIsCall in toolElement.liveHash)
     {
-      if (KeyIsCall in g_liveCallsigns)
-      { newCallList.push(g_liveCallsigns[KeyIsCall]); }
+      if (KeyIsCall in g_liveCallsigns) { newCallList.push(g_liveCallsigns[KeyIsCall]); }
     }
   }
   newCallList.sort(compareCallsignTime).reverse();
@@ -2160,15 +2175,11 @@ function createTooltTipTable(toolElement)
     var callsign = newCallList[x];
     var bgDX = " style='font-weight:bold;color:cyan;' ";
     var bgDE = " style='font-weight:bold;color:yellow;' ";
-    if (callsign.DXcall == myDEcall)
-    { bgDX = " style='background-color:cyan;color:#000;font-weight:bold' "; }
-    if (callsign.DEcall == myDEcall)
-    { bgDE = " style='background-color:#FFFF00;color:#000;font-weight:bold' "; }
-    if (typeof callsign.msg == "undefined" || callsign.msg == "")
-    { callsign.msg = "-"; }
+    if (callsign.DXcall == myDEcall) { bgDX = " style='background-color:cyan;color:#000;font-weight:bold' "; }
+    if (callsign.DEcall == myDEcall) { bgDE = " style='background-color:#FFFF00;color:#000;font-weight:bold' "; }
+    if (typeof callsign.msg == "undefined" || callsign.msg == "") { callsign.msg = "-"; }
     var ageString = "";
-    if (timeNowSec() - callsign.time < 3601)
-    { ageString = (timeNowSec() - callsign.time).toDHMS(); }
+    if (timeNowSec() - callsign.time < 3601) { ageString = (timeNowSec() - callsign.time).toDHMS(); }
     else
     {
       ageString = userTimeString(callsign.time * 1000);
@@ -2186,8 +2197,7 @@ function createTooltTipTable(toolElement)
     worker += "<td>" + (callsign.delta > -1 ? callsign.delta : "-") + "</td>";
     worker += "<td>" + callsign.RSTsent + "</td>";
     worker += "<td>" + callsign.RSTrecv + "</td>" + "<td" + bgDX + ">";
-    if (callsign.DXcall.indexOf("CQ") == 0 || callsign.DXcall == "-")
-    { worker += callsign.DXcall.formatCallsign(); }
+    if (callsign.DXcall.indexOf("CQ") == 0 || callsign.DXcall == "-") { worker += callsign.DXcall.formatCallsign(); }
     else
     {
       worker +=
@@ -2289,13 +2299,10 @@ function createTooltTipTableLogbook(toolElement)
     var callsign = newCallList[x];
     var bgDX = " style='font-weight:bold;color:cyan;' ";
     var bgDE = " style='font-weight:bold;color:yellow;' ";
-    if (callsign.DXcall == myDEcall)
-    { bgDX = " style='background-color:cyan;color:#000;font-weight:bold' "; }
-    if (callsign.DEcall == myDEcall)
-    { bgDE = " style='background-color:#FFFF00;color:#000;font-weight:bold' "; }
+    if (callsign.DXcall == myDEcall) { bgDX = " style='background-color:cyan;color:#000;font-weight:bold' "; }
+    if (callsign.DEcall == myDEcall) { bgDE = " style='background-color:#FFFF00;color:#000;font-weight:bold' "; }
     var ageString = "";
-    if (timeNowSec() - callsign.time < 3601)
-    { ageString = (timeNowSec() - callsign.time).toDHMS(); }
+    if (timeNowSec() - callsign.time < 3601) { ageString = (timeNowSec() - callsign.time).toDHMS(); }
     else
     {
       ageString = userTimeString(callsign.time * 1000);
@@ -2313,8 +2320,7 @@ function createTooltTipTableLogbook(toolElement)
     worker += "<td>" + (callsign.delta > -1 ? callsign.delta : "-") + "</td>";
     worker += "<td>" + callsign.RSTsent + "</td>";
     worker += "<td>" + callsign.RSTrecv + "</td>" + "<td" + bgDX + ">";
-    if (callsign.DXcall.indexOf("CQ") == 0 || callsign.DXcall == "-")
-    { worker += callsign.DXcall.formatCallsign(); }
+    if (callsign.DXcall.indexOf("CQ") == 0 || callsign.DXcall == "-") { worker += callsign.DXcall.formatCallsign(); }
     else
     {
       worker +=
@@ -2360,15 +2366,15 @@ function createTooltTipTableLogbook(toolElement)
       if (callsign.DEcall in g_oqrsCallsigns)
       {
         worker +=
-            "<td align='center' " +
-            "onClick='window.opener.openSite(\"https://clublog.org/logsearch/logsearch.php?log=" +
-            callsign.DEcall + "&call=" + callsign.DXcall + "&SubmitLogSearch=Show+contacts\");'>" +
-            "&#10004;&#128236;</td>";
+          "<td align='center' " +
+          "onClick='window.opener.openSite(\"https://clublog.org/logsearch/logsearch.php?log=" +
+          callsign.DEcall + "&call=" + callsign.DXcall + "&SubmitLogSearch=Show+contacts\");'>" +
+          "&#10004;&#128236;</td>";
       }
       else
       {
         worker +=
-            "<td align='center'></td>";
+          "<td align='center'></td>";
       }
     }
     worker += "</tr>";
@@ -2398,7 +2404,7 @@ function renderTooltipWindow(feature)
       g_popupWindowHandle.width = parseInt(positionInfo.width) + 20;
       g_popupWindowHandle.height = parseInt(positionInfo.height) + 50;
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -2486,7 +2492,7 @@ function openConditionsWindow()
         g_conditionsWindowHandle.hide();
       }
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -2577,7 +2583,7 @@ function openCallRosterWindow(show = true)
         g_callRosterWindowHandle.hide();
       }
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -2589,7 +2595,7 @@ function updateRosterWorked()
     {
       g_callRosterWindowHandle.window.updateWorked();
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -2601,7 +2607,7 @@ function updateRosterInstances()
     {
       g_callRosterWindowHandle.window.updateInstances();
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -2658,7 +2664,7 @@ function openStatsWindow(show = true)
         g_statsWindowHandle.hide();
       }
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -2703,7 +2709,7 @@ function showMessaging(show = true, cid)
       g_chatWindowHandle.focus();
       if (typeof cid != "undefined") g_chatWindowHandle.window.openId(cid);
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -2757,7 +2763,7 @@ function onRightClickGridSquare(feature)
       {
         renderTooltipWindow(feature);
       }
-      catch (e) {}
+      catch (e) { }
     }
     mouseOutOfDataItem();
   }
@@ -2796,8 +2802,7 @@ function tempGridToBox(iQTH, oldGrid, borderColor, boxColor, layer)
   var LL = squareToLatLong(iQTH.substr(0, 4));
   if (oldGrid)
   {
-    if (g_layerSources.temp.hasFeature(oldGrid))
-    { g_layerSources.temp.removeFeature(oldGrid); }
+    if (g_layerSources.temp.hasFeature(oldGrid)) { g_layerSources.temp.removeFeature(oldGrid); }
   }
   var bounds = [
     [LL.lo1, LL.la1],
@@ -2889,8 +2894,7 @@ function onMyKeyDown(event)
         var param2 = null;
         if (typeof g_hotKeys[event.code].param2 != "undefined")
         {
-          if (typeof event[g_hotKeys[event.code].param2] != "undefined")
-          { param2 = event[g_hotKeys[event.code].param2]; }
+          if (typeof event[g_hotKeys[event.code].param2] != "undefined") { param2 = event[g_hotKeys[event.code].param2]; }
         }
         g_hotKeys[event.code].func(g_hotKeys[event.code].param1, param2);
       }
@@ -2906,8 +2910,7 @@ function onMyKeyDown(event)
         var param2 = null;
         if (typeof g_hotKeys[event.key].param2 != "undefined")
         {
-          if (typeof event[g_hotKeys[event.key].param2] != "undefined")
-          { param2 = event[g_hotKeys[event.key].param2]; }
+          if (typeof event[g_hotKeys[event.key].param2] != "undefined") { param2 = event[g_hotKeys[event.key].param2]; }
         }
         g_hotKeys[event.key].func(g_hotKeys[event.key].param1, param2);
       }
@@ -3068,7 +3071,7 @@ function toggleHelp()
   else helpDiv.style.display = "none";
 }
 
-function onMyKeyUp(event) {}
+function onMyKeyUp(event) { }
 
 var g_currentOverlay = 0;
 
@@ -3113,8 +3116,7 @@ function makeTitleInfo(mapWindow)
     news += " Layer: " + g_viewInfo[g_currentOverlay][1];
   }
 
-  if (g_currentOverlay == 0 && g_appSettings.gridViewMode == 1)
-  { return news + end; }
+  if (g_currentOverlay == 0 && g_appSettings.gridViewMode == 1) { return news + end; }
 
   var workline =
     " - Worked " +
@@ -3592,7 +3594,7 @@ function trophyOver(feature)
           {
             if (
               g_gridToDXCC[name][x] ==
-                g_StateData[g_gridToState[name][y]].dxcc &&
+              g_StateData[g_gridToState[name][y]].dxcc &&
               g_gridToDXCC[name][x] == 291
             )
             {
@@ -3841,8 +3843,7 @@ function mouseUpGrid()
 
   if (g_tempGridBox)
   {
-    if (g_layerSources.temp.hasFeature(g_tempGridBox))
-    { g_layerSources.temp.removeFeature(g_tempGridBox); }
+    if (g_layerSources.temp.hasFeature(g_tempGridBox)) { g_layerSources.temp.removeFeature(g_tempGridBox); }
   }
 
   g_tempGridBox = null;
@@ -3933,8 +3934,7 @@ function mouseOverDataItem(mouseEvent, fromHover)
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
-  )
-  { noRoomRight = true; }
+  ) { noRoomRight = true; }
   myTooltip.style.left = getMouseX() + 15 + "px";
   top = parseInt(getMouseY() - 20 - (callListLength / 2) * 25);
   if (windowWidth - getMouseX() < positionInfo.width || noRoomRight == true)
@@ -3969,8 +3969,7 @@ function mouseMoveDataItem(mouseEvent)
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
-  )
-  { noRoomRight = true; }
+  ) { noRoomRight = true; }
   myTooltip.style.left = getMouseX() + 15 + "px";
   top = Number(myTooltip.style.top);
   if (top > 20) top = getMouseY() - 20 + "px";
@@ -4010,7 +4009,7 @@ function reloadInfo(bandOrMode)
     {
       g_statsWindowHandle.window.reloadInfo();
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -4260,8 +4259,7 @@ function qthToQsoBox(
 
       newRect.rectangle.qth = iQTH;
 
-      if (g_pushPinMode == false && entityVisibility == true)
-      { g_layerSources.qso.addFeature(newRect.rectangle); }
+      if (g_pushPinMode == false && entityVisibility == true) { g_layerSources.qso.addFeature(newRect.rectangle); }
 
       var newPin = g_colorLeafletQPins.worked[band];
       if (confirmed) newPin = g_colorLeafletQPins.confirmed[band];
@@ -4276,8 +4274,7 @@ function qthToQsoBox(
       newRect.rectangle.pin.hashes[iHash] = 1;
       newRect.rectangle.pin.size = LL.size;
 
-      if (g_pushPinMode && entityVisibility == true)
-      { g_layerSources["qso-pins"].addFeature(newRect.rectangle.pin); }
+      if (g_pushPinMode && entityVisibility == true) { g_layerSources["qso-pins"].addFeature(newRect.rectangle.pin); }
 
       newRect.rectangle.locked = locked;
       newRect.rectangle.worked = worked;
@@ -4305,8 +4302,7 @@ function qthToQsoBox(
       return rect.rectangle;
     }
     if (worked && !rect.rectangle.worked) rect.rectangle.worked = worked;
-    if (confirmed && !rect.rectangle.confirmed)
-    { rect.rectangle.confirmed = confirmed; }
+    if (confirmed && !rect.rectangle.confirmed) { rect.rectangle.confirmed = confirmed; }
     borderColor = g_mainBorderColor;
     if (myDEbox) borderWeight = 1;
     zIndex = 2;
@@ -4471,8 +4467,7 @@ function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash)
       newRect.rectangle.pin.liveHash[hash] = 1;
       newRect.rectangle.pin.size = LL.size;
 
-      if (g_pushPinMode && entityVisibility == true)
-      { g_layerSources["live-pins"].addFeature(newRect.rectangle.pin); }
+      if (g_pushPinMode && entityVisibility == true) { g_layerSources["live-pins"].addFeature(newRect.rectangle.pin); }
 
       newRect.rectangle.locked = locked;
       newRect.rectangle.size = LL.size;
@@ -4789,8 +4784,7 @@ function animatePaths()
   {
     if (g_flightPaths[i].age < g_timeNow)
     {
-      if (typeof g_flightPaths[i].Arrow != "undefined")
-      { g_layerSources.flight.removeFeature(g_flightPaths[i].Arrow); }
+      if (typeof g_flightPaths[i].Arrow != "undefined") { g_layerSources.flight.removeFeature(g_flightPaths[i].Arrow); }
       g_layerSources.flight.removeFeature(g_flightPaths[i]);
       delete g_flightPaths[i];
       g_flightPaths[i] = null;
@@ -5030,8 +5024,7 @@ function clearCalls()
       g_liveCallsigns[i].rect != null
     )
     {
-      if (i in g_liveCallsigns[i].rect.liveHash)
-      { delete g_liveCallsigns[i].rect.liveHash[i]; }
+      if (i in g_liveCallsigns[i].rect.liveHash) { delete g_liveCallsigns[i].rect.liveHash[i]; }
     }
   }
 
@@ -5130,7 +5123,9 @@ function clearLogFilesAndCounts()
   tryToDeleteLog("qrz.adif");
   tryToDeleteLog("clublog.adif");
   g_adifLogSettings.downloads = {};
-  localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
+  g_adifLogSettings.lastFetch.lotw_qso = "1940-01-01";
+  g_adifLogSettings.lastFetch.lotw_qsl = "1940-01-01";
+  saveAdifSettings();
 }
 
 function getCurrentBandModeHTML()
@@ -5219,8 +5214,7 @@ function displayTime()
     {
       if (now - time > 120000)
       {
-        if (g_layerSources.strikes.hasFeature(g_bolts[time]))
-        { g_layerSources.strikes.removeFeature(g_bolts[time]); }
+        if (g_layerSources.strikes.hasFeature(g_bolts[time])) { g_layerSources.strikes.removeFeature(g_bolts[time]); }
         delete g_bolts[time];
       }
     }
@@ -5400,8 +5394,7 @@ function toggleStrikeGlobal()
 
   var worker =
     "<font color='yellow'>Strike Distance Changed<br/>" + msg + "</font>";
-  if (g_mapSettings.strikes == false)
-  { worker += "<br/><font color='red'>Detection is not enabled!</font>"; }
+  if (g_mapSettings.strikes == false) { worker += "<br/><font color='red'>Detection is not enabled!</font>"; }
   addLastTraffic(worker);
 
   g_layerSources.strikes.clear();
@@ -5426,8 +5419,7 @@ function setStrikeDistance()
 
     var send = "{\"west\":-180,\"east\":180,\"north\":-90,\"south\":-90}";
 
-    if (g_strikeInterval == null)
-    { g_strikeInterval = setInterval(setStrikeDistance, 300000); }
+    if (g_strikeInterval == null) { g_strikeInterval = setInterval(setStrikeDistance, 300000); }
 
     try
     {
@@ -5957,8 +5949,7 @@ function toggleNexrad()
     g_Nexrad = createNexRad();
     g_map.addLayer(g_Nexrad);
 
-    if (g_nexradInterval == null)
-    { g_nexradInterval = setInterval(nexradRefresh, 600000); }
+    if (g_nexradInterval == null) { g_nexradInterval = setInterval(nexradRefresh, 600000); }
   }
   else
   {
@@ -6323,8 +6314,7 @@ function setCallAndGrid(callsign, grid, instance = null)
     length = encodeQUTF8(responseArray, length, callsign);
 
     var hash = liveHash(callsign, thisInstance.Band, thisInstance.MO);
-    if (hash in g_liveCallsigns && g_liveCallsigns[hash].grid.length > 1)
-    { grid = g_liveCallsigns[hash].grid; }
+    if (hash in g_liveCallsigns && g_liveCallsigns[hash].grid.length > 1) { grid = g_liveCallsigns[hash].grid; }
 
     if (grid.length == 0) grid = " ";
 
@@ -6390,7 +6380,7 @@ function handleWsjtxQSO(newMessage)
   g_oldQSOTimer = setTimeout(oldSendToLogger, 3000);
 }
 
-function handleWsjtxNotSupported(newMessage) {}
+function handleWsjtxNotSupported(newMessage) { }
 
 var g_gtShareCount = 0;
 var g_lastBand = "";
@@ -6474,7 +6464,7 @@ function handleWsjtxStatus(newMessage)
     {
       g_callRosterWindowHandle.window.processStatus(newMessage);
     }
-    catch (e) {}
+    catch (e) { }
   }
 
   if (g_activeInstance == "")
@@ -6495,11 +6485,9 @@ function handleWsjtxStatus(newMessage)
 
   if (DXcall.length > 1)
   {
-    if (!(newMessage.instance in g_lastTransmitCallsign))
-    { g_lastTransmitCallsign[newMessage.instance] = ""; }
+    if (!(newMessage.instance in g_lastTransmitCallsign)) { g_lastTransmitCallsign[newMessage.instance] = ""; }
 
-    if (!(newMessage.instance in g_lastStatusCallsign))
-    { g_lastStatusCallsign[newMessage.instance] = ""; }
+    if (!(newMessage.instance in g_lastStatusCallsign)) { g_lastStatusCallsign[newMessage.instance] = ""; }
 
     if (
       lookupOnTx.checked == true &&
@@ -6650,8 +6638,7 @@ function handleWsjtxStatus(newMessage)
       localDXReport.innerHTML = Number(
         newMessage.Report.trim()
       ).formatSignalReport();
-      if (DXcall.length > 0)
-      { localDXCountry.innerHTML = g_dxccToAltName[callsignToDxcc(DXcall)]; }
+      if (DXcall.length > 0) { localDXCountry.innerHTML = g_dxccToAltName[callsignToDxcc(DXcall)]; }
       else localDXCountry.innerHTML = "&nbsp;";
     }
     else
@@ -7006,10 +6993,8 @@ function handleWsjtxDecode(newMessage)
     }
 
     if (validQTH) msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
-    if (validQTH == false && decodeWords.length == 3)
-    { msgDEcallsign = decodeWords[decodeWords.length - 2].trim(); }
-    if (validQTH == false && decodeWords.length == 2)
-    { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
+    if (validQTH == false && decodeWords.length == 3) { msgDEcallsign = decodeWords[decodeWords.length - 2].trim(); }
+    if (validQTH == false && decodeWords.length == 2) { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
     if (decodeWords[0] == "CQ")
     {
       CQ = true;
@@ -7025,8 +7010,7 @@ function handleWsjtxDecode(newMessage)
     }
     if (decodeWords.length >= 3 && CQ == true && validQTH == false)
     {
-      if (validateNumAndLetter(decodeWords[decodeWords.length - 1].trim()))
-      { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
+      if (validateNumAndLetter(decodeWords[decodeWords.length - 1].trim())) { msgDEcallsign = decodeWords[decodeWords.length - 1].trim(); }
       else msgDEcallsign = decodeWords[decodeWords.length - 2].trim();
     }
 
@@ -7043,8 +7027,7 @@ function handleWsjtxDecode(newMessage)
 
     if (validQTH == "" && msgDEcallsign in g_gtCallsigns)
     {
-      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0)
-      { validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid; }
+      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0) { validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid; }
     }
 
     var canPath = false;
@@ -7124,8 +7107,7 @@ function handleWsjtxDecode(newMessage)
 
         newCallsign.cont =
           g_worldGeoData[g_dxccToGeoData[newCallsign.dxcc]].continent;
-        if (newCallsign.dxcc == 390 && newCallsign.zone == 1)
-        { details.cont = "EU"; }
+        if (newCallsign.dxcc == 390 && newCallsign.zone == 1) { details.cont = "EU"; }
       }
 
       newCallsign.ituza = Array();
@@ -7288,8 +7270,7 @@ function handleWsjtxDecode(newMessage)
         if (
           g_gtCallsigns[callsign.DEcall] in g_gtFlagPins &&
           g_gtFlagPins[g_gtCallsigns[callsign.DEcall]].o == 1
-        )
-        { g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent; }
+        ) { g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent; }
       }
     }
 
@@ -7449,8 +7430,7 @@ function handleWsjtxDecode(newMessage)
           else if (CCd.length == 3)
           {
             // maybe it's DEL, or WYO. check the first two letters
-            if (CCd.substr(0, 2) in g_shapeData)
-            { locality = g_shapeData[CCd.substr(0, 2)]; }
+            if (CCd.substr(0, 2) in g_shapeData) { locality = g_shapeData[CCd.substr(0, 2)]; }
           }
 
           if (locality == null)
@@ -7522,24 +7502,24 @@ function handleWsjtxDecode(newMessage)
 
   g_lastMessages.unshift(
     "<tr style='background-color:" +
-      bgColor +
-      "'><td style='color:lightblue'>" +
-      userTimeString(theTimeStamp * 1000) +
-      "</td><td style='color:orange'>" +
-      newMessage.SR +
-      "</td><td style='color:gray'>" +
-      newMessage.DT.toFixed(1) +
-      "</td><td style='color:lightgreen'>" +
-      newF +
-      "</td><td>" +
-      newMessage.MO +
-      "</td><td style='color:" +
-      messageColor +
-      "'>" +
-      htmlEntities(newMessage.Msg) +
-      "</td><td style='color:yellow'>" +
-      countryName +
-      "</td></tr>"
+    bgColor +
+    "'><td style='color:lightblue'>" +
+    userTimeString(theTimeStamp * 1000) +
+    "</td><td style='color:orange'>" +
+    newMessage.SR +
+    "</td><td style='color:gray'>" +
+    newMessage.DT.toFixed(1) +
+    "</td><td style='color:lightgreen'>" +
+    newF +
+    "</td><td>" +
+    newMessage.MO +
+    "</td><td style='color:" +
+    messageColor +
+    "'>" +
+    htmlEntities(newMessage.Msg) +
+    "</td><td style='color:yellow'>" +
+    countryName +
+    "</td></tr>"
   );
 
   while (g_lastMessages.length > 100) g_lastMessages.pop();
@@ -7600,13 +7580,11 @@ function handleWsjtxClear(newMessage)
     if (
       g_liveCallsigns[hash].instance == newMessage.instance ||
       g_liveCallsigns[hash].mode == g_instances[newMessage.instance].status.MO
-    )
-    { delete g_liveCallsigns[hash]; }
+    ) { delete g_liveCallsigns[hash]; }
   }
   for (var call in g_callRoster)
   {
-    if (g_callRoster[call].callObj.instance == newMessage.instance)
-    { delete g_callRoster[call]; }
+    if (g_callRoster[call].callObj.instance == newMessage.instance) { delete g_callRoster[call]; }
   }
 
   redrawGrids();
@@ -7635,12 +7613,11 @@ function goProcessRoster(isRealtime = false)
     {
       if (isRealtime == true)
       {
-        if (g_callRosterWindowHandle.window.g_rosterSettings.realtime == false)
-        { return; }
+        if (g_callRosterWindowHandle.window.g_rosterSettings.realtime == false) { return; }
       }
       g_callRosterWindowHandle.window.processRoster(g_callRoster);
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -7681,13 +7658,13 @@ function handleWsjtxWSPR(newMessage)
     Number(newMessage.SR),
     timeNowSec(),
     "Pwr:" +
-      newMessage.Power +
-      " Freq:" +
-      Number(newMessage.Frequency / 1000).formatMhz(3, 3) +
-      " Delta:" +
-      Number(newMessage.DT).toFixed(2) +
-      " Drift:" +
-      newMessage.Drift,
+    newMessage.Power +
+    " Freq:" +
+    Number(newMessage.Frequency / 1000).formatMhz(3, 3) +
+    " Delta:" +
+    Number(newMessage.DT).toFixed(2) +
+    " Drift:" +
+    newMessage.Drift,
     "WSPR",
     Number(newMessage.Frequency / 1000000).formatBand(),
     false,
@@ -7903,8 +7880,7 @@ function showCallsignBox(redraw)
         (thisCall in g_tracker.confirmed.call ? "&#10004;" : "") +
         "</td>";
       var ageString = "";
-      if (timeNowSec() - newCallList[x].time < 3601)
-      { ageString = (timeNowSec() - newCallList[x].time).toDHMS(); }
+      if (timeNowSec() - newCallList[x].time < 3601) { ageString = (timeNowSec() - newCallList[x].time).toDHMS(); }
       else
       {
         ageString = userTimeString(newCallList[x].time * 1000);
@@ -8081,8 +8057,7 @@ function myDxccCompare(a, b)
 function myDxccIntCompare(a, b)
 {
   if (!(a in g_dxccToAltName)) return 0;
-  if (!(b in g_dxccToAltName))
-  { return g_dxccToAltName[a].localeCompare(g_dxccToAltName[b]); }
+  if (!(b in g_dxccToAltName)) { return g_dxccToAltName[a].localeCompare(g_dxccToAltName[b]); }
 }
 
 function myTimeCompare(a, b)
@@ -8252,7 +8227,7 @@ function showWorkedBox(sortIndex, nextPage, redraw)
       var unconfirmedCallsKey = new UnconfirmedCallsKey(list[key].dxcc, list[key].band);
       if (
         g_unconfirmedCalls.has(unconfirmedCallsKey.key) &&
-         list[key].confirmed
+        list[key].confirmed
       )
       {
         g_unconfirmedCalls.set(unconfirmedCallsKey.key, unconfirmedCallsSentinel);
@@ -8300,14 +8275,12 @@ function showWorkedBox(sortIndex, nextPage, redraw)
           g_filterMode == "Phone" &&
           value.mode in g_modes_phone &&
           g_modes_phone[value.mode]
-        )
-        { return true; }
+        ) { return true; }
         if (
           g_filterMode == "Digital" &&
           value.mode in g_modes &&
           g_modes[value.mode]
-        )
-        { return true; }
+        ) { return true; }
         return value.mode == g_filterMode;
       });
     }
@@ -8852,14 +8825,14 @@ function showDXCCsBox()
   Object.keys(List).forEach(function (key, i)
   {
     var band =
-          g_appSettings.gtBandFilter == "auto"
-            ? myBand
-            : g_appSettings.gtBandFilter.length == 0
-              ? ""
-              : g_appSettings.gtBandFilter;
+      g_appSettings.gtBandFilter == "auto"
+        ? myBand
+        : g_appSettings.gtBandFilter.length == 0
+          ? ""
+          : g_appSettings.gtBandFilter;
     var unconfirmedCallsKey = new UnconfirmedCallsKey(List[key].dxcc, band);
     if (g_unconfirmedCalls.has(unconfirmedCallsKey.key) &&
-          g_unconfirmedCalls.get(unconfirmedCallsKey.key) != unconfirmedCallsSentinel
+      g_unconfirmedCalls.get(unconfirmedCallsKey.key) != unconfirmedCallsSentinel
     )
     {
       var onMousedown = function (e)
@@ -8899,8 +8872,7 @@ function showDXCCsBox()
         }
       };
       var unconfirmedTd = g_statsWindowHandle.window.document.getElementById("unconfirmed" + List[key].dxcc + "Id");
-      if (unconfirmedTd != null)
-      { unconfirmedTd.addEventListener("mousedown", onMousedown); }
+      if (unconfirmedTd != null) { unconfirmedTd.addEventListener("mousedown", onMousedown); }
     }
   });
 }
@@ -9209,7 +9181,7 @@ function openBaWindow(show = true)
         g_baWindowHandle.hide();
       }
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -9261,7 +9233,7 @@ function openLookupWindow(show = false)
         g_lookupWindowHandle.window.saveScreenSettings();
       }
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -9303,8 +9275,7 @@ function openInfoTab(evt, tabName, callFunc, callObj)
     }
     if (evt)
     {
-      if (typeof evt.currentTarget != "undefined")
-      { evt.currentTarget.className += " active"; }
+      if (typeof evt.currentTarget != "undefined") { evt.currentTarget.className += " active"; }
       else evt.className += " active";
     }
 
@@ -9338,8 +9309,7 @@ function openSettingsTab(evt, tabName)
   displayAlerts();
   // Show the current tab, and add an "active" class to the button that opened the tab
   document.getElementById(tabName).style.display = "block";
-  if (typeof evt.currentTarget != "undefined")
-  { evt.currentTarget.className += " active"; }
+  if (typeof evt.currentTarget != "undefined") { evt.currentTarget.className += " active"; }
   else evt.className += " active";
 }
 
@@ -9549,10 +9519,8 @@ function renderStatsBox()
 
       details.callsigns[call] = ~~details.callsigns[call] + 1;
 
-      if (g_QSOhash[i].time < details.oldest)
-      { details.oldest = g_QSOhash[i].time; }
-      if (g_QSOhash[i].time > details.newest)
-      { details.newest = g_QSOhash[i].time; }
+      if (g_QSOhash[i].time < details.oldest) { details.oldest = g_QSOhash[i].time; }
+      if (g_QSOhash[i].time > details.newest) { details.newest = g_QSOhash[i].time; }
 
       workObject(modet.Mixed, true, band, mode, type, didConfirm);
 
@@ -9647,12 +9615,9 @@ function renderStatsBox()
           long_distance.worked_hash = i;
         }
 
-        if (!(band in long_distance.band))
-        { long_distance.band[band] = newDistanceObject(); }
-        if (!(mode in long_distance.mode))
-        { long_distance.mode[mode] = newDistanceObject(); }
-        if (!(type in long_distance.type))
-        { long_distance.type[type] = newDistanceObject(); }
+        if (!(band in long_distance.band)) { long_distance.band[band] = newDistanceObject(); }
+        if (!(mode in long_distance.mode)) { long_distance.mode[mode] = newDistanceObject(); }
+        if (!(type in long_distance.type)) { long_distance.type[type] = newDistanceObject(); }
 
         if (unit > long_distance.mode[mode].worked_unit)
         {
@@ -9704,12 +9669,9 @@ function renderStatsBox()
             short_distance.worked_hash = i;
           }
 
-          if (!(band in short_distance.band))
-          { short_distance.band[band] = newDistanceObject(100000); }
-          if (!(mode in short_distance.mode))
-          { short_distance.mode[mode] = newDistanceObject(100000); }
-          if (!(type in short_distance.type))
-          { short_distance.type[type] = newDistanceObject(100000); }
+          if (!(band in short_distance.band)) { short_distance.band[band] = newDistanceObject(100000); }
+          if (!(mode in short_distance.mode)) { short_distance.mode[mode] = newDistanceObject(100000); }
+          if (!(type in short_distance.type)) { short_distance.type[type] = newDistanceObject(100000); }
 
           if (unit < short_distance.mode[mode].worked_unit)
           {
@@ -9752,8 +9714,7 @@ function renderStatsBox()
         }
       }
 
-      if (!(g_dxccToAltName[finalDxcc] in worldGeoData))
-      { worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject(); }
+      if (!(g_dxccToAltName[finalDxcc] in worldGeoData)) { worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject(); }
 
       workObject(
         worldGeoData[g_dxccToAltName[finalDxcc]],
@@ -9796,8 +9757,7 @@ function renderStatsBox()
         {
           if (g_gridToITUZone[gridCheck].length == 1)
           {
-            if (!(g_gridToITUZone[gridCheck][0] in ituZones))
-            { ituZones[g_gridToITUZone[gridCheck][0]] = newStatObject(); }
+            if (!(g_gridToITUZone[gridCheck][0] in ituZones)) { ituZones[g_gridToITUZone[gridCheck][0]] = newStatObject(); }
 
             workObject(
               ituZones[g_gridToITUZone[gridCheck][0]],
@@ -10151,11 +10111,9 @@ function createGtStationsTable(obj)
     var bgDX = " style='font-weight:bold;color:cyan;' ";
     var bgDE = " style='font-weight:bold;color:yellow;' ";
 
-    if (typeof callsign.msg == "undefined" || callsign.msg == "")
-    { callsign.msg = "-"; }
+    if (typeof callsign.msg == "undefined" || callsign.msg == "") { callsign.msg = "-"; }
     var ageString = "";
-    if (timeNowSec() - callsign.time < 3601)
-    { ageString = (timeNowSec() - callsign.time).toDHMS(); }
+    if (timeNowSec() - callsign.time < 3601) { ageString = (timeNowSec() - callsign.time).toDHMS(); }
     else
     {
       ageString = userTimeString(callsign.time * 1000);
@@ -11072,8 +11030,7 @@ function setGtShareButtons()
     g_mapSettings.offlineMode == false
   )
   {
-    if (g_appSettings.gtMsgEnable == true)
-    { msgButton.style.display = "inline-block"; }
+    if (g_appSettings.gtMsgEnable == true) { msgButton.style.display = "inline-block"; }
     else msgButton.style.display = "none";
 
     gtFlagButton.style.display = "inline-block";
@@ -11100,7 +11057,7 @@ function setGtShareButtons()
       {
         g_chatWindowHandle.hide();
       }
-      catch (e) {}
+      catch (e) { }
     }
   }
 
@@ -11168,8 +11125,7 @@ function setMsgEnable(checkbox)
   g_appSettings.gtMsgEnable = checkbox.checked;
   if (g_appSettings.gtShareEnable == true)
   {
-    if (g_appSettings.gtMsgEnable == true)
-    { msgButton.style.display = "inline-block"; }
+    if (g_appSettings.gtMsgEnable == true) { msgButton.style.display = "inline-block"; }
     else
     {
       msgButton.style.display = "none";
@@ -11198,13 +11154,34 @@ function checkForNewVersion(showUptoDate)
   if (typeof nw != "undefined")
   {
     getBuffer(
-      "http://app.gridtracker.org/version.txt?lang=" + g_localeString,
+      "http://app.gridtracker.org/version.txt?lang=",
       versionCheck,
       showUptoDate,
       "http",
       80
     );
   }
+}
+
+function downloadAcknowledgements()
+{
+  if (g_mapSettings.offlineMode == false)
+  {
+    getBuffer(
+      "http://app.gridtracker.org/acknowledgements.json",
+      updateAcks,
+      null,
+      "http",
+      80
+    );
+  }
+}
+
+function checkForNewAcknowledgements()
+{
+  downloadAcknowledgements();
+  setTimeout(checkForNewAcknowledgements, 8640000);
+  readAcksFromDisk();
 }
 
 function renderBandActivity()
@@ -11363,9 +11340,9 @@ function pskGetBandActivity()
   {
     getBuffer(
       "https://pskreporter.info/cgi-bin/psk-freq.pl?mode=" +
-        myMode +
-        "&grid=" +
-        myDEGrid.substr(0, 4),
+      myMode +
+      "&grid=" +
+      myDEGrid.substr(0, 4),
       pskBandActivityCallback,
       null,
       "https",
@@ -11593,7 +11570,7 @@ function updateBasedOnIni()
         localStorage.N1MMSettings = JSON.stringify(g_N1MMSettings);
         alert(
           which.appName +
-            " N1MM Logger+ is enabled with same settings, disabled GridTracker N1MM logger"
+          " N1MM Logger+ is enabled with same settings, disabled GridTracker N1MM logger"
         );
       }
     }
@@ -11642,8 +11619,7 @@ function CheckForwardPortIsNotReceivePort(value)
     udpForwardIpInput.value == "127.0.0.1" &&
     udpPortInput.value == value &&
     g_appSettings.wsjtIP == ""
-  )
-  { return false; }
+  ) { return false; }
   return true;
 }
 
@@ -12061,8 +12037,7 @@ function workingCallsignsChanged(ele)
   if (callsigns.length > 0)
   {
     g_appSettings.workingCallsigns = Object.assign({}, g_tempWorkingCallsigns);
-    if (g_appSettings.workingCallsignEnable)
-    { applyCallsignsAndDateDiv.style.display = ""; }
+    if (g_appSettings.workingCallsignEnable) { applyCallsignsAndDateDiv.style.display = ""; }
   }
   else applyCallsignsAndDateDiv.style.display = "none";
 }
@@ -12165,8 +12140,7 @@ function callsignToDxcc(insign)
     return -1;
   }
 
-  if (callsign in g_directCallToDXCC)
-  { return Number(g_directCallToDXCC[callsign]); }
+  if (callsign in g_directCallToDXCC) { return Number(g_directCallToDXCC[callsign]); }
 
   if (callsign.includes("/"))
   {
@@ -12199,8 +12173,7 @@ function callsignToDxcc(insign)
     }
     else callsign = parts[0];
 
-    if (callsign in g_directCallToDXCC)
-    { return Number(g_directCallToDXCC[callsign]); }
+    if (callsign in g_directCallToDXCC) { return Number(g_directCallToDXCC[callsign]); }
   }
 
   for (var x = callsign.length; x > 0; x--)
@@ -12244,8 +12217,7 @@ function loadMaidenHeadData()
       delete g_worldGeoData[key].prefix;
       for (var x = 0; x < g_worldGeoData[key].mh.length; x++)
       {
-        if (!(g_worldGeoData[key].mh[x] in g_gridToDXCC))
-        { g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array(); }
+        if (!(g_worldGeoData[key].mh[x] in g_gridToDXCC)) { g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array(); }
         g_gridToDXCC[g_worldGeoData[key].mh[x]].push(g_worldGeoData[key].dxcc);
       }
 
@@ -12253,8 +12225,7 @@ function loadMaidenHeadData()
         g_worldGeoData[key].dxcc != 291 &&
         g_worldGeoData[key].dxcc != 110 &&
         g_worldGeoData[key].dxcc != 6
-      )
-      { delete g_worldGeoData[key].mh; }
+      ) { delete g_worldGeoData[key].mh; }
     }
 
     file = "./data/dxcc.json";
@@ -12272,16 +12243,14 @@ function loadMaidenHeadData()
 
     for (var id in countyData)
     {
-      if (!(countyData[id].properties.st in g_stateToCounty))
-      { g_stateToCounty[countyData[id].properties.st] = Array(); }
+      if (!(countyData[id].properties.st in g_stateToCounty)) { g_stateToCounty[countyData[id].properties.st] = Array(); }
       g_stateToCounty[countyData[id].properties.st].push(id);
 
       var cnty =
         countyData[id].properties.st +
         "," +
         countyData[id].properties.n.toUpperCase().replaceAll(" ", "");
-      if (!(cnty in g_cntyToCounty))
-      { g_cntyToCounty[cnty] = countyData[id].properties.n.toProperCase(); }
+      if (!(cnty in g_cntyToCounty)) { g_cntyToCounty[cnty] = countyData[id].properties.n.toProperCase(); }
 
       g_countyData[cnty] = {};
       g_countyData[cnty].geo = countyData[id];
@@ -12309,33 +12278,28 @@ function loadMaidenHeadData()
     g_shapeData = JSON.parse(fs.readFileSync(g_shapeFile));
     for (var key in g_shapeData)
     {
-      if (g_shapeData[key].properties.alias == key)
-      { g_shapeData[key].properties.alias = null; }
+      if (g_shapeData[key].properties.alias == key) { g_shapeData[key].properties.alias = null; }
       else if (
         g_shapeData[key].properties.alias &&
         g_shapeData[key].properties.alias.length > 2 &&
         (g_shapeData[key].properties.alias.indexOf("US") == 0 ||
           g_shapeData[key].properties.alias.indexOf("CA") == 0)
-      )
-      { g_shapeData[key].properties.alias = null; }
+      ) { g_shapeData[key].properties.alias = null; }
       if (
         g_shapeData[key].properties.alias &&
         g_shapeData[key].properties.alias.length < 2
-      )
-      { g_shapeData[key].properties.alias = null; }
+      ) { g_shapeData[key].properties.alias = null; }
       if (g_shapeData[key].properties.alias != null)
       {
         if (key.indexOf("CN-") == 0)
         {
-          if (g_shapeData[key].properties.alias == key.replace("CN-", ""))
-          { g_shapeData[key].properties.alias = null; }
+          if (g_shapeData[key].properties.alias == key.replace("CN-", "")) { g_shapeData[key].properties.alias = null; }
         }
       }
       if (
         g_shapeData[key].properties.alias != null &&
         g_shapeData[key].properties.alias.length != 2
-      )
-      { g_shapeData[key].properties.alias = null; }
+      ) { g_shapeData[key].properties.alias = null; }
     }
 
     // finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6
@@ -12397,8 +12361,7 @@ function loadMaidenHeadData()
     {
       for (var x = 0; x < g_StateData[key].mh.length; x++)
       {
-        if (!(g_StateData[key].mh[x] in g_gridToState))
-        { g_gridToState[g_StateData[key].mh[x]] = Array(); }
+        if (!(g_StateData[key].mh[x] in g_gridToState)) { g_gridToState[g_StateData[key].mh[x]] = Array(); }
         g_gridToState[g_StateData[key].mh[x]].push(g_StateData[key].postal);
       }
       g_StateData[key].worked_bands = {};
@@ -12448,8 +12411,7 @@ function loadMaidenHeadData()
     {
       for (var x = 0; x < g_cqZones[key].mh.length; x++)
       {
-        if (!(g_cqZones[key].mh[x] in g_gridToCQZone))
-        { g_gridToCQZone[g_cqZones[key].mh[x]] = Array(); }
+        if (!(g_cqZones[key].mh[x] in g_gridToCQZone)) { g_gridToCQZone[g_cqZones[key].mh[x]] = Array(); }
         g_gridToCQZone[g_cqZones[key].mh[x]].push(String(key));
       }
       delete g_cqZones[key].mh;
@@ -12462,8 +12424,7 @@ function loadMaidenHeadData()
     {
       for (var x = 0; x < g_ituZones[key].mh.length; x++)
       {
-        if (!(g_ituZones[key].mh[x] in g_gridToITUZone))
-        { g_gridToITUZone[g_ituZones[key].mh[x]] = Array(); }
+        if (!(g_ituZones[key].mh[x] in g_gridToITUZone)) { g_gridToITUZone[g_ituZones[key].mh[x]] = Array(); }
         g_gridToITUZone[g_ituZones[key].mh[x]].push(String(key));
       }
       delete g_ituZones[key].mh;
@@ -12638,9 +12599,9 @@ function drawAllGrids()
         {
           var LL = squareToLatLong(
             String.fromCharCode(x) +
-              String.fromCharCode(y) +
-              String(a) +
-              String(b)
+            String.fromCharCode(y) +
+            String(a) +
+            String(b)
           );
           var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
           var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
@@ -12772,6 +12733,34 @@ function versionCheck(buffer, flag)
   }
 }
 
+function updateAcks(buffer)
+{
+  try
+  {
+    g_acks = JSON.parse(buffer);
+    fs.writeFileSync(g_NWappData + "acknowledgements.json", JSON.stringify(g_acks));
+  }
+  catch (e)
+  {
+    // can't write, somethings broke
+  }
+}
+
+function readAcksFromDisk()
+{
+  try
+  {
+    var fileBuf = fs.readFileSync(g_NWappData + "acknowledgements.json");
+    var loadedData = JSON.parse(fileBuf);
+    // some validation here?
+    g_acknowledgedCalls = loadedData;
+  }
+  catch (e)
+  {
+    // file failed to load, probably not downloaded
+  }
+}
+
 function onExitAppToGoWebsite()
 {
   require("nw.gui").Shell.openExternal("https://gridtracker.org/");
@@ -12818,8 +12807,7 @@ function getBuffer(file_url, callback, flag, mode, port, cache = null)
   {
     var fsize = res.headers["content-length"];
     var cookies = null;
-    if (typeof res.headers["set-cookie"] != "undefined")
-    { cookies = res.headers["set-cookie"]; }
+    if (typeof res.headers["set-cookie"] != "undefined") { cookies = res.headers["set-cookie"]; }
     res
       .on("data", function (data)
       {
@@ -12872,8 +12860,7 @@ function getPostBuffer(
   {
     var fsize = res.headers["content-length"];
     var cookies = null;
-    if (typeof res.headers["set-cookie"] != "undefined")
-    { cookies = res.headers["set-cookie"]; }
+    if (typeof res.headers["set-cookie"] != "undefined") { cookies = res.headers["set-cookie"]; }
     res
       .on("data", function (data)
       {
@@ -13106,8 +13093,7 @@ function changeMapValues()
     g_appSettings.gtFlagImgSrc > 0 &&
     g_mapSettings.offlineMode == false &&
     g_appSettings.gtShareEnable == true
-  )
-  { g_layerVectors.gtflags.setVisible(true); }
+  ) { g_layerVectors.gtflags.setVisible(true); }
   else g_layerVectors.gtflags.setVisible(false);
 
   saveMapSettings();
@@ -13350,7 +13336,7 @@ function initSoundCards()
     .catch(errorCallback);
 }
 
-function errorCallback(e) {}
+function errorCallback(e) { }
 function gotAudioDevices(deviceInfos)
 {
   soundCardDiv.innerHTML = "";
@@ -13533,8 +13519,7 @@ function setMsgSettingsView()
     msgAlertMedia.style.display = "none";
   }
 
-  if (g_msgSettings.msgAwaySelect > 0)
-  { msgAwayTextDiv.style.display = "inline-block"; }
+  if (g_msgSettings.msgAwaySelect > 0) { msgAwayTextDiv.style.display = "inline-block"; }
   else msgAwayTextDiv.style.display = "none";
 }
 
@@ -13574,8 +13559,7 @@ function loadAdifSettings()
   }
   for (var key in g_adifLogSettings.startup)
   {
-    if (document.getElementById(key) != null)
-    { document.getElementById(key).checked = g_adifLogSettings.startup[key]; }
+    if (document.getElementById(key) != null) { document.getElementById(key).checked = g_adifLogSettings.startup[key]; }
   }
   for (var key in g_adifLogSettings.nickname)
   {
@@ -13715,7 +13699,7 @@ function startupButtonsAndInputs()
 
     setGtShareButtons();
   }
-  catch (e) {}
+  catch (e) { }
 }
 
 function startupEventsAndTimers()
@@ -13794,6 +13778,7 @@ var g_startupTable = [
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
   [gtChatSystemInit, "User System Initialized"],
+  [downloadAcknowledgements, "Contributor Acknowledgements Loaded"],
   [postInit, "Finalizing System"]
 ];
 
@@ -13974,7 +13959,7 @@ function updateForwardListener()
     reuseAddr: true
   });
 
-  g_forwardUdpServer.on("listening", function () {});
+  g_forwardUdpServer.on("listening", function () { });
   g_forwardUdpServer.on("error", function ()
   {
     g_forwardUdpServer.close();
@@ -14050,8 +14035,7 @@ var g_currentID = null;
 
 function updateWsjtxListener(port)
 {
-  if (port == g_wsjtCurrentPort && g_appSettings.wsjtIP == g_wsjtCurrentIP)
-  { return; }
+  if (port == g_wsjtCurrentPort && g_appSettings.wsjtIP == g_wsjtCurrentIP) { return; }
   if (g_wsjtUdpServer != null)
   {
     if (multicastEnable.checked == true && g_appSettings.wsjtIP != "")
@@ -14060,7 +14044,7 @@ function updateWsjtxListener(port)
       {
         g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
       }
-      catch (e) {}
+      catch (e) { }
     }
     g_wsjtUdpServer.close();
     g_wsjtUdpServer = null;
@@ -14418,8 +14402,7 @@ function loadLookupDetails()
   }
   ValidateText(lookupLogin);
   ValidateText(lookupPassword);
-  if (lookupService.value == "CALLOOK")
-  { lookupCredentials.style.display = "none"; }
+  if (lookupService.value == "CALLOOK") { lookupCredentials.style.display = "none"; }
   else lookupCredentials.style.display = "block";
 }
 
@@ -14448,8 +14431,7 @@ function lookupValueChanged(what)
   g_appSettings.lookupCallookPreferred = lookupCallookPreferred.checked;
   lookupQrzTestResult.innerHTML = "";
   g_qrzLookupSessionId = null;
-  if (lookupService.value == "CALLOOK")
-  { lookupCredentials.style.display = "none"; }
+  if (lookupService.value == "CALLOOK") { lookupCredentials.style.display = "none"; }
   else lookupCredentials.style.display = "block";
   if (ValidateText(lookupLogin) && ValidateText(lookupPassword))
   {
@@ -14656,10 +14638,10 @@ function GetSessionID(resultTd, useCache)
   {
     getBuffer(
       "https://ssl.qrzcq.com/xml?username=" +
-        g_appSettings.lookupLoginCq +
-        "&password=" +
-        encodeURIComponent(g_appSettings.lookupPasswordCq) +
-        "&agent=GridTracker1.18",
+      g_appSettings.lookupLoginCq +
+      "&password=" +
+      encodeURIComponent(g_appSettings.lookupPasswordCq) +
+      "&agent=GridTracker1.18",
       qrzGetSessionCallback,
       resultTd,
       "https",
@@ -14671,9 +14653,9 @@ function GetSessionID(resultTd, useCache)
   {
     getBuffer(
       "https://xmldata.qrz.com/xml/current/?username=" +
-        g_appSettings.lookupLoginQrz +
-        ";password=" +
-        encodeURIComponent(g_appSettings.lookupPasswordQrz),
+      g_appSettings.lookupLoginQrz +
+      ";password=" +
+      encodeURIComponent(g_appSettings.lookupPasswordQrz),
       qrzGetSessionCallback,
       resultTd,
       "https",
@@ -14685,9 +14667,9 @@ function GetSessionID(resultTd, useCache)
   {
     getBuffer(
       "https://www.hamqth.com/xml.php?u=" +
-        g_appSettings.lookupLoginQth +
-        "&p=" +
-        encodeURIComponent(g_appSettings.lookupPasswordQth),
+      g_appSettings.lookupLoginQth +
+      "&p=" +
+      encodeURIComponent(g_appSettings.lookupPasswordQth),
       hamQthGetSessionCallback,
       resultTd,
       "https",
@@ -14800,10 +14782,10 @@ function GetLookup(useCache)
   {
     getBuffer(
       "https://ssl.qrzcq.com/xml?s=" +
-        g_qrzLookupSessionId +
-        "&callsign=" +
-        g_qrzLookupCallsign +
-        "&agent=GridTracker",
+      g_qrzLookupSessionId +
+      "&callsign=" +
+      g_qrzLookupCallsign +
+      "&agent=GridTracker",
       qrzLookupResults,
       g_qrzLookupGrid,
       "https",
@@ -14815,9 +14797,9 @@ function GetLookup(useCache)
   {
     getBuffer(
       "http://xmldata.qrz.com/xml/current/?s=" +
-        g_qrzLookupSessionId +
-        ";callsign=" +
-        g_qrzLookupCallsign,
+      g_qrzLookupSessionId +
+      ";callsign=" +
+      g_qrzLookupCallsign,
       qrzLookupResults,
       g_qrzLookupGrid,
       "http",
@@ -14829,10 +14811,10 @@ function GetLookup(useCache)
   {
     getBuffer(
       "https://www.hamqth.com/xml.php?id=" +
-        g_qrzLookupSessionId +
-        "&callsign=" +
-        g_qrzLookupCallsign +
-        "&prg=GridTracker",
+      g_qrzLookupSessionId +
+      "&callsign=" +
+      g_qrzLookupCallsign +
+      "&prg=GridTracker",
       qthHamLookupResults,
       g_qrzLookupGrid,
       "https",
@@ -14939,8 +14921,8 @@ function initialDatabases()
   {
     alert(
       "Database error: " +
-        event.target.errorCode +
-        " : GridTracker will have issues"
+      event.target.errorCode +
+      " : GridTracker will have issues"
     );
   };
 
@@ -15021,8 +15003,7 @@ function getLookupCachedObject(
       }
       return;
     }
-    if (request.result != null && resultFunction)
-    { resultFunction(request.result, gridPass, false); }
+    if (request.result != null && resultFunction) { resultFunction(request.result, gridPass, false); }
     else if (noResultFunction) noResultFunction(call, gridPass);
   };
 
@@ -15409,7 +15390,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
   if (
     getLookProp(lookup, "gtGrid").length > 0 &&
     getLookProp(lookup, "gtGrid").toUpperCase() !=
-      getLookProp(lookup, "grid").toUpperCase()
+    getLookProp(lookup, "grid").toUpperCase()
   )
   {
     worker += makeRow("GT Grid", lookup, "gtGrid");
@@ -15468,12 +15449,12 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
   setLookupDiv(
     "lookupInfoDiv",
     "<table align='center'><tr><td>" +
-      card +
-      "</td><td>" +
-      details +
-      "</td></tr>" +
-      genMessage +
-      "</table>"
+    card +
+    "</td><td>" +
+    details +
+    "</td></tr>" +
+    genMessage +
+    "</table>"
   );
   setLookupDivHeight("lookupBoxDiv", getLookupWindowHeight() + "px");
 }
@@ -15514,8 +15495,7 @@ function saveToCsv(lookup)
   if (
     getLookProp(lookup, "land").length > 0 &&
     country != getLookProp(lookup, "land")
-  )
-  { country = getLookProp(lookup, "land"); }
+  ) { country = getLookProp(lookup, "land"); }
   if (country == "United States") country = "";
 
   tryToWriteAdifToDocFolder(
@@ -15603,8 +15583,7 @@ function joinCommaIf(camera1, camera2)
 
 function joinIfBothWithDash(camera1, camera2)
 {
-  if (camera1.length > 0 && camera2.length > 0)
-  { return camera1 + " / " + camera2; }
+  if (camera1.length > 0 && camera2.length > 0) { return camera1 + " / " + camera2; }
   return "";
 }
 
@@ -15630,7 +15609,7 @@ function searchLogForCallsign(call)
 
   var worker = ""
 
-  if (g_acknowledgedCalls[call])
+  if (call in g_acknowledgedCalls)
   {
     worker = `<h3>GridTracker would like to acknowledge ${call}: ` +
       `<img class='lookupAckBadge' src='${g_acknowledgedCalls[call].badge}'> ${g_acknowledgedCalls[call].message}</h3>`
@@ -15707,8 +15686,7 @@ function searchLogForCallsign(call)
       if (String(dxcc) + g_colorBands[band] in g_tracker.worked.dxcc)
       {
         var strike = "";
-        if (String(dxcc) + g_colorBands[band] in g_tracker.confirmed.dxcc)
-        { strike = "text-decoration: underline overline;"; }
+        if (String(dxcc) + g_colorBands[band] in g_tracker.confirmed.dxcc) { strike = "text-decoration: underline overline;"; }
         worker +=
           "<div style='" +
           strike +
@@ -15853,6 +15831,7 @@ function mediaCheck()
   g_scriptDir += g_dirSeperator;
 
   g_qsoLogFile = path.join(g_appData, "GridTracker_QSO.adif");
+  g_LoTWLogFile = path.join(g_appData, "lotw.adif");
 
   logEventMedia.appendChild(newOption("none", "None"));
   msgAlertMedia.appendChild(newOption("none", "Select File"));
@@ -15930,8 +15909,7 @@ function mediaCheck()
           g_QSOhash[i].px == null
         )
         {
-          if (g_QSOhash[i].dxcc != -1)
-          { g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall); }
+          if (g_QSOhash[i].dxcc != -1) { g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall); }
           else g_QSOhash[i].px = null;
         }
         g_QSOcount++;
@@ -15974,7 +15952,7 @@ function saveReceptionReports()
       JSON.stringify(g_receptionReports)
     );
   }
-  catch (e) {}
+  catch (e) { }
 }
 
 function loadReceptionReports()
@@ -15987,8 +15965,7 @@ function loadReceptionReports()
       g_receptionReports = JSON.parse(
         fs.readFileSync(g_NWappData + "spots.json")
       );
-      if (timeNowSec() - g_receptionReports.lastDownloadTimeSec <= 86400)
-      { clear = false; }
+      if (timeNowSec() - g_receptionReports.lastDownloadTimeSec <= 86400) { clear = false; }
     }
 
     if (clear == true)
@@ -16030,8 +16007,8 @@ function pskSpotCheck(timeSec)
     spotRefreshDiv.innerHTML = "…refreshing…";
     getBuffer(
       `https://retrieve.pskreporter.info/query?rronly=1&lastseqno=${g_receptionReports.lastSequenceNumber}` +
-        `&senderCallsign=${encodeURIComponent(myRawCall)}` +
-        `&appcontact=${encodeURIComponent(`GT-${pjson.version}`)}`,
+      `&senderCallsign=${encodeURIComponent(myRawCall)}` +
+      `&appcontact=${encodeURIComponent(`GT-${pjson.version}`)}`,
       pskSpotResults,
       null,
       "https",
@@ -16096,8 +16073,7 @@ function pskSpotResults(buffer, flag)
               if (
                 parseInt(json.receptionReport[key].flowStartSeconds) <
                 report.when
-              )
-              { continue; }
+              ) { continue; }
             }
             else
             {
@@ -16229,8 +16205,7 @@ function createSpot(report, key, fromPoint, addToLayer = true)
           : workingColor == 361
             ? "#FFFFFF"
             : "hsla(" + workingColor + ", 100%, 50%," + report.color / 255 + ")";
-      if (workingColor < 1 || workingColor == 361)
-      { spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color); }
+      if (workingColor < 1 || workingColor == 361) { spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color); }
       else spotColor = testColor;
     }
 
@@ -16400,8 +16375,7 @@ function spotPathChange()
     spotPathColorDiv.style.color = "#FFF";
     spotPathColorDiv.style.backgroundColor = pathColor;
   }
-  if (g_receptionSettings.pathColor == -1)
-  { spotPathInfoTd.innerHTML = "PSK-Reporter Palette"; }
+  if (g_receptionSettings.pathColor == -1) { spotPathInfoTd.innerHTML = "PSK-Reporter Palette"; }
   else spotPathInfoTd.innerHTML = "";
 
   g_spotFlightColor =
@@ -16428,8 +16402,7 @@ function spotPathChange()
     spotNightPathColorDiv.style.color = "#FFF";
     spotNightPathColorDiv.style.backgroundColor = pathNightColor;
   }
-  if (g_receptionSettings.pathNightColor == -1)
-  { spotNightPathInfoTd.innerHTML = "PSK-Reporter Palette"; }
+  if (g_receptionSettings.pathNightColor == -1) { spotNightPathInfoTd.innerHTML = "PSK-Reporter Palette"; }
   else spotNightPathInfoTd.innerHTML = "";
 
   g_spotNightFlightColor =
@@ -16580,7 +16553,7 @@ function setRosterTop()
     {
       g_callRosterWindowHandle.setAlwaysOnTop(g_appSettings.rosterAlwaysOnTop);
     }
-    catch (e) {}
+    catch (e) { }
   }
 }
 
@@ -16662,8 +16635,8 @@ function makeScreenshots()
         fs.writeFileSync(fn, buffer);
         addLastTraffic(
           "<font style='color:lightgreen;cursor:pointer;' onclick='showNativeFolder(\"" +
-            encodeURI(fn).trim() +
-            "\");''>Saved Screenshot</font>"
+          encodeURI(fn).trim() +
+          "\");''>Saved Screenshot</font>"
         );
       }
       catch (e)

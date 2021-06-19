@@ -96,7 +96,7 @@ var g_callsignDatabaseUSplus = {
   202: true
 };
 
-var g_acknowledgedCalls = require("./data/acknowledgements.json");
+var g_acknowledgedCalls = {};
 
 function loadAllSettings()
 {
@@ -11123,7 +11123,7 @@ function checkForNewVersion(showUptoDate)
   if (typeof nw != "undefined")
   {
     getBuffer(
-      "http://app.gridtracker.org/version.txt?lang=" + g_localeString,
+      "http://app.gridtracker.org/version.txt?lang=",
       versionCheck,
       showUptoDate,
       "http",
@@ -11132,15 +11132,25 @@ function checkForNewVersion(showUptoDate)
   }
 }
 
-function checkForNewAcks()
+function downloadAcknowledgements()
 {
-  getBuffer(
-    "http://app.gridtracker.org/acknowledgements.json?lang=" + g_localeString,
-    updateAcks,
-    null,
-    "http",
-    80
-  );
+  if (g_mapSettings.offlineMode == false)
+  {
+    getBuffer(
+      "http://app.gridtracker.org/acknowledgements.json",
+      updateAcks,
+      null,
+      "http",
+      80
+    );
+  }
+}
+
+function checkForNewAcknowledgements()
+{
+  downloadAcknowledgements();
+  setTimeout(checkForNewAcknowledgements, 8640000);
+  readAcksFromDisk();
 }
 
 function renderBandActivity()
@@ -12694,8 +12704,31 @@ function versionCheck(buffer, flag)
 
 function updateAcks(buffer)
 {
-  g_acks = JSON.parse(buffer);
-  fs.writeFileSync("./data/acknowledgements.json", JSON.stringify(g_acks));
+  try
+  {
+    g_acks = JSON.parse(buffer);
+    fs.writeFileSync(g_NWappData + "acknowledgements.json", JSON.stringify(g_acks));
+  }
+  catch (e)
+  {
+    // can't write, somethings broke
+  }
+}
+
+function readAcksFromDisk()
+{
+  try
+  {
+    var fileBuf = fs.readFileSync(g_NWappData + "acknowledgements.json");
+    var loadedData = JSON.parse(fileBuf);
+    // some validation here?
+    g_acknowledgedCalls = loadedData;
+  }
+  catch (e)
+  {
+    // file failed to load, probably not downloaded
+    downloadAcknowledgements();
+  }
 }
 
 function onExitAppToGoWebsite()
@@ -13588,7 +13621,6 @@ function startupVersionInit()
     {
       checkForNewVersion(false);
     }, 86400000);
-    checkForNewAcks();
   }
 }
 
@@ -13716,6 +13748,7 @@ var g_startupTable = [
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
   [gtChatSystemInit, "User System Initialized"],
+  [downloadAcknowledgements, "Contributor Acknowledgements Loaded"],
   [postInit, "Finalizing System"]
 ];
 

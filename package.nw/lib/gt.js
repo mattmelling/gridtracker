@@ -15578,7 +15578,7 @@ function searchLogForCallsign(call)
 
   var worker = ""
 
-  if (g_acknowledgedCalls[call])
+  if (call in g_acknowledgedCalls)
   {
     worker = `<h3>GridTracker would like to acknowledge ${call}: ` +
       `<img class='lookupAckBadge' src='${g_acknowledgedCalls[call].badge}'> ${g_acknowledgedCalls[call].message}</h3>`

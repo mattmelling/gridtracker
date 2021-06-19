@@ -13588,6 +13588,7 @@ function startupVersionInit()
     {
       checkForNewVersion(false);
     }, 86400000);
+    checkForNewAcks();
   }
 }
 

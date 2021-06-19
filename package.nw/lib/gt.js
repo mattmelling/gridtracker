@@ -11138,7 +11138,7 @@ function checkForNewAcks()
     "http://app.gridtracker.org/acknowledgements.json?lang=" + g_localeString,
     updateAcks,
     null,
-    http,
+    "http",
     80
   );
 }

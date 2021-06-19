@@ -12727,7 +12727,6 @@ function readAcksFromDisk()
   catch (e)
   {
     // file failed to load, probably not downloaded
-    downloadAcknowledgements();
   }
 }
 

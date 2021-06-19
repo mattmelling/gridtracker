@@ -910,6 +910,28 @@ function userTimeString(Msec)
   return dateToString(dateTime);
 }
 
+function dateToISO8601(dString, tZone)
+{
+  var retDate = "";
+  var tZone = (typeof tZone !== "undefined") ? tZone : "Z";
+  var dateParts = dString.match(/(\d{4}-\d{2}-\d{2})(\s+(\d{2}:\d{2}:\d{2}))?/);
+
+  if (dateParts !== null)
+  {
+    retDate = dateParts[1]
+    if ((typeof dateParts[3]) !== "undefined")
+    {
+      retDate += "T" + dateParts[3] + ".000" + tZone;
+    }
+    else
+    {
+      retDate += "T00:00:00.000" + tZone;
+    }
+  }
+
+  return retDate;
+}
+
 function getWpx(callsign)
 {
   var prefix = null;

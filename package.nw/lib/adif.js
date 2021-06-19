@@ -701,7 +701,7 @@ function grabLOtWLog(test)
 
 function grabLoTWQSO()
 {
-  var dLoTWQSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
+  var dLoTWQSO = Date.parse(dateToISO8601(g_adifLogSettings.lastFetch.lotw_qso, "Z"));
   var tmpDate = ((new Date().getTime()) - 300);
 
   if ((g_isGettingLOTW == false) && ((isNaN(dLoTWQSO) == false) && (dLoTWQSO < tmpDate)))
@@ -728,7 +728,7 @@ function grabLoTWQSO()
 
 function grabLoTWQSL()
 {
-  var dLoTWQSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
+  var dLoTWQSL = Date.parse(dateToISO8601(g_adifLogSettings.lastFetch.lotw_qsl, "Z"));
   var tmpDate = ((new Date().getTime()) - 300);
 
   if ((g_isGettingLOTW == false) && ((isNaN(dLoTWQSL) == false) && (dLoTWQSL < tmpDate)))

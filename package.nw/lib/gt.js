@@ -237,6 +237,11 @@ function saveLegendColors()
   localStorage.legendColors = JSON.stringify(g_legendColors);
 }
 
+function saveAdifSettings()
+{
+  localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
+}
+
 function saveStartupLogs()
 {
   localStorage.startupLogs = JSON.stringify(g_startupLogs);
@@ -306,6 +311,7 @@ function saveAndCloseApp()
   }
 
   saveAppSettings();
+  saveAdifSettings();
   saveMapSettings();
   saveLegendColors();
 
@@ -504,6 +510,7 @@ var g_NWappData = "";
 var g_screenshotDir = "";
 var g_scriptDir = "";
 var g_qsoLogFile = "";
+var g_LoTWLogFile = "";
 var g_userMediaDir = "";
 var g_gtMediaDir = path.resolve("./media");
 var g_localeString = navigator.language;
@@ -901,6 +908,28 @@ function userTimeString(Msec)
   if (Msec != null) dateTime = new Date(Msec);
   else dateTime = new Date();
   return dateToString(dateTime);
+}
+
+function dateToISO8601(dString, tZone)
+{
+  var retDate = "";
+  var tZone = (typeof tZone !== "undefined") ? tZone : "Z";
+  var dateParts = dString.match(/(\d{4}-\d{2}-\d{2})(\s+(\d{2}:\d{2}:\d{2}))?/);
+
+  if (dateParts !== null)
+  {
+    retDate = dateParts[1]
+    if ((typeof dateParts[3]) !== "undefined")
+    {
+      retDate += "T" + dateParts[3] + ".000" + tZone;
+    }
+    else
+    {
+      retDate += "T00:00:00.000" + tZone;
+    }
+  }
+
+  return retDate;
 }
 
 function getWpx(callsign)
@@ -5130,7 +5159,9 @@ function clearLogFilesAndCounts()
   tryToDeleteLog("qrz.adif");
   tryToDeleteLog("clublog.adif");
   g_adifLogSettings.downloads = {};
-  localStorage.adifLogSettings = JSON.stringify(g_adifLogSettings);
+  g_adifLogSettings.lastFetch.lotw_qso = "1940-01-01";
+  g_adifLogSettings.lastFetch.lotw_qsl = "1940-01-01";
+  saveAdifSettings();
 }
 
 function getCurrentBandModeHTML()
@@ -12174,7 +12205,8 @@ function callsignToDxcc(insign)
     var end = parts.length - 1;
     if (ancPrefixes.includes(parts[end]))
     {
-      if (parts[end].toUpperCase() == "MM") {
+      if (parts[end].toUpperCase() == "MM")
+      {
         return -1;
       }
       parts.pop();
@@ -15852,6 +15884,7 @@ function mediaCheck()
   g_scriptDir += g_dirSeperator;
 
   g_qsoLogFile = path.join(g_appData, "GridTracker_QSO.adif");
+  g_LoTWLogFile = path.join(g_appData, "lotw.adif");
 
   logEventMedia.appendChild(newOption("none", "None"));
   msgAlertMedia.appendChild(newOption("none", "Select File"));

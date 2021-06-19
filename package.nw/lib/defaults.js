@@ -175,7 +175,11 @@ var def_adifLogSettings = {
     eQSLPassword: "",
     eQSLNickname: ""
   },
-  downloads: {}
+  downloads: {},
+  lastFetch: {
+    lotw_qso: "1970-01-01",
+    lotw_qsl: "1970-01-01"
+  }
 };
 
 var def_msgSettings = {

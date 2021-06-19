@@ -12174,7 +12174,8 @@ function callsignToDxcc(insign)
     var end = parts.length - 1;
     if (ancPrefixes.includes(parts[end]))
     {
-      if (parts[end].toUpperCase() == "MM") {
+      if (parts[end].toUpperCase() == "MM")
+      {
         return -1;
       }
       parts.pop();

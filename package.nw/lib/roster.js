@@ -419,7 +419,7 @@ var r_excptTest = [
   huntITU,
   huntUSStates,
   huntUSState
-]
+];
 
 function showRosterBox(sortIndex)
 {

@@ -436,6 +436,8 @@ function viewRoster()
   var bands = Object();
   var modes = Object();
 
+  // can the following block where we figure out how the roster is being used
+  // be a function itself that we can call in at the start of this?
   var callMode = g_rosterSettings.callsign;
   var onlyHits = false;
   var isAwardTracker = false;
@@ -452,12 +454,18 @@ function viewRoster()
     isAwardTracker = true;
     g_rosterSettings.huntNeed = "confirmed";
   }
-
+  // this appears to be determine if we should show the OAMS collumn
+  // if the user is not in offline mode and has OAMS enabled, this could
+  // be it's own function maybe?
   var canMsg =
     window.opener.g_mapSettings.offlineMode == false &&
     window.opener.g_appSettings.gtShareEnable == "true" &&
     window.opener.g_appSettings.gtMsgEnable == "true";
 
+  // The following 3 sections deal with QSLing, do we break them out
+  // individually or lump them into a qslUser function that sets
+  // all three at the same time?
+  // this section is for LoTW users, can be a function
   if (window.opener.g_callsignLookups.lotwUseEnable == true)
   {
     usesLoTWDiv.style.display = "";
@@ -479,18 +487,24 @@ function viewRoster()
     maxLoTWView.style.display = "none";
   }
 
+  // eQSL - function
   if (window.opener.g_callsignLookups.eqslUseEnable == true) useseQSLDiv.style.display = "";
   else useseQSLDiv.style.display = "none";
 
+  // OQRS - function
   if (window.opener.g_callsignLookups.oqrsUseEnable == true) usesOQRSDiv.style.display = "";
   else usesOQRSDiv.style.display = "none";
 
+  // dealing with spots
   if (g_rosterSettings.columns.Spot == true) onlySpotDiv.style.display = "";
   else onlySpotDiv.style.display = "none";
 
+  // callmode (all or only new)
   if (callMode == "all") allOnlyNewDiv.style.display = "";
   else allOnlyNewDiv.style.display = "none";
 
+  // hunting mode - can this be comibined with the roster mode stuff on
+  // on line 441 above in that function or be it's own?
   var huntIndex, workedIndex, layeredMode;
   if (g_rosterSettings.huntNeed == "mixed")
   {
@@ -520,6 +534,7 @@ function viewRoster()
   var now = timeNowSec();
 
   // First loop, exclude calls, mostly based on "Exceptions" settings
+  // this whole section is full of individual if's that could be broken out
   for (var callHash in callRoster)
   {
     var entry = callRoster[callHash];
@@ -879,6 +894,8 @@ function viewRoster()
     }
   }
 
+  // these vars, do they rely on anything between the top and here?
+  // if not could they be put in the var list at the beginning?
   var hasGtPin = false;
 
   var newCallList = Array();

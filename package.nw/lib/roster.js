@@ -389,6 +389,38 @@ var r_sortFunction = [
   myContCompare
 ];
 
+var r_excptTest = [
+  timeChk,
+  crEnable,
+  blockedCall,
+  blockedFrom,
+  blcokedDXCC,
+  cqOnly,
+  useRegex,
+  reqGrid,
+  minDB,
+  maxDT,
+  minFreq,
+  maxFreq,
+  noMsg,
+  onlyMesg,
+  myDXCC,
+  lotwUse,
+  eqslUse,
+  oqrsUse,
+  noMyCQDX,
+  callWorked,
+  callConfirmed,
+  huntGrid,
+  huntDXCC,
+  huntDXCCs,
+  huntWPX,
+  huntCQ,
+  huntITU,
+  huntUSStates,
+  huntUSState
+]
+
 function showRosterBox(sortIndex)
 {
   if (g_rosterSettings.lastSortIndex != sortIndex)
@@ -454,7 +486,7 @@ function viewRoster()
     isAwardTracker = true;
     g_rosterSettings.huntNeed = "confirmed";
   }
-  // this appears to be determine if we should show the OAMS collumn
+  // this appears to be determine if we should show the OAMS column
   // if the user is not in offline mode and has OAMS enabled, this could
   // be it's own function maybe?
   var canMsg =
@@ -745,7 +777,6 @@ function viewRoster()
           entry.tx = false;
           continue;
         }
-
         continue;
       }
 
@@ -797,7 +828,6 @@ function viewRoster()
           entry.tx = false;
           continue;
         }
-
         continue;
       }
 

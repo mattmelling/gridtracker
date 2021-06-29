@@ -95,5 +95,6 @@ function renderRoster(callRoster, rosterSettings)
     worker += g_rosterSettings.compact ? renderCompactRosterRow(callObj) : renderNormalRosterRow(callObj, showBands, showModes)
   }
 
-  RosterTable.innerHTML = g_rosterSettings.compact ? renderCompactRosterFooter() : renderNormalRosterFooter()
+  worker += g_rosterSettings.compact ? renderCompactRosterFooter() : renderNormalRosterFooter()
+  RosterTable.innerHTML = worker;
 }

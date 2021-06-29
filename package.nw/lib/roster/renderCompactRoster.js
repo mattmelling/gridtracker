@@ -16,7 +16,7 @@ function renderCompactRosterRow(callObj)
     (callObj.grid.length ? ", " + callObj.grid : "") +
     ", " +
     (timeNowSec() - callObj.age).toDHMS();
-  worker +=
+  var worker =
     "<div class='compact' onClick='initiateQso(\"" +
     thisCall +
     callObj.band +

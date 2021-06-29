@@ -70,7 +70,7 @@ function renderRoster(callRoster, rosterSettings)
   // Third loop: render all rows
   for (var x in visibleCallList)
   {
-    var callObj = visibleCallList[x];
+    var callObj = visibleCallList[x].callObj;
 
     // TODO: This is filtering
     if (callObj.shouldAlert == false && onlyHits == true && callObj.qrz == false)

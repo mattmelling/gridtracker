@@ -65,7 +65,7 @@ function renderRoster(callRoster, rosterSettings)
   var showBands = (Object.keys(rosterSettings.bands).length > 1) || g_rosterSettings.columns.Band;
   var showModes = (Object.keys(rosterSettings.modes).length > 1) || g_rosterSettings.columns.Mode;
 
-  var worker = g_rosterSettings.compact ? renderCompactRosterHeaders() : renderNormalRosterHeaders()
+  var worker = g_rosterSettings.compact ? renderCompactRosterHeaders() : renderNormalRosterHeaders(showBands, showModes)
 
   // Third loop: render all rows
   for (var x in visibleCallList)

@@ -1,4 +1,4 @@
-function renderNormalRosterHeaders()
+function renderNormalRosterHeaders(showBands, showModes)
 {
   var worker = ""
   worker = "<table id='callTable' class='rosterTable' align=left>";

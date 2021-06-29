@@ -29,7 +29,7 @@ function sendAlerts(callRoster, rosterSettings)
     delete g_scriptReport[call].qso;
     delete g_scriptReport[call].instance;
 
-    if (callMode != "all")
+    if (rosterSettings.callMode != "all")
     {
       g_scriptReport[call].shouldAlert = true;
       g_scriptReport[call].reason.push(g_rosterSettings.hunting);
@@ -38,7 +38,7 @@ function sendAlerts(callRoster, rosterSettings)
 
   if (
     callObj.alerted == false &&
-      callMode == "all" &&
+      rosterSettings.callMode == "all" &&
       callObj.shouldAlert == true
   )
   {

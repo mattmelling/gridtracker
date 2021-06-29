@@ -23,7 +23,7 @@ function renderRoster(callRoster, rosterSettings)
   var visibleCallList = [];
   for (entry in callRoster)
   {
-    if (entry.tx)
+    if (callRoster[entry].tx)
     {
       visibleCallList.push(callRoster[entry]);
     }

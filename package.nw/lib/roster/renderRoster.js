@@ -18,11 +18,20 @@ function renderRoster(callRoster, rosterSettings)
 
   // Show the roster count in the window title
 
-  var visibleCallList = callRoster.filter(entry => entry.tx);
+  // var visibleCallList = callRoster.filter(entry => entry.tx);
+
+  var visibleCallList = [];
+  for (entry in callRoster)
+  {
+    if (entry.tx)
+    {
+      visibleCallList.push(callRoster[entry]);
+    }
+  }
 
   var totalCount = Object.keys(callRoster).length;
   var visibleCount = visibleCallList.length;
-  var huntedCount = visibleCallList.filter(obj => Object.keys(obj.hunting).length > 0).length
+  var huntedCount = visibleCallList.filter(obj => Object.keys(callObj.hunting).length > 0).length
   var countParts = [];
 
   if (totalCount != visibleCount)

@@ -85,7 +85,7 @@ function renderNormalRosterHeaders(showBands, showModes)
   return worker
 }
 
-function renderNormalRosterRow(callObj)
+function renderNormalRosterRow(callObj, showBands, showModes)
 {
   var thisCall = callObj.DEcall;
   var acks = window.opener.g_acknowledgedCalls;

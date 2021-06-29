@@ -145,9 +145,9 @@ function renderNormalRosterRow(callObj, showBands, showModes)
     "<td  " +
     callObj.style.grid +
     " onClick='centerOn(\"" +
-    callObj.grid +
+    grid +
     "\")' >" +
-    callObj.grid +
+    grid +
     "</td>";
   if (g_rosterSettings.columns.Calling)
   {

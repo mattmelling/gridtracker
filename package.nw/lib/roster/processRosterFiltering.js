@@ -14,7 +14,7 @@ function processRosterFiltering(callRoster, rosterSettings)
     callObj.reason = Array();
     callObj.awardReason = "Callsign";
 
-    if (now - callObj.age > window.opener.g_mapSettings.rosterTime)
+    if (rosterSettings.now - callObj.age > window.opener.g_mapSettings.rosterTime)
     {
       entry.tx = false;
       entry.alerted = false;
@@ -166,7 +166,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
     }
 
-    if (callMode != "all")
+    if (rosterSettings.callMode != "all")
     {
       if (entry.DXcall == "CQ DX" && callObj.dxcc == window.opener.g_myDXCC)
       {
@@ -175,12 +175,12 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
 
       var hash = hashMaker(call, callObj, g_rosterSettings.reference);
-      if (callMode == "worked" && hash in g_worked.call)
+      if (rosterSettings.callMode == "worked" && hash in g_worked.call)
       {
         entry.tx = false;
         continue;
       }
-      if (callMode == "confirmed" && hash in g_confirmed.call)
+      if (rosterSettings.callMode == "confirmed" && hash in g_confirmed.call)
       {
         entry.tx = false;
         continue;
@@ -338,7 +338,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         continue;
       }
     }
-    if (isAwardTracker)
+    if (rosterSettings.isAwardTracker)
     {
       var tx = false;
       var baseHash = hashMaker("", callObj, g_rosterSettings.reference);

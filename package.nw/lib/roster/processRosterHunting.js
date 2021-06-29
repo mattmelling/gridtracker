@@ -46,9 +46,9 @@ function processRosterHunting(callRoster, rosterSettings)
       // In layered mode ("Hunting: mixed") the workHashSuffix becomes a more stricter 'live band',
       // while the layered suffix is a broader 'mixed band'
       var workHashSuffix, layeredHashSuffix;
-      if (layeredMode)
+      if (rosterSettings.layeredMode)
       {
-        workHashSuffix = hashMaker("", callObj, layeredMode);
+        workHashSuffix = hashMaker("", callObj, rosterSettings.layeredMode);
         layeredHashSuffix = hashMaker("", callObj, g_rosterSettings.reference);
       }
       else
@@ -128,7 +128,7 @@ function processRosterHunting(callRoster, rosterSettings)
       // We only do hunt highlighting when showing all entries
       // This means "Callsigns: All Traffic", "Callsigns: All Traffic/Only Wanted" and "Logbook: Award Tracker"
       // There is no highlighting in other modes
-      if (callMode == "all")
+      if (rosterSettings.callMode == "all")
       {
         // Skip when "only new calls"
         // Questions: Move to the first loop? Why only skip new calls in "all traffic" and not other modes?
@@ -142,17 +142,17 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntCallsign.checked == true)
         {
           var hash = callsign + workHashSuffix;
-          var layeredHash = layeredMode && (callsign + layeredHashSuffix)
+          var layeredHash = rosterSettings.layeredMode && (callsign + layeredHashSuffix)
 
-          if (huntIndex && !(hash in huntIndex.call))
+          if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.call))
           {
             shouldAlert = true;
 
             callObj.reason.push("call");
 
-            if (workedIndex && hash in workedIndex.call)
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.call)
             {
-              if (layeredMode && layeredHash in huntIndex.call)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.call)
               {
                 callObj.hunting.call = "worked-and-mixed";
                 callConf = `${layeredUnconf}${call}${layeredUnconfAlpha};`;
@@ -164,7 +164,7 @@ function processRosterHunting(callRoster, rosterSettings)
               //  * so we cannot cover this particular combination
               //  * and have to default to just showing it as plain "worked"
               //  */
-              // else if (layeredMode && layeredHash in workedIndex.call)
+              // else if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.call)
               // {
               //   callObj.hunting.call = "worked-and-mixed-worked";
               //   callConf = `${layeredUnconf}${call}${layeredAlpha};`;
@@ -177,13 +177,13 @@ function processRosterHunting(callRoster, rosterSettings)
             }
             else
             {
-              if (layeredMode && layeredHash in huntIndex.call)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.call)
               {
                 callObj.hunting.call = "mixed";
                 callBg = `${call}${layeredAlpha};`;
                 call = bold;
               }
-              else if (layeredMode && layeredHash in workedIndex.call)
+              else if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.call)
               {
                 callObj.hunting.call = "mixed-worked";
                 callConf = `${unconf}${call}${layeredAlpha};`;
@@ -218,17 +218,17 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntGrid.checked == true && callObj.grid.length > 1)
         {
           var hash = callObj.grid.substr(0, 4) + workHashSuffix;
-          var layeredHash = layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
+          var layeredHash = rosterSettings.layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
 
-          if (huntIndex && !(hash in huntIndex.grid))
+          if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.grid))
           {
             shouldAlert = true;
 
             callObj.reason.push("grid");
 
-            if (workedIndex && hash in workedIndex.grid)
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.grid)
             {
-              if (layeredMode && layeredHash in huntIndex.grid)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.grid)
               {
                 callObj.hunting.grid = "worked-and-mixed";
                 gridConf = `${layeredUnconf}${grid}${layeredUnconfAlpha};`;
@@ -243,13 +243,13 @@ function processRosterHunting(callRoster, rosterSettings)
             }
             else
             {
-              if (layeredMode && layeredHash in huntIndex.grid)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.grid)
               {
                 callObj.hunting.grid = "mixed";
                 gridBg = `${grid}${layeredAlpha};`;
                 grid = bold;
               }
-              else if (layeredMode && layeredHash in workedIndex.grid)
+              else if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.grid)
               {
                 callObj.hunting.grid = "mixed-worked";
                 gridConf = `${unconf}${grid}${layeredAlpha};`;
@@ -268,17 +268,17 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntDXCC.checked == true)
         {
           var hash = String(callObj.dxcc) + workHashSuffix;
-          var layeredHash = layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
+          var layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
 
-          if (huntIndex && !(hash in huntIndex.dxcc))
+          if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.dxcc))
           {
             shouldAlert = true;
 
             callObj.reason.push("dxcc");
 
-            if (workedIndex && hash in workedIndex.dxcc)
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.dxcc)
             {
-              if (layeredMode && layeredHash in huntIndex.dxcc)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.dxcc)
               {
                 callObj.hunting.dxcc = "worked-and-mixed";
                 dxccConf = `${layeredUnconf}${dxcc}${layeredUnconfAlpha};`;
@@ -293,13 +293,13 @@ function processRosterHunting(callRoster, rosterSettings)
             }
             else
             {
-              if (layeredMode && layeredHash in huntIndex.dxcc)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.dxcc)
               {
                 callObj.hunting.dxcc = "mixed";
                 dxccBg = `${dxcc}${layeredAlpha};`;
                 dxcc = bold;
               }
-              else if (layeredMode && layeredHash in workedIndex.dxcc)
+              else if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.dxcc)
               {
                 callObj.hunting.dxcc = "mixed-worked";
                 dxccConf = `${unconf}${dxcc}${layeredAlpha};`;
@@ -324,17 +324,17 @@ function processRosterHunting(callRoster, rosterSettings)
             if (stateSearch in window.opener.g_StateData)
             {
               var hash = stateSearch + workHashSuffix;
-              var layeredHash = layeredMode && (stateSearch + layeredHashSuffix)
+              var layeredHash = rosterSettings.layeredMode && (stateSearch + layeredHashSuffix)
 
-              if (huntIndex && !(hash in huntIndex.state))
+              if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.state))
               {
                 shouldAlert = true;
 
                 callObj.reason.push("state");
 
-                if (workedIndex && hash in workedIndex.state)
+                if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.state)
                 {
-                  if (layeredMode && layeredHash in huntIndex.state)
+                  if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.state)
                   {
                     callObj.hunting.state = "worked-and-mixed";
                     stateConf = `${layeredUnconf}${state}${layeredUnconfAlpha};`;
@@ -349,13 +349,13 @@ function processRosterHunting(callRoster, rosterSettings)
                 }
                 else
                 {
-                  if (layeredMode && layeredHash in huntIndex.state)
+                  if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.state)
                   {
                     callObj.hunting.state = "mixed";
                     stateBg = `${state}${layeredAlpha};`;
                     state = bold;
                   }
-                  else if (layeredMode && layeredHash in workedIndex.state)
+                  else if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.state)
                   {
                     callObj.hunting.state = "mixed-worked";
                     stateConf = `${unconf}${state}${layeredAlpha};`;
@@ -382,9 +382,9 @@ function processRosterHunting(callRoster, rosterSettings)
             callObj.cnty.length > 0
           )
           {
-            var hash = callObj.cnty + (layeredMode ? layeredHashSuffix : workHashSuffix);
+            var hash = callObj.cnty + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
 
-            if ((huntIndex && !(hash in huntIndex.cnty)) || callObj.qual == false)
+            if ((rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.cnty)) || callObj.qual == false)
             {
               if (callObj.qual == false)
               {
@@ -394,7 +394,7 @@ function processRosterHunting(callRoster, rosterSettings)
                 {
                   var hh = counties[cnt] + workHash;
                   callObj.cnty = counties[cnt];
-                  if (huntIndex && !(hh in huntIndex.cnty))
+                  if (rosterSettings.huntIndex && !(hh in rosterSettings.huntIndex.cnty))
                   {
                     foundHit = true;
                     break;
@@ -411,7 +411,7 @@ function processRosterHunting(callRoster, rosterSettings)
               {
                 callObj.reason.push("cnty");
 
-                if (workedIndex && hash in workedIndex.cnty)
+                if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cnty)
                 {
                   callObj.hunting.cnty = "worked";
                   cntyConf = `${unconf}${cnty}${inversionAlpha};`;
@@ -436,21 +436,21 @@ function processRosterHunting(callRoster, rosterSettings)
           for (index in callObj.cqza)
           {
             var hash = callObj.cqza[index] + workHashSuffix;
-            var layeredHash = layeredMode && (callObj.cqza[index] + layeredHashSuffix)
+            var layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix)
 
-            if (huntIndex && hash in huntIndex.cqz) huntFound++;
-            if (layeredMode && layeredHash in huntIndex.cqz) layeredFound++;
-            if (workedIndex && hash in workedIndex.cqz) workedFound++;
-            if (layeredMode && layeredHash in workedIndex.cqz) layeredWorkedFound++;
+            if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.cqz) huntFound++;
+            if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cqz) layeredFound++;
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cqz) workedFound++;
+            if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.cqz) layeredWorkedFound++;
           }
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
             callObj.reason.push("cqz");
 
-            if (workedIndex && workedFound == huntTotal)
+            if (rosterSettings.workedIndex && workedFound == huntTotal)
             {
-              if (layeredMode && layeredFound == huntTotal)
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
               {
                 callObj.hunting.cqz = "worked-and-mixed";
                 cqzConf = `${layeredUnconf}${cqz}${layeredUnconfAlpha};`;
@@ -465,13 +465,13 @@ function processRosterHunting(callRoster, rosterSettings)
             }
             else
             {
-              if (layeredMode && layeredFound == huntTotal)
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
               {
                 callObj.hunting.cqz = "mixed";
                 cqzBg = `${cqz}${layeredAlpha};`;
                 cqz = bold;
               }
-              else if (layeredMode && layeredWorkedFound == huntTotal)
+              else if (rosterSettings.layeredMode && layeredWorkedFound == huntTotal)
               {
                 callObj.hunting.cqz = "mixed-worked";
                 cqzConf = `${unconf}${cqz}${layeredAlpha};`;
@@ -495,21 +495,21 @@ function processRosterHunting(callRoster, rosterSettings)
           for (index in callObj.ituza)
           {
             var hash = callObj.ituza[index] + workHashSuffix;
-            var layeredHash = layeredMode && (callObj.ituza[index] + layeredHashSuffix)
+            var layeredHash = rosterSettings.layeredMode && (callObj.ituza[index] + layeredHashSuffix)
 
-            if (huntIndex && hash in huntIndex.ituz) huntFound++;
-            if (layeredMode && layeredHash in huntIndex.ituz) layeredFound++;
-            if (workedIndex && hash in workedIndex.ituz) workedFound++;
-            if (layeredMode && layeredHash in workedIndex.ituz) layeredWorkedFound++;
+            if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.ituz) huntFound++;
+            if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.ituz) layeredFound++;
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.ituz) workedFound++;
+            if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.ituz) layeredWorkedFound++;
           }
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
             callObj.reason.push("ituz");
 
-            if (workedIndex && workedFound == huntTotal)
+            if (rosterSettings.workedIndex && workedFound == huntTotal)
             {
-              if (layeredMode && layeredFound == huntTotal)
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
               {
                 callObj.hunting.ituz = "worked-and-mixed";
                 ituzConf = `${layeredUnconf}${ituz}${layeredUnconfAlpha};`;
@@ -524,13 +524,13 @@ function processRosterHunting(callRoster, rosterSettings)
             }
             else
             {
-              if (layeredMode && layeredFound == huntTotal)
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
               {
                 callObj.hunting.ituz = "mixed";
                 ituzBg = `${ituz}${layeredAlpha};`;
                 ituz = bold;
               }
-              else if (layeredMode && layeredWorkedFound == huntTotal)
+              else if (rosterSettings.layeredMode && layeredWorkedFound == huntTotal)
               {
                 callObj.hunting.ituz = "mixed-worked";
                 ituzConf = `${unconf}${ituz}${layeredAlpha};`;
@@ -549,17 +549,17 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntPX.checked == true && callObj.px)
         {
           var hash = String(callObj.px) + workHashSuffix;
-          var layeredHash = layeredMode && (String(callObj.px) + layeredHashSuffix)
+          var layeredHash = rosterSettings.layeredMode && (String(callObj.px) + layeredHashSuffix)
 
-          if (huntIndex && !(hash in huntIndex.px))
+          if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.px))
           {
             shouldAlert = true;
 
             callObj.reason.push("wpx");
 
-            if (workedIndex && hash in workedIndex.px)
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.px)
             {
-              if (layeredMode && layeredHash in huntIndex.px)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.px)
               {
                 callObj.hunting.wpx = "worked-and-mixed";
                 wpxConf = `${layeredUnconf}${wpx}${layeredUnconfAlpha};`;
@@ -574,13 +574,13 @@ function processRosterHunting(callRoster, rosterSettings)
             }
             else
             {
-              if (layeredMode && layeredHash in huntIndex.px)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.px)
               {
                 callObj.hunting.wpx = "mixed";
                 wpxBg = `${wpx}${layeredAlpha};`;
                 wpx = bold;
               }
-              else if (layeredMode && layeredHash in workedIndex.px)
+              else if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.px)
               {
                 callObj.hunting.wpx = "mixed-worked";
                 wpxConf = `${unconf}${wpx}${layeredAlpha};`;
@@ -599,17 +599,17 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntCont.checked == true && callObj.cont)
         {
           var hash = String(callObj.cont) + workHashSuffix;
-          var layeredHash = layeredMode && (String(callObj.cont) + layeredHashSuffix)
+          var layeredHash = rosterSettings.layeredMode && (String(callObj.cont) + layeredHashSuffix)
 
-          if (huntIndex && !(hash in huntIndex.cont))
+          if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.cont))
           {
             shouldAlert = true;
 
             callObj.reason.push("cont");
 
-            if (workedIndex && hash in workedIndex.cont)
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cont)
             {
-              if (layeredMode && layeredHash in huntIndex.cont)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cont)
               {
                 callObj.hunting.cont = "worked-and-mixed";
                 contConf = `${layeredUnconf}${cont}${layeredUnconfAlpha};`;
@@ -624,13 +624,13 @@ function processRosterHunting(callRoster, rosterSettings)
             }
             else
             {
-              if (layeredMode && layeredHash in huntIndex.cont)
+              if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cont)
               {
                 callObj.hunting.cont = "mixed";
                 contBg = `${cont}${layeredAlpha};`;
                 cont = bold;
               }
-              else if (layeredMode && layeredHash in workedIndex.cont)
+              else if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.cont)
               {
                 callObj.hunting.cont = "mixed-worked";
                 contConf = `${unconf}${cont}${layeredAlpha};`;
@@ -693,8 +693,8 @@ function processRosterHunting(callRoster, rosterSettings)
         callObj.spot = { when: 0, snr: 0 };
       }
 
-      modes[callObj.mode] = true;
-      bands[callObj.band] = true;
+      rosterSettings.modes[callObj.mode] = true;
+      rosterSettings.bands[callObj.band] = true;
     }
   }
 }

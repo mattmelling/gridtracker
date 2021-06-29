@@ -246,6 +246,26 @@ function lockNewWindows()
   }
 }
 
+var r_sortFunction = [
+  myCallCompare,
+  myGridCompare,
+  myDbCompare,
+  myDTCompare,
+  myFreqCompare,
+  myDxccCompare,
+  myTimeCompare,
+  myDistanceCompare,
+  myHeadingCompare,
+  myStateCompare,
+  myCQCompare,
+  myWPXCompare,
+  myLifeCompare,
+  mySpotCompare,
+  myGTCompare,
+  myCntyCompare,
+  myContCompare
+];
+
 function myCallCompare(a, b)
 {
   return a.DEcall.localeCompare(b.DEcall);

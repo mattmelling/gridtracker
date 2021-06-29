@@ -73,7 +73,7 @@ function renderRoster(callRoster, rosterSettings)
     var callObj = visibleCallList[x].callObj;
 
     // TODO: This is filtering
-    if (callObj.shouldAlert == false && onlyHits == true && callObj.qrz == false)
+    if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
     { continue; }
 
     var spotString = "";

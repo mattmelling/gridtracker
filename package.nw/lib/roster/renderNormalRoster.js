@@ -89,6 +89,17 @@ function renderNormalRosterRow(callObj, showBands, showModes)
 {
   var thisCall = callObj.DEcall;
   var acks = window.opener.g_acknowledgedCalls;
+  var grid = callObj.grid.length > 1 ? callObj.grid.substr(0, 4) : "-";
+
+  var geo = window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]];
+  var cqzone = grid in window.opener.g_gridToCQZone ? window.opener.g_gridToCQZone[grid].join(", ") : "-";
+  var ituzone = grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-";
+
+  var spotString = "";
+  if (g_rosterSettings.columns.Spot && callObj.qrz == false)
+  {
+    spotString = getSpotString(callObj);
+  }
 
   var thisHash = thisCall + callObj.band + callObj.mode;
   var callStr = thisCall.formatCallsign()

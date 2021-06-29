@@ -76,18 +76,6 @@ function renderRoster(callRoster, rosterSettings)
     if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
     { continue; }
 
-    var spotString = "";
-    if (g_rosterSettings.columns.Spot && callObj.qrz == false)
-    {
-      spotString = getSpotString(callObj);
-      // TODO: This is filtering
-      if (g_rosterSettings.onlySpot && spotString == "") continue;
-    }
-    var grid = callObj.grid.length > 1 ? callObj.grid.substr(0, 4) : "-";
-
-    var geo = window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]];
-    var cqzone = grid in window.opener.g_gridToCQZone ? window.opener.g_gridToCQZone[grid].join(", ") : "-";
-    var ituzone = grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-";
     var thisCall = callObj.DEcall;
 
     if (thisCall.match("^[A-Z][0-9][A-Z](/w+)?$"))
@@ -104,7 +92,7 @@ function renderRoster(callRoster, rosterSettings)
       }
     }
 
-    worker += g_rosterSettings.compact ? renderCompactRosterRow(callObj) : renderNormalRosterRow(callObj)
+    worker += g_rosterSettings.compact ? renderCompactRosterRow(callObj) : renderNormalRosterRow(callObj, showBands, showModes)
   }
 
   RosterTable.innerHTML = g_rosterSettings.compact ? renderCompactRosterFooter() : renderNormalRosterFooter()

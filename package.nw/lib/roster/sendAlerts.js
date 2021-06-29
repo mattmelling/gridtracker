@@ -6,7 +6,7 @@ function sendAlerts(callRoster, rosterSettings)
 
   var shouldAlert = 0;
 
-  for (var callObj in callRoster)
+  for (callObj in callRoster)
   { if (!callObj.tx) continue }
 
   // TODO: Get rid of realtime

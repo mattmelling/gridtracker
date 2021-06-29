@@ -369,58 +369,6 @@ function myGTCompare(a, b)
   return 0;
 }
 
-var r_sortFunction = [
-  myCallCompare,
-  myGridCompare,
-  myDbCompare,
-  myDTCompare,
-  myFreqCompare,
-  myDxccCompare,
-  myTimeCompare,
-  myDistanceCompare,
-  myHeadingCompare,
-  myStateCompare,
-  myCQCompare,
-  myWPXCompare,
-  myLifeCompare,
-  mySpotCompare,
-  myGTCompare,
-  myCntyCompare,
-  myContCompare
-];
-
-var r_excptTest = [
-  timeChk,
-  crEnable,
-  blockedCall,
-  blockedFrom,
-  blcokedDXCC,
-  cqOnly,
-  useRegex,
-  reqGrid,
-  minDB,
-  maxDT,
-  minFreq,
-  maxFreq,
-  noMsg,
-  onlyMesg,
-  myDXCC,
-  lotwUse,
-  eqslUse,
-  oqrsUse,
-  noMyCQDX,
-  callWorked,
-  callConfirmed,
-  huntGrid,
-  huntDXCC,
-  huntDXCCs,
-  huntWPX,
-  huntCQ,
-  huntITU,
-  huntUSStates,
-  huntUSState
-];
-
 function showRosterBox(sortIndex)
 {
   if (g_rosterSettings.lastSortIndex != sortIndex)

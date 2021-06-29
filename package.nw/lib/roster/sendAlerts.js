@@ -52,84 +52,84 @@ function sendAlerts(callRoster, rosterSettings)
   }
 
   callObj.shouldAlert = false;
-}
 
-// NOTE: Ring alerts if needed
-try
-{
-  if (fs.existsSync(dirPath))
+  // NOTE: Ring alerts if needed
+  try
   {
-    if (window.opener.g_platform == "windows")
+    if (fs.existsSync(dirPath))
     {
-      script = "cr-alert.bat";
-    }
-    if (
-      fs.existsSync(dirPath + script) &&
+      if (window.opener.g_platform == "windows")
+      {
+        script = "cr-alert.bat";
+      }
+      if (
+        fs.existsSync(dirPath + script) &&
         g_rosterSettings.realtime == false
-    )
-    {
-      scriptExists = true;
-      scriptIcon.innerHTML =
+      )
+      {
+        scriptExists = true;
+        scriptIcon.innerHTML =
           "<div class='buttonScript' onclick='window.opener.toggleCRScript();'>" +
           (window.opener.g_crScript == 1
             ? "<font color='lightgreen'>Script Enabled</font>"
             : "<font color='yellow'>Script Disabled</font>") +
           "</div>";
-      scriptIcon.style.display = "block";
-    }
-    else
-    {
-      scriptIcon.style.display = "none";
+        scriptIcon.style.display = "block";
+      }
+      else
+      {
+        scriptIcon.style.display = "none";
+      }
     }
   }
-}
-catch (e) {}
+  catch (e) {}
 
-if (shouldAlert > 0)
-{
-  if (window.opener.g_classicAlerts.huntRoster == true)
+  if (shouldAlert > 0)
   {
-    var notify = window.opener.huntRosterNotify.value;
-    if (notify == "0")
+    if (window.opener.g_classicAlerts.huntRoster == true)
     {
-      var media = window.opener.huntRosterNotifyMedia.value;
-      if (media != "none") window.opener.playAlertMediaFile(media);
+      var notify = window.opener.huntRosterNotify.value;
+      if (notify == "0")
+      {
+        var media = window.opener.huntRosterNotifyMedia.value;
+        if (media != "none") window.opener.playAlertMediaFile(media);
+      }
+      else if (notify == "1")
+      {
+        window.opener.speakAlertString(
+          window.opener.huntRosterNotifyWord.value
+        );
+      }
     }
-    else if (notify == "1")
-    {
-      window.opener.speakAlertString(
-        window.opener.huntRosterNotifyWord.value
-      );
-    }
-  }
 
-  if (
-    g_rosterSettings.realtime == false &&
+    if (
+      g_rosterSettings.realtime == false &&
       scriptExists &&
       window.opener.g_crScript == 1
-  )
-  {
-    try
+    )
     {
-      fs.writeFileSync(
-        dirPath + "cr-alert.json",
-        JSON.stringify(g_scriptReport, null, 2)
-      );
+      try
+      {
+        fs.writeFileSync(
+          dirPath + "cr-alert.json",
+          JSON.stringify(g_scriptReport, null, 2)
+        );
 
-      var thisProc = dirPath + script;
-      var cp = require("child_process");
-      var child = cp.spawn(thisProc, [], {
-        detached: true,
-        cwd: dirPath.slice(0, -1),
-        stdio: ["ignore", "ignore", "ignore"]
-      });
-      child.unref();
+        var thisProc = dirPath + script;
+        var cp = require("child_process");
+        var child = cp.spawn(thisProc, [], {
+          detached: true,
+          cwd: dirPath.slice(0, -1),
+          stdio: ["ignore", "ignore", "ignore"]
+        });
+        child.unref();
+      }
+      catch (e)
+      {
+        conosle.log(e);
+      }
+      g_scriptReport = Object();
     }
-    catch (e)
-    {
-      conosle.log(e);
-    }
-    g_scriptReport = Object();
+    else g_scriptReport = Object();
   }
-  else g_scriptReport = Object();
 }

@@ -283,7 +283,7 @@ function myGridCompare(a, b)
 
 function myDxccCompare(a, b)
 {
-  return window.opener.myDxccCompare(a, b);
+  return window.opener.myDxccCompare(a.callObj, b.callObj);
 }
 
 function myTimeCompare(a, b)

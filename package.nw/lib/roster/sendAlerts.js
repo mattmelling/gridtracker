@@ -6,52 +6,57 @@ function sendAlerts(callRoster, rosterSettings)
 
   var shouldAlert = 0;
 
-  for (callObj in callRoster)
-  { if (!callObj.tx) continue }
-
-  // TODO: Get rid of realtime
-  if (g_rosterSettings.realtime == false)
+  for (entry in callRoster)
   {
-    var call = callObj.DEcall;
-    g_scriptReport[call] = Object.assign({}, callObj);
-    g_scriptReport[call].dxccName =
-        window.opener.g_dxccToAltName[callObj.dxcc];
-    g_scriptReport[call].distance = parseInt(
-      callObj.distance *
-          MyCircle.validateRadius(window.opener.distanceUnit.value)
-    );
+    var callObj = callRoster[entry].callObj;
 
-    delete g_scriptReport[call].DEcall;
-    g_scriptReport[call].rect = null;
-    delete g_scriptReport[call].rect;
-    delete g_scriptReport[call].style;
-    delete g_scriptReport[call].wspr;
-    delete g_scriptReport[call].qso;
-    delete g_scriptReport[call].instance;
+    // chrbayer: what does the tx field mean? no alerts are generated (at all) if this is in place...
+    // if (!callObj.tx) continue;
 
-    if (rosterSettings.callMode != "all")
+    // TODO: Get rid of realtime
+    if (g_rosterSettings.realtime == false)
     {
-      g_scriptReport[call].shouldAlert = true;
-      g_scriptReport[call].reason.push(g_rosterSettings.hunting);
+      var call = callObj.DEcall;
+      g_scriptReport[call] = Object.assign({}, callObj);
+      g_scriptReport[call].dxccName =
+          window.opener.g_dxccToAltName[callObj.dxcc];
+      g_scriptReport[call].distance = parseInt(
+        callObj.distance *
+            MyCircle.validateRadius(window.opener.distanceUnit.value)
+      );
+
+      delete g_scriptReport[call].DEcall;
+      g_scriptReport[call].rect = null;
+      delete g_scriptReport[call].rect;
+      delete g_scriptReport[call].style;
+      delete g_scriptReport[call].wspr;
+      delete g_scriptReport[call].qso;
+      delete g_scriptReport[call].instance;
+
+      if (rosterSettings.callMode != "all")
+      {
+        g_scriptReport[call].shouldAlert = true;
+        g_scriptReport[call].reason.push(g_rosterSettings.hunting);
+      }
     }
-  }
 
-  if (
-    callObj.alerted == false &&
-      rosterSettings.callMode == "all" &&
-      callObj.shouldAlert == true
-  )
-  {
-    callObj.alerted = true;
-    shouldAlert++;
-  }
-  else if (callObj.alerted == false && callMode != "all")
-  {
-    callObj.alerted = true;
-    shouldAlert++;
-  }
+    if (
+      callObj.alerted == false &&
+        rosterSettings.callMode == "all" &&
+        callObj.shouldAlert == true
+    )
+    {
+      callObj.alerted = true;
+      shouldAlert++;
+    }
+    else if (callObj.alerted == false && rosterSettings.callMode != "all")
+    {
+      callObj.alerted = true;
+      shouldAlert++;
+    }
 
-  callObj.shouldAlert = false;
+    callObj.shouldAlert = false;
+  }
 
   // NOTE: Ring alerts if needed
   try

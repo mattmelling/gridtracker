@@ -268,13 +268,13 @@ var r_sortFunction = [
 
 function myCallCompare(a, b)
 {
-  return a.DEcall.localeCompare(b.DEcall);
+  return a.callObj.DEcall.localeCompare(b.callObj.DEcall);
 }
 
 function myGridCompare(a, b)
 {
-  var gridA = a.grid ? a.grid : "0";
-  var gridB = b.grid ? b.grid : "0";
+  var gridA = a.callObj.grid ? a.callObj.grid : "0";
+  var gridB = b.callObj.grid ? b.callObj.grid : "0";
 
   if (gridA > gridB) return 1;
   if (gridA < gridB) return -1;
@@ -288,104 +288,104 @@ function myDxccCompare(a, b)
 
 function myTimeCompare(a, b)
 {
-  if (a.age > b.age) return 1;
-  if (a.age < b.age) return -1;
+  if (a.callObj.age > b.callObj.age) return 1;
+  if (a.callObj.age < b.callObj.age) return -1;
   return 0;
 }
 
 function myLifeCompare(a, b)
 {
-  if (a.life > b.life) return 1;
-  if (a.life < b.life) return -1;
+  if (a.callObj.life > b.callObj.life) return 1;
+  if (a.callObj.life < b.callObj.life) return -1;
   return 0;
 }
 
 function mySpotCompare(a, b)
 {
-  if (a.spot.when > b.spot.when) return 1;
-  if (a.spot.when < b.spot.when) return -1;
+  if (a.callObj.spot.when > b.callObj.spot.when) return 1;
+  if (a.callObj.spot.when < b.callObj.spot.when) return -1;
   return 0;
 }
 
 function myDbCompare(a, b)
 {
-  if (a.RSTsent > b.RSTsent) return 1;
-  if (a.RSTsent < b.RSTsent) return -1;
+  if (a.callObj.RSTsent > b.callObj.RSTsent) return 1;
+  if (a.callObj.RSTsent < b.callObj.RSTsent) return -1;
   return 0;
 }
 
 function myFreqCompare(a, b)
 {
-  if (a.delta > b.delta) return 1;
-  if (a.delta < b.delta) return -1;
+  if (a.callObj.delta > b.callObj.delta) return 1;
+  if (a.callObj.delta < b.callObj.delta) return -1;
   return 0;
 }
 
 function myDTCompare(a, b)
 {
-  if (a.dt > b.dt) return 1;
-  if (a.dt < b.dt) return -1;
+  if (a.callObj.dt > b.callObj.dt) return 1;
+  if (a.callObj.dt < b.callObj.dt) return -1;
   return 0;
 }
 
 function myDistanceCompare(a, b)
 {
-  if (a.distance > b.distance) return 1;
-  if (a.distance < b.distance) return -1;
+  if (a.callObj.distance > b.callObj.distance) return 1;
+  if (a.callObj.distance < b.callObj.distance) return -1;
   return 0;
 }
 
 function myHeadingCompare(a, b)
 {
-  if (a.heading > b.heading) return 1;
-  if (a.heading < b.heading) return -1;
+  if (a.callObj.heading > b.callObj.heading) return 1;
+  if (a.callObj.heading < b.callObj.heading) return -1;
   return 0;
 }
 
 function myStateCompare(a, b)
 {
-  if (a.state == null) return 1;
-  if (b.state == null) return -1;
-  if (a.state > b.state) return 1;
-  if (a.state < b.state) return -1;
+  if (a.callObj.state == null) return 1;
+  if (b.callObj.state == null) return -1;
+  if (a.callObj.state > b.callObj.state) return 1;
+  if (a.callObj.state < b.callObj.state) return -1;
   return 0;
 }
 
 function myCQCompare(a, b)
 {
-  return a.DXcall.localeCompare(b.DXcall);
+  return a.callObj.DXcall.localeCompare(b.callObj.DXcall);
 }
 
 function myWPXCompare(a, b)
 {
-  if (a.px == null) return 1;
-  if (b.px == null) return -1;
-  if (a.px > b.px) return 1;
-  if (a.px < b.px) return -1;
+  if (a.callObj.px == null) return 1;
+  if (b.callObj.px == null) return -1;
+  if (a.callObj.px > b.callObj.px) return 1;
+  if (a.callObj.px < b.callObj.px) return -1;
   return 0;
 }
 
 function myCntyCompare(a, b)
 {
-  if (a.cnty == null) return 1;
-  if (b.cnty == null) return -1;
-  if (a.cnty.substr(3) > b.cnty.substr(3)) return 1;
-  if (a.cnty.substr(3) < b.cnty.substr(3)) return -1;
+  if (a.callObj.cnty == null) return 1;
+  if (b.callObj.cnty == null) return -1;
+  if (a.callObj.cnty.substr(3) > b.callObj.cnty.substr(3)) return 1;
+  if (a.callObj.cnty.substr(3) < b.callObj.cnty.substr(3)) return -1;
   return 0;
 }
 
 function myContCompare(a, b)
 {
-  if (a.cont == null) return 1;
-  if (b.cont == null) return -1;
-  if (a.cont > b.cont) return 1;
-  if (a.cont < b.cont) return -1;
+  if (a.callObj.cont == null) return 1;
+  if (b.callObj.cont == null) return -1;
+  if (a.callObj.cont > b.callObj.cont) return 1;
+  if (a.callObj.cont < b.callObj.cont) return -1;
   return 0;
 }
 function myGTCompare(a, b)
 {
-  if (a.style.gt != 0 && b.style.gt == 0) return 1;
-  if (a.style.gt == 0 && b.style.gt != 0) return -1;
+  if (a.callObj.style.gt != 0 && b.callObj.style.gt == 0) return 1;
+  if (a.callObj.style.gt == 0 && b.callObj.style.gt != 0) return -1;
   return 0;
 }
 

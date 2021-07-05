@@ -41,7 +41,7 @@ function processRosterHunting(callRoster, rosterSettings)
     }
 
     // Only render entries with `tx == true`, ignore the rest
-    if (entry.tx == true)
+    if (callObj.dxcc != -1 && entry.tx == true)
     {
       // In layered mode ("Hunting: mixed") the workHashSuffix becomes a more stricter 'live band',
       // while the layered suffix is a broader 'mixed band'

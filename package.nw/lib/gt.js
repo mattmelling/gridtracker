@@ -12975,6 +12975,7 @@ function loadMapSettings()
   focusRigValue.checked = g_mapSettings.focusRig;
   haltAllOnTxValue.checked = g_mapSettings.haltAllOnTx;
   strikesAlert.value = g_mapSettings.strikesAlert;
+  clearRosterOnBandChange.checked = g_appSettings.clearRosterOnBandChange;
 
   setStrikesButton();
 
@@ -14404,6 +14405,11 @@ function loadLookupDetails()
   ValidateText(lookupPassword);
   if (lookupService.value == "CALLOOK") { lookupCredentials.style.display = "none"; }
   else lookupCredentials.style.display = "block";
+}
+
+function clearRosterOnBandChangeValueChanged(what)
+{
+  g_appSettings.clearRosterOnBandChange = clearRosterOnBandChange.checked;
 }
 
 function lookupValueChanged(what)

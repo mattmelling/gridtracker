@@ -21,11 +21,30 @@ function renderRoster(callRoster, rosterSettings)
   // var visibleCallList = callRoster.filter(entry => entry.tx);
 
   var visibleCallList = [];
+  var band =
+  window.opener.g_appSettings.gtBandFilter == "auto"
+    ? window.opener.g_appSettings.myBand
+    : window.opener.g_appSettings.gtBandFilter.length == 0
+      ? ""
+      : window.opener.g_appSettings.gtBandFilter;
   for (entry in callRoster)
   {
+    // entry should populate in general
     if (callRoster[entry].tx)
     {
-      visibleCallList.push(callRoster[entry]);
+      // check setting for call roster clear on band change.
+      // if true and band is current band, populate
+      if (window.opener.g_appSettings.clearRosterOnBandChange)
+      {
+        if (callRoster[entry].callObj.band == band)
+        {
+          visibleCallList.push(callRoster[entry]);
+        }
+      }
+      else if (!window.opener.g_appSettings.clearRosterOnBandChange)
+      {
+        visibleCallList.push(callRoster[entry]);
+      }
     }
   }
 

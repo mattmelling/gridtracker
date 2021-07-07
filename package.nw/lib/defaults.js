@@ -61,6 +61,7 @@ var def_appSettings = {
   lookupPasswordQth: "",
   lookupService: "CALLOOK",
   lookupCallookPreferred: false,
+  clearRosterOnBandChange: false,
   moonPath: 0,
   moonTrack: 0,
   mouseTrack: 0,

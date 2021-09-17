@@ -1,8 +1,8 @@
 {
   "name": "GridTracker",
   "product_string_do_not_use": "gridtracker",
-  "version": "1.21.0620",
-  "betaVersion": "",
+  "version": "1.21.0917",
+  "betaVersion": "LoTW Fetch Fix 1",
   "description": "GridTracker, an amateur radio companion",
   "author": "Stephen Loomis (N0TTL) and GridTracker.org",
   "license": "BSD-3-Clause",

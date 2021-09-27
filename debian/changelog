@@ -1,6 +1,11 @@
-gridtracker (1.21.0926) unstable; urgency=low
+gridtracker (1.21.0928) unstable; urgency=medium
   [Bug Fixes]
-  - This is a test beta to test treating adif records as byte length vs string length
+  - Treat ADIF record values as byte length vs string length (to better handle UTF-8 data).
+  - Remove looking at fetched records for last date for LoTW fetches, Use only headers (More reliable LoTW fetches).
+  [Enhancements]
+  - ARM builds now with NWJS 0.54.2 and 64 bit ARM binaries.
+
+-- Matthew Chambers <nr0q@gridtracker.org> Sun, 28 Sept 2021 00:00:00 -0000
 
  -- Matthew Chambers <nr0q@gridtracker.org> Sund, 26 Sept 2021 19:03:30 -0000
 gridtracker (1.21.0620) unstable; urgency=medium
@@ -9,7 +14,7 @@ gridtracker (1.21.0620) unstable; urgency=medium
   [Enhancements]
   - Automatic pulling down of acknowledgements.json file daily when doing version check (if enabled). 
 
- -- Matthew Chambers <nr0q@gridtracker.org> Sat, 19 June 2021 16:49:00 -0000
+-- Matthew Chambers <nr0q@gridtracker.org> Sat, 19 June 2021 16:49:00 -0000
  
 gridtracker (1.21.0613) unstable; urgency=medium
   [Bug Fixes]
@@ -17,7 +22,7 @@ gridtracker (1.21.0613) unstable; urgency=medium
   [Enhancements]
   - Updated list of contributors
 
- -- Matthew Chambers <nr0q@gridtracker.org> Sun, 13 June 2021 03:04:00 -0000
+-- Matthew Chambers <nr0q@gridtracker.org> Sun, 13 June 2021 03:04:00 -0000
 
 gridtracker (1.21.0530) unstable; urgency=medium
   [Bug Fixes]
@@ -30,7 +35,7 @@ gridtracker (1.21.0530) unstable; urgency=medium
   [Enhancements]
   - Add statistical information to call roster title bar
 
- -- Matthew Chambers <nr0q@gridtracker.org> Sat, 30 May 2021 00:10:00 -0000
+-- Matthew Chambers <nr0q@gridtracker.org> Sat, 30 May 2021 00:10:00 -0000
 
 gridtracker (1.21.0520) unstable; urgency=medium
   [Bug Fixes]
@@ -46,7 +51,7 @@ gridtracker (1.21.0520) unstable; urgency=medium
   - Make settings icon a toggle that both opens and closes the settings pane
   - Grid and IP Address Fields are slightly wider
 
- -- Matthew Chambers <nr0q@gridtracker.org> Mon, 17 May 2021 02:30:00 -0000
+-- Matthew Chambers <nr0q@gridtracker.org> Mon, 17 May 2021 02:30:00 -0000
 
 gridtracker (1.21.0407) unstable; urgency=medium
   [Bug Fixes]
@@ -57,12 +62,12 @@ gridtracker (1.21.0407) unstable; urgency=medium
   - new icon to request ClubLog OQRS QSL
   - add eQSL check in log file processing
 
- -- Matthew Chambers <nr0q@gridtracker.org> Wed, 07 Apr 2021 00:00:00 -0000
+-- Matthew Chambers <nr0q@gridtracker.org> Wed, 07 Apr 2021 00:00:00 -0000
 
 gridtracker (1.21.0327) unstable; urgency=medium
   This is the public release of the 1.21.0324 hotfix release candidates
 
- -- Matthew Chambers <nr0q@gridtracker.org> Fri, 27 Mar 2021 00:38:00 -0000
+-- Matthew Chambers <nr0q@gridtracker.org> Fri, 27 Mar 2021 00:38:00 -0000
 
 gridtracker (1.21.0324) unstable; urgency=medium
   [Christian Bayer]
@@ -72,7 +77,7 @@ gridtracker (1.21.0324) unstable; urgency=medium
   * Fixed #71 bug with loading adif files
   This is the hotfix release of the first public release of 1.21.0322
 
- -- Christian Bayer <chrbayer84@googlemail.com>  Wed, 22 Mar 2021 22:00:00 -0500
+-- Christian Bayer <chrbayer84@googlemail.com>  Wed, 22 Mar 2021 22:00:00 -0500
 
 gridtracker (1.21.0322) unstable; urgency=medium
   [Christian Bayer]
@@ -81,7 +86,7 @@ gridtracker (1.21.0322) unstable; urgency=medium
   * Fixed linux and arm packaging
   This is the public release of 1.21.0307 release candidates
 
- -- Matthew Chambers <nr0q@gridtracker.org>  Mon, 22 Mar 2021 20:30:00 -0500
+-- Matthew Chambers <nr0q@gridtracker.org>  Mon, 22 Mar 2021 20:30:00 -0500
 
 gridtracker (1.21.0307) unstable; urgency=medium
 
@@ -108,6 +113,8 @@ gridtracker (1.21.0307) unstable; urgency=medium
   * New Callook preference setting. if checked, US callsigns will always be
     queried from Callook since it usually has more data than free QRZ lookup
   * fixed CR alert script not being triggered for Awared Tracker hits
+
+-- Matthew Chambers <nr0q@gridtracker.org> Sun, 7 Mar 2021 12:00:00 -0000
 
 gridtracker (1.20.1118) unstable; urgency=low
 
@@ -138,13 +145,13 @@ gridtracker (1.20.1118) unstable; urgency=low
   * Improve debugging/developer experience by enabling context menus when
     using nwjs's SDK.
 
- -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Wed, 04 Nov 2020 15:58:29 -0800
+-- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Wed, 04 Nov 2020 15:58:29 -0800
 
 gridtracker (1.20.0927+repack1) unstable; urgency=high
 
   * Clean up nw execution in .desktop and .sh file.
 
- -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Wed, 07 Oct 2020 09:16:02 -0700
+-- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Wed, 07 Oct 2020 09:16:02 -0700
 
 gridtracker (1.20.0927) unstable; urgency=medium
 
@@ -154,4 +161,4 @@ gridtracker (1.20.0927) unstable; urgency=medium
   [ Paul Traina ]
   * Debian package building support
 
- -- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Mon, 28 Sep 2020 14:06:49 -0700
+-- Paul Traina <216482-pleasantone@users.noreply.gitlab.com>  Mon, 28 Sep 2020 14:06:49 -0700

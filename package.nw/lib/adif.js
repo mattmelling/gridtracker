@@ -1638,7 +1638,7 @@ function sendTcpMessage(msg, length, port, address)
   client.setTimeout(30000);
   client.connect(port, address, function ()
   {
-    client.write(msg);
+    client.write(Buffer.from(msg, "utf-8"));
   });
 
   client.on("close", function () {});
@@ -1647,7 +1647,7 @@ function sendTcpMessage(msg, length, port, address)
 function valueToAdiField(field, value)
 {
   var adi = "<" + field + ":";
-  adi += String(value).length + ">";
+  adi += Buffer.byteLength(String(value)) + ">";
   adi += String(value) + " ";
   return adi;
 }
@@ -1927,7 +1927,7 @@ function finishSendingReport(record, localMode)
 
   for (let key in record)
   {
-    report += "<" + key + ":" + record[key].length + ">" + record[key] + " ";
+    report += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
   }
   report += "<EOR>";
 
@@ -2109,7 +2109,7 @@ function finishSendingReport(record, localMode)
       for (var key in record)
       {
         report +=
-          "<" + key + ":" + record[key].length + ">" + record[key] + " ";
+          "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
       }
       report += "<EOR>";
     }

@@ -1,9 +1,8 @@
-gridtracker (1.21.0917) unstable; urgency=medium
+gridtracker (1.21.0926) unstable; urgency=low
   [Bug Fixes]
-  - Fixes issues with fetching from LoTW
+  - This is a test beta to test treating adif records as byte length vs string length
 
-  -- Matthew Chambers <nr0q@gridtracker.org> Fri, 16 Sept 2021 01:34:49 -0000
-
+ -- Matthew Chambers <nr0q@gridtracker.org> Sund, 26 Sept 2021 19:03:30 -0000
 gridtracker (1.21.0620) unstable; urgency=medium
   [Bug Fixes]
   - Fix pulling down of LoTW logs at start-up with a differential log syncing mechanism that only get's changes since last sync, also cool down timer to prevent rapid reloading of LoTW log. 

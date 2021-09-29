@@ -1,5 +1,8 @@
 # About GridTracker
 
+# Getting GridTracker
+GridTracker can be downloaded for nearly all common platforms (Windows, MacOS, Linux, Raspberry Pi) from the [downloads](https://gridtracker.org/downloads/) page on our website GridTracker.org.
+
 # Developing GridTracker
 
 GridTracker runs using [NWJS](https://nwjs.io/), a tools that wraps both Chrome windows and node processes into

@@ -86,36 +86,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
   {
     let finalMode = "";
 
-    let appLoTW_RXQSO = findAdiField(
-      activeAdifArray[x],
-      "APP_LoTW_RXQSO"
-    );
-
-    if (appLoTW_RXQSO != "")
-    {
-      let dRXQSO = Date.parse(appLoTW_RXQSO);
-      let dLastLOTW_QSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
-      if ((isNaN(dRXQSO) == false) && (isNaN(dLastLOTW_QSO) == false) && (dRXQSO > dLastLOTW_QSO))
-      {
-        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
-      }
-    }
-
-    let appLoTW_RXQSL = findAdiField(
-      activeAdifArray[x],
-      "APP_LoTW_RXQSL"
-    );
-
-    if (appLoTW_RXQSL != "")
-    {
-      let dRXQSL = Date.parse(appLoTW_RXQSL);
-      let dLastLOTW_QSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
-      if ((isNaN(dRXQSL) == false) && (isNaN(dLastLOTW_QSL) == false) && (dRXQSL > dLastLOTW_QSL))
-      {
-        g_adifLogSettings.lastFetch.lotw_qsl = appLoTW_RXQSL;
-      }
-    }
-
     if (activeAdifArray[x].length > 3)
     {
       if (activeAdifLogMode)
@@ -1668,7 +1638,7 @@ function sendTcpMessage(msg, length, port, address)
   client.setTimeout(30000);
   client.connect(port, address, function ()
   {
-    client.write(msg);
+    client.write(Buffer.from(msg, "utf-8"));
   });
 
   client.on("close", function () {});
@@ -1677,7 +1647,7 @@ function sendTcpMessage(msg, length, port, address)
 function valueToAdiField(field, value)
 {
   var adi = "<" + field + ":";
-  adi += String(value).length + ">";
+  adi += Buffer.byteLength(String(value)) + ">";
   adi += String(value) + " ";
   return adi;
 }
@@ -1957,7 +1927,7 @@ function finishSendingReport(record, localMode)
 
   for (let key in record)
   {
-    report += "<" + key + ":" + record[key].length + ">" + record[key] + " ";
+    report += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
   }
   report += "<EOR>";
 
@@ -2139,7 +2109,7 @@ function finishSendingReport(record, localMode)
       for (var key in record)
       {
         report +=
-          "<" + key + ":" + record[key].length + ">" + record[key] + " ";
+          "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
       }
       report += "<EOR>";
     }

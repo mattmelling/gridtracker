@@ -183,6 +183,10 @@ intel-packaging:
 
 arm-packaging:
   stage: package
+  variables:
+    NWJS_VERSION: "v0.54.2"
+    NWJS32_BUILD: "nw54_2021-07-09"
+    NWJS64_BUILD: "nw54-arm64_2021-07-10"
   rules:
     # only do this with a manual tag starting with v or test_
     - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
@@ -212,23 +216,39 @@ arm-packaging:
       apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
       echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
     - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
-    # This is for ARM arch build
+    # This is for ARM 32 arch build
     - |
-      echo -e "\e[0Ksection_start:`date +%s`:arm_build\r\e[0KBuilding ARM packages"
-      wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/nw49_2020-10-26/nw49_2020-10-26.tar.gz
-      tar -xf nw49_2020-10-26.tar.gz
-      tar -xf usr/docker/dist/nwjs-chromium-ffmpeg-branding/nwjs-v0.49.2-linux-arm.tar.gz
-      rm nwjs-v0.49.2-linux-arm/locales/*.info
-      mv nwjs-v0.49.2-linux-arm/nw nwjs-v0.49.2-linux-arm/GridTracker
+      wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/$NWJS32_BUILD/$NWJS32_BUILD.tar.gz
+      tar -xf $NWJS32_BUILD.tar.gz
+      tar -xf usr/docker/dist/nwjs-chromium-ffmpeg-branding/nwjs-$NWJS_VERSION-linux-arm.tar.gz
+      rm nwjs-$NWJS_VERSION-linux-arm/locales/*.info
+      mv nwjs-$NWJS_VERSION-linux-arm/nw nwjs-$NWJS_VERSION-linux-arm/GridTracker
       ls
       version=`node ./version.js`
-      mkdir GridTracker-$version-linux-arm
-      cp -r nwjs-v0.49.2-linux-arm/* GridTracker-$version-linux-arm/
-      cp -r arm/* GridTracker-$version-linux-arm/
-      cp -r package.nw GridTracker-$version-linux-arm/
-      cp LICENSE GridTracker-$version-linux-arm/
-      tar -czf GridTracker-$version-linux-arm.tar.gz GridTracker-$version-linux-arm
-      mv GridTracker-$version-linux-arm.tar.gz artifacts/
+      mkdir GridTracker-$version-linux-arm32
+      cp -r nwjs-$NWJS_VERSION-linux-arm/* GridTracker-$version-linux-arm32/
+      cp -r arm/* GridTracker-$version-linux-arm32/
+      cp -r package.nw GridTracker-$version-linux-arm32/
+      cp LICENSE GridTracker-$version-linux-arm32/
+      tar -czf GridTracker-$version-linux-arm32.tar.gz GridTracker-$version-linux-arm32
+      mv GridTracker-$version-linux-arm32.tar.gz artifacts/
+    # This is for ARM 64 arch build
+    - |
+      wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/$NWJS64_BUILD/$NWJS64_BUILD.tar.gz
+      tar -xf $NWJS64_BUILD.tar.gz
+      tar -xf usr/docker/dist/nwjs-chromium-ffmpeg-branding/nwjs-$NWJS_VERSION-linux-arm64.tar.gz
+      rm nwjs-$NWJS_VERSION-linux-arm64/locales/*.info
+      mv nwjs-$NWJS_VERSION-linux-arm64/nw nwjs-$NWJS_VERSION-linux-arm64/GridTracker
+      ls
+      version=`node ./version.js`
+      mkdir GridTracker-$version-linux-arm64
+      cp -r nwjs-$NWJS_VERSION-linux-arm64/* GridTracker-$version-linux-arm64/
+      cp -r arm/* GridTracker-$version-linux-arm64/
+      cp -r package.nw GridTracker-$version-linux-arm64/
+      cp LICENSE GridTracker-$version-linux-arm64/
+      tar -czf GridTracker-$version-linux-arm64.tar.gz GridTracker-$version-linux-arm64
+      mv GridTracker-$version-linux-arm64.tar.gz artifacts/
+    
     # This section handles making RPMs for Fedora/CentOS/RHEL
     #- |
       #  echo -e "\e[0Ksection_start:`date +%s`:rpm_build\r\e[0KBuilding RPM packages"
@@ -253,6 +273,8 @@ arm-packaging:
 nr0q_upload_testing:
   stage: deploy
   image: alpine
+  variables:
+    GIT_STRATEGY: none
   rules:
     - if: '$CI_COMMIT_TAG =~ /^(test_).*/ && $NR0Q_SERVER_KEY != ""'
   before_script:
@@ -310,6 +332,8 @@ nr0q_upload_release:
 source_release:
   stage: deploy
   image: registry.gitlab.com/gitlab-org/release-cli:latest
+  variables:
+    GIT_STRATEGY: none
   rules:
     - if: '$CI_COMMIT_TAG =~ /^(v).*/'
   release:

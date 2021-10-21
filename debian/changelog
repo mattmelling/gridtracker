@@ -1,10 +1,15 @@
+gridtracker (1.21.1021) untable; urgency=low
+  - Test beta of call roster refactoring
+
+-- Matthew Chambers <nr0q@gridtracker.org>  Thu, 21 Jan 2021 00:39:00 -0000
+
 gridtracker (1.21.0620) unstable; urgency=medium
   [Bug Fixes]
   - Fix pulling down of LoTW logs at start-up with a differential log syncing mechanism that only get's changes since last sync, also cool down timer to prevent rapid reloading of LoTW log. 
   [Enhancements]
   - Automatic pulling down of acknowledgements.json file daily when doing version check (if enabled). 
 
- -- Matthew Chambers <nr0q@gridtracker.org> Sat, 19 June 20201 16:49:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org>  Sat, 19 Jun 20201 16:49:00 -0000
  
 gridtracker (1.21.0613) unstable; urgency=medium
   [Bug Fixes]

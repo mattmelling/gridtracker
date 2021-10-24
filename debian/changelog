@@ -1,3 +1,8 @@
+gridtracker (1.21.1021) unstable; urgency=low
+  Beta test for Call Roster Refactor changes
+
+ -- Matthew Chambers <nr0q@gridtracker.org> Thu, 21 Sep 2021 00:00:00 -0000
+
 gridtracker (1.21.0928) unstable; urgency=medium
   [Bug Fixes]
   - Treat ADIF record values as byte length vs string length (to better handle UTF-8 data).
@@ -5,9 +10,8 @@ gridtracker (1.21.0928) unstable; urgency=medium
   [Enhancements]
   - ARM builds now with NWJS 0.54.2 and 64 bit ARM binaries.
 
--- Matthew Chambers <nr0q@gridtracker.org> Sun, 28 Sept 2021 00:00:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org> Sun, 28 Sept 2021 00:00:00 -0000
 
- -- Matthew Chambers <nr0q@gridtracker.org> Sund, 26 Sept 2021 19:03:30 -0000
 gridtracker (1.21.0620) unstable; urgency=medium
   [Bug Fixes]
   - Fix pulling down of LoTW logs at start-up with a differential log syncing mechanism that only get's changes since last sync, also cool down timer to prevent rapid reloading of LoTW log. 

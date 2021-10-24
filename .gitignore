@@ -10,3 +10,4 @@ debian/tmp
 .DS_Store
 node_modules
 package-lock.json
+settings.json

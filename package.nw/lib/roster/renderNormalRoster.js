@@ -111,7 +111,7 @@ function renderNormalRosterRow(callObj, showBands, showModes)
 
   var worker = "<tbody><tr id='" + thisHash + "'>";
 
-  if (typeof (callObj) !== "undefined")
+  if (typeof (callObj) !== "undefined" || typeof (callObj.style) !== "undefined")
   {
     worker +=
       "<td title='" +

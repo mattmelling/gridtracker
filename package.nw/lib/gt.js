@@ -12143,7 +12143,7 @@ function callsignToDxcc(insign)
     {
       if (parts[end].toUpperCase() == "MM")
       {
-        return -1;
+        return 0;
       }
       parts.pop();
       end = parts.length - 1;

@@ -111,21 +111,18 @@ function renderNormalRosterRow(callObj, showBands, showModes)
 
   var worker = "<tbody><tr id='" + thisHash + "'>";
 
-  if (typeof (callObj) !== "undefined" || typeof (callObj.style) !== "undefined")
-  {
-    worker +=
-      "<td title='" +
-      callObj.awardReason +
-      "' name='Callsign' align=left " +
-      callObj.style.call +
-      " onClick='initiateQso(\"" +
-      thisCall +
-      callObj.band +
-      callObj.mode +
-      "\")'>" +
-      callStr +
-      "</td>";
-  }
+  worker +=
+    "<td title='" +
+    callObj.awardReason +
+    "' name='Callsign' align=left " +
+    callObj.style.call +
+    " onClick='initiateQso(\"" +
+    thisCall +
+    callObj.band +
+    callObj.mode +
+    "\")'>" +
+    callStr +
+    "</td>";
 
   if (showBands)
   {

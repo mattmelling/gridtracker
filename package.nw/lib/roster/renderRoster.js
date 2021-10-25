@@ -52,8 +52,10 @@ function renderRoster(callRoster, rosterSettings)
   var visibleCount = visibleCallList.length;
 
   var huntedCount = 0;
-  if (typeof (obj) !== "undefined" && typeof (obj.callObj) !== "undefined" && typeof (obj.callObj.hunting) !== "undefined")
-  { huntedCount = visibleCallList.filter(obj => Object.keys().length > 0).length }
+  if (typeof (obj) !== "undefined")
+  {
+    huntedCount = visibleCallList.filter(obj => Object.keys().length > 0).length
+  }
   var countParts = [];
 
   if (totalCount != visibleCount)

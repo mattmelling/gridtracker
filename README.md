@@ -31,9 +31,17 @@ automatically, but if you want to run on the command line, you can (after runnin
 
 # Developer Environment Setup
 
+Our builds and development environment are usually managed by [nwjs-builder-phoenix](https://github.com/evshiron/nwjs-builder-phoenix), but it only supports Intel-based architectures.
+
 ## x86-based Windows, Mac, Linux
 
 Run `npm install` and then `npm start`
+
+## Apple Silicon Macs (M1, M1 Pro, M1 Max)
+
+Phoenix does not support ARM-based macs, so we have to explicitly tell it to use Intel-based versions of NWJS.
+
+Run `npm install` and then `npm start-x64`
 
 ## ARM-based Raspberry
 

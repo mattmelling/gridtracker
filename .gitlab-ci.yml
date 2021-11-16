@@ -23,6 +23,10 @@ variables:
 include:
   - template: "Workflows/MergeRequest-Pipelines.gitlab-ci.yml"
   - template: "Security/Dependency-Scanning.gitlab-ci.yml"
+  - template: "Security/Secret-Detection.gitlab-ci.yml"
+  - template: "Security/Secret-Detection.gitlab-ci.yml"
+
+
 
 stages:
   - build

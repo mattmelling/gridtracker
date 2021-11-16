@@ -11167,14 +11167,9 @@ function downloadAcknowledgements()
       "http",
       80
     );
-  }
-}
 
-function checkForNewAcknowledgements()
-{
-  downloadAcknowledgements();
-  setTimeout(checkForNewAcknowledgements, 8640000);
-  readAcksFromDisk();
+    setTimeout(downloadAcknowledgements, 8640000);
+  }
 }
 
 function renderBandActivity()
@@ -12730,8 +12725,7 @@ function updateAcks(buffer)
 {
   try
   {
-    g_acks = JSON.parse(buffer);
-    fs.writeFileSync(g_NWappData + "acknowledgements.json", JSON.stringify(g_acks));
+    g_acknowledgedCalls = JSON.parse(buffer);
   }
   catch (e)
   {

@@ -16,6 +16,7 @@
     "dist-nix": "build --concurrent --tasks linux-x86,linux-x64,mac-x64 package.nw",
     "dist-win": "build --concurrent --tasks win-x86,win-x64 package.nw",
     "distsome": "build --debug --tasks linux-x64,mac-x64 package.nw",
-    "start": "run package.nw"
+    "start": "run package.nw",
+    "start-x64": "run --x64 package.nw"
   }
 }

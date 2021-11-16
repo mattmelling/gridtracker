@@ -22,6 +22,7 @@ variables:
 # 3. committing to the default branch
 include:
   - template: "Workflows/MergeRequest-Pipelines.gitlab-ci.yml"
+  - template: "Security/Dependency-Scanning.gitlab-ci.yml"
 
 stages:
   - build

@@ -1752,7 +1752,7 @@ function viewRoster()
       if (acks[thisCall])
       {
         callStr = `${callStr} <span class='acknowledged'><img class='ackBadge' src='${acks[thisCall].badge}'></span>`
-        callObj.awardReason += ` - ${acks[thisCall].message}`
+        callObj.awardReason += ` - ${thisCall}: ${acks[thisCall].message}`
       }
 
       worker += "<tbody><tr id='" + thisHash + "'>";

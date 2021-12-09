@@ -141,7 +141,7 @@ Number.prototype.toDHM = function ()
 
   days = days ? days + "d " : "";
   hrs = hrs ? hrs + "h " : "";
-  mnts = mnts ? mnts + "m " : "";
+  mnts = mnts || seconds ? mnts + "m " : "";
   val = days + hrs + mnts;
   return val;
 };

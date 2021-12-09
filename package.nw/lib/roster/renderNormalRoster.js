@@ -201,7 +201,8 @@ function renderNormalRosterRow(callObj, showBands, showModes)
       (callObj.cnty
         ? (callObj.qual
             ? ""
-            : "onClick='window.opener.lookupCallsign(\"" +
+            : "title='ZIP Code matches multiple counties, click to do a full lookup' " +
+              "onClick='window.opener.lookupCallsign(\"" +
               thisCall +
               "\",\"" +
               grid +
@@ -210,9 +211,9 @@ function renderNormalRosterRow(callObj, showBands, showModes)
         : "") +
       ">" +
       (callObj.cnty
-        ? (callObj.qual ? "" : "~ ") +
+        ? (callObj.qual ? "" : "¿ ") +
           window.opener.g_cntyToCounty[callObj.cnty] +
-          (callObj.qual ? "" : " ~")
+          (callObj.qual ? "" : " ?")
         : "") +
       "</td>";
   }

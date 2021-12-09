@@ -302,8 +302,20 @@ function myLifeCompare(a, b)
 
 function mySpotCompare(a, b)
 {
+  var cutoff = timeNowSec() - window.opener.g_receptionSettings.viewHistoryTimeSec;
+
+  if (a.spot.when <= cutoff) return -1;
+  if (b.spot.when <= cutoff) return 1;
+
+  var aSNR = Number(a.spot.snr);
+  var bSNR = Number(b.spot.snr);
+
+  if (aSNR > bSNR) return 1;
+  if (aSNR < bSNR) return -1;
+
   if (a.callObj.spot.when > b.callObj.spot.when) return 1;
   if (a.callObj.spot.when < b.callObj.spot.when) return -1;
+
   return 0;
 }
 

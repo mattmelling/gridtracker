@@ -22,6 +22,11 @@ function processRosterFiltering(callRoster, rosterSettings)
       callObj.reset = true;
       continue;
     }
+    if (entry.message.type != 2)
+    {
+      entry.tx = false;
+      continue;
+    }
     if (window.opener.g_instances[callObj.instance].crEnable == false)
     {
       entry.tx = false;

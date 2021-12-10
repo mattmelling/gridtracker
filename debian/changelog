@@ -1,17 +1,7 @@
-gridtracker (1.21.1026) unstable; urgency=low
+gridtracker (1.21.1209) unstable; urgency=low
   Beta test for Call Roster Refactor changes
 
- -- Matthew Chambers <nr0q@gridtracker.org> Thu, 26 Sep 2021 01:35:00 -0000
-
-gridtracker (1.21.1025) unstable; urgency=low
-  Beta test for Call Roster Refactor changes
-
- -- Matthew Chambers <nr0q@gridtracker.org> Thu, 25 Sep 2021 01:35:00 -0000
-
-gridtracker (1.21.1021) unstable; urgency=low
-  Beta test for Call Roster Refactor changes
-
- -- Matthew Chambers <nr0q@gridtracker.org> Thu, 21 Sep 2021 00:00:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org>  Thu, 9 Dec 2021 02:58:00 -0000
 
 gridtracker (1.21.0928) unstable; urgency=medium
   [Bug Fixes]
@@ -20,7 +10,7 @@ gridtracker (1.21.0928) unstable; urgency=medium
   [Enhancements]
   - ARM builds now with NWJS 0.54.2 and 64 bit ARM binaries.
 
- -- Matthew Chambers <nr0q@gridtracker.org> Sun, 28 Sept 2021 00:00:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org>  Sun, 28 Sept 2021 00:00:00 -0000
 
 gridtracker (1.21.0620) unstable; urgency=medium
   [Bug Fixes]

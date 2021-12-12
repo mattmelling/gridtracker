@@ -31,7 +31,7 @@
     ],
     "mac": {
       "icon": "gridview.icns",
-      "copyright": "Copyright (c) 2021 GridTracker.org",
+      "copyright": "Copyright (c) 2022 GridTracker.org",
       "plistStrings": {
         "CFBundleIdentifier": "org.gridtracker.gridtracker",
         "CFBundleDocumentTypes": []
@@ -39,7 +39,7 @@
     },
     "win": {
       "icon": "gridview.ico",
-      "copyright": "Copyright (c) 2021 GridTracker.org"
+      "copyright": "Copyright (c) 2022 GridTracker.org"
     },
     "nsis": {
       "installDirectory": "$PROGRAMFILES\\${_APPNAME}",

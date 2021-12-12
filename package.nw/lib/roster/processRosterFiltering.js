@@ -2,12 +2,12 @@ function processRosterFiltering(callRoster, rosterSettings)
 {
   // First loop, exclude calls, mostly based on "Exceptions" settings
   // this whole section is full of individual if's that could be broken out
-  for (var callHash in callRoster)
+  for (let callHash in callRoster)
   {
-    var entry = callRoster[callHash];
-    var callObj = entry.callObj;
+    let entry = callRoster[callHash];
+    let callObj = entry.callObj;
 
-    var call = entry.DEcall;
+    let call = entry.DEcall;
 
     entry.tx = true;
     callObj.shouldAlert = false;
@@ -144,7 +144,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
       if (g_rosterSettings.maxLoTW < 27)
       {
-        var months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
+        let months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
         if (months > g_rosterSettings.maxLoTW)
         {
           entry.tx = false;
@@ -179,7 +179,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         continue;
       }
 
-      var hash = hashMaker(call, callObj, g_rosterSettings.reference);
+      let hash = hashMaker(call, callObj, g_rosterSettings.reference);
       if (rosterSettings.callMode == "worked" && hash in g_worked.call)
       {
         entry.tx = false;
@@ -193,7 +193,7 @@ function processRosterFiltering(callRoster, rosterSettings)
 
       if (g_rosterSettings.hunting == "grid")
       {
-        var hash = hashMaker(callObj.grid.substr(0, 4),
+        let hash = hashMaker(callObj.grid.substr(0, 4),
           callObj, g_rosterSettings.reference);
         if (huntIndex && hash in huntIndex.grid)
         {
@@ -209,7 +209,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
       if (g_rosterSettings.hunting == "dxcc")
       {
-        var hash = hashMaker(String(callObj.dxcc),
+        let hash = hashMaker(String(callObj.dxcc),
           callObj, g_rosterSettings.reference);
 
         if (huntIndex && (hash in huntIndex.dxcc))
@@ -242,7 +242,7 @@ function processRosterFiltering(callRoster, rosterSettings)
           entry.tx = false;
           continue;
         }
-        var hash = hashMaker(String(callObj.px),
+        let hash = hashMaker(String(callObj.px),
           callObj, g_rosterSettings.reference);
 
         if (huntIndex && (hash in huntIndex.px))
@@ -256,16 +256,16 @@ function processRosterFiltering(callRoster, rosterSettings)
 
       if (g_rosterSettings.hunting == "cq")
       {
-        var huntTotal = callObj.cqza.length;
+        let huntTotal = callObj.cqza.length;
         if (huntTotal == 0 || !huntIndex)
         {
           entry.tx = false;
           continue;
         }
-        var huntFound = 0;
+        let huntFound = 0;
         for (index in callObj.cqza)
         {
-          var hash = hashMaker(callObj.cqza[index], callObj, g_rosterSettings.reference);
+          let hash = hashMaker(callObj.cqza[index], callObj, g_rosterSettings.reference);
 
           if (hash in huntIndex.cqz) huntFound++;
         }
@@ -279,16 +279,16 @@ function processRosterFiltering(callRoster, rosterSettings)
 
       if (g_rosterSettings.hunting == "itu")
       {
-        var huntTotal = callObj.ituza.length;
+        let huntTotal = callObj.ituza.length;
         if (huntTotal == 0 || !huntIndex)
         {
           entry.tx = false;
           continue;
         }
-        var huntFound = 0;
+        let huntFound = 0;
         for (index in callObj.ituza)
         {
-          var hash = hashMaker(callObj.ituza[index], callObj, g_rosterSettings.reference);
+          let hash = hashMaker(callObj.ituza[index], callObj, g_rosterSettings.reference);
 
           if (hash in huntIndex.ituz) huntFound++;
         }
@@ -308,13 +308,13 @@ function processRosterFiltering(callRoster, rosterSettings)
 
       if (g_rosterSettings.hunting == "usstates" && window.opener.g_callsignLookups.ulsUseEnable == true)
       {
-        var state = callObj.state;
-        var finalDxcc = callObj.dxcc;
+        let state = callObj.state;
+        let finalDxcc = callObj.dxcc;
         if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
         {
           if (state in window.opener.g_StateData)
           {
-            var hash = hashMaker(state, callObj, g_rosterSettings.reference);
+            let hash = hashMaker(state, callObj, g_rosterSettings.reference);
 
             if (huntIndex && hash in huntIndex.state)
             {
@@ -345,17 +345,17 @@ function processRosterFiltering(callRoster, rosterSettings)
     }
     if (rosterSettings.isAwardTracker)
     {
-      var tx = false;
-      var baseHash = hashMaker("", callObj, g_rosterSettings.reference);
+      let tx = false;
+      let baseHash = hashMaker("", callObj, g_rosterSettings.reference);
 
-      for (var award in g_awardTracker)
+      for (let award in g_awardTracker)
       {
         if (g_awardTracker[award].enable)
         {
           tx = testAward(award, callObj, baseHash);
           if (tx)
           {
-            var x = g_awardTracker[award];
+            let x = g_awardTracker[award];
 
             // TODO: Move award reason out of exclusions code?
             callObj.awardReason =

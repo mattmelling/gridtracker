@@ -1,6 +1,6 @@
 function prepareRosterSettings()
 {
-  var rosterSettings = {
+  let rosterSettings = {
     bands: {},
     modes: {},
     callMode: g_rosterSettings.callsign,

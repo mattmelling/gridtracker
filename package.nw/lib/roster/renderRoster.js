@@ -18,10 +18,10 @@ function renderRoster(callRoster, rosterSettings)
 
   // Show the roster count in the window title
 
-  // var visibleCallList = callRoster.filter(entry => entry.tx);
+  // let visibleCallList = callRoster.filter(entry => entry.tx);
 
-  var visibleCallList = [];
-  var band =
+  let visibleCallList = [];
+  let band =
   window.opener.g_appSettings.gtBandFilter == "auto"
     ? window.opener.g_appSettings.myBand
     : window.opener.g_appSettings.gtBandFilter.length == 0
@@ -48,15 +48,15 @@ function renderRoster(callRoster, rosterSettings)
     }
   }
 
-  var totalCount = Object.keys(callRoster).length;
-  var visibleCount = visibleCallList.length;
+  let totalCount = Object.keys(callRoster).length;
+  let visibleCount = visibleCallList.length;
 
-  var huntedCount = 0;
+  let huntedCount = 0;
   if (typeof (obj) !== "undefined")
   {
     huntedCount = visibleCallList.filter(obj => Object.keys().length > 0).length
   }
-  var countParts = [];
+  let countParts = [];
 
   if (totalCount != visibleCount)
   {
@@ -86,21 +86,21 @@ function renderRoster(callRoster, rosterSettings)
     visibleCallList.sort(r_sortFunction[6]).reverse();
   }
 
-  var showBands = (Object.keys(rosterSettings.bands).length > 1) || g_rosterSettings.columns.Band;
-  var showModes = (Object.keys(rosterSettings.modes).length > 1) || g_rosterSettings.columns.Mode;
+  let showBands = (Object.keys(rosterSettings.bands).length > 1) || g_rosterSettings.columns.Band;
+  let showModes = (Object.keys(rosterSettings.modes).length > 1) || g_rosterSettings.columns.Mode;
 
-  var worker = g_rosterSettings.compact ? renderCompactRosterHeaders() : renderNormalRosterHeaders(showBands, showModes)
+  let worker = g_rosterSettings.compact ? renderCompactRosterHeaders() : renderNormalRosterHeaders(showBands, showModes)
 
   // Third loop: render all rows
-  for (var x in visibleCallList)
+  for (let x in visibleCallList)
   {
-    var callObj = visibleCallList[x].callObj;
+    let callObj = visibleCallList[x].callObj;
 
     // TODO: This is filtering
     if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
     { continue; }
 
-    var thisCall = callObj.DEcall;
+    let thisCall = callObj.DEcall;
 
     if (thisCall.match("^[A-Z][0-9][A-Z](/w+)?$"))
     { callObj.style.call = "class='oneByOne'"; }

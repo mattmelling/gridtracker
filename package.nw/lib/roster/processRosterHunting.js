@@ -1,26 +1,26 @@
 function processRosterHunting(callRoster, rosterSettings)
 {
-  // these vars, do they rely on anything between the top and here?
-  // if not could they be put in the var list at the beginning?
-  var hasGtPin = false;
+  // these lets, do they rely on anything between the top and here?
+  // if not could they be put in the let list at the beginning?
+  let hasGtPin = false;
 
-  var inversionAlpha = "DD";
-  var row = "#000000";
-  var bold = "#000000;font-weight: bold;";
-  var unconf = "background-clip:padding-box;box-shadow: 0 0 7px 3px inset ";
-  var layeredAlpha = "77";
-  var layeredInversionAlpha = "66";
-  var layeredUnconf = "background-clip:padding-box;box-shadow: 0 0 4px 2px inset ";
-  var layeredUnconfAlpha = "AA";
+  let inversionAlpha = "DD";
+  let row = "#000000";
+  let bold = "#000000;font-weight: bold;";
+  let unconf = "background-clip:padding-box;box-shadow: 0 0 7px 3px inset ";
+  let layeredAlpha = "77";
+  let layeredInversionAlpha = "66";
+  let layeredUnconf = "background-clip:padding-box;box-shadow: 0 0 4px 2px inset ";
+  let layeredUnconfAlpha = "AA";
 
   // TODO: Hunting results might be used to filter, based on the "Callsigns: Only Wanted" option,
   //       so maybe we can move this loop first, and add a check to the filtering loop?
 
   // Second loop, hunting and highlighting
-  for (var callHash in callRoster)
+  for (let callHash in callRoster)
   {
-    var entry = callRoster[callHash];
-    var callObj = entry.callObj;
+    let entry = callRoster[callHash];
+    let callObj = entry.callObj;
 
     // Special case check for called station
     if (callObj.qrz == true && entry.tx == false)
@@ -29,7 +29,7 @@ function processRosterHunting(callRoster, rosterSettings)
       if (window.opener.g_instances[callObj.instance].crEnable == true)
       {
         // Calling us, but we wouldn't normally display
-        // If they are not ignored or we're in a QSO with them, var it through
+        // If they are not ignored or we're in a QSO with them, let it through
 
         // TODO: This is here because it's after the filtering stage
         if ((!(entry.DEcall in g_blockedCalls) && !(callObj.dxcc in g_blockedDxcc)) ||
@@ -45,7 +45,7 @@ function processRosterHunting(callRoster, rosterSettings)
     {
       // In layered mode ("Hunting: mixed") the workHashSuffix becomes a more stricter 'live band',
       // while the layered suffix is a broader 'mixed band'
-      var workHashSuffix, layeredHashSuffix;
+      let workHashSuffix, layeredHashSuffix;
       if (rosterSettings.layeredMode)
       {
         workHashSuffix = hashMaker("", callObj, rosterSettings.layeredMode);
@@ -56,42 +56,42 @@ function processRosterHunting(callRoster, rosterSettings)
         workHashSuffix = hashMaker("", callObj, g_rosterSettings.reference);
         layeredHashSuffix = false
       }
-      var workHash = workHashSuffix; // TODO: Remove after replacing all occurrences with Suffix
+      let workHash = workHashSuffix; // TODO: Remove after replacing all occurrences with Suffix
 
-      var callsign = entry.DEcall;
+      let callsign = entry.DEcall;
 
       callObj.hunting = {}
       callObj.callFlags = {}
 
-      var colorObject = Object();
+      let colorObject = Object();
 
-      var callPointer = callObj.CQ == true ? "cursor:pointer" : "";
+      let callPointer = callObj.CQ == true ? "cursor:pointer" : "";
 
-      var didWork = false;
+      let didWork = false;
 
-      var call = "#FFFF00";
-      var grid = "#00FFFF";
-      var calling = "#90EE90";
-      var dxcc = "#FFA500";
-      var state = "#90EE90";
-      var cnty = "#CCDD00";
-      var cont = "#00DDDD";
-      var cqz = "#DDDDDD";
-      var ituz = "#DDDDDD";
-      var wpx = "#FFFF00";
+      let call = "#FFFF00";
+      let grid = "#00FFFF";
+      let calling = "#90EE90";
+      let dxcc = "#FFA500";
+      let state = "#90EE90";
+      let cnty = "#CCDD00";
+      let cont = "#00DDDD";
+      let cqz = "#DDDDDD";
+      let ituz = "#DDDDDD";
+      let wpx = "#FFFF00";
 
       hasGtPin = false;
-      var shouldAlert = false;
-      var callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
-      var callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, cqzConf, ituzConf, wpxConf;
+      let shouldAlert = false;
+      let callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
+      let callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, cqzConf, ituzConf, wpxConf;
 
       callBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
 
       callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = cqzConf = ituzConf = wpxConf =
         "";
 
-      var hash = callsign + workHashSuffix;
-      var layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
+      let hash = callsign + workHashSuffix;
+      let layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
 
       // Call worked in current logbook settings, regardless of hunting mode
       if (hash in g_worked.call)
@@ -141,8 +141,8 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for callsigns
         if (huntCallsign.checked == true)
         {
-          var hash = callsign + workHashSuffix;
-          var layeredHash = rosterSettings.layeredMode && (callsign + layeredHashSuffix)
+          let hash = callsign + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (callsign + layeredHashSuffix)
 
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.call))
           {
@@ -217,8 +217,8 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for grids
         if (huntGrid.checked == true && callObj.grid.length > 1)
         {
-          var hash = callObj.grid.substr(0, 4) + workHashSuffix;
-          var layeredHash = rosterSettings.layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
+          let hash = callObj.grid.substr(0, 4) + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
 
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.grid))
           {
@@ -267,8 +267,8 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for DXCC
         if (huntDXCC.checked == true)
         {
-          var hash = String(callObj.dxcc) + workHashSuffix;
-          var layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
+          let hash = String(callObj.dxcc) + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
 
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.dxcc))
           {
@@ -317,14 +317,14 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for US States
         if (huntState.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
-          var stateSearch = callObj.state;
-          var finalDxcc = callObj.dxcc;
+          let stateSearch = callObj.state;
+          let finalDxcc = callObj.dxcc;
           if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
           {
             if (stateSearch in window.opener.g_StateData)
             {
-              var hash = stateSearch + workHashSuffix;
-              var layeredHash = rosterSettings.layeredMode && (stateSearch + layeredHashSuffix)
+              let hash = stateSearch + workHashSuffix;
+              let layeredHash = rosterSettings.layeredMode && (stateSearch + layeredHashSuffix)
 
               if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.state))
               {
@@ -375,24 +375,24 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for US Counties
         if (huntCounty.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
-          var finalDxcc = callObj.dxcc;
+          let finalDxcc = callObj.dxcc;
           if (
             callObj.cnty &&
             (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6 || finalDxcc == 202) &&
             callObj.cnty.length > 0
           )
           {
-            var hash = callObj.cnty + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
+            let hash = callObj.cnty + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
 
             if ((rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.cnty)) || callObj.qual == false)
             {
               if (callObj.qual == false)
               {
-                var counties = window.opener.g_zipToCounty[callObj.zipcode];
-                var foundHit = false;
-                for (var cnt in counties)
+                let counties = window.opener.g_zipToCounty[callObj.zipcode];
+                let foundHit = false;
+                for (let cnt in counties)
                 {
-                  var hh = counties[cnt] + workHash;
+                  let hh = counties[cnt] + workHash;
                   callObj.cnty = counties[cnt];
                   if (rosterSettings.huntIndex && !(hh in rosterSettings.huntIndex.cnty))
                   {
@@ -430,13 +430,13 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for CQ Zones
         if (huntCQz.checked == true)
         {
-          var huntTotal = callObj.cqza.length;
-          var huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+          let huntTotal = callObj.cqza.length;
+          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
 
           for (index in callObj.cqza)
           {
-            var hash = callObj.cqza[index] + workHashSuffix;
-            var layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix)
+            let hash = callObj.cqza[index] + workHashSuffix;
+            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix)
 
             if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.cqz) huntFound++;
             if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cqz) layeredFound++;
@@ -489,13 +489,13 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for ITU Zones
         if (huntITUz.checked == true)
         {
-          var huntTotal = callObj.ituza.length;
-          var huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+          let huntTotal = callObj.ituza.length;
+          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
 
           for (index in callObj.ituza)
           {
-            var hash = callObj.ituza[index] + workHashSuffix;
-            var layeredHash = rosterSettings.layeredMode && (callObj.ituza[index] + layeredHashSuffix)
+            let hash = callObj.ituza[index] + workHashSuffix;
+            let layeredHash = rosterSettings.layeredMode && (callObj.ituza[index] + layeredHashSuffix)
 
             if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.ituz) huntFound++;
             if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.ituz) layeredFound++;
@@ -548,8 +548,8 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for WPX (Prefixes)
         if (huntPX.checked == true && callObj.px)
         {
-          var hash = String(callObj.px) + workHashSuffix;
-          var layeredHash = rosterSettings.layeredMode && (String(callObj.px) + layeredHashSuffix)
+          let hash = String(callObj.px) + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (String(callObj.px) + layeredHashSuffix)
 
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.px))
           {
@@ -598,8 +598,8 @@ function processRosterHunting(callRoster, rosterSettings)
         // Hunting for Continents
         if (huntCont.checked == true && callObj.cont)
         {
-          var hash = String(callObj.cont) + workHashSuffix;
-          var layeredHash = rosterSettings.layeredMode && (String(callObj.cont) + layeredHashSuffix)
+          let hash = String(callObj.cont) + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (String(callObj.cont) + layeredHashSuffix)
 
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.cont))
           {

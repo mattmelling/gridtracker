@@ -1,6 +1,6 @@
 function renderNormalRosterHeaders(showBands, showModes)
 {
-  var worker = ""
+  let worker = ""
   worker = "<table id='callTable' class='rosterTable' align=left>";
 
   worker += "<thead><th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
@@ -87,29 +87,29 @@ function renderNormalRosterHeaders(showBands, showModes)
 
 function renderNormalRosterRow(callObj, showBands, showModes)
 {
-  var thisCall = callObj.DEcall;
-  var acks = window.opener.g_acknowledgedCalls;
-  var grid = callObj.grid.length > 1 ? callObj.grid.substr(0, 4) : "-";
+  let thisCall = callObj.DEcall;
+  let acks = window.opener.g_acknowledgedCalls;
+  let grid = callObj.grid.length > 1 ? callObj.grid.substr(0, 4) : "-";
 
-  var geo = window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]];
-  var cqzone = grid in window.opener.g_gridToCQZone ? window.opener.g_gridToCQZone[grid].join(", ") : "-";
-  var ituzone = grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-";
+  let geo = window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]];
+  let cqzone = grid in window.opener.g_gridToCQZone ? window.opener.g_gridToCQZone[grid].join(", ") : "-";
+  let ituzone = grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-";
 
-  var spotString = "";
+  let spotString = "";
   if (g_rosterSettings.columns.Spot && callObj.qrz == false)
   {
     spotString = getSpotString(callObj);
   }
 
-  var thisHash = thisCall + callObj.band + callObj.mode;
-  var callStr = thisCall.formatCallsign()
+  let thisHash = thisCall + callObj.band + callObj.mode;
+  let callStr = thisCall.formatCallsign()
   if (acks[thisCall])
   {
     callStr = `${callStr} <span class='acknowledged'><img class='ackBadge' src='${acks[thisCall].badge}'></span>`
     callObj.awardReason += ` - ${acks[thisCall].message}`
   }
 
-  var worker = "<tbody><tr id='" + thisHash + "'>";
+  let worker = "<tbody><tr id='" + thisHash + "'>";
 
   worker +=
     "<td title='" +
@@ -135,7 +135,7 @@ function renderNormalRosterRow(callObj, showBands, showModes)
   }
   if (showModes)
   {
-    var color = "888888";
+    let color = "888888";
     if (callObj.mode in g_modeColors)
     { color = g_modeColors[callObj.mode]; }
     worker +=
@@ -152,7 +152,7 @@ function renderNormalRosterRow(callObj, showBands, showModes)
     "</td>";
   if (g_rosterSettings.columns.Calling)
   {
-    var lookString = callObj.CQ ? "name='CQ'" : "name='Calling'";
+    let lookString = callObj.CQ ? "name='CQ'" : "name='Calling'";
     worker +=
       "<td " +
       callObj.style.calling +
@@ -294,7 +294,7 @@ function renderNormalRosterRow(callObj, showBands, showModes)
     {
       if (g_rosterSettings.maxLoTW < 27)
       {
-        var months = (g_day - window.opener.g_lotwCallsigns[thisCall]) / 30;
+        let months = (g_day - window.opener.g_lotwCallsigns[thisCall]) / 30;
         if (months > g_rosterSettings.maxLoTW)
         {
           worker +=

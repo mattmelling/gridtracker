@@ -192,7 +192,7 @@ function storeAwardTracker()
 
 function loadSettings()
 {
-  var readSettings = {};
+  let readSettings = {};
   if (typeof localStorage.rosterSettings != "undefined")
   {
     readSettings = JSON.parse(localStorage.rosterSettings);
@@ -236,8 +236,8 @@ function lockNewWindows()
 {
   if (typeof nw != "undefined")
   {
-    var gui = require("nw.gui");
-    var win = gui.Window.get();
+    let gui = require("nw.gui");
+    let win = gui.Window.get();
     win.on("new-win-policy", function (frame, url, policy)
     {
       gui.Shell.openExternal(url);
@@ -273,8 +273,8 @@ function myCallCompare(a, b)
 
 function myGridCompare(a, b)
 {
-  var gridA = a.callObj.grid ? a.callObj.grid : "0";
-  var gridB = b.callObj.grid ? b.callObj.grid : "0";
+  let gridA = a.callObj.grid ? a.callObj.grid : "0";
+  let gridB = b.callObj.grid ? b.callObj.grid : "0";
 
   if (gridA > gridB) return 1;
   if (gridA < gridB) return -1;
@@ -302,13 +302,13 @@ function myLifeCompare(a, b)
 
 function mySpotCompare(a, b)
 {
-  var cutoff = timeNowSec() - window.opener.g_receptionSettings.viewHistoryTimeSec;
+  let cutoff = timeNowSec() - window.opener.g_receptionSettings.viewHistoryTimeSec;
 
   if (a.spot.when <= cutoff) return -1;
   if (b.spot.when <= cutoff) return 1;
 
-  var aSNR = Number(a.spot.snr);
-  var bSNR = Number(b.spot.snr);
+  let aSNR = Number(a.spot.snr);
+  let bSNR = Number(b.spot.snr);
 
   if (aSNR > bSNR) return 1;
   if (aSNR < bSNR) return -1;
@@ -445,7 +445,7 @@ function processRoster(roster)
 
 function viewRoster()
 {
-  var rosterSettings = prepareRosterSettings();
+  let rosterSettings = prepareRosterSettings();
   processRosterFiltering(callRoster, rosterSettings);
   processRosterHunting(callRoster, rosterSettings);
   renderRoster(callRoster, rosterSettings);
@@ -454,33 +454,33 @@ function viewRoster()
 
 function realtimeRoster()
 {
-  var now = timeNowSec();
+  let now = timeNowSec();
   g_day = now / 86400;
 
   if (g_rosterSettings.realtime == false) return;
 
-  var timeCols = document.getElementsByClassName("timeCol");
-  for (var x in timeCols)
+  let timeCols = document.getElementsByClassName("timeCol");
+  for (let x in timeCols)
   {
     if ((typeof timeCols[x].id != "undefined") && (typeof callRoster[timeCols[x].id.substr(2)] != "undefined"))
     {
-      var when = now - callRoster[timeCols[x].id.substr(2)].callObj.age;
+      let when = now - callRoster[timeCols[x].id.substr(2)].callObj.age;
       timeCols[x].innerHTML = when.toDHMS();
     }
   }
-  var lifeCols = document.getElementsByClassName("lifeCol");
-  for (var x in lifeCols)
+  let lifeCols = document.getElementsByClassName("lifeCol");
+  for (let x in lifeCols)
   {
     if ((typeof lifeCols[x].id != "undefined") && (typeof callRoster[lifeCols[x].id.substr(2)] != "undefined"))
     {
-      var when = now - callRoster[lifeCols[x].id.substr(2)].callObj.life;
+      let when = now - callRoster[lifeCols[x].id.substr(2)].callObj.life;
       lifeCols[x].innerHTML = when.toDHMS();
     }
   }
   if (g_rosterSettings.columns.Spot)
   {
-    var spotCols = document.getElementsByClassName("spotCol");
-    for (var x in spotCols)
+    let spotCols = document.getElementsByClassName("spotCol");
+    for (let x in spotCols)
     {
       if ((typeof spotCols[x].id != "undefined") && (typeof callRoster[spotCols[x].id.substr(2)] != "undefined"))
       {
@@ -499,7 +499,7 @@ function realtimeRoster()
 
 function getSpotString(callObj)
 {
-  var result = "";
+  let result = "";
   if (callObj.spot && callObj.spot.when > 0)
   {
     when = timeNowSec() - callObj.spot.when;
@@ -530,22 +530,22 @@ function callLookup(thisHash, grid)
 
 function callingLookup(thisHash, grid)
 {
-  var thisCall = callRoster[thisHash].DXcall;
+  let thisCall = callRoster[thisHash].DXcall;
   window.opener.startLookup(thisCall, grid);
 }
 
 function callGenMessage(thisHash, grid)
 {
-  var thisCall = callRoster[thisHash].DEcall;
-  var instance = callRoster[thisHash].callObj.instance;
+  let thisCall = callRoster[thisHash].DEcall;
+  let instance = callRoster[thisHash].callObj.instance;
 
   window.opener.startGenMessages(thisCall, grid, instance);
 }
 
 function callingGenMessage(thisHash, grid)
 {
-  var thisCall = callRoster[thisHash].DXcall;
-  var instance = callRoster[thisHash].callObj.instance;
+  let thisCall = callRoster[thisHash].DXcall;
+  let instance = callRoster[thisHash].callObj.instance;
 
   window.opener.startGenMessages(thisCall, grid, instance);
 }
@@ -565,17 +565,17 @@ function updateInstances()
 {
   if (window.opener.g_instancesIndex.length > 1)
   {
-    var instances = window.opener.g_instances;
+    let instances = window.opener.g_instances;
 
-    var worker = "";
+    let worker = "";
 
-    var keys = Object.keys(instances).sort();
-    for (var key in keys)
+    let keys = Object.keys(instances).sort();
+    for (let key in keys)
     {
-      var inst = keys[key];
-      var sp = inst.split(" - ");
-      var shortInst = sp[sp.length - 1].substring(0, 18);
-      var color = "blue";
+      let inst = keys[key];
+      let sp = inst.split(" - ");
+      let shortInst = sp[sp.length - 1].substring(0, 18);
+      let color = "blue";
 
       if (instances[inst].open == false)
       {
@@ -635,7 +635,7 @@ function toTitleCase(str)
 function newOption(value, text)
 {
   if (typeof text == "undefined") text = value;
-  var option = document.createElement("option");
+  let option = document.createElement("option");
   option.value = value;
   option.text = text;
   return option;
@@ -650,10 +650,10 @@ function createSelectOptions(
   checkSponsor = null
 )
 {
-  var selector = document.getElementById(selectElementString);
+  let selector = document.getElementById(selectElementString);
   selector.innerHTML = "";
 
-  var option = document.createElement("option");
+  let option = document.createElement("option");
   option.value = defaultValue;
   option.text = selectNameDefault;
   option.selected = true;
@@ -661,15 +661,15 @@ function createSelectOptions(
   option.style.display = "none";
   selector.appendChild(option);
 
-  var obj = null;
+  let obj = null;
   if (forObject)
   {
     obj = Object.keys(forObject).sort();
   }
-  for (var k in obj)
+  for (let k in obj)
   {
-    var opt = obj[k];
-    var option = document.createElement("option");
+    let opt = obj[k];
+    let option = document.createElement("option");
     option.value = opt;
     option.text = altName ? forObject[opt][altName] : opt;
     if (checkSponsor && opt + "-" + checkSponsor in g_awardTracker)
@@ -694,13 +694,13 @@ function awardSponsorChanged()
 
 function awardNameChanged()
 {
-  var awardToAdd = newAwardTrackerObject(
+  let awardToAdd = newAwardTrackerObject(
     awardSponsor.value,
     awardName.value,
     true
   );
 
-  var hash = awardToAdd.name + "-" + awardToAdd.sponsor;
+  let hash = awardToAdd.name + "-" + awardToAdd.sponsor;
   if (!(hash in g_awardTracker))
   {
     g_awardTracker[hash] = awardToAdd;
@@ -721,7 +721,7 @@ function awardNameChanged()
 
 function updateAwardList(target = null)
 {
-  var worker =
+  let worker =
     "<table id=\"awardTable\" class=\"awardTableCSS\" style=\"padding:0;margin:0;margin-top:-5px;\" >";
   worker += "<tr style='font-size:smaller'>";
   worker += "<td align='left'>";
@@ -742,31 +742,31 @@ function updateAwardList(target = null)
 
   AwardWantedList.innerHTML = worker;
 
-  var keys = Object.keys(g_awardTracker).sort();
+  let keys = Object.keys(g_awardTracker).sort();
 
-  for (var key in keys)
+  for (let key in keys)
   {
-    var award = g_awardTracker[keys[key]];
-    var rule = g_awards[award.sponsor].awards[award.name].rule;
-    var row = awardTable.insertRow();
+    let award = g_awardTracker[keys[key]];
+    let rule = g_awards[award.sponsor].awards[award.name].rule;
+    let row = awardTable.insertRow();
     row.id = keys[key];
-    var baseAward = false;
-    var baseCount = 0;
+    let baseAward = false;
+    let baseCount = 0;
 
-    var endorseCount = 0;
-    var endorseTotal = 0;
-    var allEndorse = false;
+    let endorseCount = 0;
+    let endorseTotal = 0;
+    let allEndorse = false;
 
-    var tooltip =
+    let tooltip =
       g_awards[award.sponsor].awards[award.name].tooltip +
       " (" +
       g_awards[award.sponsor].sponsor +
       ")\n";
     tooltip += toTitleCase(award.test.qsl_req) + " QSO\n";
-    for (var mode in award.comp.counts)
+    for (let mode in award.comp.counts)
     {
       tooltip += mode + "\n";
-      for (var count in award.comp.counts[mode])
+      for (let count in award.comp.counts[mode])
       {
         endorseTotal++;
         if (award.comp.counts[mode][count].per == 100)
@@ -785,10 +785,10 @@ function updateAwardList(target = null)
           " (" +
           award.comp.counts[mode][count].per +
           "%)\n";
-        var wrk = "";
+        let wrk = "";
         if (Object.keys(award.comp.endorse).length > 0)
         {
-          for (var band in award.comp.endorse[mode])
+          for (let band in award.comp.endorse[mode])
           {
             endorseTotal++;
             if (award.comp.endorse[mode][band][count] == true)
@@ -806,7 +806,7 @@ function updateAwardList(target = null)
     }
     if (baseCount > 0 && endorseCount == endorseTotal) allEndorse = true;
 
-    var cell = createCellHtml(
+    let cell = createCellHtml(
       row,
       "<p style='font-size:smaller;'>" + award.name + " - " + award.sponsor
     );
@@ -842,7 +842,7 @@ function updateAwardList(target = null)
 
 function deleteAwardTracker(sender)
 {
-  var id = sender.parentNode.parentNode.id;
+  let id = sender.parentNode.parentNode.id;
   delete g_awardTracker[id];
   storeAwardTracker();
   resetAwardAdd();
@@ -852,7 +852,7 @@ function deleteAwardTracker(sender)
 
 function awardCheckboxChanged(sender)
 {
-  var awardId = sender.target.parentNode.parentNode.id;
+  let awardId = sender.target.parentNode.parentNode.id;
   g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] =
     sender.target.checked;
   storeAwardTracker();
@@ -861,7 +861,7 @@ function awardCheckboxChanged(sender)
 
 function awardValueChanged(sender)
 {
-  var awardId = sender.target.parentNode.parentNode.id;
+  let awardId = sender.target.parentNode.parentNode.id;
   g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] =
     sender.target.value;
   storeAwardTracker();
@@ -877,12 +877,12 @@ function createCell(
   checkbox = false
 )
 {
-  var cell = row.insertCell();
+  let cell = row.insertCell();
   if (data == null) cell.innerHTML = value;
   if (title) cell.title = title;
   if (checkbox)
   {
-    var x = document.createElement("INPUT");
+    let x = document.createElement("INPUT");
     x.setAttribute("type", "checkbox");
     x.checked = value;
     x.name = target;
@@ -898,7 +898,7 @@ function createCell(
 
 function createCellHtml(row, html, title = null)
 {
-  var cell = row.insertCell();
+  let cell = row.insertCell();
   cell.innerHTML = html;
   if (title) cell.title = title;
 
@@ -907,7 +907,7 @@ function createCellHtml(row, html, title = null)
 
 function createAwardSelector(cell, target, value, forObject)
 {
-  var selector = document.createElement("select");
+  let selector = document.createElement("select");
   selector.name = target;
   selector.value = value;
   selector.disabled = forObject.length == 1;
@@ -915,9 +915,9 @@ function createAwardSelector(cell, target, value, forObject)
   selector.style.padding = "1px";
   if (selector.disabled) selector.style.cursor = "auto";
   selector.addEventListener("change", awardValueChanged);
-  for (var opt in forObject)
+  for (let opt in forObject)
   {
-    var option = document.createElement("option");
+    let option = document.createElement("option");
     option.value = forObject[opt];
     if (option.value == "Phone" || option.value == "CW") option.disabled = true;
     option.text = forObject[opt];
@@ -981,7 +981,7 @@ function setVisual()
     /* for ( key in g_rosterSettings.wanted )
     {
       document.getElementById(key).checked = true;
-      var t = key.replace("hunt","");
+      let t = key.replace("hunt","");
       if ( t in g_rosterSettings.columns )
         g_rosterSettings.columns[t] = true;
     } */
@@ -994,7 +994,7 @@ function setVisual()
   }
   else
   {
-    for (var key in g_rosterSettings.wanted)
+    for (let key in g_rosterSettings.wanted)
     {
       if (document.getElementById(key))
       { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
@@ -1134,13 +1134,13 @@ function wantedChanged(element)
 
   if (element.checked == true)
   {
-    var t = element.id.replace("hunt", "");
+    let t = element.id.replace("hunt", "");
 
     if (t in g_rosterSettings.columns)
     {
       g_rosterSettings.columns[t] = true;
 
-      for (var i = 0; i < g_menu.items.length; ++i)
+      for (let i = 0; i < g_menu.items.length; ++i)
       {
         if (
           typeof g_menu.items[i].checked != "undefined" &&
@@ -1154,7 +1154,7 @@ function wantedChanged(element)
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (var callHash in window.opener.g_callRoster)
+  for (let callHash in window.opener.g_callRoster)
   {
     window.opener.g_callRoster[callHash].callObj.alerted = false;
   }
@@ -1213,17 +1213,17 @@ function valuesChanged()
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (var callHash in window.opener.g_callRoster)
+  for (let callHash in window.opener.g_callRoster)
   { window.opener.g_callRoster[callHash].callObj.alerted = false; }
   window.opener.goProcessRoster();
 }
 
 function getBuffer(file_url, callback, flag, mode, port, cookie)
 {
-  var url = require("url");
-  var http = require(mode);
-  var fileBuffer = null;
-  var options = null;
+  let url = require("url");
+  let http = require(mode);
+  let fileBuffer = null;
+  let options = null;
   if (cookie != null)
   {
     options = {
@@ -1245,8 +1245,8 @@ function getBuffer(file_url, callback, flag, mode, port, cookie)
   }
   http.get(options, function (res)
   {
-    var fsize = res.headers["content-length"];
-    var cookies = null;
+    let fsize = res.headers["content-length"];
+    let cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
     { cookies = res.headers["set-cookie"]; }
     res
@@ -1269,11 +1269,11 @@ function getBuffer(file_url, callback, flag, mode, port, cookie)
 
 function callsignResult(buffer, flag)
 {
-  var rawData = JSON.parse(buffer);
+  let rawData = JSON.parse(buffer);
   r_currentUSState = flag;
 
   g_currentUSCallsigns = Object();
-  for (var key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
+  for (let key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
 
   window.opener.goProcessRoster();
 }
@@ -1286,7 +1286,7 @@ function stateChangedValue(what)
 
     if (window.opener.g_mapSettings.offlineMode == false)
     {
-      var callState = r_currentUSState.replace("CN-", "");
+      let callState = r_currentUSState.replace("CN-", "");
       getBuffer(
         "http://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
         callsignResult,
@@ -1323,24 +1323,24 @@ function DXCCsChangedValue(what)
 
 function initDXCCSelector()
 {
-  var items = Object.keys(window.opener.g_dxccToAltName).sort(function (a, b)
+  let items = Object.keys(window.opener.g_dxccToAltName).sort(function (a, b)
   {
     return window.opener.g_dxccToAltName[a].localeCompare(
       window.opener.g_dxccToAltName[b]
     );
   });
-  var newSelect = document.getElementById("DXCCsSelect");
+  let newSelect = document.getElementById("DXCCsSelect");
 
-  for (var i in items)
+  for (let i in items)
   {
-    var key = items[i];
+    let key = items[i];
 
     if (
       window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].geo !=
       "deleted"
     )
     {
-      var option = document.createElement("option");
+      let option = document.createElement("option");
       option.value = key;
       option.text =
         window.opener.g_dxccToAltName[key] +
@@ -1357,11 +1357,11 @@ function initDXCCSelector()
 function manifestResult(buffer, flag)
 {
   r_callsignManifest = JSON.parse(buffer);
-  var newSelect = document.getElementById("stateSelect");
+  let newSelect = document.getElementById("stateSelect");
 
-  for (var key in r_callsignManifest.cnt)
+  for (let key in r_callsignManifest.cnt)
   {
-    var option = document.createElement("option");
+    let option = document.createElement("option");
     if (window.opener.g_enums[key])
     {
       option.value = key;
@@ -1450,8 +1450,8 @@ function openIgnoreEdit()
 {
   MainCallRoster.style.display = "none";
   editView.style.display = "inline-block";
-  var worker = "";
-  var clearString = "<th>none</th>";
+  let worker = "";
+  let clearString = "<th>none</th>";
 
   if (Object.keys(g_blockedCalls).length > 0)
   {
@@ -1586,7 +1586,7 @@ function init()
 
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
-  for (var key in g_rosterSettings.wanted)
+  for (let key in g_rosterSettings.wanted)
   {
     if (document.getElementById(key))
     { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
@@ -1595,7 +1595,7 @@ function init()
   g_menu = new nw.Menu();
   g_compactMenu = new nw.Menu();
 
-  var item = new nw.MenuItem({
+  let item = new nw.MenuItem({
     type: "normal",
     label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
     click: function ()
@@ -1700,7 +1700,7 @@ function init()
     label: "Ignore Call",
     click: function ()
     {
-      var thisCall = callRoster[g_targetHash].DEcall;
+      let thisCall = callRoster[g_targetHash].DEcall;
       g_blockedCalls[thisCall] = true;
       storeBlocks();
       window.opener.goProcessRoster();
@@ -1752,9 +1752,9 @@ function init()
   item = new nw.MenuItem({ type: "separator" });
   g_menu.append(item);
 
-  for (var key in g_rosterSettings.columns)
+  for (let key in g_rosterSettings.columns)
   {
-    var itemx = new nw.MenuItem({
+    let itemx = new nw.MenuItem({
       type: "checkbox",
       label: key,
       checked: g_rosterSettings.columns[key],
@@ -1996,10 +1996,10 @@ function handleContextMenu(ev)
 {
   if (editView.style.display == "inline-block") return false;
 
-  var mouseX = Math.round(ev.x);
-  var mouseY = Math.round(ev.y);
+  let mouseX = Math.round(ev.x);
+  let mouseY = Math.round(ev.y);
 
-  var len = Object.keys(g_blockedCalls).length;
+  let len = Object.keys(g_blockedCalls).length;
   if (len > 0)
   {
     g_clearIgnores.enabled = true;
@@ -2065,7 +2065,7 @@ function handleContextMenu(ev)
       }
     }
 
-    var name = ev.target.getAttribute("name");
+    let name = ev.target.getAttribute("name");
     if (name == "Callsign")
     {
       g_targetHash = ev.target.parentNode.id;
@@ -2086,8 +2086,8 @@ function handleContextMenu(ev)
     }
     else if (name && name.startsWith("DXCC"))
     {
-      var dxcca = name.split("(");
-      var dxcc = parseInt(dxcca[1]);
+      let dxcca = name.split("(");
+      let dxcc = parseInt(dxcca[1]);
       g_targetDxcc = dxcc;
       g_dxccMenu.popup(mouseX, mouseY);
     }
@@ -2183,15 +2183,15 @@ function testAward(awardName, obj, baseHash)
 
 function processAward(awardName)
 {
-  var award =
+  let award =
     g_awards[g_awardTracker[awardName].sponsor].awards[
       g_awardTracker[awardName].name
     ];
   g_awardTracker[awardName].rule = award.rule;
-  var test = (g_awardTracker[awardName].test = {});
-  var mode = award.rule.mode.slice();
+  let test = (g_awardTracker[awardName].test = {});
+  let mode = award.rule.mode.slice();
 
-  var Index = mode.indexOf("Mixed");
+  let Index = mode.indexOf("Mixed");
   if (Index > -1) mode.splice(Index, 1);
 
   Index = mode.indexOf("Digital");
@@ -2233,9 +2233,9 @@ function processAward(awardName)
 
   g_awardTracker[awardName].stat = {};
 
-  for (var i in window.opener.g_QSOhash)
+  for (let i in window.opener.g_QSOhash)
   {
-    var obj = window.opener.g_QSOhash[i];
+    let obj = window.opener.g_QSOhash[i];
 
     if (test.confirmed && !obj.confirmed) continue;
 
@@ -2267,7 +2267,7 @@ function processAward(awardName)
 
 function newAwardCountObject()
 {
-  var statCountObject = {};
+  let statCountObject = {};
 
   statCountObject.bands = {};
   statCountObject.bands.Mixed = {};
@@ -2477,7 +2477,7 @@ function scoreAcont(award, obj)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "AN") cont = "OC";
     if (!(cont in award.stat)) award.stat[cont] = newAwardCountObject();
     return workAwardObject(
@@ -2495,7 +2495,7 @@ function testAcont(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "AN") cont = "OC";
 
     if (cont + baseHash in g_tracker[award.test.look].cont)
@@ -2510,7 +2510,7 @@ function scoreAcont5(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -2530,7 +2530,7 @@ function testAcont5(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -2560,7 +2560,7 @@ function testAcont2band(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "AN") cont = "OC";
 
     if (cont + baseHash in g_tracker[award.test.look].cont)
@@ -2575,7 +2575,7 @@ function scoreAcont52band(award, obj)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -2596,7 +2596,7 @@ function testAcont52band(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -2612,7 +2612,7 @@ function scoreAgrids(award, obj)
 {
   if (obj.grid)
   {
-    var grid = obj.grid.substr(0, 4);
+    let grid = obj.grid.substr(0, 4);
 
     if (!(grid in award.stat)) award.stat[grid] = newAwardCountObject();
     return workAwardObject(
@@ -2662,7 +2662,7 @@ function testAcnty(award, obj, baseHash)
 
 function scoreAcall(award, obj)
 {
-  var call = obj.DEcall;
+  let call = obj.DEcall;
 
   if (call.indexOf("/") > -1)
   {
@@ -2695,7 +2695,7 @@ function scoreAIOTA(award, obj)
 {
   if (obj.IOTA)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ("IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1)
     { return false; }
@@ -2717,7 +2717,7 @@ function testAIOTA(award, obj, baseHash)
 {
   /* if ( obj.IOTA )
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
       return false;
@@ -2731,7 +2731,7 @@ function scoreAcallarea(award, obj)
 {
   if (obj.zone != null)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ("zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1)
     { return false; }
@@ -2752,7 +2752,7 @@ function testAcallarea(award, obj, baseHash)
 {
   if (obj.zone != null)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ("zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1)
     { return false; }
@@ -2764,8 +2764,8 @@ function scoreApx(award, obj)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    var px = obj.px;
+    let test = g_awards[award.sponsor].awards[award.name];
+    let px = obj.px;
     if ("px" in test.rule)
     {
       px = px.substr(0, test.rule.px[0].length);
@@ -2788,8 +2788,8 @@ function testApx(award, obj, baseHash)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    var px = obj.px;
+    let test = g_awards[award.sponsor].awards[award.name];
+    let px = obj.px;
     if ("px" in test.rule)
     {
       px = px.substr(0, test.rule.px[0].length);
@@ -2808,8 +2808,8 @@ function scoreApxa(award, obj)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    for (var i in test.rule.pxa)
+    let test = g_awards[award.sponsor].awards[award.name];
+    for (let i in test.rule.pxa)
     {
       if (test.rule.pxa[i].indexOf(obj.px) > -1)
       {
@@ -2831,8 +2831,8 @@ function testApxa(award, obj, baseHash)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    for (var i in test.rule.pxa)
+    let test = g_awards[award.sponsor].awards[award.name];
+    for (let i in test.rule.pxa)
     {
       if (test.rule.pxa[i].indexOf(obj.px) > -1)
       {
@@ -2852,11 +2852,11 @@ function testApxa(award, obj, baseHash)
 
 function scoreAsfx(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var suf = obj.DEcall.replace(obj.px, "");
-  for (var i in test.rule.sfx)
+  let test = g_awards[award.sponsor].awards[award.name];
+  let suf = obj.DEcall.replace(obj.px, "");
+  for (let i in test.rule.sfx)
   {
-    for (var s in test.rule.sfx[i])
+    for (let s in test.rule.sfx[i])
     {
       if (suf.indexOf(test.rule.sfx[i][s]) == 0)
       {
@@ -2877,11 +2877,11 @@ function scoreAsfx(award, obj)
 
 function testAsfx(award, obj, baseHash)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var suf = obj.DEcall.replace(obj.px, "");
-  for (var i in test.rule.sfx)
+  let test = g_awards[award.sponsor].awards[award.name];
+  let suf = obj.DEcall.replace(obj.px, "");
+  for (let i in test.rule.sfx)
   {
-    for (var s in test.rule.sfx[i])
+    for (let s in test.rule.sfx[i])
     {
       if (suf.indexOf(test.rule.sfx[i][s]) == 0)
       {
@@ -2983,8 +2983,8 @@ function testAcqz(award, obj, baseHash)
 {
   if (obj.cqza)
   {
-    var x = 0;
-    for (var z in obj.cqza)
+    let x = 0;
+    for (let z in obj.cqza)
     {
       if (obj.cqza[z] + baseHash in g_tracker[award.test.look].cqz) x++;
     }
@@ -2995,13 +2995,13 @@ function testAcqz(award, obj, baseHash)
 
 function scoreAnumsfx(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var px = obj.px.substr(0, obj.px.length - 1);
-  var suf = obj.DEcall.replace(px, "");
+  let test = g_awards[award.sponsor].awards[award.name];
+  let px = obj.px.substr(0, obj.px.length - 1);
+  let suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (var i in test.rule.numsfx)
+  for (let i in test.rule.numsfx)
   {
-    for (var s in test.rule.numsfx[i])
+    for (let s in test.rule.numsfx[i])
     {
       if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
       {
@@ -3022,13 +3022,13 @@ function scoreAnumsfx(award, obj)
 
 function testAnumsfx(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var px = obj.px.substr(0, obj.px.length - 1);
-  var suf = obj.DEcall.replace(px, "");
+  let test = g_awards[award.sponsor].awards[award.name];
+  let px = obj.px.substr(0, obj.px.length - 1);
+  let suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (var i in test.rule.numsfx)
+  for (let i in test.rule.numsfx)
   {
-    for (var s in test.rule.numsfx[i])
+    for (let s in test.rule.numsfx[i])
     {
       if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
       {
@@ -3042,11 +3042,11 @@ function testAnumsfx(award, obj)
 
 function scoreApxplus(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
+  let test = g_awards[award.sponsor].awards[award.name];
 
   if (test.rule.pxplus)
   {
-    for (var i in test.rule.pxplus)
+    for (let i in test.rule.pxplus)
     {
       if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
       {
@@ -3066,11 +3066,11 @@ function scoreApxplus(award, obj)
 
 function testApxplus(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
+  let test = g_awards[award.sponsor].awards[award.name];
 
   if (test.rule.pxplus)
   {
-    for (var i in test.rule.pxplus)
+    for (let i in test.rule.pxplus)
     {
       if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
       {
@@ -3084,7 +3084,7 @@ function testApxplus(award, obj)
 function loadAwardJson()
 {
   g_awards = {};
-  var fs = require("fs");
+  let fs = require("fs");
   if (fs.existsSync("./data/awards.json"))
   {
     fileBuf = fs.readFileSync("./data/awards.json");
@@ -3093,9 +3093,9 @@ function loadAwardJson()
       g_awards = JSON.parse(fileBuf);
       // fs.writeFileSync("./data/awards.json", JSON.stringify(g_awards,null,2));
 
-      for (var sp in g_awards)
+      for (let sp in g_awards)
       {
-        for (var aw in g_awards[sp].awards)
+        for (let aw in g_awards[sp].awards)
         {
           if (!("unique" in g_awards[sp].awards[aw].rule))
           { g_awards[sp].awards[aw].rule.unique = 1; }
@@ -3108,7 +3108,7 @@ function loadAwardJson()
           if (g_awards[sp].awards[aw].rule.band.length == 0)
           {
             g_awards[sp].awards[aw].rule.band = [];
-            for (var key in g_awards[sp].mixed)
+            for (let key in g_awards[sp].mixed)
             {
               g_awards[sp].awards[aw].rule.band.push(g_awards[sp].mixed[key]);
             }
@@ -3119,7 +3119,7 @@ function loadAwardJson()
           )
           {
             g_awards[sp].awards[aw].rule.endorse = [];
-            for (var key in g_awards[sp].mixed)
+            for (let key in g_awards[sp].mixed)
             {
               g_awards[sp].awards[aw].rule.endorse.push(
                 g_awards[sp].mixed[key]
@@ -3142,7 +3142,7 @@ function loadAwardJson()
 
 function processAllAwardTrackers()
 {
-  for (var tracker in g_awardTracker)
+  for (let tracker in g_awardTracker)
   {
     if (!(g_awardTracker[tracker].sponsor in g_awards))
     {
@@ -3166,7 +3166,7 @@ function processAllAwardTrackers()
 
 function newAwardTrackerObject(sponsor, award, enable)
 {
-  var newAward = {};
+  let newAward = {};
   newAward.sponsor = sponsor;
   newAward.name = award;
   newAward.enable = enable;
@@ -3181,13 +3181,13 @@ function newAwardTrackerObject(sponsor, award, enable)
 
 function addAllAwards()
 {
-  for (var sponsor in g_awards)
+  for (let sponsor in g_awards)
   {
-    for (var award in g_awards[sponsor].awards)
+    for (let award in g_awards[sponsor].awards)
     {
-      var awardToAdd = newAwardTrackerObject(sponsor, award, true);
+      let awardToAdd = newAwardTrackerObject(sponsor, award, true);
 
-      var hash = awardToAdd.name + "-" + awardToAdd.sponsor;
+      let hash = awardToAdd.name + "-" + awardToAdd.sponsor;
       if (!(hash in g_awardTracker))
       {
         g_awardTracker[hash] = awardToAdd;
@@ -3210,7 +3210,7 @@ function delAllAwards()
 
 function newCompileCountObject()
 {
-  var compileCountObject = {};
+  let compileCountObject = {};
   compileCountObject.bands = {};
   compileCountObject.modes = {};
   compileCountObject.endorse = {};
@@ -3220,19 +3220,19 @@ function newCompileCountObject()
 
 function singleCompile(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var rule = test.rule;
-  var comp = newCompileCountObject();
-  for (var mode in rule.mode)
+  let test = g_awards[award.sponsor].awards[award.name];
+  let rule = test.rule;
+  let comp = newCompileCountObject();
+  for (let mode in rule.mode)
   {
     comp.modes[rule.mode[mode]] = 0;
     comp.bands[rule.mode[mode]] = {};
 
-    for (var band in rule.band)
+    for (let band in rule.band)
     {
       comp.bands[rule.mode[mode]][rule.band[band]] = 0;
     }
-    for (var key in obj)
+    for (let key in obj)
     {
       if (
         rule.mode[mode] in obj[key].bands &&
@@ -3241,7 +3241,7 @@ function singleCompile(award, obj)
       {
         comp.modes[rule.mode[mode]] += 1;
 
-        for (var band in rule.band)
+        for (let band in rule.band)
         {
           if (rule.band[band] in obj[key].bands[rule.mode[mode]])
           { comp.bands[rule.mode[mode]][rule.band[band]] += 1; }
@@ -3250,11 +3250,11 @@ function singleCompile(award, obj)
     }
   }
 
-  for (var mode in comp.modes)
+  for (let mode in comp.modes)
   {
     comp.endorse[mode] = {};
     comp.counts[mode] = {};
-    for (var cnts in rule.count)
+    for (let cnts in rule.count)
     {
       comp.counts[mode][rule.count[cnts]] = {
         num: comp.modes[mode],
@@ -3264,10 +3264,10 @@ function singleCompile(award, obj)
       };
     }
 
-    for (var endorse in rule.endorse)
+    for (let endorse in rule.endorse)
     {
       comp.endorse[mode][rule.endorse[endorse]] = {};
-      for (var cnts in rule.count)
+      for (let cnts in rule.count)
       {
         comp.endorse[mode][rule.endorse[endorse]][rule.count[cnts]] =
           comp.bands[mode][rule.endorse[endorse]] >= rule.count[cnts];
@@ -3280,22 +3280,22 @@ function singleCompile(award, obj)
 
 function doubleCompile(award, firstLevel)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var rule = test.rule;
+  let test = g_awards[award.sponsor].awards[award.name];
+  let rule = test.rule;
 
-  for (var k in firstLevel)
+  for (let k in firstLevel)
   {
     firstLevel[k].bands = {};
     // firstLevel[k].modes = {};
-    var obj = singleCompile(award, firstLevel[k].unique);
+    let obj = singleCompile(award, firstLevel[k].unique);
 
-    for (var mode in obj.bands)
+    for (let mode in obj.bands)
     {
-      for (var cnt in test.rule.count)
+      for (let cnt in test.rule.count)
       {
         if (obj.counts[mode][test.rule.count[cnt]].num >= test.rule.unique)
         {
-          for (var band in obj.bands[mode])
+          for (let band in obj.bands[mode])
           {
             if (!(mode in firstLevel[k].bands)) firstLevel[k].bands[mode] = {};
 
@@ -3308,7 +3308,7 @@ function doubleCompile(award, firstLevel)
         }
       }
     }
-    /* for ( var mode in obj.modes )
+    /* for ( let mode in obj.modes )
     {
       if ( !(mode in firstLevel[k].modes) )
         firstLevel[k].modes[mode] = 0;

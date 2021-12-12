@@ -1,7 +1,7 @@
-gridtracker (1.21.1209) unstable; urgency=low
+gridtracker (1.21.1212) unstable; urgency=low
   Beta test for Call Roster Refactor changes
 
- -- Matthew Chambers <nr0q@gridtracker.org>  Thu, 9 Dec 2021 02:58:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org>  Thu, 12 Dec 2021 15:10:00 -0000
 
 gridtracker (1.21.0928) unstable; urgency=medium
   [Bug Fixes]

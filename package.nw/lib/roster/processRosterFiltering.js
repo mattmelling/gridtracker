@@ -195,7 +195,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       {
         let hash = hashMaker(callObj.grid.substr(0, 4),
           callObj, g_rosterSettings.reference);
-        if (huntIndex && hash in huntIndex.grid)
+        if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.grid)
         {
           entry.tx = false;
           continue;
@@ -212,7 +212,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         let hash = hashMaker(String(callObj.dxcc),
           callObj, g_rosterSettings.reference);
 
-        if (huntIndex && (hash in huntIndex.dxcc))
+        if (rosterSettings.huntIndex && (hash in rosterSettings.huntIndex.dxcc))
         {
           entry.tx = false;
           continue;
@@ -245,7 +245,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         let hash = hashMaker(String(callObj.px),
           callObj, g_rosterSettings.reference);
 
-        if (huntIndex && (hash in huntIndex.px))
+        if (rosterSettings.huntIndex && (hash in rosterSettings.huntIndex.px))
         {
           entry.tx = false;
           continue;
@@ -257,7 +257,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       if (g_rosterSettings.hunting == "cq")
       {
         let huntTotal = callObj.cqza.length;
-        if (huntTotal == 0 || !huntIndex)
+        if (huntTotal == 0 || !rosterSettings.huntIndex)
         {
           entry.tx = false;
           continue;
@@ -267,7 +267,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         {
           let hash = hashMaker(callObj.cqza[index], callObj, g_rosterSettings.reference);
 
-          if (hash in huntIndex.cqz) huntFound++;
+          if (hash in rosterSettings.huntIndex.cqz) huntFound++;
         }
         if (huntFound == huntTotal)
         {
@@ -280,7 +280,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       if (g_rosterSettings.hunting == "itu")
       {
         let huntTotal = callObj.ituza.length;
-        if (huntTotal == 0 || !huntIndex)
+        if (huntTotal == 0 || !rosterSettings.huntIndex)
         {
           entry.tx = false;
           continue;
@@ -290,7 +290,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         {
           let hash = hashMaker(callObj.ituza[index], callObj, g_rosterSettings.reference);
 
-          if (hash in huntIndex.ituz) huntFound++;
+          if (hash in rosterSettings.huntIndex.ituz) huntFound++;
         }
         if (huntFound == huntTotal)
         {
@@ -316,7 +316,7 @@ function processRosterFiltering(callRoster, rosterSettings)
           {
             let hash = hashMaker(state, callObj, g_rosterSettings.reference);
 
-            if (huntIndex && hash in huntIndex.state)
+            if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.state)
             {
               entry.tx = false;
               continue;

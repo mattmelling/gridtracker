@@ -22,7 +22,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       callObj.reset = true;
       continue;
     }
-    if (callObj.dxcc == -1)
+    if (!callObj.dxcc || callObj.dxcc == -1)
     {
       entry.tx = false;
       continue;

@@ -125,7 +125,7 @@ var g_defaultSettings = {
   },
   reference: 0,
   controls: true,
-  controlsExpanded: false,
+  controlsExtended: false,
   compact: false,
   settingProfiles: false,
   lastSortIndex: 6,
@@ -304,11 +304,11 @@ function mySpotCompare(a, b)
 {
   let cutoff = timeNowSec() - window.opener.g_receptionSettings.viewHistoryTimeSec;
 
-  if (a.spot.when <= cutoff) return -1;
-  if (b.spot.when <= cutoff) return 1;
+  if (a.callObj.spot.when <= cutoff) return -1;
+  if (b.callObj.spot.when <= cutoff) return 1;
 
-  let aSNR = Number(a.spot.snr);
-  let bSNR = Number(b.spot.snr);
+  let aSNR = Number(a.callObj.spot.snr);
+  let bSNR = Number(b.callObj.spot.snr);
 
   if (aSNR > bSNR) return 1;
   if (aSNR < bSNR) return -1;

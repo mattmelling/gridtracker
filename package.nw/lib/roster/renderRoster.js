@@ -50,7 +50,7 @@ function renderRoster(callRoster, rosterSettings)
 
   let totalCount = Object.keys(callRoster).length;
   let visibleCount = visibleCallList.length;
-  let huntedCount = visibleCallList.filter(obj => Object.keys().length > 0).length
+  let huntedCount = visibleCallList.filter(obj => Object.keys(obj.callObj.hunting).length > 0).length
   let countParts = [];
 
   if (totalCount != visibleCount)

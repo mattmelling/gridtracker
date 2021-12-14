@@ -3,6 +3,7 @@ gridtracker (1.21.1212) unstable; urgency=low
   [Bug Fixes]
   - Fix #107, where the call roster timeout was longer then a single FT4 cycle.
   - Fix #91, CQ is always highlighted, no matter status of CQ Only.
+  - Fix #76, unfinished ignore CQ and ITU zones.
 
  -- Matthew Chambers <nr0q@gridtracker.org>  Thu, 12 Dec 2021 15:10:00 -0000
 

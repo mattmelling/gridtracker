@@ -259,7 +259,7 @@ function renderNormalRosterRow(callObj, showBands, showModes)
   if (g_rosterSettings.columns.CQz)
   {
     worker +=
-      "<td " +
+      "<td name='CQz' " +
       callObj.style.cqz +
       ">" +
       callObj.cqza.join(",") +
@@ -268,7 +268,7 @@ function renderNormalRosterRow(callObj, showBands, showModes)
   if (g_rosterSettings.columns.ITUz)
   {
     worker +=
-      "<td " +
+      "<td name='ITUz'" +
       callObj.style.ituz +
       ">" +
       callObj.ituza.join(",") +

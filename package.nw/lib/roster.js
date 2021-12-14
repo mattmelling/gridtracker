@@ -8,6 +8,8 @@ var callRoster = {};
 var g_blockedCalls = {};
 var g_blockedCQ = {};
 var g_blockedDxcc = {};
+var g_blockedCQz = {};
+var g_blockedITUz = {};
 var g_scriptReport = {};
 var g_worked = {};
 var g_confirmed = {};
@@ -35,6 +37,10 @@ var g_CQMenu = null;
 var g_targetCQ = "";
 var g_clearCQIgnore = null;
 var g_clearCQIgnoreMainMenu = null;
+var g_clearCQzIgnore = null;
+var g_clearCQzIgnoreMainMenu = null;
+var g_clearITUzIgnore = null;
+var g_clearITUzIgnoreMainMenu = null;
 var g_timerInterval = null;
 var g_regFocus = false;
 var g_awards = {};
@@ -162,6 +168,16 @@ if (typeof localStorage.blockedCQ == "undefined")
   localStorage.blockedCQ = "{}";
 }
 
+if (typeof localStorage.blockedCQz == "undefined")
+{
+  localStorage.blockedCQz = "{}";
+}
+
+if (typeof localStorage.blockedITUz == "undefined")
+{
+  localStorage.blockedITUz = "{}";
+}
+
 if (typeof localStorage.awardTracker == "undefined")
 {
   localStorage.awardTracker = "{}";
@@ -176,6 +192,8 @@ if (typeof localStorage.blockedCalls != "undefined")
   g_blockedCalls = JSON.parse(localStorage.blockedCalls);
   g_blockedCQ = JSON.parse(localStorage.blockedCQ);
   g_blockedDxcc = JSON.parse(localStorage.blockedDxcc);
+  g_blockedCQz = JSON.parse(localStorage.blockedCQz);
+  g_blockedITUz = JSON.parse(localStorage.blockedITUz);
 }
 
 function storeBlocks()
@@ -183,6 +201,8 @@ function storeBlocks()
   localStorage.blockedCalls = JSON.stringify(g_blockedCalls);
   localStorage.blockedCQ = JSON.stringify(g_blockedCQ);
   localStorage.blockedDxcc = JSON.stringify(g_blockedDxcc);
+  localStorage.blockedCQz = JSON.stringify(g_blockedCQz);
+  localStorage.blockedITUz = JSON.stringify(g_blockedITUz);
 }
 
 function storeAwardTracker()
@@ -1416,6 +1436,22 @@ function deleteCQIgnore(key)
   window.opener.goProcessRoster();
 }
 
+function deleteCQzIgnore(key)
+{
+  delete g_blockedCQz[key];
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
+function deleteITUzIgnore(key)
+{
+  delete g_blockedITUz[key];
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
 function clearAllCallsignIgnores()
 {
   g_blockedCalls = Object();
@@ -1435,6 +1471,22 @@ function clearAllDxccIgnores()
 function clearAllCQIgnores()
 {
   g_blockedCQ = Object();
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
+function clearAllCQzIgnores()
+{
+  g_blockedCQz = Object();
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
+function clearAllITUzIgnores()
+{
+  g_blockedITUz = Object();
   storeBlocks();
   openIgnoreEdit();
   window.opener.goProcessRoster();
@@ -1524,6 +1576,54 @@ function openIgnoreEdit()
         " (" +
         window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp +
         ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
+  if (Object.keys(g_blockedCQz).length > 0)
+  {
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllCQzIgnores()'>Clear All</th>";
+  }
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>CQ Zones</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedCQz)
+    .sort()
+    .forEach(function (key, i)
+    {
+      worker +=
+        "<tr><td align=left style='color:cyan;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteCQzIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
+  if (Object.keys(g_blockedITUz).length > 0)
+  {
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllITUzIgnores()'>Clear All</th>";
+  }
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>ITU Zones</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedITUz)
+    .sort()
+    .forEach(function (key, i)
+    {
+      worker +=
+        "<tr><td align=left style='color:cyan;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteITUzIgnore(\"" +
         key +
         "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
     });
@@ -1870,6 +1970,115 @@ function init()
   });
   g_CQMenu.append(item);
 
+  g_CQzMenu = new nw.Menu();
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Ignore CQ Zone",
+    click: function ()
+    {
+      g_blockedCQz[callRoster[g_targetCQz].callObj.cqza] = true;
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_CQzMenu.append(item);
+
+  g_clearCQzIgnoreMainMenu = new nw.MenuItem({
+    type: "normal",
+    label: "Clear CQ Zone Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedCQz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_clearCQzIgnore = new nw.MenuItem({
+    type: "normal",
+    label: "Clear Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedCQz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+  g_CQzMenu.append(g_clearCQzIgnore);
+
+  g_CQzMenu.append(g_clearCQzIgnoreMainMenu);
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Edit Ignores",
+    enabled: true,
+    click: function ()
+    {
+      openIgnoreEdit();
+    }
+  });
+
+  g_CQzMenu.append(item);
+
+  g_ITUzMenu = new nw.Menu();
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Ignore ITU Zone",
+    click: function ()
+    {
+      g_blockedITUz[callRoster[g_targetITUz].callObj.ituza] = true;
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_ITUzMenu.append(item);
+
+  g_clearITUzIgnoreMainMenu = new nw.MenuItem({
+    type: "normal",
+    label: "Clear ITU Zone Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedITUz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_ITUzMenu.append(g_clearITUzIgnoreMainMenu);
+
+  g_clearITUzIgnore = new nw.MenuItem({
+    type: "normal",
+    label: "Clear Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedITUz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_ITUzMenu.append(g_clearITUzIgnore);
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Edit Ignores",
+    enabled: true,
+    click: function ()
+    {
+      openIgnoreEdit();
+    }
+  });
+
+  g_ITUzMenu.append(item);
+
   g_dxccMenu = new nw.Menu();
 
   item = new nw.MenuItem({
@@ -2052,6 +2261,40 @@ function handleContextMenu(ev)
     g_clearCQIgnore.enabled = false;
   }
 
+  len = Object.keys(g_blockedCQz).length;
+  if (len > 0)
+  {
+    g_clearCQzIgnoreMainMenu.enabled = true;
+    g_clearCQzIgnoreMainMenu.label =
+      "Clear CQ Zone Ignore" + (len > 1 ? "s (" + len + ")" : "");
+    g_clearCQzIgnore.enabled = true;
+    g_clearCQzIgnore.label = "Clear Ignore" + (len > 1 ? "s (" + len + ")" : "");
+  }
+  else
+  {
+    g_clearCQzIgnoreMainMenu.label = "Clear CQ Zone Ignore";
+    g_clearCQzIgnoreMainMenu.enabled = false;
+    g_clearCQzIgnore.label = "Clear Ignore";
+    g_clearCQzIgnore.enabled = false;
+  }
+
+  len = Object.keys(g_blockedITUz).length;
+  if (len > 0)
+  {
+    g_clearITUzIgnoreMainMenu.enabled = true;
+    g_clearITUzIgnoreMainMenu.label =
+      "Clear ITU Zone Ignore" + (len > 1 ? "s (" + len + ")" : "");
+    g_clearITUzIgnore.enabled = true;
+    g_clearITUzIgnore.label = "Clear Ignore" + (len > 1 ? "s (" + len + ")" : "");
+  }
+  else
+  {
+    g_clearITUzIgnoreMainMenu.label = "Clear ITU Zone Ignore";
+    g_clearITUzIgnoreMainMenu.enabled = false;
+    g_clearITUzIgnore.label = "Clear Ignore";
+    g_clearITUzIgnore.enabled = false;
+  }
+
   if (typeof ev.target != "undefined")
   {
     if (g_developerMode)
@@ -2083,6 +2326,16 @@ function handleContextMenu(ev)
         g_targetCQ = ev.target.parentNode.id;
         g_CQMenu.popup(mouseX, mouseY);
       }
+    }
+    else if (name == "CQz")
+    {
+      g_targetCQz = ev.target.parentNode.id;
+      g_CQzMenu.popup(mouseX, mouseY);
+    }
+    else if (name == "ITUz")
+    {
+      g_targetITUz = ev.target.parentNode.id;
+      g_ITUzMenu.popup(mouseX, mouseY);
     }
     else if (name && name.startsWith("DXCC"))
     {

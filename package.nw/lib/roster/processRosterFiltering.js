@@ -45,6 +45,16 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
+    if (callObj.ituza in g_blockedITUz)
+    {
+      entry.tx = false;
+      continue;
+    }
+    if (callObj.cqza in g_blockedCQz)
+    {
+      entry.tx = false;
+      continue;
+    }
     if (callObj.dxcc in g_blockedDxcc)
     {
       entry.tx = false;

@@ -1,9 +1,18 @@
 gridtracker (1.21.1212) unstable; urgency=low
-  Release build with the call roster refactor
+  Release build with the call roster refactor code that's been in the works for some time.
   [Bug Fixes]
+  - Fix #76, unfinished ignore CQ and ITU zones.
+  - Improved handling of stations that are not in a valid DXCC (ie; /MM stations)
+  - Improved handling of free text decodes that don't contain valid callsigns (ie "HI BOB" and "MERRY XMAS")
+  - Fix how the Call Roster title bar counts are calculated.
+  [Enhancements]
+  - More clarity when a ULS Zip code falls in more then one county, replacing ~ with ? symbols and
+    better tool tip message.
   - Fix #107, where the call roster timeout was longer then a single FT4 cycle.
   - Fix #91, CQ is always highlighted, no matter status of CQ Only.
-  - Fix #76, unfinished ignore CQ and ITU zones.
+  - Performance improvement by changing how call roster vars are handled ('let' vs 'var')
+  - Build system improved to push to Arch AUR, building of Debian (.deb) packages and triggering
+    of COPR RPM builds for Fedora/Cent/RHEL and their cousins.
 
  -- Matthew Chambers <nr0q@gridtracker.org>  Thu, 12 Dec 2021 15:10:00 -0000
 

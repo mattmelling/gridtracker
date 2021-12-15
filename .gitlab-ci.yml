@@ -2,7 +2,7 @@
 # see https://docs.gitlab.com/ee/ci/yaml/README.html for all available options
 
 variables:
-  DEFAULT_IMAGE: debian:stable
+  DEFAULT_IMAGE: registry.gitlab.com/gridtracker.org/gtbuilder:v1-0
   APT_CACHE_DIR: $CI_PROJECT_DIR/.cache/apt
   NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/npm
 
@@ -15,6 +15,13 @@ variables:
   GCLOUD_TESTING_DEPLOY_PATH: gs://download.gridtracker.org/testing/$CI_COMMIT_TAG
   NR0Q_SERVER_ADDRESS: ""
   NR0Q_SERVER_PASSWORD: ""
+
+  #
+  # Because it's getting to be that kind of world, we're going to have to
+  # sign our packages/exectuables with a signing key.
+  # That signing chain and spec file will be stored in a Gitlab CI Variable and protected,
+  # here's a placeholder for the script
+  G_CODE_SIGNING_CHAIN: ""
 
 # nothing in this file ill be allowed to run automatically except for:
 # 1. merge requests
@@ -31,7 +38,9 @@ include:
 stages:
   - build
   - test
+  - staging
   - package
+  - pre-deploy
   - deploy
 
 default:
@@ -40,7 +49,7 @@ default:
 
 # just do a quick syntax check job, we don't need to "build" anything here other than the
 # outer dev environment for gridtracker
-npm_test:
+npm:test:
   stage: test
   image: node:latest
   script:
@@ -54,7 +63,7 @@ npm_test:
 #     - echo "For example run a lint test"
 
 # package binaries and create build artifacts that may be used in later stages
-win-packaging:
+win:package:
   stage: package
   rules:
     # only do this with a manual tag starting with v or test_
@@ -71,26 +80,26 @@ win-packaging:
       files:
         - package.json
         - package.nw/package.json
-  script:
+  before_script:
     - |
-      mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
+      mkdir -p $NPM_CONFIG_CACHE
       mkdir -p artifacts
-      dpkg --add-architecture i386
-    - |
       echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
-      apt-get -qq update
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y zip nsis nsis nsis-pluginapi wget
+      apt-get update && apt-get upgrade -y
       wget https://nsis.sourceforge.io/mediawiki/images/4/47/Registry.zip
       unzip Registry.zip
       mv Desktop/Plugin/registry.dll /usr/share/nsis/Plugins/x86-unicode/
       mv Desktop/Include/Registry.nsh /usr/share/nsis/Include/
       rm -Rf Desktop PocketPC Source
-      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
-    - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
-    # Making our Windows packages
+      eval $(ssh-agent -s)
+      echo "$NR0Q_PRIV" | tr -d '\r' | ssh-add -
+      mkdir -p ~/.ssh; chmod 700 ~/.ssh
+      scp -o StrictHostKeyChecking=no mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
+  script:
     - |
+      # Making our Windows packages 
+      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
+      test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
       echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
       npm install --prefer-offline
       npm run dist-win
@@ -106,20 +115,23 @@ win-packaging:
             rm $dir
           fi
       done
+      # Now we need to sign the executable before it get's stuffed into Nullsoft
+      # using mono signcode
+      signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-*-win-*/*.exe
+      # Now the executable should be signed 
       sed "s#GridTracker-\${VERSION}-win-x86/#`pwd`/dist/GridTracker-\${VERSION}-win-x86/#g" windows/setup.nsi.tmpl > windows/setup.nsi.tmp.1
       sed "s#GridTracker-Installer.#`pwd`/dist/GridTracker-Installer.#g" windows/setup.nsi.tmp.1 > windows/setup.nsi.tmp.2
       sed "s#define VERSION <placeholder#define VERSION `node version.js`#g" windows/setup.nsi.tmp.2 > windows/setup.nsi
-
       makensis windows/setup.nsi
       # clean up generated files
       rm windows/setup.nsi
       rm windows/setup.nsi.tmp.1
       rm windows/setup.nsi.tmp.2
+      signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-Installer.*.exe
       (cd dist ; mv GridTracker-Installer.*.exe ../artifacts)
       echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
 
-
-intel-packaging:
+linux:package:
   stage: package
   rules:
     # only do this with a manual tag starting with v or test_
@@ -136,22 +148,17 @@ intel-packaging:
       files:
         - package.json
         - package.nw/package.json
+  before_script:
+    - |
+      mkdir -p $NPM_CONFIG_CACHE
+      mkdir -p artifacts
+      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
+      apt-get update && apt-get upgrade -y
+      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
   script:
     - |
-      mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
-      mkdir -p artifacts/rpm
-      dpkg --add-architecture i386
-    - |
-      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
-      apt-get -qq update
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm wine wine32
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm zip wget
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
-      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
-    - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
-    # Making our MacOS and distro agnostic Linux packages
-    - |
+      # Making our distro agnostic Linux packages
+      test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
       echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
       npm install --prefer-offline
       npm run dist-nix
@@ -163,30 +170,53 @@ intel-packaging:
           tar -C dist -czf ${dir}.tar.gz `basename $dir`
         fi
       done
-      (cd dist ; mv *-mac-x64.zip *.tar.gz ../artifacts)
+      (cd dist; mv *.tar.gz ../artifacts/)
       echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
-    # This section handles making RPMs for Fedora/CentOS/RHEL
-    - |
-      echo -e "\e[0Ksection_start:`date +%s`:rpm_build\r\e[0KBuilding RPM packages"
-      # mkdir -p $HOME/rpmbuild/SOURCES
-      # cp artifacts/*.tar.gz $HOME/rpmbuild/SOURCES/
-      setarch i386 rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.i386.spec
-      setarch x86_64 rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.x86_64.spec
-      mv $HOME/rpmbuild/RPMS/i386/*.rpm artifacts/rpm/
-      mv $HOME/rpmbuild/RPMS/x86_64/*.rpm artifacts/rpm/
-      echo -e "\e[0Ksection_end:`date +%s`:rpm_build\r\e[0K"
-    # This section does debian DEBs
-    #- |
-    #  echo -e "\e[0Ksection_start:`date +%s`:debian_build\r\e[0KBuilding Debian packages"
-    #  dpkg-buildpackage -uc -us
-    #  mkdir artifacts/debian
-    #  mv ../*.{deb,dsc,buildinfo,tar.xz,changes} artifacts/debian/
-    #  echo -e "\e[0Ksection_end:`date +%s`:debian_build\r\e[0K"
-    - |
-      echo "we made packages!"
+      # This section does debian DEBs
+      echo -e "\e[0Ksection_start:`date +%s`:debian_build\r\e[0KBuilding Debian packages"
+      dpkg-buildpackage -b --no-sign
+      mv ../*.{deb,buildinfo,changes} artifacts/
+      echo -e "\e[0Ksection_end:`date +%s`:debian_build\r\e[0K"
+      echo "we made LINUX packages!"
       ls -laR artifacts
 
-arm-packaging:
+mac:package:
+  stage: package
+  rules:
+    # only do this with a manual tag starting with v or test_
+    - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
+  artifacts:
+    paths:
+      - artifacts/
+    name: '$CI_COMMIT_REF_SLUG'
+  cache:
+    paths:
+      - .cache/
+      - node_modules/
+    key:
+      files:
+        - package.json
+        - package.nw/package.json
+  before_script:
+    - |
+      mkdir -p $NPM_CONFIG_CACHE
+      mkdir -p artifacts
+      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
+      apt-get update && apt-get upgrade -y
+      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
+  script:
+    - |
+      # Making our MacOS packages  
+      test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
+      echo -e "\e[0Ksection_start:`date +%s`:native_build\r\e[0KBuilding native packages"
+      npm install --prefer-offline
+      npm run dist-mac
+      (cd dist; mv *.zip ../artifacts/)
+      echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
+      echo "we made MAC packages!"
+      ls -laR artifacts
+
+arm:package:
   stage: package
   variables:
     NWJS_VERSION: "v0.54.2"
@@ -207,28 +237,26 @@ arm-packaging:
       files:
         - package.json
         - package.nw/package.json
+  before_script:
+    - |
+      mkdir -p $NPM_CONFIG_CACHE
+      mkdir -p artifacts
+      #dpkg --add-architecture armhf
+      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
+      apt-get update && apt-get upgrade -y
+      apt-get build-dep .
+      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
   script:
     - |
-      mkdir -p $APT_CACHE_DIR $NPM_CONFIG_CACHE
-      mkdir -p artifacts/rpm
-      dpkg --add-architecture armhf
-    - |
-      echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
-      apt-get -qq update
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y npm
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential devscripts
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y rpm zip wget
-      apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" build-dep .
-      echo -e "\e[0Ksection_end:`date +%s`:apt_get\r\e[0K"
-    - test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
-    # This is for ARM 32 arch build
-    - |
+      # This is for ARM 32 arch build
+      test `node version.js` = `dpkg-parsechangelog -S version` || (echo "package.nw/package.json and debian/changelog version mismatch"; exit 1)
+      echo -e "\e[0Ksection_start:`date +%s`:wget[collapsed=true]\r\e[0KGetting Upstream NWJS Binary"
       wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/$NWJS32_BUILD/$NWJS32_BUILD.tar.gz
       tar -xf $NWJS32_BUILD.tar.gz
       tar -xf usr/docker/dist/nwjs-chromium-ffmpeg-branding/nwjs-$NWJS_VERSION-linux-arm.tar.gz
+      echo -e "\e[0Ksection_end:`date +%s`:wget\r\e[0K"
       rm nwjs-$NWJS_VERSION-linux-arm/locales/*.info
       mv nwjs-$NWJS_VERSION-linux-arm/nw nwjs-$NWJS_VERSION-linux-arm/GridTracker
-      ls
       version=`node ./version.js`
       mkdir GridTracker-$version-linux-arm32
       cp -r nwjs-$NWJS_VERSION-linux-arm/* GridTracker-$version-linux-arm32/
@@ -237,14 +265,12 @@ arm-packaging:
       cp LICENSE GridTracker-$version-linux-arm32/
       tar -czf GridTracker-$version-linux-arm32.tar.gz GridTracker-$version-linux-arm32
       mv GridTracker-$version-linux-arm32.tar.gz artifacts/
-    # This is for ARM 64 arch build
-    - |
+      # This is for ARM 64 arch build
       wget https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/$NWJS64_BUILD/$NWJS64_BUILD.tar.gz
       tar -xf $NWJS64_BUILD.tar.gz
       tar -xf usr/docker/dist/nwjs-chromium-ffmpeg-branding/nwjs-$NWJS_VERSION-linux-arm64.tar.gz
       rm nwjs-$NWJS_VERSION-linux-arm64/locales/*.info
       mv nwjs-$NWJS_VERSION-linux-arm64/nw nwjs-$NWJS_VERSION-linux-arm64/GridTracker
-      ls
       version=`node ./version.js`
       mkdir GridTracker-$version-linux-arm64
       cp -r nwjs-$NWJS_VERSION-linux-arm64/* GridTracker-$version-linux-arm64/
@@ -253,29 +279,11 @@ arm-packaging:
       cp LICENSE GridTracker-$version-linux-arm64/
       tar -czf GridTracker-$version-linux-arm64.tar.gz GridTracker-$version-linux-arm64
       mv GridTracker-$version-linux-arm64.tar.gz artifacts/
-    
-    # This section handles making RPMs for Fedora/CentOS/RHEL
-    #- |
-      #  echo -e "\e[0Ksection_start:`date +%s`:rpm_build\r\e[0KBuilding RPM packages"
-      # mkdir -p $HOME/rpmbuild/SOURCES
-      # cp artifacts/*.tar.gz $HOME/rpmbuild/SOURCES/
-      #setarch --list
-      #setarch armhf rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.arm.spec
-      #mv $HOME/rpmbuild/RPMS/armv7l/*.rpm artifacts/rpm/
-      #echo -e "\e[0Ksection_end:`date +%s`:rpm_build\r\e[0K"
-    # This section does debian DEBs
-    #- |
-    #  echo -e "\e[0Ksection_start:`date +%s`:debian_build\r\e[0KBuilding Debian packages"
-    #  dpkg-buildpackage -uc -us
-    #  mkdir artifacts/debian
-    #  mv ../*.{deb,dsc,buildinfo,tar.xz,changes} artifacts/debian/
-    #  echo -e "\e[0Ksection_end:`date +%s`:debian_build\r\e[0K"
-    - |
-      echo "we made packages!"
+      echo "we made ARM packages!"
       ls -laR artifacts
 
 # copy test assets to NR0Q's server
-nr0q_upload_testing:
+uploadtest:
   stage: deploy
   image: alpine
   variables:
@@ -296,16 +304,10 @@ nr0q_upload_testing:
         echo "Calculating MD5 Hash for $FILE"
         md5sum $FILE > $FILE.md5
       done
-      for FILE in rpm/*.rpm
-      do
-        echo "Calculating MD5 Hash for $FILE"
-        md5sum $FILE > $FILE.md5
-      done
-
       ssh -o StrictHostKeyChecking=no gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/ && ssh -o StrictHostKeyChecking=no gridtracker@$NR0Q_SERVER_ADDRESS "rm latest_test && ln -s $CI_COMMIT_TAG latest_test"
 
 # copy release assets to NR0Q's server
-nr0q_upload_release:
+uploadrelease:
   stage: deploy
   image: alpine
   rules:
@@ -324,17 +326,12 @@ nr0q_upload_release:
         echo "Calculating MD5 Hash for $FILE"
         md5sum $FILE > $FILE.md5
       done
-      for FILE in rpm/*.rpm
-      do
-        echo "Calculating MD5 Hash for $FILE"
-        md5sum $FILE > $FILE.md5
-      done
       ssh -o StrictHostKeyChecking=no gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now
 
-source_release:
+sourcerelease:
   stage: deploy
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   variables:
@@ -354,3 +351,45 @@ source_release:
           link_type: package
   script:
     - echo 'Release for $CI_COMMIT_TAG'
+
+update_arch_aur:
+  stage: deploy
+  image: archlinux:base-devel
+  variables:
+    GIT_STRATEGY: none
+  rules:
+    # only do this with a manual tag starting with v
+    - if: '$CI_COMMIT_TAG =~ /^v.*/ && $AUR_KEY != ""'
+  before_script:
+    - |
+      pacman -Sy; pacman -S --needed --noconfirm openssh git
+      eval $(ssh-agent -s)
+      echo "$AUR_KEY" | tr -d '\r' | ssh-add -
+      mkdir -p ~/.ssh; chmod 700 ~/.ssh
+      git config --global user.name "nr0q"
+      git config --global user.email "nr0q@gridtracker.org"
+  script:
+    # generate the PKGBUILD
+    - |
+      cd arch-linux
+      curl -o gridtracker.tar.gz "https://gitlab.com/gridtracker.org/gridtracker/-/archive/${CI_COMMIT_TAG}/gridtracker-${CI_COMMIT_TAG}.tar.gz"
+      SHASUM=$(sha256sum gridtracker.tar.gz | cut -d ' ' -f1)
+      sed "s/REPLACE_WITH_VERSION/${CI_COMMIT_TAG#v}/;s/REPLACE_WITH_SHASUM/${SHASUM}/" PKGBUILD.template > PKGBUILD
+    # test that it builds
+    - |
+      useradd builder -m
+      passwd -d builder
+      printf 'builder ALL=(ALL) ALL\n' | tee -a /etc/sudoers
+      # build nwjs-bin
+      sudo -u builder bash -c 'git clone https://aur.archlinux.org/nwjs-bin.git nwjs-bin && cd nwjs-bin && makepkg -si --noconfirm'
+      # build gridtracker
+      sudo -u builder makepkg -si --noconfirm PKGBUILD
+    # push the new version
+    - |
+      makepkg --printsrcinfo > .SRCINFO
+      git clone ssh://aur@aur.archlinux.org/gridtracker.git
+      cp PKGBUILD gridtracker/PKGBUILD
+      cp .SRCINFO gridtracker/.SRCINFO
+      cd gridtracker
+      git add PKGBUILD .SRCINFO && git commit -m "upgpkg: gridtracker ${CI_COMMIT_TAG#v}" && git push
+

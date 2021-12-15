@@ -21,6 +21,10 @@ clean:
 	@echo "Cleaning $(DESTDIR)..."
 	rm -rf $(DESTDIR)/*
 
+.PHONY: build
+build:
+	@echo "GridTracker doesn't need building :D"
+
 .PHONY: install
 install:
 	@echo "Installing gridtracker in $(DESTDIR)..."

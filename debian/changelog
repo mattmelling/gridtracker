@@ -31,7 +31,7 @@ gridtracker (1.21.0620) unstable; urgency=medium
   [Enhancements]
   - Automatic pulling down of acknowledgements.json file daily when doing version check (if enabled). 
 
- -- Matthew Chambers <nr0q@gridtracker.org>  Sat, 19 Jun 20201 16:49:00 -0000
+ -- Matthew Chambers <nr0q@gridtracker.org>  Sat, 19 Jun 2021 16:49:00 -0000
  
 gridtracker (1.21.0613) unstable; urgency=medium
   [Bug Fixes]

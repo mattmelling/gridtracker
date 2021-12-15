@@ -40,7 +40,19 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
-* Sun Dec 13 2021 Matthew Chambers <nr0q@gridtracker.org> - 1.21.1212-1
-- Release with refactored Call Roster code and minor improvements.
+* Sun Dec 12 2021 Matthew Chambers <nr0q@gridtracker.org> - 1.21.1212-1
+- Release build with the call roster refactor code that's been in the works for some time.
+- [Bug Fixes]
+  - Fix #76, unfinished ignore CQ and ITU zones.
+  - Improved handling of stations that are not in a valid DXCC (ie; /MM stations)
+  - Improved handling of free text decodes that don't contain valid callsigns (ie "HI BOB" and "MERRY XMAS")
+  - Fix how the Call Roster title bar counts are calculated.
+- [Enhancements]
+  - More clarity when a ULS Zip code falls in more then one county, replacing ~ with ? symbols and better tool tip message.
+  - Fix #107, where the call roster timeout was longer then a single FT4 cycle.
+  - Fix #91, CQ is always highlighted, no matter status of CQ Only.
+  - Performance improvement by changing how call roster vars are handled ('let' vs 'var')
+  - Build system improved to push to Arch AUR, building of Debian (.deb) packages and triggering
+    of COPR RPM builds for Fedora/Cent/RHEL and their cousins.
 * Thu Sep 30 2021 Matthew Chambers <nr0q@gridtracker.org> - 1.21.0928-1
 - First attempt at repo grade RPM builds

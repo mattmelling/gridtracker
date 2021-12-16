@@ -1,4 +1,4 @@
-// GridTracker Copyright © 2021 GridTracker.org
+// GridTracker Copyright © 2022 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
 const pjson = require("./package.json");
@@ -12138,7 +12138,7 @@ function callsignToDxcc(insign)
     {
       if (parts[end].toUpperCase() == "MM")
       {
-        return -1;
+        return 0;
       }
       parts.pop();
       end = parts.length - 1;
@@ -12962,6 +12962,7 @@ function loadMapSettings()
   focusRigValue.checked = g_mapSettings.focusRig;
   haltAllOnTxValue.checked = g_mapSettings.haltAllOnTx;
   strikesAlert.value = g_mapSettings.strikesAlert;
+  clearRosterOnBandChange.checked = g_appSettings.clearRosterOnBandChange;
 
   setStrikesButton();
 
@@ -14391,6 +14392,11 @@ function loadLookupDetails()
   ValidateText(lookupPassword);
   if (lookupService.value == "CALLOOK") { lookupCredentials.style.display = "none"; }
   else lookupCredentials.style.display = "block";
+}
+
+function clearRosterOnBandChangeValueChanged(what)
+{
+  g_appSettings.clearRosterOnBandChange = clearRosterOnBandChange.checked;
 }
 
 function lookupValueChanged(what)

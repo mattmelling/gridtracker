@@ -4,9 +4,9 @@ Upstream-Contact: GridTracker Team <contact@gridtracker.org>
 Source: https://gitlab.com/gridtracker.org/gridtracker
 
 Files: *
-Copyright: Copyright (c) 2018-2020 by Tag Loomis, 2020 by GridTracker.org
+Copyright: Copyright (c) 2018-2020 by Tag Loomis, 2020-2022 by GridTracker.org
 License: BSD-3-clause
-  Copyright (c) 2018-2020 GridTricker.org
+  Copyright (c) 2018-2022 GridTricker.org
   All rights reserved.
   .
   Redistribution and use in source and binary forms, with or without

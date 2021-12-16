@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-GridTracker Copyright © 2018-2021 GridTracker.org
+GridTracker Copyright © 2018-2022 GridTracker.org
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -2893,7 +2893,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 <td colspan="2">
                   <input
                     type="range"
-                    min="15"
+                    min="5"
                     max="300"
                     value="120"
                     step="15"
@@ -2901,6 +2901,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     id="rosterTime"
                     oninput="changeRosterTime()"
                   />
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="mapItem">
+            <table align="center">
+              <tr align="center">
+                <td align="center">Clear Call Roster on Band change</td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                  <input type="checkbox" id="clearRosterOnBandChange" onchange="clearRosterOnBandChangeValueChanged(this);" />
                 </td>
               </tr>
             </table>
@@ -3526,7 +3538,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 >GridTracker.org!</a
               >
             </p>
-            <p>Copyright &copy; 2021 GridTracker.org</p>
+            <p>Copyright &copy; 2022 GridTracker.org</p>
             <img src="./gridview.png" /> <br />
           </div>
         </div>

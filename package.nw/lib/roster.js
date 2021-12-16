@@ -1,4 +1,4 @@
-// GridTracker Copyright © 2021 GridTracker.org
+// GridTracker Copyright © 2022 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
 
@@ -8,6 +8,8 @@ var callRoster = {};
 var g_blockedCalls = {};
 var g_blockedCQ = {};
 var g_blockedDxcc = {};
+var g_blockedCQz = {};
+var g_blockedITUz = {};
 var g_scriptReport = {};
 var g_worked = {};
 var g_confirmed = {};
@@ -35,6 +37,10 @@ var g_CQMenu = null;
 var g_targetCQ = "";
 var g_clearCQIgnore = null;
 var g_clearCQIgnoreMainMenu = null;
+var g_clearCQzIgnore = null;
+var g_clearCQzIgnoreMainMenu = null;
+var g_clearITUzIgnore = null;
+var g_clearITUzIgnoreMainMenu = null;
 var g_timerInterval = null;
 var g_regFocus = false;
 var g_awards = {};
@@ -125,7 +131,7 @@ var g_defaultSettings = {
   },
   reference: 0,
   controls: true,
-  controlsExpanded: false,
+  controlsExtended: false,
   compact: false,
   settingProfiles: false,
   lastSortIndex: 6,
@@ -162,6 +168,16 @@ if (typeof localStorage.blockedCQ == "undefined")
   localStorage.blockedCQ = "{}";
 }
 
+if (typeof localStorage.blockedCQz == "undefined")
+{
+  localStorage.blockedCQz = "{}";
+}
+
+if (typeof localStorage.blockedITUz == "undefined")
+{
+  localStorage.blockedITUz = "{}";
+}
+
 if (typeof localStorage.awardTracker == "undefined")
 {
   localStorage.awardTracker = "{}";
@@ -176,6 +192,8 @@ if (typeof localStorage.blockedCalls != "undefined")
   g_blockedCalls = JSON.parse(localStorage.blockedCalls);
   g_blockedCQ = JSON.parse(localStorage.blockedCQ);
   g_blockedDxcc = JSON.parse(localStorage.blockedDxcc);
+  g_blockedCQz = JSON.parse(localStorage.blockedCQz);
+  g_blockedITUz = JSON.parse(localStorage.blockedITUz);
 }
 
 function storeBlocks()
@@ -183,6 +201,8 @@ function storeBlocks()
   localStorage.blockedCalls = JSON.stringify(g_blockedCalls);
   localStorage.blockedCQ = JSON.stringify(g_blockedCQ);
   localStorage.blockedDxcc = JSON.stringify(g_blockedDxcc);
+  localStorage.blockedCQz = JSON.stringify(g_blockedCQz);
+  localStorage.blockedITUz = JSON.stringify(g_blockedITUz);
 }
 
 function storeAwardTracker()
@@ -192,7 +212,7 @@ function storeAwardTracker()
 
 function loadSettings()
 {
-  var readSettings = {};
+  let readSettings = {};
   if (typeof localStorage.rosterSettings != "undefined")
   {
     readSettings = JSON.parse(localStorage.rosterSettings);
@@ -236,137 +256,14 @@ function lockNewWindows()
 {
   if (typeof nw != "undefined")
   {
-    var gui = require("nw.gui");
-    var win = gui.Window.get();
+    let gui = require("nw.gui");
+    let win = gui.Window.get();
     win.on("new-win-policy", function (frame, url, policy)
     {
       gui.Shell.openExternal(url);
       policy.ignore();
     });
   }
-}
-
-function myCallCompare(a, b)
-{
-  return a.DEcall.localeCompare(b.DEcall);
-}
-
-function myGridCompare(a, b)
-{
-  var gridA = a.grid ? a.grid : "0";
-  var gridB = b.grid ? b.grid : "0";
-
-  if (gridA > gridB) return 1;
-  if (gridA < gridB) return -1;
-  return 0;
-}
-
-function myDxccCompare(a, b)
-{
-  return window.opener.myDxccCompare(a, b);
-}
-
-function myTimeCompare(a, b)
-{
-  if (a.age > b.age) return 1;
-  if (a.age < b.age) return -1;
-  return 0;
-}
-
-function myLifeCompare(a, b)
-{
-  if (a.life > b.life) return 1;
-  if (a.life < b.life) return -1;
-  return 0;
-}
-
-function mySpotCompare(a, b)
-{
-  if (a.spot.when > b.spot.when) return 1;
-  if (a.spot.when < b.spot.when) return -1;
-  return 0;
-}
-
-function myDbCompare(a, b)
-{
-  if (a.RSTsent > b.RSTsent) return 1;
-  if (a.RSTsent < b.RSTsent) return -1;
-  return 0;
-}
-
-function myFreqCompare(a, b)
-{
-  if (a.delta > b.delta) return 1;
-  if (a.delta < b.delta) return -1;
-  return 0;
-}
-
-function myDTCompare(a, b)
-{
-  if (a.dt > b.dt) return 1;
-  if (a.dt < b.dt) return -1;
-  return 0;
-}
-
-function myDistanceCompare(a, b)
-{
-  if (a.distance > b.distance) return 1;
-  if (a.distance < b.distance) return -1;
-  return 0;
-}
-
-function myHeadingCompare(a, b)
-{
-  if (a.heading > b.heading) return 1;
-  if (a.heading < b.heading) return -1;
-  return 0;
-}
-
-function myStateCompare(a, b)
-{
-  if (a.state == null) return 1;
-  if (b.state == null) return -1;
-  if (a.state > b.state) return 1;
-  if (a.state < b.state) return -1;
-  return 0;
-}
-
-function myCQCompare(a, b)
-{
-  return a.DXcall.localeCompare(b.DXcall);
-}
-
-function myWPXCompare(a, b)
-{
-  if (a.px == null) return 1;
-  if (b.px == null) return -1;
-  if (a.px > b.px) return 1;
-  if (a.px < b.px) return -1;
-  return 0;
-}
-
-function myCntyCompare(a, b)
-{
-  if (a.cnty == null) return 1;
-  if (b.cnty == null) return -1;
-  if (a.cnty.substr(3) > b.cnty.substr(3)) return 1;
-  if (a.cnty.substr(3) < b.cnty.substr(3)) return -1;
-  return 0;
-}
-
-function myContCompare(a, b)
-{
-  if (a.cont == null) return 1;
-  if (b.cont == null) return -1;
-  if (a.cont > b.cont) return 1;
-  if (a.cont < b.cont) return -1;
-  return 0;
-}
-function myGTCompare(a, b)
-{
-  if (a.style.gt != 0 && b.style.gt == 0) return 1;
-  if (a.style.gt == 0 && b.style.gt != 0) return -1;
-  return 0;
 }
 
 var r_sortFunction = [
@@ -388,6 +285,141 @@ var r_sortFunction = [
   myCntyCompare,
   myContCompare
 ];
+
+function myCallCompare(a, b)
+{
+  return a.callObj.DEcall.localeCompare(b.callObj.DEcall);
+}
+
+function myGridCompare(a, b)
+{
+  let gridA = a.callObj.grid ? a.callObj.grid : "0";
+  let gridB = b.callObj.grid ? b.callObj.grid : "0";
+
+  if (gridA > gridB) return 1;
+  if (gridA < gridB) return -1;
+  return 0;
+}
+
+function myDxccCompare(a, b)
+{
+  return window.opener.myDxccCompare(a.callObj, b.callObj);
+}
+
+function myTimeCompare(a, b)
+{
+  if (a.callObj.age > b.callObj.age) return 1;
+  if (a.callObj.age < b.callObj.age) return -1;
+  return 0;
+}
+
+function myLifeCompare(a, b)
+{
+  if (a.callObj.life > b.callObj.life) return 1;
+  if (a.callObj.life < b.callObj.life) return -1;
+  return 0;
+}
+
+function mySpotCompare(a, b)
+{
+  let cutoff = timeNowSec() - window.opener.g_receptionSettings.viewHistoryTimeSec;
+
+  if (a.callObj.spot.when <= cutoff) return -1;
+  if (b.callObj.spot.when <= cutoff) return 1;
+
+  let aSNR = Number(a.callObj.spot.snr);
+  let bSNR = Number(b.callObj.spot.snr);
+
+  if (aSNR > bSNR) return 1;
+  if (aSNR < bSNR) return -1;
+
+  if (a.callObj.spot.when > b.callObj.spot.when) return 1;
+  if (a.callObj.spot.when < b.callObj.spot.when) return -1;
+
+  return 0;
+}
+
+function myDbCompare(a, b)
+{
+  if (a.callObj.RSTsent > b.callObj.RSTsent) return 1;
+  if (a.callObj.RSTsent < b.callObj.RSTsent) return -1;
+  return 0;
+}
+
+function myFreqCompare(a, b)
+{
+  if (a.callObj.delta > b.callObj.delta) return 1;
+  if (a.callObj.delta < b.callObj.delta) return -1;
+  return 0;
+}
+
+function myDTCompare(a, b)
+{
+  if (a.callObj.dt > b.callObj.dt) return 1;
+  if (a.callObj.dt < b.callObj.dt) return -1;
+  return 0;
+}
+
+function myDistanceCompare(a, b)
+{
+  if (a.callObj.distance > b.callObj.distance) return 1;
+  if (a.callObj.distance < b.callObj.distance) return -1;
+  return 0;
+}
+
+function myHeadingCompare(a, b)
+{
+  if (a.callObj.heading > b.callObj.heading) return 1;
+  if (a.callObj.heading < b.callObj.heading) return -1;
+  return 0;
+}
+
+function myStateCompare(a, b)
+{
+  if (a.callObj.state == null) return 1;
+  if (b.callObj.state == null) return -1;
+  if (a.callObj.state > b.callObj.state) return 1;
+  if (a.callObj.state < b.callObj.state) return -1;
+  return 0;
+}
+
+function myCQCompare(a, b)
+{
+  return a.callObj.DXcall.localeCompare(b.callObj.DXcall);
+}
+
+function myWPXCompare(a, b)
+{
+  if (a.callObj.px == null) return 1;
+  if (b.callObj.px == null) return -1;
+  if (a.callObj.px > b.callObj.px) return 1;
+  if (a.callObj.px < b.callObj.px) return -1;
+  return 0;
+}
+
+function myCntyCompare(a, b)
+{
+  if (a.callObj.cnty == null) return 1;
+  if (b.callObj.cnty == null) return -1;
+  if (a.callObj.cnty.substr(3) > b.callObj.cnty.substr(3)) return 1;
+  if (a.callObj.cnty.substr(3) < b.callObj.cnty.substr(3)) return -1;
+  return 0;
+}
+
+function myContCompare(a, b)
+{
+  if (a.callObj.cont == null) return 1;
+  if (b.callObj.cont == null) return -1;
+  if (a.callObj.cont > b.callObj.cont) return 1;
+  if (a.callObj.cont < b.callObj.cont) return -1;
+  return 0;
+}
+function myGTCompare(a, b)
+{
+  if (a.callObj.style.gt != 0 && b.callObj.style.gt == 0) return 1;
+  if (a.callObj.style.gt == 0 && b.callObj.style.gt != 0) return -1;
+  return 0;
+}
 
 function showRosterBox(sortIndex)
 {
@@ -433,1831 +465,42 @@ function processRoster(roster)
 
 function viewRoster()
 {
-  var bands = Object();
-  var modes = Object();
-
-  var callMode = g_rosterSettings.callsign;
-  var onlyHits = false;
-  var isAwardTracker = false;
-
-  if (callMode == "hits")
-  {
-    callMode = "all";
-    onlyHits = true;
-  }
-  if (referenceNeed.value == LOGBOOK_AWARD_TRACKER)
-  {
-    callMode = "all";
-    onlyHits = false;
-    isAwardTracker = true;
-    g_rosterSettings.huntNeed = "confirmed";
-  }
-
-  var canMsg =
-    window.opener.g_mapSettings.offlineMode == false &&
-    window.opener.g_appSettings.gtShareEnable == "true" &&
-    window.opener.g_appSettings.gtMsgEnable == "true";
-
-  if (window.opener.g_callsignLookups.lotwUseEnable == true)
-  {
-    usesLoTWDiv.style.display = "";
-    if (g_rosterSettings.usesLoTW == true)
-    {
-      maxLoTW.style.display = "";
-      maxLoTWView.style.display = "";
-    }
-    else
-    {
-      maxLoTW.style.display = "none";
-      maxLoTWView.style.display = "none";
-    }
-  }
-  else
-  {
-    usesLoTWDiv.style.display = "none";
-    maxLoTW.style.display = "none";
-    maxLoTWView.style.display = "none";
-  }
-
-  if (window.opener.g_callsignLookups.eqslUseEnable == true) useseQSLDiv.style.display = "";
-  else useseQSLDiv.style.display = "none";
-
-  if (window.opener.g_callsignLookups.oqrsUseEnable == true) usesOQRSDiv.style.display = "";
-  else usesOQRSDiv.style.display = "none";
-
-  if (g_rosterSettings.columns.Spot == true) onlySpotDiv.style.display = "";
-  else onlySpotDiv.style.display = "none";
-
-  if (callMode == "all") allOnlyNewDiv.style.display = "";
-  else allOnlyNewDiv.style.display = "none";
-
-  var huntIndex, workedIndex, layeredMode;
-  if (g_rosterSettings.huntNeed == "mixed")
-  {
-    huntIndex = g_confirmed;
-    workedIndex = g_worked;
-    layeredMode = LAYERED_MODE_FOR[String(g_rosterSettings.reference)];
-  }
-  else if (g_rosterSettings.huntNeed == "worked")
-  {
-    huntIndex = g_worked;
-    workedIndex = false;
-    layeredMode = false;
-  }
-  else if (g_rosterSettings.huntNeed == "confirmed")
-  {
-    huntIndex = g_confirmed;
-    workedIndex = g_worked;
-    layeredMode = false;
-  }
-  else
-  {
-    huntIndex = false;
-    workedIndex = false;
-    layeredMode = false;
-  }
-
-  var now = timeNowSec();
-
-  // First loop, exclude calls, mostly based on "Exceptions" settings
-  for (var callHash in callRoster)
-  {
-    var entry = callRoster[callHash];
-    var callObj = entry.callObj;
-
-    var call = entry.DEcall;
-
-    entry.tx = true;
-    callObj.shouldAlert = false;
-    callObj.reason = Array();
-    callObj.awardReason = "Callsign";
-
-    if (now - callObj.age > window.opener.g_mapSettings.rosterTime)
-    {
-      entry.tx = false;
-      entry.alerted = false;
-      callObj.qrz = false;
-      callObj.reset = true;
-      continue;
-    }
-    if (window.opener.g_instances[callObj.instance].crEnable == false)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (call in g_blockedCalls)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (
-      entry.DXcall + " from All" in g_blockedCQ ||
-      entry.DXcall + " from " + window.opener.g_dxccToAltName[callObj.dxcc] in g_blockedCQ
-    )
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (callObj.dxcc in g_blockedDxcc)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (g_rosterSettings.cqOnly == true && callObj.CQ == false)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (g_rosterSettings.useRegex && g_rosterSettings.callsignRegex.length > 0)
-    {
-      try
-      {
-        if (!call.match(g_rosterSettings.callsignRegex))
-        {
-          entry.tx = false;
-          continue;
-        }
-      }
-      catch (e) {}
-    }
-    if (g_rosterSettings.requireGrid == true && callObj.grid.length != 4)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (g_rosterSettings.wantMinDB == true && entry.message.SR < g_rosterSettings.minDb)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (g_rosterSettings.wantMaxDT == true && Math.abs(entry.message.DT) > g_rosterSettings.maxDT)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (g_rosterSettings.wantMinFreq == true && entry.message.DF < g_rosterSettings.minFreq)
-    {
-      entry.tx = false;
-      continue;
-    }
-    if (g_rosterSettings.wantMaxFreq == true && entry.message.DF > g_rosterSettings.maxFreq)
-    {
-      entry.tx = false;
-      continue;
-    }
-
-    if (g_rosterSettings.noMsg == true)
-    {
-      try
-      {
-        if (callObj.msg.match(g_rosterSettings.noMsgValue))
-        {
-          entry.tx = false;
-          continue;
-        }
-      }
-      catch (e) {}
-    }
-    if (g_rosterSettings.onlyMsg == true)
-    {
-      try
-      {
-        if (!callObj.msg.match(g_rosterSettings.onlyMsgValue))
-        {
-          entry.tx = false;
-          continue;
-        }
-      }
-      catch (e) {}
-    }
-
-    if (callObj.dxcc == window.opener.g_myDXCC)
-    {
-      if (g_rosterSettings.noMyDxcc == true)
-      {
-        entry.tx = false;
-        continue;
-      }
-    }
-    else
-    {
-      if (g_rosterSettings.onlyMyDxcc == true)
-      {
-        entry.tx = false;
-        continue;
-      }
-    }
-
-    if (window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.usesLoTW == true)
-    {
-      if (!(call in window.opener.g_lotwCallsigns))
-      {
-        entry.tx = false;
-        continue;
-      }
-      if (g_rosterSettings.maxLoTW < 27)
-      {
-        var months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
-        if (months > g_rosterSettings.maxLoTW)
-        {
-          entry.tx = false;
-          continue;
-        }
-      }
-    }
-
-    if (window.opener.g_callsignLookups.eqslUseEnable == true && g_rosterSettings.useseQSL == true)
-    {
-      if (!(call in window.opener.g_eqslCallsigns))
-      {
-        entry.tx = false;
-        continue;
-      }
-    }
-
-    if (window.opener.g_callsignLookups.oqrsUseEnable == true && g_rosterSettings.usesOQRS == true)
-    {
-      if (!(call in window.opener.g_oqrsCallsigns))
-      {
-        entry.tx = false;
-        continue;
-      }
-    }
-
-    if (callMode != "all")
-    {
-      if (entry.DXcall == "CQ DX" && callObj.dxcc == window.opener.g_myDXCC)
-      {
-        entry.tx = false;
-        continue;
-      }
-
-      var hash = hashMaker(call, callObj, g_rosterSettings.reference);
-      if (callMode == "worked" && hash in g_worked.call)
-      {
-        entry.tx = false;
-        continue;
-      }
-      if (callMode == "confirmed" && hash in g_confirmed.call)
-      {
-        entry.tx = false;
-        continue;
-      }
-
-      if (g_rosterSettings.hunting == "grid")
-      {
-        var hash = hashMaker(callObj.grid.substr(0, 4),
-          callObj, g_rosterSettings.reference);
-        if (huntIndex && hash in huntIndex.grid)
-        {
-          entry.tx = false;
-          continue;
-        }
-        if (callObj.grid.length == 0)
-        {
-          entry.tx = false;
-          continue;
-        }
-        continue;
-      }
-      if (g_rosterSettings.hunting == "dxcc")
-      {
-        var hash = hashMaker(String(callObj.dxcc),
-          callObj, g_rosterSettings.reference);
-
-        if (huntIndex && (hash in huntIndex.dxcc))
-        {
-          entry.tx = false;
-          continue;
-        }
-
-        continue;
-      }
-
-      if (g_rosterSettings.hunting == "dxccs" && r_currentDXCCs != -1)
-      {
-        if (callObj.dxcc != r_currentDXCCs)
-        {
-          entry.tx = false;
-          continue;
-        }
-      }
-
-      if (g_rosterSettings.hunting == "wpx")
-      {
-        if (String(callObj.px) == null)
-        {
-          entry.tx = false;
-          continue;
-        }
-        var hash = hashMaker(String(callObj.px),
-          callObj, g_rosterSettings.reference);
-
-        if (huntIndex && (hash in huntIndex.px))
-        {
-          entry.tx = false;
-          continue;
-        }
-
-        continue;
-      }
-
-      if (g_rosterSettings.hunting == "cq")
-      {
-        var huntTotal = callObj.cqza.length;
-        if (huntTotal == 0 || !huntIndex)
-        {
-          entry.tx = false;
-          continue;
-        }
-        var huntFound = 0;
-        for (index in callObj.cqza)
-        {
-          var hash = hashMaker(callObj.cqza[index], callObj, g_rosterSettings.reference);
-
-          if (hash in huntIndex.cqz) huntFound++;
-        }
-        if (huntFound == huntTotal)
-        {
-          entry.tx = false;
-          continue;
-        }
-
-        continue;
-      }
-
-      if (g_rosterSettings.hunting == "itu")
-      {
-        var huntTotal = callObj.ituza.length;
-        if (huntTotal == 0 || !huntIndex)
-        {
-          entry.tx = false;
-          continue;
-        }
-        var huntFound = 0;
-        for (index in callObj.ituza)
-        {
-          var hash = hashMaker(callObj.ituza[index], callObj, g_rosterSettings.reference);
-
-          if (hash in huntIndex.ituz) huntFound++;
-        }
-        if (huntFound == huntTotal)
-        {
-          entry.tx = false;
-          continue;
-        }
-
-        if (callObj.grid.length == 0)
-        {
-          entry.tx = false;
-          continue;
-        }
-        continue;
-      }
-
-      if (g_rosterSettings.hunting == "usstates" && window.opener.g_callsignLookups.ulsUseEnable == true)
-      {
-        var state = callObj.state;
-        var finalDxcc = callObj.dxcc;
-        if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
-        {
-          if (state in window.opener.g_StateData)
-          {
-            var hash = hashMaker(state, callObj, g_rosterSettings.reference);
-
-            if (huntIndex && hash in huntIndex.state)
-            {
-              entry.tx = false;
-              continue;
-            }
-          }
-          else entry.tx = false;
-        }
-        else entry.tx = false;
-
-        continue;
-      }
-
-      if (g_rosterSettings.hunting == "usstate" && g_currentUSCallsigns)
-      {
-        if (call in g_currentUSCallsigns)
-        {
-          // Do Nothing
-        }
-        else
-        {
-          entry.tx = false;
-          continue;
-        }
-        continue;
-      }
-    }
-    if (isAwardTracker)
-    {
-      var tx = false;
-      var baseHash = hashMaker("", callObj, g_rosterSettings.reference);
-
-      for (var award in g_awardTracker)
-      {
-        if (g_awardTracker[award].enable)
-        {
-          tx = testAward(award, callObj, baseHash);
-          if (tx)
-          {
-            var x = g_awardTracker[award];
-            callObj.awardReason =
-              g_awards[x.sponsor].awards[x.name].tooltip +
-              " (" +
-              g_awards[x.sponsor].sponsor +
-              ")";
-
-            break;
-          }
-        }
-      }
-      entry.tx = tx;
-    }
-  }
-
-  var hasGtPin = false;
-
-  var newCallList = Array();
-  var inversionAlpha = "DD";
-  var row = "#000000";
-  var bold = "#000000;font-weight: bold;";
-  var unconf = "background-clip:padding-box;box-shadow: 0 0 7px 3px inset ";
-  var layeredAlpha = "77";
-  var layeredInversionAlpha = "66";
-  var layeredUnconf = "background-clip:padding-box;box-shadow: 0 0 4px 2px inset ";
-  var layeredUnconfAlpha = "AA";
-
-  // Second loop, hunting and highlighting
-  for (var callHash in callRoster)
-  {
-    var entry = callRoster[callHash];
-    var callObj = entry.callObj;
-
-    // Special case check for called station
-    if (callObj.qrz == true && entry.tx == false)
-    {
-      // The instance has to be enabled
-      if (window.opener.g_instances[callObj.instance].crEnable == true)
-      {
-        // Calling us, but we wouldn't normally display
-        // If they are not ignored or we're in a QSO with them, var it through
-
-        if ((!(entry.DEcall in g_blockedCalls) && !(callObj.dxcc in g_blockedDxcc)) ||
-          window.opener.g_instances[callObj.instance].status.DXcall == entry.DEcall)
-        {
-          entry.tx = true;
-        }
-      }
-    }
-
-    // Only render entries with `tx == true`, ignore the rest
-    if (callObj.dxcc != -1 && entry.tx == true)
-    {
-      // In layered mode ("Hunting: mixed") the workHashSuffix becomes a more stricter 'live band',
-      // while the layered suffix is a broader 'mixed band'
-      var workHashSuffix, layeredHashSuffix;
-      if (layeredMode)
-      {
-        workHashSuffix = hashMaker("", callObj, layeredMode);
-        layeredHashSuffix = hashMaker("", callObj, g_rosterSettings.reference);
-      }
-      else
-      {
-        workHashSuffix = hashMaker("", callObj, g_rosterSettings.reference);
-        layeredHashSuffix = false
-      }
-      var workHash = workHashSuffix; // TODO: Remove after replacing all occurrences with Suffix
-
-      var callsign = entry.DEcall;
-
-      callObj.hunting = {}
-      callObj.callFlags = {}
-
-      var colorObject = Object();
-
-      var callPointer = callObj.CQ == true ? "cursor:pointer" : "";
-
-      var didWork = false;
-
-      var call = "#FFFF00";
-      var grid = "#00FFFF";
-      var calling = "#90EE90";
-      var dxcc = "#FFA500";
-      var state = "#90EE90";
-      var cnty = "#CCDD00";
-      var cont = "#00DDDD";
-      var cqz = "#DDDDDD";
-      var ituz = "#DDDDDD";
-      var wpx = "#FFFF00";
-
-      hasGtPin = false;
-      var shouldAlert = false;
-      var callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
-      var callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, cqzConf, ituzConf, wpxConf;
-
-      callBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
-
-      callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = cqzConf = ituzConf = wpxConf =
-        "";
-
-      var hash = callsign + workHashSuffix;
-      var layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
-
-      // Call worked in current logbook settings, regardless of hunting mode
-      if (hash in g_worked.call)
-      {
-        callObj.callFlags.worked = true;
-        didWork = true;
-        callConf = `${unconf}${call}${inversionAlpha};`;
-
-        if (hash in g_confirmed.call)
-        {
-          callObj.callFlags.confirmed = true;
-          callPointer = "text-decoration: line-through; ";
-          callConf = "";
-        }
-      }
-
-      // Calls that have OAMS chat support
-      if (
-        callsign in window.opener.g_gtCallsigns &&
-        window.opener.g_gtCallsigns[callsign] in window.opener.g_gtFlagPins &&
-        window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[callsign]].canmsg == true
-      )
-      {
-        callObj.callFlags.oams = true;
-        // grab the CID
-        colorObject.gt = window.opener.g_gtCallsigns[callsign];
-        hasGtPin = true;
-      }
-      else
-      {
-        colorObject.gt = 0;
-      }
-
-      // We only do hunt highlighting when showing all entries
-      // This means "Callsigns: All Traffic", "Callsigns: All Traffic/Only Wanted" and "Logbook: Award Tracker"
-      // There is no highlighting in other modes
-      if (callMode == "all")
-      {
-        // Skip when "only new calls"
-        // Questions: Move to the first loop? Why only skip new calls in "all traffic" and not other modes?
-        if (allOnlyNew.checked == true && didWork && callObj.qrz == false)
-        {
-          entry.tx = false;
-          continue;
-        }
-
-        // Hunting for callsigns
-        if (huntCallsign.checked == true)
-        {
-          var hash = callsign + workHashSuffix;
-          var layeredHash = layeredMode && (callsign + layeredHashSuffix)
-
-          if (huntIndex && !(hash in huntIndex.call))
-          {
-            shouldAlert = true;
-
-            callObj.reason.push("call");
-
-            if (workedIndex && hash in workedIndex.call)
-            {
-              if (layeredMode && layeredHash in huntIndex.call)
-              {
-                callObj.hunting.call = "worked-and-mixed";
-                callConf = `${layeredUnconf}${call}${layeredUnconfAlpha};`;
-                callBg = `${call}${layeredInversionAlpha}`;
-                call = bold;
-              }
-              // /* Currently we don't have a way to figure out
-              //  * if the call is worked only in this band or also others,
-              //  * so we cannot cover this particular combination
-              //  * and have to default to just showing it as plain "worked"
-              //  */
-              // else if (layeredMode && layeredHash in workedIndex.call)
-              // {
-              //   callObj.hunting.call = "worked-and-mixed-worked";
-              //   callConf = `${layeredUnconf}${call}${layeredAlpha};`;
-              // }
-              else
-              {
-                callObj.hunting.call = "worked";
-                callConf = `${unconf}${call}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (layeredMode && layeredHash in huntIndex.call)
-              {
-                callObj.hunting.call = "mixed";
-                callBg = `${call}${layeredAlpha};`;
-                call = bold;
-              }
-              else if (layeredMode && layeredHash in workedIndex.call)
-              {
-                callObj.hunting.call = "mixed-worked";
-                callConf = `${unconf}${call}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.call = "hunted";
-                callBg = `${call}${inversionAlpha};`;
-                call = bold;
-              }
-            }
-          }
-        }
-
-        // Hunting for "stations calling you"
-        if (huntQRZ.checked == true && callObj.qrz == true)
-        {
-          callObj.callFlags.calling = true
-          shouldAlert = true;
-          callObj.reason.push("qrz");
-        }
-
-        // Hunting for stations with OAMS
-        if (huntOAMS.checked == true && hasGtPin == true)
-        {
-          callObj.hunting.oams = "hunted";
-          shouldAlert = true;
-          callObj.reason.push("oams");
-        }
-
-        // Hunting for grids
-        if (huntGrid.checked == true && callObj.grid.length > 1)
-        {
-          var hash = callObj.grid.substr(0, 4) + workHashSuffix;
-          var layeredHash = layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
-
-          if (huntIndex && !(hash in huntIndex.grid))
-          {
-            shouldAlert = true;
-
-            callObj.reason.push("grid");
-
-            if (workedIndex && hash in workedIndex.grid)
-            {
-              if (layeredMode && layeredHash in huntIndex.grid)
-              {
-                callObj.hunting.grid = "worked-and-mixed";
-                gridConf = `${layeredUnconf}${grid}${layeredUnconfAlpha};`;
-                gridBg = `${grid}${layeredInversionAlpha}`;
-                grid = bold;
-              }
-              else
-              {
-                callObj.hunting.grid = "worked";
-                gridConf = `${unconf}${grid}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (layeredMode && layeredHash in huntIndex.grid)
-              {
-                callObj.hunting.grid = "mixed";
-                gridBg = `${grid}${layeredAlpha};`;
-                grid = bold;
-              }
-              else if (layeredMode && layeredHash in workedIndex.grid)
-              {
-                callObj.hunting.grid = "mixed-worked";
-                gridConf = `${unconf}${grid}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.grid = "hunted";
-                gridBg = `${grid}${inversionAlpha};`;
-                grid = bold;
-              }
-            }
-          }
-        }
-
-        // Hunting for DXCC
-        if (huntDXCC.checked == true)
-        {
-          var hash = String(callObj.dxcc) + workHashSuffix;
-          var layeredHash = layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
-
-          if (huntIndex && !(hash in huntIndex.dxcc))
-          {
-            shouldAlert = true;
-
-            callObj.reason.push("dxcc");
-
-            if (workedIndex && hash in workedIndex.dxcc)
-            {
-              if (layeredMode && layeredHash in huntIndex.dxcc)
-              {
-                callObj.hunting.dxcc = "worked-and-mixed";
-                dxccConf = `${layeredUnconf}${dxcc}${layeredUnconfAlpha};`;
-                dxccBg = `${dxcc}${layeredInversionAlpha}`;
-                dxcc = bold;
-              }
-              else
-              {
-                callObj.hunting.dxcc = "worked";
-                dxccConf = `${unconf}${dxcc}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (layeredMode && layeredHash in huntIndex.dxcc)
-              {
-                callObj.hunting.dxcc = "mixed";
-                dxccBg = `${dxcc}${layeredAlpha};`;
-                dxcc = bold;
-              }
-              else if (layeredMode && layeredHash in workedIndex.dxcc)
-              {
-                callObj.hunting.dxcc = "mixed-worked";
-                dxccConf = `${unconf}${dxcc}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.dxcc = "hunted";
-                dxccBg = `${dxcc}${inversionAlpha};`;
-                dxcc = bold;
-              }
-            }
-          }
-        }
-
-        // Hunting for US States
-        if (huntState.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
-        {
-          var stateSearch = callObj.state;
-          var finalDxcc = callObj.dxcc;
-          if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
-          {
-            if (stateSearch in window.opener.g_StateData)
-            {
-              var hash = stateSearch + workHashSuffix;
-              var layeredHash = layeredMode && (stateSearch + layeredHashSuffix)
-
-              if (huntIndex && !(hash in huntIndex.state))
-              {
-                shouldAlert = true;
-
-                callObj.reason.push("state");
-
-                if (workedIndex && hash in workedIndex.state)
-                {
-                  if (layeredMode && layeredHash in huntIndex.state)
-                  {
-                    callObj.hunting.state = "worked-and-mixed";
-                    stateConf = `${layeredUnconf}${state}${layeredUnconfAlpha};`;
-                    stateBg = `${state}${layeredInversionAlpha}`;
-                    state = bold;
-                  }
-                  else
-                  {
-                    callObj.hunting.state = "worked";
-                    stateConf = `${unconf}${state}${inversionAlpha};`;
-                  }
-                }
-                else
-                {
-                  if (layeredMode && layeredHash in huntIndex.state)
-                  {
-                    callObj.hunting.state = "mixed";
-                    stateBg = `${state}${layeredAlpha};`;
-                    state = bold;
-                  }
-                  else if (layeredMode && layeredHash in workedIndex.state)
-                  {
-                    callObj.hunting.state = "mixed-worked";
-                    stateConf = `${unconf}${state}${layeredAlpha};`;
-                  }
-                  else
-                  {
-                    callObj.hunting.state = "hunted";
-                    stateBg = `${state}${inversionAlpha};`;
-                    state = bold;
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        // Hunting for US Counties
-        if (huntCounty.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
-        {
-          var finalDxcc = callObj.dxcc;
-          if (
-            callObj.cnty &&
-            (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6 || finalDxcc == 202) &&
-            callObj.cnty.length > 0
-          )
-          {
-            var hash = callObj.cnty + (layeredMode ? layeredHashSuffix : workHashSuffix);
-
-            if ((huntIndex && !(hash in huntIndex.cnty)) || callObj.qual == false)
-            {
-              if (callObj.qual == false)
-              {
-                var counties = window.opener.g_zipToCounty[callObj.zipcode];
-                var foundHit = false;
-                for (var cnt in counties)
-                {
-                  var hh = counties[cnt] + workHash;
-                  callObj.cnty = counties[cnt];
-                  if (huntIndex && !(hh in huntIndex.cnty))
-                  {
-                    foundHit = true;
-                    break;
-                  }
-                }
-                if (foundHit) shouldAlert = true;
-              }
-              else
-              {
-                shouldAlert = true;
-              }
-
-              if (shouldAlert)
-              {
-                callObj.reason.push("cnty");
-
-                if (workedIndex && hash in workedIndex.cnty)
-                {
-                  callObj.hunting.cnty = "worked";
-                  cntyConf = `${unconf}${cnty}${inversionAlpha};`;
-                }
-                else
-                {
-                  callObj.hunting.cnty = "hunted";
-                  cntyBg = `${cnty}${inversionAlpha}`;
-                  cnty = bold;
-                }
-              }
-            }
-          }
-        }
-
-        // Hunting for CQ Zones
-        if (huntCQz.checked == true)
-        {
-          var huntTotal = callObj.cqza.length;
-          var huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
-
-          for (index in callObj.cqza)
-          {
-            var hash = callObj.cqza[index] + workHashSuffix;
-            var layeredHash = layeredMode && (callObj.cqza[index] + layeredHashSuffix)
-
-            if (huntIndex && hash in huntIndex.cqz) huntFound++;
-            if (layeredMode && layeredHash in huntIndex.cqz) layeredFound++;
-            if (workedIndex && hash in workedIndex.cqz) workedFound++;
-            if (layeredMode && layeredHash in workedIndex.cqz) layeredWorkedFound++;
-          }
-          if (huntFound != huntTotal)
-          {
-            shouldAlert = true;
-            callObj.reason.push("cqz");
-
-            if (workedIndex && workedFound == huntTotal)
-            {
-              if (layeredMode && layeredFound == huntTotal)
-              {
-                callObj.hunting.cqz = "worked-and-mixed";
-                cqzConf = `${layeredUnconf}${cqz}${layeredUnconfAlpha};`;
-                cqzBg = `${cqz}${layeredInversionAlpha}`;
-                cqz = bold;
-              }
-              else
-              {
-                callObj.hunting.cqz = "worked";
-                cqzConf = `${unconf}${cqz}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (layeredMode && layeredFound == huntTotal)
-              {
-                callObj.hunting.cqz = "mixed";
-                cqzBg = `${cqz}${layeredAlpha};`;
-                cqz = bold;
-              }
-              else if (layeredMode && layeredWorkedFound == huntTotal)
-              {
-                callObj.hunting.cqz = "mixed-worked";
-                cqzConf = `${unconf}${cqz}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.cqz = "hunted";
-                cqzBg = `${cqz}${inversionAlpha};`;
-                cqz = bold;
-              }
-            }
-          }
-        }
-
-        // Hunting for ITU Zones
-        if (huntITUz.checked == true)
-        {
-          var huntTotal = callObj.ituza.length;
-          var huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
-
-          for (index in callObj.ituza)
-          {
-            var hash = callObj.ituza[index] + workHashSuffix;
-            var layeredHash = layeredMode && (callObj.ituza[index] + layeredHashSuffix)
-
-            if (huntIndex && hash in huntIndex.ituz) huntFound++;
-            if (layeredMode && layeredHash in huntIndex.ituz) layeredFound++;
-            if (workedIndex && hash in workedIndex.ituz) workedFound++;
-            if (layeredMode && layeredHash in workedIndex.ituz) layeredWorkedFound++;
-          }
-          if (huntFound != huntTotal)
-          {
-            shouldAlert = true;
-            callObj.reason.push("ituz");
-
-            if (workedIndex && workedFound == huntTotal)
-            {
-              if (layeredMode && layeredFound == huntTotal)
-              {
-                callObj.hunting.ituz = "worked-and-mixed";
-                ituzConf = `${layeredUnconf}${ituz}${layeredUnconfAlpha};`;
-                ituzBg = `${ituz}${layeredInversionAlpha}`;
-                ituz = bold;
-              }
-              else
-              {
-                callObj.hunting.ituz = "worked";
-                ituzConf = `${unconf}${ituz}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (layeredMode && layeredFound == huntTotal)
-              {
-                callObj.hunting.ituz = "mixed";
-                ituzBg = `${ituz}${layeredAlpha};`;
-                ituz = bold;
-              }
-              else if (layeredMode && layeredWorkedFound == huntTotal)
-              {
-                callObj.hunting.ituz = "mixed-worked";
-                ituzConf = `${unconf}${ituz}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.ituz = "hunted";
-                ituzBg = `${ituz}${inversionAlpha};`;
-                ituz = bold;
-              }
-            }
-          }
-        }
-
-        // Hunting for WPX (Prefixes)
-        if (huntPX.checked == true && callObj.px)
-        {
-          var hash = String(callObj.px) + workHashSuffix;
-          var layeredHash = layeredMode && (String(callObj.px) + layeredHashSuffix)
-
-          if (huntIndex && !(hash in huntIndex.px))
-          {
-            shouldAlert = true;
-
-            callObj.reason.push("wpx");
-
-            if (workedIndex && hash in workedIndex.px)
-            {
-              if (layeredMode && layeredHash in huntIndex.px)
-              {
-                callObj.hunting.wpx = "worked-and-mixed";
-                wpxConf = `${layeredUnconf}${wpx}${layeredUnconfAlpha};`;
-                wpxBg = `${wpx}${layeredInversionAlpha}`;
-                wpx = bold;
-              }
-              else
-              {
-                callObj.hunting.wpx = "worked";
-                wpxConf = `${unconf}${wpx}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (layeredMode && layeredHash in huntIndex.px)
-              {
-                callObj.hunting.wpx = "mixed";
-                wpxBg = `${wpx}${layeredAlpha};`;
-                wpx = bold;
-              }
-              else if (layeredMode && layeredHash in workedIndex.px)
-              {
-                callObj.hunting.wpx = "mixed-worked";
-                wpxConf = `${unconf}${wpx}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.wpx = "hunted";
-                wpxBg = `${wpx}${inversionAlpha};`;
-                wpx = bold;
-              }
-            }
-          }
-        }
-
-        // Hunting for Continents
-        if (huntCont.checked == true && callObj.cont)
-        {
-          var hash = String(callObj.cont) + workHashSuffix;
-          var layeredHash = layeredMode && (String(callObj.cont) + layeredHashSuffix)
-
-          if (huntIndex && !(hash in huntIndex.cont))
-          {
-            shouldAlert = true;
-
-            callObj.reason.push("cont");
-
-            if (workedIndex && hash in workedIndex.cont)
-            {
-              if (layeredMode && layeredHash in huntIndex.cont)
-              {
-                callObj.hunting.cont = "worked-and-mixed";
-                contConf = `${layeredUnconf}${cont}${layeredUnconfAlpha};`;
-                contBg = `${cont}${layeredInversionAlpha}`;
-                cont = bold;
-              }
-              else
-              {
-                callObj.hunting.cont = "worked";
-                contConf = `${unconf}${cont}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (layeredMode && layeredHash in huntIndex.cont)
-              {
-                callObj.hunting.cont = "mixed";
-                contBg = `${cont}${layeredAlpha};`;
-                cont = bold;
-              }
-              else if (layeredMode && layeredHash in workedIndex.cont)
-              {
-                callObj.hunting.cont = "mixed-worked";
-                contConf = `${unconf}${cont}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.cont = "hunted";
-                contBg = `${cont}${inversionAlpha};`;
-                cont = bold;
-              }
-            }
-          }
-        }
-      }
-
-      // Station is calling us
-      if (callObj.DXcall == window.opener.myDEcall)
-      {
-        callingBg = "#0000FF" + inversionAlpha;
-        calling = "#FFFF00;text-shadow: 0px 0px 2px #FFFF00";
-      }
-      else if (callObj.CQ == true && g_rosterSettings.cqOnly == false)
-      {
-        callingBg = calling + inversionAlpha;
-        calling = bold;
-      }
-
-      // Assemble all styles
-      colorObject.call = "style='" + callConf + "background-color:" + callBg + ";color:" +
-        call + ";" + callPointer + "'";
-      colorObject.grid = "style='" + gridConf + "background-color:" + gridBg + ";color:" + grid + ";cursor:pointer'";
-      colorObject.calling = "style='" + callingConf + "background-color:" + callingBg + ";color:" + calling + "'";
-      colorObject.dxcc = "style='" + dxccConf + "background-color:" + dxccBg + ";color:" + dxcc + "'";
-      colorObject.state = "style='" + stateConf + "background-color:" + stateBg + ";color:" + state + "'";
-      colorObject.cnty = "style='" + cntyConf + "background-color:" + cntyBg + ";color:" + cnty + "'";
-      colorObject.cont = "style='" + contConf + "background-color:" + contBg + ";color:" + cont + "'";
-      colorObject.cqz = "style='" + cqzConf + "background-color:" + cqzBg + ";color:" + cqz + "'";
-      colorObject.ituz = "style='" + ituzConf + "background-color:" + ituzBg + ";color:" + ituz + "'";
-      colorObject.px = "style='" + wpxConf + "background-color:" + wpxBg + ";color:" + wpx + "'";
-
-      // Just in case, don't alert if we worked this callsign alread
-      if (didWork && shouldAlert) shouldAlert = false;
-
-      callObj.shouldAlert = shouldAlert;
-
-      callObj.style = colorObject;
-
-      if (g_rosterSettings.columns.Spot)
-      {
-        callObj.spot = window.opener.getSpotTime(
-          callObj.DEcall + callObj.mode + callObj.band + callObj.grid
-        );
-        if (callObj.spot == null)
-        {
-          callObj.spot = { when: 0, snr: 0 };
-        }
-      }
-      else
-      {
-        callObj.spot = { when: 0, snr: 0 };
-      }
-
-      modes[callObj.mode] = true;
-      bands[callObj.band] = true;
-
-      newCallList.push(callObj);
-    }
-  }
-
-  // Show the roster count in the window title
-
-  var totalCount = Object.keys(callRoster).length;
-  var visibleCount = newCallList.length;
-  var huntedCount = newCallList.filter(obj => Object.keys(obj.hunting).length > 0).length
-  var countParts = [];
-
-  if (totalCount != visibleCount)
-  {
-    countParts.push(`${totalCount} heard`);
-  }
-
-  countParts.push(`${visibleCount} in roster`);
-
-  if (huntedCount != visibleCount)
-  {
-    countParts.push(`${huntedCount} wanted`);
-  }
-
-  window.document.title = `Call Roster: ${countParts.join(" • ")}`;
-
-  // Render the roster
-
-  if (g_rosterSettings.compact == false)
-  {
-    newCallList.sort(r_sortFunction[g_rosterSettings.lastSortIndex]);
-    if (g_rosterSettings.lastSortReverse == 1)
-    {
-      newCallList.reverse();
-    }
-  }
-  else
-  {
-    // Age sort for now... make this happen Tag
-    newCallList.sort(r_sortFunction[6]).reverse();
-  }
-
-  var showBands = (Object.keys(bands).length > 1) || g_rosterSettings.columns.Band;
-  var showModes = (Object.keys(modes).length > 1) || g_rosterSettings.columns.Mode;
-
-  var worker = "";
-
-  // Render the table headers for the regular roster table
-  if (g_rosterSettings.compact == false)
-  {
-    worker = "<table id='callTable' class='rosterTable' align=left>";
-
-    worker += "<thead><th style='cursor:pointer;' onclick='showRosterBox(0);' align=left>Callsign</th>";
-
-    if (showBands)
-    { worker += "<th onclick='' >Band</th>"; }
-
-    if (showModes)
-    { worker += "<th onclick='' >Mode</th>"; }
-
-    worker += "<th style='cursor:pointer;' onclick='showRosterBox(1);'  >Grid</th>";
-
-    if (g_rosterSettings.columns.Calling)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(10);' >Calling</th>"; }
-
-    if (g_rosterSettings.columns.Msg)
-    { worker += "<th >Msg</th>"; }
-
-    if (g_rosterSettings.columns.DXCC)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >DXCC</th>"; }
-
-    if (g_rosterSettings.columns.Flag)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(5);' >Flag</th>"; }
-
-    if (g_rosterSettings.columns.State)
-    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(9);'  >State</th>"; }
-
-    if (g_rosterSettings.columns.County)
-    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(15);' >County</th>"; }
-
-    if (g_rosterSettings.columns.Cont)
-    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(16);' >Cont</th>"; }
-
-    if (g_rosterSettings.columns.dB)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(2);' >dB</th>"; }
-
-    if (g_rosterSettings.columns.Freq)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(4);' >Freq</th>"; }
-
-    if (g_rosterSettings.columns.DT)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(3);' >DT</th>"; }
-
-    if (g_rosterSettings.columns.Dist)
-    {
-      worker += "<th style='cursor:pointer;' onclick='showRosterBox(7);' >Dist(" +
-        window.opener.distanceUnit.value.toLowerCase() + ")</th>";
-    }
-
-    if (g_rosterSettings.columns.Azim)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(8);' >Azim</th>"; }
-
-    if (g_rosterSettings.columns.CQz)
-    { worker += "<th>CQz</th>"; }
-
-    if (g_rosterSettings.columns.ITUz)
-    { worker += "<th>ITUz</th>"; }
-
-    if (g_rosterSettings.columns.PX)
-    { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(11);'>PX</th>"; }
-
-    if (window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.columns.LoTW)
-    { worker += "<th  >LoTW</th>"; }
-
-    if (window.opener.g_callsignLookups.eqslUseEnable == true && g_rosterSettings.columns.eQSL)
-    { worker += "<th >eQSL</th>"; }
-
-    if (window.opener.g_callsignLookups.oqrsUseEnable == true && g_rosterSettings.columns.OQRS)
-    { worker += "<th >OQRS</th>"; }
-
-    if (g_rosterSettings.columns.Spot)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(13);' >Spot</th>"; }
-
-    if (g_rosterSettings.columns.Life)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(12);' >Life</th>"; }
-
-    if (g_rosterSettings.columns.OAMS)
-    { worker += "<th title='Off-Air Message User' style='cursor:pointer;' onclick='showRosterBox(14);'>OAMS</th>"; }
-
-    if (g_rosterSettings.columns.Age)
-    { worker += "<th style='cursor:pointer;' onclick='showRosterBox(6);' >Age</th></thead>"; }
-  }
-  // No headers for compact roster table
-  else
-  {
-    worker = "<div id=\"buttonsDiv\" style=\"margin-left:0px;white-space:normal;\">";
-  }
-
-  var shouldAlert = 0;
-
-  // Render all rows
-  for (var x in newCallList)
-  {
-    var callObj = newCallList[x];
-
-    if (callObj.shouldAlert == false && onlyHits == true && callObj.qrz == false)
-    { continue; }
-
-    var spotString = "";
-    if (g_rosterSettings.columns.Spot && callObj.qrz == false)
-    {
-      spotString = getSpotString(callObj);
-      if (g_rosterSettings.onlySpot && spotString == "") continue;
-    }
-    var grid = callObj.grid.length > 1 ? callObj.grid.substr(0, 4) : "-";
-
-    var geo = window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]];
-    var cqzone = grid in window.opener.g_gridToCQZone ? window.opener.g_gridToCQZone[grid].join(", ") : "-";
-    var ituzone = grid in window.opener.g_gridToITUZone ? window.opener.g_gridToITUZone[grid].join(", ") : "-";
-    var thisCall = callObj.DEcall;
-
-    if (thisCall.match("^[A-Z][0-9][A-Z](/w+)?$"))
-    { callObj.style.call = "class='oneByOne'"; }
-    if (thisCall == window.opener.g_instances[callObj.instance].status.DXcall)
-    {
-      if (window.opener.g_instances[callObj.instance].status.TxEnabled == 1)
-      {
-        callObj.style.call = "class='dxCalling'";
-      }
-      else
-      {
-        callObj.style.call = "class='dxCaller'";
-      }
-    }
-
-    if (g_rosterSettings.compact == false)
-    {
-      var acks = window.opener.g_acknowledgedCalls
-
-      var thisHash = thisCall + callObj.band + callObj.mode;
-      var callStr = thisCall.formatCallsign()
-      if (acks[thisCall])
-      {
-        callStr = `${callStr} <span class='acknowledged'><img class='ackBadge' src='${acks[thisCall].badge}'></span>`
-        callObj.awardReason += ` - ${thisCall}: ${acks[thisCall].message}`
-      }
-
-      worker += "<tbody><tr id='" + thisHash + "'>";
-      worker +=
-        "<td title='" +
-        callObj.awardReason +
-        "' name='Callsign' align=left " +
-        callObj.style.call +
-        " onClick='initiateQso(\"" +
-        thisCall +
-        callObj.band +
-        callObj.mode +
-        "\")'>" +
-        callStr +
-        "</td>";
-
-      if (showBands)
-      {
-        worker +=
-          "<td style='color:#" +
-          window.opener.g_pskColors[callObj.band] +
-          "' >" +
-          callObj.band +
-          "</td>";
-      }
-      if (showModes)
-      {
-        var color = "888888";
-        if (callObj.mode in g_modeColors)
-        { color = g_modeColors[callObj.mode]; }
-        worker +=
-          "<td  style='color:#" + color + "' >" + callObj.mode + "</td>";
-      }
-
-      worker +=
-        "<td  " +
-        callObj.style.grid +
-        " onClick='centerOn(\"" +
-        grid +
-        "\")' >" +
-        grid +
-        "</td>";
-      if (g_rosterSettings.columns.Calling)
-      {
-        var lookString = callObj.CQ ? "name='CQ'" : "name='Calling'";
-        worker +=
-          "<td " +
-          callObj.style.calling +
-          " " +
-          lookString +
-          ">" +
-          callObj.DXcall.formatCallsign() +
-          "</td>";
-      }
-      if (g_rosterSettings.columns.Msg)
-      { worker += "<td>" + callObj.msg + "</td>"; }
-
-      if (g_rosterSettings.columns.DXCC)
-      {
-        worker +=
-          "<td title='" + window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].pp +
-          "' name='DXCC (" +
-          callObj.dxcc +
-          ")' " +
-          callObj.style.dxcc +
-          ">" +
-          window.opener.g_dxccToAltName[callObj.dxcc] + "</td>";
-      }
-      if (g_rosterSettings.columns.Flag)
-      {
-        worker +=
-          "<td align='center' style='margin:0;padding:0'><img style='padding-top:3px' src='./img/flags/16/" +
-          geo.flag +
-          "'></td>";
-      }
-      if (g_rosterSettings.columns.State)
-      {
-        worker +=
-          "<td align='center' " +
-          callObj.style.state +
-          " >" +
-          (callObj.state ? callObj.state.substr(3) : "") +
-          "</td>";
-      }
-      if (g_rosterSettings.columns.County)
-      {
-        worker +=
-          "<td align='center' " +
-          callObj.style.cnty +
-          " " +
-          (callObj.cnty
-            ? (callObj.qual
-                ? ""
-                : "onClick='window.opener.lookupCallsign(\"" +
-                  thisCall +
-                  "\",\"" +
-                  grid +
-                  "\")'"
-              )
-            : "") +
-          ">" +
-          (callObj.cnty
-            ? (callObj.qual ? "" : "~ ") +
-              window.opener.g_cntyToCounty[callObj.cnty] +
-              (callObj.qual ? "" : " ~")
-            : "") +
-          "</td>";
-      }
-      if (g_rosterSettings.columns.Cont)
-      {
-        worker +=
-          "<td align='center' " +
-          callObj.style.cont +
-          " >" +
-          (callObj.cont ? callObj.cont : "") +
-          "</td>";
-      }
-
-      if (g_rosterSettings.columns.dB)
-      {
-        worker +=
-          "<td style='color:#DD44DD'><b>" +
-          callObj.RSTsent +
-          "</b></td>";
-      }
-      if (g_rosterSettings.columns.Freq)
-      { worker += "<td style='color:#00FF00'>" + callObj.delta + "</td>"; }
-      if (g_rosterSettings.columns.DT)
-      { worker += "<td style='color:#1E90FF'>" + callObj.dt + "</td>"; }
-      if (g_rosterSettings.columns.Dist)
-      {
-        worker +=
-          "<td style='color:cyan'>" +
-          parseInt(
-            callObj.distance *
-              MyCircle.validateRadius(window.opener.distanceUnit.value)
-          ) +
-          "</td>";
-      }
-      if (g_rosterSettings.columns.Azim)
-      {
-        worker +=
-          "<td style='color:yellow'>" +
-          parseInt(callObj.heading) +
-          "</td>";
-      }
-
-      if (g_rosterSettings.columns.CQz)
-      {
-        worker +=
-          "<td " +
-          callObj.style.cqz +
-          ">" +
-          callObj.cqza.join(",") +
-          "</td>";
-      }
-      if (g_rosterSettings.columns.ITUz)
-      {
-        worker +=
-          "<td " +
-          callObj.style.ituz +
-          ">" +
-          callObj.ituza.join(",") +
-          "</td>";
-      }
-
-      if (g_rosterSettings.columns.PX)
-      {
-        worker +=
-          "<td " +
-          callObj.style.px +
-          ">" +
-          (callObj.px ? callObj.px : "") +
-          "</td>";
-      }
-
-      if (
-        window.opener.g_callsignLookups.lotwUseEnable == true &&
-        g_rosterSettings.columns.LoTW
-      )
-      {
-        if (thisCall in window.opener.g_lotwCallsigns)
-        {
-          if (g_rosterSettings.maxLoTW < 27)
-          {
-            var months = (g_day - window.opener.g_lotwCallsigns[thisCall]) / 30;
-            if (months > g_rosterSettings.maxLoTW)
-            {
-              worker +=
-                "<td  style='color:yellow' align='center' title='Has not uploaded a QSO in " +
-                Number(months).toYM() +
-                "'>?</td>";
-            }
-            else
-            {
-              worker +=
-                "<td  style='color:#0F0' align='center' title='  Last Upload&#10;" +
-                window.opener.userDayString(
-                  window.opener.g_lotwCallsigns[thisCall] * 86400000
-                ) +
-                "'>&#10004;</td>";
-            }
-          }
-          else
-          {
-            worker +=
-              "<td  style='color:#0F0' align='center' title='  Last Upload&#10;" +
-              window.opener.userDayString(
-                window.opener.g_lotwCallsigns[thisCall] * 86400000
-              ) +
-              "'>&#10004;</td>";
-          }
-        }
-        else worker += "<td></td>";
-      }
-      if (
-        window.opener.g_callsignLookups.eqslUseEnable == true &&
-        g_rosterSettings.columns.eQSL
-      )
-      {
-        worker +=
-          "<td  style='color:#0F0;' align='center'>" +
-          (thisCall in window.opener.g_eqslCallsigns ? "&#10004;" : "") +
-          "</td>";
-      }
-      if (
-        window.opener.g_callsignLookups.oqrsUseEnable == true &&
-        g_rosterSettings.columns.OQRS
-      )
-      {
-        worker +=
-          "<td  style='color:#0F0;' align='center'>" +
-          (thisCall in window.opener.g_oqrsCallsigns ? "&#10004;" : "") +
-          "</td>";
-      }
-
-      if (g_rosterSettings.columns.Spot)
-      {
-        worker +=
-          "<td style='color:#EEE;' class='spotCol' id='sp" +
-          thisCall +
-          callObj.band +
-          callObj.mode +
-          "'>" +
-          spotString +
-          "</td>";
-      }
-      if (g_rosterSettings.columns.Life)
-      {
-        worker +=
-          "<td style='color:#EEE;' class='lifeCol' id='lm" +
-          thisCall +
-          callObj.band +
-          callObj.mode +
-          "'>" +
-          (timeNowSec() - callObj.life).toDHMS() +
-          "</td>";
-      }
-
-      if (g_rosterSettings.columns.OAMS)
-      {
-        if (callObj.style.gt != 0)
-        {
-          if (callObj.reason.includes("oams"))
-          {
-            worker +=
-              "<td align='center' style='margin:0;padding:0;cursor:pointer;background-clip:content-box;box-shadow: 0 0 4px 4px inset #2222FFFF;' onClick='openChatToCid(\"" +
-              callObj.style.gt +
-              "\")'><img height='16px' style='' src='./img/gt_chat.png'></td>";
-          }
-          else
-          {
-            worker +=
-              "<td align='center' style='margin:0;padding:0;cursor:pointer;' onClick='openChatToCid(\"" +
-              callObj.style.gt +
-              "\")'><img height='16px' style='' src='./img/gt_chat.png'></td>";
-          }
-        }
-        else worker += "<td></td>";
-      }
-
-      if (g_rosterSettings.columns.Age)
-      {
-        worker +=
-          "<td style='color:#EEE' class='timeCol' id='tm" +
-          thisCall +
-          callObj.band +
-          callObj.mode +
-          "'>" +
-          (timeNowSec() - callObj.age).toDHMS() +
-          "</td>";
-      }
-
-      worker += "</tr></tbody>";
-    }
-    else
-    {
-      var tt =
-        callObj.RSTsent +
-        "&#13256;, " +
-        parseInt(callObj.dt * 100) +
-        "ms, " +
-        callObj.delta +
-        "hz" +
-        (callObj.grid.length ? ", " + callObj.grid : "") +
-        ", " +
-        (timeNowSec() - callObj.age).toDHMS();
-      worker +=
-        "<div class='compact' onClick='initiateQso(\"" +
-        thisCall +
-        callObj.band +
-        callObj.mode +
-        "\")' ";
-      worker +=
-        "id='" +
-        thisCall +
-        callObj.band +
-        callObj.mode +
-        "' title='" +
-        tt +
-        "'>";
-      worker +=
-        "<div class='compactCallsign' name='Callsign' " +
-        callObj.style.call +
-        " >" +
-        thisCall.formatCallsign() +
-        "</div>";
-      worker +=
-        "<div class='compactDXCC' name='DXCC (" +
-        callObj.dxcc +
-        ")' " +
-        callObj.style.dxcc +
-        ">" +
-        window.opener.g_dxccToAltName[callObj.dxcc] +
-        "</div>";
-      worker += "</div>";
-    }
-
-    if (g_rosterSettings.realtime == false)
-    {
-      var call = callObj.DEcall;
-      g_scriptReport[call] = Object.assign({}, callObj);
-      g_scriptReport[call].dxccName =
-        window.opener.g_dxccToAltName[callObj.dxcc];
-      g_scriptReport[call].distance = parseInt(
-        callObj.distance *
-          MyCircle.validateRadius(window.opener.distanceUnit.value)
-      );
-
-      delete g_scriptReport[call].DEcall;
-      g_scriptReport[call].rect = null;
-      delete g_scriptReport[call].rect;
-      delete g_scriptReport[call].style;
-      delete g_scriptReport[call].wspr;
-      delete g_scriptReport[call].qso;
-      delete g_scriptReport[call].instance;
-
-      if (callMode != "all")
-      {
-        g_scriptReport[call].shouldAlert = true;
-        g_scriptReport[call].reason.push(g_rosterSettings.hunting);
-      }
-    }
-
-    if (
-      callObj.alerted == false &&
-      callMode == "all" &&
-      callObj.shouldAlert == true
-    )
-    {
-      callObj.alerted = true;
-      shouldAlert++;
-    }
-    else if (callObj.alerted == false && callMode != "all")
-    {
-      callObj.alerted = true;
-      shouldAlert++;
-    }
-
-    callObj.shouldAlert = false;
-  }
-
-  if (g_rosterSettings.compact == false)
-  {
-    worker += "</table>";
-    RosterTable.innerHTML = worker;
-  }
-  else
-  {
-    RosterTable.innerHTML = worker + "</div>";
-  }
-
-  var dirPath = window.opener.g_scriptDir;
-  var scriptExists = false;
-  var script = "cr-alert.sh";
-
-  try
-  {
-    if (fs.existsSync(dirPath))
-    {
-      if (window.opener.g_platform == "windows")
-      {
-        script = "cr-alert.bat";
-      }
-      if (
-        fs.existsSync(dirPath + script) &&
-        g_rosterSettings.realtime == false
-      )
-      {
-        scriptExists = true;
-        scriptIcon.innerHTML =
-          "<div class='buttonScript' onclick='window.opener.toggleCRScript();'>" +
-          (window.opener.g_crScript == 1
-            ? "<font color='lightgreen'>Script Enabled</font>"
-            : "<font color='yellow'>Script Disabled</font>") +
-          "</div>";
-        scriptIcon.style.display = "block";
-      }
-      else
-      {
-        scriptIcon.style.display = "none";
-      }
-    }
-  }
-  catch (e) {}
-
-  if (shouldAlert > 0)
-  {
-    if (window.opener.g_classicAlerts.huntRoster == true)
-    {
-      var notify = window.opener.huntRosterNotify.value;
-      if (notify == "0")
-      {
-        var media = window.opener.huntRosterNotifyMedia.value;
-        if (media != "none") window.opener.playAlertMediaFile(media);
-      }
-      else if (notify == "1")
-      {
-        window.opener.speakAlertString(
-          window.opener.huntRosterNotifyWord.value
-        );
-      }
-    }
-
-    if (
-      g_rosterSettings.realtime == false &&
-      scriptExists &&
-      window.opener.g_crScript == 1
-    )
-    {
-      try
-      {
-        fs.writeFileSync(
-          dirPath + "cr-alert.json",
-          JSON.stringify(g_scriptReport, null, 2)
-        );
-
-        var thisProc = dirPath + script;
-        var cp = require("child_process");
-        var child = cp.spawn(thisProc, [], {
-          detached: true,
-          cwd: dirPath.slice(0, -1),
-          stdio: ["ignore", "ignore", "ignore"]
-        });
-        child.unref();
-      }
-      catch (e)
-      {
-        conosle.log(e);
-      }
-      g_scriptReport = Object();
-    }
-    else g_scriptReport = Object();
-  }
+  let rosterSettings = prepareRosterSettings();
+  processRosterFiltering(callRoster, rosterSettings);
+  processRosterHunting(callRoster, rosterSettings);
+  renderRoster(callRoster, rosterSettings);
+  sendAlerts(callRoster, rosterSettings);
 }
 
 function realtimeRoster()
 {
-  var now = timeNowSec();
+  let now = timeNowSec();
   g_day = now / 86400;
 
   if (g_rosterSettings.realtime == false) return;
 
-  var timeCols = document.getElementsByClassName("timeCol");
-  for (var x in timeCols)
+  let timeCols = document.getElementsByClassName("timeCol");
+  for (let x in timeCols)
   {
     if ((typeof timeCols[x].id != "undefined") && (typeof callRoster[timeCols[x].id.substr(2)] != "undefined"))
     {
-      var when = now - callRoster[timeCols[x].id.substr(2)].callObj.age;
+      let when = now - callRoster[timeCols[x].id.substr(2)].callObj.age;
       timeCols[x].innerHTML = when.toDHMS();
     }
   }
-  var lifeCols = document.getElementsByClassName("lifeCol");
-  for (var x in lifeCols)
+  let lifeCols = document.getElementsByClassName("lifeCol");
+  for (let x in lifeCols)
   {
     if ((typeof lifeCols[x].id != "undefined") && (typeof callRoster[lifeCols[x].id.substr(2)] != "undefined"))
     {
-      var when = now - callRoster[lifeCols[x].id.substr(2)].callObj.life;
+      let when = now - callRoster[lifeCols[x].id.substr(2)].callObj.life;
       lifeCols[x].innerHTML = when.toDHMS();
     }
   }
   if (g_rosterSettings.columns.Spot)
   {
-    var spotCols = document.getElementsByClassName("spotCol");
-    for (var x in spotCols)
+    let spotCols = document.getElementsByClassName("spotCol");
+    for (let x in spotCols)
     {
       if ((typeof spotCols[x].id != "undefined") && (typeof callRoster[spotCols[x].id.substr(2)] != "undefined"))
       {
@@ -2276,7 +519,7 @@ function realtimeRoster()
 
 function getSpotString(callObj)
 {
-  var result = "";
+  let result = "";
   if (callObj.spot && callObj.spot.when > 0)
   {
     when = timeNowSec() - callObj.spot.when;
@@ -2307,22 +550,22 @@ function callLookup(thisHash, grid)
 
 function callingLookup(thisHash, grid)
 {
-  var thisCall = callRoster[thisHash].DXcall;
+  let thisCall = callRoster[thisHash].DXcall;
   window.opener.startLookup(thisCall, grid);
 }
 
 function callGenMessage(thisHash, grid)
 {
-  var thisCall = callRoster[thisHash].DEcall;
-  var instance = callRoster[thisHash].callObj.instance;
+  let thisCall = callRoster[thisHash].DEcall;
+  let instance = callRoster[thisHash].callObj.instance;
 
   window.opener.startGenMessages(thisCall, grid, instance);
 }
 
 function callingGenMessage(thisHash, grid)
 {
-  var thisCall = callRoster[thisHash].DXcall;
-  var instance = callRoster[thisHash].callObj.instance;
+  let thisCall = callRoster[thisHash].DXcall;
+  let instance = callRoster[thisHash].callObj.instance;
 
   window.opener.startGenMessages(thisCall, grid, instance);
 }
@@ -2342,17 +585,17 @@ function updateInstances()
 {
   if (window.opener.g_instancesIndex.length > 1)
   {
-    var instances = window.opener.g_instances;
+    let instances = window.opener.g_instances;
 
-    var worker = "";
+    let worker = "";
 
-    var keys = Object.keys(instances).sort();
-    for (var key in keys)
+    let keys = Object.keys(instances).sort();
+    for (let key in keys)
     {
-      var inst = keys[key];
-      var sp = inst.split(" - ");
-      var shortInst = sp[sp.length - 1].substring(0, 18);
-      var color = "blue";
+      let inst = keys[key];
+      let sp = inst.split(" - ");
+      let shortInst = sp[sp.length - 1].substring(0, 18);
+      let color = "blue";
 
       if (instances[inst].open == false)
       {
@@ -2412,7 +655,7 @@ function toTitleCase(str)
 function newOption(value, text)
 {
   if (typeof text == "undefined") text = value;
-  var option = document.createElement("option");
+  let option = document.createElement("option");
   option.value = value;
   option.text = text;
   return option;
@@ -2427,10 +670,10 @@ function createSelectOptions(
   checkSponsor = null
 )
 {
-  var selector = document.getElementById(selectElementString);
+  let selector = document.getElementById(selectElementString);
   selector.innerHTML = "";
 
-  var option = document.createElement("option");
+  let option = document.createElement("option");
   option.value = defaultValue;
   option.text = selectNameDefault;
   option.selected = true;
@@ -2438,15 +681,15 @@ function createSelectOptions(
   option.style.display = "none";
   selector.appendChild(option);
 
-  var obj = null;
+  let obj = null;
   if (forObject)
   {
     obj = Object.keys(forObject).sort();
   }
-  for (var k in obj)
+  for (let k in obj)
   {
-    var opt = obj[k];
-    var option = document.createElement("option");
+    let opt = obj[k];
+    let option = document.createElement("option");
     option.value = opt;
     option.text = altName ? forObject[opt][altName] : opt;
     if (checkSponsor && opt + "-" + checkSponsor in g_awardTracker)
@@ -2471,13 +714,13 @@ function awardSponsorChanged()
 
 function awardNameChanged()
 {
-  var awardToAdd = newAwardTrackerObject(
+  let awardToAdd = newAwardTrackerObject(
     awardSponsor.value,
     awardName.value,
     true
   );
 
-  var hash = awardToAdd.name + "-" + awardToAdd.sponsor;
+  let hash = awardToAdd.name + "-" + awardToAdd.sponsor;
   if (!(hash in g_awardTracker))
   {
     g_awardTracker[hash] = awardToAdd;
@@ -2498,7 +741,7 @@ function awardNameChanged()
 
 function updateAwardList(target = null)
 {
-  var worker =
+  let worker =
     "<table id=\"awardTable\" class=\"awardTableCSS\" style=\"padding:0;margin:0;margin-top:-5px;\" >";
   worker += "<tr style='font-size:smaller'>";
   worker += "<td align='left'>";
@@ -2519,31 +762,31 @@ function updateAwardList(target = null)
 
   AwardWantedList.innerHTML = worker;
 
-  var keys = Object.keys(g_awardTracker).sort();
+  let keys = Object.keys(g_awardTracker).sort();
 
-  for (var key in keys)
+  for (let key in keys)
   {
-    var award = g_awardTracker[keys[key]];
-    var rule = g_awards[award.sponsor].awards[award.name].rule;
-    var row = awardTable.insertRow();
+    let award = g_awardTracker[keys[key]];
+    let rule = g_awards[award.sponsor].awards[award.name].rule;
+    let row = awardTable.insertRow();
     row.id = keys[key];
-    var baseAward = false;
-    var baseCount = 0;
+    let baseAward = false;
+    let baseCount = 0;
 
-    var endorseCount = 0;
-    var endorseTotal = 0;
-    var allEndorse = false;
+    let endorseCount = 0;
+    let endorseTotal = 0;
+    let allEndorse = false;
 
-    var tooltip =
+    let tooltip =
       g_awards[award.sponsor].awards[award.name].tooltip +
       " (" +
       g_awards[award.sponsor].sponsor +
       ")\n";
     tooltip += toTitleCase(award.test.qsl_req) + " QSO\n";
-    for (var mode in award.comp.counts)
+    for (let mode in award.comp.counts)
     {
       tooltip += mode + "\n";
-      for (var count in award.comp.counts[mode])
+      for (let count in award.comp.counts[mode])
       {
         endorseTotal++;
         if (award.comp.counts[mode][count].per == 100)
@@ -2562,10 +805,10 @@ function updateAwardList(target = null)
           " (" +
           award.comp.counts[mode][count].per +
           "%)\n";
-        var wrk = "";
+        let wrk = "";
         if (Object.keys(award.comp.endorse).length > 0)
         {
-          for (var band in award.comp.endorse[mode])
+          for (let band in award.comp.endorse[mode])
           {
             endorseTotal++;
             if (award.comp.endorse[mode][band][count] == true)
@@ -2583,7 +826,7 @@ function updateAwardList(target = null)
     }
     if (baseCount > 0 && endorseCount == endorseTotal) allEndorse = true;
 
-    var cell = createCellHtml(
+    let cell = createCellHtml(
       row,
       "<p style='font-size:smaller;'>" + award.name + " - " + award.sponsor
     );
@@ -2619,7 +862,7 @@ function updateAwardList(target = null)
 
 function deleteAwardTracker(sender)
 {
-  var id = sender.parentNode.parentNode.id;
+  let id = sender.parentNode.parentNode.id;
   delete g_awardTracker[id];
   storeAwardTracker();
   resetAwardAdd();
@@ -2629,7 +872,7 @@ function deleteAwardTracker(sender)
 
 function awardCheckboxChanged(sender)
 {
-  var awardId = sender.target.parentNode.parentNode.id;
+  let awardId = sender.target.parentNode.parentNode.id;
   g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] =
     sender.target.checked;
   storeAwardTracker();
@@ -2638,7 +881,7 @@ function awardCheckboxChanged(sender)
 
 function awardValueChanged(sender)
 {
-  var awardId = sender.target.parentNode.parentNode.id;
+  let awardId = sender.target.parentNode.parentNode.id;
   g_awardTracker[sender.target.parentNode.parentNode.id][sender.target.name] =
     sender.target.value;
   storeAwardTracker();
@@ -2654,12 +897,12 @@ function createCell(
   checkbox = false
 )
 {
-  var cell = row.insertCell();
+  let cell = row.insertCell();
   if (data == null) cell.innerHTML = value;
   if (title) cell.title = title;
   if (checkbox)
   {
-    var x = document.createElement("INPUT");
+    let x = document.createElement("INPUT");
     x.setAttribute("type", "checkbox");
     x.checked = value;
     x.name = target;
@@ -2675,7 +918,7 @@ function createCell(
 
 function createCellHtml(row, html, title = null)
 {
-  var cell = row.insertCell();
+  let cell = row.insertCell();
   cell.innerHTML = html;
   if (title) cell.title = title;
 
@@ -2684,7 +927,7 @@ function createCellHtml(row, html, title = null)
 
 function createAwardSelector(cell, target, value, forObject)
 {
-  var selector = document.createElement("select");
+  let selector = document.createElement("select");
   selector.name = target;
   selector.value = value;
   selector.disabled = forObject.length == 1;
@@ -2692,9 +935,9 @@ function createAwardSelector(cell, target, value, forObject)
   selector.style.padding = "1px";
   if (selector.disabled) selector.style.cursor = "auto";
   selector.addEventListener("change", awardValueChanged);
-  for (var opt in forObject)
+  for (let opt in forObject)
   {
-    var option = document.createElement("option");
+    let option = document.createElement("option");
     option.value = forObject[opt];
     if (option.value == "Phone" || option.value == "CW") option.disabled = true;
     option.text = forObject[opt];
@@ -2758,7 +1001,7 @@ function setVisual()
     /* for ( key in g_rosterSettings.wanted )
     {
       document.getElementById(key).checked = true;
-      var t = key.replace("hunt","");
+      let t = key.replace("hunt","");
       if ( t in g_rosterSettings.columns )
         g_rosterSettings.columns[t] = true;
     } */
@@ -2771,7 +1014,7 @@ function setVisual()
   }
   else
   {
-    for (var key in g_rosterSettings.wanted)
+    for (let key in g_rosterSettings.wanted)
     {
       if (document.getElementById(key))
       { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
@@ -2911,13 +1154,13 @@ function wantedChanged(element)
 
   if (element.checked == true)
   {
-    var t = element.id.replace("hunt", "");
+    let t = element.id.replace("hunt", "");
 
     if (t in g_rosterSettings.columns)
     {
       g_rosterSettings.columns[t] = true;
 
-      for (var i = 0; i < g_menu.items.length; ++i)
+      for (let i = 0; i < g_menu.items.length; ++i)
       {
         if (
           typeof g_menu.items[i].checked != "undefined" &&
@@ -2931,7 +1174,7 @@ function wantedChanged(element)
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (var callHash in window.opener.g_callRoster)
+  for (let callHash in window.opener.g_callRoster)
   {
     window.opener.g_callRoster[callHash].callObj.alerted = false;
   }
@@ -2990,17 +1233,17 @@ function valuesChanged()
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (var callHash in window.opener.g_callRoster)
+  for (let callHash in window.opener.g_callRoster)
   { window.opener.g_callRoster[callHash].callObj.alerted = false; }
   window.opener.goProcessRoster();
 }
 
 function getBuffer(file_url, callback, flag, mode, port, cookie)
 {
-  var url = require("url");
-  var http = require(mode);
-  var fileBuffer = null;
-  var options = null;
+  let url = require("url");
+  let http = require(mode);
+  let fileBuffer = null;
+  let options = null;
   if (cookie != null)
   {
     options = {
@@ -3022,8 +1265,8 @@ function getBuffer(file_url, callback, flag, mode, port, cookie)
   }
   http.get(options, function (res)
   {
-    var fsize = res.headers["content-length"];
-    var cookies = null;
+    let fsize = res.headers["content-length"];
+    let cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
     { cookies = res.headers["set-cookie"]; }
     res
@@ -3046,11 +1289,11 @@ function getBuffer(file_url, callback, flag, mode, port, cookie)
 
 function callsignResult(buffer, flag)
 {
-  var rawData = JSON.parse(buffer);
+  let rawData = JSON.parse(buffer);
   r_currentUSState = flag;
 
   g_currentUSCallsigns = Object();
-  for (var key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
+  for (let key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
 
   window.opener.goProcessRoster();
 }
@@ -3063,7 +1306,7 @@ function stateChangedValue(what)
 
     if (window.opener.g_mapSettings.offlineMode == false)
     {
-      var callState = r_currentUSState.replace("CN-", "");
+      let callState = r_currentUSState.replace("CN-", "");
       getBuffer(
         "http://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
         callsignResult,
@@ -3100,24 +1343,24 @@ function DXCCsChangedValue(what)
 
 function initDXCCSelector()
 {
-  var items = Object.keys(window.opener.g_dxccToAltName).sort(function (a, b)
+  let items = Object.keys(window.opener.g_dxccToAltName).sort(function (a, b)
   {
     return window.opener.g_dxccToAltName[a].localeCompare(
       window.opener.g_dxccToAltName[b]
     );
   });
-  var newSelect = document.getElementById("DXCCsSelect");
+  let newSelect = document.getElementById("DXCCsSelect");
 
-  for (var i in items)
+  for (let i in items)
   {
-    var key = items[i];
+    let key = items[i];
 
     if (
       window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].geo !=
       "deleted"
     )
     {
-      var option = document.createElement("option");
+      let option = document.createElement("option");
       option.value = key;
       option.text =
         window.opener.g_dxccToAltName[key] +
@@ -3134,11 +1377,11 @@ function initDXCCSelector()
 function manifestResult(buffer, flag)
 {
   r_callsignManifest = JSON.parse(buffer);
-  var newSelect = document.getElementById("stateSelect");
+  let newSelect = document.getElementById("stateSelect");
 
-  for (var key in r_callsignManifest.cnt)
+  for (let key in r_callsignManifest.cnt)
   {
-    var option = document.createElement("option");
+    let option = document.createElement("option");
     if (window.opener.g_enums[key])
     {
       option.value = key;
@@ -3193,6 +1436,22 @@ function deleteCQIgnore(key)
   window.opener.goProcessRoster();
 }
 
+function deleteCQzIgnore(key)
+{
+  delete g_blockedCQz[key];
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
+function deleteITUzIgnore(key)
+{
+  delete g_blockedITUz[key];
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
 function clearAllCallsignIgnores()
 {
   g_blockedCalls = Object();
@@ -3217,6 +1476,22 @@ function clearAllCQIgnores()
   window.opener.goProcessRoster();
 }
 
+function clearAllCQzIgnores()
+{
+  g_blockedCQz = Object();
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
+function clearAllITUzIgnores()
+{
+  g_blockedITUz = Object();
+  storeBlocks();
+  openIgnoreEdit();
+  window.opener.goProcessRoster();
+}
+
 function closeEditIgnores()
 {
   MainCallRoster.style.display = "block";
@@ -3227,8 +1502,8 @@ function openIgnoreEdit()
 {
   MainCallRoster.style.display = "none";
   editView.style.display = "inline-block";
-  var worker = "";
-  var clearString = "<th>none</th>";
+  let worker = "";
+  let clearString = "<th>none</th>";
 
   if (Object.keys(g_blockedCalls).length > 0)
   {
@@ -3306,6 +1581,54 @@ function openIgnoreEdit()
     });
   worker += "</table></div>";
 
+  if (Object.keys(g_blockedCQz).length > 0)
+  {
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllCQzIgnores()'>Clear All</th>";
+  }
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>CQ Zones</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedCQz)
+    .sort()
+    .forEach(function (key, i)
+    {
+      worker +=
+        "<tr><td align=left style='color:cyan;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteCQzIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
+  if (Object.keys(g_blockedITUz).length > 0)
+  {
+    clearString =
+      "<th style='cursor:pointer;' onclick='clearAllITUzIgnores()'>Clear All</th>";
+  }
+  worker +=
+    "<div  style='margin:10px;padding:0px;vertical-align:top;display:inline-block;margin-right:2px;overflow:auto;overflow-x:hidden;height:" +
+    (window.innerHeight - 135) +
+    "px;'><table class='darkTable' align=center><tr><th align=left>ITU Zones</th>" +
+    clearString +
+    "</tr>";
+  Object.keys(g_blockedITUz)
+    .sort()
+    .forEach(function (key, i)
+    {
+      worker +=
+        "<tr><td align=left style='color:cyan;' >" +
+        key +
+        "</td><td style='cursor:pointer;' onclick='deleteITUzIgnore(\"" +
+        key +
+        "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";
+    });
+  worker += "</table></div>";
+
   editTables.innerHTML = worker;
 }
 
@@ -3363,7 +1686,7 @@ function init()
 
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
-  for (var key in g_rosterSettings.wanted)
+  for (let key in g_rosterSettings.wanted)
   {
     if (document.getElementById(key))
     { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
@@ -3372,7 +1695,7 @@ function init()
   g_menu = new nw.Menu();
   g_compactMenu = new nw.Menu();
 
-  var item = new nw.MenuItem({
+  let item = new nw.MenuItem({
     type: "normal",
     label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
     click: function ()
@@ -3477,7 +1800,7 @@ function init()
     label: "Ignore Call",
     click: function ()
     {
-      var thisCall = callRoster[g_targetHash].DEcall;
+      let thisCall = callRoster[g_targetHash].DEcall;
       g_blockedCalls[thisCall] = true;
       storeBlocks();
       window.opener.goProcessRoster();
@@ -3529,9 +1852,9 @@ function init()
   item = new nw.MenuItem({ type: "separator" });
   g_menu.append(item);
 
-  for (var key in g_rosterSettings.columns)
+  for (let key in g_rosterSettings.columns)
   {
-    var itemx = new nw.MenuItem({
+    let itemx = new nw.MenuItem({
       type: "checkbox",
       label: key,
       checked: g_rosterSettings.columns[key],
@@ -3646,6 +1969,115 @@ function init()
     }
   });
   g_CQMenu.append(item);
+
+  g_CQzMenu = new nw.Menu();
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Ignore CQ Zone",
+    click: function ()
+    {
+      g_blockedCQz[callRoster[g_targetCQz].callObj.cqza] = true;
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_CQzMenu.append(item);
+
+  g_clearCQzIgnoreMainMenu = new nw.MenuItem({
+    type: "normal",
+    label: "Clear CQ Zone Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedCQz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_clearCQzIgnore = new nw.MenuItem({
+    type: "normal",
+    label: "Clear Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedCQz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+  g_CQzMenu.append(g_clearCQzIgnore);
+
+  g_CQzMenu.append(g_clearCQzIgnoreMainMenu);
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Edit Ignores",
+    enabled: true,
+    click: function ()
+    {
+      openIgnoreEdit();
+    }
+  });
+
+  g_CQzMenu.append(item);
+
+  g_ITUzMenu = new nw.Menu();
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Ignore ITU Zone",
+    click: function ()
+    {
+      g_blockedITUz[callRoster[g_targetITUz].callObj.ituza] = true;
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_ITUzMenu.append(item);
+
+  g_clearITUzIgnoreMainMenu = new nw.MenuItem({
+    type: "normal",
+    label: "Clear ITU Zone Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedITUz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_ITUzMenu.append(g_clearITUzIgnoreMainMenu);
+
+  g_clearITUzIgnore = new nw.MenuItem({
+    type: "normal",
+    label: "Clear Ignore",
+    enabled: false,
+    click: function ()
+    {
+      g_blockedITUz = Object();
+      storeBlocks();
+      window.opener.goProcessRoster();
+    }
+  });
+
+  g_ITUzMenu.append(g_clearITUzIgnore);
+
+  item = new nw.MenuItem({
+    type: "normal",
+    label: "Edit Ignores",
+    enabled: true,
+    click: function ()
+    {
+      openIgnoreEdit();
+    }
+  });
+
+  g_ITUzMenu.append(item);
 
   g_dxccMenu = new nw.Menu();
 
@@ -3773,10 +2205,10 @@ function handleContextMenu(ev)
 {
   if (editView.style.display == "inline-block") return false;
 
-  var mouseX = Math.round(ev.x);
-  var mouseY = Math.round(ev.y);
+  let mouseX = Math.round(ev.x);
+  let mouseY = Math.round(ev.y);
 
-  var len = Object.keys(g_blockedCalls).length;
+  let len = Object.keys(g_blockedCalls).length;
   if (len > 0)
   {
     g_clearIgnores.enabled = true;
@@ -3829,6 +2261,40 @@ function handleContextMenu(ev)
     g_clearCQIgnore.enabled = false;
   }
 
+  len = Object.keys(g_blockedCQz).length;
+  if (len > 0)
+  {
+    g_clearCQzIgnoreMainMenu.enabled = true;
+    g_clearCQzIgnoreMainMenu.label =
+      "Clear CQ Zone Ignore" + (len > 1 ? "s (" + len + ")" : "");
+    g_clearCQzIgnore.enabled = true;
+    g_clearCQzIgnore.label = "Clear Ignore" + (len > 1 ? "s (" + len + ")" : "");
+  }
+  else
+  {
+    g_clearCQzIgnoreMainMenu.label = "Clear CQ Zone Ignore";
+    g_clearCQzIgnoreMainMenu.enabled = false;
+    g_clearCQzIgnore.label = "Clear Ignore";
+    g_clearCQzIgnore.enabled = false;
+  }
+
+  len = Object.keys(g_blockedITUz).length;
+  if (len > 0)
+  {
+    g_clearITUzIgnoreMainMenu.enabled = true;
+    g_clearITUzIgnoreMainMenu.label =
+      "Clear ITU Zone Ignore" + (len > 1 ? "s (" + len + ")" : "");
+    g_clearITUzIgnore.enabled = true;
+    g_clearITUzIgnore.label = "Clear Ignore" + (len > 1 ? "s (" + len + ")" : "");
+  }
+  else
+  {
+    g_clearITUzIgnoreMainMenu.label = "Clear ITU Zone Ignore";
+    g_clearITUzIgnoreMainMenu.enabled = false;
+    g_clearITUzIgnore.label = "Clear Ignore";
+    g_clearITUzIgnore.enabled = false;
+  }
+
   if (typeof ev.target != "undefined")
   {
     if (g_developerMode)
@@ -3842,7 +2308,7 @@ function handleContextMenu(ev)
       }
     }
 
-    var name = ev.target.getAttribute("name");
+    let name = ev.target.getAttribute("name");
     if (name == "Callsign")
     {
       g_targetHash = ev.target.parentNode.id;
@@ -3861,10 +2327,20 @@ function handleContextMenu(ev)
         g_CQMenu.popup(mouseX, mouseY);
       }
     }
+    else if (name == "CQz")
+    {
+      g_targetCQz = ev.target.parentNode.id;
+      g_CQzMenu.popup(mouseX, mouseY);
+    }
+    else if (name == "ITUz")
+    {
+      g_targetITUz = ev.target.parentNode.id;
+      g_ITUzMenu.popup(mouseX, mouseY);
+    }
     else if (name && name.startsWith("DXCC"))
     {
-      var dxcca = name.split("(");
-      var dxcc = parseInt(dxcca[1]);
+      let dxcca = name.split("(");
+      let dxcc = parseInt(dxcca[1]);
       g_targetDxcc = dxcc;
       g_dxccMenu.popup(mouseX, mouseY);
     }
@@ -3960,15 +2436,15 @@ function testAward(awardName, obj, baseHash)
 
 function processAward(awardName)
 {
-  var award =
+  let award =
     g_awards[g_awardTracker[awardName].sponsor].awards[
       g_awardTracker[awardName].name
     ];
   g_awardTracker[awardName].rule = award.rule;
-  var test = (g_awardTracker[awardName].test = {});
-  var mode = award.rule.mode.slice();
+  let test = (g_awardTracker[awardName].test = {});
+  let mode = award.rule.mode.slice();
 
-  var Index = mode.indexOf("Mixed");
+  let Index = mode.indexOf("Mixed");
   if (Index > -1) mode.splice(Index, 1);
 
   Index = mode.indexOf("Digital");
@@ -4010,9 +2486,9 @@ function processAward(awardName)
 
   g_awardTracker[awardName].stat = {};
 
-  for (var i in window.opener.g_QSOhash)
+  for (let i in window.opener.g_QSOhash)
   {
-    var obj = window.opener.g_QSOhash[i];
+    let obj = window.opener.g_QSOhash[i];
 
     if (test.confirmed && !obj.confirmed) continue;
 
@@ -4044,7 +2520,7 @@ function processAward(awardName)
 
 function newAwardCountObject()
 {
-  var statCountObject = {};
+  let statCountObject = {};
 
   statCountObject.bands = {};
   statCountObject.bands.Mixed = {};
@@ -4254,7 +2730,7 @@ function scoreAcont(award, obj)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "AN") cont = "OC";
     if (!(cont in award.stat)) award.stat[cont] = newAwardCountObject();
     return workAwardObject(
@@ -4272,7 +2748,7 @@ function testAcont(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "AN") cont = "OC";
 
     if (cont + baseHash in g_tracker[award.test.look].cont)
@@ -4287,7 +2763,7 @@ function scoreAcont5(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -4307,7 +2783,7 @@ function testAcont5(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -4337,7 +2813,7 @@ function testAcont2band(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "AN") cont = "OC";
 
     if (cont + baseHash in g_tracker[award.test.look].cont)
@@ -4352,7 +2828,7 @@ function scoreAcont52band(award, obj)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -4373,7 +2849,7 @@ function testAcont52band(award, obj, baseHash)
 {
   if (obj.cont)
   {
-    var cont = obj.cont;
+    let cont = obj.cont;
     if (cont == "NA" || cont == "SA") cont = "AM";
     if (cont == "AN") cont = "OC";
 
@@ -4389,7 +2865,7 @@ function scoreAgrids(award, obj)
 {
   if (obj.grid)
   {
-    var grid = obj.grid.substr(0, 4);
+    let grid = obj.grid.substr(0, 4);
 
     if (!(grid in award.stat)) award.stat[grid] = newAwardCountObject();
     return workAwardObject(
@@ -4439,7 +2915,7 @@ function testAcnty(award, obj, baseHash)
 
 function scoreAcall(award, obj)
 {
-  var call = obj.DEcall;
+  let call = obj.DEcall;
 
   if (call.indexOf("/") > -1)
   {
@@ -4472,7 +2948,7 @@ function scoreAIOTA(award, obj)
 {
   if (obj.IOTA)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ("IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1)
     { return false; }
@@ -4494,7 +2970,7 @@ function testAIOTA(award, obj, baseHash)
 {
   /* if ( obj.IOTA )
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ( "IOTA" in test.rule && test.rule.IOTA.indexOf(obj.IOTA) == -1 )
       return false;
@@ -4508,7 +2984,7 @@ function scoreAcallarea(award, obj)
 {
   if (obj.zone != null)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ("zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1)
     { return false; }
@@ -4529,7 +3005,7 @@ function testAcallarea(award, obj, baseHash)
 {
   if (obj.zone != null)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
+    let test = g_awards[award.sponsor].awards[award.name];
 
     if ("zone" in test.rule && test.rule.zone.indexOf(obj.zone) == -1)
     { return false; }
@@ -4541,8 +3017,8 @@ function scoreApx(award, obj)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    var px = obj.px;
+    let test = g_awards[award.sponsor].awards[award.name];
+    let px = obj.px;
     if ("px" in test.rule)
     {
       px = px.substr(0, test.rule.px[0].length);
@@ -4565,8 +3041,8 @@ function testApx(award, obj, baseHash)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    var px = obj.px;
+    let test = g_awards[award.sponsor].awards[award.name];
+    let px = obj.px;
     if ("px" in test.rule)
     {
       px = px.substr(0, test.rule.px[0].length);
@@ -4585,8 +3061,8 @@ function scoreApxa(award, obj)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    for (var i in test.rule.pxa)
+    let test = g_awards[award.sponsor].awards[award.name];
+    for (let i in test.rule.pxa)
     {
       if (test.rule.pxa[i].indexOf(obj.px) > -1)
       {
@@ -4608,8 +3084,8 @@ function testApxa(award, obj, baseHash)
 {
   if (obj.px)
   {
-    var test = g_awards[award.sponsor].awards[award.name];
-    for (var i in test.rule.pxa)
+    let test = g_awards[award.sponsor].awards[award.name];
+    for (let i in test.rule.pxa)
     {
       if (test.rule.pxa[i].indexOf(obj.px) > -1)
       {
@@ -4629,11 +3105,11 @@ function testApxa(award, obj, baseHash)
 
 function scoreAsfx(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var suf = obj.DEcall.replace(obj.px, "");
-  for (var i in test.rule.sfx)
+  let test = g_awards[award.sponsor].awards[award.name];
+  let suf = obj.DEcall.replace(obj.px, "");
+  for (let i in test.rule.sfx)
   {
-    for (var s in test.rule.sfx[i])
+    for (let s in test.rule.sfx[i])
     {
       if (suf.indexOf(test.rule.sfx[i][s]) == 0)
       {
@@ -4654,11 +3130,11 @@ function scoreAsfx(award, obj)
 
 function testAsfx(award, obj, baseHash)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var suf = obj.DEcall.replace(obj.px, "");
-  for (var i in test.rule.sfx)
+  let test = g_awards[award.sponsor].awards[award.name];
+  let suf = obj.DEcall.replace(obj.px, "");
+  for (let i in test.rule.sfx)
   {
-    for (var s in test.rule.sfx[i])
+    for (let s in test.rule.sfx[i])
     {
       if (suf.indexOf(test.rule.sfx[i][s]) == 0)
       {
@@ -4760,8 +3236,8 @@ function testAcqz(award, obj, baseHash)
 {
   if (obj.cqza)
   {
-    var x = 0;
-    for (var z in obj.cqza)
+    let x = 0;
+    for (let z in obj.cqza)
     {
       if (obj.cqza[z] + baseHash in g_tracker[award.test.look].cqz) x++;
     }
@@ -4772,13 +3248,13 @@ function testAcqz(award, obj, baseHash)
 
 function scoreAnumsfx(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var px = obj.px.substr(0, obj.px.length - 1);
-  var suf = obj.DEcall.replace(px, "");
+  let test = g_awards[award.sponsor].awards[award.name];
+  let px = obj.px.substr(0, obj.px.length - 1);
+  let suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (var i in test.rule.numsfx)
+  for (let i in test.rule.numsfx)
   {
-    for (var s in test.rule.numsfx[i])
+    for (let s in test.rule.numsfx[i])
     {
       if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
       {
@@ -4799,13 +3275,13 @@ function scoreAnumsfx(award, obj)
 
 function testAnumsfx(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var px = obj.px.substr(0, obj.px.length - 1);
-  var suf = obj.DEcall.replace(px, "");
+  let test = g_awards[award.sponsor].awards[award.name];
+  let px = obj.px.substr(0, obj.px.length - 1);
+  let suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (var i in test.rule.numsfx)
+  for (let i in test.rule.numsfx)
   {
-    for (var s in test.rule.numsfx[i])
+    for (let s in test.rule.numsfx[i])
     {
       if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
       {
@@ -4819,11 +3295,11 @@ function testAnumsfx(award, obj)
 
 function scoreApxplus(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
+  let test = g_awards[award.sponsor].awards[award.name];
 
   if (test.rule.pxplus)
   {
-    for (var i in test.rule.pxplus)
+    for (let i in test.rule.pxplus)
     {
       if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
       {
@@ -4843,11 +3319,11 @@ function scoreApxplus(award, obj)
 
 function testApxplus(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
+  let test = g_awards[award.sponsor].awards[award.name];
 
   if (test.rule.pxplus)
   {
-    for (var i in test.rule.pxplus)
+    for (let i in test.rule.pxplus)
     {
       if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
       {
@@ -4861,7 +3337,7 @@ function testApxplus(award, obj)
 function loadAwardJson()
 {
   g_awards = {};
-  var fs = require("fs");
+  let fs = require("fs");
   if (fs.existsSync("./data/awards.json"))
   {
     fileBuf = fs.readFileSync("./data/awards.json");
@@ -4870,9 +3346,9 @@ function loadAwardJson()
       g_awards = JSON.parse(fileBuf);
       // fs.writeFileSync("./data/awards.json", JSON.stringify(g_awards,null,2));
 
-      for (var sp in g_awards)
+      for (let sp in g_awards)
       {
-        for (var aw in g_awards[sp].awards)
+        for (let aw in g_awards[sp].awards)
         {
           if (!("unique" in g_awards[sp].awards[aw].rule))
           { g_awards[sp].awards[aw].rule.unique = 1; }
@@ -4885,7 +3361,7 @@ function loadAwardJson()
           if (g_awards[sp].awards[aw].rule.band.length == 0)
           {
             g_awards[sp].awards[aw].rule.band = [];
-            for (var key in g_awards[sp].mixed)
+            for (let key in g_awards[sp].mixed)
             {
               g_awards[sp].awards[aw].rule.band.push(g_awards[sp].mixed[key]);
             }
@@ -4896,7 +3372,7 @@ function loadAwardJson()
           )
           {
             g_awards[sp].awards[aw].rule.endorse = [];
-            for (var key in g_awards[sp].mixed)
+            for (let key in g_awards[sp].mixed)
             {
               g_awards[sp].awards[aw].rule.endorse.push(
                 g_awards[sp].mixed[key]
@@ -4919,7 +3395,7 @@ function loadAwardJson()
 
 function processAllAwardTrackers()
 {
-  for (var tracker in g_awardTracker)
+  for (let tracker in g_awardTracker)
   {
     if (!(g_awardTracker[tracker].sponsor in g_awards))
     {
@@ -4943,7 +3419,7 @@ function processAllAwardTrackers()
 
 function newAwardTrackerObject(sponsor, award, enable)
 {
-  var newAward = {};
+  let newAward = {};
   newAward.sponsor = sponsor;
   newAward.name = award;
   newAward.enable = enable;
@@ -4958,13 +3434,13 @@ function newAwardTrackerObject(sponsor, award, enable)
 
 function addAllAwards()
 {
-  for (var sponsor in g_awards)
+  for (let sponsor in g_awards)
   {
-    for (var award in g_awards[sponsor].awards)
+    for (let award in g_awards[sponsor].awards)
     {
-      var awardToAdd = newAwardTrackerObject(sponsor, award, true);
+      let awardToAdd = newAwardTrackerObject(sponsor, award, true);
 
-      var hash = awardToAdd.name + "-" + awardToAdd.sponsor;
+      let hash = awardToAdd.name + "-" + awardToAdd.sponsor;
       if (!(hash in g_awardTracker))
       {
         g_awardTracker[hash] = awardToAdd;
@@ -4987,7 +3463,7 @@ function delAllAwards()
 
 function newCompileCountObject()
 {
-  var compileCountObject = {};
+  let compileCountObject = {};
   compileCountObject.bands = {};
   compileCountObject.modes = {};
   compileCountObject.endorse = {};
@@ -4997,19 +3473,19 @@ function newCompileCountObject()
 
 function singleCompile(award, obj)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var rule = test.rule;
-  var comp = newCompileCountObject();
-  for (var mode in rule.mode)
+  let test = g_awards[award.sponsor].awards[award.name];
+  let rule = test.rule;
+  let comp = newCompileCountObject();
+  for (let mode in rule.mode)
   {
     comp.modes[rule.mode[mode]] = 0;
     comp.bands[rule.mode[mode]] = {};
 
-    for (var band in rule.band)
+    for (let band in rule.band)
     {
       comp.bands[rule.mode[mode]][rule.band[band]] = 0;
     }
-    for (var key in obj)
+    for (let key in obj)
     {
       if (
         rule.mode[mode] in obj[key].bands &&
@@ -5018,7 +3494,7 @@ function singleCompile(award, obj)
       {
         comp.modes[rule.mode[mode]] += 1;
 
-        for (var band in rule.band)
+        for (let band in rule.band)
         {
           if (rule.band[band] in obj[key].bands[rule.mode[mode]])
           { comp.bands[rule.mode[mode]][rule.band[band]] += 1; }
@@ -5027,11 +3503,11 @@ function singleCompile(award, obj)
     }
   }
 
-  for (var mode in comp.modes)
+  for (let mode in comp.modes)
   {
     comp.endorse[mode] = {};
     comp.counts[mode] = {};
-    for (var cnts in rule.count)
+    for (let cnts in rule.count)
     {
       comp.counts[mode][rule.count[cnts]] = {
         num: comp.modes[mode],
@@ -5041,10 +3517,10 @@ function singleCompile(award, obj)
       };
     }
 
-    for (var endorse in rule.endorse)
+    for (let endorse in rule.endorse)
     {
       comp.endorse[mode][rule.endorse[endorse]] = {};
-      for (var cnts in rule.count)
+      for (let cnts in rule.count)
       {
         comp.endorse[mode][rule.endorse[endorse]][rule.count[cnts]] =
           comp.bands[mode][rule.endorse[endorse]] >= rule.count[cnts];
@@ -5057,22 +3533,22 @@ function singleCompile(award, obj)
 
 function doubleCompile(award, firstLevel)
 {
-  var test = g_awards[award.sponsor].awards[award.name];
-  var rule = test.rule;
+  let test = g_awards[award.sponsor].awards[award.name];
+  let rule = test.rule;
 
-  for (var k in firstLevel)
+  for (let k in firstLevel)
   {
     firstLevel[k].bands = {};
     // firstLevel[k].modes = {};
-    var obj = singleCompile(award, firstLevel[k].unique);
+    let obj = singleCompile(award, firstLevel[k].unique);
 
-    for (var mode in obj.bands)
+    for (let mode in obj.bands)
     {
-      for (var cnt in test.rule.count)
+      for (let cnt in test.rule.count)
       {
         if (obj.counts[mode][test.rule.count[cnt]].num >= test.rule.unique)
         {
-          for (var band in obj.bands[mode])
+          for (let band in obj.bands[mode])
           {
             if (!(mode in firstLevel[k].bands)) firstLevel[k].bands[mode] = {};
 
@@ -5085,7 +3561,7 @@ function doubleCompile(award, firstLevel)
         }
       }
     }
-    /* for ( var mode in obj.modes )
+    /* for ( let mode in obj.modes )
     {
       if ( !(mode in firstLevel[k].modes) )
         firstLevel[k].modes[mode] = 0;

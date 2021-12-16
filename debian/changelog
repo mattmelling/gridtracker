@@ -1,6 +1,24 @@
+gridtracker (1.21.1212) unstable; urgency=low
+  Release build with the call roster refactor code that's been in the works for some time.
+  [Bug Fixes]
+  - Fix #76, unfinished ignore CQ and ITU zones.
+  - Improved handling of stations that are not in a valid DXCC (ie; /MM stations)
+  - Improved handling of free text decodes that don't contain valid callsigns (ie "HI BOB" and "MERRY XMAS")
+  - Fix how the Call Roster title bar counts are calculated.
+  [Enhancements]
+  - More clarity when a ULS Zip code falls in more then one county, replacing ~ with ? symbols and
+    better tool tip message.
+  - Fix #107, where the call roster timeout was longer then a single FT4 cycle.
+  - Fix #91, CQ is always highlighted, no matter status of CQ Only.
+  - Performance improvement by changing how call roster vars are handled ('let' vs 'var')
+  - Build system improved to push to Arch AUR, building of Debian (.deb) packages and triggering
+    of COPR RPM builds for Fedora/Cent/RHEL and their cousins.
+
+ -- Matthew Chambers <nr0q@gridtracker.org>  Thu, 12 Dec 2021 15:10:00 -0000
+
 gridtracker (1.21.0928) unstable; urgency=medium
   [Bug Fixes]
-  - Treat ADIF record values as byte length vs string length (to better handle UTF-8 data).
+  - Treat ADIF record values as byte length vs string length (to better handle UTSF-8 data).
   - Remove looking at fetched records for last date for LoTW fetches, Use only headers (More reliable LoTW fetches).
   [Enhancements]
   - ARM builds now with NWJS 0.54.2 and 64 bit ARM binaries.

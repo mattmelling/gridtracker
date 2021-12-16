@@ -1,4 +1,4 @@
-// GridTracker Copyright © 2021 GridTracker.org
+// GridTracker Copyright © 2022 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
 
@@ -141,7 +141,7 @@ Number.prototype.toDHM = function ()
 
   days = days ? days + "d " : "";
   hrs = hrs ? hrs + "h " : "";
-  mnts = mnts ? mnts + "m " : "";
+  mnts = mnts || seconds ? mnts + "m " : "";
   val = days + hrs + mnts;
   return val;
 };

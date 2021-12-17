@@ -1,6 +1,6 @@
 Name:           gridtracker
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        1.21.1212
+Version:        1.21.1217
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        %{name}-%{version}.tar.gz
@@ -40,6 +40,8 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Fri Dec 17 2021 Matthew Chambers <nr0q@gridtracker.org> - 1.21.1217-1
+- Changed to newer NWJS to fix upstream bug that caused media playback to fail.
 * Sun Dec 12 2021 Matthew Chambers <nr0q@gridtracker.org> - 1.21.1212-1
 - Release build with the call roster refactor code that's been in the works for some time.
 - [Bug Fixes]

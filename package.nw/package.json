@@ -1,7 +1,7 @@
 {
   "name": "GridTracker",
   "product_string_do_not_use": "gridtracker",
-  "version": "1.21.1212",
+  "version": "1.21.1217",
   "betaVersion": "",
   "description": "GridTracker, an amateur radio companion",
   "author": "Stephen Loomis (N0TTL) and GridTracker.org",
@@ -23,7 +23,7 @@
     "start": "run --mirror https://dl.nwjs.io/ ."
   },
   "build": {
-    "nwVersion": "0.54.0",
+    "nwVersion": "0.59.0",
     "output": "../dist/.",
     "targets": [
       "zip",

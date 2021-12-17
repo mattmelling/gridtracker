@@ -355,8 +355,6 @@ sourcerelease:
 update_arch_aur:
   stage: deploy
   image: archlinux:base-devel
-  variables:
-    GIT_STRATEGY: none
   rules:
     # only do this with a manual tag starting with v
     - if: '$CI_COMMIT_TAG =~ /^v.*/ && $AUR_KEY != ""'

@@ -8,7 +8,7 @@ pkgdesc="Companion program for WSJT-X for mapping contacts"
 arch=('x86_64')
 url="https://gridtracker.org/grid-tracker/"
 license=('BSD')
-depends=('nwjs-bin>=0.48.0')
+depends=('nwjs-bin>=0.54.0')
 replaces=('gridtracker-bin')
 source=("https://gitlab.com/gridtracker.org/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz")
 sha256sums=('REPLACE_WITH_SHASUM')

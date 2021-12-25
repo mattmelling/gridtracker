@@ -2,7 +2,8 @@
 // All rights reserved.
 // See LICENSE for more information.
 const pjson = require("./package.json");
-var gtVersion = parseInt(pjson.version.replace(/\./g, ""));
+var gtVersionStr = pjson.version
+var gtVersion = parseInt(gtVersionStr.replace(/\./g, ""));
 var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
@@ -3101,30 +3102,23 @@ function makeTitleInfo(mapWindow)
         ? myMode
         : g_appSettings.gtModeFilter;
   var space = " ";
-  var news = "GridTracker [Band: " + band + " Mode: " + mode;
+  var news = `GridTracker ${gtVersionStr} [Band: ${band} Mode: ${mode}`;
   var end = "]";
 
   if (mapWindow)
   {
-    news += " Layer: " + g_viewInfo[g_currentOverlay][1];
+    news += ` Layer: ${g_viewInfo[g_currentOverlay][1]}`;
   }
 
   if (g_currentOverlay == 0 && g_appSettings.gridViewMode == 1) { return news + end; }
 
-  var workline =
-    " - Worked " +
-    g_viewInfo[g_currentOverlay][2] +
-    " Confirmed " +
-    g_viewInfo[g_currentOverlay][3];
+  var workline = ` - Worked ${g_viewInfo[g_currentOverlay][2]} Confirmed ${g_viewInfo[g_currentOverlay][3]}`
   if (
     g_viewInfo[g_currentOverlay][2] <= g_viewInfo[g_currentOverlay][4] &&
     g_viewInfo[g_currentOverlay][4] > 0
   )
   {
-    end =
-      " Needed " +
-      (g_viewInfo[g_currentOverlay][4] - g_viewInfo[g_currentOverlay][2]) +
-      "]";
+    end = ` Needed ${(g_viewInfo[g_currentOverlay][4] - g_viewInfo[g_currentOverlay][2])}]`;
   }
   return news + workline + end;
 }

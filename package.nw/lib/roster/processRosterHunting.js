@@ -652,7 +652,7 @@ function processRosterHunting(callRoster, rosterSettings)
         callingBg = "#0000FF" + inversionAlpha;
         calling = "#FFFF00;text-shadow: 0px 0px 2px #FFFF00";
       }
-      else if (callObj.CQ == true)
+      else if (callObj.CQ == true && !g_rosterSettings.cqOnly)
       {
         callingBg = calling + inversionAlpha;
         calling = bold;

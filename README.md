@@ -41,7 +41,7 @@ Run `npm install` and then `npm start`
 
 Phoenix does not support ARM-based macs, so we have to explicitly tell it to use Intel-based versions of NWJS.
 
-Run `npm install` and then `npm start-x64`
+Run `npm install` and then `npm run start-x64`
 
 ## ARM-based Raspberry
 

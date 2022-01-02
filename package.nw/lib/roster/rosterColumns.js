@@ -1,6 +1,6 @@
 const DEFAULT_COLUMN_ORDER = [
-  "Callsign", "Band", "Mode", "Grid", "Calling", "Msg",
-  "DXCC", "POTA", "Flag", "State", "County", "Cont",
+  "Callsign", "Band", "Mode", "Calling", "Wanted", "Grid", "Msg",
+  "DXCC", "Flag", "State", "County", "Cont",
   "dB", "Freq", "DT", "Dist", "Azim",
   "CQz", "ITUz", "PX",
   "LoTW", "eQSL", "OQRS",
@@ -30,6 +30,7 @@ const getterSimpleComparer = (getter) => (a, b) =>
 {
   const aVal = getter(a);
   const bVal = getter(b);
+
   if (aVal == null) return 1;
   if (bVal == null) return -1;
   if (aVal > bVal) return 1;
@@ -384,5 +385,69 @@ const ROSTER_COLUMNS = {
       title: callObj.pota ? callObj.pota.name : "",
       html: callObj.pota ? callObj.pota.reference : ""
     })
+  },
+
+  Wanted: {
+    compare: getterSimpleComparer((elem) => wantedColumnSort(elem.callObj)),
+    tableData: (callObj) => ({
+      class: "wantedCol",
+      title: wantedColumnParts(callObj).join("\n"),
+      html: wantedColumnParts(callObj).join(", ")
+    })
   }
+}
+
+WANTED_ORDER = ["cont", "cqz", "ituz", "dxcc", "state", "grid", "cnty", "wpx", "call", "oams"];
+WANTED_LABELS = {
+  cont: "Continent",
+  cqz: "CQ Zone",
+  ituz: "ITU Zone",
+  dxcc: "DXCC",
+  state: "State",
+  grid: "Grid",
+  cnty: "County",
+  wpx: "WPX",
+  call: "Call",
+  oams: "OAMS"
+}
+
+function wantedColumnParts(callObj)
+{
+  if (!callObj.hunting) return [];
+
+  let parts = [];
+  WANTED_ORDER.forEach(field =>
+  {
+    let wanted = callObj.hunting[field];
+
+    if (wanted == "hunted" && field == "oams") { parts.push("OAMS User"); }
+    else if (wanted == "hunted") { parts.push(`<b>New ${WANTED_LABELS[field]}</b>`); }
+    else if (wanted == "worked") { parts.push(`Worked ${WANTED_LABELS[field]}`); }
+    else if (wanted == "mixed") { parts.push(`${callObj.band} ${WANTED_LABELS[field]}`); }
+    else if (wanted == "mixed-worked") { parts.push(`${callObj.band} ${WANTED_LABELS[field]}`); parts.push(`Worked ${WANTED_LABELS[field]}`); }
+    else if (wanted == "worked-and-mixed") { parts.push(`Worked ${callObj.band} ${WANTED_LABELS[field]}`); }
+  })
+
+  return parts;
+}
+
+function wantedColumnSort(callObj)
+{
+  if (!callObj.hunting) return 0;
+
+  let weight = 0;
+  WANTED_ORDER.forEach(field =>
+  {
+    let wanted = callObj.hunting && callObj.hunting[field];
+
+    if (wanted == "hunted") { weight = weight + 5; }
+    else if (wanted == "worked") { weight = weight + 4; }
+    else if (wanted == "mixed") { weight = weight + 3; }
+    else if (wanted == "mixed-worked") { weight = weight + 2; }
+    else if (wanted == "worked-and-mixed") { weight = weight + 1; }
+
+    weight = weight * 10; // make room for the next level of wanted order
+  })
+
+  return -weight; // return negative values because we want to sort in reverse order by default
 }

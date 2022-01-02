@@ -558,3 +558,11 @@ table.rosterTable thead th:first-child {
   padding: 0;
   width: 1.5em;
 }
+
+.wantedCol {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow:
+  ellipsis;
+  white-space: nowrap;
+}

@@ -139,6 +139,27 @@ function processRosterHunting(callRoster, rosterSettings)
           continue;
         }
 
+        // Special Calls
+        if (callObj.DEcall.match("^[A-Z][0-9][A-Z](/w+)?$"))
+        {
+          callObj.style.call = "class='oneByOne'";
+        }
+
+        // Entries currently calling or being called by us
+        if (callObj.DEcall == window.opener.g_instances[callObj.instance].status.DXcall)
+        {
+          if (window.opener.g_instances[callObj.instance].status.TxEnabled == 1)
+          {
+            callObj.hunting.call = "calling";
+            callObj.style.call = "class='dxCalling'";
+          }
+          else
+          {
+            callObj.hunting.call = "caller";
+            callObj.style.call = "class='dxCaller'";
+          }
+        }
+
         // Hunting for callsigns
         if (huntCallsign.checked == true)
         {
@@ -203,6 +224,7 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntQRZ.checked == true && callObj.qrz == true)
         {
           callObj.callFlags.calling = true
+          callObj.hunting.qrz = "hunted";
           shouldAlert = true;
           callObj.reason.push("qrz");
         }

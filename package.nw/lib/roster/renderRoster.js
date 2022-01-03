@@ -116,24 +116,6 @@ function renderRoster(callRoster, rosterSettings)
   {
     let callObj = visibleCallList[x].callObj;
 
-    // TODO: This is filtering
-    if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
-    { continue; }
-
-    if (callObj.DEcall.match("^[A-Z][0-9][A-Z](/w+)?$"))
-    { callObj.style.call = "class='oneByOne'"; }
-    if (callObj.DEcall == window.opener.g_instances[callObj.instance].status.DXcall)
-    {
-      if (window.opener.g_instances[callObj.instance].status.TxEnabled == 1)
-      {
-        callObj.style.call = "class='dxCalling'";
-      }
-      else
-      {
-        callObj.style.call = "class='dxCaller'";
-      }
-    }
-
     worker += g_rosterSettings.compact ? renderCompactRosterRow(callObj) : renderNormalRosterRow(rosterColumns, callObj)
   }
 

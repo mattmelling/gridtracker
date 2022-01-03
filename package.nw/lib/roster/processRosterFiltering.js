@@ -378,6 +378,12 @@ function processRosterFiltering(callRoster, rosterSettings)
           }
         }
       }
+
+      if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
+      {
+        tx = false
+      }
+
       entry.tx = tx;
     }
   }

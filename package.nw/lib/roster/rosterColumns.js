@@ -388,16 +388,16 @@ const ROSTER_COLUMNS = {
   },
 
   Wanted: {
-    compare: getterSimpleComparer((elem) => wantedColumnSort(elem.callObj)),
+    compare: (a, b) => wantedColumnComparer(a.callObj, b.callObj),
     tableData: (callObj) => ({
       class: "wantedCol",
-      title: wantedColumnParts(callObj).join("\n"),
-      html: wantedColumnParts(callObj).join(", ")
+      title: wantedColumnParts(callObj).map(entry => `• ${entry}`).join("\n"),
+      html: wantedColumnParts(callObj).join(" - ", { html: true })
     })
   }
 }
 
-WANTED_ORDER = ["cont", "cqz", "ituz", "dxcc", "state", "grid", "cnty", "wpx", "call", "oams"];
+WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "state", "grid", "cnty", "wpx", "oams"];
 WANTED_LABELS = {
   cont: "Continent",
   cqz: "CQ Zone",
@@ -411,43 +411,64 @@ WANTED_LABELS = {
   oams: "OAMS"
 }
 
-function wantedColumnParts(callObj)
+function wantedColumnParts(callObj, options)
 {
+  options = options || {};
+
   if (!callObj.hunting) return [];
 
   let parts = [];
+
   WANTED_ORDER.forEach(field =>
   {
     let wanted = callObj.hunting[field];
 
-    if (wanted == "hunted" && field == "oams") { parts.push("OAMS User"); }
-    else if (wanted == "hunted") { parts.push(`<b>New ${WANTED_LABELS[field]}</b>`); }
+    if (wanted == "calling" || wanted == "caller") { parts.push("Calling"); }
+    else if (wanted == "hunted" && field == "qrz") { parts.push("QRZ"); }
+    else if (wanted == "hunted" && field == "oams") { parts.push("OAMS User"); }
+    else if (wanted == "hunted") { parts.push(`${options.html ? "<b>" : ""}New ${WANTED_LABELS[field]}${options.html ? "<b>" : ""}`); }
     else if (wanted == "worked") { parts.push(`Worked ${WANTED_LABELS[field]}`); }
     else if (wanted == "mixed") { parts.push(`${callObj.band} ${WANTED_LABELS[field]}`); }
     else if (wanted == "mixed-worked") { parts.push(`${callObj.band} ${WANTED_LABELS[field]}`); parts.push(`Worked ${WANTED_LABELS[field]}`); }
     else if (wanted == "worked-and-mixed") { parts.push(`Worked ${callObj.band} ${WANTED_LABELS[field]}`); }
   })
 
+  if (parts[0] == "Calling" && parts[1] == "Calling")
+  {
+    parts.shift(); parts.shift();
+    parts.unshift("Working");
+  }
+
   return parts;
 }
 
-function wantedColumnSort(callObj)
+function wantedColumnWeighter(callObj, field)
 {
-  if (!callObj.hunting) return 0;
+  let wanted = callObj.hunting[field];
 
-  let weight = 0;
-  WANTED_ORDER.forEach(field =>
+  // We use negative numbers so that sorting is "reversed" by default, placing most interesting items up top.
+  if (wanted == "calling" || wanted == "caller") return -10;
+  else if (wanted == "hunted") return -5;
+  else if (wanted == "worked") return -4;
+  else if (wanted == "mixed") return -3;
+  else if (wanted == "mixed-worked") return -2;
+  else if (wanted == "worked-and-mixed") return -1;
+  else return 0;
+}
+
+function wantedColumnComparer(a, b)
+{
+  if (!a.hunting) return 1;
+  if (!b.hunting) return -1;
+
+  for (const index in WANTED_ORDER)
   {
-    let wanted = callObj.hunting && callObj.hunting[field];
+    const field = WANTED_ORDER[index];
+    const aWeight = wantedColumnWeighter(a, field);
+    const bWeight = wantedColumnWeighter(b, field);
 
-    if (wanted == "hunted") { weight = weight + 5; }
-    else if (wanted == "worked") { weight = weight + 4; }
-    else if (wanted == "mixed") { weight = weight + 3; }
-    else if (wanted == "mixed-worked") { weight = weight + 2; }
-    else if (wanted == "worked-and-mixed") { weight = weight + 1; }
-
-    weight = weight * 10; // make room for the next level of wanted order
-  })
-
-  return -weight; // return negative values because we want to sort in reverse order by default
+    if (aWeight < bWeight) return 1;
+    if (aWeight > bWeight) return -1;
+  }
+  return 0;
 }

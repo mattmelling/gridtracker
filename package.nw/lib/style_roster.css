@@ -560,7 +560,7 @@ table.rosterTable thead th:first-child {
 }
 
 .wantedCol {
-  max-width: 90px;
+  max-width: 160px;
   overflow: hidden;
   text-overflow:
   ellipsis;

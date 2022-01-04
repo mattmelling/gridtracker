@@ -62,16 +62,36 @@ function setRosterSorting(column)
   window.opener.goProcessRoster();
 }
 
-function sortCallList(callList, sortColumn, sortReverse)
+function sortCallList(callList, sortColumn, sortReverse, columns)
 {
   const columnInfo = ROSTER_COLUMNS[sortColumn]
 
-  callList.sort((columnInfo && columnInfo.compare) || ROSTER_COLUMNS.Age.compare)
+  const comparerList = [
+    (columnInfo && columnInfo.compare) || ROSTER_COLUMNS.Age.compare,
+    columns && columns.includes("Spot") && ROSTER_COLUMNS.Spot.compare,
+    columns && columns.includes("dB") && ROSTER_COLUMNS.dB.compare,
+    columns && columns.includes("Age") && ROSTER_COLUMNS.Age.compare,
+    columns && columns.includes("Life") && ROSTER_COLUMNS.Life.compare,
+    columns && columns.includes("Callsign") && ROSTER_COLUMNS.Callsign.compare
+  ]
+
+  callList.sort(multiColumnComparer(comparerList))
 
   if (sortReverse)
   {
     callList.reverse()
   }
+}
+
+const multiColumnComparer = (comparers) => (a, b) =>
+{
+  let result = 0;
+  for (let i in comparers)
+  {
+    result = comparers[i] && comparers[i](a, b);
+    if (result) return result;
+  }
+  return 0;
 }
 
 function validateRosterColumnOrder(columns)

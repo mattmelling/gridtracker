@@ -423,7 +423,7 @@ function wantedColumnParts(callObj, options)
   {
     let wanted = callObj.hunting[field];
 
-    if (wanted == "calling" || wanted == "caller") { parts.push("Calling"); }
+    if (wanted == "calling") { parts.push("Calling"); }
     else if (wanted == "hunted" && field == "qrz") { parts.push("QRZ"); }
     else if (wanted == "hunted" && field == "oams") { parts.push("OAMS User"); }
     else if (wanted == "hunted") { parts.push(`${options.html ? "<b>" : ""}New ${WANTED_LABELS[field]}${options.html ? "<b>" : ""}`); }
@@ -436,7 +436,7 @@ function wantedColumnParts(callObj, options)
   if (parts[0] == "Calling" && parts[1] == "Calling")
   {
     parts.shift(); parts.shift();
-    parts.unshift("Working");
+    parts.unshift(`${options.html ? "<b>" : ""}Working${options.html ? "<b>" : ""}`);
   }
 
   return parts;

@@ -12,6 +12,8 @@ function renderHeaderForColumn(column)
 
   let attrs = (columnInfo && columnInfo.tableHeader && columnInfo.tableHeader()) || {}
 
+  attrs.name = column
+
   attrs.html = attrs.html || column
 
   if (columnInfo.compare)
@@ -98,11 +100,20 @@ function validateRosterColumnOrder(columns)
 {
   let correctedColumnOrder = (columns || DEFAULT_COLUMN_ORDER || []).slice();
 
+  // Aappend columns not included in the suggested list.
   DEFAULT_COLUMN_ORDER.forEach(column =>
   {
     if (!correctedColumnOrder.includes(column)) correctedColumnOrder.push(column);
   })
+
+  // Exclude any unexpected values
   correctedColumnOrder = correctedColumnOrder.filter(column => !!ROSTER_COLUMNS[column])
+
+  // Ensure the first three columns are always the same
+  correctedColumnOrder = correctedColumnOrder.filter(column => column != "Callsign" && column != "Band" && column != "Mode");
+  correctedColumnOrder.unshift("Mode");
+  correctedColumnOrder.unshift("Band");
+  correctedColumnOrder.unshift("Callsign");
 
   return correctedColumnOrder;
 }
@@ -112,4 +123,16 @@ function changeRosterColumnOrder(columns)
   g_rosterSettings.columnOrder = validateRosterColumnOrder(columns);
   writeRosterSettings();
   window.opener.goProcessRoster();
+}
+
+function moveColumnLeft(column)
+{
+  const columns = rosterColumnList(g_rosterSettings.columns, { Callsign: true, Grid: true });
+  const pos = columns.indexOf(column);
+  if (pos > 1)
+  {
+    columns[pos] = columns[pos - 1];
+    columns[pos - 1] = column;
+  }
+  changeRosterColumnOrder(columns);
 }

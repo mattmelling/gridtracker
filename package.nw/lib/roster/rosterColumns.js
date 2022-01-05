@@ -117,9 +117,9 @@ const ROSTER_COLUMNS = {
     compare: (a, b) => window.opener.myDxccCompare(a.callObj, b.callObj),
     tableData: (callObj) => ({
       title: window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].pp,
-      name: `DXCC (${callObj.dxcc})`,
+      name: `${callObj.dxcc}`,
       rawAttrs: callObj.style.dxcc,
-      html: window.opener.g_dxccToAltName[callObj.dxcc]
+      html: [window.opener.g_dxccToAltName[callObj.dxcc], callObj.dxccSuffix].join("&nbsp;")
     })
   },
 
@@ -216,7 +216,7 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "CQz",
       rawAttrs: callObj.style.cqz,
-      html: callObj.cqza.join(",")
+      html: [callObj.cqza.join(","), callObj.cqzSuffix].join("&nbsp;")
     })
   },
 
@@ -397,12 +397,14 @@ const ROSTER_COLUMNS = {
   }
 }
 
-WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "state", "grid", "cnty", "wpx", "oams"];
+WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "grid", "cnty", "wpx", "oams"];
 WANTED_LABELS = {
   cont: "Continent",
   cqz: "CQ Zone",
   ituz: "ITU Zone",
   dxcc: "DXCC",
+  dxccMarathon: "Marathon DXCC",
+  cqzMarathon: "Marathon CQ Zone",
   state: "State",
   grid: "Grid",
   cnty: "County",
@@ -424,7 +426,8 @@ function wantedColumnParts(callObj, options)
     let wanted = callObj.hunting[field];
 
     if (wanted == "calling") { parts.push("Calling"); }
-    else if (wanted == "hunted" && field == "qrz") { parts.push("QRZ"); }
+    // else if (wanted == "caller") { parts.push("Called"); }
+    else if (wanted == "hunted" && field == "qrz") { parts.push("Caller"); }
     else if (wanted == "hunted" && field == "oams") { parts.push("OAMS User"); }
     else if (wanted == "hunted") { parts.push(`${options.html ? "<b>" : ""}New ${WANTED_LABELS[field]}${options.html ? "<b>" : ""}`); }
     else if (wanted == "worked") { parts.push(`Worked ${WANTED_LABELS[field]}`); }
@@ -433,7 +436,7 @@ function wantedColumnParts(callObj, options)
     else if (wanted == "worked-and-mixed") { parts.push(`Worked ${callObj.band} ${WANTED_LABELS[field]}`); }
   })
 
-  if (parts[0] == "Calling" && parts[1] == "Calling")
+  if (parts[0] == "Calling" && parts[1] == "Caller")
   {
     parts.shift(); parts.shift();
     parts.unshift(`${options.html ? "<b>" : ""}Working${options.html ? "<b>" : ""}`);

@@ -98,6 +98,7 @@ var g_defaultSettings = {
     huntDXCC: true,
     huntCQz: false,
     huntITUz: false,
+    huntMarathon: false,
     huntState: false,
     huntCounty: false,
     huntCont: false,

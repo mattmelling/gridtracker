@@ -1065,6 +1065,10 @@ function addDeDx(
   finalSatName = ""
 )
 {
+  var currentYear = new Date().getFullYear();
+  var qsoDate = new Date(1970, 0, 1); qsoDate.setSeconds(finalTime);
+  var isCurrentYear = (qsoDate.getFullYear() == currentYear);
+
   var callsign = null;
   var rect = null;
   var worked = false;
@@ -1262,6 +1266,10 @@ function addDeDx(
         g_tracker.worked.cqz[details.cqz + "dg"] = true;
         g_tracker.worked.cqz[details.cqz + band + "dg"] = true;
       }
+      if (isCurrentYear)
+      {
+        g_tracker.worked.cqz[`${details.cqz}-${currentYear}`] = true;
+      }
     }
 
     if (details.dxcc > 0)
@@ -1275,6 +1283,10 @@ function addDeDx(
       {
         g_tracker.worked.dxcc[sDXCC + "dg"] = true;
         g_tracker.worked.dxcc[sDXCC + band + "dg"] = true;
+      }
+      if (isCurrentYear)
+      {
+        g_tracker.worked.dxcc[`${sDXCC}-${currentYear}`] = true;
       }
     }
 

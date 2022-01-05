@@ -13,6 +13,9 @@ function processRosterHunting(callRoster, rosterSettings)
   let layeredUnconf = "background-clip:padding-box;box-shadow: 0 0 4px 2px inset ";
   let layeredUnconfAlpha = "AA";
 
+  const currentYear = new Date().getFullYear();
+  const currentYearSuffix = `&rsquo;${currentYear - 2000}`;
+
   // TODO: Hunting results might be used to filter, based on the "Callsigns: Only Wanted" option,
   //       so maybe we can move this loop first, and add a check to the filtering loop?
 
@@ -335,6 +338,27 @@ function processRosterHunting(callRoster, rosterSettings)
               }
             }
           }
+
+          callObj.dxccSuffix = null
+          if (huntMarathon.checked && callObj.hunting.dxcc != "hunted" && callObj.hunting.dxcc != "checked")
+          {
+            callObj.reason.push("dxcc-marathon");
+
+            let hash = `${callObj.dxcc}-${currentYear}`;
+            if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.dxcc))
+            {
+              if (!rosterSettings.workedIndex || !(hash in rosterSettings.workedIndex.dxcc))
+              {
+                callObj.dxccSuffix = currentYearSuffix;
+
+                callObj.hunting.dxccMarathon = "hunted";
+                if (!callObj.hunting.dxcc)
+                {
+                  dxccConf = `${unconf}${dxcc}${layeredAlpha};`;
+                }
+              }
+            }
+          }
         }
 
         // Hunting for US States
@@ -513,17 +537,23 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntCQz.checked == true)
         {
           let huntTotal = callObj.cqza.length;
-          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0, marathonFound = 0;
 
           for (index in callObj.cqza)
           {
             let hash = callObj.cqza[index] + workHashSuffix;
-            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix)
+            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix);
+            let marathonHash = huntMarathon.checked && `${callObj.cqza[index]}-${currentYear}`;
 
             if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.cqz) huntFound++;
             if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cqz) layeredFound++;
             if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cqz) workedFound++;
             if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.cqz) layeredWorkedFound++;
+            if (marathonHash)
+            {
+              if (rosterSettings.huntIndex && marathonHash in rosterSettings.huntIndex.cqz) marathonFound++;
+              else if (rosterSettings.workedIndex && marathonHash in rosterSettings.workedIndex.cqz) marathonFound++;
+            }
           }
           if (huntFound != huntTotal)
           {
@@ -563,6 +593,23 @@ function processRosterHunting(callRoster, rosterSettings)
                 callObj.hunting.cqz = "hunted";
                 cqzBg = `${cqz}${inversionAlpha};`;
                 cqz = bold;
+              }
+            }
+          }
+
+          callObj.cqzSuffix = null
+          if (huntMarathon.checked && callObj.hunting.cqz != "hunted" && callObj.hunting.cqz != "worked")
+          {
+            if (marathonFound != huntTotal)
+            {
+              callObj.reason.push("cqz-marathon");
+
+              callObj.cqzSuffix = currentYearSuffix;
+
+              callObj.hunting.cqzMarathon = "hunted";
+              if (!callObj.hunting.cqz)
+              {
+                cqzConf = `${unconf}${cqz}${layeredAlpha};`;
               }
             }
           }

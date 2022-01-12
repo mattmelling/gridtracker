@@ -127,6 +127,10 @@
     "badge": "img/emojis/star.png",
     "message": "Creator of FT8 and WSJT-X"
   },
+  "K1VK": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
+  },
   "K2PF": {
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
@@ -247,11 +251,19 @@
     "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
+  "KD1UA": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
+  },
   "KD5EAX": {
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
   },
   "KD5VZS": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
+  },
+  "KD7IQL": {
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
   },
@@ -291,6 +303,10 @@
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
   },
+  "KF0FVW": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
+  },
   "KF5QHQ": {
     "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"
@@ -320,6 +336,10 @@
     "message": "GridTracker Donor"
   },
   "KK4INZ": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
+  },
+  "KK4TYW": {
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
   },
@@ -602,6 +622,10 @@
   "W4IPA": {
     "badge": "img/emojis/beer-mug.png",
     "message": "GridTracker Tester"
+  },
+  "W4WWF": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
   },
   "W5AFK": {
     "badge": "img/emojis/pizza.png",

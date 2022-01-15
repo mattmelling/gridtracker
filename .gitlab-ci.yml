@@ -384,7 +384,7 @@ update_arch_aur:
       sudo -u builder makepkg -si --noconfirm PKGBUILD
     # push the new version
     - |
-      makepkg --printsrcinfo > .SRCINFO
+      sudo -u builder makepkg --printsrcinfo > .SRCINFO
       git clone ssh://aur@aur.archlinux.org/gridtracker.git
       cp PKGBUILD gridtracker/PKGBUILD
       cp .SRCINFO gridtracker/.SRCINFO

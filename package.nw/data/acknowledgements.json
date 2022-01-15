@@ -331,6 +331,10 @@
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
   },
+  "KJ7ZOK": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
+  },
   "KJ8U": {
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
@@ -464,6 +468,10 @@
     "message": "GridTracker Donor"
   },
   "N4SFS": {
+    "badge": "img/emojis/money-bag.png",
+    "message": "GridTracker Donor"
+  },
+  "N4TDT": {
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
   },
@@ -708,10 +716,6 @@
     "message": "GridTracker Donor"
   },
   "ZL4CAT": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KJ7ZOK": {
     "badge": "img/emojis/money-bag.png",
     "message": "GridTracker Donor"
   }

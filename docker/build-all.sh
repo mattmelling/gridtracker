@@ -15,26 +15,18 @@ for dir in dist/*-linux-* ; do
     fi
 done
 for dir in dist/*-win-* ; do
-    if [ -d $dir ] ; then
-        mkdir $dir/package.nw
-        for file in package.nw/* ; do
-          mv $dir/`basename $file` $dir/package.nw
-        done
-    elif [  -f $dir ] && [[ "$dir" == *"win-x86-Setup.exe"* ]] ; then
+    if [  -f $dir ] && [[ "$dir" == *"-Setup.exe" ]] ; then
       echo "deleting broken installer $dir"
       rm $dir
     fi
 done
 
-sed "s#GridTracker-\${VERSION}-win-x86/#`pwd`/dist/GridTracker-\${VERSION}-win-x86/#g" windows/setup.nsi.tmpl > windows/setup.nsi.tmp.1
-sed "s#GridTracker-Installer.#`pwd`/dist/GridTracker-Installer.#g" windows/setup.nsi.tmp.1 > windows/setup.nsi.tmp.2
-sed "s#define VERSION <placeholder#define VERSION `node version.js`#g" windows/setup.nsi.tmp.2 > windows/setup.nsi
-
+sed "s#<versionplaceholder>#`node version.js`#g" windows/win_installer.nsi > windows/setup.nsi.tmp.1
+sed "s#<buildplaceholder>#`pwd`#g" windows/setup.nsi.tmp.1 > windows/setup.nsi
 makensis windows/setup.nsi
 # clean up generated files
 rm windows/setup.nsi
 rm windows/setup.nsi.tmp.1
-rm windows/setup.nsi.tmp.2
 
 mv dist/*{.exe,mac-x64.zip,.tar.gz} ../dist
 rpmbuild -D "version `node ./version.js`" --build-in-place -bb gridtracker.i386.spec

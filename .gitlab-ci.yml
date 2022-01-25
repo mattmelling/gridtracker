@@ -86,11 +86,14 @@ win:package:
       mkdir -p artifacts
       echo -e "\e[0Ksection_start:`date +%s`:apt_get[collapsed=true]\r\e[0KGetting Build Dependencies"
       apt-get update && apt-get upgrade -y
+      apt-get install p7zip -y
       wget https://nsis.sourceforge.io/mediawiki/images/4/47/Registry.zip
-      unzip Registry.zip
-      mv Desktop/Plugin/registry.dll /usr/share/nsis/Plugins/x86-unicode/
-      mv Desktop/Include/Registry.nsh /usr/share/nsis/Include/
-      rm -Rf Desktop PocketPC Source
+      unzip -bj Registry.zip Desktop/Plugin/registry.dll -d /usr/share/nsis/Plugins/x86-unicode/
+      unzip -bj Registry.zip Desktop/Include/Registry.nsh -d /usr/share/nsis/Include/
+      wget https://nsis.sourceforge.io/mediawiki/images/1/18/NsProcess.zip
+      7zr e NsProcess.zip -y -o/usr/share/nsis/Include/ Include/nsProcess.nsh
+      7zr e NsProcess.zip -y -o/usr/share/nsis/Plugins/x86-unicode/ Plugin/nsProcessW.dll
+      mv /usr/share/nsis/Plugins/x86-unicode/nsProcessW.dll /usr/share/nsis/Plugins/x86-unicode/nsProcess.dll
       eval $(ssh-agent -s)
       echo "$NR0Q_PRIV" | tr -d '\r' | ssh-add -
       mkdir -p ~/.ssh; chmod 700 ~/.ssh
@@ -104,13 +107,7 @@ win:package:
       npm install --prefer-offline
       npm run dist-win
       for dir in dist/*-win-* ; do
-          if [ -d $dir ] ; then
-              rm $dir/locales/*.info
-              mkdir $dir/package.nw
-              for file in package.nw/* ; do
-                mv $dir/`basename $file` $dir/package.nw
-              done
-          elif [  -f $dir ] && [[ "$dir" == *"win-x86-Setup.exe"* ]] ; then
+          if [  -f $dir ] && [[ "$dir" == *"-Setup.exe" ]] ; then
             echo "deleting broken installer $dir"
             rm $dir
           fi
@@ -119,14 +116,12 @@ win:package:
       # using mono signcode
       signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-*-win-*/*.exe
       # Now the executable should be signed 
-      sed "s#GridTracker-\${VERSION}-win-x86/#`pwd`/dist/GridTracker-\${VERSION}-win-x86/#g" windows/setup.nsi.tmpl > windows/setup.nsi.tmp.1
-      sed "s#GridTracker-Installer.#`pwd`/dist/GridTracker-Installer.#g" windows/setup.nsi.tmp.1 > windows/setup.nsi.tmp.2
-      sed "s#define VERSION <placeholder#define VERSION `node version.js`#g" windows/setup.nsi.tmp.2 > windows/setup.nsi
+      sed "s#<versionplaceholder>#`node version.js`#g" windows/win_installer.nsi > windows/setup.nsi.tmp.1
+      sed "s#<buildplaceholder>#`pwd`#g" windows/setup.nsi.tmp.1 > windows/setup.nsi
       makensis windows/setup.nsi
       # clean up generated files
       rm windows/setup.nsi
       rm windows/setup.nsi.tmp.1
-      rm windows/setup.nsi.tmp.2
       signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-Installer.*.exe
       (cd dist ; mv GridTracker-Installer.*.exe ../artifacts)
       echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"

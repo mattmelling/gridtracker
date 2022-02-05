@@ -11,7 +11,7 @@ function g_getPotaPlaces()
   // we need to see if ever run and update 1x a week
 }
 
-function g_ingestPotaSpots()
+function g_ingestPotaSpots(buffer)
 {
   try
   {
@@ -31,8 +31,8 @@ function g_getPotaSpots()
       "https://api.pota.app/spot/activator",
       g_ingestPotaSpots,
       null,
-      "http",
-      80
+      "https",
+      443
     );
 
     setTimeout(g_getPotaSpots, 300000);

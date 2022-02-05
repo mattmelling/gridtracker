@@ -12782,7 +12782,7 @@ function getBuffer(file_url, callback, flag, mode, port, cache = null)
     port: port,
     followAllRedirects: true,
     path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
-    headers: { "User-Agent": gtVersionString, Referer: "https://gridtracker.org" }
+    headers: { "User-Agent": gtVersionString }
   };
 
   http.get(options, function (res)

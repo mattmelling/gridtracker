@@ -5,10 +5,32 @@
 var g_potaPlaces = null;
 var g_potaSpots = null;
 
+function g_ingestPotaPlaces(buffer)
+{
+  try
+  {
+    g_potaPlaces = JSON.parse(buffer);
+  }
+  catch (e)
+  {
+    // can't write, somethings broke
+  }
+}
+
 function g_getPotaPlaces()
 {
-  // get list of all parks
-  // we need to see if ever run and update 1x a week
+  if (g_mapSettings.offlineMode == false)
+  {
+    getBuffer(
+      "http://app.gridtracker.org/pota_parks.php",
+      g_ingestPotaPlaces,
+      null,
+      "http",
+      80
+    );
+
+    setTimeout(g_getPotaPlaces, 86400000)
+  }
 }
 
 function g_ingestPotaSpots(buffer)

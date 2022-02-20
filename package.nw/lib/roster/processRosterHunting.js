@@ -76,18 +76,19 @@ function processRosterHunting(callRoster, rosterSettings)
       let state = "#90EE90";
       let cnty = "#CCDD00";
       let cont = "#00DDDD";
+      let pota = "#fbb6fc";
       let cqz = "#DDDDDD";
       let ituz = "#DDDDDD";
       let wpx = "#FFFF00";
 
       hasGtPin = false;
       let shouldAlert = false;
-      let callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
-      let callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, cqzConf, ituzConf, wpxConf;
+      let callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, potaBg, cqzBg, ituzBg, wpxBg, gtBg;
+      let callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, potaConf, cqzConf, ituzConf, wpxConf;
 
-      callBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
+      callBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = potaBg = cqzBg = ituzBg = wpxBg = gtBg = row;
 
-      callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = cqzConf = ituzConf = wpxConf =
+      callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = potaConf = cqzConf = ituzConf = wpxConf =
         "";
 
       let hash = callsign + workHashSuffix;
@@ -428,7 +429,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for POTAs
-        if (huntPOTA.checked == true && g_mapSettings.offlineMode == false)
+        if (huntPOTA.checked == true && window.opener.g_mapSettings.offlineMode == false)
         {
           // find and highlight POTAs
         }
@@ -672,7 +673,7 @@ function processRosterHunting(callRoster, rosterSettings)
       colorObject.dxcc = "style='" + dxccConf + "background-color:" + dxccBg + ";color:" + dxcc + "'";
       colorObject.state = "style='" + stateConf + "background-color:" + stateBg + ";color:" + state + "'";
       colorObject.cnty = "style='" + cntyConf + "background-color:" + cntyBg + ";color:" + cnty + "'";
-      colorObject.pota = "style='" + potoConf + "background-color:" + potoBg + ";color:" + poto + "'";
+      colorObject.pota = "style='" + potaConf + "background-color:" + potaBg + ";color:" + pota + "'";
       colorObject.cont = "style='" + contConf + "background-color:" + contBg + ";color:" + cont + "'";
       colorObject.cqz = "style='" + cqzConf + "background-color:" + cqzBg + ";color:" + cqz + "'";
       colorObject.ituz = "style='" + ituzConf + "background-color:" + ituzBg + ";color:" + ituz + "'";

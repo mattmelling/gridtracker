@@ -13762,6 +13762,7 @@ var g_startupTable = [
   [registerHotKeys, "Registered Hotkeys"],
   [gtChatSystemInit, "Chat System Initialized"],
   [getPotaPlaces, "Loading POTA Database"],
+  [getPotaSpots, "Starting POTA Spots Pump"],
   [downloadAcknowledgements, "Contributor Acknowledgements Loaded"],
   [postInit, "Finalizing System"]
 ];

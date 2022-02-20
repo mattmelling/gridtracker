@@ -47,7 +47,7 @@ function ingestPotaSpots(buffer)
 
 function getPotaSpots()
 {
-  if (g_mapSettings.offlineMode == false)
+  if (g_mapSettings.offlineMode == false && g_spotsEnabled == 1)
   {
     getBuffer(
       "https://api.pota.app/spot/activator",

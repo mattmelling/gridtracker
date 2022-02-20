@@ -13760,7 +13760,8 @@ var g_startupTable = [
   [loadLookupDetails, "Callsign Lookup Details Loaded"],
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
-  [gtChatSystemInit, "User System Initialized"],
+  [gtChatSystemInit, "Chat System Initialized"],
+  [getPotaPlaces, "Loading POTA Database"],
   [downloadAcknowledgements, "Contributor Acknowledgements Loaded"],
   [postInit, "Finalizing System"]
 ];

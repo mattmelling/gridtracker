@@ -5,7 +5,7 @@
 var g_potaPlaces = null;
 var g_potaSpots = null;
 
-function g_ingestPotaPlaces(buffer)
+function ingestPotaPlaces(buffer)
 {
   try
   {
@@ -17,23 +17,23 @@ function g_ingestPotaPlaces(buffer)
   }
 }
 
-function g_getPotaPlaces()
+function getPotaPlaces()
 {
   if (g_mapSettings.offlineMode == false)
   {
     getBuffer(
       "http://app.gridtracker.org/pota_parks.php",
-      g_ingestPotaPlaces,
+      ingestPotaPlaces,
       null,
       "http",
       80
     );
 
-    setTimeout(g_getPotaPlaces, 86400000)
+    setTimeout(getPotaPlaces, 86400000)
   }
 }
 
-function g_ingestPotaSpots(buffer)
+function ingestPotaSpots(buffer)
 {
   try
   {
@@ -45,19 +45,19 @@ function g_ingestPotaSpots(buffer)
   }
 }
 
-function g_getPotaSpots()
+function getPotaSpots()
 {
   if (g_mapSettings.offlineMode == false)
   {
     getBuffer(
       "https://api.pota.app/spot/activator",
-      g_ingestPotaSpots,
+      ingestPotaSpots,
       null,
       "https",
       443
     );
 
-    setTimeout(g_getPotaSpots, 300000);
+    setTimeout(getPotaSpots, 300000);
   }
 }
 

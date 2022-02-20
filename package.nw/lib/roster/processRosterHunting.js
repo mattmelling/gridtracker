@@ -427,6 +427,12 @@ function processRosterHunting(callRoster, rosterSettings)
           }
         }
 
+        // Hunting for POTAs
+        if (huntPOTA.checked == true && g_mapSettings.offlineMode == false)
+        {
+          // find and highlight POTAs
+        }
+
         // Hunting for CQ Zones
         if (huntCQz.checked == true)
         {
@@ -666,6 +672,7 @@ function processRosterHunting(callRoster, rosterSettings)
       colorObject.dxcc = "style='" + dxccConf + "background-color:" + dxccBg + ";color:" + dxcc + "'";
       colorObject.state = "style='" + stateConf + "background-color:" + stateBg + ";color:" + state + "'";
       colorObject.cnty = "style='" + cntyConf + "background-color:" + cntyBg + ";color:" + cnty + "'";
+      colorObject.pota = "style='" + potoConf + "background-color:" + potoBg + ";color:" + poto + "'";
       colorObject.cont = "style='" + contConf + "background-color:" + contBg + ";color:" + cont + "'";
       colorObject.cqz = "style='" + cqzConf + "background-color:" + cqzBg + ";color:" + cqz + "'";
       colorObject.ituz = "style='" + ituzConf + "background-color:" + ituzBg + ";color:" + ituz + "'";

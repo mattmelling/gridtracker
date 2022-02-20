@@ -100,6 +100,7 @@ var g_defaultSettings = {
     huntCounty: false,
     huntCont: false,
     huntPX: false,
+    huntPOTA: false,
     huntQRZ: true,
     huntOAMS: false
   },
@@ -112,6 +113,7 @@ var g_defaultSettings = {
     Flag: true,
     State: true,
     County: true,
+    POTA: false,
     Cont: true,
     dB: true,
     Freq: false,

@@ -97,7 +97,7 @@ win:package:
       eval $(ssh-agent -s)
       echo "$NR0Q_PRIV" | tr -d '\r' | ssh-add -
       mkdir -p ~/.ssh; chmod 700 ~/.ssh
-      scp -o StrictHostKeyChecking=no mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
+      scp -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
   script:
     - |
       # Making our Windows packages 

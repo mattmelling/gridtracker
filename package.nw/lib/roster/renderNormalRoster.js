@@ -227,14 +227,14 @@ function renderNormalRosterRow(callObj, showBands, showModes)
     {
       worker +=
       "<td title='" +
-      callObj.pota.name + "' " +
+      callObj.pota.name + " " +
+      callObj.pota.locationDesc + "&#10;" +
+      callObj.pota.activatorLastComments + "&#10;" +
+      callObj.pota.comments + "' " +
       "align='center' " +
       callObj.style.pota +
       " >" +
       callObj.pota.reference + " " +
-      callObj.pota.locationDesc + "&#10;" +
-      callObj.pota.activatorLastComments + "&#10;" +
-      callObj.pota.comments +
       "</td>";
     }
     else

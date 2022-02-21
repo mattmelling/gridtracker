@@ -429,9 +429,62 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for POTAs
-        if (huntPOTA.checked == true && window.opener.g_mapSettings.offlineMode == false)
+        if (huntPOTA.checked == true && window.opener.g_mapSettings.offlineMode == false && callObj.pota != null)
         {
-          // find and highlight POTAs
+          let huntTotal = callObj.pota.length;
+          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+
+          for (index in callObj.pota)
+          {
+            let hash = callObj.pota[index] + workHashSuffix;
+            let layeredHash = rosterSettings.layeredMode && (callObj.pota[index] + layeredHashSuffix)
+
+            if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.pota) layeredFound++;
+            if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.pota) layeredFound++;
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
+            if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.pota) layeredWorkedFound++;
+          }
+          if (huntFound != huntTotal)
+          {
+            shouldAlert = true;
+            callObj.reason.push("pota");
+
+            if (rosterSettings.workedIndex && workedFound == huntTotal)
+            {
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.pota = "worked-and-mixed";
+                potaConf = `${layeredUnconf}${pota}${layeredUnconfAlpha};`;
+                potaBg = `${potaBg}${layeredInversionAlpha}`;
+                pota = bold;
+              }
+              else
+              {
+                callObj.hunting.pota = "worked";
+                potaConf = `${unconf}${pota}${inversionAlpha};`;
+              }
+            }
+            else
+            {
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.pota = "mixed";
+                potaBg = `${pota}${layeredAlpha};`;
+                pota = bold;
+              }
+              else if (rosterSettings.layeredMode && layeredWorkedFound == huntTotal)
+              {
+                callObj.hunting.pota = "mixed-worked";
+                potaConf = `${unconf}${pota}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.pota = "hunted";
+                potaBg = `${pota}${inversionAlpha};`;
+                pota = bold;
+              }
+            }
+          }
         }
 
         // Hunting for CQ Zones

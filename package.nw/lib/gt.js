@@ -7075,6 +7075,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.qso = false;
       newCallsign.dxcc = callsignToDxcc(newCallsign.DEcall);
       newCallsign.px = null;
+      newCallsign.pota = null;
       newCallsign.zone = null;
       newCallsign.vucc_grids = [];
       newCallsign.propMode = "";
@@ -7203,6 +7204,11 @@ function handleWsjtxDecode(newMessage)
       {
         callsign.cqza = g_gridToCQZone[callsign.grid];
       }
+    }
+
+    if (callsign.pota == null && g_potaSpots.some(item => item.activator === callsign.DEcall))
+    {
+      callsign.pota = g_potaSpots.filter(item => item.activator === callsign.DEcall)[0];
     }
 
     if (newMessage.NW)

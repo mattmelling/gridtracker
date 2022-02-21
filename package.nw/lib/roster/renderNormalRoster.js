@@ -31,6 +31,9 @@ function renderNormalRosterHeaders(showBands, showModes)
   if (g_rosterSettings.columns.County)
   { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(15);' >County</th>"; }
 
+  if (g_rosterSettings.columns.POTA)
+  { worker += "<th>POTA</th>"; }
+
   if (g_rosterSettings.columns.Cont)
   { worker += "<th  style='cursor:pointer;' onclick='showRosterBox(16);' >Cont</th>"; }
 
@@ -217,6 +220,26 @@ function renderNormalRosterRow(callObj, showBands, showModes)
         : "") +
       "</td>";
   }
+
+  if (g_rosterSettings.columns.POTA)
+  {
+    if (callObj.pota != null)
+    {
+      worker +=
+      "<td title='" +
+      callObj.pota.name + "' " +
+      "align='center' " +
+      callObj.style.pota +
+      " >" +
+      callObj.pota.reference +
+      "</td>";
+    }
+    else
+    {
+      worker += "<td>&nbsp;</td>";
+    }
+  }
+
   if (g_rosterSettings.columns.Cont)
   {
     worker +=

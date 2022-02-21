@@ -231,7 +231,8 @@ function renderNormalRosterRow(callObj, showBands, showModes)
       "align='center' " +
       callObj.style.pota +
       " >" +
-      callObj.pota.reference +
+      callObj.pota.reference + " " +
+      callObj.pota.locationDesc +
       "</td>";
     }
     else

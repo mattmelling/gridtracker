@@ -232,7 +232,9 @@ function renderNormalRosterRow(callObj, showBands, showModes)
       callObj.style.pota +
       " >" +
       callObj.pota.reference + " " +
-      callObj.pota.locationDesc +
+      callObj.pota.locationDesc + "&#10;" +
+      callObj.pota.activatorLastComments + "&#10;" +
+      callObj.pota.comments +
       "</td>";
     }
     else

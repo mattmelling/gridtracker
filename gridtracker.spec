@@ -9,7 +9,7 @@ License:        BSD 3-Clause License
 URL:            https://gridtracker.org
 Group:          Science & Math
 Packager:       Matthew Chambers <nr0q@gridtracker.org>
-Requires:       nwjs
+Requires:       nwjs libatomic1
 BuildRequires:  desktop-file-utils make nodejs
 
 %description

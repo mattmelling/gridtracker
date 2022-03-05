@@ -1092,7 +1092,11 @@ function addDeDx(
           details.grid.length < 6 &&
           (details.grid.substr(0, 4) == finalGrid.substr(0, 4) ||
             details.grid.length == 0)
-        ) { details.grid = finalGrid; }
+        )
+        {
+          details.grid = finalGrid;
+          details.grid4 = finalGrid.substr(0, 4);
+        }
       }
       if (finalRSTsent.length > 0) details.RSTsent = finalRSTsent;
       if (finalRSTrecv.length > 0) details.RSTrecv = finalRSTrecv;
@@ -1112,6 +1116,7 @@ function addDeDx(
     {
       details = {};
       details.grid = finalGrid;
+      details.grid4 = finalGrid.length > 0 ? finalGrid.substr(0, 4) : "-";
       details.RSTsent = finalRSTsent;
       details.RSTrecv = finalRSTrecv;
       details.msg = "-";
@@ -1153,10 +1158,9 @@ function addDeDx(
       finalGrid.length > 0
     )
     {
-      var fourGrid = finalGrid.substr(0, 4);
-      if (fourGrid in g_gridToState && g_gridToState[fourGrid].length == 1)
+      if (details.grid4 in g_gridToState && g_gridToState[details.grid4].length == 1)
       {
-        details.state = g_gridToState[fourGrid][0];
+        details.state = g_gridToState[details.grid4][0];
       }
       lookupCall = true;
     }
@@ -14566,6 +14570,7 @@ function callookResults(buffer, gridPass)
       callObject.lat = results.location.latitude;
       callObject.lon = results.location.longitude;
       callObject.grid = results.location.gridsquare;
+      callObject.grid4 = callObject.grid.length > 1 ? callObject.grid.substr(0, 4) : "-";
       callObject.efdate = results.otherInfo.grantDate;
       callObject.expdate = results.otherInfo.expiryDate;
       callObject.frn = results.otherInfo.frn;

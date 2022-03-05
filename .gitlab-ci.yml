@@ -97,7 +97,7 @@ win:package:
       eval $(ssh-agent -s)
       echo "$NR0Q_PRIV" | tr -d '\r' | ssh-add -
       mkdir -p ~/.ssh; chmod 700 ~/.ssh
-      scp -o StrictHostKeyChecking=no mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
+      scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
   script:
     - |
       # Making our Windows packages 
@@ -299,7 +299,7 @@ uploadtest:
         echo "Calculating MD5 Hash for $FILE"
         md5sum $FILE > $FILE.md5
       done
-      ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/ && ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "rm latest_test && ln -s $CI_COMMIT_TAG latest_test"
+      ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/ && ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "rm latest_test && ln -s $CI_COMMIT_TAG latest_test"
 
 # copy release assets to NR0Q's server
 uploadrelease:
@@ -321,7 +321,7 @@ uploadrelease:
         echo "Calculating MD5 Hash for $FILE"
         md5sum $FILE > $FILE.md5
       done
-      ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/
+      ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now

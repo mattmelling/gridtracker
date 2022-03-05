@@ -117,12 +117,12 @@ function processRosterHunting(callRoster, rosterSettings)
       {
         callObj.callFlags.oams = true;
         // grab the CID
-        colorObject.gt = window.opener.g_gtCallsigns[callsign];
+        callObj.gt = window.opener.g_gtCallsigns[callsign];
         hasGtPin = true;
       }
       else
       {
-        colorObject.gt = 0;
+        callObj.gt = 0;
       }
 
       // We only do hunt highlighting when showing all entries

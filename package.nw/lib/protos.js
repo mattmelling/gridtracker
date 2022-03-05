@@ -129,6 +129,27 @@ Number.prototype.toDHMS = function ()
   return val;
 };
 
+Number.prototype.toDHMS15 = function ()
+{
+  // round to earliest 15 seconds
+
+  var seconds = Math.floor(this / 15) * 15;
+  var days = Math.floor(seconds / (3600 * 24));
+  seconds -= days * 3600 * 24;
+  var hrs = Math.floor(seconds / 3600);
+  seconds -= hrs * 3600;
+  var mnts = Math.floor(seconds / 60);
+  seconds -= mnts * 60;
+
+  days = days ? days + "d " : "";
+  hrs = hrs ? hrs + "h " : "";
+  mnts = mnts ? mnts + "m " : "";
+  var first = days + hrs + mnts;
+  if (first == "") val = seconds + "s";
+  else val = first + (seconds > 0 ? seconds + "s" : "");
+  return val;
+};
+
 Number.prototype.toDHM = function ()
 {
   var seconds = this;
@@ -143,6 +164,8 @@ Number.prototype.toDHM = function ()
   hrs = hrs ? hrs + "h " : "";
   mnts = mnts || seconds ? mnts + "m " : "";
   val = days + hrs + mnts;
+  if (val == "") val = "0m";
+
   return val;
 };
 

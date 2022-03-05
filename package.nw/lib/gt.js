@@ -10070,7 +10070,7 @@ function renderStatsBox()
     worker +=
       "<br/> In Section: " +
       scoreSection +
-      "<br/>Error Generating Stats<br/>Please take a screenshot and send to gridtracker@gmail.com";
+      "<br/>Error Generating Stats<br/>Please take a screenshot and send to team@gridtracker.org";
   }
 
   setStatsDiv("statViewDiv", worker);
@@ -11305,7 +11305,13 @@ function pskBandActivityCallback(buffer, flag)
 
   renderBandActivity();
 }
-
+/* FIXME ******************************************************************************
+   Should we somewhere in settings, have a checkbox to enable / disable PSK spots
+   specifically? We can disable the overall spots, both PSK and OAMS, and OAMS has a
+   checkbox in the OAMS tab. I'm thinking for the situation where I only want to
+   pull in OAMS spots and not PSK reporter's spots.
+   ************************************************************************************
+*/
 function pskGetBandActivity()
 {
   if (g_mapSettings.offlineMode == true) return;
@@ -11569,14 +11575,7 @@ function updateBasedOnIni()
   {
     if (typeof nw != "undefined")
     {
-      // lets see if we can find our location the hard way
-      getBuffer(
-        "https://api.ipstack.com/check?access_key=8c9233ec1c09861a707951ab3718a7f6&format=1",
-        ipLocation,
-        null,
-        "https",
-        443
-      );
+      alert("Location not available!\nEither start WSJT-X/JTDX or enter your grid square in the settings ");
     }
   }
 }
@@ -12051,27 +12050,6 @@ function selectElementContents(el)
     document.execCommand("copy");
     sel.removeAllRanges();
     selectNodeDiv.innerText = "";
-  }
-}
-
-function ipLocation(buffer, flag)
-{
-  var obj = JSON.parse(buffer);
-  if (
-    typeof obj != "undefined" &&
-    obj != null &&
-    typeof obj.latitude != "undefined"
-  )
-  {
-    g_appSettings.centerGridsquare = latLonToGridSquare(
-      obj.latitude,
-      obj.longitude
-    ).substr(0, 6);
-    if (g_appSettings.centerGridsquare.length > 0)
-    {
-      homeQTHInput.value = g_appSettings.centerGridsquare;
-      if (ValidateGridsquare(homeQTHInput, null)) setCenterGridsquare();
-    }
   }
 }
 

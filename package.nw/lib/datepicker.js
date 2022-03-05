@@ -1,3 +1,9 @@
+// FIXME ****************************************************************************** //
+// The datepicker's "Time" section doesn't work. This really needs to be fixed before
+// the next big RTTY Roundup or Field Day where there may be a lot of hams that want
+// to use this feature to only reference their log starting when the contest starts.
+// Which isn't always 00:00 UTC.
+// ************************************************************************************ //
 var picker = {
   attach: function (opt)
   {

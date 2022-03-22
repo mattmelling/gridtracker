@@ -8,7 +8,7 @@ Homepage: https://gridtracker.org/
 
 Package: gridtracker
 Architecture: all
-Depends: ${misc:Depends} nwjs libatomic1
+Depends: ${misc:Depends} nwjs
 Recommends: speech-dispatcher-espeak-ng
 Description: Companion program to WSJT-X/JTDX
  .

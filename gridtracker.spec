@@ -1,9 +1,9 @@
-Name:           gridtracker
+Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        1.22.0502
+Version:        {{{ git_version lead=1.22 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
-Source0:        %{name}-%{version}.tar.gz
+Source0:        {{{ git_dir_pack }}}
 
 License:        BSD 3-Clause License
 URL:            https://gridtracker.org
@@ -19,7 +19,7 @@ working interesting stations. It also will upload QSO records to multiple
 logging frameworks including Logbook of the World.
 
 %prep
-%setup -q GridTracker
+{{{ git_dir_setup_macro }}}
 
 %build
 

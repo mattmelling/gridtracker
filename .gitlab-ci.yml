@@ -94,10 +94,10 @@ win:package:
       7zr e NsProcess.zip -y -o/usr/share/nsis/Include/ Include/nsProcess.nsh
       7zr e NsProcess.zip -y -o/usr/share/nsis/Plugins/x86-unicode/ Plugin/nsProcessW.dll
       mv /usr/share/nsis/Plugins/x86-unicode/nsProcessW.dll /usr/share/nsis/Plugins/x86-unicode/nsProcess.dll
-      eval $(ssh-agent -s)
-      echo "$NR0Q_PRIV" | tr -d '\r' | ssh-add -
-      mkdir -p ~/.ssh; chmod 700 ~/.ssh
-      scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
+      ## eval $(ssh-agent -s)
+      ## echo "$NR0Q_PRIV" | tr -d '\r' | ssh-add -
+      ## mkdir -p ~/.ssh; chmod 700 ~/.ssh
+      ## scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
   script:
     - |
       # Making our Windows packages 
@@ -114,7 +114,7 @@ win:package:
       done
       # Now we need to sign the executable before it get's stuffed into Nullsoft
       # using mono signcode
-      signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-*-win-*/*.exe
+      ## signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-*-win-*/*.exe
       # Now the executable should be signed 
       sed "s#<versionplaceholder>#`node version.js`#g" windows/win_installer.nsi > windows/setup.nsi.tmp.1
       sed "s#<buildplaceholder>#`pwd`#g" windows/setup.nsi.tmp.1 > windows/setup.nsi
@@ -122,7 +122,7 @@ win:package:
       # clean up generated files
       rm windows/setup.nsi
       rm windows/setup.nsi.tmp.1
-      signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-Installer.*.exe
+      ## signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-Installer.*.exe
       (cd dist ; mv GridTracker-Installer.*.exe ../artifacts)
       echo -e "\e[0Ksection_end:`date +%s`:native_build\e[0K"
 

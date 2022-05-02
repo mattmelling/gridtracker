@@ -1,115 +1,19 @@
 {
-  "2M0SYH": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "A41MK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "AA5KD": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "AA7MO": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "AC0AE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "AD0WB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "AE4ON": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "AF2V": {
     "badge": "img/emojis/books.png",
     "message": "GridTracker Documentation"
-  },
-  "AI5CA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "AJ6RX": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "AK0MR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "BD3OOX": {
     "badge": "img/emojis/speech.png",
     "message": "GridTracker Translator"
   },
-  "CX4CD": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "DE1JPJ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "DL6RA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "DL9QB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "EA7JCR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "EI8GS": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "GI1MIC": {
     "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
-  "GM4SJB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "HA5OLA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "HB9HKE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "HB9VKL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "HI80": {
     "badge": "img/emojis/speech.png",
     "message": "GridTracker Translator"
-  },
-  "HS0ZLZ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "I4SOI": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "IK0ZSN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "IW2BUW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "IW3HMH": {
     "badge": "img/emojis/logbook.png",
@@ -119,381 +23,41 @@
     "badge": "img/emojis/books.png",
     "message": "GridTracker Documentation"
   },
-  "K0GUZ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K0MQZ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "K1JT": {
     "badge": "img/emojis/star.png",
     "message": "Creator of FT8 and WSJT-X"
-  },
-  "K1VK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K2BEF": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K2PF": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K2SFS": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K3LEM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K4GMY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K4KPG": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K4TLS": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K5DCC": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K5JBT": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "K5TUX": {
     "badge": "img/emojis/penguin.png",
     "message": "GridTracker Partner"
   },
-  "K5WRE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K6OW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K6WRF": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K7CGA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K7DCM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K7YD": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K8VSY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K9AMP": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "K9AN": {
     "badge": "img/emojis/star.png",
     "message": "Co-Creator of FT8"
-  },
-  "K9BAW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K9CPA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "K9MIH": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "KA0AZS": {
     "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
-  "KA4JON": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KA7JAZ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KB2BK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "KB2YSI": {
     "badge": "img/emojis/coffee.png",
     "message": "GridTracker Developer"
-  },
-  "KB3AST": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KB4RSM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KB5ITC": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KB5KUY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KB6UDI": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KC4HN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KC4ZBL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KC7ZXY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "KD0YTE": {
     "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
-  "KD1ELK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD1UA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD2VDL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD5EAX": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD5VZS": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD7IQL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD8YY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD9QGP": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD9RAZ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD9RUD": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KD9RUE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KE0TES": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "KE0UL": {
     "badge": "img/emojis/grandfather.png",
     "message": "GridTracker's Grandfather"
-  },
-  "KE1Q": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KE4GNB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KE4WLE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KE8HIM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KE8SAU": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KF0FVW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "KF5QHQ": {
     "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"
   },
-  "KG5EVI": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KG5RJ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KI0Y": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "KI2D": {
     "badge": "img/emojis/flatbread.png",
     "message": "GridTracker Developer"
-  },
-  "KJ6RJY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KJ7KRN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KJ7ZOK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KJ8U": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KK4INZ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KK4TYW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KK4WZI": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KL4NE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KM3T": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KM4RL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KM4TY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KM5GN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KM6JS": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KM6LBW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KN4YZY": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KN6NCT": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KN6OKN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KNC6EWM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KO4BCN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KO4MBN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KO4NCC": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KO4UCF": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KQ4Y": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "KW4AU": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "LA6YJA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "LB1RJ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "LU7DK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "M7CCZ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N0GTO": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N0JL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "N0TTL": {
     "badge": "img/emojis/star.png",
@@ -507,288 +71,20 @@
     "badge": "img/emojis/books.png",
     "message": "GridTracker Documentation"
   },
-  "N3TQM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N3UGI": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N4CSV": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N4MCC": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N4MGA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N4SFS": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N4TDT": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N6GEB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N7HQ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N7WFK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N8BOA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N8VWQ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "N9UUR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "NJ2DX": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "NR0Q": {
     "badge": "img/emojis/coffee.png",
     "message": "GridTracker Developer"
-  },
-  "OH1LEU": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "OH3NZW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "ON2VJ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "ON3VJ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "ON4VT": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "ON7IVE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "OZ1LNR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "OZ6FH": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "OZ8QI": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "PA0ADG": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "PA0LMA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "PD0HLA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "PD2SHB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "PD9DP": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "SM0ONR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "SM6EKG": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "SV2RIM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VA3DJL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VA7CND": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VE3FMQ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VE3HNA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VE3MB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VE4MAR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VE7LGP": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VK2WJ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VK3JLM": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "VK4OO": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W0SP": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W0YRE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W1WRA": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W2EKE": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W3WMS": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W4DHK": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   },
   "W4IPA": {
     "badge": "img/emojis/beer-mug.png",
     "message": "GridTracker Tester"
   },
-  "W4WWF": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "W5AFK": {
     "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
-  "W6FVO": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W6NEL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W8PSP": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W9LL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "W9VZR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WA0IAN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WA1KPD": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WA2LAN": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WA4CNL": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
   "WA4YA": {
     "badge": "img/emojis/trophy.png",
     "message": "GridTracker Developer"
-  },
-  "WA6JQB": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WA8P": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WB0QIR": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WB0SMX": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WB5WAJ": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WB6RJH": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WD5FBW": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WI9I": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "WS4S": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
-  },
-  "ZL4CAT": {
-    "badge": "img/emojis/money-bag.png",
-    "message": "GridTracker Donor"
   }
 }

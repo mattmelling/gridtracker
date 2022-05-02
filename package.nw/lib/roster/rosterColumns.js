@@ -63,7 +63,7 @@ const ROSTER_COLUMNS = {
         html: html = callObj.DEcall.formatCallsign()
       }
 
-      let acks = window.opener.g_acknowledgedCalls;
+      let acks = window.opener.g_acknowledgedCalls || {};
       if (acks[callObj.DEcall])
       {
         attrs.html = `${attrs.html} <span class='acknowledged'><img class='ackBadge' src='${acks[callObj.DEcall].badge}'></span>`

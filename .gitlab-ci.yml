@@ -10,9 +10,9 @@ variables:
   # We have code in here for releasing on both GS and S3, control it through variables
   # on GitLab, do not change it in this file.
   #
+  GCLOUD_PROJECT_ID: "cent7-288417"
   GCLOUD_SERVICE_ACCOUNT: /dev/null
-  GCLOUD_RELEASE_DEPLOY_PATH: gs://download.gridtracker.org/release/$CI_COMMIT_TAG
-  GCLOUD_TESTING_DEPLOY_PATH: gs://download.gridtracker.org/testing/$CI_COMMIT_TAG
+  GCLOUD_DEPLOY_PATH: gs://gt_download/$CI_COMMIT_TAG
   NR0Q_SERVER_ADDRESS: ""
   NR0Q_SERVER_PASSWORD: ""
 
@@ -277,51 +277,20 @@ arm:package:
       echo "we made ARM packages!"
       ls -laR artifacts
 
-# copy test assets to NR0Q's server
-uploadtest:
+# copy test assets to Google Storage
+upload-Google:
   stage: deploy
-  image: alpine
+  image: google/cloud-sdk
   variables:
     GIT_STRATEGY: none
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^(test_).*/ && $NR0Q_SERVER_KEY != ""'
-  before_script:
-    - |
-      apk add openssh-client
-      eval $(ssh-agent -s)
-      echo "$NR0Q_SERVER_KEY" | tr -d '\r' | ssh-add -
-      mkdir -p ~/.ssh; chmod 700 ~/.ssh
+    - if: '$CI_COMMIT_TAG =~ /^(v|test_).*/'
   script:
     - |
-      cd artifacts
-      for FILE in *.*
-      do
-        echo "Calculating MD5 Hash for $FILE"
-        md5sum $FILE > $FILE.md5
-      done
-      ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/ && ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "rm latest_test && ln -s $CI_COMMIT_TAG latest_test"
-
-# copy release assets to NR0Q's server
-uploadrelease:
-  stage: deploy
-  image: alpine
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^(v).*/ && $NR0Q_SERVER_KEY != ""'
-  before_script:
-    - |
-      apk add openssh-client
-      eval $(ssh-agent -s)
-      echo "$NR0Q_SERVER_KEY" | tr -d '\r' | ssh-add -
-      mkdir -p ~/.ssh; chmod 700 ~/.ssh
-  script:
-    - |
-      cd artifacts
-      for FILE in *.*
-      do
-        echo "Calculating MD5 Hash for $FILE"
-        md5sum $FILE > $FILE.md5
-      done
-      ssh -o StrictHostKeyChecking=no -p $NR0Q_SSH_PORT gridtracker@$NR0Q_SERVER_ADDRESS "mkdir ~/$CI_COMMIT_TAG" && scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT -r ./* gridtracker@$NR0Q_SERVER_ADDRESS:~/$CI_COMMIT_TAG/
+      echo $GCP_SERVICE_KEY > gcloud-service-key.json
+      gcloud auth activate-service-account --key-file gcloud-service-key.json
+      gcloud config set project $GCLOUD_PROJECT_ID
+      gsutil -m cp -R artifacts/* $GCLOUD_DEPLOY_PATH/
 
 # this only creates a "source code release" -- gitlab doesn't specify binaries
 # except as links to external storage, which is suboptimal for now
@@ -341,7 +310,7 @@ sourcerelease:
     assets:
       links:
         - name: Release Packages for $CI_COMMIT_TAG
-          url: https://fleetwood.mchambersradio.com/gridtracker/$CI_COMMIT_TAG/
+          url: https://https://storage.googleapis.com/gt_download/$CI_COMMIT_TAG/
           external: true
           link_type: package
   script:

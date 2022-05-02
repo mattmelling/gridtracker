@@ -11145,7 +11145,7 @@ function checkForNewVersion(showUptoDate)
   if (typeof nw != "undefined")
   {
     getBuffer(
-      "http://app.gridtracker.org/version.txt?lang=",
+      "https://storage.googleapis.com/gt_app/version.txt",
       versionCheck,
       showUptoDate,
       "http",
@@ -11159,7 +11159,7 @@ function downloadAcknowledgements()
   if (g_mapSettings.offlineMode == false)
   {
     getBuffer(
-      "http://app.gridtracker.org/acknowledgements.json",
+      "https://storage.googleapis.com/gt_app/acknowledgements.json",
       updateAcks,
       null,
       "http",

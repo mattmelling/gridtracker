@@ -1,3 +1,17 @@
+gridtracker (1.22.0502) unstable; urgency=low
+  [Bug Fixes]
+  - Fixed broken Call Roster due to online assets being moved from a web server to Google Storage Bucket.
+  - Don't highlight "CQ" rows if filtering by "CQ Only".
+  - Resolved #126 Windows Installer script updated to fix issues with install location and missing registry keys
+  - Resolved #124 removing IP-Geolocation when no all other means of locating failed, we now tell the user to
+    start WSJT-X or enter a location  as Geo-Location services are costly and unreliable
+  - Resolved #137 missing libatomic dependency in Linux DEB and RPM spec files
+  [Enhancements]
+  - Include version number in main window title
+  - Call Roster colums refactored and wanted column added
+  
+ -- Matthew Chambers <nr0q@gridtracker.org>  Mon, 01 May 2022 02:25:40 -0000
+
 gridtracker (1.21.1217) unstable; urgency=low
   - Changed to newer NWJS to fix upstream bug that caused media playback to fail.
 

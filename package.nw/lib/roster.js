@@ -1160,7 +1160,7 @@ function stateChangedValue(what)
     {
       let callState = r_currentUSState.replace("CN-", "");
       getBuffer(
-        "http://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
+        "https://storage.googleapis.com/gt_app/callsigns/" + callState + ".callsigns.json",
         callsignResult,
         r_currentUSState,
         "http",
@@ -1526,7 +1526,7 @@ function init()
   if (window.opener.g_mapSettings.offlineMode == false)
   {
     getBuffer(
-      "http://app.gridtracker.org/callsigns/manifest.json",
+      "https://storage.googleapis.com/gt_app/callsigns/manifest.json",
       manifestResult,
       null,
       "http",

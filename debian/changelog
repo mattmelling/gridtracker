@@ -1,3 +1,8 @@
+gridtracker (1.22.0503) unstable; urgency=low
+  - Increment version for build with correct NWJS version
+  
+  -- Matthew Chambers <nr0q@gridtracker.org>  Mon, 01 May 2022 16:07:00 -0000
+  
 gridtracker (1.22.0502) unstable; urgency=low
   [Bug Fixes]
   - Fixed broken Call Roster due to online assets being moved from a web server to Google Storage Bucket.

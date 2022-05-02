@@ -1,6 +1,6 @@
 Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        {{{ git_version lead=1.22 }}}
+Version:        {{{ git_version lead=1.22.0503 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        {{{ git_dir_pack }}}
@@ -40,6 +40,8 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Mon May 02 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0503-1
+- Increment version number for build with correct vesion of NWJS
 * Mon May 02 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0502-1
 - [Bug Fixes]
   - Fixed broken Call Roster due to online assets being moved from a web server to Google Storage Bucket.

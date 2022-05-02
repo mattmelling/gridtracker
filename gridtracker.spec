@@ -1,6 +1,6 @@
 Name:           gridtracker
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        1.21.1217
+Version:        1.22.0502
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        %{name}-%{version}.tar.gz

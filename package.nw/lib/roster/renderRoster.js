@@ -1,12 +1,38 @@
 function renderRoster(callRoster, rosterSettings)
 {
-  // eQSL - function
-  if (window.opener.g_callsignLookups.eqslUseEnable == true) useseQSLDiv.style.display = "";
-  else useseQSLDiv.style.display = "none";
+  let columnOverrides = {
+    Callsign: true,
+    Grid: true
+  }
 
-  // OQRS - function
-  if (window.opener.g_callsignLookups.oqrsUseEnable == true) usesOQRSDiv.style.display = "";
-  else usesOQRSDiv.style.display = "none";
+  if (window.opener.g_callsignLookups.eqslUseEnable == true)
+  {
+    useseQSLDiv.style.display = "";
+  }
+  else
+  {
+    columnOverrides.eQSL = false;
+    useseQSLDiv.style.display = "none";
+  }
+
+  if (window.opener.g_callsignLookups.oqrsUseEnable == true)
+  {
+    usesOQRSDiv.style.display = "";
+  }
+  else
+  {
+    columnOverrides.OQRS = false;
+    usesOQRSDiv.style.display = "none";
+  }
+
+  if (window.opener.g_callsignLookups.lotwUseEnable == true)
+  {
+    // Do nothing
+  }
+  else
+  {
+    columnOverrides.LoTW = false;
+  }
 
   // dealing with spots
   if (g_rosterSettings.columns.Spot == true) onlySpotDiv.style.display = "";
@@ -67,24 +93,23 @@ function renderRoster(callRoster, rosterSettings)
 
   window.document.title = `Call Roster: ${countParts.join(" • ")}`;
 
-  if (g_rosterSettings.compact == false)
+  if (g_rosterSettings.compact)
   {
-    visibleCallList.sort(r_sortFunction[g_rosterSettings.lastSortIndex]);
-    if (g_rosterSettings.lastSortReverse == 1)
-    {
-      visibleCallList.reverse();
-    }
+    sortCallList(visibleCallList, "Age", false);
   }
   else
   {
-    // Age sort for now... make this happen Tag
-    visibleCallList.sort(r_sortFunction[6]).reverse();
+    sortCallList(visibleCallList, g_rosterSettings.sortColumn, g_rosterSettings.sortReverse);
   }
 
   let showBands = (Object.keys(rosterSettings.bands).length > 1) || g_rosterSettings.columns.Band;
   let showModes = (Object.keys(rosterSettings.modes).length > 1) || g_rosterSettings.columns.Mode;
 
-  let worker = g_rosterSettings.compact ? renderCompactRosterHeaders() : renderNormalRosterHeaders(showBands, showModes)
+  columnOverrides.Band = showBands
+  columnOverrides.Mode = showModes
+  const rosterColumns = rosterColumnList(g_rosterSettings.columns, columnOverrides)
+
+  let worker = g_rosterSettings.compact ? renderCompactRosterHeaders() : renderNormalRosterHeaders(rosterColumns)
 
   // Third loop: render all rows
   for (let x in visibleCallList)
@@ -95,11 +120,9 @@ function renderRoster(callRoster, rosterSettings)
     if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
     { continue; }
 
-    let thisCall = callObj.DEcall;
-
-    if (thisCall.match("^[A-Z][0-9][A-Z](/w+)?$"))
+    if (callObj.DEcall.match("^[A-Z][0-9][A-Z](/w+)?$"))
     { callObj.style.call = "class='oneByOne'"; }
-    if (thisCall == window.opener.g_instances[callObj.instance].status.DXcall)
+    if (callObj.DEcall == window.opener.g_instances[callObj.instance].status.DXcall)
     {
       if (window.opener.g_instances[callObj.instance].status.TxEnabled == 1)
       {
@@ -111,7 +134,7 @@ function renderRoster(callRoster, rosterSettings)
       }
     }
 
-    worker += g_rosterSettings.compact ? renderCompactRosterRow(callObj) : renderNormalRosterRow(callObj, showBands, showModes)
+    worker += g_rosterSettings.compact ? renderCompactRosterRow(callObj) : renderNormalRosterRow(rosterColumns, callObj)
   }
 
   worker += g_rosterSettings.compact ? renderCompactRosterFooter() : renderNormalRosterFooter()

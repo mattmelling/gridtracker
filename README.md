@@ -107,3 +107,19 @@ Final build results are left in:
 # Editing GeoJSON files
 
 We've had success using https://vector.rocks/ and then cleaning up the output with https://jsonformatter.org/
+
+# Hacks
+
+### Roster Column Ordering
+
+We've added internal support for reordering roster columns, but have yet to implement a UI to change these settings.
+
+In the meantime you can:
+* Open the roster window, right click on the "More Controls" link on the top right corner and select "Inspect" from the context menu.
+
+* Select the "Console" tab in the Chrome DevTools window that should have appeared.
+
+* Enter `g_rosterSettings.columnOrder` in the Console and press `[return]` to see the current list of columns.
+
+* Enter the following in the Console, changing the values of `columnOrder` to fit your needs: `changeRosterColumnOrder(["Callsign", "Grid", "Spot"]);` and press `[return]`.
+ Any columns included in this list will be shown before all other columns.

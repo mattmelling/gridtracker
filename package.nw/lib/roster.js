@@ -136,8 +136,9 @@ var g_defaultSettings = {
   controlsExtended: false,
   compact: false,
   settingProfiles: false,
-  lastSortIndex: 6,
-  lastSortReverse: 1
+
+  sortColumn: "Age",
+  sortReverse: false
 };
 
 const LOGBOOK_LIVE_BAND_LIVE_MODE = "0";
@@ -221,9 +222,32 @@ function loadSettings()
   }
   g_rosterSettings = deepmerge(g_defaultSettings, readSettings);
 
-  if ("GT" in g_rosterSettings.columns) delete g_rosterSettings.columns.GT;
+  fixLegacySettings();
 
   writeRosterSettings();
+}
+
+function fixLegacySettings()
+{
+  // Not sure why, but Paul Traina added this settings cleanup in August 2020.
+  if ("GT" in g_rosterSettings.columns) delete g_rosterSettings.columns.GT;
+
+  // In January 2022, we refactored roster column sorting
+  if (g_rosterSettings.lastSortIndex)
+  {
+    g_rosterSettings.sortColumn = LEGACY_COLUMN_SORT_ID[g_rosterSettings.lastSortIndex] || "Age";
+    delete g_rosterSettings.lastSortIndex;
+  }
+
+  // In January 2022, we refactored roster column sorting
+  if (g_rosterSettings.lastSortReverse)
+  {
+    g_rosterSettings.sortReverse = g_rosterSettings.lastSortReverse;
+    delete g_rosterSettings.lastSortReverse;
+  }
+
+  // In January 2022, we added a `columnOrder` setting, which we need to ensure always includes all columns
+  g_rosterSettings.columnOrder = validateRosterColumnOrder(g_rosterSettings.columnOrder);
 }
 
 function writeRosterSettings()
@@ -266,178 +290,6 @@ function lockNewWindows()
       policy.ignore();
     });
   }
-}
-
-var r_sortFunction = [
-  myCallCompare,
-  myGridCompare,
-  myDbCompare,
-  myDTCompare,
-  myFreqCompare,
-  myDxccCompare,
-  myTimeCompare,
-  myDistanceCompare,
-  myHeadingCompare,
-  myStateCompare,
-  myCQCompare,
-  myWPXCompare,
-  myLifeCompare,
-  mySpotCompare,
-  myGTCompare,
-  myCntyCompare,
-  myContCompare
-];
-
-function myCallCompare(a, b)
-{
-  return a.callObj.DEcall.localeCompare(b.callObj.DEcall);
-}
-
-function myGridCompare(a, b)
-{
-  let gridA = a.callObj.grid ? a.callObj.grid : "0";
-  let gridB = b.callObj.grid ? b.callObj.grid : "0";
-
-  if (gridA > gridB) return 1;
-  if (gridA < gridB) return -1;
-  return 0;
-}
-
-function myDxccCompare(a, b)
-{
-  return window.opener.myDxccCompare(a.callObj, b.callObj);
-}
-
-function myTimeCompare(a, b)
-{
-  if (a.callObj.age > b.callObj.age) return 1;
-  if (a.callObj.age < b.callObj.age) return -1;
-  return 0;
-}
-
-function myLifeCompare(a, b)
-{
-  if (a.callObj.life > b.callObj.life) return 1;
-  if (a.callObj.life < b.callObj.life) return -1;
-  return 0;
-}
-
-function mySpotCompare(a, b)
-{
-  let cutoff = timeNowSec() - window.opener.g_receptionSettings.viewHistoryTimeSec;
-
-  if (a.callObj.spot.when <= cutoff) return -1;
-  if (b.callObj.spot.when <= cutoff) return 1;
-
-  let aSNR = Number(a.callObj.spot.snr);
-  let bSNR = Number(b.callObj.spot.snr);
-
-  if (aSNR > bSNR) return 1;
-  if (aSNR < bSNR) return -1;
-
-  if (a.callObj.spot.when > b.callObj.spot.when) return 1;
-  if (a.callObj.spot.when < b.callObj.spot.when) return -1;
-
-  return 0;
-}
-
-function myDbCompare(a, b)
-{
-  if (a.callObj.RSTsent > b.callObj.RSTsent) return 1;
-  if (a.callObj.RSTsent < b.callObj.RSTsent) return -1;
-  return 0;
-}
-
-function myFreqCompare(a, b)
-{
-  if (a.callObj.delta > b.callObj.delta) return 1;
-  if (a.callObj.delta < b.callObj.delta) return -1;
-  return 0;
-}
-
-function myDTCompare(a, b)
-{
-  if (a.callObj.dt > b.callObj.dt) return 1;
-  if (a.callObj.dt < b.callObj.dt) return -1;
-  return 0;
-}
-
-function myDistanceCompare(a, b)
-{
-  if (a.callObj.distance > b.callObj.distance) return 1;
-  if (a.callObj.distance < b.callObj.distance) return -1;
-  return 0;
-}
-
-function myHeadingCompare(a, b)
-{
-  if (a.callObj.heading > b.callObj.heading) return 1;
-  if (a.callObj.heading < b.callObj.heading) return -1;
-  return 0;
-}
-
-function myStateCompare(a, b)
-{
-  if (a.callObj.state == null) return 1;
-  if (b.callObj.state == null) return -1;
-  if (a.callObj.state > b.callObj.state) return 1;
-  if (a.callObj.state < b.callObj.state) return -1;
-  return 0;
-}
-
-function myCQCompare(a, b)
-{
-  return a.callObj.DXcall.localeCompare(b.callObj.DXcall);
-}
-
-function myWPXCompare(a, b)
-{
-  if (a.callObj.px == null) return 1;
-  if (b.callObj.px == null) return -1;
-  if (a.callObj.px > b.callObj.px) return 1;
-  if (a.callObj.px < b.callObj.px) return -1;
-  return 0;
-}
-
-function myCntyCompare(a, b)
-{
-  if (a.callObj.cnty == null) return 1;
-  if (b.callObj.cnty == null) return -1;
-  if (a.callObj.cnty.substr(3) > b.callObj.cnty.substr(3)) return 1;
-  if (a.callObj.cnty.substr(3) < b.callObj.cnty.substr(3)) return -1;
-  return 0;
-}
-
-function myContCompare(a, b)
-{
-  if (a.callObj.cont == null) return 1;
-  if (b.callObj.cont == null) return -1;
-  if (a.callObj.cont > b.callObj.cont) return 1;
-  if (a.callObj.cont < b.callObj.cont) return -1;
-  return 0;
-}
-function myGTCompare(a, b)
-{
-  if (a.callObj.style.gt != 0 && b.callObj.style.gt == 0) return 1;
-  if (a.callObj.style.gt == 0 && b.callObj.style.gt != 0) return -1;
-  return 0;
-}
-
-function showRosterBox(sortIndex)
-{
-  if (g_rosterSettings.lastSortIndex != sortIndex)
-  {
-    g_rosterSettings.lastSortIndex = sortIndex;
-    g_rosterSettings.lastSortReverse = 0;
-  }
-  else
-  {
-    g_rosterSettings.lastSortReverse ^= 1;
-  }
-
-  writeRosterSettings();
-
-  window.opener.goProcessRoster();
 }
 
 function hashMaker(start, callObj, reference)
@@ -526,7 +378,7 @@ function getSpotString(callObj)
   {
     when = timeNowSec() - callObj.spot.when;
     if (when <= window.opener.g_receptionSettings.viewHistoryTimeSec)
-    { result = parseInt(when).toDHMS(); }
+    { result = parseInt(when).toDHM(); }
   }
   if (result) result += " / " + callObj.spot.snr;
   return result;
@@ -1310,7 +1162,7 @@ function stateChangedValue(what)
     {
       let callState = r_currentUSState.replace("CN-", "");
       getBuffer(
-        "http://app.gridtracker.org/callsigns/" + callState + ".callsigns.json",
+        "https://storage.googleapis.com/gt_app/callsigns/" + callState + ".callsigns.json",
         callsignResult,
         r_currentUSState,
         "http",
@@ -1676,7 +1528,7 @@ function init()
   if (window.opener.g_mapSettings.offlineMode == false)
   {
     getBuffer(
-      "http://app.gridtracker.org/callsigns/manifest.json",
+      "https://storage.googleapis.com/gt_app/callsigns/manifest.json",
       manifestResult,
       null,
       "http",
@@ -1854,8 +1706,10 @@ function init()
   item = new nw.MenuItem({ type: "separator" });
   g_menu.append(item);
 
-  for (let key in g_rosterSettings.columns)
+  for (let columnIndex in g_rosterSettings.columnOrder)
   {
+    let key = g_rosterSettings.columnOrder[columnIndex];
+
     let itemx = new nw.MenuItem({
       type: "checkbox",
       label: key,

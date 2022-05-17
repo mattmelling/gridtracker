@@ -1092,7 +1092,11 @@ function addDeDx(
           details.grid.length < 6 &&
           (details.grid.substr(0, 4) == finalGrid.substr(0, 4) ||
             details.grid.length == 0)
-        ) { details.grid = finalGrid; }
+        )
+        {
+          details.grid = finalGrid;
+          details.grid4 = finalGrid.substr(0, 4);
+        }
       }
       if (finalRSTsent.length > 0) details.RSTsent = finalRSTsent;
       if (finalRSTrecv.length > 0) details.RSTrecv = finalRSTrecv;
@@ -1112,6 +1116,7 @@ function addDeDx(
     {
       details = {};
       details.grid = finalGrid;
+      details.grid4 = finalGrid.length > 0 ? finalGrid.substr(0, 4) : "-";
       details.RSTsent = finalRSTsent;
       details.RSTrecv = finalRSTrecv;
       details.msg = "-";
@@ -1153,10 +1158,9 @@ function addDeDx(
       finalGrid.length > 0
     )
     {
-      var fourGrid = finalGrid.substr(0, 4);
-      if (fourGrid in g_gridToState && g_gridToState[fourGrid].length == 1)
+      if (details.grid4 in g_gridToState && g_gridToState[details.grid4].length == 1)
       {
-        details.state = g_gridToState[fourGrid][0];
+        details.state = g_gridToState[details.grid4][0];
       }
       lookupCall = true;
     }
@@ -10076,7 +10080,7 @@ function renderStatsBox()
     worker +=
       "<br/> In Section: " +
       scoreSection +
-      "<br/>Error Generating Stats<br/>Please take a screenshot and send to gridtracker@gmail.com";
+      "<br/>Error Generating Stats<br/>Please take a screenshot and send to team@gridtracker.org";
   }
 
   setStatsDiv("statViewDiv", worker);
@@ -11147,7 +11151,7 @@ function checkForNewVersion(showUptoDate)
   if (typeof nw != "undefined")
   {
     getBuffer(
-      "http://app.gridtracker.org/version.txt?lang=",
+      "https://storage.googleapis.com/gt_app/version.txt",
       versionCheck,
       showUptoDate,
       "http",
@@ -11161,7 +11165,7 @@ function downloadAcknowledgements()
   if (g_mapSettings.offlineMode == false)
   {
     getBuffer(
-      "http://app.gridtracker.org/acknowledgements.json",
+      "https://storage.googleapis.com/gt_app/acknowledgements.json",
       updateAcks,
       null,
       "http",
@@ -11311,7 +11315,13 @@ function pskBandActivityCallback(buffer, flag)
 
   renderBandActivity();
 }
-
+/* FIXME ******************************************************************************
+   Should we somewhere in settings, have a checkbox to enable / disable PSK spots
+   specifically? We can disable the overall spots, both PSK and OAMS, and OAMS has a
+   checkbox in the OAMS tab. I'm thinking for the situation where I only want to
+   pull in OAMS spots and not PSK reporter's spots.
+   ************************************************************************************
+*/
 function pskGetBandActivity()
 {
   if (g_mapSettings.offlineMode == true) return;
@@ -11575,14 +11585,7 @@ function updateBasedOnIni()
   {
     if (typeof nw != "undefined")
     {
-      // lets see if we can find our location the hard way
-      getBuffer(
-        "https://api.ipstack.com/check?access_key=8c9233ec1c09861a707951ab3718a7f6&format=1",
-        ipLocation,
-        null,
-        "https",
-        443
-      );
+      alert("Location not available!\nEither start WSJT-X/JTDX or enter your grid square in the settings ");
     }
   }
 }
@@ -12057,27 +12060,6 @@ function selectElementContents(el)
     document.execCommand("copy");
     sel.removeAllRanges();
     selectNodeDiv.innerText = "";
-  }
-}
-
-function ipLocation(buffer, flag)
-{
-  var obj = JSON.parse(buffer);
-  if (
-    typeof obj != "undefined" &&
-    obj != null &&
-    typeof obj.latitude != "undefined"
-  )
-  {
-    g_appSettings.centerGridsquare = latLonToGridSquare(
-      obj.latitude,
-      obj.longitude
-    ).substr(0, 6);
-    if (g_appSettings.centerGridsquare.length > 0)
-    {
-      homeQTHInput.value = g_appSettings.centerGridsquare;
-      if (ValidateGridsquare(homeQTHInput, null)) setCenterGridsquare();
-    }
   }
 }
 
@@ -14597,6 +14579,7 @@ function callookResults(buffer, gridPass)
       callObject.lat = results.location.latitude;
       callObject.lon = results.location.longitude;
       callObject.grid = results.location.gridsquare;
+      callObject.grid4 = callObject.grid.length > 1 ? callObject.grid.substr(0, 4) : "-";
       callObject.efdate = results.otherInfo.grantDate;
       callObject.expdate = results.otherInfo.expiryDate;
       callObject.frn = results.otherInfo.frn;

@@ -1,9 +1,9 @@
-Name:           gridtracker
+Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        1.21.1217
+Version:        {{{ git_version lead=1.22.0503 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
-Source0:        %{name}-%{version}.tar.gz
+Source0:        {{{ git_dir_pack }}}
 
 License:        BSD 3-Clause License
 URL:            https://gridtracker.org
@@ -19,7 +19,7 @@ working interesting stations. It also will upload QSO records to multiple
 logging frameworks including Logbook of the World.
 
 %prep
-%setup -q GridTracker
+{{{ git_dir_setup_macro }}}
 
 %build
 
@@ -40,6 +40,19 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Mon May 02 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0503-1
+- Increment version number for build with correct vesion of NWJS
+* Mon May 02 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0502-1
+- [Bug Fixes]
+  - Fixed broken Call Roster due to online assets being moved from a web server to Google Storage Bucket.
+  - Don't highlight "CQ" rows if filtering by "CQ Only".
+  - Resolved #126 Windows Installer script updated to fix issues with install location and missing registry keys
+  - Resolved #124 removing IP-Geolocation when no all other means of locating failed, we now tell the user to
+    start WSJT-X or enter a location  as Geo-Location services are costly and unreliable
+  - Resolved #137 missing libatomic dependency in Linux DEB and RPM spec files
+- [Enhancements]
+  - Include version number in main window title
+  - Call Roster colums refactored and wanted column added
 * Fri Dec 17 2021 Matthew Chambers <nr0q@gridtracker.org> - 1.21.1217-1
 - Changed to newer NWJS to fix upstream bug that caused media playback to fail.
 * Sun Dec 12 2021 Matthew Chambers <nr0q@gridtracker.org> - 1.21.1212-1

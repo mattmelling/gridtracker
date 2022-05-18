@@ -25,8 +25,8 @@ function getPotaPlaces()
       "https://storage.googleapis.com/gt_app/pota.json",
       ingestPotaPlaces,
       null,
-      "http",
-      80
+      "https",
+      443
     );
 
     setTimeout(getPotaPlaces, 86400000)

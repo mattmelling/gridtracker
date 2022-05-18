@@ -22,7 +22,7 @@ function getPotaPlaces()
   if (g_mapSettings.offlineMode == false)
   {
     getBuffer(
-      "http://app.gridtracker.org/pota_parks.php",
+      "https://storage.googleapis.com/gt_app/pota.json",
       ingestPotaPlaces,
       null,
       "http",

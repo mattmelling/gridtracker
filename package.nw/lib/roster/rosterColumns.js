@@ -1,6 +1,6 @@
 const DEFAULT_COLUMN_ORDER = [
   "Callsign", "Band", "Mode", "Grid", "Calling", "Msg",
-  "DXCC", "Flag", "State", "County", "Cont",
+  "DXCC", "POTA", "Flag", "State", "County", "Cont",
   "dB", "Freq", "DT", "Dist", "Azim",
   "CQz", "ITUz", "PX",
   "LoTW", "eQSL", "OQRS",
@@ -373,6 +373,15 @@ const ROSTER_COLUMNS = {
       class: "spotCol",
       id: `sp${callObj.hash}`,
       html: getSpotString(callObj)
+    })
+  },
+
+  POTA: {
+    compare: false,
+    tableData: (callObj) => ({
+      name: "POTA",
+      rawAttrs: callObj.style.pota,
+      html: callObj.pota.join(",")
     })
   }
 }

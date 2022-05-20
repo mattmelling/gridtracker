@@ -439,10 +439,10 @@ function processRosterHunting(callRoster, rosterSettings)
             let hash = callObj.pota[index] + workHashSuffix;
             let layeredHash = rosterSettings.layeredMode && (callObj.pota[index] + layeredHashSuffix)
 
-            if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.pota) layeredFound++;
-            if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.pota) layeredFound++;
-            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
-            if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.pota) layeredWorkedFound++;
+            // if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.pota) layeredFound++;
+            // if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.pota) layeredFound++;
+            // if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
+            // if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.pota) layeredWorkedFound++;
           }
           if (huntFound != huntTotal)
           {

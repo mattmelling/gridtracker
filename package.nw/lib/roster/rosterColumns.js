@@ -1,6 +1,6 @@
 const DEFAULT_COLUMN_ORDER = [
   "Callsign", "Band", "Mode", "Calling", "Wanted", "Grid", "Msg",
-  "DXCC", "Flag", "State", "County", "Cont",
+  "POTA", "DXCC", "Flag", "State", "County", "Cont",
   "dB", "Freq", "DT", "Dist", "Azim",
   "CQz", "ITUz", "PX",
   "LoTW", "eQSL", "OQRS",

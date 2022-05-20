@@ -65,7 +65,7 @@ function processRosterHunting(callRoster, rosterSettings)
 
       callObj.hunting = {}
       callObj.callFlags = {}
-	  callObj.style = callObj.style || {}
+      callObj.style = callObj.style || {}
 
       let colorObject = Object();
 
@@ -142,7 +142,7 @@ function processRosterHunting(callRoster, rosterSettings)
           entry.tx = false;
           continue;
         }
-        
+
         // Special Calls
         if (callObj.DEcall.match("^[A-Z][0-9][A-Z](/w+)?$"))
         {

@@ -7214,6 +7214,10 @@ function handleWsjtxDecode(newMessage)
     {
       callsign.pota = g_potaSpots.filter(item => item.activator === callsign.DEcall)[0];
     }
+    else
+    {
+      callsign.pota = g_NotaAPota;
+    }
 
     if (newMessage.NW)
     {

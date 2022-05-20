@@ -381,7 +381,8 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "POTA",
       rawAttrs: callObj.style.pota,
-      html: callObj.pota.join(",")
+      title: callObj.pota.name,
+      html: callObj.pota.reference
     })
   }
 }

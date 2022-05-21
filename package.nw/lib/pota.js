@@ -5,11 +5,6 @@
 var g_potaPlaces = null;
 var g_potaSpots = null;
 
-const g_NotaAPota = {
-  refrence: null,
-  name: null
-}
-
 function ingestPotaPlaces(buffer)
 {
   try

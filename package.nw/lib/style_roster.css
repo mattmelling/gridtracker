@@ -310,11 +310,11 @@ body.roster {
 }
 
 #huntingMatrixDiv {
-  flex: 0.5;
+  flex: 0.75;
 }
 
 #exceptionDiv {
-  flex: 1.5;
+  flex: 1.25;
 }
 
 .secondaryControlGroup h3 {

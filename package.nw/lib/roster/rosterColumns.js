@@ -397,7 +397,7 @@ const ROSTER_COLUMNS = {
   }
 }
 
-WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "grid", "cnty", "wpx", "oams"];
+WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
 WANTED_LABELS = {
   cont: "Continent",
   cqz: "CQ Zone",
@@ -410,7 +410,8 @@ WANTED_LABELS = {
   cnty: "County",
   wpx: "WPX",
   call: "Call",
-  oams: "OAMS"
+  oams: "OAMS",
+  pota: "POTA"
 }
 
 function wantedColumnParts(callObj, options)

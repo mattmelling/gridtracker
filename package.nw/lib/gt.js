@@ -6957,7 +6957,6 @@ function handleWsjtxDecode(newMessage)
   theTimeStamp =
     timeNowSec() - (timeNowSec() % 86400) + parseInt(newMessage.TM / 1000);
   var messageColor = "white";
-  if (CQ == true) messageColor = "cyan";
 
   // Break up the decoded message
   var decodeWords = newMessage.Msg.split(" ").slice(0, 5);
@@ -7003,6 +7002,7 @@ function handleWsjtxDecode(newMessage)
       CQ = true;
       msgDXcallsign = "CQ";
     }
+
     if (decodeWords.length == 4 && CQ == true)
     {
       msgDXcallsign += " " + decodeWords[1];
@@ -7021,6 +7021,12 @@ function handleWsjtxDecode(newMessage)
     {
       msgDXcallsign = decodeWords[0];
       msgDEcallsign = decodeWords[1];
+    }
+
+    if (decodeWords[2] == "RR73")
+    {
+      CQ = true;
+      msgDXcallsign = "RR73";
     }
 
     var callsign = null;

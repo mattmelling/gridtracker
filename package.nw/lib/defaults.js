@@ -172,6 +172,7 @@ var def_adifLogSettings = {
     HRDLOGUploadCode: "",
     CloudlogURL: "http://127.0.0.1/index.php/api/qso",
     CloudlogAPI: "",
+    CloudlogStationProfileID: "1",
     eQSLUser: "",
     eQSLPassword: "",
     eQSLNickname: ""

@@ -2619,7 +2619,7 @@ function sendCloudlogEntry(report)
   {
     if (typeof nw != "undefined")
     {
-      var postData = { key: CloudlogAPI.value, type: "adif", string: report };
+      var postData = { key: CloudlogAPI.value, station_profile_id: CloudlogStationProfileID.value, type: "adif", string: report };
       getPostJSONBuffer(
         CloudlogURL.value,
         CloudlogSendLogResult,

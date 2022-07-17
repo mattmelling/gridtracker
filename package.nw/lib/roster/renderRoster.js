@@ -120,7 +120,7 @@ function renderRoster(callRoster, rosterSettings)
     if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
     { continue; }
 
-    if (callObj.DEcall.match("^[A-Z][0-9][A-Z](/w+)?$"))
+    if (callObj.DEcall.match("^[KNW][0-9][A-W|Z](/w+)?$"))
     { callObj.style.call = "class='oneByOne'"; }
     if (callObj.DEcall == window.opener.g_instances[callObj.instance].status.DXcall)
     {

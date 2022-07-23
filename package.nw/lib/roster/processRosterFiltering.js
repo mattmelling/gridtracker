@@ -50,8 +50,10 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = true;
       if (callObj.pota == null)
       {
-        callObj.pota.reference = "?-????";
-        callObj.pota.name = "Unknown Park";
+        callObj.pota = {
+          reference: "?-????",
+          name: "Unknown Park"
+        }
       }
       continue;
     }

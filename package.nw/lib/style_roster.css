@@ -310,11 +310,11 @@ body.roster {
 }
 
 #huntingMatrixDiv {
-  flex: 0.5;
+  flex: 0.75;
 }
 
 #exceptionDiv {
-  flex: 1.5;
+  flex: 1.25;
 }
 
 .secondaryControlGroup h3 {
@@ -557,4 +557,12 @@ table.rosterTable thead th:first-child {
 .ackBadge {
   padding: 0;
   width: 1.5em;
+}
+
+.wantedCol {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow:
+  ellipsis;
+  white-space: nowrap;
 }

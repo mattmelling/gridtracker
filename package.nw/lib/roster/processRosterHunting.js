@@ -13,6 +13,9 @@ function processRosterHunting(callRoster, rosterSettings)
   let layeredUnconf = "background-clip:padding-box;box-shadow: 0 0 4px 2px inset ";
   let layeredUnconfAlpha = "AA";
 
+  const currentYear = new Date().getFullYear();
+  const currentYearSuffix = `&rsquo;${currentYear - 2000}`;
+
   // TODO: Hunting results might be used to filter, based on the "Callsigns: Only Wanted" option,
   //       so maybe we can move this loop first, and add a check to the filtering loop?
 
@@ -62,6 +65,7 @@ function processRosterHunting(callRoster, rosterSettings)
 
       callObj.hunting = {}
       callObj.callFlags = {}
+      callObj.style = callObj.style || {}
 
       let colorObject = Object();
 
@@ -76,18 +80,19 @@ function processRosterHunting(callRoster, rosterSettings)
       let state = "#90EE90";
       let cnty = "#CCDD00";
       let cont = "#00DDDD";
+      let pota = "#fbb6fc";
       let cqz = "#DDDDDD";
       let ituz = "#DDDDDD";
       let wpx = "#FFFF00";
 
       hasGtPin = false;
       let shouldAlert = false;
-      let callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, cqzBg, ituzBg, wpxBg, gtBg;
-      let callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, cqzConf, ituzConf, wpxConf;
+      let callBg, gridBg, callingBg, dxccBg, stateBg, cntyBg, contBg, potaBg, cqzBg, ituzBg, wpxBg, gtBg;
+      let callConf, gridConf, callingConf, dxccConf, stateConf, cntyConf, contConf, potaConf, cqzConf, ituzConf, wpxConf;
 
-      callBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = cqzBg = ituzBg = wpxBg = gtBg = row;
+      callBg = gridBg = callingBg = dxccBg = stateBg = cntyBg = contBg = potaBg = cqzBg = ituzBg = wpxBg = gtBg = row;
 
-      callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = cqzConf = ituzConf = wpxConf =
+      callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = potaConf = cqzConf = ituzConf = wpxConf =
         "";
 
       let hash = callsign + workHashSuffix;
@@ -136,6 +141,27 @@ function processRosterHunting(callRoster, rosterSettings)
         {
           entry.tx = false;
           continue;
+        }
+
+        // Special Calls
+        if (callObj.DEcall.match("^[A-Z][0-9][A-Z](/w+)?$"))
+        {
+          callObj.style.call = "class='oneByOne'";
+        }
+
+        // Entries currently calling or being called by us
+        if (callObj.DEcall == window.opener.g_instances[callObj.instance].status.DXcall)
+        {
+          if (window.opener.g_instances[callObj.instance].status.TxEnabled == 1)
+          {
+            callObj.hunting.call = "calling";
+            callObj.style.call = "class='dxCalling'";
+          }
+          else
+          {
+            callObj.hunting.call = "caller";
+            callObj.style.call = "class='dxCaller'";
+          }
         }
 
         // Hunting for callsigns
@@ -202,6 +228,7 @@ function processRosterHunting(callRoster, rosterSettings)
         if (huntQRZ.checked == true && callObj.qrz == true)
         {
           callObj.callFlags.calling = true
+          callObj.hunting.qrz = "hunted";
           shouldAlert = true;
           callObj.reason.push("qrz");
         }
@@ -309,6 +336,27 @@ function processRosterHunting(callRoster, rosterSettings)
                 callObj.hunting.dxcc = "hunted";
                 dxccBg = `${dxcc}${inversionAlpha};`;
                 dxcc = bold;
+              }
+            }
+          }
+
+          callObj.dxccSuffix = null
+          if (huntMarathon.checked && callObj.hunting.dxcc != "hunted" && callObj.hunting.dxcc != "checked")
+          {
+            callObj.reason.push("dxcc-marathon");
+
+            let hash = `${callObj.dxcc}-${currentYear}`;
+            if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.dxcc))
+            {
+              if (!rosterSettings.workedIndex || !(hash in rosterSettings.workedIndex.dxcc))
+              {
+                callObj.dxccSuffix = currentYearSuffix;
+
+                callObj.hunting.dxccMarathon = "hunted";
+                if (!callObj.hunting.dxcc)
+                {
+                  dxccConf = `${unconf}${dxcc}${layeredAlpha};`;
+                }
               }
             }
           }
@@ -427,21 +475,86 @@ function processRosterHunting(callRoster, rosterSettings)
           }
         }
 
+        // Hunting for POTAs
+        if (huntPOTA.checked == true && window.opener.g_mapSettings.offlineMode == false && callObj.pota != null)
+        {
+          let huntTotal = callObj.pota.length;
+          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+
+          for (index in callObj.pota)
+          {
+            let hash = callObj.pota[index] + workHashSuffix;
+            let layeredHash = rosterSettings.layeredMode && (callObj.pota[index] + layeredHashSuffix)
+
+            // if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.pota) layeredFound++;
+            // if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.pota) layeredFound++;
+            // if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
+            // if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.pota) layeredWorkedFound++;
+          }
+          if (huntFound != huntTotal)
+          {
+            shouldAlert = true;
+            callObj.reason.push("pota");
+
+            if (rosterSettings.workedIndex && workedFound == huntTotal)
+            {
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.pota = "worked-and-mixed";
+                potaConf = `${layeredUnconf}${pota}${layeredUnconfAlpha};`;
+                potaBg = `${potaBg}${layeredInversionAlpha}`;
+                pota = bold;
+              }
+              else
+              {
+                callObj.hunting.pota = "worked";
+                potaConf = `${unconf}${pota}${inversionAlpha};`;
+              }
+            }
+            else
+            {
+              if (rosterSettings.layeredMode && layeredFound == huntTotal)
+              {
+                callObj.hunting.pota = "mixed";
+                potaBg = `${pota}${layeredAlpha};`;
+                pota = bold;
+              }
+              else if (rosterSettings.layeredMode && layeredWorkedFound == huntTotal)
+              {
+                callObj.hunting.pota = "mixed-worked";
+                potaConf = `${unconf}${pota}${layeredAlpha};`;
+              }
+              else
+              {
+                callObj.hunting.pota = "hunted";
+                potaBg = `${pota}${inversionAlpha};`;
+                pota = bold;
+              }
+            }
+          }
+        }
+
         // Hunting for CQ Zones
         if (huntCQz.checked == true)
         {
           let huntTotal = callObj.cqza.length;
-          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0, marathonFound = 0;
 
           for (index in callObj.cqza)
           {
             let hash = callObj.cqza[index] + workHashSuffix;
-            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix)
+            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix);
+            let marathonHash = huntMarathon.checked && `${callObj.cqza[index]}-${currentYear}`;
 
             if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.cqz) huntFound++;
             if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cqz) layeredFound++;
             if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cqz) workedFound++;
             if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.cqz) layeredWorkedFound++;
+            if (marathonHash)
+            {
+              if (rosterSettings.huntIndex && marathonHash in rosterSettings.huntIndex.cqz) marathonFound++;
+              else if (rosterSettings.workedIndex && marathonHash in rosterSettings.workedIndex.cqz) marathonFound++;
+            }
           }
           if (huntFound != huntTotal)
           {
@@ -481,6 +594,23 @@ function processRosterHunting(callRoster, rosterSettings)
                 callObj.hunting.cqz = "hunted";
                 cqzBg = `${cqz}${inversionAlpha};`;
                 cqz = bold;
+              }
+            }
+          }
+
+          callObj.cqzSuffix = null
+          if (huntMarathon.checked && callObj.hunting.cqz != "hunted" && callObj.hunting.cqz != "worked")
+          {
+            if (marathonFound != huntTotal)
+            {
+              callObj.reason.push("cqz-marathon");
+
+              callObj.cqzSuffix = currentYearSuffix;
+
+              callObj.hunting.cqzMarathon = "hunted";
+              if (!callObj.hunting.cqz)
+              {
+                cqzConf = `${unconf}${cqz}${layeredAlpha};`;
               }
             }
           }
@@ -666,6 +796,7 @@ function processRosterHunting(callRoster, rosterSettings)
       colorObject.dxcc = "style='" + dxccConf + "background-color:" + dxccBg + ";color:" + dxcc + "'";
       colorObject.state = "style='" + stateConf + "background-color:" + stateBg + ";color:" + state + "'";
       colorObject.cnty = "style='" + cntyConf + "background-color:" + cntyBg + ";color:" + cnty + "'";
+      colorObject.pota = "style='" + potaConf + "background-color:" + potaBg + ";color:" + pota + "'";
       colorObject.cont = "style='" + contConf + "background-color:" + contBg + ";color:" + cont + "'";
       colorObject.cqz = "style='" + cqzConf + "background-color:" + cqzBg + ";color:" + cqz + "'";
       colorObject.ituz = "style='" + ituzConf + "background-color:" + ituzBg + ";color:" + ituz + "'";

@@ -1,6 +1,6 @@
 const DEFAULT_COLUMN_ORDER = [
-  "Callsign", "Band", "Mode", "Grid", "Calling", "Msg",
-  "DXCC", "Flag", "State", "County", "Cont",
+  "Callsign", "Band", "Mode", "Calling", "Wanted", "Grid", "Msg",
+  "POTA", "DXCC", "Flag", "State", "County", "Cont",
   "dB", "Freq", "DT", "Dist", "Azim",
   "CQz", "ITUz", "PX",
   "LoTW", "eQSL", "OQRS",
@@ -30,6 +30,7 @@ const getterSimpleComparer = (getter) => (a, b) =>
 {
   const aVal = getter(a);
   const bVal = getter(b);
+
   if (aVal == null) return 1;
   if (bVal == null) return -1;
   if (aVal > bVal) return 1;
@@ -62,7 +63,7 @@ const ROSTER_COLUMNS = {
         html: html = callObj.DEcall.formatCallsign()
       }
 
-      let acks = window.opener.g_acknowledgedCalls;
+      let acks = window.opener.g_acknowledgedCalls || {};
       if (acks[callObj.DEcall])
       {
         attrs.html = `${attrs.html} <span class='acknowledged'><img class='ackBadge' src='${acks[callObj.DEcall].badge}'></span>`
@@ -116,9 +117,9 @@ const ROSTER_COLUMNS = {
     compare: (a, b) => window.opener.myDxccCompare(a.callObj, b.callObj),
     tableData: (callObj) => ({
       title: window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].pp,
-      name: `DXCC (${callObj.dxcc})`,
+      name: `${callObj.dxcc}`,
       rawAttrs: callObj.style.dxcc,
-      html: window.opener.g_dxccToAltName[callObj.dxcc]
+      html: [window.opener.g_dxccToAltName[callObj.dxcc], callObj.dxccSuffix].join("&nbsp;")
     })
   },
 
@@ -215,7 +216,7 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "CQz",
       rawAttrs: callObj.style.cqz,
-      html: callObj.cqza.join(",")
+      html: [callObj.cqza.join(","), callObj.cqzSuffix].join("&nbsp;")
     })
   },
 
@@ -374,5 +375,104 @@ const ROSTER_COLUMNS = {
       id: `sp${callObj.hash}`,
       html: getSpotString(callObj)
     })
+  },
+
+  POTA: {
+    compare: false,
+    tableData: (callObj) => ({
+      name: "POTA",
+      rawAttrs: callObj.style.pota,
+      title: callObj.pota ? callObj.pota.name : "",
+      html: callObj.pota ? callObj.pota.reference : ""
+    })
+  },
+
+  Wanted: {
+    compare: (a, b) => wantedColumnComparer(a.callObj, b.callObj),
+    tableData: (callObj) => ({
+      class: "wantedCol",
+      title: wantedColumnParts(callObj).map(entry => `• ${entry}`).join("\n"),
+      html: wantedColumnParts(callObj).join(" - ", { html: true })
+    })
   }
+}
+
+WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
+WANTED_LABELS = {
+  cont: "Continent",
+  cqz: "CQ Zone",
+  ituz: "ITU Zone",
+  dxcc: "DXCC",
+  dxccMarathon: "Marathon DXCC",
+  cqzMarathon: "Marathon CQ Zone",
+  state: "State",
+  grid: "Grid",
+  cnty: "County",
+  wpx: "WPX",
+  call: "Call",
+  oams: "OAMS",
+  pota: "POTA"
+}
+
+function wantedColumnParts(callObj, options)
+{
+  options = options || {};
+
+  if (!callObj.hunting) return [];
+
+  let parts = [];
+
+  WANTED_ORDER.forEach(field =>
+  {
+    let wanted = callObj.hunting[field];
+
+    if (wanted == "calling") { parts.push("Calling"); }
+    // else if (wanted == "caller") { parts.push("Called"); }
+    else if (wanted == "hunted" && field == "qrz") { parts.push("Caller"); }
+    else if (wanted == "hunted" && field == "oams") { parts.push("OAMS User"); }
+    else if (wanted == "hunted") { parts.push(`${options.html ? "<b>" : ""}New ${WANTED_LABELS[field]}${options.html ? "<b>" : ""}`); }
+    else if (wanted == "worked") { parts.push(`Worked ${WANTED_LABELS[field]}`); }
+    else if (wanted == "mixed") { parts.push(`${callObj.band} ${WANTED_LABELS[field]}`); }
+    else if (wanted == "mixed-worked") { parts.push(`${callObj.band} ${WANTED_LABELS[field]}`); parts.push(`Worked ${WANTED_LABELS[field]}`); }
+    else if (wanted == "worked-and-mixed") { parts.push(`Worked ${callObj.band} ${WANTED_LABELS[field]}`); }
+  })
+
+  if (parts[0] == "Calling" && parts[1] == "Caller")
+  {
+    parts.shift(); parts.shift();
+    parts.unshift(`${options.html ? "<b>" : ""}Working${options.html ? "<b>" : ""}`);
+  }
+
+  return parts;
+}
+
+function wantedColumnWeighter(callObj, field)
+{
+  let wanted = callObj.hunting[field];
+
+  // We use negative numbers so that sorting is "reversed" by default, placing most interesting items up top.
+  if (wanted == "calling" || wanted == "caller") return -10;
+  else if (wanted == "hunted") return -5;
+  else if (wanted == "worked") return -4;
+  else if (wanted == "mixed") return -3;
+  else if (wanted == "mixed-worked") return -2;
+  else if (wanted == "worked-and-mixed") return -1;
+  else return 0;
+}
+
+function wantedColumnComparer(a, b)
+{
+  if (!a.hunting) return 1;
+  if (!b.hunting) return -1;
+
+  for (const index in WANTED_ORDER)
+  {
+    const field = WANTED_ORDER[index];
+    const aWeight = wantedColumnWeighter(a, field);
+    const bWeight = wantedColumnWeighter(b, field);
+
+    if (aWeight < bWeight) return 1;
+    if (aWeight > bWeight) return -1;
+  }
+  return 0;
 }

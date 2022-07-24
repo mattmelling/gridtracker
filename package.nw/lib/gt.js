@@ -1065,6 +1065,10 @@ function addDeDx(
   finalSatName = ""
 )
 {
+  var currentYear = new Date().getFullYear();
+  var qsoDate = new Date(1970, 0, 1); qsoDate.setSeconds(finalTime);
+  var isCurrentYear = (qsoDate.getFullYear() == currentYear);
+
   var callsign = null;
   var rect = null;
   var worked = false;
@@ -1262,6 +1266,10 @@ function addDeDx(
         g_tracker.worked.cqz[details.cqz + "dg"] = true;
         g_tracker.worked.cqz[details.cqz + band + "dg"] = true;
       }
+      if (isCurrentYear)
+      {
+        g_tracker.worked.cqz[`${details.cqz}-${currentYear}`] = true;
+      }
     }
 
     if (details.dxcc > 0)
@@ -1275,6 +1283,10 @@ function addDeDx(
       {
         g_tracker.worked.dxcc[sDXCC + "dg"] = true;
         g_tracker.worked.dxcc[sDXCC + band + "dg"] = true;
+      }
+      if (isCurrentYear)
+      {
+        g_tracker.worked.dxcc[`${sDXCC}-${currentYear}`] = true;
       }
     }
 
@@ -6945,7 +6957,6 @@ function handleWsjtxDecode(newMessage)
   theTimeStamp =
     timeNowSec() - (timeNowSec() % 86400) + parseInt(newMessage.TM / 1000);
   var messageColor = "white";
-  if (CQ == true) messageColor = "cyan";
 
   // Break up the decoded message
   var decodeWords = newMessage.Msg.split(" ").slice(0, 5);
@@ -6991,6 +7002,7 @@ function handleWsjtxDecode(newMessage)
       CQ = true;
       msgDXcallsign = "CQ";
     }
+
     if (decodeWords.length == 4 && CQ == true)
     {
       msgDXcallsign += " " + decodeWords[1];
@@ -7009,6 +7021,12 @@ function handleWsjtxDecode(newMessage)
     {
       msgDXcallsign = decodeWords[0];
       msgDEcallsign = decodeWords[1];
+    }
+
+    if (decodeWords[2] == "RR73")
+    {
+      CQ = true;
+      msgDXcallsign = "RR73";
     }
 
     var callsign = null;
@@ -7079,6 +7097,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.qso = false;
       newCallsign.dxcc = callsignToDxcc(newCallsign.DEcall);
       newCallsign.px = null;
+      newCallsign.pota = null;
       newCallsign.zone = null;
       newCallsign.vucc_grids = [];
       newCallsign.propMode = "";
@@ -7207,6 +7226,11 @@ function handleWsjtxDecode(newMessage)
       {
         callsign.cqza = g_gridToCQZone[callsign.grid];
       }
+    }
+
+    if (g_potaSpots && g_potaSpots.some(item => item.activator === callsign.DEcall))
+    {
+      callsign.pota = g_potaSpots.filter(item => item.activator === callsign.DEcall)[0];
     }
 
     if (newMessage.NW)
@@ -12763,7 +12787,8 @@ function getBuffer(file_url, callback, flag, mode, port, cache = null)
     host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
     port: port,
     followAllRedirects: true,
-    path: url.parse(file_url).path // eslint-disable-line node/no-deprecated-api
+    path: url.parse(file_url).path, // eslint-disable-line node/no-deprecated-api
+    headers: { "User-Agent": gtVersionString }
   };
 
   http.get(options, function (res)
@@ -13741,7 +13766,9 @@ var g_startupTable = [
   [loadLookupDetails, "Callsign Lookup Details Loaded"],
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
-  [gtChatSystemInit, "User System Initialized"],
+  [gtChatSystemInit, "Chat System Initialized"],
+  [getPotaPlaces, "Loading POTA Database"],
+  [getPotaSpots, "Starting POTA Spots Pump"],
   [downloadAcknowledgements, "Contributor Acknowledgements Loaded"],
   [postInit, "Finalizing System"]
 ];

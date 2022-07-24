@@ -12,6 +12,8 @@ function renderHeaderForColumn(column)
 
   let attrs = (columnInfo && columnInfo.tableHeader && columnInfo.tableHeader()) || {}
 
+  attrs.name = column
+
   attrs.html = attrs.html || column
 
   if (columnInfo.compare)
@@ -62,11 +64,20 @@ function setRosterSorting(column)
   window.opener.goProcessRoster();
 }
 
-function sortCallList(callList, sortColumn, sortReverse)
+function sortCallList(callList, sortColumn, sortReverse, columns)
 {
   const columnInfo = ROSTER_COLUMNS[sortColumn]
 
-  callList.sort((columnInfo && columnInfo.compare) || ROSTER_COLUMNS.Age.compare)
+  const comparerList = [
+    (columnInfo && columnInfo.compare) || ROSTER_COLUMNS.Age.compare,
+    columns && columns.includes("Spot") && ROSTER_COLUMNS.Spot.compare,
+    columns && columns.includes("dB") && ROSTER_COLUMNS.dB.compare,
+    columns && columns.includes("Age") && ROSTER_COLUMNS.Age.compare,
+    columns && columns.includes("Life") && ROSTER_COLUMNS.Life.compare,
+    columns && columns.includes("Callsign") && ROSTER_COLUMNS.Callsign.compare
+  ]
+
+  callList.sort(multiColumnComparer(comparerList))
 
   if (sortReverse)
   {
@@ -74,15 +85,35 @@ function sortCallList(callList, sortColumn, sortReverse)
   }
 }
 
+const multiColumnComparer = (comparers) => (a, b) =>
+{
+  let result = 0;
+  for (let i in comparers)
+  {
+    result = comparers[i] && comparers[i](a, b);
+    if (result) return result;
+  }
+  return 0;
+}
+
 function validateRosterColumnOrder(columns)
 {
   let correctedColumnOrder = (columns || DEFAULT_COLUMN_ORDER || []).slice();
 
+  // Aappend columns not included in the suggested list.
   DEFAULT_COLUMN_ORDER.forEach(column =>
   {
     if (!correctedColumnOrder.includes(column)) correctedColumnOrder.push(column);
   })
+
+  // Exclude any unexpected values
   correctedColumnOrder = correctedColumnOrder.filter(column => !!ROSTER_COLUMNS[column])
+
+  // Ensure the first three columns are always the same
+  correctedColumnOrder = correctedColumnOrder.filter(column => column != "Callsign" && column != "Band" && column != "Mode");
+  correctedColumnOrder.unshift("Mode");
+  correctedColumnOrder.unshift("Band");
+  correctedColumnOrder.unshift("Callsign");
 
   return correctedColumnOrder;
 }
@@ -92,4 +123,16 @@ function changeRosterColumnOrder(columns)
   g_rosterSettings.columnOrder = validateRosterColumnOrder(columns);
   writeRosterSettings();
   window.opener.goProcessRoster();
+}
+
+function moveColumnLeft(column)
+{
+  const columns = rosterColumnList(g_rosterSettings.columns, { Callsign: true, Grid: true });
+  const pos = columns.indexOf(column);
+  if (pos > 1)
+  {
+    columns[pos] = columns[pos - 1];
+    columns[pos - 1] = column;
+  }
+  changeRosterColumnOrder(columns);
 }

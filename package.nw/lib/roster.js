@@ -26,6 +26,8 @@ var g_callMenu = null;
 var g_ageMenu = null;
 var g_callingMenu = null;
 var g_compactMenu = null;
+var g_menuItemForCurrentColumn = null;
+var g_currentColumnName = null;
 var g_targetHash = "";
 var g_clearIgnores = null;
 var g_clearIgnoresCall = null;
@@ -96,10 +98,12 @@ var g_defaultSettings = {
     huntDXCC: true,
     huntCQz: false,
     huntITUz: false,
+    huntMarathon: false,
     huntState: false,
     huntCounty: false,
     huntCont: false,
     huntPX: false,
+    huntPOTA: false,
     huntQRZ: true,
     huntOAMS: false
   },
@@ -112,6 +116,7 @@ var g_defaultSettings = {
     Flag: true,
     State: true,
     County: true,
+    POTA: false,
     Cont: true,
     dB: true,
     Freq: false,
@@ -1704,6 +1709,19 @@ function init()
   item = new nw.MenuItem({ type: "separator" });
   g_menu.append(item);
 
+  g_menuItemForCurrentColumn = new nw.MenuItem({
+    type: "normal",
+    label: "Move Column Left",
+    click: function ()
+    {
+      moveColumnLeft(g_currentColumnName);
+    }
+  })
+  g_menu.append(g_menuItemForCurrentColumn)
+
+  item = new nw.MenuItem({ type: "separator" });
+  g_menu.append(item);
+
   for (let columnIndex in g_rosterSettings.columnOrder)
   {
     let key = g_rosterSettings.columnOrder[columnIndex];
@@ -2162,7 +2180,9 @@ function handleContextMenu(ev)
       }
     }
 
-    let name = ev.target.getAttribute("name");
+    let name
+    if (ev.target.tagName == "TD") name = ev.target.getAttribute("name");
+
     if (name == "Callsign")
     {
       g_targetHash = ev.target.parentNode.id;
@@ -2200,13 +2220,24 @@ function handleContextMenu(ev)
     }
     else
     {
-      if (g_rosterSettings.compact == false)
+      if (g_rosterSettings.compact)
       {
-        g_menu.popup(mouseX, mouseY);
+        g_compactMenu.popup(mouseX, mouseY);
       }
       else
       {
-        g_compactMenu.popup(mouseX, mouseY);
+        if (ev.target.tagName == "TH" && ev.target.getAttribute("name"))
+        {
+          g_menuItemForCurrentColumn.enabled = true;
+          g_currentColumnName = ev.target.getAttribute("name");
+        }
+        else
+        {
+          g_menuItemForCurrentColumn.enabled = false;
+          g_currentColumnName = null;
+        }
+
+        g_menu.popup(mouseX, mouseY);
       }
     }
   }

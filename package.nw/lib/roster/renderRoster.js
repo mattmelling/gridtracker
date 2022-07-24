@@ -97,21 +97,21 @@ function renderRoster(callRoster, rosterSettings)
     window.document.title += " | " + listShortInstances().join(" • ");
   }
 
-  if (g_rosterSettings.compact)
-  {
-    sortCallList(visibleCallList, "Age", false);
-  }
-  else
-  {
-    sortCallList(visibleCallList, g_rosterSettings.sortColumn, g_rosterSettings.sortReverse);
-  }
-
   let showBands = (Object.keys(rosterSettings.bands).length > 1) || g_rosterSettings.columns.Band;
   let showModes = (Object.keys(rosterSettings.modes).length > 1) || g_rosterSettings.columns.Mode;
 
   columnOverrides.Band = showBands
   columnOverrides.Mode = showModes
   const rosterColumns = rosterColumnList(g_rosterSettings.columns, columnOverrides)
+
+  if (g_rosterSettings.compact)
+  {
+    sortCallList(visibleCallList, "Age", false, rosterColumns);
+  }
+  else
+  {
+    sortCallList(visibleCallList, g_rosterSettings.sortColumn, g_rosterSettings.sortReverse);
+  }
 
   let worker = g_rosterSettings.compact ? renderCompactRosterHeaders() : renderNormalRosterHeaders(rosterColumns)
 
@@ -142,5 +142,6 @@ function renderRoster(callRoster, rosterSettings)
   }
 
   worker += g_rosterSettings.compact ? renderCompactRosterFooter() : renderNormalRosterFooter()
+
   RosterTable.innerHTML = worker;
 }

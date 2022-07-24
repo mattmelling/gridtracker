@@ -45,6 +45,18 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
+    if (entry.DXcall == "CQ POTA" && huntPOTA.checked == true)
+    {
+      entry.tx = true;
+      if (callObj.pota == null)
+      {
+        callObj.pota = {
+          reference: "?-????",
+          name: "Unknown Park"
+        }
+      }
+      continue;
+    }
     if (callObj.ituza in g_blockedITUz)
     {
       entry.tx = false;
@@ -378,6 +390,12 @@ function processRosterFiltering(callRoster, rosterSettings)
           }
         }
       }
+
+      if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
+      {
+        tx = false
+      }
+
       entry.tx = tx;
     }
   }

@@ -94,7 +94,7 @@ function renderRoster(callRoster, rosterSettings)
   window.document.title = `Call Roster: ${countParts.join(" • ")}`;
   if (listShortInstances().length > 0)
   {
-    window.document.title += " | " +  listShortInstances().join(" • ");
+    window.document.title += " | " + listShortInstances().join(" • ");
   }
 
   if (g_rosterSettings.compact)

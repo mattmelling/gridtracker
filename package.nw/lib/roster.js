@@ -3433,7 +3433,7 @@ function doubleCompile(award, firstLevel)
 function listShortInstances()
 {
   let shortInstances = [];
-  if (typeof window.opener.g_instancesIndex != "undefined" && typeof window.opener.g_instances != "undefined") 
+  if (typeof window.opener.g_instancesIndex != "undefined" && typeof window.opener.g_instances != "undefined")
   {
     if (window.opener.g_instancesIndex.length > 1)
     {

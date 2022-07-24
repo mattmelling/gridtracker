@@ -92,6 +92,10 @@ function renderRoster(callRoster, rosterSettings)
   }
 
   window.document.title = `Call Roster: ${countParts.join(" • ")}`;
+  if (listShortInstances().length > 0)
+  {
+    window.document.title += " | " + listShortInstances().join(" • ");
+  }
 
   let showBands = (Object.keys(rosterSettings.bands).length > 1) || g_rosterSettings.columns.Band;
   let showModes = (Object.keys(rosterSettings.modes).length > 1) || g_rosterSettings.columns.Mode;
@@ -115,6 +119,24 @@ function renderRoster(callRoster, rosterSettings)
   for (let x in visibleCallList)
   {
     let callObj = visibleCallList[x].callObj;
+
+    // TODO: This is filtering
+    if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
+    { continue; }
+
+    if (callObj.DEcall.match("^[KNW][0-9][A-W|Y|Z](/w+)?$"))
+    { callObj.style.call = "class='oneByOne'"; }
+    if (callObj.DEcall == window.opener.g_instances[callObj.instance].status.DXcall)
+    {
+      if (window.opener.g_instances[callObj.instance].status.TxEnabled == 1)
+      {
+        callObj.style.call = "class='dxCalling'";
+      }
+      else
+      {
+        callObj.style.call = "class='dxCaller'";
+      }
+    }
 
     worker += g_rosterSettings.compact ? renderCompactRosterRow(callObj) : renderNormalRosterRow(rosterColumns, callObj)
   }

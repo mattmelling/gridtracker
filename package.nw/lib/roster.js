@@ -3460,3 +3460,24 @@ function doubleCompile(award, firstLevel)
 
   return singleCompile(award, firstLevel);
 }
+
+function listShortInstances()
+{
+  let shortInstances = [];
+  if (typeof window.opener.g_instancesIndex != "undefined" && typeof window.opener.g_instances != "undefined")
+  {
+    if (window.opener.g_instancesIndex.length > 1)
+    {
+      let instances = window.opener.g_instances;
+      let keys = Object.keys(instances).sort();
+      for (let key in keys)
+      {
+        let inst = keys[key];
+        let sp = inst.split(" - ");
+        let shortInst = sp[sp.length - 1].substring(0, 18);
+        shortInstances.push(shortInst);
+      }
+    }
+  }
+  return shortInstances;
+}

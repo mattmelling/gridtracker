@@ -7228,7 +7228,7 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    if (callsign.pota == null && g_potaSpots && g_potaSpots.some(item => item.activator === callsign.DEcall))
+    if (g_potaSpots && g_potaSpots.some(item => item.activator === callsign.DEcall))
     {
       callsign.pota = g_potaSpots.filter(item => item.activator === callsign.DEcall)[0];
     }

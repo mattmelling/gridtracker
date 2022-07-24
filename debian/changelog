@@ -1,3 +1,14 @@
+gridtracker (1.22.0725) unstable; urgency=low
+  - Resolved #9 Call roster columns order can be changed
+  - Resolved $95 Puts calling/called stations at the top of the call roster if sorting by Wanted
+  - Resolved #118 Introduce POTA hunting in the call roster
+  - Resolved #133 Fixes missing CloudLog Station Profile ID
+  - Resolved #150 Highlights RR73/73 the same as a station calling CQ
+  - Fixes pattern match for US 1x1 callsigns to match actual FCC rules around them.
+  - Add WSJT-X/JTDX active instance name to roster window title when operating with multiple instances.
+
+  -- Matthew Chambers <nr0q@gridtracker.org>  Sun, 24 Jul 2022 19:05:00 -0000
+
 gridtracker (1.22.0503) unstable; urgency=low
   - Increment version for build with correct NWJS version
   

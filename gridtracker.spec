@@ -1,6 +1,6 @@
 Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        {{{ git_version lead=1.22.0503 }}}
+Version:        {{{ git_version lead=1.22.0725 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        {{{ git_dir_pack }}}
@@ -40,6 +40,14 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Sun Jul 24 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0725-1
+  - Resolved #9 Call roster columns order can be changed
+  - Resolved $95 Puts calling/called stations at the top of the call roster if sorting by Wanted
+  - Resolved #118 Introduce POTA hunting in the call roster
+  - Resolved #133 Fixes missing CloudLog Station Profile ID
+  - Resolved #150 Highlights RR73/73 the same as a station calling CQ
+  - Fixes pattern match for US 1x1 callsigns to match actual FCC rules around them.
+  - Add WSJT-X/JTDX active instance name to roster window title when operating with multiple instances.
 * Mon May 02 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0503-1
 - Increment version number for build with correct vesion of NWJS
 * Mon May 02 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0502-1

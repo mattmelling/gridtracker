@@ -1,10 +1,10 @@
 {
   "name": "GridTracker",
   "product_string_do_not_use": "gridtracker",
-  "version": "1.22.0503",
+  "version": "1.22.0725",
   "betaVersion": "",
   "description": "GridTracker, an amateur radio companion",
-  "author": "Stephen Loomis (N0TTL) and GridTracker.org",
+  "author": "GridTracker.org",
   "license": "BSD-3-Clause",
   "main": "GridTracker.html",
   "window": {

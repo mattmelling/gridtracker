@@ -786,8 +786,8 @@ function processRosterHunting(callRoster, rosterSettings)
       {
         callingBg = calling + inversionAlpha;
         calling = bold;
-        // If treating RR73/73 as CQ, soften highlighting to help differentiate foreshadow from an actual CQ 
-        if (callObj.DXcall == "RR73" || callObj.DXcall == "73") 
+        // If treating RR73/73 as CQ, soften highlighting to help differentiate foreshadow from an actual CQ
+        if (callObj.DXcall == "RR73" || callObj.DXcall == "73")
         {
           callingConf = `${unconf}#90EE90${inversionAlpha};`;
           calling = `#90EE90${inversionAlpha};`

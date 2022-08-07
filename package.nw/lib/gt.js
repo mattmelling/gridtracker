@@ -5388,7 +5388,7 @@ function toggleStrikeGlobal()
   g_layerSources.strikes.clear();
 }
 
-function handleStrike( strike )
+function handleStrike(strike)
 {
   let index = Date.now();
   while (index in g_bolts) index++;
@@ -5449,7 +5449,6 @@ function handleStrike( strike )
 
     addLastTraffic(worker);
   }
-
 }
 
 function toggleMouseTrack()

@@ -9,7 +9,8 @@ var g_chatRecvFunctions = {
   info: gtChatUpdateCall,
   drop: gtChatRemoveCall,
   mesg: gtChatMessage,
-  o: gtSpotMessage
+  o: gtSpotMessage,
+  l: gtLightningStrike
 };
 
 var ChatState = Object();
@@ -235,8 +236,9 @@ function gtChatSendStatus()
   msg.mode = myMode;
   msg.band = myBand;
   msg.src = "GT";
-  msg.canmsg = g_appSettings.gtMsgEnable == true;
+  msg.canmsg = g_appSettings.gtMsgEnable;
   msg.o = g_appSettings.gtSpotEnable == true ? 1 : 0;
+  msg.l = g_mapSettings.strikes == true ? 1 : 0;
   msg = JSON.stringify(msg);
 
   if (msg != g_lastGtStatus)
@@ -593,6 +595,15 @@ function gtChatStateMachine()
 function gtSpotMessage(jsmesg)
 {
   addNewOAMSSpot(jsmesg.cid, jsmesg.db);
+}
+
+function gtLightningStrike(jsmesg)
+{
+  // Saftey check
+  if (g_mapSettings.strikes)
+  {
+    handleStrike(jsmesg);
+  }
 }
 
 function gtChatSystemInit()

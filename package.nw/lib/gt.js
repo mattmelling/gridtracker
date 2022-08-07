@@ -4665,6 +4665,7 @@ function setStrikesButton()
   {
     strikesImg.style.webkitFilter = "grayscale(1)";
   }
+  g_gtLiveStatusUpdate = true;
 }
 
 function toggleStrikesValue()
@@ -5210,8 +5211,6 @@ function displayTime()
 
   if (g_mapSettings.strikes && g_mapSettings.offlineMode == false)
   {
-    if (g_strikeWebSocket == null) loadStrikes();
-
     var now = Date.now();
     for (var time in g_bolts)
     {
@@ -5225,17 +5224,6 @@ function displayTime()
   else
   {
     g_layerSources.strikes.clear();
-    if (g_strikeWebSocket != null)
-    {
-      try
-      {
-        g_strikeWebSocket.close();
-      }
-      catch (e)
-      {
-        g_strikeWebSocket = null;
-      }
-    }
   }
 
   if (g_currentNightState != g_nightTime)
@@ -5382,20 +5370,17 @@ g_lightningGlobal[1] = new ol.style.Icon({
 });
 
 var g_bolts = {};
-var g_strikeWebSocket = null;
-var g_strikeInterval = null;
 var g_strikeRange = 0.4;
 
 function toggleStrikeGlobal()
 {
-  g_mapSettings.strikesGlobal =
-    g_mapSettings.strikesGlobal == false;
+  g_mapSettings.strikesGlobal = g_mapSettings.strikesGlobal == false;
   saveMapSettings();
 
-  var msg = "Local Strikes";
+  let msg = "Local Strikes";
   if (g_mapSettings.strikesGlobal == true) msg = "Global Strikes";
 
-  var worker =
+  let worker =
     "<font color='yellow'>Strike Distance Changed<br/>" + msg + "</font>";
   if (g_mapSettings.strikes == false) { worker += "<br/><font color='red'>Detection is not enabled!</font>"; }
   addLastTraffic(worker);
@@ -5403,169 +5388,68 @@ function toggleStrikeGlobal()
   g_layerSources.strikes.clear();
 }
 
-function setStrikeDistance()
+function handleStrike( strike )
 {
+  let index = Date.now();
+  while (index in g_bolts) index++;
+
+  let inRange = true;
+
+  if (Math.abs(strike.o - g_myLon) > g_strikeRange) inRange = false;
+
+  if (Math.abs(strike.a - g_myLat) > g_strikeRange) inRange = false;
+
   if (
-    g_mapSettings.offlineMode == true &&
-    g_strikeWebSocket != null &&
-    g_strikeWebSocket.readyState != 3
+    g_mapSettings.strikesGlobal ||
+    (g_mapSettings.strikesGlobal == false && inRange)
   )
   {
-    g_strikeWebSocket.close();
-    return;
+    g_bolts[index] = iconFeature(
+      ol.proj.fromLonLat([strike.o, strike.a]),
+      inRange ? g_lightningBolt : g_lightningGlobal[0],
+      1
+    );
+
+    g_layerSources.strikes.addFeature(g_bolts[index]);
   }
 
-  if (g_strikeWebSocket != null)
+  if (inRange == true)
   {
-    var distance = g_strikeRange;
-    if (g_mapSettings.strikesGlobal == true) distance = 1000;
+    playStrikeAlert();
 
-    var send = "{\"west\":-180,\"east\":180,\"north\":-90,\"south\":-90}";
+    let dist =
+      parseInt(
+        MyCircle.distance(
+          g_myLat,
+          g_myLon,
+          strikes.a,
+          strikes.o,
+          distanceUnit.value
+        ) * MyCircle.validateRadius(distanceUnit.value)
+      ).toLocaleString() +
+      " " +
+      distanceUnit.value.toLowerCase();
+    let azim =
+      parseInt(
+        MyCircle.bearing(g_myLat, g_myLon, strike.a, strike.o)
+      ).toLocaleString() + "&deg;";
 
-    if (g_strikeInterval == null) { g_strikeInterval = setInterval(setStrikeDistance, 300000); }
+    let worker =
+      "<font style='color:yellow;font-weight:bold'>Lighting Strike Detected!</font><br/>";
+    worker +=
+      "<font style='color:white'>" + userTimeString(null) + "</font><br/>";
+    worker +=
+      "<font style='color:orange'>Distance: </font><font style='color:lightblue;font-weight:bold'>" +
+      dist +
+      "</font><br/>";
+    worker +=
+      "<font style='color:cyan'>Bearing: </font><font style='color:lightgreen;font-weight:bold'>" +
+      azim +
+      "</font>";
 
-    try
-    {
-      g_strikeWebSocket.send(send);
-    }
-    catch (e)
-    {
-      g_strikeWebSocket = null;
-    }
-  }
-  else
-  {
-    if (g_strikeInterval != null)
-    {
-      clearInterval(g_strikeInterval);
-      g_strikeInterval = null;
-    }
-  }
-}
-
-var g_strikeCount = 0;
-function loadStrikes()
-{
-  if (g_strikeWebSocket) return;
-
-  var rnd = parseInt(Math.random() * 4);
-  var ws_server = "";
-  if (rnd < 1)
-  {
-    ws_server = "ws7.blitzortung.org";
-  }
-  else if (rnd < 2)
-  {
-    ws_server = "ws6.blitzortung.org";
-  }
-  else if (rnd < 3)
-  {
-    ws_server = "ws5.blitzortung.org";
-  }
-  else
-  {
-    ws_server = "ws1.blitzortung.org";
+    addLastTraffic(worker);
   }
 
-  try
-  {
-    g_strikeWebSocket = new WebSocket("wss:///" + ws_server + ":3000");
-  }
-  catch (e)
-  {
-    g_strikeWebSocket = null;
-    return;
-  }
-
-  g_strikeWebSocket.onopen = function ()
-  {
-    setStrikeDistance();
-  };
-
-  g_strikeWebSocket.onmessage = function (evt)
-  {
-    var Strikes = JSON.parse(evt.data);
-    Strikes.sig = null;
-
-    if (
-      "delay" in Strikes &&
-      "time" in Strikes &&
-      "lat" in Strikes &&
-      "lon" in Strikes
-    )
-    {
-      var index = Date.now();
-      while (index in g_bolts) index++;
-
-      var inRange = true;
-
-      if (Math.abs(Strikes.lon - g_myLon) > g_strikeRange) inRange = false;
-
-      if (Math.abs(Strikes.lat - g_myLat) > g_strikeRange) inRange = false;
-
-      if (
-        g_mapSettings.strikesGlobal ||
-        (g_mapSettings.strikesGlobal == false && inRange)
-      )
-      {
-        g_bolts[index] = iconFeature(
-          ol.proj.fromLonLat([Strikes.lon, Strikes.lat]),
-          inRange ? g_lightningBolt : g_lightningGlobal[0],
-          1
-        );
-
-        g_layerSources.strikes.addFeature(g_bolts[index]);
-      }
-
-      if (inRange == true)
-      {
-        playStrikeAlert();
-
-        var dist =
-          parseInt(
-            MyCircle.distance(
-              g_myLat,
-              g_myLon,
-              Strikes.lat,
-              Strikes.lon,
-              distanceUnit.value
-            ) * MyCircle.validateRadius(distanceUnit.value)
-          ).toLocaleString() +
-          " " +
-          distanceUnit.value.toLowerCase();
-        var azim =
-          parseInt(
-            MyCircle.bearing(g_myLat, g_myLon, Strikes.lat, Strikes.lon)
-          ).toLocaleString() + "&deg;";
-
-        var worker =
-          "<font style='color:yellow;font-weight:bold'>Lighting Strike Detected!</font><br/>";
-        worker +=
-          "<font style='color:white'>" + userTimeString(null) + "</font><br/>";
-        worker +=
-          "<font style='color:orange'>Distance: </font><font style='color:lightblue;font-weight:bold'>" +
-          dist +
-          "</font><br/>";
-        worker +=
-          "<font style='color:cyan'>Bearing: </font><font style='color:lightgreen;font-weight:bold'>" +
-          azim +
-          "</font>";
-
-        addLastTraffic(worker);
-      }
-    }
-    delete evt.data;
-  };
-
-  g_strikeWebSocket.onerror = function ()
-  {
-    g_strikeWebSocket = null;
-  };
-
-  g_strikeWebSocket.onclose = function ()
-  {
-    g_strikeWebSocket = null;
-  };
 }
 
 function toggleMouseTrack()

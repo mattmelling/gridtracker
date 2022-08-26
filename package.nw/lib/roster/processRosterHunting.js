@@ -167,7 +167,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for callsigns
         let awardTrackerCallsOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "call"){
+          if (awardTracker[key].rule.type === "call") {
             awardTrackerCallsOverride = true;
           }
         })
@@ -250,7 +250,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for grids
         let awardTrackerGridsOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "grids"){
+          if (awardTracker[key].rule.type === "grids") {
             awardTrackerGridsOverride = true;
           }
         })
@@ -306,7 +306,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for DXCC
         let awardTrackerDXCCOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "dxcc"){
+          if (awardTracker[key].rule.type === "dxcc") {
             awardTrackerDXCCOverride = true;
           }
         })
@@ -383,7 +383,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for US States
         let awardTrackerStatesOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "states"){
+          if (awardTracker[key].rule.type === "states") {
             awardTrackerStatesOverride = true;
           }
         })
@@ -447,7 +447,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for US Counties
         let awardTrackerCountiesOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "cnty"){
+          if (awardTracker[key].rule.type == "cnty") {
             awardTrackerCountiesOverride = true;
           }
         })
@@ -567,7 +567,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for CQ Zones
         let awardTrackerCqZonesOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "cqz"){
+          if (awardTracker[key].rule.type == "cqz") {
             awardTrackerCqZonesOverride = true;
           }
         })
@@ -714,7 +714,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for WPX (Prefixes)
         let awardTrackerPrefixOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "px"){
+          if (awardTracker[key].rule.type == "px") {
             awardTrackerPrefixOverride = true;
           }
         })
@@ -770,7 +770,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for Continents
         let awardTrackerContOverride = false;
         Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "cont"){
+          if (awardTracker[key].rule.type == "cont") {
             awardTrackerContOverride = true;
           }
         })

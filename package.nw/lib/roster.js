@@ -324,7 +324,7 @@ function viewRoster()
 {
   let rosterSettings = prepareRosterSettings();
   processRosterFiltering(callRoster, rosterSettings);
-  processRosterHunting(callRoster, rosterSettings);
+  processRosterHunting(callRoster, rosterSettings, g_awardTracker);
   renderRoster(callRoster, rosterSettings);
   sendAlerts(callRoster, rosterSettings);
 }

@@ -254,7 +254,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
             awardTrackerGridsOverride = true;
           }
         })
-        if ((huntGrid.checked || awardTrackerGridsOverride ) && callObj.grid.length > 1)
+        if ((huntGrid.checked || awardTrackerGridsOverride) && callObj.grid.length > 1)
         {
           let hash = callObj.grid.substr(0, 4) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)

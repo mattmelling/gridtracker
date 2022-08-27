@@ -7334,10 +7334,9 @@ function handleWsjtxDecode(newMessage)
           if (locality == null)
           {
             // Check the prefix for dxcc direct
-            var dxcc = callsignToDxcc(CCd);
-            if (dxcc != -1)
+            if (CCd in g_prefixToMap)
             {
-              locality = g_worldGeoData[g_dxccToGeoData[dxcc]].geo;
+              locality = g_worldGeoData[g_prefixToMap[CCd]].geo;
               if (locality == "deleted") locality = null;
             }
           }
@@ -7412,7 +7411,7 @@ function handleWsjtxDecode(newMessage)
     "</td><td>" +
     newMessage.MO +
     "</td><td style='color:" +
-    messageColor +
+    (CQ ? "cyan" : "white") +
     "'>" +
     htmlEntities(newMessage.Msg) +
     "</td><td style='color:yellow'>" +

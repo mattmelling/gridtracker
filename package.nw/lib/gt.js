@@ -6917,7 +6917,7 @@ function handleWsjtxDecode(newMessage)
     var hash = msgDEcallsign + newMessage.OB + newMessage.OM;
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
 
-    if (validQTH == "" && msgDEcallsign in g_gtCallsigns)
+    if (validQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
     {
       if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0) { validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid; }
     }

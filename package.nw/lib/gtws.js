@@ -109,7 +109,8 @@ function gtConnectChat()
       }
       else
       {
-        g_gtState = ChatState.error;
+        // Not fatal!
+        console.log("Unknown oams message '" + jsmesg.type + "' ignoring");
       }
     }
   };

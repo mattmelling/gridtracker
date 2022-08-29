@@ -174,8 +174,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           px: false,
           cont: false
         };
-        // import const from roster.js?
-        const LOGBOOK_AWARD_TRACKER = 6;
         if (g_rosterSettings.reference == LOGBOOK_AWARD_TRACKER) {
           for (let key in awardTracker) {
             awardTrackerOverrides[awardTracker[key].rule.type] = true;

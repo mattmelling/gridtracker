@@ -163,15 +163,27 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
             callObj.style.call = "class='dxCaller'";
           }
         }
+        // award tracker overrides
+        let awardTrackerOverrides = {
+          call: false,
+          grids: false,
+          dxcc: false,
+          states: false,
+          cnty: false,
+          cqz: false,
+          px: false,
+          cont: false
+        };
+        // import const from roster.js?
+        const LOGBOOK_AWARD_TRACKER = 6;
+        if (g_rosterSettings.reference == LOGBOOK_AWARD_TRACKER) {
+          for (let key in awardTracker) {
+            awardTrackerOverrides[awardTracker[key].rule.type] = true;
+          }
+        }
 
         // Hunting for callsigns
-        let awardTrackerCallsOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "call") {
-            awardTrackerCallsOverride = true;
-          }
-        })
-        if (huntCallsign.checked || awardTrackerCallsOverride)
+        if (huntCallsign.checked || awardTrackerOverrides.call)
         {
           let hash = callsign + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (callsign + layeredHashSuffix)
@@ -248,13 +260,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for grids
-        let awardTrackerGridsOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "grids") {
-            awardTrackerGridsOverride = true;
-          }
-        })
-        if ((huntGrid.checked || awardTrackerGridsOverride) && callObj.grid.length > 1)
+        if ((huntGrid.checked || awardTrackerOverrides.grids) && callObj.grid.length > 1)
         {
           let hash = callObj.grid.substr(0, 4) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
@@ -304,13 +310,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for DXCC
-        let awardTrackerDXCCOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "dxcc") {
-            awardTrackerDXCCOverride = true;
-          }
-        })
-        if (huntDXCC.checked || awardTrackerDXCCOverride)
+        if (huntDXCC.checked || awardTrackerOverrides.dxcc)
         {
           let hash = String(callObj.dxcc) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
@@ -381,13 +381,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for US States
-        let awardTrackerStatesOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type === "states") {
-            awardTrackerStatesOverride = true;
-          }
-        })
-        if ((huntState.checked || awardTrackerStatesOverride) && window.opener.g_callsignLookups.ulsUseEnable == true)
+        if ((huntState.checked || awardTrackerOverrides.states) && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
           let stateSearch = callObj.state;
           let finalDxcc = callObj.dxcc;
@@ -445,13 +439,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for US Counties
-        let awardTrackerCountiesOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "cnty") {
-            awardTrackerCountiesOverride = true;
-          }
-        })
-        if ((huntCounty.checked || awardTrackerCountiesOverride) && window.opener.g_callsignLookups.ulsUseEnable == true)
+        if ((huntCounty.checked || awardTrackerOverrides.cnty) && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
           let finalDxcc = callObj.dxcc;
           if (
@@ -565,13 +553,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for CQ Zones
-        let awardTrackerCqZonesOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "cqz") {
-            awardTrackerCqZonesOverride = true;
-          }
-        })
-        if (huntCQz.checked || awardTrackerCqZonesOverride)
+        if (huntCQz.checked || awardTrackerOverrides.cqz)
         {
           let huntTotal = callObj.cqza.length;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0, marathonFound = 0;
@@ -712,13 +694,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for WPX (Prefixes)
-        let awardTrackerPrefixOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "px") {
-            awardTrackerPrefixOverride = true;
-          }
-        })
-        if ((huntPX.checked || awardTrackerPrefixOverride) && callObj.px)
+        if ((huntPX.checked || awardTrackerOverrides.px) && callObj.px)
         {
           let hash = String(callObj.px) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.px) + layeredHashSuffix)
@@ -768,13 +744,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for Continents
-        let awardTrackerContOverride = false;
-        Object.keys(awardTracker).forEach(function(key) {
-          if (awardTracker[key].rule.type == "cont") {
-            awardTrackerContOverride = true;
-          }
-        })
-        if ((huntCont.checked || awardTrackerContOverride) && callObj.cont)
+        if ((huntCont.checked || awardTrackerOverrides.cont) && callObj.cont)
         {
           let hash = String(callObj.cont) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.cont) + layeredHashSuffix)

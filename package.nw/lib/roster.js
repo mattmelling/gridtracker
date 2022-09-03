@@ -1086,6 +1086,7 @@ function valuesChanged()
   g_rosterSettings.allOnlyNew = allOnlyNew.checked;
   g_rosterSettings.useRegex = useRegex.checked;
   g_rosterSettings.callsignRegex = callsignRegex.value;
+  g_rosterSettings.wanted.huntRR73 = huntRR73.checked;
 
   writeRosterSettings();
 

@@ -1,3 +1,11 @@
+gridtracker (1.22.0903) unstable; urgency=low
+  - Fixed a bug that displayed 1.25m band QSOs incorrectly.
+  - Fixed broken DXCC CQ highlighting and Statistics CQ highlighting.
+  - Fixed an exception that occurs when the OAMS server is restarting.
+  - Resolved #159 where the Wade Hampton Census area should be the Kusilvak Census Area.
+  
+  -- Matthew Chambers <nr0q@gridtracker.org>  Sat, 03 Sep 2022 15:26:00 -0000
+
 gridtracker (1.22.0725) unstable; urgency=low
   - Resolved #9 Call roster columns order can be changed
   - Resolved $95 Puts calling/called stations at the top of the call roster if sorting by Wanted

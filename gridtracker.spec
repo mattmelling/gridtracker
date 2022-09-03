@@ -45,6 +45,7 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
   - Fixed broken DXCC CQ highlighting and Statistics CQ highlighting.
   - Fixed an exception that occurs when the OAMS server is restarting.
   - Resolved #159 where the Wade Hampton Census area should be the Kusilvak Census Area.
+  - Fixed where using the Award Tracker didn't override and hide the Wanted select of the call roster. This was the behavior prior to the call roster refactor.
 * Sun Jul 24 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0725-1
   - Resolved #9 Call roster columns order can be changed
   - Resolved $95 Puts calling/called stations at the top of the call roster if sorting by Wanted

@@ -6906,7 +6906,7 @@ function handleWsjtxDecode(newMessage)
       msgDEcallsign = decodeWords[1];
     }
 
-    if (decodeWords[2] == "RR73")
+    if (g_callRosterWindowHandle.window.g_rosterSettings == huntRR73 && decodeWords[2] == "RR73")
     {
       CQ = true;
       msgDXcallsign = "RR73";

@@ -324,7 +324,7 @@ function viewRoster()
 {
   let rosterSettings = prepareRosterSettings();
   processRosterFiltering(callRoster, rosterSettings);
-  processRosterHunting(callRoster, rosterSettings);
+  processRosterHunting(callRoster, rosterSettings, g_awardTracker);
   renderRoster(callRoster, rosterSettings);
   sendAlerts(callRoster, rosterSettings);
 }
@@ -855,18 +855,10 @@ function setVisual()
   // Award Hunter
   if (referenceNeed.value == LOGBOOK_AWARD_TRACKER)
   {
-    /* for ( key in g_rosterSettings.wanted )
-    {
-      document.getElementById(key).checked = true;
-      let t = key.replace("hunt","");
-      if ( t in g_rosterSettings.columns )
-        g_rosterSettings.columns[t] = true;
-    } */
-
     HuntModeControls.style.display = "none";
     CallsignsControls.style.display = "none";
     AwardTrackerControls.style.display = "";
-    huntingMatrixDiv.style.display = "";
+    huntingMatrixDiv.style.display = "none";
     updateAwardList();
   }
   else

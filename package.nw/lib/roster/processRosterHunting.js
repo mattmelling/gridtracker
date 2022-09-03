@@ -1,4 +1,4 @@
-function processRosterHunting(callRoster, rosterSettings)
+function processRosterHunting(callRoster, rosterSettings, awardTracker)
 {
   // these lets, do they rely on anything between the top and here?
   // if not could they be put in the let list at the beginning?
@@ -163,9 +163,25 @@ function processRosterHunting(callRoster, rosterSettings)
             callObj.style.call = "class='dxCaller'";
           }
         }
+        // award tracker overrides
+        let awardTrackerOverrides = {
+          call: false,
+          grids: false,
+          dxcc: false,
+          states: false,
+          cnty: false,
+          cqz: false,
+          px: false,
+          cont: false
+        };
+        if (g_rosterSettings.reference == LOGBOOK_AWARD_TRACKER) {
+          for (let key in awardTracker) {
+            awardTrackerOverrides[awardTracker[key].rule.type] = true;
+          }
+        }
 
         // Hunting for callsigns
-        if (huntCallsign.checked == true)
+        if (huntCallsign.checked || awardTrackerOverrides.call)
         {
           let hash = callsign + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (callsign + layeredHashSuffix)
@@ -242,7 +258,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for grids
-        if (huntGrid.checked == true && callObj.grid.length > 1)
+        if ((huntGrid.checked || awardTrackerOverrides.grids) && callObj.grid.length > 1)
         {
           let hash = callObj.grid.substr(0, 4) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
@@ -292,7 +308,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for DXCC
-        if (huntDXCC.checked == true)
+        if (huntDXCC.checked || awardTrackerOverrides.dxcc)
         {
           let hash = String(callObj.dxcc) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
@@ -363,7 +379,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for US States
-        if (huntState.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
+        if ((huntState.checked || awardTrackerOverrides.states) && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
           let stateSearch = callObj.state;
           let finalDxcc = callObj.dxcc;
@@ -421,7 +437,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for US Counties
-        if (huntCounty.checked == true && window.opener.g_callsignLookups.ulsUseEnable == true)
+        if ((huntCounty.checked || awardTrackerOverrides.cnty) && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
           let finalDxcc = callObj.dxcc;
           if (
@@ -535,7 +551,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for CQ Zones
-        if (huntCQz.checked == true)
+        if (huntCQz.checked || awardTrackerOverrides.cqz)
         {
           let huntTotal = callObj.cqza.length;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0, marathonFound = 0;
@@ -676,7 +692,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for WPX (Prefixes)
-        if (huntPX.checked == true && callObj.px)
+        if ((huntPX.checked || awardTrackerOverrides.px) && callObj.px)
         {
           let hash = String(callObj.px) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.px) + layeredHashSuffix)
@@ -726,7 +742,7 @@ function processRosterHunting(callRoster, rosterSettings)
         }
 
         // Hunting for Continents
-        if (huntCont.checked == true && callObj.cont)
+        if ((huntCont.checked || awardTrackerOverrides.cont) && callObj.cont)
         {
           let hash = String(callObj.cont) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.cont) + layeredHashSuffix)

@@ -5607,7 +5607,7 @@ function initMap()
           ) + distanceUnit.value.toLowerCase();
         var azim =
           parseInt(MyCircle.bearing(g_myLat, g_myLon, LL[1], LL[0])) + "&deg;";
-        var gg = latLonToGridSquare(LL[1], LL[0]);
+        var gg = latLonToGridSquare(LL[1], LL[0], (g_appSettings.sixWideMode == 1 ? 6 : 4));
         mouseTrackDiv.innerHTML =
           LL[1].toFixed(3) +
           ", " +

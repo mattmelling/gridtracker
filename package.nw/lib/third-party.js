@@ -13,12 +13,12 @@
 // How Can One Convert From Lat/Long to Grid Square
 // http://ham.stackexchange.com/questions/221/how-can-one-convert-from-lat-long-to-grid-square
 //
-function latLonToGridSquare(param1,param2){
-  var lat=-100.0;
-  var lon=0.0;
-  var adjLat,adjLon,GLat,GLon,nLat,nLon,gLat,gLon,rLat,rLon;
-  var U = 'ABCDEFGHIJKLMNOPQRSTUVWX'
-  var L = U.toLowerCase();
+function latLonToGridSquare(param1,param2, width = 4){
+  let lat=-100.0;
+  let lon=0.0;
+  let adjLat,adjLon,GLat,GLon,nLat,nLon,gLat,gLon,rLat,rLon;
+  let U = 'ABCDEFGHIJKLMNOPQRSTUVWX';
+
   // support Chris Veness 2002-2012 LatLon library and
   // other objects with lat/lon properties
   // properties could be getter functions, numbers, or strings
@@ -69,9 +69,19 @@ function latLonToGridSquare(param1,param2){
   GLon = U[Math.trunc(adjLon/20)];
   nLat = ''+Math.trunc(adjLat % 10);
   nLon = ''+Math.trunc((adjLon/2) % 10);
- // gLat = L[Math.trunc(rLat/2.5)];
-//  gLon = L[Math.trunc(rLon/5)];
-  return GLon+GLat+nLon+nLat;
+  
+  if (width == 4)
+  {
+    return GLon+GLat+nLon+nLat;
+  }
+  else
+  {
+    rLat = (adjLat - Math.trunc(adjLat)) * 60;
+    rLon = (adjLon - 2*Math.trunc(adjLon/2)) *60;
+    gLat = U[Math.trunc(rLat/2.5)];
+    gLon = U[Math.trunc(rLon/5)];
+    return GLon+GLat+nLon+nLat+gLon+gLat;
+  }
 }
 
 

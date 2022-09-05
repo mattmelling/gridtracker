@@ -1,6 +1,6 @@
 Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        {{{ git_version lead=1.22.0725 }}}
+Version:        {{{ git_version lead=1.22.0903 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        {{{ git_dir_pack }}}
@@ -40,6 +40,13 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Sat Sep 03 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0903-1
+  - Fixed a bug that displayed 1.25m band QSOs incorrectly.
+  - Fixed broken DXCC CQ highlighting and Statistics CQ highlighting.
+  - Fixed an exception that occurs when the OAMS server is restarting.
+  - Resolved #159 where the Wade Hampton Census area should be the Kusilvak Census Area.
+  - Fixed where using the Award Tracker didn't override and hide the Wanted select of the call roster. This was the behavior prior to the call roster refactor.
+  - Fix lightening strike display/alerts, this data now flows through OAMS rather then trying to poll direct from Blitzkrieg. 
 * Sun Jul 24 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0725-1
   - Resolved #9 Call roster columns order can be changed
   - Resolved $95 Puts calling/called stations at the top of the call roster if sorting by Wanted

@@ -17,7 +17,7 @@
 <html lang="en" xml:lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Callsign Lookup</title>
+    <title data-i18n="lookup.title">Callsign Lookup</title>
     <link rel="stylesheet" href="./lib/style.css" />
     <script src="./lib/protos.js" type="text/javascript"></script>
     <script src="./lib/screens.js"></script>
@@ -118,25 +118,20 @@
     >
       <div id="lookupBoxDiv" class="lookupContent" style="display: block; overflow: auto; overflow-x: hidden">
         <div>
-          Callsign<input
-            id="lookupCallsignInput"
-            type="text"
-            class="inputTextValue"
-            size="12"
-            onkeyup="if (event.keyCode === 13) lookupButtonID.click();"
-            oninput="ValidateCallsign(this,null);"
-          />
+          <label data-i18n="lookup.callsign.label" for="lookupCallsignInput">Callsign</label>
+          <input
+            id="lookupCallsignInput" type="text" class="inputTextValue" size="12" onkeyup="if (event.keyCode === 13) lookupButtonID.click();" oninput="ValidateCallsign(this,null);"/>
           <div
+            data-i18n="lookup.callsign.button"
             id="lookupButtonID"
             title="Lookup Callsign"
             class="button"
-            onclick="if ( ValidateCallsign(lookupCallsignInput,null) ) { lookupCallsign(lookupCallsignInput.value, null, false);}"
-          >
+            onclick="if ( ValidateCallsign(lookupCallsignInput,null) ) { lookupCallsign(lookupCallsignInput.value, null, false);}">
             Lookup
           </div>
         </div>
         <div id="lookupLocalDiv"></div>
-        <div id="lookupInfoDiv">No Callsign information to display<br />try a lookup!</div>
+        <div data-i18n="lookup.noinfo" id="lookupInfoDiv">No Callsign information to display<br />try a lookup!</div>
       </div>
     </div>
   </body>

@@ -357,7 +357,7 @@ function addNewAlert()
     if (alertMediaSelect.value == "none")
     {
       valid = false;
-      error = "Select File!";
+      error = $.i18n("alerts.addNew.SelectFile");
     }
     else
     {

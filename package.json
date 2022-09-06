@@ -18,6 +18,7 @@
     "dist-win": "build --concurrent --tasks win-x86,win-x64 package.nw",
     "distsome": "build --debug --tasks linux-x64,mac-x64 package.nw",
     "start": "run package.nw",
-    "start-x64": "run --x64 package.nw"
+    "start-x64": "run --x64 package.nw",
+    "postinstall": "cd package.nw && npm install"
   }
 }

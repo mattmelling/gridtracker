@@ -1576,15 +1576,12 @@ function init()
   g_callsignDatabaseDXCC = window.opener.g_callsignDatabaseDXCC;
   g_callsignDatabaseUS = window.opener.g_callsignDatabaseUS;
   g_callsignDatabaseUSplus = window.opener.g_callsignDatabaseUSplus;
-
   loadAwardJson();
 
   updateWorked();
-
   // addAllAwards();
 
   window.addEventListener("message", receiveMessage, false);
-
   lockNewWindows();
 
   if (window.opener.g_mapSettings.offlineMode == false)
@@ -1597,9 +1594,14 @@ function init()
       80
     );
   }
-
   loadSettings();
+  loadRosteri18n();
+  g_timerInterval = setInterval(realtimeRoster, 1000);
+  updateInstances();
+}
 
+function addControls()
+{
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
   for (const key in g_rosterSettings.wanted)
@@ -1687,7 +1689,8 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Lookup",
+    // label: "Lookup",
+    label: $.i18n("roster.menu.Lookup"),
     click: function ()
     {
       callLookup(g_targetHash, "");
@@ -1698,7 +1701,8 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Gen Msgs",
+    // label: "Gen Msgs",
+    label: $.i18n("roster.menu.GenMesg"),
     click: function ()
     {
       callGenMessage(g_targetHash, "");
@@ -2131,7 +2135,6 @@ function init()
   document.addEventListener("keydown", onMyKeyDown, false);
 
   initDXCCSelector();
-
   g_timerInterval = nodeTimers.setInterval(realtimeRoster, 1000);
 
   updateInstances();

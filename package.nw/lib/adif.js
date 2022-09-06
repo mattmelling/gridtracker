@@ -108,6 +108,36 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
   {
     let finalMode = "";
 
+    let appLoTW_RXQSO = findAdiField(
+      activeAdifArray[x],
+      "APP_LoTW_RXQSO"
+    );
+
+    if (appLoTW_RXQSO != "")
+    {
+      let dRXQSO = Date.parse(appLoTW_RXQSO);
+      let dLastLOTW_QSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
+      if ((isNaN(dRXQSO) == false) && (isNaN(dLastLOTW_QSO) == false) && (dRXQSO > dLastLOTW_QSO))
+      {
+        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+      }
+    }
+
+    let appLoTW_RXQSL = findAdiField(
+      activeAdifArray[x],
+      "APP_LoTW_RXQSL"
+    );
+
+    if (appLoTW_RXQSL != "")
+    {
+      let dRXQSL = Date.parse(appLoTW_RXQSL);
+      let dLastLOTW_QSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
+      if ((isNaN(dRXQSL) == false) && (isNaN(dLastLOTW_QSL) == false) && (dRXQSL > dLastLOTW_QSL))
+      {
+        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+      }
+    }
+
     if (activeAdifArray[x].length > 3)
     {
       if (activeAdifLogMode)
@@ -737,6 +767,27 @@ function grabLoTWQSL()
       "g_isGettingLOTW",
       120000
     );
+
+    // Fetch QSLs
+    var tQSO = setTimeout(function()
+    {
+      if (test == false) lotwLogLoaded = true;
+      getABuffer(
+        "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
+          lotwLogin.value +
+          "&password=" +
+          encodeURIComponent(lotwPassword.value) +
+          "&qso_query=1&qso_qsl=yes&qso_qsldetail=yes&qso_withown=yes" +
+          lastQSLDateString,
+        lotwCallback,
+        test,
+        "https",
+        443,
+        lotwLogImg,
+        "g_isGettingLOTW",
+        120000
+      );
+    }, 10000);
   }
 }
 

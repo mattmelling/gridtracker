@@ -15240,7 +15240,11 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
   worker += makeRow("Polish OT", lookup, "plot");
   worker += makeRow("German DOK", lookup, "dok");
   worker += makeYesNoRow("DOK is Sonder-DOK", lookup, "sondok");
-  worker += makeRow("DXCC", lookup, "dxcc");
+  // worker += makeRow("DXCC", lookup, "dxcc");
+  worker +=
+    "<tr><td>DXCC</td><td>" +
+    getLookProp(lookup, "dxcc") + " - " + g_dxccToAltName[getLookProp(lookup, "dxcc")] +
+    "</td></tr>";
   worker += makeRow("CQ zone", lookup, "cqzone");
   worker += makeRow("ITU zone", lookup, "ituzone");
   worker += makeRow("IOTA", lookup, "iota");

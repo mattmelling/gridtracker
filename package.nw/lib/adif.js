@@ -2864,7 +2864,7 @@ function aclAction(action)
 
 function adifField(record, key)
 {
-  if (key in record) return record[key];
+  if (key in record) return record[key].trim();
   else return "";
 }
 function sendACLogMessage(record, port, address)

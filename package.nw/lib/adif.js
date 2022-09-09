@@ -2864,7 +2864,7 @@ function aclAction(action)
 
 function adifField(record, key)
 {
-  if (key in record) return record[key];
+  if (key in record) return record[key].trim();
   else return "";
 }
 function sendACLogMessage(record, port, address)
@@ -2938,7 +2938,10 @@ function sendACLogMessage(record, port, address)
   );
   report += aclUpdateControlValue("TXTENTRYITUZ", adifField(record, "ITUZ"));
   report += aclUpdateControlValue("TXTENTRYCQZONE", adifField(record, "CQZ"));
-  report += aclUpdateControlValue("TXTENTRYCOUNTYR", adifField(record, "CNTY"));
+  report += aclUpdateControlValue(
+    "TXTENTRYCOUNTYR",
+    adifField(record, "CNTY").replaceAll(", ", ",")
+  );
 
   var sentSpcNum = false;
   if (adifField(record, "SRX").length > 0)

@@ -2939,7 +2939,7 @@ function sendACLogMessage(record, port, address)
   report += aclUpdateControlValue("TXTENTRYITUZ", adifField(record, "ITUZ"));
   report += aclUpdateControlValue("TXTENTRYCQZONE", adifField(record, "CQZ"));
   report += aclUpdateControlValue(
-    "TXTENTRYCOUNTYR", 
+    "TXTENTRYCOUNTYR",
     adifField(record, "CNTY").replaceAll(", ", ",")
   );
 

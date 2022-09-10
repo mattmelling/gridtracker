@@ -47,7 +47,7 @@
     "badge": "img/emojis/pizza.png",
     "message": "GridTracker Tester"
   },
-  "KE0UL": {
+  "KE5EI": {
     "badge": "img/emojis/grandfather.png",
     "message": "GridTracker's Grandfather"
   },
@@ -85,6 +85,10 @@
   },
   "WA4YA": {
     "badge": "img/emojis/trophy.png",
+    "message": "GridTracker Developer"
+  },
+  "KE0YBL": {
+    "badge": "img/emojis/tractor.png",
     "message": "GridTracker Developer"
   }
 }

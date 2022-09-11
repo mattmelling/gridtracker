@@ -382,8 +382,8 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "POTA",
       rawAttrs: callObj.style.pota,
-      title: callObj.pota ? callObj.pota.name : "",
-      html: callObj.pota ? callObj.pota.reference : ""
+      title: callObj.pota ? window.opener.g_pota.places[callObj.pota[0]].name : "",
+      html: callObj.pota ? callObj.pota[0] : ""
     })
   },
 

@@ -171,6 +171,7 @@ var g_flightDuration = 30;
 
 var g_crScript = g_appSettings.crScript;
 var g_spotsEnabled = g_appSettings.spotsEnabled;
+var g_potaEnabled = g_appSettings.potaEnabled;
 var g_heatEnabled = g_appSettings.heatEnabled;
 
 var g_myLat = g_mapSettings.latitude;
@@ -796,7 +797,8 @@ function toggleOffline()
     buttonStrikesDiv.style.display = "inline-block";
     buttonPSKSpotsBoxDiv.style.display = "inline-block";
     donateButton.style.display = "inline-block";
-
+    potaButton.style.display = "inline-block";
+    
     if (g_appSettings.gtShareEnable == true)
     {
       gtFlagButton.style.display = "inline-block";
@@ -840,6 +842,7 @@ function toggleOffline()
     gtShareButton.style.display = "none";
     msgButton.style.display = "none";
     donateButton.style.display = "none";
+    potaButton.style.display = "none";
     buttonStrikesDiv.style.display = "none";
     buttonPSKSpotsBoxDiv.style.display = "none";
     setGtShareButtons();
@@ -6906,7 +6909,7 @@ function handleWsjtxDecode(newMessage)
       msgDEcallsign = decodeWords[1];
     }
 
-    if (g_callRosterWindowHandle.window.g_rosterSettings.wanted.huntRR73 && decodeWords[2] == "RR73")
+    if (decodeWords[2] == "RR73" && g_callRosterWindowHandle.window.g_rosterSettings.wanted.huntRR73)
     {
       CQ = true;
       msgDXcallsign = "RR73";
@@ -7111,9 +7114,25 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    if (g_potaSpots && g_potaSpots.some(item => item.activator === callsign.DEcall))
+    if (g_potaEnabled == 1 && (callsign.DEcall in g_pota.spots || callsign.DEcall in g_pota.schedule))
     {
-      callsign.pota = g_potaSpots.filter(item => item.activator === callsign.DEcall)[0];
+      let now = Date.now();
+      callsign.pota = [];
+      if (callsign.DEcall in g_pota.spots)
+      {
+        // copies the entire array
+        callsign.pota = g_pota.spots[callsign.DEcall];
+      }
+      if (callsign.DEcall in g_pota.schedule)
+      {
+        for (let i in g_pota.schedule[callsign.DEcall])
+        {
+          if (now < g_pota.schedule[callsign.DEcall][i].end && now >= g_pota.schedule[callsign.DEcall][i].start && !callsign.pota.includes(g_pota.schedule[callsign.DEcall][i].id))
+          {
+            callsign.pota.push(g_pota.schedule[callsign.DEcall][i].id);
+          }
+        }
+      }
     }
 
     if (newMessage.NW)
@@ -12851,7 +12870,7 @@ function loadMapSettings()
 
   trafficDecode.checked = g_mapSettings.trafficDecode;
 
-  pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1);";
+  pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
 
   g_bandToColor = JSON.parse(JSON.stringify(g_pskColors));
 
@@ -13355,6 +13374,7 @@ function loadMsgSettings()
 
   pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
 
+  
   for (var key in g_msgSettings)
   {
     document.getElementById(key).value = g_msgSettings[key];
@@ -13649,8 +13669,7 @@ var g_startupTable = [
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
   [gtChatSystemInit, "Chat System Initialized"],
-  [getPotaPlaces, "Loading POTA Database"],
-  [getPotaSpots, "Starting POTA Spots Pump"],
+  [initPota, "POTA Initialized"],
   [downloadAcknowledgements, "Contributor Acknowledgements Loaded"],
   [postInit, "Finalizing System"]
 ];

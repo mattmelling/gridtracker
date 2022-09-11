@@ -7116,7 +7116,6 @@ function handleWsjtxDecode(newMessage)
 
     if (g_potaEnabled == 1 && (callsign.DEcall in g_pota.spots || callsign.DEcall in g_pota.schedule))
     {
-      let now = Date.now();
       callsign.pota = [];
       if (callsign.DEcall in g_pota.spots)
       {
@@ -7125,6 +7124,7 @@ function handleWsjtxDecode(newMessage)
       }
       if (callsign.DEcall in g_pota.schedule)
       {
+        let now = Date.now();
         for (let i in g_pota.schedule[callsign.DEcall])
         {
           if (now < g_pota.schedule[callsign.DEcall][i].end && now >= g_pota.schedule[callsign.DEcall][i].start && !callsign.pota.includes(g_pota.schedule[callsign.DEcall][i].id))

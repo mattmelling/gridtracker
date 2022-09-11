@@ -13373,7 +13373,6 @@ function loadMsgSettings()
   GTspotEnable.checked = g_appSettings.gtSpotEnable;
 
   pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
-
   
   for (var key in g_msgSettings)
   {

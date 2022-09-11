@@ -174,8 +174,10 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           px: false,
           cont: false
         };
-        if (g_rosterSettings.reference == LOGBOOK_AWARD_TRACKER) {
-          for (let key in awardTracker) {
+        if (g_rosterSettings.reference == LOGBOOK_AWARD_TRACKER)
+        {
+          for (let key in awardTracker)
+          {
             awardTrackerOverrides[awardTracker[key].rule.type] = true;
           }
         }

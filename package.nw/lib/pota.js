@@ -113,7 +113,6 @@ function getPotaSpots()
   g_pota.spotsTimeout = setTimeout(getPotaSpots, 300000);
 }
 
-
 function processPotaSchedule(buffer)
 {
   try
@@ -142,7 +141,7 @@ function processPotaSchedule(buffer)
 
 function getPotaSchedule()
 {
-   if (g_pota.scheduleTimeout)
+  if (g_pota.scheduleTimeout)
   {
     clearTimeout(g_pota.scheduleTimeout);
     g_pota.scheduleTimeout = null;

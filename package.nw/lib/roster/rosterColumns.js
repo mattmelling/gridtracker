@@ -408,10 +408,14 @@ function potaColumnRef(callObj)
     if (callObj.pota.length == 1)
     {
       value = callObj.pota[0];
-    } else {
+    }
+    else
+    {
       value = callObj.pota[0] + "..."
     }
-  } else {
+  }
+  else
+  {
     value = callObj.pota.reference;
   }
   return value;
@@ -426,12 +430,17 @@ function potaColumnHover(callObj)
     if (callObj.pota.length == 1)
     {
       value = window.opener.g_pota.places[callObj.pota[0]].name;
-    } else {
-      callObj.pota.forEach(potaRef => {
+    }
+    else
+    {
+      callObj.pota.forEach(potaRef =>
+      {
         value += potaRef + " - " + window.opener.g_pota.places[callObj.pota[potaRef]].name + "</br>";
       });
     }
-  } else {
+  }
+  else
+  {
     value = callObj.pota.name;
   }
   return value;

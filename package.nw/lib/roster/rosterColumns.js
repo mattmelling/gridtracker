@@ -382,8 +382,9 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "POTA",
       rawAttrs: callObj.style.pota,
-      title: callObj.pota ? window.opener.g_pota.places[callObj.pota[0]].name : "",
-      html: callObj.pota ? callObj.pota[0] : ""
+      title: potaColumnHover(callObj),
+      html: potaColumnRef(callObj)
+      // html: callObj.pota ? callObj.pota[0] : ""
     })
   },
 
@@ -395,6 +396,45 @@ const ROSTER_COLUMNS = {
       html: wantedColumnParts(callObj).join(" - ", { html: true })
     })
   }
+}
+
+function potaColumnRef(callObj)
+{
+  if (!callObj.pota || callObj.pota.length == 0) return "";
+
+  let value = "";
+  if (Array.isArray(callObj.pota))
+  {
+    if (callObj.pota.length == 1)
+    {
+      value = callObj.pota[0];
+    } else {
+      value = callObj.pota[0] + "..."
+    }
+  } else {
+    value = callObj.pota.reference;
+  }
+  return value;
+}
+
+function potaColumnHover(callObj)
+{
+  if (!callObj.pota || callObj.pota.length == 0) return "";
+  let value = ""
+  if (Array.isArray(callObj.pota))
+  {
+    if (callObj.pota.length == 1)
+    {
+      value = window.opener.g_pota.places[callObj.pota[0]].name;
+    } else {
+      callObj.pota.forEach(potaRef => {
+        value += potaRef + " - " + window.opener.g_pota.places[callObj.pota[potaRef]].name + "</br>";
+      });
+    }
+  } else {
+    value = callObj.pota.name;
+  }
+  return value;
 }
 
 WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];

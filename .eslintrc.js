@@ -26,7 +26,7 @@ module.exports = {
     semi: 0,
     "space-before-function-paren": 0,
     "one-var": 0,
-    no-trailing-spaces: ["error", { "skipBlankLines": true, "ignoreComments": true }],
+    "no-trailing-spaces": ["error", { skipBlankLines: true, ignoreComments: true }],
 
     /* ESLint checks we should consider fixing in the future */
     eqeqeq: 0,

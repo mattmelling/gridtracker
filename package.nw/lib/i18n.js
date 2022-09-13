@@ -5,6 +5,7 @@ function loadi18n()
       en: "i18n/en.json",
       es: "i18n/es.json",
       cn: "i18n/cn.json",
+      hk: "i18n/hk.json",
       de: "i18n/de.json",
       ja: "i18n/ja.json"
     }).done(function ()

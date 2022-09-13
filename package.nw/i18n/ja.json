@@ -480,7 +480,7 @@
     "roster.title": "Call Roster",
     "roster.haltTX": "Halt TX",
     "roster.controls.more": "More Controls",
-    "roster.controls.fewer": "Fewer Controls",
+    "roster.controls.less": "Fewer Controls",
     "roster.controls.logbook.label": "Logbook",
     "roster.controls.logbook.awardTracker": "Award Tracker",
     "roster.controls.logbook.liveBandMode": "Live Band & Mode",

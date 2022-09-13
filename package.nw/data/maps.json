@@ -5,7 +5,7 @@
     "minZoom": 0,
     "maxZoom": 19
   },
-  "Mapnik by OpenStreetMap (Deutsche)": {
+  "Mapnik by OpenStreetMap (Deutsch)": {
     "url": "http://{a-c}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png",
     "attributions": "<a href=\"http://openstreetmap.de/\" target=\"_blank\">OpenStreetMap Deutschland</a>",
     "minZoom": 0,

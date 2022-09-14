@@ -11,6 +11,14 @@ var g_pota = {
   spotsTimeout: null
 };
 
+var g_parks = {};
+
+var g_defaultPark = {
+  scheduled: false,
+  spotted: false,
+  feature: false
+}
+
 function initPota()
 {
   potaImg.style.filter = g_potaEnabled == 1 ? "" : "grayscale(1)";
@@ -37,6 +45,10 @@ function togglePota()
     }
     getPotaSchedule();
     getPotaSpots();
+  }
+  else
+  {
+     g_layerSources.pota.clear();
   }
 }
 

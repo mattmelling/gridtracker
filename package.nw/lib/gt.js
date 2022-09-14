@@ -5537,6 +5537,7 @@ function initMap()
   createGlobalMapLayer("long-grids", 3000);
   createGlobalMapLayer("short-grids", 8000, 3001);
   createGlobalMapLayer("big-grids", 50000, 3001);
+  createGlobalMapLayer("pota");
   createGlobalMapLayer("psk-flights");
   createGlobalMapLayer("psk-spots");
   createGlobalMapLayer("psk-hop");
@@ -5570,6 +5571,7 @@ function initMap()
       g_layerVectors["long-grids"],
       g_layerVectors["short-grids"],
       g_layerVectors["big-grids"],
+      g_layerVectors.pota,
       g_layerVectors["psk-flights"],
       g_layerVectors["psk-spots"],
       g_layerVectors["psk-hop"],

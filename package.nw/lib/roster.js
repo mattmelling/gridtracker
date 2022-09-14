@@ -1612,25 +1612,26 @@ function addControls()
 
   g_menu = new nw.Menu();
   g_compactMenu = new nw.Menu();
-
+  let showControlsText = $.i18n("roster.menu.ShowControls");
+  let hideControlsText = $.i18n("roster.menu.HideControls");
   let item = new nw.MenuItem({
     type: "normal",
-    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
+    label: g_rosterSettings.controls ? hideControlsText : showControlsText,
     click: function ()
     {
       if (this.label == "Hide Controls")
       {
-        this.label = "Show Controls";
+        this.label = showControlsText;
         g_rosterSettings.controls = false;
       }
       else
       {
-        this.label = "Hide Controls";
+        this.label = hideControlsText;
         g_rosterSettings.controls = true;
       }
       g_compactMenu.items[0].label = g_rosterSettings.controls
-        ? "Hide Controls"
-        : "Show Controls";
+        ? hideControlsText
+        : showControlsText;
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       setVisual();
     }
@@ -1639,22 +1640,22 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
+    label: g_rosterSettings.controls ? hideControlsText : showControlsText,
     click: function ()
     {
-      if (this.label == "Hide Controls")
+      if (this.label == hideControlsText)
       {
-        this.label = "Show Controls";
+        this.label = showControlsText;
         g_rosterSettings.controls = false;
       }
       else
       {
-        this.label = "Hide Controls";
+        this.label = hideControlsText;
         g_rosterSettings.controls = true;
       }
       g_menu.items[0].label = g_rosterSettings.controls
-        ? "Hide Controls"
-        : "Show Controls";
+        ? hideControlsText
+        : showControlsText;
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       setVisual();
     }
@@ -1663,7 +1664,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Compact Mode",
+    label: $.i18n("roster.CompactMode"),
     click: function ()
     {
       g_rosterSettings.compact = true;
@@ -1675,7 +1676,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Roster Mode",
+    label: $.i18n("roster.RosterMode"),
     click: function ()
     {
       g_rosterSettings.compact = false;
@@ -1689,7 +1690,6 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    // label: "Lookup",
     label: $.i18n("roster.menu.Lookup"),
     click: function ()
     {
@@ -1701,7 +1701,6 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    // label: "Gen Msgs",
     label: $.i18n("roster.menu.GenMesg"),
     click: function ()
     {
@@ -1717,7 +1716,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Ignore Call",
+    label: $.i18n("roster.menu.IgnoreCall"),
     click: function ()
     {
       let thisCall = callRoster[g_targetHash].DEcall;
@@ -1733,7 +1732,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Lookup",
+    label: $.i18n("roster.menu.Lookup"),
     click: function ()
     {
       callingLookup(g_targetHash, "");
@@ -1744,7 +1743,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Gen Msgs",
+    label: $.i18n("roster.menu.GenMesg"),
     click: function ()
     {
       callingGenMessage(g_targetHash, "");
@@ -1758,7 +1757,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "checkbox",
-    label: "Realtime",
+    label: $.i18n("roster.menu.Realtime"),
     checked: g_rosterSettings.realtime,
     click: function ()
     {
@@ -1774,7 +1773,7 @@ function addControls()
 
   g_menuItemForCurrentColumn = new nw.MenuItem({
     type: "normal",
-    label: "Move Column Left",
+    label: $.i18n("roster.menu.MoveLeft"),
     click: function ()
     {
       moveColumnLeft(g_currentColumnName);

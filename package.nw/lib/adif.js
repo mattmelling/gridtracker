@@ -1717,7 +1717,7 @@ function convertToDate(julian)
 
 var CLk = "25bc718451a71954cb6d0d1b50541dd45d4ba148";
 
-var lastReportHash = null;
+var g_lastReport = "";
 
 var g_oldStyleLogMessage = null;
 
@@ -1923,17 +1923,16 @@ function finishSendingReport(record, localMode)
 {
   let report = "";
 
-  let reportHash = record.CALL + record.MODE + localMode;
-
   for (let key in record)
   {
     report += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
   }
   report += "<EOR>";
 
-  if (reportHash != lastReportHash)
+  // Full record dupe check
+  if (report != g_lastReport)
   {
-    lastReportHash = reportHash;
+    g_lastReport = report;
 
     if (
       g_N1MMSettings.enable == true &&

@@ -1,17 +1,18 @@
 let languages = {
-    en: "i18n/en.json",
-    es: "i18n/es.json",
-    cn: "i18n/cn.json",
-    cnt: "i18n/cn-t.json",
-    de: "i18n/de.json",
-    ja: "i18n/ja.json"
+  en: "i18n/en.json",
+  es: "i18n/es.json",
+  cn: "i18n/cn.json",
+  cnt: "i18n/cn-t.json",
+  de: "i18n/de.json",
+  ja: "i18n/ja.json"
 };
 
-
-function loadi18n() {
-    $.i18n().load(languages).done(function () {
-        $.i18n().locale = g_appSettings.locale;
-    });
+function loadi18n()
+{
+  $.i18n().load(languages).done(function ()
+  {
+    $.i18n().locale = g_appSettings.locale;
+  });
 }
 
 function renderI18n(locale)
@@ -26,17 +27,21 @@ function changeLocale()
   renderI18n(g_appSettings.locale);
 }
 
-function loadChildWindowI18n() {
-    $.i18n().load(languages).done(function () {
-        renderI18n(window.opener.g_appSettings.locale);
-    });
+function loadChildWindowI18n()
+{
+  $.i18n().load(languages).done(function ()
+  {
+    renderI18n(window.opener.g_appSettings.locale);
+  });
 }
 
-function loadRosteri18n() {
-    $.i18n().load(languages).done(function () {
-        renderI18n(window.opener.g_appSettings.locale);
-        addControls();
-    });
+function loadRosteri18n()
+{
+  $.i18n().load(languages).done(function ()
+  {
+    renderI18n(window.opener.g_appSettings.locale);
+    addControls();
+  });
 }
 
 function renderLocale()

@@ -2616,14 +2616,6 @@ function openCallRosterWindow(show = true)
         });
       }
     );
-    try
-    {
-      // g_callRosterWindowHandle.window.loadRosteri18n();
-    }
-    catch (e)
-    {
-      console.error(e);
-    }
 
     lockNewWindows();
   }
@@ -2648,7 +2640,6 @@ function openCallRosterWindow(show = true)
           g_callRosterWindowHandle.hide();
         }
       }
-      // g_callRosterWindowHandle.window.loadRosteri18n();
     }
     catch (e)
     {

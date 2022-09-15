@@ -98,14 +98,14 @@ function ValidateCallsign(inputText, validDiv)
     {
       inputText.style.color = "#FF0";
       inputText.style.backgroundColor = "green";
-      if (validDiv) validDiv.innerHTML = "Valid!";
+      if (validDiv) validDiv.innerHTML = $.i18n("stats.Validate.Valid");
       return true;
     }
     else
     {
       inputText.style.color = "#000";
       inputText.style.backgroundColor = "yellow";
-      if (validDiv) validDiv.innerHTML = "Invalid!";
+      if (validDiv) validDiv.innerHTML = $.i18n("stats.Validate.Invalid");
       return false;
     }
   }
@@ -113,7 +113,7 @@ function ValidateCallsign(inputText, validDiv)
   {
     inputText.style.color = "#000";
     inputText.style.backgroundColor = "yellow";
-    if (validDiv) validDiv.innerHTML = "Invalid!";
+    if (validDiv) validDiv.innerHTML = $.i18n("stats.Validate.Invalid");
     return false;
   }
 }
@@ -126,6 +126,7 @@ function validateCallByElement(elementString)
 function init()
 {
   openInfoTab(event, "workedBoxDiv", "showWorkedBox");
+  loadChildWindowI18n();
 }
 
 function addTextToClipboard(data)

@@ -85,9 +85,8 @@ function makeParkFeature(park, active)
       }
       if (parkObj.feature == null)
       {
-        feature = iconFeature(ol.proj.fromLonLat(myLonLat), g_gtParkIconActive, 1);
+        parkObj.feature = iconFeature(ol.proj.fromLonLat([0,0]), g_gtParkIconActive, 1);
       }
-      let feature = iconFeature(ol.proj.fromLonLat(myLonLat), g_gtParkIconActive, 1);
       feature.key = park;
       feature.size = 1;
       

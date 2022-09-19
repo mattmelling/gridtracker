@@ -94,8 +94,8 @@ const ROSTER_COLUMNS = {
     compare: callObjSimpleComparer("grid"),
     tableData: (callObj) => ({
       rawAttrs: callObj.style.grid,
-      onClick: `centerOn("${callObj.grid4}")`,
-      html: callObj.grid4
+      onClick: `centerOn("${callObj.grid}")`,
+      html: callObj.grid
     })
   },
 
@@ -143,6 +143,7 @@ const ROSTER_COLUMNS = {
 
   County: {
     // Not sure why this comparison uses substring, but this is what the original code did
+    // Because we're sorting on the county name, the data contains  "CO,Adams", we don't want to sort by state.
     compare: getterSimpleComparer((elem) => elem.callObj.cnty && elem.callObj.cnty.substr(3)),
     tableData: (callObj) =>
     {
@@ -151,11 +152,12 @@ const ROSTER_COLUMNS = {
         rawAttrs: callObj.style.cnty,
         html: callObj.cnty ? window.opener.g_cntyToCounty[callObj.cnty] : ""
       }
-      if (callObj.cnty && callObj.qual)
+      if (callObj.cnty && callObj.qual == false)
       {
         attrs.title = "ZIP Code matches multiple counties, click to do a full lookup"
-        attrs.onClick = `lookupZip("${callObj.DEcall}", "${callObj.grid4}")`
-        attrs.html = `¿ ${attrs.html} ?`
+        attrs.onClick = `window.opener.lookupCallsign("${callObj.DEcall}", "${callObj.grid}")`
+        attrs.html = `? ${attrs.html} ?`
+        attrs.style = "cursor: pointer; color: cyan;"
       }
       return attrs
     }
@@ -306,7 +308,7 @@ const ROSTER_COLUMNS = {
       style: "color: #EEE;",
       class: "lifeCol",
       id: `lm${callObj.hash}`,
-      html: (timeNowSec() - callObj.life).toDHMS15()
+      html: (timeNowSec() - callObj.life).toDHMS()
     })
   },
 
@@ -340,13 +342,13 @@ const ROSTER_COLUMNS = {
   },
 
   Age: {
-    compare: callObjSimpleComparer("time"),
+    compare: callObjSimpleComparer("age"),
     tableData: (callObj) => ({
       style: "color: #EEE;",
       class: "timeCol",
       id: `tm${callObj.hash}`,
       title: (timeNowSec() - callObj.age).toDHMS(),
-      html: (timeNowSec() - callObj.age).toDHMS15()
+      html: (timeNowSec() - callObj.age).toDHMS()
     })
   },
 
@@ -384,7 +386,6 @@ const ROSTER_COLUMNS = {
       rawAttrs: callObj.style.pota,
       title: potaColumnHover(callObj),
       html: potaColumnRef(callObj)
-      // html: callObj.pota ? callObj.pota[0] : ""
     })
   },
 
@@ -400,48 +401,30 @@ const ROSTER_COLUMNS = {
 
 function potaColumnRef(callObj)
 {
-  if (!callObj.pota || callObj.pota.length == 0) return "";
-
-  let value = "";
-  if (Array.isArray(callObj.pota))
+  if (callObj.pota.length > 0)
   {
-    if (callObj.pota.length == 1)
+    let value = callObj.pota[0];
+    if (callObj.pota.length > 1)
     {
-      value = callObj.pota[0];
+      value += "...";
     }
-    else
-    {
-      value = callObj.pota[0] + "..."
-    }
+    return value;
   }
   else
   {
-    value = callObj.pota.reference;
+    return "";
   }
-  return value;
 }
 
 function potaColumnHover(callObj)
 {
-  if (!callObj.pota || callObj.pota.length == 0) return "";
   let value = ""
-  if (Array.isArray(callObj.pota))
+  for (let i in callObj.pota)
   {
-    if (callObj.pota.length == 1)
+    if (callObj.pota[i] in window.opener.g_pota.parks)
     {
-      value = window.opener.g_pota.places[callObj.pota[0]].name;
+       value += callObj.pota[i] + " - " + window.opener.g_pota.parks[callObj.pota[i]].name + "\n";
     }
-    else
-    {
-      callObj.pota.forEach(potaRef =>
-      {
-        value += potaRef + " - " + window.opener.g_pota.places[callObj.pota[potaRef]].name + "</br>";
-      });
-    }
-  }
-  else
-  {
-    value = callObj.pota.name;
   }
   return value;
 }

@@ -95,6 +95,8 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = potaConf = cqzConf = ituzConf = wpxConf =
         "";
 
+      let cntyPointer = "";
+      
       let hash = callsign + workHashSuffix;
       let layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
 
@@ -467,6 +469,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
                   }
                 }
                 if (foundHit) shouldAlert = true;
+                cntyPointer = "cursor: pointer;";
               }
               else
               {
@@ -820,7 +823,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       colorObject.calling = "style='" + callingConf + "background-color:" + callingBg + ";color:" + calling + "'";
       colorObject.dxcc = "style='" + dxccConf + "background-color:" + dxccBg + ";color:" + dxcc + "'";
       colorObject.state = "style='" + stateConf + "background-color:" + stateBg + ";color:" + state + "'";
-      colorObject.cnty = "style='" + cntyConf + "background-color:" + cntyBg + ";color:" + cnty + "'";
+      colorObject.cnty = "style='" + cntyConf + "background-color:" + cntyBg + ";color:" + cnty + ";" + cntyPointer + "'";
       colorObject.pota = "style='" + potaConf + "background-color:" + potaBg + ";color:" + pota + "'";
       colorObject.cont = "style='" + contConf + "background-color:" + contBg + ";color:" + cont + "'";
       colorObject.cqz = "style='" + cqzConf + "background-color:" + cqzBg + ";color:" + cqz + "'";

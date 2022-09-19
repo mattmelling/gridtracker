@@ -7,7 +7,10 @@ var gtVersion = parseInt(gtVersionStr.replace(/\./g, ""));
 var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
-if (typeof localStorage.currentVersion != "undefined") { g_startVersion = localStorage.currentVersion; }
+if (typeof localStorage.currentVersion != "undefined")
+{ 
+  g_startVersion = localStorage.currentVersion; 
+}
 
 if (
   typeof localStorage.currentVersion == "undefined" ||
@@ -43,8 +46,14 @@ if (g_platform.indexOf("win") == 0 || g_platform.indexOf("Win") == 0)
 {
   g_platform = "windows";
 }
-if (g_platform.indexOf("inux") > -1) g_platform = "linux";
-if (g_platform.indexOf("darwin") > -1) g_platform = "mac";
+if (g_platform.indexOf("inux") > -1) 
+{
+  g_platform = "linux";
+}
+if (g_platform.indexOf("darwin") > -1)
+{
+  g_platform = "mac";
+}
 
 var gui = require("nw.gui");
 var win = gui.Window.get();
@@ -1123,7 +1132,6 @@ function addDeDx(
     {
       details = {};
       details.grid = finalGrid;
-      details.grid4 = finalGrid.length > 0 ? finalGrid.substr(0, 4) : "-";
       details.RSTsent = finalRSTsent;
       details.RSTrecv = finalRSTrecv;
       details.msg = "-";
@@ -1159,15 +1167,16 @@ function addDeDx(
       if (details.px) { details.zone = Number(details.px.charAt(details.px.length - 1)); }
     }
 
+    let fourGrid = details.grid.substr(0, 4);
     if (
       details.state == null &&
       isKnownCallsignUSplus(finalDxcc) &&
-      finalGrid.length > 0
+      fourGrid.length > 0
     )
     {
-      if (details.grid4 in g_gridToState && g_gridToState[details.grid4].length == 1)
+      if (fourGrid in g_gridToState && g_gridToState[fourGrid].length == 1)
       {
-        details.state = g_gridToState[details.grid4][0];
+        details.state = g_gridToState[fourGrid][0];
       }
       lookupCall = true;
     }
@@ -1217,7 +1226,7 @@ function addDeDx(
       g_tracker.worked.call[finalDXcall + band + "dg"] = true;
     }
 
-    var fourGrid = details.grid.substr(0, 4);
+    
     if (fourGrid != "")
     {
       g_tracker.worked.grid[fourGrid + band + mode] = true;
@@ -2510,6 +2519,7 @@ function openConditionsWindow()
 }
 
 var g_callRoster = {};
+var g_rosterUpdateTimer = null;
 
 function insertMessageInRoster(
   newMessage,
@@ -2519,7 +2529,13 @@ function insertMessageInRoster(
   hash
 )
 {
-  var now = timeNowSec();
+  if (g_rosterUpdateTimer != null)
+  {
+    clearTimeout(g_rosterUpdateTimer);
+    g_rosterUpdateTimer = null;
+  }
+  
+  let now = timeNowSec();
   if (!(hash in g_callRoster))
   {
     g_callRoster[hash] = {};
@@ -2542,6 +2558,13 @@ function insertMessageInRoster(
   g_callRoster[hash].callObj = callObj;
   g_callRoster[hash].DXcall = msgDXcallsign;
   g_callRoster[hash].DEcall = msgDEcallsign;
+
+  g_rosterUpdateTimer = setTimeout(delayedRosterUpdate, 100);
+}
+
+function delayedRosterUpdate()
+{
+  g_rosterUpdateTimer = null;
   goProcessRoster(true);
 }
 
@@ -4135,12 +4158,12 @@ function squareToLatLong(qth)
 
 function iconFeature(center, iconObj, zIndex)
 {
-  var feature = new ol.Feature({
+  let feature = new ol.Feature({
     geometry: new ol.geom.Point(center),
     name: "pin"
   });
 
-  var iconStyle = new ol.style.Style({
+  let iconStyle = new ol.style.Style({
     zIndex: zIndex,
     image: iconObj
   });
@@ -6824,16 +6847,16 @@ var g_spotCollector = {};
 function handleWsjtxDecode(newMessage)
 {
   if (g_ignoreMessages == 1 || g_map == null) return;
-  var didAlert = false;
-  var didCustomAlert = false;
-  var validQTH = false;
-  var CQ = false;
-  var DEDX = false;
-  var msgDEcallsign = "";
-  var msgDXcallsign = "";
-  var theirQTH = "";
-  var countryName = "";
-  var newF;
+  let didAlert = false;
+  let didCustomAlert = false;
+  let validQTH = false;
+  let CQ = false;
+  let DEDX = false;
+  let msgDEcallsign = "";
+  let msgDXcallsign = "";
+  let theirQTH = "";
+  let countryName = "";
+  let newF;
   if (newMessage.OF > 0)
   {
     newF = Number((newMessage.OF + newMessage.DF) / 1000).formatMhz(3, 3);
@@ -6842,31 +6865,31 @@ function handleWsjtxDecode(newMessage)
   {
     newF = newMessage.DF;
   }
-  theTimeStamp =
+  let theTimeStamp =
     timeNowSec() - (timeNowSec() % 86400) + parseInt(newMessage.TM / 1000);
-  var messageColor = "white";
+  let messageColor = "white";
 
   // Break up the decoded message
-  var decodeWords = newMessage.Msg.split(" ").slice(0, 5);
+  let decodeWords = newMessage.Msg.split(" ").slice(0, 5);
   while (decodeWords[decodeWords.length - 1] == "") decodeWords.pop();
 
   if (decodeWords.length > 1 && newMessage.Msg.indexOf("<...>") == -1)
   {
     if (newMessage.Msg.indexOf("<") != -1)
     {
-      for (var i in decodeWords)
+      for (const i in decodeWords)
       {
         decodeWords[i] = decodeWords[i].replace("<", "").replace(">", "");
       }
     }
 
-    var rect = null;
+    let rect = null;
     // Grab the last word in the decoded message
-    var qth = decodeWords[decodeWords.length - 1].trim();
+    let qth = decodeWords[decodeWords.length - 1].trim();
     if (qth.length == 4)
     {
-      var LETTERS = qth.substr(0, 2);
-      var NUMBERS = qth.substr(2, 2);
+      let LETTERS = qth.substr(0, 2);
+      let NUMBERS = qth.substr(2, 2);
       if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
       {
         theirQTH = LETTERS + NUMBERS;
@@ -6917,17 +6940,21 @@ function handleWsjtxDecode(newMessage)
       msgDXcallsign = "RR73";
     }
 
-    var callsign = null;
+    let callsign = null;
 
-    var hash = msgDEcallsign + newMessage.OB + newMessage.OM;
+    let hash = msgDEcallsign + newMessage.OB + newMessage.OM;
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
 
-    if (validQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
+    if (theirQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
     {
-      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0) { validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid; }
+      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0) 
+      {
+        theirQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.substr(0,4);
+        validQTH = true;
+      }
     }
 
-    var canPath = false;
+    let canPath = false;
     if (
       (g_appSettings.gtBandFilter.length == 0 ||
         (g_appSettings.gtBandFilter == "auto" && newMessage.OB == myBand) ||
@@ -6973,7 +7000,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.RSTsent = newMessage.SR;
       newCallsign.RSTrecv = "-";
       newCallsign.time = theTimeStamp;
-      newCallsign.life = newCallsign.age = g_timeNow;
+      newCallsign.life = newCallsign.age = timeNowSec();
       newCallsign.delta = newMessage.DF;
       newCallsign.dt = newMessage.DT.toFixed(2);
       newCallsign.DXcall = msgDXcallsign.trim();
@@ -6985,7 +7012,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.qso = false;
       newCallsign.dxcc = callsignToDxcc(newCallsign.DEcall);
       newCallsign.px = null;
-      newCallsign.pota = null;
+      newCallsign.pota = [];
       newCallsign.zone = null;
       newCallsign.vucc_grids = [];
       newCallsign.propMode = "";
@@ -6993,6 +7020,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.phone = false;
       newCallsign.IOTA = "";
       newCallsign.satName = "";
+      newCallsign.hash = hash;
       if (newCallsign.dxcc != -1)
       {
         newCallsign.px = getWpx(newCallsign.DEcall);
@@ -7071,7 +7099,7 @@ function handleWsjtxDecode(newMessage)
       }
 
       callsign.time = theTimeStamp;
-      callsign.age = g_timeNow;
+      callsign.age = timeNowSec();
 
       callsign.RSTsent = newMessage.SR;
       callsign.delta = newMessage.DF;
@@ -7116,22 +7144,22 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    if (g_potaEnabled == 1 && (callsign.DEcall in g_pota.spots || callsign.DEcall in g_pota.schedule))
+    if (g_potaEnabled == 1 && (callsign.DEcall in g_pota.callSpots || callsign.DEcall in g_pota.callSchedule))
     {
       callsign.pota = [];
-      if (callsign.DEcall in g_pota.spots)
+      if (callsign.DEcall in g_pota.callSpots)
       {
         // copies the entire array
-        callsign.pota = g_pota.spots[callsign.DEcall];
+        callsign.pota = g_pota.callSpots[callsign.DEcall];
       }
-      if (callsign.DEcall in g_pota.schedule)
+      if (callsign.DEcall in g_pota.callSchedule)
       {
         let now = Date.now();
-        for (let i in g_pota.schedule[callsign.DEcall])
+        for (let i in g_pota.callSchedule[callsign.DEcall])
         {
-          if (now < g_pota.schedule[callsign.DEcall][i].end && now >= g_pota.schedule[callsign.DEcall][i].start && !callsign.pota.includes(g_pota.schedule[callsign.DEcall][i].id))
+          if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start && !callsign.pota.includes(g_pota.callSchedule[callsign.DEcall][i].id))
           {
-            callsign.pota.push(g_pota.schedule[callsign.DEcall][i].id);
+            callsign.pota.push(g_pota.callSchedule[callsign.DEcall][i].id);
           }
         }
       }
@@ -7529,13 +7557,17 @@ function goProcessRoster(isRealtime = false)
   {
     try
     {
-      if (isRealtime == true)
+      if (isRealtime == true && g_callRosterWindowHandle.window.g_rosterSettings.realtime == false)
       {
-        if (g_callRosterWindowHandle.window.g_rosterSettings.realtime == false) { return; }
+       return
       }
       g_callRosterWindowHandle.window.processRoster(g_callRoster);
     }
-    catch (e) { }
+    catch (e) 
+    {
+      console.log("Call Roster exception");
+      console.log(e.message);
+    }
   }
 }
 
@@ -14499,7 +14531,6 @@ function callookResults(buffer, gridPass)
       callObject.lat = results.location.latitude;
       callObject.lon = results.location.longitude;
       callObject.grid = results.location.gridsquare;
-      callObject.grid4 = callObject.grid.length > 1 ? callObject.grid.substr(0, 4) : "-";
       callObject.efdate = results.otherInfo.grantDate;
       callObject.expdate = results.otherInfo.expiryDate;
       callObject.frn = results.otherInfo.frn;
@@ -14893,7 +14924,10 @@ function getLookupCachedObject(
       {
         callObject.cnty = request.result.cnty;
 
-        if (callObject.cnty in g_countyData) callObject.qual = true;
+        if (callObject.cnty in g_countyData) 
+        {
+          callObject.qual = true;
+        }
         else
         {
           callObject.cnty = null;
@@ -14902,19 +14936,31 @@ function getLookupCachedObject(
       }
       return;
     }
-    if (request.result != null && resultFunction) { resultFunction(request.result, gridPass, false); }
-    else if (noResultFunction) noResultFunction(call, gridPass);
+    if (request.result != null && resultFunction) 
+    { 
+      resultFunction(request.result, gridPass, false); 
+    }
+    else if (noResultFunction) 
+    {
+      noResultFunction(call, gridPass);
+    }
   };
 
   request.onerror = function (event)
   {
-    if (noResultFunction) noResultFunction(call, gridPass);
+    if (noResultFunction)
+    {
+      noResultFunction(call, gridPass);
+    }
   };
 }
 
 function cacheLookupObject(lookup, gridPass, cacheable = false)
 {
-  if (!("cnty" in lookup)) lookup.cnty = null;
+  if (!("cnty" in lookup)) 
+  {
+    lookup.cnty = null;
+  }
 
   if (lookup.hasOwnProperty("callsign"))
   {
@@ -15055,11 +15101,14 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
     delete lookup.land;
   }
 
-  if ("grid" in lookup) lookup.grid = lookup.grid.toUpperCase();
+  if ("grid" in lookup) 
+  {
+    lookup.grid = lookup.grid.toUpperCase();
+  }
 
   if (lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county"))
   {
-    var foundCounty = false;
+    let foundCounty = false;
 
     if (lookup.cnty == null)
     {
@@ -15069,7 +15118,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
 
     if (lookup.cnty in g_countyData)
     {
-      for (var hash in g_liveCallsigns)
+      for (const hash in g_liveCallsigns)
       {
         if (
           g_liveCallsigns[hash].DEcall == lookup.call &&

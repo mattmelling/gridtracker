@@ -3,29 +3,42 @@
 // See LICENSE for more information.
 
 var g_pota = {
-  places: {},
-  placesTimeout: null,
-  schedule: {},
+  parks: {},
+  parksTimeout: null,
+  callSchedule: {},
+  parkSchedule: {},
   scheduleTimeout: null,
-  spots: {},
-  spotsTimeout: null
+  callSpots: {},
+  spotsTimeout: null,
+  mapParks: {}
 };
-
-var g_parks = {};
 
 var g_defaultPark = {
   scheduled: false,
   spotted: false,
-  feature: false
+  activators: {},
+  feature: null
 }
+
+var g_gtParkIconActive = new ol.style.Icon({
+  src: "./img/pota_icon_active.png",
+  anchorYUnits: "pixels",
+  anchorXUnits: "pixels",
+  anchor: [10, 19]
+});
+
+var g_gtParkIconInactive = new ol.style.Icon({
+  src: "./img/pota_icon_inactive.png",
+  anchorYUnits: "pixels",
+  anchorXUnits: "pixels",
+  anchor: [10, 19]
+});
 
 function initPota()
 {
   potaImg.style.filter = g_potaEnabled == 1 ? "" : "grayscale(1)";
 
-  getPotaPlaces();
-  getPotaSchedule();
-  getPotaSpots();
+  getPotaParks();
 }
 
 function togglePota()
@@ -38,52 +51,104 @@ function togglePota()
 
   if (g_potaEnabled == 1)
   {
-    // Only get if empty, let the timer do its job
-    if (Object.keys(g_pota.places).length == 0)
-    {
-      getPotaPlaces();
-    }
-    getPotaSchedule();
-    getPotaSpots();
+    getPotaParks();
   }
   else
   {
-     g_layerSources.pota.clear();
+    g_layerSources.pota.clear();
+    g_pota.mapParks = {};
   }
 }
 
-function processPotaPlaces(buffer)
+function rebuildParks()
+{
+  g_layerSources.pota.clear();
+  g_pota.mapParks = {};
+  
+}
+
+function makeParkFeature(park, active)
 {
   try
   {
-    g_pota.places = JSON.parse(buffer);
+    if (park in g_pota.parks)
+    {
+      let parkObj = null;
+      if (park in g_pota.mapParks)
+      {
+        parkObj = g_pota.mapParks[park];
+      }
+      else
+      {
+        parkObj = Object.assign({}, g_defaultPark);
+        g_pota.mapParks[park] = parkObj;
+      }
+      if (parkObj.feature == null)
+      {
+        feature = iconFeature(ol.proj.fromLonLat(myLonLat), g_gtParkIconActive, 1);
+      }
+      let feature = iconFeature(ol.proj.fromLonLat(myLonLat), g_gtParkIconActive, 1);
+      feature.key = park;
+      feature.size = 1;
+      
+    }
+  }
+  catch (e) 
+  {
+    console.log("exception: makeParkFeature " + park);
+    console.log(e.message);
+  }
+}
+
+function processPotaParks(buffer)
+{
+  try
+  {
+    let newParks = JSON.parse(buffer);
+    g_pota.parks = newParks;
+ 
+    getPotaSchedule();
+    getPotaSpots();
   }
   catch (e)
   {
     // can't write, somethings broke
+    console.log("Failed to load parks!");
+    console.log(e.message);
   }
 }
 
-function getPotaPlaces()
+function getPotaParks()
 {
-  if (g_pota.placesTimeout)
+  if (g_pota.parksTimeout)
   {
-    clearTimeout(g_pota.placesTimeout);
+    clearTimeout(g_pota.parksTimeout);
     g_pota.spotsTimeout = null;
   }
   
   if (g_mapSettings.offlineMode == false && g_potaEnabled == 1)
   {
     getBuffer(
-      "https://storage.googleapis.com/gt_app/pota.json",
-      processPotaPlaces,
+      "https://storage.googleapis.com/gt_app/pota.json?cb="+Date.now(),
+      processPotaParks,
       null,
       "https",
       443
     );
   }
 
-  g_pota.placesTimeout = setTimeout(getPotaPlaces, 86400000)
+  g_pota.parksTimeout = setTimeout(getPotaParks, 86400000)
+}
+
+function uniqueArrayFromArray(input)
+{
+  let unique = [];
+  input.forEach((c) => {
+    if (!unique.includes(c)) {
+        unique.push(c);
+    }
+  });
+  return unique;
 }
 
 function processPotaSpots(buffer)
@@ -91,11 +156,32 @@ function processPotaSpots(buffer)
   try
   {
     let spots = JSON.parse(buffer);
-    g_pota.spots = {};
-    for (let spot in spots)
+    g_pota.callSpots = {};
+    g_pota.parkSpots = {};
+    for (const spot in spots)
     {
-      (g_pota.spots[spots[spot].activator] = g_pota.spots[spots[spot].activator] || []).push(spots[spot].reference);
+      if (spots[spot].reference in g_pota.parks)
+      {
+        (g_pota.callSpots[spots[spot].activator] = g_pota.callSpots[spots[spot].activator] || []).push(spots[spot].reference);
+        (g_pota.parkSpots[spots[spot].reference] = g_pota.parkSpots[spots[spot].reference] || []).push(spots[spot].activator);
+      }
+      else
+      {
+        console.log("PotaSpots: unknown park id: " + spots[spot].reference);
+      }
     }
+    
+    // Sanity dedupe checks
+    for (const spot in g_pota.callSpots)
+    {
+      g_pota.callSpots[spot] = uniqueArrayFromArray(g_pota.callSpots[spot]);
+    }
+    for (const spot in g_pota.parkSpots)
+    {
+      g_pota.parkSpots[spot] = uniqueArrayFromArray(g_pota.parkSpots[spot]);
+    }
+    
+    rebuildParks();
   }
   catch (e)
   {
@@ -130,20 +216,45 @@ function processPotaSchedule(buffer)
   try
   {
     let schedules = JSON.parse(buffer);
-    g_pota.schedule = {};
-    for (let i in schedules)
+    g_pota.callSchedule = {};
+    g_pota.parkSchedule = {};
+    for (const i in schedules)
     {
       let newObj = {};
       newObj.id = schedules[i].reference;
       newObj.start = Date.parse(schedules[i].startDate + "T" + schedules[i].startTime);
       newObj.end = Date.parse(schedules[i].endDate + "T" + schedules[i].endTime);
-
+      newObj.frequencies = schedules[i].frequencies;
+      newObj.comments = schedules[i].comments;
       if (Date.now() < newObj.end)
       {
-        (g_pota.schedule[schedules[i].activator] = g_pota.schedule[schedules[i].activator] || []).push(newObj);
+        if (newObj.id in g_pota.parks)
+        {
+          (g_pota.callSchedule[schedules[i].activator] = g_pota.callSchedule[schedules[i].activator] || []).push(newObj);
+          
+          newObj = Object.assign({}, newObj);
+          newObj.id = schedules[i].activator;
+          (g_pota.parkSchedule[schedules[i].reference] = g_pota.parkSchedule[schedules[i].reference] || []).push(newObj);
+        }
+        else
+        {
+          console.log("PotaSchedule: unknown park id: " + newObj.id);
+        }
       }
       // else it is expired and no longer relevant
     }
+    
+    // Sanity dedupe checks
+    for (const key in g_pota.callSchedule)
+    {
+       g_pota.callSchedule[key] = uniqueArrayFromArray(g_pota.callSchedule[key]);
+    }
+    for (const key in g_pota.parkSchedule)
+    {
+       g_pota.parkSchedule[key] = uniqueArrayFromArray(g_pota.parkSchedule[key]);
+    }
+
+    rebuildParks();
   }
   catch (e)
   {

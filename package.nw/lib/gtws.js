@@ -337,7 +337,9 @@ function gtChatUpdateCall(jsmesg)
   {
     makeGtPin(g_gtFlagPins[cid]);
     if (g_gtFlagPins[cid].pin != null)
-    { g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin); }
+    {
+      g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin);
+    }
   }
   g_gtChatlistChangeCount++;
   g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
@@ -382,7 +384,9 @@ function makeGtPin(obj)
       delete obj.pin;
       obj.pin = null;
     }
-
+    
+    if (obj.src != "GT") return;
+    
     if (typeof obj.grid == "undefined" || obj.grid == null) return;
 
     if (obj.grid.length != 4 && obj.grid.length != 6) return;
@@ -453,9 +457,13 @@ function gtChatNewList(jsmesg)
       g_gtFlagPins[cid].dxcc = callsignToDxcc(g_gtFlagPins[cid].call);
       g_gtFlagPins[cid].live = true;
       g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
+
       makeGtPin(g_gtFlagPins[cid]);
+
       if (g_gtFlagPins[cid].pin != null)
-      { g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin); }
+      {
+        g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin);
+      }
     }
   }
   g_gtChatlistChangeCount++;

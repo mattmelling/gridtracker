@@ -48,13 +48,6 @@ function processRosterFiltering(callRoster, rosterSettings)
     if (entry.DXcall == "CQ POTA" && huntPOTA.checked == true)
     {
       entry.tx = true;
-      if (callObj.pota == null)
-      {
-        callObj.pota = {
-          reference: "?-????",
-          name: "Unknown Park"
-        }
-      }
       continue;
     }
     if (callObj.ituza in g_blockedITUz)

@@ -1149,7 +1149,6 @@ function addDeDx(
       details.px = null;
       details.zone = null;
       details.cont = null;
-
       details.vucc_grids = finalVucc;
       details.propMode = finalPropMode;
       details.digital = finalDigital;
@@ -1529,6 +1528,7 @@ function addDeDx(
     newCallsign.distance = 0;
     newCallsign.px = null;
     newCallsign.zone = null;
+    newCallsign.pota = [];
     newCallsign.cnty = finalCnty;
     newCallsign.cont = finalCont;
     if (finalDxcc > -1)

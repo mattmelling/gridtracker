@@ -95,7 +95,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       callConf = gridConf = callingConf = dxccConf = stateConf = cntyConf = contConf = potaConf = cqzConf = ituzConf = wpxConf =
         "";
 
-      let cntyPointer = "";
+      let cntyPointer = (callObj.cnty && callObj.qual == false) ? "cursor: pointer;" : "";
       
       let hash = callsign + workHashSuffix;
       let layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
@@ -469,7 +469,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
                   }
                 }
                 if (foundHit) shouldAlert = true;
-                cntyPointer = "cursor: pointer;";
               }
               else
               {

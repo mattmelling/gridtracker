@@ -1,8 +1,7 @@
 function renderRoster(callRoster, rosterSettings)
 {
   let columnOverrides = {
-    Callsign: true,
-    Grid: true
+    Callsign: true
   }
 
   if (window.opener.g_callsignLookups.eqslUseEnable == true)

@@ -109,9 +109,11 @@ var g_defaultSettings = {
     huntRR73: false
   },
   columns: {
+    Callsign: true,
     Band: false,
     Mode: false,
     Calling: true,
+    Grid: true,
     Msg: false,
     DXCC: true,
     Flag: true,
@@ -137,7 +139,7 @@ var g_defaultSettings = {
   },
   reference: 0,
   controls: true,
-  controlsExtended: false,
+  controlsExtended: true,
   compact: false,
   settingProfiles: false,
 

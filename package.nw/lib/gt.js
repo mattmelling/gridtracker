@@ -1225,7 +1225,6 @@ function addDeDx(
       g_tracker.worked.call[finalDXcall + band + "dg"] = true;
     }
 
-
     if (fourGrid != "")
     {
       g_tracker.worked.grid[fourGrid + band + mode] = true;
@@ -6952,7 +6951,7 @@ function handleWsjtxDecode(newMessage)
     {
       if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0)
       {
-        theirQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.substr(0,4);
+        theirQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.substr(0, 4);
         validQTH = true;
       }
     }

@@ -64,7 +64,6 @@ function rebuildParks()
 {
   g_layerSources.pota.clear();
   g_pota.mapParks = {};
-
 }
 
 function makeParkFeature(park, active)
@@ -141,9 +140,9 @@ function getPotaParks()
 function uniqueArrayFromArray(input)
 {
   let unique = [];
-  input.forEach((c) => 
+  input.forEach((c) =>
   {
-    if (!unique.includes(c)) 
+    if (!unique.includes(c))
     {
       unique.push(c);
     }

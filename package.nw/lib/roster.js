@@ -2332,29 +2332,9 @@ function processAward(awardName)
   if (Index > -1) mode.splice(Index, 1);
 
   test.mode = mode.length > 0;
-
-  test.confirmed =
-    "qsl_req" in
-    g_awards[g_awardTracker[awardName].sponsor].awards[
-      g_awardTracker[awardName].name
-    ].rule
-      ? g_awards[g_awardTracker[awardName].sponsor].awards[
-        g_awardTracker[awardName].name
-      ].rule.qsl_req == "confirmed"
-      : g_awards[g_awardTracker[awardName].sponsor].qsl_req == "confirmed";
-
+  test.confirmed = "qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule ? g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req == "confirmed" : g_awards[g_awardTracker[awardName].sponsor].qsl_req == "confirmed";
   test.look = "confirmed";
-
-  test.qsl_req =
-    "qsl_req" in
-    g_awards[g_awardTracker[awardName].sponsor].awards[
-      g_awardTracker[awardName].name
-    ].rule
-      ? g_awards[g_awardTracker[awardName].sponsor].awards[
-        g_awardTracker[awardName].name
-      ].rule.qsl_req
-      : g_awards[g_awardTracker[awardName].sponsor].qsl_req;
-
+  test.qsl_req = "qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule ? g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req : g_awards[g_awardTracker[awardName].sponsor].qsl_req;
   test.DEcall = "call" in award.rule;
   test.band = "band" in award.rule && award.rule.band.indexOf("Mixed") == -1;
   test.dxcc = "dxcc" in award.rule;

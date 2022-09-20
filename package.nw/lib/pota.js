@@ -64,7 +64,7 @@ function rebuildParks()
 {
   g_layerSources.pota.clear();
   g_pota.mapParks = {};
-  
+
 }
 
 function makeParkFeature(park, active)
@@ -85,14 +85,13 @@ function makeParkFeature(park, active)
       }
       if (parkObj.feature == null)
       {
-        parkObj.feature = iconFeature(ol.proj.fromLonLat([0,0]), g_gtParkIconActive, 1);
+        parkObj.feature = iconFeature(ol.proj.fromLonLat([0, 0]), g_gtParkIconActive, 1);
       }
       feature.key = park;
       feature.size = 1;
-      
     }
   }
-  catch (e) 
+  catch (e)
   {
     console.log("exception: makeParkFeature " + park);
     console.log(e.message);
@@ -105,7 +104,7 @@ function processPotaParks(buffer)
   {
     let newParks = JSON.parse(buffer);
     g_pota.parks = newParks;
- 
+
     getPotaSchedule();
     getPotaSpots();
   }
@@ -124,11 +123,11 @@ function getPotaParks()
     clearTimeout(g_pota.parksTimeout);
     g_pota.spotsTimeout = null;
   }
-  
+
   if (g_mapSettings.offlineMode == false && g_potaEnabled == 1)
   {
     getBuffer(
-      "https://storage.googleapis.com/gt_app/pota.json?cb="+Date.now(),
+      "https://storage.googleapis.com/gt_app/pota.json?cb=" + Date.now(),
       processPotaParks,
       null,
       "https",
@@ -142,9 +141,11 @@ function getPotaParks()
 function uniqueArrayFromArray(input)
 {
   let unique = [];
-  input.forEach((c) => {
-    if (!unique.includes(c)) {
-        unique.push(c);
+  input.forEach((c) => 
+  {
+    if (!unique.includes(c)) 
+    {
+      unique.push(c);
     }
   });
   return unique;
@@ -169,7 +170,7 @@ function processPotaSpots(buffer)
         console.log("PotaSpots: unknown park id: " + spots[spot].reference);
       }
     }
-    
+
     // Sanity dedupe checks
     for (const spot in g_pota.callSpots)
     {
@@ -179,7 +180,7 @@ function processPotaSpots(buffer)
     {
       g_pota.parkSpots[spot] = uniqueArrayFromArray(g_pota.parkSpots[spot]);
     }
-    
+
     rebuildParks();
   }
   catch (e)
@@ -195,7 +196,7 @@ function getPotaSpots()
     clearTimeout(g_pota.spotsTimeout);
     g_pota.spotsTimeout = null;
   }
-  
+
   if (g_mapSettings.offlineMode == false && g_potaEnabled == 1)
   {
     getBuffer(
@@ -206,7 +207,7 @@ function getPotaSpots()
       443
     );
   }
-  
+
   g_pota.spotsTimeout = setTimeout(getPotaSpots, 300000);
 }
 
@@ -230,7 +231,7 @@ function processPotaSchedule(buffer)
         if (newObj.id in g_pota.parks)
         {
           (g_pota.callSchedule[schedules[i].activator] = g_pota.callSchedule[schedules[i].activator] || []).push(newObj);
-          
+
           newObj = Object.assign({}, newObj);
           newObj.id = schedules[i].activator;
           (g_pota.parkSchedule[schedules[i].reference] = g_pota.parkSchedule[schedules[i].reference] || []).push(newObj);
@@ -242,15 +243,15 @@ function processPotaSchedule(buffer)
       }
       // else it is expired and no longer relevant
     }
-    
+
     // Sanity dedupe checks
     for (const key in g_pota.callSchedule)
     {
-       g_pota.callSchedule[key] = uniqueArrayFromArray(g_pota.callSchedule[key]);
+      g_pota.callSchedule[key] = uniqueArrayFromArray(g_pota.callSchedule[key]);
     }
     for (const key in g_pota.parkSchedule)
     {
-       g_pota.parkSchedule[key] = uniqueArrayFromArray(g_pota.parkSchedule[key]);
+      g_pota.parkSchedule[key] = uniqueArrayFromArray(g_pota.parkSchedule[key]);
     }
 
     rebuildParks();
@@ -268,7 +269,7 @@ function getPotaSchedule()
     clearTimeout(g_pota.scheduleTimeout);
     g_pota.scheduleTimeout = null;
   }
-  
+
   if (g_mapSettings.offlineMode == false && g_potaEnabled == 1)
   {
     getBuffer(

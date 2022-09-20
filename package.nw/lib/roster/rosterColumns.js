@@ -423,7 +423,7 @@ function potaColumnHover(callObj)
   {
     if (callObj.pota[i] in window.opener.g_pota.parks)
     {
-       value += callObj.pota[i] + " - " + window.opener.g_pota.parks[callObj.pota[i]].name + "\n";
+      value += callObj.pota[i] + " - " + window.opener.g_pota.parks[callObj.pota[i]].name + "\n";
     }
   }
   return value;

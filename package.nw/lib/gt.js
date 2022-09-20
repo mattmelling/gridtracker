@@ -1572,6 +1572,7 @@ function addDeDx(
     newCallsign.phone = finalPhone;
     newCallsign.IOTA = finalIOTA;
     newCallsign.satName = finalSatName;
+    newCallsign.hash = hash;
 
     if (
       newCallsign.state == null &&

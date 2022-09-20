@@ -8,8 +8,8 @@ var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
 if (typeof localStorage.currentVersion != "undefined")
-{ 
-  g_startVersion = localStorage.currentVersion; 
+{
+  g_startVersion = localStorage.currentVersion;
 }
 
 if (
@@ -46,7 +46,7 @@ if (g_platform.indexOf("win") == 0 || g_platform.indexOf("Win") == 0)
 {
   g_platform = "windows";
 }
-if (g_platform.indexOf("inux") > -1) 
+if (g_platform.indexOf("inux") > -1)
 {
   g_platform = "linux";
 }
@@ -807,7 +807,7 @@ function toggleOffline()
     buttonPSKSpotsBoxDiv.style.display = "inline-block";
     donateButton.style.display = "inline-block";
     potaButton.style.display = "inline-block";
-    
+
     if (g_appSettings.gtShareEnable == true)
     {
       gtFlagButton.style.display = "inline-block";
@@ -1225,7 +1225,7 @@ function addDeDx(
       g_tracker.worked.call[finalDXcall + band + "dg"] = true;
     }
 
-    
+
     if (fourGrid != "")
     {
       g_tracker.worked.grid[fourGrid + band + mode] = true;
@@ -1556,6 +1556,7 @@ function addDeDx(
       newCallsign.RSTrecv = finalRSTrecv;
     }
     newCallsign.time = finalTime;
+    newCallsign.age = finalTime;
     newCallsign.delta = -1;
     newCallsign.DXcall = finalDEcall;
     newCallsign.rect = rect;
@@ -1604,6 +1605,7 @@ function addDeDx(
     if (callsign.DXcall != "Self" && finalTime > callsign.time)
     {
       callsign.time = finalTime;
+      callsign.age = finalTime;
       callsign.mode = mode;
       callsign.band = band;
       callsign.delta = -1;
@@ -2535,7 +2537,7 @@ function insertMessageInRoster(
     clearTimeout(g_rosterUpdateTimer);
     g_rosterUpdateTimer = null;
   }
-  
+
   let now = timeNowSec();
   if (!(hash in g_callRoster))
   {
@@ -6948,7 +6950,7 @@ function handleWsjtxDecode(newMessage)
 
     if (theirQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
     {
-      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0) 
+      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0)
       {
         theirQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.substr(0,4);
         validQTH = true;
@@ -7560,11 +7562,11 @@ function goProcessRoster(isRealtime = false)
     {
       if (isRealtime == true && g_callRosterWindowHandle.window.g_rosterSettings.realtime == false)
       {
-       return
+        return;
       }
       g_callRosterWindowHandle.window.processRoster(g_callRoster);
     }
-    catch (e) 
+    catch (e)
     {
       console.log("Call Roster exception");
       console.log(e.message);
@@ -13408,7 +13410,7 @@ function loadMsgSettings()
   GTspotEnable.checked = g_appSettings.gtSpotEnable;
 
   pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
-  
+
   for (var key in g_msgSettings)
   {
     document.getElementById(key).value = g_msgSettings[key];
@@ -14925,7 +14927,7 @@ function getLookupCachedObject(
       {
         callObject.cnty = request.result.cnty;
 
-        if (callObject.cnty in g_countyData) 
+        if (callObject.cnty in g_countyData)
         {
           callObject.qual = true;
         }
@@ -14937,11 +14939,11 @@ function getLookupCachedObject(
       }
       return;
     }
-    if (request.result != null && resultFunction) 
-    { 
-      resultFunction(request.result, gridPass, false); 
+    if (request.result != null && resultFunction)
+    {
+      resultFunction(request.result, gridPass, false);
     }
-    else if (noResultFunction) 
+    else if (noResultFunction)
     {
       noResultFunction(call, gridPass);
     }
@@ -14958,7 +14960,7 @@ function getLookupCachedObject(
 
 function cacheLookupObject(lookup, gridPass, cacheable = false)
 {
-  if (!("cnty" in lookup)) 
+  if (!("cnty" in lookup))
   {
     lookup.cnty = null;
   }
@@ -15102,7 +15104,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
     delete lookup.land;
   }
 
-  if ("grid" in lookup) 
+  if ("grid" in lookup)
   {
     lookup.grid = lookup.grid.toUpperCase();
   }

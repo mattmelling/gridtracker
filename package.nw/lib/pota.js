@@ -16,7 +16,6 @@ var g_pota = {
 var g_defaultPark = {
   scheduled: false,
   spotted: false,
-  activators: {},
   feature: null
 }
 
@@ -64,9 +63,26 @@ function rebuildParks()
 {
   g_layerSources.pota.clear();
   g_pota.mapParks = {};
+  
+  for (const park in g_pota.parkSpots)
+  {
+    let obj = makeParkFeature(park);
+    if (obj)
+    {
+      obj.spotted = true;
+    }
+  }
+  for (const park in g_pota.parkSchedule)
+  {
+    let obj = makeParkFeature(park);
+    if (obj)
+    {
+      obj.scheduled = true;
+    }
+  }
 }
 
-function makeParkFeature(park, active)
+function makeParkFeature(park)
 {
   try
   {
@@ -84,16 +100,20 @@ function makeParkFeature(park, active)
       }
       if (parkObj.feature == null)
       {
-        parkObj.feature = iconFeature(ol.proj.fromLonLat([0, 0]), g_gtParkIconActive, 1);
+        parkObj.feature = iconFeature(ol.proj.fromLonLat([Number(g_pota.parks[park].longitude), Number(g_pota.parks[park].latitude)]), g_gtParkIconActive, 1);
+        parkObj.feature.key = park;
+        parkObj.feature.size = 22;
+        
+        g_layerSources.pota.addFeature(parkObj.feature);
       }
-      feature.key = park;
-      feature.size = 1;
+      return parkObj;
     }
   }
   catch (e)
   {
     console.log("exception: makeParkFeature " + park);
     console.log(e.message);
+    return null;
   }
 }
 
@@ -102,6 +122,18 @@ function processPotaParks(buffer)
   try
   {
     let newParks = JSON.parse(buffer);
+    for (const park in newParks)
+    {
+      let locations = newParks[park].locationDesc.split(",");
+      for (const i in locations)
+      {
+        if (locations[i] in g_StateData)
+        {
+          locations[i] = g_StateData[locations[i]].name;
+        }
+      }
+      newParks[park].locationDesc = locations.join(", ");
+    }
     g_pota.parks = newParks;
 
     getPotaSchedule();
@@ -161,8 +193,11 @@ function processPotaSpots(buffer)
     {
       if (spots[spot].reference in g_pota.parks)
       {
+        spots[spot].spotTime = Date.parse(spots[spot].spotTime + "Z");
+        spots[spot].expire = (spots[spot].expire * 1000) + spots[spot].spotTime;
+        spots[spot].frequency = parseInt(spots[spot].frequency) / 1000;
         (g_pota.callSpots[spots[spot].activator] = g_pota.callSpots[spots[spot].activator] || []).push(spots[spot].reference);
-        (g_pota.parkSpots[spots[spot].reference] = g_pota.parkSpots[spots[spot].reference] || []).push(spots[spot].activator);
+        (g_pota.parkSpots[spots[spot].reference] = g_pota.parkSpots[spots[spot].reference] || []).push(spots[spot]);
       }
       else
       {
@@ -221,8 +256,8 @@ function processPotaSchedule(buffer)
     {
       let newObj = {};
       newObj.id = schedules[i].reference;
-      newObj.start = Date.parse(schedules[i].startDate + "T" + schedules[i].startTime);
-      newObj.end = Date.parse(schedules[i].endDate + "T" + schedules[i].endTime);
+      newObj.start = Date.parse(schedules[i].startDate + "T" + schedules[i].startTime + "Z");
+      newObj.end = Date.parse(schedules[i].endDate + "T" + schedules[i].endTime + "Z");
       newObj.frequencies = schedules[i].frequencies;
       newObj.comments = schedules[i].comments;
       if (Date.now() < newObj.end)
@@ -285,4 +320,100 @@ function getPotaSchedule()
 function sendPotaSpot()
 {
   // if Pota spotting enabled, and we have enough info, send a spot to Pota
+}
+
+var g_lastPark = null;
+function mouseOverPark(feature)
+{
+  if (g_lastPark && g_lastPark == feature)
+  {
+    mouseParkMove();
+    return;
+  }
+  g_lastPark = feature;
+
+  createParkTipTable(feature);
+
+  var positionInfo = myParktip.getBoundingClientRect();
+  myParktip.style.left = getMouseX() + 15 + "px";
+  myParktip.style.top = getMouseY() - positionInfo.height - 5 + "px";
+  myParktip.style.zIndex = 499;
+  myParktip.style.display = "block";
+}
+
+function mouseOutPark(mouseEvent)
+{
+  g_lastPark = null;
+  myParktip.style.zIndex = -1;
+}
+
+function mouseParkMove()
+{
+  var positionInfo = myParktip.getBoundingClientRect();
+  myParktip.style.left = getMouseX() + 15 + "px";
+  myParktip.style.top = getMouseY() - positionInfo.height - 5 + "px";
+}
+
+function createParkTipTable(toolElement)
+{
+  let worker = "";
+
+  let key = toolElement.key;
+  let parkObj = g_pota.mapParks[key];
+  let now = Date.now();
+  
+  worker += "<div style='background-color:#000;color:lightgreen;font-weight:bold;font-size:12px;border:1px solid gray;margin:0px' class='roundBorder'>" +
+    key +
+    " : <font color='cyan'>" + g_pota.parks[key].name + "" +
+    " (<font color='yellow'>" + g_dxccToAltName[Number(g_pota.parks[key].entityId)] + "</font>)" +
+    // "</br>" + g_pota.parks[key].locationDesc +
+    "</font></div>";
+
+  if (parkObj.spotted)
+  {
+    worker += "<div style='background-color:#000;color:#fff;font-size:12px;border:1px solid gray;margin:1px' class='roundBorder'>Activators (spots)"
+    
+    worker += "<table id='potaSpotsTable' class='darkTable' style='margin: 0 auto;'>";
+    worker += "<tr><th>Activator</th><th>Spotter</th><th>Freq</th><th>Mode</th><th>Count</th><th>When</th><th>Source</th><th>Comment</th></tr>";
+    for (const i in g_pota.parkSpots[key])
+    {
+      worker += "<tr>";
+      worker += "<td style='color:yellow'>" + g_pota.parkSpots[key][i].activator + "</td>";
+      worker += "<td style='color:cyan'>" + ((g_pota.parkSpots[key][i].spotter == g_pota.parkSpots[key][i].activator) ? "Self" : g_pota.parkSpots[key][i].spotter) + "</td>";
+      worker += "<td style='color:lightgreen' >" + g_pota.parkSpots[key][i].frequency.formatMhz(3, 3) + " <font color='yellow'>(" + g_pota.parkSpots[key][i].frequency.formatBand() + ")</font></td>";
+      worker += "<td style='color:orange'>" + g_pota.parkSpots[key][i].mode + "</td>";
+      worker += "<td>" + g_pota.parkSpots[key][i].count + "</td>";
+      worker += "<td style='color:lightblue' >" + parseInt((now - g_pota.parkSpots[key][i].spotTime) / 1000).toDHMS() + "</td>";
+      worker += "<td>" + g_pota.parkSpots[key][i].source + "</td>";
+      worker += "<td>" + g_pota.parkSpots[key][i].comments + "</td>";
+      worker += "</tr>";
+    }
+    worker += "</table>";
+    worker += "</div>";
+  }
+
+  if (parkObj.scheduled)
+  {
+    worker += "<div style='background-color:#000;color:#fff;font-size:12px;border:1px solid gray;margin:1px' class='roundBorder'>Activations (scheduled)"
+    worker += "<table id='potaScheduleTable' class='darkTable' style='margin: 0 auto;'>";
+    worker += "<tr><th>Activator</th><th>Start</th><th>End</th><th>Frequencies</th><th>Comment</th></tr>";
+    for (const i in g_pota.parkSchedule[key])
+    {
+      let start = g_pota.parkSchedule[key][i].start;
+      let end = g_pota.parkSchedule[key][i].end;
+      
+      worker += "<tr>";
+      worker += "<td style='color:yellow'>" + g_pota.parkSchedule[key][i].id + "</td>";
+      worker += "<td style='color:lightblue'>" + ((now >= start && now < end) ? "<font color='white'>Now</font>" : (userTimeString(start) + "</br><font color='lightgreen'>T- " + Number(start - now).msToDHMS() + "</font>")) + "</td>";
+      worker += "<td style='color:lightblue'>" + ((now < end) ? (userTimeString(end) + "</br><font color='orange'>T- " + Number(end - now).msToDHMS() + "</font>") : "<font color='white'>Expired</font>") + "</td>";
+      worker += "<td style='color:lightgreen'>" + g_pota.parkSchedule[key][i].frequencies + "</td>";
+      worker += "<td>" + g_pota.parkSchedule[key][i].comments.substr(0, 40) + "</td>";
+      worker += "</tr>";
+    }
+    worker += "</table>";
+    worker += "</div>";
+  }
+  
+  myParktip.innerHTML = worker;
+  return 1;
 }

@@ -1801,7 +1801,6 @@ function compareCallsignTime(a, b)
 
 function createFlagTipTable(toolElement)
 {
-  var myFlagtip = document.getElementById("myFlagtip");
   var worker = "";
   if (toolElement.size == 1)
   {
@@ -5656,6 +5655,7 @@ function initMap()
     var noAward = true;
     var noMoon = true;
     var noTimeZone = true;
+    var noPark = true;
 
     if (g_map.hasFeatureAtPixel(mousePosition))
     {
@@ -5693,6 +5693,15 @@ function initMap()
             break;
           }
 
+          if (features[index].size == 22)
+          {
+            mouseOverPark(features[index]);
+            noPark = false;
+            noFlag = true;
+            noFeature = true;
+            break;
+          }
+          
           if (features[index].size == 6)
           {
             noFeature = false;
@@ -5718,6 +5727,7 @@ function initMap()
     }
     if (noFeature) mouseOutOfDataItem();
     if (noFlag) mouseOutGtFlag();
+    if (noPark) mouseOutPark();
     if (noAward) trophyOut();
     if (noMoon) moonOut();
   });
@@ -5918,6 +5928,7 @@ function mapLoseFocus()
   mouseUpGrid();
   moonOut();
   mouseOutGtFlag();
+  mouseOutPark();
 }
 
 function lineString(points)

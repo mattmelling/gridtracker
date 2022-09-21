@@ -91,7 +91,7 @@ var g_defaultSettings = {
   allOnlyNew: false,
   useRegex: false,
   callsignRegex: "",
-  realtime: false,
+  realtime: true,
   wanted: {
     huntCallsign: false,
     huntGrid: true,
@@ -1720,23 +1720,25 @@ function init()
   for (let columnIndex in g_rosterSettings.columnOrder)
   {
     let key = g_rosterSettings.columnOrder[columnIndex];
+    if (key != "Callsign")
+    {
+      let itemx = new nw.MenuItem({
+        type: "checkbox",
+        label: key,
+        checked: g_rosterSettings.columns[key],
+        click: function ()
+        {
+          g_rosterSettings.columns[this.label] = this.checked;
+          if (this.label == "Spot")
+          { window.opener.setRosterSpot(g_rosterSettings.columns.Spot); }
+          writeRosterSettings();
+          window.opener.goProcessRoster();
+          resize();
+        }
+      });
 
-    let itemx = new nw.MenuItem({
-      type: "checkbox",
-      label: key,
-      checked: g_rosterSettings.columns[key],
-      click: function ()
-      {
-        g_rosterSettings.columns[this.label] = this.checked;
-        if (this.label == "Spot")
-        { window.opener.setRosterSpot(g_rosterSettings.columns.Spot); }
-        writeRosterSettings();
-        window.opener.goProcessRoster();
-        resize();
-      }
-    });
-
-    g_menu.append(itemx);
+      g_menu.append(itemx);
+    }
   }
 
   item = new nw.MenuItem({ type: "separator" });

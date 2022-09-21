@@ -119,31 +119,34 @@ function makeParkFeature(park)
 
 function processPotaParks(buffer)
 {
-  try
+  if (g_potaEnabled == 1)
   {
-    let newParks = JSON.parse(buffer);
-    for (const park in newParks)
+    try
     {
-      let locations = newParks[park].locationDesc.split(",");
-      for (const i in locations)
+      let newParks = JSON.parse(buffer);
+      for (const park in newParks)
       {
-        if (locations[i] in g_StateData)
+        let locations = newParks[park].locationDesc.split(",");
+        for (const i in locations)
         {
-          locations[i] = g_StateData[locations[i]].name;
+          if (locations[i] in g_StateData)
+          {
+            locations[i] = g_StateData[locations[i]].name;
+          }
         }
+        newParks[park].locationDesc = locations.join(", ");
       }
-      newParks[park].locationDesc = locations.join(", ");
-    }
-    g_pota.parks = newParks;
+      g_pota.parks = newParks;
 
-    getPotaSchedule();
-    getPotaSpots();
-  }
-  catch (e)
-  {
-    // can't write, somethings broke
-    console.log("Failed to load parks!");
-    console.log(e.message);
+      getPotaSchedule();
+      getPotaSpots();
+    }
+    catch (e)
+    {
+      // can't write, somethings broke
+      console.log("Failed to load parks!");
+      console.log(e.message);
+    }
   }
 }
 
@@ -184,42 +187,45 @@ function uniqueArrayFromArray(input)
 
 function processPotaSpots(buffer)
 {
-  try
+  if (g_potaEnabled == 1)
   {
-    let spots = JSON.parse(buffer);
-    g_pota.callSpots = {};
-    g_pota.parkSpots = {};
-    for (const spot in spots)
+    try
     {
-      if (spots[spot].reference in g_pota.parks)
+      let spots = JSON.parse(buffer);
+      g_pota.callSpots = {};
+      g_pota.parkSpots = {};
+      for (const spot in spots)
       {
-        spots[spot].spotTime = Date.parse(spots[spot].spotTime + "Z");
-        spots[spot].expire = (spots[spot].expire * 1000) + spots[spot].spotTime;
-        spots[spot].frequency = parseInt(spots[spot].frequency) / 1000;
-        (g_pota.callSpots[spots[spot].activator] = g_pota.callSpots[spots[spot].activator] || []).push(spots[spot].reference);
-        (g_pota.parkSpots[spots[spot].reference] = g_pota.parkSpots[spots[spot].reference] || []).push(spots[spot]);
+        if (spots[spot].reference in g_pota.parks)
+        {
+          spots[spot].spotTime = Date.parse(spots[spot].spotTime + "Z");
+          spots[spot].expire = (spots[spot].expire * 1000) + spots[spot].spotTime;
+          spots[spot].frequency = parseInt(spots[spot].frequency) / 1000;
+          (g_pota.callSpots[spots[spot].activator] = g_pota.callSpots[spots[spot].activator] || []).push(spots[spot].reference);
+          (g_pota.parkSpots[spots[spot].reference] = g_pota.parkSpots[spots[spot].reference] || []).push(spots[spot]);
+        }
+        else
+        {
+          console.log("PotaSpots: unknown park id: " + spots[spot].reference);
+        }
       }
-      else
+
+      // Sanity dedupe checks
+      for (const spot in g_pota.callSpots)
       {
-        console.log("PotaSpots: unknown park id: " + spots[spot].reference);
+        g_pota.callSpots[spot] = uniqueArrayFromArray(g_pota.callSpots[spot]);
       }
-    }
+      for (const spot in g_pota.parkSpots)
+      {
+        g_pota.parkSpots[spot] = uniqueArrayFromArray(g_pota.parkSpots[spot]);
+      }
 
-    // Sanity dedupe checks
-    for (const spot in g_pota.callSpots)
-    {
-      g_pota.callSpots[spot] = uniqueArrayFromArray(g_pota.callSpots[spot]);
+      rebuildParks();
     }
-    for (const spot in g_pota.parkSpots)
+    catch (e)
     {
-      g_pota.parkSpots[spot] = uniqueArrayFromArray(g_pota.parkSpots[spot]);
+      // can't write, somethings broke
     }
-
-    rebuildParks();
-  }
-  catch (e)
-  {
-    // can't write, somethings broke
   }
 }
 
@@ -247,52 +253,55 @@ function getPotaSpots()
 
 function processPotaSchedule(buffer)
 {
-  try
+  if (g_potaEnabled == 1)
   {
-    let schedules = JSON.parse(buffer);
-    g_pota.callSchedule = {};
-    g_pota.parkSchedule = {};
-    for (const i in schedules)
+    try
     {
-      let newObj = {};
-      newObj.id = schedules[i].reference;
-      newObj.start = Date.parse(schedules[i].startDate + "T" + schedules[i].startTime + "Z");
-      newObj.end = Date.parse(schedules[i].endDate + "T" + schedules[i].endTime + "Z");
-      newObj.frequencies = schedules[i].frequencies;
-      newObj.comments = schedules[i].comments;
-      if (Date.now() < newObj.end)
+      let schedules = JSON.parse(buffer);
+      g_pota.callSchedule = {};
+      g_pota.parkSchedule = {};
+      for (const i in schedules)
       {
-        if (newObj.id in g_pota.parks)
+        let newObj = {};
+        newObj.id = schedules[i].reference;
+        newObj.start = Date.parse(schedules[i].startDate + "T" + schedules[i].startTime + "Z");
+        newObj.end = Date.parse(schedules[i].endDate + "T" + schedules[i].endTime + "Z");
+        newObj.frequencies = schedules[i].frequencies;
+        newObj.comments = schedules[i].comments;
+        if (Date.now() < newObj.end)
         {
-          (g_pota.callSchedule[schedules[i].activator] = g_pota.callSchedule[schedules[i].activator] || []).push(newObj);
+          if (newObj.id in g_pota.parks)
+          {
+            (g_pota.callSchedule[schedules[i].activator] = g_pota.callSchedule[schedules[i].activator] || []).push(newObj);
 
-          newObj = Object.assign({}, newObj);
-          newObj.id = schedules[i].activator;
-          (g_pota.parkSchedule[schedules[i].reference] = g_pota.parkSchedule[schedules[i].reference] || []).push(newObj);
+            newObj = Object.assign({}, newObj);
+            newObj.id = schedules[i].activator;
+            (g_pota.parkSchedule[schedules[i].reference] = g_pota.parkSchedule[schedules[i].reference] || []).push(newObj);
+          }
+          else
+          {
+            console.log("PotaSchedule: unknown park id: " + newObj.id);
+          }
         }
-        else
-        {
-          console.log("PotaSchedule: unknown park id: " + newObj.id);
-        }
+        // else it is expired and no longer relevant
       }
-      // else it is expired and no longer relevant
-    }
 
-    // Sanity dedupe checks
-    for (const key in g_pota.callSchedule)
-    {
-      g_pota.callSchedule[key] = uniqueArrayFromArray(g_pota.callSchedule[key]);
-    }
-    for (const key in g_pota.parkSchedule)
-    {
-      g_pota.parkSchedule[key] = uniqueArrayFromArray(g_pota.parkSchedule[key]);
-    }
+      // Sanity dedupe checks
+      for (const key in g_pota.callSchedule)
+      {
+        g_pota.callSchedule[key] = uniqueArrayFromArray(g_pota.callSchedule[key]);
+      }
+      for (const key in g_pota.parkSchedule)
+      {
+        g_pota.parkSchedule[key] = uniqueArrayFromArray(g_pota.parkSchedule[key]);
+      }
 
-    rebuildParks();
-  }
-  catch (e)
-  {
-    // can't write, somethings broke
+      rebuildParks();
+    }
+    catch (e)
+    {
+      // can't write, somethings broke
+    }
   }
 }
 

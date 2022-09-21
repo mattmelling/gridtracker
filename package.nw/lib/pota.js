@@ -335,8 +335,9 @@ function mouseOverPark(feature)
   createParkTipTable(feature);
 
   var positionInfo = myParktip.getBoundingClientRect();
-  myParktip.style.left = getMouseX() + 15 + "px";
-  myParktip.style.top = getMouseY() - positionInfo.height - 5 + "px";
+  
+  myParktip.style.left = getMouseX() - positionInfo.width / 2 + "px";
+  myParktip.style.top = getMouseY() - positionInfo.height - 22 + "px";
   myParktip.style.zIndex = 499;
   myParktip.style.display = "block";
 }
@@ -350,8 +351,8 @@ function mouseOutPark(mouseEvent)
 function mouseParkMove()
 {
   var positionInfo = myParktip.getBoundingClientRect();
-  myParktip.style.left = getMouseX() + 15 + "px";
-  myParktip.style.top = getMouseY() - positionInfo.height - 5 + "px";
+  myParktip.style.left = getMouseX() - positionInfo.width / 2 + "px";
+  myParktip.style.top = getMouseY() - positionInfo.height - 22 + "px";
 }
 
 function createParkTipTable(toolElement)

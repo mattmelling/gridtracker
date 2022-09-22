@@ -413,13 +413,16 @@ function createParkTipTable(toolElement)
       let start = g_pota.parkSchedule[key][i].start;
       let end = g_pota.parkSchedule[key][i].end;
       
-      worker += "<tr>";
-      worker += "<td style='color:yellow'>" + g_pota.parkSchedule[key][i].id + "</td>";
-      worker += "<td style='color:lightblue'>" + ((now >= start && now < end) ? "<font color='white'>Now</font>" : (userTimeString(start) + "</br><font color='lightgreen'>T- " + Number(start - now).msToDHMS() + "</font>")) + "</td>";
-      worker += "<td style='color:lightblue'>" + ((now < end) ? (userTimeString(end) + "</br><font color='orange'>T- " + Number(end - now).msToDHMS() + "</font>") : "<font color='white'>Expired</font>") + "</td>";
-      worker += "<td style='color:lightgreen'>" + g_pota.parkSchedule[key][i].frequencies + "</td>";
-      worker += "<td>" + g_pota.parkSchedule[key][i].comments.substr(0, 40) + "</td>";
-      worker += "</tr>";
+      if (now < end)
+      {
+        worker += "<tr>";
+        worker += "<td style='color:yellow'>" + g_pota.parkSchedule[key][i].id + "</td>";
+        worker += "<td style='color:lightblue'>" + ((now >= start) ? "<font color='white'>Now</font>" : (userTimeString(start) + "</br><font color='lightgreen'>T- " + Number(start - now).msToDHMS() + "</font>")) + "</td>";
+        worker += "<td style='color:lightblue'>" + (userTimeString(end) + "</br><font color='orange'>T- " + Number(end - now).msToDHMS() + "</font>") + "</td>";
+        worker += "<td style='color:lightgreen'>" + g_pota.parkSchedule[key][i].frequencies + "</td>";
+        worker += "<td>" + g_pota.parkSchedule[key][i].comments.substr(0, 40) + "</td>";
+        worker += "</tr>";
+      }
     }
     worker += "</table>";
     worker += "</div>";

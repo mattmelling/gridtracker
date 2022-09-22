@@ -1664,7 +1664,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: $.i18n("roster.CompactMode"),
+    label: $.i18n("roster.menu.CompactMode"),
     click: function ()
     {
       g_rosterSettings.compact = true;
@@ -1676,7 +1676,7 @@ function addControls()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: $.i18n("roster.RosterMode"),
+    label: $.i18n("roster.menu.RosterMode"),
     click: function ()
     {
       g_rosterSettings.compact = false;

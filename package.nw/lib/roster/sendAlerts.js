@@ -76,8 +76,8 @@ function sendAlerts(callRoster, rosterSettings)
         scriptIcon.innerHTML =
           "<div class='buttonScript' onclick='window.opener.toggleCRScript();'>" +
           (window.opener.g_crScript == 1
-            ? "<font color='lightgreen'>Script Enabled</font>"
-            : "<font color='yellow'>Script Disabled</font>") +
+            ? `<font color='lightgreen'>${$.i18n("sendAlerts.scriptEnabled")}</font>`
+            : `<font color='yellow'>${$.i18n("sendAlerts.scriptDisabled")}</font>`) +
           "</div>";
         scriptIcon.style.display = "block";
       }

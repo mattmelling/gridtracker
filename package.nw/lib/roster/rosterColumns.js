@@ -154,7 +154,7 @@ const ROSTER_COLUMNS = {
       }
       if (callObj.cnty && callObj.qual == false)
       {
-        attrs.title = "Matches multiple counties, click to do a full lookup"
+        attrs.title = $.i18n("rosterColumns.County.title")
         attrs.onClick = `window.opener.lookupCallsign("${callObj.DEcall}", "${callObj.grid}")`
         attrs.html = attrs.html + " +" + String(window.opener.g_zipToCounty[callObj.zipcode].length - 1)
         attrs.style = "cursor: pointer; color: cyan;"
@@ -253,7 +253,7 @@ const ROSTER_COLUMNS = {
             return {
               style: "color: yellow;",
               align: "center",
-              title: `Has not updated a QSO in ${Number(months).toYM()}`,
+              title: `${$.i18n("rosterColumns.LoTW.NoUpdate")} ${Number(months).toYM()}`,
               html: "?"
             }
           }
@@ -262,7 +262,7 @@ const ROSTER_COLUMNS = {
             return {
               style: "color: #0F0;",
               align: "center",
-              title: `Last Upload&#10;${
+              title: `${$.i18n("rosterColumns.LoTW.LastUpdate")}${
                 window.opener.userDayString(window.opener.g_lotwCallsigns[callObj.DEcall] * 86400000)
               }`,
               html: "&#10004;"
@@ -274,7 +274,7 @@ const ROSTER_COLUMNS = {
           return {
             style: "color: #0F0;",
             align: "center",
-            title: `Last Upload&#10;${
+            title: `${$.i18n("rosterColumns.LoTW.LastUpdate")}${
               window.opener.userDayString(window.opener.g_lotwCallsigns[callObj.DEcall] * 86400000)
             }`,
             html: "&#10004;"
@@ -430,20 +430,19 @@ function potaColumnHover(callObj)
 
 WANTED_ORDER = ["call", "qrz", "regex", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
 WANTED_LABELS = {
-  cont: "Continent",
-  cqz: "CQ Zone",
-  ituz: "ITU Zone",
-  dxcc: "DXCC",
-  dxccMarathon: "Marathon DXCC",
-  cqzMarathon: "Marathon CQ Zone",
-  state: "State",
-  grid: "Grid",
-  cnty: "County",
-  wpx: "WPX",
-  call: "Call",
-  regex: "Regex",
-  oams: "OAMS",
-  pota: "POTA"
+  cont: $.i18n("rosterColumns.Wanted.cont"),
+  cqz: $.i18n("rosterColumns.Wanted.cqz"),
+  ituz: $.i18n("rosterColumns.Wanted.ituz"),
+  dxcc: $.i18n("rosterColumns.Wanted.dxcc"),
+  dxccMarathon: $.i18n("rosterColumns.Wanted.dxccMarathon"),
+  cqzMarathon: $.i18n("rosterColumns.Wanted.cqzMarathon"),
+  state: $.i18n("rosterColumns.Wanted.state"),
+  grid: $.i18n("rosterColumns.Wanted.grid"),
+  cnty: $.i18n("rosterColumns.Wanted.county"),
+  wpx: $.i18n("rosterColumns.Wanted.wpx"),
+  call: $.i18n("rosterColumns.Wanted.call"),
+  oams: $.i18n("rosterColumns.Wanted.oams"),
+  pota: $.i18n("rosterColumns.Wanted.pota"),
 }
 
 function wantedColumnParts(callObj, options)

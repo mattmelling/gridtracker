@@ -139,7 +139,7 @@ function processPotaParks(buffer)
         newParks[park].locationDesc = locations.join(", ");
       }
       g_pota.parks = newParks;
-      g_pota.locations =  data.locations;
+      g_pota.locations = data.locations;
       getPotaSchedule();
       getPotaSpots();
     }

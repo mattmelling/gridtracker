@@ -4,6 +4,7 @@
 
 var g_pota = {
   parks: {},
+  locations: {},
   parksTimeout: null,
   callSchedule: {},
   parkSchedule: {},
@@ -123,21 +124,22 @@ function processPotaParks(buffer)
   {
     try
     {
-      let newParks = JSON.parse(buffer);
+      let data = JSON.parse(buffer);
+      let newParks = data.parks;
       for (const park in newParks)
       {
         let locations = newParks[park].locationDesc.split(",");
         for (const i in locations)
         {
-          if (locations[i] in g_StateData)
+          if (locations[i] in data.locations)
           {
-            locations[i] = g_StateData[locations[i]].name;
+            locations[i] = data.locations[locations[i]];
           }
         }
         newParks[park].locationDesc = locations.join(", ");
       }
       g_pota.parks = newParks;
-
+      g_pota.locations =  data.locations;
       getPotaSchedule();
       getPotaSpots();
     }
@@ -376,8 +378,7 @@ function createParkTipTable(toolElement)
     key +
     " : <font color='cyan'>" + g_pota.parks[key].name + "" +
     " (<font color='yellow'>" + g_dxccToAltName[Number(g_pota.parks[key].entityId)] + "</font>)" +
-    // "</br>" + g_pota.parks[key].locationDesc +
-    "</font></div>";
+    "</font></br><font color='lightblue'>" + g_pota.parks[key].locationDesc + "</font></div>";
 
   if (parkObj.spotted)
   {

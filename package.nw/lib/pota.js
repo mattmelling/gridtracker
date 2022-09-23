@@ -405,27 +405,34 @@ function createParkTipTable(toolElement)
 
   if (parkObj.scheduled)
   {
-    worker += "<div style='background-color:#000;color:#fff;font-size:12px;border:1px solid gray;margin:1px' class='roundBorder'>Activations (scheduled)"
-    worker += "<table id='potaScheduleTable' class='darkTable' style='margin: 0 auto;'>";
-    worker += "<tr><th>Activator</th><th>Start</th><th>End</th><th>Frequencies</th><th>Comment</th></tr>";
+    let active = 0;
+    let buffer = "";
+    buffer += "<div style='background-color:#000;color:#fff;font-size:12px;border:1px solid gray;margin:1px' class='roundBorder'>Activations (scheduled)"
+    buffer += "<table id='potaScheduleTable' class='darkTable' style='margin: 0 auto;'>";
+    buffer += "<tr><th>Activator</th><th>Start</th><th>End</th><th>Frequencies</th><th>Comment</th></tr>";
     for (const i in g_pota.parkSchedule[key])
     {
       let start = g_pota.parkSchedule[key][i].start;
       let end = g_pota.parkSchedule[key][i].end;
-      
       if (now < end)
       {
-        worker += "<tr>";
-        worker += "<td style='color:yellow'>" + g_pota.parkSchedule[key][i].id + "</td>";
-        worker += "<td style='color:lightblue'>" + ((now >= start) ? "<font color='white'>Now</font>" : (userTimeString(start) + "</br><font color='lightgreen'>T- " + Number(start - now).msToDHMS() + "</font>")) + "</td>";
-        worker += "<td style='color:lightblue'>" + (userTimeString(end) + "</br><font color='orange'>T- " + Number(end - now).msToDHMS() + "</font>") + "</td>";
-        worker += "<td style='color:lightgreen'>" + g_pota.parkSchedule[key][i].frequencies + "</td>";
-        worker += "<td>" + g_pota.parkSchedule[key][i].comments.substr(0, 40) + "</td>";
-        worker += "</tr>";
+        buffer += "<tr>";
+        buffer += "<td style='color:yellow'>" + g_pota.parkSchedule[key][i].id + "</td>";
+        buffer += "<td style='color:lightblue'>" + ((now >= start) ? "<font color='white'>Now</font>" : (userTimeString(start) + "</br><font color='lightgreen'>T- " + Number(start - now).msToDHMS() + "</font>")) + "</td>";
+        buffer += "<td style='color:lightblue'>" + (userTimeString(end) + "</br><font color='orange'>T- " + Number(end - now).msToDHMS() + "</font>") + "</td>";
+        buffer += "<td style='color:lightgreen'>" + g_pota.parkSchedule[key][i].frequencies + "</td>";
+        buffer += "<td>" + g_pota.parkSchedule[key][i].comments.substr(0, 40) + "</td>";
+        buffer += "</tr>";
+        active++;
       }
     }
-    worker += "</table>";
-    worker += "</div>";
+    buffer += "</table>";
+    buffer += "</div>";
+    if (active > 0)
+    {
+      // Only if we found non-expired schedules
+      worker += buffer;
+    }
   }
   
   myParktip.innerHTML = worker;

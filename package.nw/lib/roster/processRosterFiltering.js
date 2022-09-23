@@ -45,11 +45,6 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
-    if (entry.DXcall == "CQ POTA" && huntPOTA.checked == true)
-    {
-      entry.tx = true;
-      continue;
-    }
     if (callObj.ituza in g_blockedITUz)
     {
       entry.tx = false;
@@ -141,13 +136,10 @@ function processRosterFiltering(callRoster, rosterSettings)
         continue;
       }
     }
-    else
+    else if (g_rosterSettings.onlyMyDxcc == true)
     {
-      if (g_rosterSettings.onlyMyDxcc == true)
-      {
-        entry.tx = false;
-        continue;
-      }
+      entry.tx = false;
+      continue;
     }
 
     if (window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.usesLoTW == true)

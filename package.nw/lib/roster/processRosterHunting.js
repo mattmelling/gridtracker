@@ -496,7 +496,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for POTAs
-        if (huntPOTA.checked == true && callObj.pota != null)
+        if (huntPOTA.checked == true && callObj.pota.length > 0)
         {
           let huntTotal = callObj.pota.length;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;

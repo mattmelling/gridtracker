@@ -691,6 +691,7 @@ function gtBandFilterChanged(selector)
   removePaths();
   redrawGrids();
   redrawSpots();
+  redrawParks();
 }
 
 function gtModeFilterChanged(selector)
@@ -699,6 +700,7 @@ function gtModeFilterChanged(selector)
 
   redrawGrids();
   redrawSpots();
+  redrawParks();
 }
 
 function gtPropFilterChanged(selector)
@@ -715,6 +717,7 @@ function setBandAndModeToAuto()
     "auto";
   redrawGrids();
   redrawSpots();
+  redrawParks();
 }
 
 function hideLiveGrid(i)
@@ -6472,6 +6475,7 @@ function handleWsjtxStatus(newMessage)
       goProcessRoster();
       redrawGrids();
       redrawSpots();
+      redrawParks();
       redrawPins();
 
       var msg = "";
@@ -13219,6 +13223,7 @@ function changeMapLayer()
 
   changePathWidth();
   redrawSpots();
+  redrawParks();
 }
 
 function voiceChangedValue()

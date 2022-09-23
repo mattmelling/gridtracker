@@ -10,13 +10,12 @@ var g_pota = {
   parkSchedule: {},
   scheduleTimeout: null,
   callSpots: {},
+  parkSpots: {},
   spotsTimeout: null,
   mapParks: {}
 };
 
 var g_defaultPark = {
-  scheduled: false,
-  spotted: false,
   feature: null
 }
 
@@ -60,61 +59,47 @@ function togglePota()
   }
 }
 
-function rebuildParks()
+function redrawParks()
 {
-  g_layerSources.pota.clear();
-  g_pota.mapParks = {};
-  
-  for (const park in g_pota.parkSpots)
+  if (g_potaEnabled == 1)
   {
-    let obj = makeParkFeature(park);
-    if (obj)
-    {
-      obj.spotted = true;
-    }
-  }
-  for (const park in g_pota.parkSchedule)
-  {
-    let obj = makeParkFeature(park);
-    if (obj)
-    {
-      obj.scheduled = true;
-    }
+    g_layerSources.pota.clear();
+    g_pota.mapParks = {};
+    makeParkFeatures();
   }
 }
 
-function makeParkFeature(park)
+function makeParkFeatures()
 {
   try
   {
-    if (park in g_pota.parks)
+    for (const park in g_pota.parkSpots)
     {
-      let parkObj = null;
-      if (park in g_pota.mapParks)
+      if (park in g_pota.parks)
       {
-        parkObj = g_pota.mapParks[park];
+        let parkObj = Object.assign({}, g_defaultPark);
+
+        for (const i in g_pota.parkSpots[park])
+        {
+          let report = g_pota.parkSpots[park][i];
+          if (parkObj.feature == null && (g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == "auto" ? myBand == report.band : g_appSettings.gtBandFilter == report.band)) && validateMapMode(report.mode))
+          {
+            parkObj.feature = iconFeature(ol.proj.fromLonLat([Number(g_pota.parks[park].longitude), Number(g_pota.parks[park].latitude)]), g_gtParkIconActive, 1);
+            parkObj.feature.key = park;
+            parkObj.feature.size = 22;
+            
+            g_pota.mapParks[park] = parkObj;
+            g_layerSources.pota.addFeature(parkObj.feature);
+            break;
+          }
+        }
       }
-      else
-      {
-        parkObj = Object.assign({}, g_defaultPark);
-        g_pota.mapParks[park] = parkObj;
-      }
-      if (parkObj.feature == null)
-      {
-        parkObj.feature = iconFeature(ol.proj.fromLonLat([Number(g_pota.parks[park].longitude), Number(g_pota.parks[park].latitude)]), g_gtParkIconActive, 1);
-        parkObj.feature.key = park;
-        parkObj.feature.size = 22;
-        
-        g_layerSources.pota.addFeature(parkObj.feature);
-      }
-      return parkObj;
     }
   }
   catch (e)
   {
     console.log("exception: makeParkFeature " + park);
     console.log(e.message);
-    return null;
   }
 }
 
@@ -203,6 +188,7 @@ function processPotaSpots(buffer)
           spots[spot].spotTime = Date.parse(spots[spot].spotTime + "Z");
           spots[spot].expire = (spots[spot].expire * 1000) + spots[spot].spotTime;
           spots[spot].frequency = parseInt(spots[spot].frequency) / 1000;
+          spots[spot].band = spots[spot].frequency.formatBand();
           (g_pota.callSpots[spots[spot].activator] = g_pota.callSpots[spots[spot].activator] || []).push(spots[spot].reference);
           (g_pota.parkSpots[spots[spot].reference] = g_pota.parkSpots[spots[spot].reference] || []).push(spots[spot]);
         }
@@ -222,7 +208,7 @@ function processPotaSpots(buffer)
         g_pota.parkSpots[spot] = uniqueArrayFromArray(g_pota.parkSpots[spot]);
       }
 
-      rebuildParks();
+      redrawParks();
     }
     catch (e)
     {
@@ -297,8 +283,6 @@ function processPotaSchedule(buffer)
       {
         g_pota.parkSchedule[key] = uniqueArrayFromArray(g_pota.parkSchedule[key]);
       }
-
-      rebuildParks();
     }
     catch (e)
     {
@@ -380,33 +364,24 @@ function createParkTipTable(toolElement)
     " (<font color='yellow'>" + g_dxccToAltName[Number(g_pota.parks[key].entityId)] + "</font>)" +
     "</font></br><font color='lightblue'>" + g_pota.parks[key].locationDesc + "</font></div>";
 
-  if (parkObj.spotted)
+  worker += "<table id='potaSpotsTable' class='darkTable' style='margin: 0 auto;'>";
+  worker += "<tr><th>Activator</th><th>Spotter</th><th>Freq</th><th>Mode</th><th>Count</th><th>When</th><th>Source</th><th>Comment</th></tr>";
+  for (const i in g_pota.parkSpots[key])
   {
-    worker += "<div style='background-color:#000;color:#fff;font-size:12px;border:1px solid gray;margin:1px' class='roundBorder'>Activators (spots)"
-    
-    worker += "<table id='potaSpotsTable' class='darkTable' style='margin: 0 auto;'>";
-    worker += "<tr><th>Activator</th><th>Spotter</th><th>Freq</th><th>Mode</th><th>Count</th><th>When</th><th>Source</th><th>Comment</th></tr>";
-    for (const i in g_pota.parkSpots[key])
-    {
-      worker += "<tr>";
-      worker += "<td style='color:yellow'>" + g_pota.parkSpots[key][i].activator + "</td>";
-      worker += "<td style='color:cyan'>" + ((g_pota.parkSpots[key][i].spotter == g_pota.parkSpots[key][i].activator) ? "Self" : g_pota.parkSpots[key][i].spotter) + "</td>";
-      worker += "<td style='color:lightgreen' >" + g_pota.parkSpots[key][i].frequency.formatMhz(3, 3) + " <font color='yellow'>(" + g_pota.parkSpots[key][i].frequency.formatBand() + ")</font></td>";
-      worker += "<td style='color:orange'>" + g_pota.parkSpots[key][i].mode + "</td>";
-      worker += "<td>" + g_pota.parkSpots[key][i].count + "</td>";
-      worker += "<td style='color:lightblue' >" + parseInt((now - g_pota.parkSpots[key][i].spotTime) / 1000).toDHMS() + "</td>";
-      worker += "<td>" + g_pota.parkSpots[key][i].source + "</td>";
-      worker += "<td>" + g_pota.parkSpots[key][i].comments + "</td>";
-      worker += "</tr>";
-    }
-    worker += "</table>";
-    worker += "</div>";
+    worker += "<tr>";
+    worker += "<td style='color:yellow'>" + g_pota.parkSpots[key][i].activator + "</td>";
+    worker += "<td style='color:cyan'>" + ((g_pota.parkSpots[key][i].spotter == g_pota.parkSpots[key][i].activator) ? "Self" : g_pota.parkSpots[key][i].spotter) + "</td>";
+    worker += "<td style='color:lightgreen' >" + g_pota.parkSpots[key][i].frequency.formatMhz(3, 3) + " <font color='yellow'>(" + g_pota.parkSpots[key][i].band + ")</font></td>";
+    worker += "<td style='color:orange'>" + g_pota.parkSpots[key][i].mode + "</td>";
+    worker += "<td>" + g_pota.parkSpots[key][i].count + "</td>";
+    worker += "<td style='color:lightblue' >" + parseInt((now - g_pota.parkSpots[key][i].spotTime) / 1000).toDHMS() + "</td>";
+    worker += "<td>" + g_pota.parkSpots[key][i].source + "</td>";
+    worker += "<td>" + g_pota.parkSpots[key][i].comments + "</td>";
+    worker += "</tr>";
   }
+  worker += "</table>";
 
-  if (parkObj.scheduled)
-  {
-    let active = 0;
-    let buffer = "";
+  /*
     buffer += "<div style='background-color:#000;color:#fff;font-size:12px;border:1px solid gray;margin:1px' class='roundBorder'>Activations (scheduled)"
     buffer += "<table id='potaScheduleTable' class='darkTable' style='margin: 0 auto;'>";
     buffer += "<tr><th>Activator</th><th>Start</th><th>End</th><th>Frequencies</th><th>Comment</th></tr>";
@@ -426,15 +401,7 @@ function createParkTipTable(toolElement)
         active++;
       }
     }
-    buffer += "</table>";
-    buffer += "</div>";
-    if (active > 0)
-    {
-      // Only if we found non-expired schedules
-      worker += buffer;
-    }
-  }
-  
+  */
   myParktip.innerHTML = worker;
   return 1;
 }

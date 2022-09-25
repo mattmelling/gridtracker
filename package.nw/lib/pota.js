@@ -12,20 +12,24 @@ var g_pota = {
   callSpots: {},
   parkSpots: {},
   spotsTimeout: null,
-  mapParks: {}
+  mapParks: {},
+  rbnReportTimes: {},
+  rbnFrequency: 600000
 };
 
 var g_spotTemplate = {
   activator: "",
   frequency: 0,
   mode: "",
+  band: "",
   reference: "",
   spotTime: 0,
   spotter: "",
   comments: "",
   source: "GT",
   count: 1,
-  rbn: false
+  activatorGrid: "",
+  spotterGrid: ""
 };
 
 var g_parkTemplate = {
@@ -70,6 +74,7 @@ function togglePota()
     g_layerSources.pota.clear();
     g_pota.mapParks = {};
   }
+  goProcessRoster();
 }
 
 function redrawParks()
@@ -92,10 +97,9 @@ function makeParkFeatures()
       if (park in g_pota.parks)
       {
         let parkObj = Object.assign({}, g_parkTemplate);
-
-        for (const i in g_pota.parkSpots[park])
+        for (const call in g_pota.parkSpots[park])
         {
-          let report = g_pota.parkSpots[park][i];
+          let report = g_pota.parkSpots[park][call];
           if (parkObj.feature == null && validateMapBandAndMode(report.band, report.mode))
           {
             parkObj.feature = iconFeature(ol.proj.fromLonLat([Number(g_pota.parks[park].longitude), Number(g_pota.parks[park].latitude)]), g_gtParkIconActive, 1);
@@ -104,7 +108,6 @@ function makeParkFeatures()
 
             g_pota.mapParks[park] = parkObj;
             g_layerSources.pota.addFeature(parkObj.feature);
-            break;
           }
         }
       }
@@ -117,23 +120,8 @@ function makeParkFeatures()
   }
 }
 
-var g_potaSpotRedrawTimer = null;
-
-function redrawParkSpotsOnTimeout()
-{
-  if (g_potaSpotRedrawTimer != null)
-  {
-    clearTimeout(g_potaSpotRedrawTimer);
-    g_potaSpotRedrawTimer = null;
-  }
-
-  g_potaSpotRedrawTimer = setTimeout(redrawParks, 250);
-}
-
 function potaSpotFromDecode(callObj)
 {
-  let hash = callObj.DEcall + callObj.band + callObj.mode;
-
   for (const i in callObj.pota)
   {
     let park = callObj.pota[i];
@@ -153,33 +141,27 @@ function potaSpotFromDecode(callObj)
     if (!(park in g_pota.parkSpots))
     {
       g_pota.parkSpots[park] = {};
-
-      let newSpot = spotFromCallObj(callObj, park);
-      g_pota.parkSpots[park][hash] = newSpot;
-      redrawParkSpotsOnTimeout();
+      g_pota.parkSpots[park][callObj.DEcall] = spotFromCallObj(callObj, park, 0, 0);
     }
-    else if (!(hash in g_pota.parkSpots[park]))
+    else if (!(callObj.DEcall in g_pota.parkSpots[park]))
     {
-      let newSpot = spotFromCallObj(callObj, park);
-      g_pota.parkSpots[park][hash] = newSpot;
-      redrawParkSpotsOnTimeout();
+      g_pota.parkSpots[park][callObj.DEcall] = spotFromCallObj(callObj, park, 0, 0);
     }
     else
     {
       // update spot
-      if (!g_pota.parkSpots[park][hash].rbn)
-      {
-        g_pota.parkSpots[park][hash].count++;
-        g_pota.parkSpots[park][hash].spotter = myDEcall;
-        g_pota.parkSpots[park][hash].spotTime = Date.now();
-        g_pota.parkSpots[park][hash].source = "GT";
-        g_pota.parkSpots[park][hash].comments = "RBN " + callObj.RSTsent + " dB " + myDEGrid;
-      }
+      g_pota.parkSpots[park][callObj.DEcall] = spotFromCallObj(callObj, park, g_pota.parkSpots[park][callObj.DEcall].count);
     }
-    if (!g_pota.parkSpots[park][hash].rbn)
+    
+    // may or may not be on screen, so try
+    addParkSpotFeature(park, g_pota.parkSpots[park][callObj.DEcall]);
+    
+    let hash = park+callObj.DEcall;
+    
+    if (!(hash in g_pota.rbnReportTimes) || Date.now() > g_pota.rbnReportTimes[hash])
     {
-      g_pota.parkSpots[park][hash].rbn = true;
-      reportPotaRBN(g_pota.parkSpots[park][hash]);
+      g_pota.rbnReportTimes[hash] = Date.now() + g_pota.rbnFrequency;
+      reportPotaRBN(g_pota.parkSpots[park][callObj.DEcall]);
     }
   }
 }
@@ -193,17 +175,17 @@ function reportPotaRBN(callSpot)
     reference: callSpot.reference,
     mode: callSpot.mode,
     source: "GT",
-    comments: callSpot.comments
+    comments: callSpot.comments,
+    activatorGrid: callSpot.activatorGrid,
+    spotterGrid: callSpot.spotterGrid
   }
-
-  // console.log(report);
-
+  
   getPostJSONBuffer(
     "https://api.pota.app/spot",
     rbnReportResult,
     null,
     "https",
-    80,
+    443,
     report,
     10000,
     null,
@@ -214,28 +196,29 @@ function reportPotaRBN(callSpot)
 function rbnReportResult(buffer, flag, cookies)
 {
   // It worked, but do we take these spots?
-  // console.log(String(buffer));
+  //console.log(String(buffer));
 }
 
-function spotFromCallObj(callObj, park)
+function spotFromCallObj(callObj, park, inCount, rbnTime)
 {
   let callSpot = {
     activator: callObj.DEcall,
+    activatorGrid: callObj.grid,
     spotter: myDEcall,
+    spotterGrid: myDEGrid,
     frequency: Number((g_instances[callObj.instance].status.Frequency / 1000000).toFixed(3)),
     reference: park,
     mode: callObj.mode,
     band: callObj.band,
     spotTime: Date.now(),
     source: "GT",
-    count: 1,
-    rbn: false,
+    count: inCount+1,
     comments: "RBN " + callObj.RSTsent + " dB " + myDEGrid
   };
   return callSpot;
 }
 
-function addParkSpotFeature(park)
+function addParkSpotFeature(park, report)
 {
   let parkObj = Object.assign({}, g_parkTemplate);
   if (park in g_pota.mapParks)
@@ -361,11 +344,20 @@ function processPotaSpots(buffer)
           newSpot.spotTime = Date.parse(newSpot.spotTime + "Z");
           newSpot.frequency = parseInt(newSpot.frequency) / 1000;
           newSpot.band = newSpot.frequency.formatBand();
-
           (g_pota.callSpots[newSpot.activator] = g_pota.callSpots[newSpot.activator] || []).push(newSpot.reference);
-
-          let hash = newSpot.activator + newSpot.band + newSpot.mode;
-          (g_pota.parkSpots[newSpot.reference] = g_pota.parkSpots[newSpot.reference] || {})[hash] = newSpot;
+          
+          if(!(newSpot.reference in g_pota.parkSpots))
+          {
+            g_pota.parkSpots[newSpot.reference] = {};
+          }
+          if (newSpot.activator in g_pota.parkSpots[newSpot.reference])
+          {
+            g_pota.parkSpots[newSpot.reference][newSpot.activator] = fillObjectFromTemplate(g_pota.parkSpots[newSpot.reference][newSpot.activator], newSpot);
+          }
+          else
+          {
+            g_pota.parkSpots[newSpot.reference][newSpot.activator] = newSpot;
+          }
         }
         else
         {
@@ -378,6 +370,7 @@ function processPotaSpots(buffer)
       {
         g_pota.callSpots[spot] = uniqueArrayFromArray(g_pota.callSpots[spot]);
       }
+      
       redrawParks();
     }
     catch (e)
@@ -482,11 +475,6 @@ function getPotaSchedule()
   g_pota.scheduleTimeout = setTimeout(getPotaSchedule, 900000);
 }
 
-function sendPotaSpot()
-{
-  // if Pota spotting enabled, and we have enough info, send a spot to Pota
-}
-
 var g_lastPark = null;
 function mouseOverPark(feature)
 {
@@ -516,12 +504,12 @@ function mouseParkMove()
   var positionInfo = myParktip.getBoundingClientRect();
   var windowWidth = window.innerWidth;
 
-  myParktip.style.left = getMouseX() - positionInfo.width / 2 + "px";
-  if (windowWidth - getMouseX() < positionInfo.width)
+  myParktip.style.left = getMouseX() - (positionInfo.width / 2) + "px";
+  if (windowWidth - getMouseX() < (positionInfo.width / 2))
   {
     myParktip.style.left = getMouseX() - (10 + positionInfo.width) + "px";
   }
-  if (getMouseX() - positionInfo.width < 0)
+  if (getMouseX() - (positionInfo.width / 2) < 0)
   {
     myParktip.style.left = getMouseX() + 10 + "px";
   }
@@ -545,16 +533,19 @@ function createParkTipTable(toolElement)
   worker += "<tr><th>Activator</th><th>Spotter</th><th>Freq</th><th>Mode</th><th>Count</th><th>When</th><th>Source</th><th>Comment</th></tr>";
   for (const i in g_pota.parkSpots[key])
   {
-    worker += "<tr>";
-    worker += "<td style='color:yellow'>" + g_pota.parkSpots[key][i].activator + "</td>";
-    worker += "<td style='color:cyan'>" + ((g_pota.parkSpots[key][i].spotter == g_pota.parkSpots[key][i].activator) ? "Self" : g_pota.parkSpots[key][i].spotter) + "</td>";
-    worker += "<td style='color:lightgreen' >" + g_pota.parkSpots[key][i].frequency.formatMhz(3, 3) + " <font color='yellow'>(" + g_pota.parkSpots[key][i].band + ")</font></td>";
-    worker += "<td style='color:orange'>" + g_pota.parkSpots[key][i].mode + "</td>";
-    worker += "<td>" + g_pota.parkSpots[key][i].count + "</td>";
-    worker += "<td style='color:lightblue' >" + parseInt((now - g_pota.parkSpots[key][i].spotTime) / 1000).toDHMS() + "</td>";
-    worker += "<td>" + g_pota.parkSpots[key][i].source + "</td>";
-    worker += "<td>" + g_pota.parkSpots[key][i].comments + "</td>";
-    worker += "</tr>";
+    if (validateMapBandAndMode(g_pota.parkSpots[key][i].band, g_pota.parkSpots[key][i].mode))
+    {
+      worker += "<tr>";
+      worker += "<td style='color:yellow'>" + g_pota.parkSpots[key][i].activator + "</td>";
+      worker += "<td style='color:cyan'>" + ((g_pota.parkSpots[key][i].spotter == g_pota.parkSpots[key][i].activator) ? "Self" : g_pota.parkSpots[key][i].spotter) + "</td>";
+      worker += "<td style='color:lightgreen' >" + g_pota.parkSpots[key][i].frequency.formatMhz(3, 3) + " <font color='yellow'>(" + g_pota.parkSpots[key][i].band + ")</font></td>";
+      worker += "<td style='color:orange'>" + g_pota.parkSpots[key][i].mode + "</td>";
+      worker += "<td>" + g_pota.parkSpots[key][i].count + "</td>";
+      worker += "<td style='color:lightblue' >" + parseInt((now - g_pota.parkSpots[key][i].spotTime) / 1000).toDHMS() + "</td>";
+      worker += "<td>" + g_pota.parkSpots[key][i].source + "</td>";
+      worker += "<td>" + g_pota.parkSpots[key][i].comments + "</td>";
+      worker += "</tr>";
+    }
   }
   worker += "</table>";
 

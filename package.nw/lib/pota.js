@@ -156,8 +156,7 @@ function potaSpotFromDecode(callObj)
     // may or may not be on screen, so try
     addParkSpotFeature(park, g_pota.parkSpots[park][callObj.DEcall]);
     
-    let hash = park+callObj.DEcall;
-    
+    let hash = park + callObj.DEcall;
     if (!(hash in g_pota.rbnReportTimes) || Date.now() > g_pota.rbnReportTimes[hash])
     {
       g_pota.rbnReportTimes[hash] = Date.now() + g_pota.rbnFrequency;
@@ -196,7 +195,7 @@ function reportPotaRBN(callSpot)
 function rbnReportResult(buffer, flag, cookies)
 {
   // It worked, but do we take these spots?
-  //console.log(String(buffer));
+  // console.log(String(buffer));
 }
 
 function spotFromCallObj(callObj, park, inCount, rbnTime)
@@ -212,7 +211,7 @@ function spotFromCallObj(callObj, park, inCount, rbnTime)
     band: callObj.band,
     spotTime: Date.now(),
     source: "GT",
-    count: inCount+1,
+    count: inCount + 1,
     comments: "RBN " + callObj.RSTsent + " dB " + myDEGrid
   };
   return callSpot;
@@ -346,7 +345,7 @@ function processPotaSpots(buffer)
           newSpot.band = newSpot.frequency.formatBand();
           (g_pota.callSpots[newSpot.activator] = g_pota.callSpots[newSpot.activator] || []).push(newSpot.reference);
           
-          if(!(newSpot.reference in g_pota.parkSpots))
+          if (!(newSpot.reference in g_pota.parkSpots))
           {
             g_pota.parkSpots[newSpot.reference] = {};
           }

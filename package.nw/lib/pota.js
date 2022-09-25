@@ -15,7 +15,20 @@ var g_pota = {
   mapParks: {}
 };
 
-var g_defaultPark = {
+var g_spotTemplate = {
+  activator: "",
+  frequency: 0,
+  mode: "",
+  reference: "",
+  spotTime: 0,
+  spotter: "",
+  comments: "",
+  source: "GT",
+  count: 1,
+  rbn: false
+};
+
+var g_parkTemplate = {
   feature: null
 }
 
@@ -61,9 +74,10 @@ function togglePota()
 
 function redrawParks()
 {
+  g_layerSources.pota.clear();
+
   if (g_potaEnabled == 1)
   {
-    g_layerSources.pota.clear();
     g_pota.mapParks = {};
     makeParkFeatures();
   }
@@ -77,17 +91,17 @@ function makeParkFeatures()
     {
       if (park in g_pota.parks)
       {
-        let parkObj = Object.assign({}, g_defaultPark);
+        let parkObj = Object.assign({}, g_parkTemplate);
 
         for (const i in g_pota.parkSpots[park])
         {
           let report = g_pota.parkSpots[park][i];
-          if (parkObj.feature == null && (g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == "auto" ? myBand == report.band : g_appSettings.gtBandFilter == report.band)) && validateMapMode(report.mode))
+          if (parkObj.feature == null && validateMapBandAndMode(report.band, report.mode))
           {
             parkObj.feature = iconFeature(ol.proj.fromLonLat([Number(g_pota.parks[park].longitude), Number(g_pota.parks[park].latitude)]), g_gtParkIconActive, 1);
             parkObj.feature.key = park;
             parkObj.feature.size = 22;
-            
+
             g_pota.mapParks[park] = parkObj;
             g_layerSources.pota.addFeature(parkObj.feature);
             break;
@@ -100,6 +114,145 @@ function makeParkFeatures()
   {
     console.log("exception: makeParkFeature " + park);
     console.log(e.message);
+  }
+}
+
+var g_potaSpotRedrawTimer = null;
+
+function redrawParkSpotsOnTimeout()
+{
+  if (g_potaSpotRedrawTimer != null)
+  {
+    clearTimeout(g_potaSpotRedrawTimer);
+    g_potaSpotRedrawTimer = null;
+  }
+
+  g_potaSpotRedrawTimer = setTimeout(redrawParks, 250);
+}
+
+function potaSpotFromDecode(callObj)
+{
+  let hash = callObj.DEcall + callObj.band + callObj.mode;
+
+  for (const i in callObj.pota)
+  {
+    let park = callObj.pota[i];
+    let spotObj = null;
+
+    if (!(callObj.DEcall in g_pota.callSpots))
+    {
+      // new call and park
+      g_pota.callSpots[callObj.DEcall] = [park];
+    }
+    else if (!g_pota.callSpots[callObj.DEcall].includes(park))
+    {
+      // new park
+      g_pota.callSpots[callObj.DEcall].push(park);
+    }
+
+    if (!(park in g_pota.parkSpots))
+    {
+      g_pota.parkSpots[park] = {};
+
+      let newSpot = spotFromCallObj(callObj, park);
+      g_pota.parkSpots[park][hash] = newSpot;
+      redrawParkSpotsOnTimeout();
+    }
+    else if (!(hash in g_pota.parkSpots[park]))
+    {
+      let newSpot = spotFromCallObj(callObj, park);
+      g_pota.parkSpots[park][hash] = newSpot;
+      redrawParkSpotsOnTimeout();
+    }
+    else
+    {
+      // update spot
+      if (!g_pota.parkSpots[park][hash].rbn)
+      {
+        g_pota.parkSpots[park][hash].count++;
+        g_pota.parkSpots[park][hash].spotter = myDEcall;
+        g_pota.parkSpots[park][hash].spotTime = Date.now();
+        g_pota.parkSpots[park][hash].source = "GT";
+        g_pota.parkSpots[park][hash].comments = "RBN " + callObj.RSTsent + " dB " + myDEGrid;
+      }
+    }
+    if (!g_pota.parkSpots[park][hash].rbn)
+    {
+      g_pota.parkSpots[park][hash].rbn = true;
+      reportPotaRBN(g_pota.parkSpots[park][hash]);
+    }
+  }
+}
+
+function reportPotaRBN(callSpot)
+{
+  let report = {
+    activator: callSpot.activator,
+    spotter: myDEcall,
+    frequency: String(parseInt(callSpot.frequency * 1000)),
+    reference: callSpot.reference,
+    mode: callSpot.mode,
+    source: "GT",
+    comments: callSpot.comments
+  }
+
+  // console.log(report);
+
+  getPostJSONBuffer(
+    "https://api.pota.app/spot",
+    rbnReportResult,
+    null,
+    "https",
+    80,
+    report,
+    10000,
+    null,
+    null
+  );
+}
+
+function rbnReportResult(buffer, flag, cookies)
+{
+  // It worked, but do we take these spots?
+  // console.log(String(buffer));
+}
+
+function spotFromCallObj(callObj, park)
+{
+  let callSpot = {
+    activator: callObj.DEcall,
+    spotter: myDEcall,
+    frequency: Number((g_instances[callObj.instance].status.Frequency / 1000000).toFixed(3)),
+    reference: park,
+    mode: callObj.mode,
+    band: callObj.band,
+    spotTime: Date.now(),
+    source: "GT",
+    count: 1,
+    rbn: false,
+    comments: "RBN " + callObj.RSTsent + " dB " + myDEGrid
+  };
+  return callSpot;
+}
+
+function addParkSpotFeature(park)
+{
+  let parkObj = Object.assign({}, g_parkTemplate);
+  if (park in g_pota.mapParks)
+  {
+    parkObj = g_pota.mapParks[park];
+  }
+  else
+  {
+    g_pota.mapParks[park] = parkObj;
+  }
+
+  if (parkObj.feature == null && validateMapBandAndMode(report.band, report.mode))
+  {
+    parkObj.feature = iconFeature(ol.proj.fromLonLat([Number(g_pota.parks[park].longitude), Number(g_pota.parks[park].latitude)]), g_gtParkIconActive, 1);
+    parkObj.feature.key = park;
+    parkObj.feature.size = 22;
+    g_layerSources.pota.addFeature(parkObj.feature);
   }
 }
 
@@ -159,6 +312,25 @@ function getPotaParks()
   g_pota.parksTimeout = setTimeout(getPotaParks, 86400000)
 }
 
+// This is a shallow copy, don't use with objects that contain other objects or arrays
+function fillObjectFromTemplate(template, input)
+{
+  let object = {};
+  for (const key in template)
+  {
+    if (key in input)
+    {
+      object[key] = input[key];
+    }
+    else
+    {
+      // missing, use the template value
+      object[key] = template[key];
+    }
+  }
+  return object;
+}
+
 function uniqueArrayFromArray(input)
 {
   let unique = [];
@@ -185,12 +357,15 @@ function processPotaSpots(buffer)
       {
         if (spots[spot].reference in g_pota.parks)
         {
-          spots[spot].spotTime = Date.parse(spots[spot].spotTime + "Z");
-          spots[spot].expire = (spots[spot].expire * 1000) + spots[spot].spotTime;
-          spots[spot].frequency = parseInt(spots[spot].frequency) / 1000;
-          spots[spot].band = spots[spot].frequency.formatBand();
-          (g_pota.callSpots[spots[spot].activator] = g_pota.callSpots[spots[spot].activator] || []).push(spots[spot].reference);
-          (g_pota.parkSpots[spots[spot].reference] = g_pota.parkSpots[spots[spot].reference] || []).push(spots[spot]);
+          let newSpot = fillObjectFromTemplate(g_spotTemplate, spots[spot]);
+          newSpot.spotTime = Date.parse(newSpot.spotTime + "Z");
+          newSpot.frequency = parseInt(newSpot.frequency) / 1000;
+          newSpot.band = newSpot.frequency.formatBand();
+
+          (g_pota.callSpots[newSpot.activator] = g_pota.callSpots[newSpot.activator] || []).push(newSpot.reference);
+
+          let hash = newSpot.activator + newSpot.band + newSpot.mode;
+          (g_pota.parkSpots[newSpot.reference] = g_pota.parkSpots[newSpot.reference] || {})[hash] = newSpot;
         }
         else
         {
@@ -203,11 +378,6 @@ function processPotaSpots(buffer)
       {
         g_pota.callSpots[spot] = uniqueArrayFromArray(g_pota.callSpots[spot]);
       }
-      for (const spot in g_pota.parkSpots)
-      {
-        g_pota.parkSpots[spot] = uniqueArrayFromArray(g_pota.parkSpots[spot]);
-      }
-
       redrawParks();
     }
     catch (e)
@@ -329,10 +499,8 @@ function mouseOverPark(feature)
 
   createParkTipTable(feature);
 
-  var positionInfo = myParktip.getBoundingClientRect();
-  
-  myParktip.style.left = getMouseX() - positionInfo.width / 2 + "px";
-  myParktip.style.top = getMouseY() - positionInfo.height - 22 + "px";
+  mouseParkMove();
+
   myParktip.style.zIndex = 499;
   myParktip.style.display = "block";
 }
@@ -346,8 +514,18 @@ function mouseOutPark(mouseEvent)
 function mouseParkMove()
 {
   var positionInfo = myParktip.getBoundingClientRect();
+  var windowWidth = window.innerWidth;
+
   myParktip.style.left = getMouseX() - positionInfo.width / 2 + "px";
-  myParktip.style.top = getMouseY() - positionInfo.height - 22 + "px";
+  if (windowWidth - getMouseX() < positionInfo.width)
+  {
+    myParktip.style.left = getMouseX() - (10 + positionInfo.width) + "px";
+  }
+  if (getMouseX() - positionInfo.width < 0)
+  {
+    myParktip.style.left = getMouseX() + 10 + "px";
+  }
+  myParktip.style.top = getMouseY() - positionInfo.height - 12 + "px";
 }
 
 function createParkTipTable(toolElement)
@@ -355,9 +533,8 @@ function createParkTipTable(toolElement)
   let worker = "";
 
   let key = toolElement.key;
-  let parkObj = g_pota.mapParks[key];
   let now = Date.now();
-  
+
   worker += "<div style='background-color:#000;color:lightgreen;font-weight:bold;font-size:12px;border:1px solid gray;margin:0px' class='roundBorder'>" +
     key +
     " : <font color='cyan'>" + g_pota.parks[key].name + "" +

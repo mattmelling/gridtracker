@@ -744,15 +744,13 @@ function lookupUsCallsign(object, writeState = false)
 {
   g_ulsDatabase.transaction(function (tx)
   {
-    var qry = "SELECT * FROM calls where callsign = \"" + object.DEcall + "\"";
+    let qry = "SELECT * FROM calls where callsign = \"" + object.DEcall + "\"";
     tx.executeSql(
       qry,
       [],
       function (tx, results)
       {
-        var len = results.rows.length,
-          i;
-        if (len == 1)
+        if (results.rows.length == 1)
         {
           if (object.state == null)
           {
@@ -764,15 +762,16 @@ function lookupUsCallsign(object, writeState = false)
             {
               object.state = "US-" + results.rows[0].state;
             }
-            if (writeState) setState(object);
+
+            if (writeState)
+            {
+              setState(object);
+            }
           }
           object.zipcode = String(results.rows[0].zip);
           if (object.cnty == null)
           {
-            let request = g_Idb
-              .transaction(["lookups"], "readwrite")
-              .objectStore("lookups")
-              .get(object.DEcall);
+            let request = g_Idb.transaction(["lookups"], "readwrite").objectStore("lookups").get(object.DEcall);
 
             request.onsuccess = function (event)
             {
@@ -785,21 +784,40 @@ function lookupUsCallsign(object, writeState = false)
               if (object.cnty == null && object.zipcode in g_zipToCounty)
               {
                 var counties = g_zipToCounty[object.zipcode];
-                if (counties.length > 1) object.qual = false;
-                else object.qual = true;
+                if (counties.length > 1)
+                {
+                  object.qual = false;
+                }
+                else
+                {
+                  object.qual = true;
+                }
                 object.cnty = counties[0];
               }
-              else object.qual = false;
-              if (writeState) setState(object);
+              else
+              {
+                object.qual = false;
+              }
+
+              if (writeState)
+              {
+                setState(object);
+              }
             };
 
             request.onerror = function (event)
             {
               object.qual = false;
-              if (writeState) setState(object);
+              if (writeState)
+              {
+                setState(object);
+              }
             };
           }
-          if (writeState) setState(object);
+          if (writeState)
+          {
+            setState(object);
+          }
         }
       },
       null

@@ -1461,14 +1461,7 @@ function addDeDx(
 
   if (!notQso)
   {
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == band
-          : g_appSettings.gtBandFilter == band)) &&
-      validateMapMode(mode) &&
-      validatePropMode(finalPropMode)
-    )
+    if (validateMapBandAndMode(band, mode) && validatePropMode(finalPropMode))
     {
       details.rect = qthToQsoBox(
         finalGrid,
@@ -1490,13 +1483,7 @@ function addDeDx(
     if (finalDxcc in g_dxccCount) g_dxccCount[finalDxcc]++;
     else g_dxccCount[finalDxcc] = 1;
 
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == band
-          : g_appSettings.gtBandFilter == band)) &&
-      validateMapMode(mode)
-    )
+    if (validateMapBandAndMode(band, mode))
     {
       rect = qthToBox(
         finalGrid,
@@ -3532,9 +3519,7 @@ function moonOver(feature)
   }
   g_lastMoon = feature;
 
-  var positionInfo = myMoonTooltip.getBoundingClientRect();
-  myMoonTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
-  myMoonTooltip.style.top = getMouseY() + 22 + "px";
+  moonMove();
   myMoonTooltip.style.zIndex = 499;
   myMoonTooltip.style.display = "block";
 }
@@ -3751,9 +3736,8 @@ function trophyOver(feature)
     "<div style='font-size:15px;color:cyan;' class='roundBorder'>" +
     worker +
     "</div>";
-  var positionInfo = myTrophyTooltip.getBoundingClientRect();
-  myTrophyTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
-  myTrophyTooltip.style.top = getMouseY() - positionInfo.height - 22 + "px";
+
+  trophyMove();
   myTrophyTooltip.style.zIndex = 499;
   myTrophyTooltip.style.display = "block";
 }
@@ -3851,12 +3835,11 @@ function mouseDownGrid(longlat, event)
     grid +
     "</div>" +
     worker;
-  var positionInfo = myGridTooltip.getBoundingClientRect();
-  myGridTooltip.style.left = event.pixel[0] - positionInfo.width / 2 + "px";
-  myGridTooltip.style.top = event.pixel[1] - positionInfo.height - 22 + "px";
+  g_MyGridIsUp = true;
+
+  mouseMoveGrid();
   myGridTooltip.style.zIndex = 499;
   myGridTooltip.style.display = "block";
-  g_MyGridIsUp = true;
 }
 
 function mouseMoveGrid()
@@ -3894,9 +3877,7 @@ function mouseOverGtFlag(feature)
 
   createFlagTipTable(feature);
 
-  var positionInfo = myFlagtip.getBoundingClientRect();
-  myFlagtip.style.left = getMouseX() + 15 + "px";
-  myFlagtip.style.top = getMouseY() - positionInfo.height - 5 + "px";
+  gtFlagMove();
 
   myFlagtip.style.zIndex = 499;
   myFlagtip.style.display = "block";
@@ -3953,17 +3934,14 @@ function mouseOverDataItem(mouseEvent, fromHover)
   if (g_mapSettings.mouseOver == false && fromHover == true) return;
 
   g_lastDataGridUp = mouseEvent;
-  var myTooltip = null;
-  var callListLength = 0;
-  var isFlag = false;
 
-  myTooltip = document.getElementById("myTooltip");
-  callListLength = createTooltTipTable(mouseEvent);
-  var positionInfo = myTooltip.getBoundingClientRect();
-  var windowWidth = window.innerWidth;
-  var top = 0;
-  var noRoomLeft = false;
-  var noRoomRight = false;
+  let isFlag = false;
+  let callListLength = createTooltTipTable(mouseEvent);
+  let positionInfo = myTooltip.getBoundingClientRect();
+  let windowWidth = window.innerWidth;
+  let top = 0;
+  let noRoomLeft = false;
+  let noRoomRight = false;
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
@@ -3993,12 +3971,11 @@ function mouseOverDataItem(mouseEvent, fromHover)
 
 function mouseMoveDataItem(mouseEvent)
 {
-  var myTooltip = document.getElementById("myTooltip");
-  var positionInfo = myTooltip.getBoundingClientRect();
-  var windowWidth = window.innerWidth;
-  var top = 0;
-  var noRoomLeft = false;
-  var noRoomRight = false;
+  let positionInfo = myTooltip.getBoundingClientRect();
+  let windowWidth = window.innerWidth;
+  let top = 0;
+  let noRoomLeft = false;
+  let noRoomRight = false;
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
@@ -7167,19 +7144,20 @@ function handleWsjtxDecode(newMessage)
       if (callsign.DEcall in g_pota.callSpots)
       {
         // copies the entire array
-        callsign.pota = g_pota.callSpots[callsign.DEcall];
+        callsign.pota = [...g_pota.callSpots[callsign.DEcall]];
       }
-      if (callsign.DEcall in g_pota.callSchedule)
+      else if (callsign.DEcall in g_pota.callSchedule)
       {
         let now = Date.now();
         for (let i in g_pota.callSchedule[callsign.DEcall])
         {
-          if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start && !callsign.pota.includes(g_pota.callSchedule[callsign.DEcall][i].id))
+          if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start)
           {
             callsign.pota.push(g_pota.callSchedule[callsign.DEcall][i].id);
           }
         }
       }
+      potaSpotFromDecode(callsign);
     }
 
     if (newMessage.NW)
@@ -10487,26 +10465,33 @@ function validatePropMode(propMode)
   return g_appSettings.gtPropFilter == propMode;
 }
 
-function validateMapMode(mode)
+function validateMapBandAndMode(band, mode)
 {
-  if (g_appSettings.gtModeFilter.length == 0) return true;
-
-  if (g_appSettings.gtModeFilter == "auto") return myMode == mode;
-
-  if (g_appSettings.gtModeFilter == "Digital")
+  if ((g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == "auto" ? myBand == band : g_appSettings.gtBandFilter == band)))
   {
-    if (mode in g_modes && g_modes[mode]) return true;
+    if (g_appSettings.gtModeFilter.length == 0) return true;
+
+    if (g_appSettings.gtModeFilter == "auto") return myMode == mode;
+
+    if (g_appSettings.gtModeFilter == "Digital")
+    {
+      if (mode in g_modes && g_modes[mode]) return true;
+      return false;
+    }
+    if (g_appSettings.gtModeFilter == "Phone")
+    {
+      if (mode in g_modes_phone && g_modes_phone[mode]) return true;
+      return false;
+    }
+
+    if (g_appSettings.gtModeFilter == "CW" && mode == "CW") return true;
+
+    return g_appSettings.gtModeFilter == mode;
+  }
+  else
+  {
     return false;
   }
-  if (g_appSettings.gtModeFilter == "Phone")
-  {
-    if (mode in g_modes_phone && g_modes_phone[mode]) return true;
-    return false;
-  }
-
-  if (g_appSettings.gtModeFilter == "CW" && mode == "CW") return true;
-
-  return g_appSettings.gtModeFilter == mode;
 }
 
 function redrawGrids()
@@ -10528,14 +10513,7 @@ function redrawGrids()
     g_QSOcount++;
     if (didConfirm) g_QSLcount++;
 
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == g_QSOhash[i].band
-          : g_appSettings.gtBandFilter == g_QSOhash[i].band)) &&
-      validateMapMode(g_QSOhash[i].mode) &&
-      validatePropMode(g_QSOhash[i].propMode)
-    )
+    if (validateMapBandAndMode(g_QSOhash[i].band, g_QSOhash[i].mode) && validatePropMode(g_QSOhash[i].propMode))
     {
       if (g_appSettings.gridViewMode > 1)
       {
@@ -10922,14 +10900,7 @@ function redrawGrids()
 
   for (var i in g_liveCallsigns)
   {
-    if (
-      g_appSettings.gridViewMode != 2 &&
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == g_liveCallsigns[i].band
-          : g_appSettings.gtBandFilter == g_liveCallsigns[i].band)) &&
-      validateMapMode(g_liveCallsigns[i].mode)
-    )
+    if (g_appSettings.gridViewMode != 2 && validateMapBandAndMode(g_liveCallsigns[i].band, g_liveCallsigns[i].mode))
     {
       if (g_appSettings.gridViewMode == 1 || g_appSettings.gridViewMode == 3)
       {
@@ -15145,6 +15116,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
         {
           g_liveCallsigns[hash].cnty = lookup.cnty;
           g_liveCallsigns[hash].qual = true;
+          g_liveCallsigns[hash].cntys = 0;
           foundCounty = true;
         }
       }
@@ -16264,13 +16236,7 @@ function redrawSpots()
       continue;
     }
 
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == report.band
-          : g_appSettings.gtBandFilter == report.band)) &&
-      validateMapMode(report.mode)
-    )
+    if (validateMapBandAndMode(report.band, report.mode))
     {
       if (now - report.when <= g_receptionSettings.viewHistoryTimeSec)
       {

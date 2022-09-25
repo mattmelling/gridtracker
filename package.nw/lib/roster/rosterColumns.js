@@ -154,9 +154,9 @@ const ROSTER_COLUMNS = {
       }
       if (callObj.cnty && callObj.qual == false)
       {
-        attrs.title = "ZIP Code matches multiple counties, click to do a full lookup"
+        attrs.title = "Matches multiple counties, click to do a full lookup"
         attrs.onClick = `window.opener.lookupCallsign("${callObj.DEcall}", "${callObj.grid}")`
-        attrs.html = `? ${attrs.html} ?`
+        attrs.html = attrs.html + " +" + String(window.opener.g_zipToCounty[callObj.zipcode].length - 1)
         attrs.style = "cursor: pointer; color: cyan;"
       }
       return attrs
@@ -406,7 +406,7 @@ function potaColumnRef(callObj)
     let value = callObj.pota[0];
     if (callObj.pota.length > 1)
     {
-      value += "...";
+      value += " +" + String(callObj.pota.length - 1);
     }
     return value;
   }

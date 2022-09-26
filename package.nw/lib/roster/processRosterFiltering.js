@@ -365,12 +365,8 @@ function processRosterFiltering(callRoster, rosterSettings)
             let x = g_awardTracker[award];
 
             // TODO: Move award reason out of exclusions code?
-            callObj.awardReason =
-              g_awards[x.sponsor].awards[x.name].tooltip +
-              " (" +
-              g_awards[x.sponsor].sponsor +
-              ")";
-
+            callObj.awardReason = g_awards[x.sponsor].awards[x.name].tooltip + " (" + g_awards[x.sponsor].sponsor + ")";
+            callObj.reason.push(x.name + " - " + x.sponsor);
             break;
           }
         }

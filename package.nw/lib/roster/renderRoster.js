@@ -43,6 +43,10 @@ function renderRoster(callRoster, rosterSettings)
     columnOverrides.POTA = false;
   }
   
+  if (rosterSettings.isAwardTracker)
+  {
+    columnOverrides.Wanted = true;
+  }
   // dealing with spots
   if (g_rosterSettings.columns.Spot == true) onlySpotDiv.style.display = "";
   else onlySpotDiv.style.display = "none";

@@ -450,7 +450,19 @@ function wantedColumnParts(callObj, options)
 {
   options = options || {};
 
-  if (!callObj.hunting) return [];
+  if (Object.keys(callObj.hunting).length == 0)
+  {
+    // is this an award reason?
+    // Hack until I talk with seb
+    if (callObj.awardReason != "Callsign")
+    {
+      return callObj.reason;
+    }
+    else
+    {
+      return [];
+    }
+  }
 
   let parts = [];
 

@@ -2725,7 +2725,7 @@ function testAcont52band(award, obj, baseHash)
 
 function scoreAgrids(award, obj)
 {
-  if (obj.grid)
+  if (obj.grid && obj.grid.length > 0)
   {
     let grid = obj.grid.substr(0, 4);
 
@@ -2744,6 +2744,10 @@ function scoreAgrids(award, obj)
 function testAgrids(award, obj, baseHash)
 {
   if (obj.grid && obj.grid + baseHash in g_tracker[award.test.look].grid)
+  {
+    return false;
+  }
+  if (!obj.grid || obj.grid.length == 0)
   {
     return false;
   }

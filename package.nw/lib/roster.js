@@ -72,6 +72,7 @@ var g_defaultSettings = {
   wantMinDB: false,
   wantMinFreq: false,
   wantMaxFreq: false,
+  wantRR73: false,
   maxDT: 0.5,
   minDb: -25,
   minFreq: 0,
@@ -105,8 +106,7 @@ var g_defaultSettings = {
     huntPX: false,
     huntPOTA: false,
     huntQRZ: true,
-    huntOAMS: false,
-    huntRR73: false
+    huntOAMS: false
   },
   columns: {
     Callsign: true,
@@ -1046,6 +1046,7 @@ function valuesChanged()
   g_rosterSettings.wantMinDB = wantMinDB.checked;
   g_rosterSettings.wantMinFreq = wantMinFreq.checked;
   g_rosterSettings.wantMaxFreq = wantMaxFreq.checked;
+  g_rosterSettings.wantRR73 = wantRR73.checked;
 
   maxDTView.innerHTML = g_rosterSettings.maxDT = maxDT.value;
   minDbView.innerHTML = g_rosterSettings.minDb = minDb.value;
@@ -2031,6 +2032,7 @@ function init()
   wantMinDB.checked = g_rosterSettings.wantMinDB;
   wantMinFreq.checked = g_rosterSettings.wantMinFreq;
   wantMaxFreq.checked = g_rosterSettings.wantMaxFreq;
+  wantRR73.checked = g_rosterSettings.wantRR73;
 
   maxDTView.innerHTML = maxDT.value = g_rosterSettings.maxDT;
   minDbView.innerHTML = minDb.value = g_rosterSettings.minDb;

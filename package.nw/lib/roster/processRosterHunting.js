@@ -784,12 +784,12 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         callingBg = "#0000FF" + inversionAlpha;
         calling = "#FFFF00;text-shadow: 0px 0px 2px #FFFF00";
       }
-      else if (callObj.CQ == true && !g_rosterSettings.cqOnly)
+      else if ((callObj.CQ == true || (g_rosterSettings.wantRR73 && callObj.RR73 == true)) && !g_rosterSettings.cqOnly)
       {
         callingBg = calling + inversionAlpha;
         calling = bold;
         // If treating RR73/73 as CQ, soften highlighting to help differentiate foreshadow from an actual CQ
-        if (callObj.DXcall == "RR73" || callObj.DXcall == "73")
+        if (g_rosterSettings.wantRR73 && callObj.RR73 == true)
         {
           callingConf = `${unconf}#90EE90${inversionAlpha};`;
           calling = `#90EE90${inversionAlpha};`

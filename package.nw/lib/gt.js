@@ -6846,6 +6846,7 @@ function handleWsjtxDecode(newMessage)
   let validQTH = false;
   let CQ = false;
   let DEDX = false;
+  let RR73 = false;
   let msgDEcallsign = "";
   let msgDXcallsign = "";
   let theirQTH = "";
@@ -6928,10 +6929,9 @@ function handleWsjtxDecode(newMessage)
       msgDEcallsign = decodeWords[1];
     }
 
-    if (decodeWords[2] == "RR73" && g_callRosterWindowHandle.window.g_rosterSettings.wanted.huntRR73)
+    if (decodeWords[2] == "RR73")
     {
-      CQ = true;
-      msgDXcallsign = "RR73";
+      RR73 = true;
     }
 
     let callsign = null;
@@ -7107,6 +7107,7 @@ function handleWsjtxDecode(newMessage)
     callsign.instance = newMessage.instance;
     callsign.grid = callsign.grid.substr(0, 4);
     callsign.CQ = CQ;
+    callsign.RR73 = RR73;
 
     if (msgDXcallsign == myDEcall) callsign.qrz = true;
     else callsign.qrz = false;

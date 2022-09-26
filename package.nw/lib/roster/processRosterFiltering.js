@@ -60,10 +60,21 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
-    if (g_rosterSettings.cqOnly == true && callObj.CQ == false)
+    if (g_rosterSettings.cqOnly == true)
     {
-      entry.tx = false;
-      continue;
+      if (g_rosterSettings.wantRR73)
+      {
+        if (callObj.RR73 == false && callObj.CQ == false)
+        {
+          entry.tx = false;
+          continue;
+        }
+      }
+      else if (callObj.CQ == false)
+      {
+        entry.tx = false;
+        continue;
+      }
     }
     if (g_rosterSettings.useRegex && g_rosterSettings.callsignRegex.length > 0)
     {

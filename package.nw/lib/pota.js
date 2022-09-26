@@ -212,7 +212,7 @@ function spotFromCallObj(callObj, park, inCount, rbnTime)
     spotTime: Date.now(),
     source: "GT",
     count: inCount + 1,
-    comments: "RBN " + callObj.RSTsent + " dB " + myDEGrid
+    comments: "GT " + callObj.RSTsent + " dB " + myDEGrid
   };
   return callSpot;
 }

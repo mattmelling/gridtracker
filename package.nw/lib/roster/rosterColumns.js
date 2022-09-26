@@ -117,7 +117,7 @@ const ROSTER_COLUMNS = {
     compare: (a, b) => window.opener.myDxccCompare(a.callObj, b.callObj),
     tableData: (callObj) => ({
       title: window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].pp,
-      name: `${callObj.dxcc}`,
+      name: `DXCC (${callObj.dxcc})`,
       rawAttrs: callObj.style.dxcc,
       html: [window.opener.g_dxccToAltName[callObj.dxcc], callObj.dxccSuffix].join("&nbsp;")
     })

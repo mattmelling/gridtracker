@@ -2177,8 +2177,11 @@ function handleContextMenu(ev)
       }
     }
 
-    let name
-    if (ev.target.tagName == "TD") name = ev.target.getAttribute("name");
+    let name = "";
+    if (ev.target.tagName == "TD")
+    {
+      name = ev.target.getAttribute("name");
+    }
 
     if (name == "Callsign")
     {
@@ -2208,7 +2211,7 @@ function handleContextMenu(ev)
       g_targetITUz = ev.target.parentNode.id;
       g_ITUzMenu.popup(mouseX, mouseY);
     }
-    else if (name && name.startsWith("DXCC"))
+    else if (name.startsWith("DXCC"))
     {
       let dxcca = name.split("(");
       let dxcc = parseInt(dxcca[1]);

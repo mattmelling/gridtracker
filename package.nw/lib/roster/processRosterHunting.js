@@ -133,7 +133,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       }
 
       // We only do hunt highlighting when showing all entries
-      // This means "Callsigns: All Traffic", "Callsigns: All Traffic/Only Wanted" and "Logbook: Award Tracker"
+      // This means "Callsigns: All Traffic", "Callsigns: All Traffic/Only Wanted"
       // There is no highlighting in other modes
       if (rosterSettings.callMode == "all" && rosterSettings.isAwardTracker == false)
       {

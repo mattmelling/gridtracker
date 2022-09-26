@@ -17,7 +17,7 @@ var g_pota = {
   rbnFrequency: 600000
 };
 
-var g_spotTemplate = {
+var g_potaSpotTemplate = {
   activator: "",
   frequency: 0,
   mode: "",
@@ -35,6 +35,16 @@ var g_spotTemplate = {
 var g_parkTemplate = {
   feature: null
 }
+
+var g_potaUnknownPark = {
+  name: "Unknown park",
+  active: "0",
+  entityId: "-1",
+  locationDesc: "??-??",
+  latitude: "0.0",
+  longitude: "0.0",
+  grid: ""
+};
 
 var g_gtParkIconActive = new ol.style.Icon({
   src: "./img/pota_icon_active.png",
@@ -258,6 +268,8 @@ function processPotaParks(buffer)
         }
         newParks[park].locationDesc = locations.join(", ");
       }
+      newParks["?-????"] = g_potaUnknownPark;
+      
       g_pota.parks = newParks;
       g_pota.locations = data.locations;
       getPotaSchedule();
@@ -339,7 +351,7 @@ function processPotaSpots(buffer)
       {
         if (spots[spot].reference in g_pota.parks)
         {
-          let newSpot = fillObjectFromTemplate(g_spotTemplate, spots[spot]);
+          let newSpot = fillObjectFromTemplate(g_potaSpotTemplate, spots[spot]);
           newSpot.spotTime = Date.parse(newSpot.spotTime + "Z");
           newSpot.frequency = parseInt(newSpot.frequency) / 1000;
           newSpot.band = newSpot.frequency.formatBand();

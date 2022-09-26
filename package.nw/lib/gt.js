@@ -7138,26 +7138,34 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    if (g_potaEnabled == 1 && (callsign.DEcall in g_pota.callSpots || callsign.DEcall in g_pota.callSchedule))
+    if (g_potaEnabled == 1)
     {
-      callsign.pota = [];
-      if (callsign.DEcall in g_pota.callSpots)
+      if (callsign.DEcall in g_pota.callSpots || callsign.DEcall in g_pota.callSchedule)
       {
-        // copies the entire array
-        callsign.pota = [...g_pota.callSpots[callsign.DEcall]];
-      }
-      else if (callsign.DEcall in g_pota.callSchedule)
-      {
-        let now = Date.now();
-        for (let i in g_pota.callSchedule[callsign.DEcall])
+        callsign.pota = [];
+        if (callsign.DEcall in g_pota.callSpots)
         {
-          if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start)
+          // copies the entire array
+          callsign.pota = [...g_pota.callSpots[callsign.DEcall]];
+        }
+        else if (callsign.DEcall in g_pota.callSchedule)
+        {
+          let now = Date.now();
+          for (let i in g_pota.callSchedule[callsign.DEcall])
           {
-            callsign.pota.push(g_pota.callSchedule[callsign.DEcall][i].id);
+            if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start)
+            {
+              callsign.pota.push(g_pota.callSchedule[callsign.DEcall][i].id);
+              break;
+            }
           }
         }
+        potaSpotFromDecode(callsign);
       }
-      potaSpotFromDecode(callsign);
+      else if (CQ == true && msgDXcallsign == "CQ POTA")
+      {
+        callsign.pota = ["?-????"];
+      }
     }
 
     if (newMessage.NW)

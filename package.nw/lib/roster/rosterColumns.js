@@ -347,7 +347,6 @@ const ROSTER_COLUMNS = {
       style: "color: #EEE;",
       class: "timeCol",
       id: `tm${callObj.hash}`,
-      title: (timeNowSec() - callObj.age).toDHMS(),
       html: (timeNowSec() - callObj.age).toDHMS()
     })
   },

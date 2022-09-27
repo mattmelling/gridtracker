@@ -62,7 +62,7 @@ function processRosterFiltering(callRoster, rosterSettings)
     }
     if (g_rosterSettings.cqOnly == true)
     {
-      if (g_rosterSettings.wantRR73)
+      if (g_rosterSettings.wantRRCQ)
       {
         if (callObj.RR73 == false && callObj.CQ == false)
         {

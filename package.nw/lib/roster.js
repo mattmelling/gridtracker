@@ -72,7 +72,7 @@ var g_defaultSettings = {
   wantMinDB: false,
   wantMinFreq: false,
   wantMaxFreq: false,
-  wantRR73: false,
+  wantRRCQ: false,
   maxDT: 0.5,
   minDb: -25,
   minFreq: 0,
@@ -1046,7 +1046,7 @@ function valuesChanged()
   g_rosterSettings.wantMinDB = wantMinDB.checked;
   g_rosterSettings.wantMinFreq = wantMinFreq.checked;
   g_rosterSettings.wantMaxFreq = wantMaxFreq.checked;
-  g_rosterSettings.wantRR73 = wantRR73.checked;
+  g_rosterSettings.wantRRCQ = wantRRCQ.checked;
 
   maxDTView.innerHTML = g_rosterSettings.maxDT = maxDT.value;
   minDbView.innerHTML = g_rosterSettings.minDb = minDb.value;
@@ -2032,7 +2032,7 @@ function init()
   wantMinDB.checked = g_rosterSettings.wantMinDB;
   wantMinFreq.checked = g_rosterSettings.wantMinFreq;
   wantMaxFreq.checked = g_rosterSettings.wantMaxFreq;
-  wantRR73.checked = g_rosterSettings.wantRR73;
+  wantRRCQ.checked = g_rosterSettings.wantRRCQ;
 
   maxDTView.innerHTML = maxDT.value = g_rosterSettings.maxDT;
   minDbView.innerHTML = minDb.value = g_rosterSettings.minDb;

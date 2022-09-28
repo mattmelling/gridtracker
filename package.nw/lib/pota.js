@@ -179,11 +179,11 @@ function reportPotaRBN(callSpot)
 {
   let report = {
     activator: callSpot.activator,
-    spotter: myDEcall,
+    spotter: myDEcall + "-#",
     frequency: String(parseInt(callSpot.frequency * 1000)),
     reference: callSpot.reference,
     mode: callSpot.mode,
-    source: "GT",
+    source: "RBN",
     comments: callSpot.comments,
     activatorGrid: callSpot.activatorGrid,
     spotterGrid: callSpot.spotterGrid
@@ -204,8 +204,16 @@ function reportPotaRBN(callSpot)
 
 function rbnReportResult(buffer, flag, cookies)
 {
-  // It worked, but do we take these spots?
-  // console.log(String(buffer));
+  // It worked! process latest spots!
+  if (g_pota.spotsTimeout)
+  {
+    clearTimeout(g_pota.spotsTimeout);
+    g_pota.spotsTimeout = null;
+  }
+  
+  processPotaSpots(String(buffer));
+  
+  g_pota.spotsTimeout = setTimeout(getPotaSpots, 300000);
 }
 
 function spotFromCallObj(callObj, park, inCount, rbnTime)
@@ -213,7 +221,7 @@ function spotFromCallObj(callObj, park, inCount, rbnTime)
   let callSpot = {
     activator: callObj.DEcall,
     activatorGrid: callObj.grid,
-    spotter: myDEcall,
+    spotter: myDEcall + "-#",
     spotterGrid: myDEGrid,
     frequency: Number((g_instances[callObj.instance].status.Frequency / 1000000).toFixed(3)),
     reference: park,
@@ -222,7 +230,7 @@ function spotFromCallObj(callObj, park, inCount, rbnTime)
     spotTime: Date.now(),
     source: "GT",
     count: inCount + 1,
-    comments: "GT " + callObj.RSTsent + " dB " + myDEGrid
+    comments: "GT " + callObj.RSTsent + " dB " + myDEGrid + " via " + myDEcall + "-#"
   };
   return callSpot;
 }

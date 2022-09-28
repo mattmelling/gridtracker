@@ -1064,7 +1064,7 @@ function addDeDx(
   mode,
   band,
   confirmed,
-  notQso,
+  isQSO,
   finalRSTrecv,
   finalDxcc,
   finalState,
@@ -1097,7 +1097,7 @@ function addDeDx(
   var finalMsg = ifinalMsg.trim();
   if (finalMsg.length > 40) finalMsg = finalMsg.substring(0, 40) + "...";
   var details = null;
-  if (!notQso)
+  if (isQSO)
   {
     var timeMod = finalTime - (finalTime % 360) + 180;
     hash = unique(mode + band + finalDXcall + timeMod);
@@ -1495,12 +1495,12 @@ function addDeDx(
   if (finalDxcc < 1) finalDxcc = callsignToDxcc(finalDXcall);
 
   hash = finalDXcall + band + mode;
-  if (notQso)
+  if (!isQSO)
   {
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
   }
 
-  if (!notQso)
+  if (isQSO)
   {
     if (validateMapBandAndMode(band, mode) && validatePropMode(finalPropMode))
     {
@@ -7655,7 +7655,7 @@ function handleWsjtxWSPR(newMessage)
     "WSPR",
     Number(newMessage.Frequency / 1000000).formatBand(),
     false,
-    true,
+    false,
     null,
     callsignToDxcc(newMessage.Callsign),
     null,

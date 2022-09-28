@@ -249,14 +249,18 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
         {
           isPhone = g_modes_phone[finalMode];
         }
+        // TODO: Revisit when we support more than one park ID
+        let finalPOTA = findAdiField(activeAdifArray[x], "POTA").toUpperCase();
+        if (finalPOTA.length == 0)
+        {
+          finalPOTA = null;
+        }
+        
         if (finalDXcall != "")
         {
           addDeDx(
             finalGrid,
             finalDXcall,
-            false,
-            false,
-            false,
             finalDEcall,
             finalRSTsent,
             finalTime,
@@ -277,7 +281,8 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             isDigital,
             isPhone,
             finalIOTA,
-            finalSatName
+            finalSatName,
+            finalPOTA
           );
         }
       }
@@ -332,9 +337,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             addDeDx(
               finalMyGrid,
               finalDEcall,
-              false,
-              false,
-              false,
               finalDXcall,
               null,
               finalTime,
@@ -357,9 +359,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             addDeDx(
               finalGrid,
               finalDXcall,
-              false,
-              false,
-              false,
               "-",
               finalRSTsent,
               finalTime,
@@ -382,9 +381,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             addDeDx(
               finalGrid,
               finalDXcall,
-              false,
-              false,
-              false,
               finalDEcall,
               finalRSTsent,
               finalTime,
@@ -2795,7 +2791,7 @@ function getPostJSONBuffer(
       });
       req.on("error", function (err) // eslint-disable-line node/handle-callback-err
       {
-        if (typeof timeoutCallback != "undefined")
+        if (typeof timeoutCallback === "function")
         {
           timeoutCallback(
             file_url,

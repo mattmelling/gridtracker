@@ -20,7 +20,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
   //       so maybe we can move this loop first, and add a check to the filtering loop?
 
   // Second loop, hunting and highlighting
-  for (let callHash in callRoster)
+  for (const callHash in callRoster)
   {
     let entry = callRoster[callHash];
     let callObj = entry.callObj;
@@ -440,7 +440,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
               {
                 let counties = window.opener.g_zipToCounty[callObj.zipcode];
                 let foundHit = false;
-                for (let cnt in counties)
+                for (const cnt in counties)
                 {
                   let hh = counties[cnt] + workHash;
                   callObj.cnty = counties[cnt];
@@ -481,58 +481,22 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         if (potaEnabled && huntPOTA.checked == true && callObj.pota.length > 0)
         {
           let huntTotal = callObj.pota.length;
-          let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+          let workedFound = 0;
 
-          for (index in callObj.pota)
+          for (const index in callObj.pota)
           {
-            let hash = callObj.pota[index] + workHashSuffix;
-            let layeredHash = rosterSettings.layeredMode && (callObj.pota[index] + layeredHashSuffix)
+            let hash = g_dayAsString + callsign + callObj.pota[index] + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
 
-            // if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.pota) layeredFound++;
-            // if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.pota) layeredFound++;
-            // if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
-            // if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.pota) layeredWorkedFound++;
+            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
           }
-          if (huntFound != huntTotal)
+          if (workedFound != huntTotal)
           {
             shouldAlert = true;
             callObj.reason.push("pota");
-
-            if (rosterSettings.workedIndex && workedFound == huntTotal)
-            {
-              if (rosterSettings.layeredMode && layeredFound == huntTotal)
-              {
-                callObj.hunting.pota = "worked-and-mixed";
-                potaConf = `${layeredUnconf}${pota}${layeredUnconfAlpha};`;
-                potaBg = `${potaBg}${layeredInversionAlpha}`;
-                pota = bold;
-              }
-              else
-              {
-                callObj.hunting.pota = "worked";
-                potaConf = `${unconf}${pota}${inversionAlpha};`;
-              }
-            }
-            else
-            {
-              if (rosterSettings.layeredMode && layeredFound == huntTotal)
-              {
-                callObj.hunting.pota = "mixed";
-                potaBg = `${pota}${layeredAlpha};`;
-                pota = bold;
-              }
-              else if (rosterSettings.layeredMode && layeredWorkedFound == huntTotal)
-              {
-                callObj.hunting.pota = "mixed-worked";
-                potaConf = `${unconf}${pota}${layeredAlpha};`;
-              }
-              else
-              {
-                callObj.hunting.pota = "hunted";
-                potaBg = `${pota}${inversionAlpha};`;
-                pota = bold;
-              }
-            }
+            
+            callObj.hunting.pota = "hunted";
+            potaBg = `${pota}${inversionAlpha};`;
+            pota = bold;
           }
         }
 
@@ -542,7 +506,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           let huntTotal = callObj.cqza.length;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0, marathonFound = 0;
 
-          for (index in callObj.cqza)
+          for (const index in callObj.cqza)
           {
             let hash = callObj.cqza[index] + workHashSuffix;
             let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix);
@@ -600,7 +564,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
             }
           }
 
-          callObj.cqzSuffix = null
+          callObj.cqzSuffix = null;
           if (huntMarathon.checked && callObj.hunting.cqz != "hunted" && callObj.hunting.cqz != "worked")
           {
             if (marathonFound != huntTotal)
@@ -624,7 +588,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           let huntTotal = callObj.ituza.length;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
 
-          for (index in callObj.ituza)
+          for (const index in callObj.ituza)
           {
             let hash = callObj.ituza[index] + workHashSuffix;
             let layeredHash = rosterSettings.layeredMode && (callObj.ituza[index] + layeredHashSuffix)

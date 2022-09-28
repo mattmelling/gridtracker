@@ -21,6 +21,7 @@ var r_currentDXCCs = -1;
 var r_callsignManifest = null;
 var g_rosterSettings = {};
 var g_day = 0;
+var g_dayAsString = "0";
 var g_menu = null;
 var g_callMenu = null;
 var g_ageMenu = null;
@@ -335,12 +336,13 @@ function viewRoster()
 function realtimeRoster()
 {
   let now = timeNowSec();
-  g_day = now / 86400;
-
+  g_day = parseInt(now / 86400);
+  g_dayAsString = String(g_day);
+  
   if (g_rosterSettings.realtime == false) return;
 
   let timeCols = document.getElementsByClassName("timeCol");
-  for (let x in timeCols)
+  for (const x in timeCols)
   {
     if ((typeof timeCols[x].id != "undefined") && (typeof callRoster[timeCols[x].id.substr(2)] != "undefined"))
     {
@@ -349,7 +351,7 @@ function realtimeRoster()
     }
   }
   let lifeCols = document.getElementsByClassName("lifeCol");
-  for (let x in lifeCols)
+  for (const x in lifeCols)
   {
     if ((typeof lifeCols[x].id != "undefined") && (typeof callRoster[lifeCols[x].id.substr(2)] != "undefined"))
     {
@@ -360,7 +362,7 @@ function realtimeRoster()
   if (g_rosterSettings.columns.Spot)
   {
     let spotCols = document.getElementsByClassName("spotCol");
-    for (let x in spotCols)
+    for (const x in spotCols)
     {
       if ((typeof spotCols[x].id != "undefined") && (typeof callRoster[spotCols[x].id.substr(2)] != "undefined"))
       {
@@ -450,7 +452,7 @@ function updateInstances()
     let worker = "";
 
     let keys = Object.keys(instances).sort();
-    for (let key in keys)
+    for (const key in keys)
     {
       let inst = keys[key];
       let sp = inst.split(" - ");
@@ -546,7 +548,7 @@ function createSelectOptions(
   {
     obj = Object.keys(forObject).sort();
   }
-  for (let k in obj)
+  for (const k in obj)
   {
     let opt = obj[k];
     let option = document.createElement("option");
@@ -624,7 +626,7 @@ function updateAwardList(target = null)
 
   let keys = Object.keys(g_awardTracker).sort();
 
-  for (let key in keys)
+  for (const key in keys)
   {
     let award = g_awardTracker[keys[key]];
     let rule = g_awards[award.sponsor].awards[award.name].rule;
@@ -1012,7 +1014,7 @@ function wantedChanged(element)
     {
       g_rosterSettings.columns[t] = true;
 
-      for (let i = 0; i < g_menu.items.length; ++i)
+      for (const i in g_menu.items)
       {
         if (
           typeof g_menu.items[i].checked != "undefined" &&
@@ -1026,7 +1028,7 @@ function wantedChanged(element)
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (let callHash in window.opener.g_callRoster)
+  for (const callHash in window.opener.g_callRoster)
   {
     window.opener.g_callRoster[callHash].callObj.alerted = false;
   }

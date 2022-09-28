@@ -474,6 +474,7 @@ function initQSOdata()
   g_tracker.worked.px = {};
   g_tracker.worked.cnty = {};
   g_tracker.worked.cont = {};
+  g_tracker.worked.pota = {};
 
   g_tracker.confirmed.band = {};
   g_tracker.confirmed.call = {};
@@ -485,6 +486,8 @@ function initQSOdata()
   g_tracker.confirmed.px = {};
   g_tracker.confirmed.cnty = {};
   g_tracker.confirmed.cont = {};
+  // Not referenced but included for consistency
+  g_tracker.confirmed.pota = {};
 }
 
 var g_offlineLayer = null;
@@ -1054,9 +1057,6 @@ function isKnownCallsignUSplus(dxcc)
 function addDeDx(
   finalGrid,
   finalDXcall,
-  cq,
-  cqdx,
-  locked,
   finalDEcall,
   finalRSTsent,
   finalTime,
@@ -1077,19 +1077,22 @@ function addDeDx(
   finalDigital = false,
   finalPhone = false,
   finalIOTA = "",
-  finalSatName = ""
+  finalSatName = "",
+  finalPOTA = null
 )
 {
   var currentYear = new Date().getFullYear();
   var qsoDate = new Date(1970, 0, 1); qsoDate.setSeconds(finalTime);
   var isCurrentYear = (qsoDate.getFullYear() == currentYear);
-
+  var dayAsString = String(parseInt(finalTime / 86400));
+  
   var callsign = null;
   var rect = null;
   var worked = false;
   var didConfirm = false;
   var wspr = mode == "WSPR" ? parseInt(band) * 2 : null;
   var hash = "";
+  var locked = false;
 
   var finalMsg = ifinalMsg.trim();
   if (finalMsg.length > 40) finalMsg = finalMsg.substring(0, 40) + "...";
@@ -1130,6 +1133,7 @@ function addDeDx(
       if (finalVucc.length > 0) details.vucc_grids = finalVucc;
       if (finalIOTA.length > 0) details.IOTA = finalIOTA;
       if (finalSatName.length > 0) details.satName = finalSatName;
+      if (finalPOTA) details.POTA = finalPOTA;
     }
     else
     {
@@ -1158,6 +1162,7 @@ function addDeDx(
       details.phone = finalPhone;
       details.IOTA = finalIOTA;
       details.satName = finalSatName;
+      details.pota = finalPOTA;
     }
 
     if (finalDxcc < 1) finalDxcc = callsignToDxcc(finalDXcall);
@@ -1306,6 +1311,7 @@ function addDeDx(
     if (details.px)
     {
       g_tracker.worked.px[details.px + band + mode] = true;
+      // store the last one
       g_tracker.worked.px[details.px] = hash;
       g_tracker.worked.px[details.px + mode] = true;
       g_tracker.worked.px[details.px + band] = true;
@@ -1324,6 +1330,7 @@ function addDeDx(
     if (details.cont)
     {
       g_tracker.worked.cont[details.cont + band + mode] = true;
+      // store the last one
       g_tracker.worked.cont[details.cont] = hash;
       g_tracker.worked.cont[details.cont + mode] = true;
       g_tracker.worked.cont[details.cont + band] = true;
@@ -1339,6 +1346,24 @@ function addDeDx(
       }
     }
 
+    if (finalPOTA)
+    {
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA] = true;
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + mode] = true;
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band] = true;
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band + mode] = true;
+      if (isDigi == true)
+      {
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + "dg"] = true;
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band + "dg"] = true;
+      }
+      if (isPhone == true)
+      {
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + "ph"] = true;
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band + "ph"] = true;
+      }
+    }
+    
     worked = true;
     locked = true;
     details.worked = worked;
@@ -1415,6 +1440,7 @@ function addDeDx(
       if (details.px)
       {
         g_tracker.confirmed.px[details.px + band + mode] = true;
+        // store the last one
         g_tracker.confirmed.px[details.px] = hash;
         g_tracker.confirmed.px[details.px + mode] = true;
         g_tracker.confirmed.px[details.px + band] = true;
@@ -1428,6 +1454,7 @@ function addDeDx(
       if (details.cont)
       {
         g_tracker.confirmed.cont[details.cont + band + mode] = true;
+        // store the last one
         g_tracker.confirmed.cont[details.cont] = hash;
         g_tracker.confirmed.cont[details.cont + mode] = true;
         g_tracker.confirmed.cont[details.cont + band] = true;
@@ -1437,6 +1464,20 @@ function addDeDx(
           g_tracker.confirmed.cont[details.cont + band + "dg"] = true;
         }
       }
+
+      // we don't need confirmations, worked is enough
+      /* if (finalPOTA)
+      {
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA] = true;
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + mode] = true;
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + band] = true;
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + band + mode] = true;
+        if (isDigi == true)
+        {
+          g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + "dg"] = true;
+          g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + band + "dg"] = true;
+        }
+      } */
 
       g_tracker.confirmed.call[finalDXcall + band + mode] = true;
       g_tracker.confirmed.call[finalDXcall] = true;
@@ -1466,8 +1507,6 @@ function addDeDx(
       details.rect = qthToQsoBox(
         finalGrid,
         hash,
-        cq,
-        cqdx,
         locked,
         finalDEcall,
         worked,
@@ -1488,8 +1527,7 @@ function addDeDx(
       rect = qthToBox(
         finalGrid,
         finalDXcall,
-        cq,
-        cqdx,
+        false,
         locked,
         finalDEcall,
         band,
@@ -4156,8 +4194,6 @@ function iconFeature(center, iconObj, zIndex)
 function qthToQsoBox(
   iQTH,
   iHash,
-  iCQ,
-  iNew,
   locked,
   DE,
   worked,
@@ -4340,7 +4376,7 @@ function qthToQsoBox(
   return returnRectangle;
 }
 
-function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash)
+function qthToBox(iQTH, iDEcallsign, iCQ, locked, DE, band, wspr, hash)
 {
   if (g_appSettings.gridViewMode == 2) return null;
 
@@ -6045,7 +6081,6 @@ function setHomeGridsquare()
     myDEGrid,
     myDEcall,
     false,
-    false,
     true,
     "",
     myBand,
@@ -6963,7 +6998,6 @@ function handleWsjtxDecode(newMessage)
         theirQTH,
         msgDEcallsign,
         CQ,
-        newMessage.NW,
         false,
         msgDXcallsign,
         newMessage.OB,
@@ -7080,7 +7114,6 @@ function handleWsjtxDecode(newMessage)
               theirQTH,
               msgDEcallsign,
               CQ,
-              newMessage.NW,
               false,
               msgDXcallsign,
               newMessage.OB,
@@ -10530,8 +10563,6 @@ function redrawGrids()
           g_QSOhash[i].grid,
           i,
           false,
-          false,
-          false,
           g_QSOhash[i].DXcall,
           g_QSOhash[i].worked,
           g_QSOhash[i].confirmed,
@@ -10543,8 +10574,6 @@ function redrawGrids()
           qthToQsoBox(
             g_QSOhash[i].vucc_grids[vucc],
             i,
-            false,
-            false,
             false,
             g_QSOhash[i].DXcall,
             g_QSOhash[i].worked,
@@ -10916,7 +10945,6 @@ function redrawGrids()
         g_liveCallsigns[i].rect = qthToBox(
           g_liveCallsigns[i].grid,
           g_liveCallsigns[i].DEcall,
-          false,
           false,
           false,
           g_liveCallsigns[i].DXcall,

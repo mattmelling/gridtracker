@@ -74,6 +74,7 @@ function prepareRosterSettings()
   }
   else
   {
+    console.log("Invalid/Unknown huntNeed");
     rosterSettings.huntIndex = false;
     rosterSettings.workedIndex = false;
     rosterSettings.layeredMode = false;

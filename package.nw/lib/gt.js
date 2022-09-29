@@ -6301,11 +6301,6 @@ function handleWsjtxADIF(newMessage)
     g_oldQSOTimer = null;
   }
 
-  if (g_ignoreMessages == 0)
-  {
-    onAdiLoadComplete(newMessage.ADIF);
-  }
-
   sendToLogger(newMessage.ADIF);
 }
 

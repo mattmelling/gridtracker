@@ -1818,14 +1818,22 @@ function sendToLogger(ADIF)
     localMode = record.SUBMODE;
   }
 
+  let localHash = record.CALL + record.BAND + localMode;
   if (
     (!("GRIDSQUARE" in record) || record.GRIDSQUARE.length == 0) &&
-    record.CALL + record.BAND + localMode in g_liveCallsigns
+    localHash in g_liveCallsigns
   )
   {
-    record.GRIDSQUARE = g_liveCallsigns[
-      record.CALL + record.BAND + localMode
-    ].grid.substr(0, 4);
+    record.GRIDSQUARE = g_liveCallsigns[localHash].grid.substr(0, 4);
+  }
+
+  if (g_potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota.length > 0)
+  {
+    let pota = g_liveCallsigns[localHash].pota[0];
+    if (pota != "?-????")
+    {
+      record.POTA = pota;
+    }
   }
 
   if ("TX_PWR" in record)
@@ -1918,17 +1926,33 @@ function sendToLogger(ADIF)
 function finishSendingReport(record, localMode)
 {
   let report = "";
-
-  for (let key in record)
+  for (const key in record)
   {
-    report += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
+    if (key != "POTA")
+    {
+      report += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
+    }
   }
   report += "<EOR>";
+  
+  // this report is for internal use ONLY!
+  let reportWithPota = "";
+  for (const key in record)
+  {
+    reportWithPota += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
+  }
+  reportWithPota += "<EOR>";
 
   // Full record dupe check
   if (report != g_lastReport)
   {
     g_lastReport = report;
+    
+    if (g_potaEnabled == 1 && "POTA" in record)
+    {
+      reportPotaQSO(record);
+      addLastTraffic("<font style='color:white'>Spotted to POTA</font>");
+    }
 
     if (
       g_N1MMSettings.enable == true &&
@@ -1962,7 +1986,7 @@ function finishSendingReport(record, localMode)
 
     try
     {
-      onAdiLoadComplete("GT<EOH>" + report);
+      onAdiLoadComplete("GT<EOH>" + reportWithPota);
     }
     catch (e)
     {
@@ -1974,7 +1998,7 @@ function finishSendingReport(record, localMode)
       if (logGTqsoCheckBox.checked == true)
       {
         var fs = require("fs");
-        fs.appendFileSync(g_qsoLogFile, report + "\r\n");
+        fs.appendFileSync(g_qsoLogFile, reportWithPota + "\r\n");
         addLastTraffic(
           "<font style='color:white'>Logged to GridTracker backup</font>"
         );

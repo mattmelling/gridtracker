@@ -202,6 +202,38 @@ function reportPotaRBN(callSpot)
   );
 }
 
+function reportPotaQSO(record)
+{
+  let report = {
+    activator: record.CALL,
+    spotter: record.STATION_CALLSIGN,
+    frequency: record.FREQ,
+    reference: record.POTA,
+    mode: record.MODE,
+    source: "GT",
+    comments: record.COMMENT ? record.COMMENT : "",
+    activatorGrid: record.GRIDSQUARE ? record.GRIDSQUARE : "",
+    spotterGrid: record.MY_GRIDSQUARE ? record.MY_GRIDSQUARE : ""
+  }
+  
+  if ("SUBMODE" in record)
+  {
+    report.mode = record.SUBMODE;
+  }
+ 
+  getPostJSONBuffer(
+    "https://api.pota.app/spot",
+    rbnReportResult,
+    null,
+    "https",
+    443,
+    report,
+    10000,
+    null,
+    null
+  );
+}
+
 function rbnReportResult(buffer, flag, cookies)
 {
   // It worked! process latest spots!

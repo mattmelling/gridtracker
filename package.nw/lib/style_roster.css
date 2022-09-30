@@ -373,27 +373,9 @@ body.roster {
   padding: 2px;
 }
 
-#instancesWrapper {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  min-width: 80px;
-  max-width: 160px;
-  margin-top: 22px;
-  text-align: right;
-}
-#instancesWrapper h3 {
-  text-align: left;
-  font-size: 12px;
-  margin: 0px;
-  margin-bottom: 2px;
-  padding: 0;
-  text-align: right;
-}
+
 #instancesWrapper .button {
-  display: block;
+  display: inline-block;
   margin: 1px;
   padding: 2px;
   border-width: 1px;

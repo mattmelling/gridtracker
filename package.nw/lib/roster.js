@@ -846,15 +846,18 @@ function setVisual()
     if (g_rosterSettings.controlsExtended)
     {
       RosterControls.className = "extended";
+      instancesWrapper.style.display = "";
     }
     else
     {
       RosterControls.className = "normal";
+      instancesWrapper.style.display = "none";
     }
   }
   else
   {
     RosterControls.className = "hidden";
+    instancesWrapper.style.display = "none";
   }
 
   // Award Hunter
@@ -1485,6 +1488,7 @@ function openIgnoreEdit()
   worker += "</table></div>";
 
   editTables.innerHTML = worker;
+  editView.style.height = ( window.innerHeight - 50) + "px";
 }
 
 function onMyKeyDown(event)

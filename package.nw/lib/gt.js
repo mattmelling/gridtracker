@@ -15873,19 +15873,34 @@ function mediaCheck()
         g_tracker.worked.px = {};
         g_tracker.confirmed.px = {};
       }
+      
+      if (typeof g_tracker.worked.pota == "undefined")
+      {
+        g_tracker.worked.pota = {};
+        g_tracker.confirmed.pota = {};
+      }
 
       g_QSOhash = data.g_QSOhash;
 
       for (var i in g_QSOhash)
       {
-        if (
-          typeof g_QSOhash[i].px == "undefined" ||
-          g_QSOhash[i].px == null
-        )
+        if (typeof g_QSOhash[i].px == "undefined" || g_QSOhash[i].px == null)
         {
-          if (g_QSOhash[i].dxcc != -1) { g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall); }
-          else g_QSOhash[i].px = null;
+          if (g_QSOhash[i].dxcc != -1)
+          {
+            g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall);
+          }
+          else
+          {
+            g_QSOhash[i].px = null;
+          }
         }
+        
+        if (typeof g_QSOhash[i].pota == "undefined" || g_QSOhash[i].pota == null)
+        {
+          g_QSOhash[i].pota = [];
+        }
+        
         g_QSOcount++;
         if (g_QSOhash[i].confirmed) g_QSLcount++;
       }

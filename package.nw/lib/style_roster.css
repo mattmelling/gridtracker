@@ -339,7 +339,7 @@ body.roster {
 
 .secondaryControlGroup .columns {
   /* column-count: 2; */
-  max-height: 125px;
+  max-height: 135px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

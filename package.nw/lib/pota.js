@@ -37,7 +37,7 @@ var g_parkTemplate = {
 }
 
 var g_potaUnknownPark = {
-  name: "Unknown park",
+  name: "Unknown park (not yet spotted)",
   active: "0",
   entityId: "-1",
   locationDesc: "??-??",

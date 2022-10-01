@@ -10039,7 +10039,6 @@ function renderStatsBox()
     worker += createDistanceTable(long_distance, "Longest Distance");
     worker += createDistanceTable(short_distance, "Shortest Distance");
     worker += "<br/>";
-
   }
   catch (e)
   {

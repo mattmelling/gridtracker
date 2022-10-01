@@ -47,6 +47,7 @@ var def_appSettings = {
   gtPropFilter: "mixed",
   gtMsgEnable: true,
   gtShareEnable: true,
+  gtSpotEnable: true,
   heatEnabled: 0,
   loadAdifAtStartup: false,
   lookupLoginCq: "",
@@ -74,6 +75,7 @@ var def_appSettings = {
   myRawFreq: "",
   myRawGrid: "",
   pathWidthWeight: 1.0,
+  potaEnabled: 0,
   pushPinMode: false,
   qrzPathWidthWeight: 1.2,
   sixWideMode: 0,
@@ -90,8 +92,7 @@ var def_appSettings = {
   workingCallsignEnable: false,
   workingCallsigns: {},
   workingDateEnable: false,
-  workingDate: 0,
-  gtSpotEnable: true
+  workingDate: 0
 };
 
 var def_mapSettings = {
@@ -210,32 +211,38 @@ var def_N1MMSettings = {
   port: 2333,
   ip: "127.0.0.1"
 };
+
 var def_log4OMSettings = {
   enable: false,
   port: 2236,
   ip: "127.0.0.1"
 };
+
 var def_dxkLogSettings = {
   enable: false,
   port: 52000,
   ip: "127.0.0.1"
 };
+
 var def_HRDLogbookLogSettings = {
   enable: false,
   port: 7826,
   ip: "127.0.0.1"
 };
+
 var def_acLogSettings = {
   enable: false,
   port: 1100,
   ip: "127.0.0.1"
 };
+
 var def_trustedQslSettings = {
   stationFile: "",
   stationFileValid: false,
   binaryFile: "",
   binaryFileValid: false
 };
+
 var def_callsignLookups = {
   lotwUseEnable: true,
   lotwWeeklyEnable: true,

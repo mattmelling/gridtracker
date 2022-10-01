@@ -695,6 +695,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <div id="radarButton" onclick="toggleNexrad()" class="iconButton" title="Toggle US Nexrad">
             <img src="./img/radar-button.png" class="buttonImg" />
           </div>
+          <div id="potaButton" onClick="togglePota();" class="iconButton" title="Parks On The Air">
+            <img id="potaImg" src="./img/pota.png" class="buttonImg" />
+          </div>
           <div id="gridOverlayButton" onclick="toggleAllGrids()" class="iconButton" title="Toggle All Grid Overlay">
             <img src="./img/grid-overlay.png" class="buttonImg" />
           </div>
@@ -753,6 +756,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         ></div>
       </div>
       <div id="myFlagtip" class="myFlagtipEnd"></div>
+      <div id="myParktip"         style="
+          -webkit-user-select: text;
+          user-select: text;
+          background-color: black;
+          padding: 2px;
+          text-align: center;
+          display: block;
+          position: absolute;
+          z-index: -500;
+          left: -1000px;
+          top: -1000px;
+          border: 2px solid white;
+          white-space: nowrap;
+          overflow: hidden;
+        "
+        class="roundBorder"></div>
       <div
         id="myTooltip"
         style="

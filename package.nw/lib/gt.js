@@ -7,7 +7,10 @@ var gtVersion = parseInt(gtVersionStr.replace(/\./g, ""));
 var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
-if (typeof localStorage.currentVersion != "undefined") { g_startVersion = localStorage.currentVersion; }
+if (typeof localStorage.currentVersion != "undefined")
+{
+  g_startVersion = localStorage.currentVersion;
+}
 
 if (
   typeof localStorage.currentVersion == "undefined" ||
@@ -43,8 +46,14 @@ if (g_platform.indexOf("win") == 0 || g_platform.indexOf("Win") == 0)
 {
   g_platform = "windows";
 }
-if (g_platform.indexOf("inux") > -1) g_platform = "linux";
-if (g_platform.indexOf("darwin") > -1) g_platform = "mac";
+if (g_platform.indexOf("inux") > -1)
+{
+  g_platform = "linux";
+}
+if (g_platform.indexOf("darwin") > -1)
+{
+  g_platform = "mac";
+}
 
 var gui = require("nw.gui");
 var win = gui.Window.get();
@@ -171,6 +180,7 @@ var g_flightDuration = 30;
 
 var g_crScript = g_appSettings.crScript;
 var g_spotsEnabled = g_appSettings.spotsEnabled;
+var g_potaEnabled = g_appSettings.potaEnabled;
 var g_heatEnabled = g_appSettings.heatEnabled;
 
 var g_myLat = g_mapSettings.latitude;
@@ -454,7 +464,6 @@ function initQSOdata()
   g_tracker.worked = {};
   g_tracker.confirmed = {};
 
-  g_tracker.worked.band = {};
   g_tracker.worked.call = {};
   g_tracker.worked.grid = {};
   g_tracker.worked.dxcc = {};
@@ -464,8 +473,8 @@ function initQSOdata()
   g_tracker.worked.px = {};
   g_tracker.worked.cnty = {};
   g_tracker.worked.cont = {};
+  g_tracker.worked.pota = {};
 
-  g_tracker.confirmed.band = {};
   g_tracker.confirmed.call = {};
   g_tracker.confirmed.grid = {};
   g_tracker.confirmed.dxcc = {};
@@ -475,6 +484,8 @@ function initQSOdata()
   g_tracker.confirmed.px = {};
   g_tracker.confirmed.cnty = {};
   g_tracker.confirmed.cont = {};
+  // Not referenced but included for consistency
+  g_tracker.confirmed.pota = {};
 }
 
 var g_offlineLayer = null;
@@ -681,6 +692,7 @@ function gtBandFilterChanged(selector)
   removePaths();
   redrawGrids();
   redrawSpots();
+  redrawParks();
 }
 
 function gtModeFilterChanged(selector)
@@ -689,6 +701,7 @@ function gtModeFilterChanged(selector)
 
   redrawGrids();
   redrawSpots();
+  redrawParks();
 }
 
 function gtPropFilterChanged(selector)
@@ -705,6 +718,7 @@ function setBandAndModeToAuto()
     "auto";
   redrawGrids();
   redrawSpots();
+  redrawParks();
 }
 
 function hideLiveGrid(i)
@@ -796,6 +810,7 @@ function toggleOffline()
     buttonStrikesDiv.style.display = "inline-block";
     buttonPSKSpotsBoxDiv.style.display = "inline-block";
     donateButton.style.display = "inline-block";
+    potaButton.style.display = "inline-block";
 
     if (g_appSettings.gtShareEnable == true)
     {
@@ -840,6 +855,7 @@ function toggleOffline()
     gtShareButton.style.display = "none";
     msgButton.style.display = "none";
     donateButton.style.display = "none";
+    potaButton.style.display = "none";
     buttonStrikesDiv.style.display = "none";
     buttonPSKSpotsBoxDiv.style.display = "none";
     setGtShareButtons();
@@ -1039,9 +1055,6 @@ function isKnownCallsignUSplus(dxcc)
 function addDeDx(
   finalGrid,
   finalDXcall,
-  cq,
-  cqdx,
-  locked,
   finalDEcall,
   finalRSTsent,
   finalTime,
@@ -1049,7 +1062,7 @@ function addDeDx(
   mode,
   band,
   confirmed,
-  notQso,
+  isQSO,
   finalRSTrecv,
   finalDxcc,
   finalState,
@@ -1062,24 +1075,27 @@ function addDeDx(
   finalDigital = false,
   finalPhone = false,
   finalIOTA = "",
-  finalSatName = ""
+  finalSatName = "",
+  finalPOTA = null
 )
 {
   var currentYear = new Date().getFullYear();
   var qsoDate = new Date(1970, 0, 1); qsoDate.setSeconds(finalTime);
   var isCurrentYear = (qsoDate.getFullYear() == currentYear);
-
+  var dayAsString = String(parseInt(finalTime / 86400));
+  
   var callsign = null;
   var rect = null;
   var worked = false;
   var didConfirm = false;
   var wspr = mode == "WSPR" ? parseInt(band) * 2 : null;
   var hash = "";
+  var locked = false;
 
   var finalMsg = ifinalMsg.trim();
   if (finalMsg.length > 40) finalMsg = finalMsg.substring(0, 40) + "...";
   var details = null;
-  if (!notQso)
+  if (isQSO)
   {
     var timeMod = finalTime - (finalTime % 360) + 180;
     hash = unique(mode + band + finalDXcall + timeMod);
@@ -1115,12 +1131,12 @@ function addDeDx(
       if (finalVucc.length > 0) details.vucc_grids = finalVucc;
       if (finalIOTA.length > 0) details.IOTA = finalIOTA;
       if (finalSatName.length > 0) details.satName = finalSatName;
+      if (finalPOTA) details.POTA = finalPOTA;
     }
     else
     {
       details = {};
       details.grid = finalGrid;
-      details.grid4 = finalGrid.length > 0 ? finalGrid.substr(0, 4) : "-";
       details.RSTsent = finalRSTsent;
       details.RSTrecv = finalRSTrecv;
       details.msg = "-";
@@ -1138,13 +1154,13 @@ function addDeDx(
       details.px = null;
       details.zone = null;
       details.cont = null;
-
       details.vucc_grids = finalVucc;
       details.propMode = finalPropMode;
       details.digital = finalDigital;
       details.phone = finalPhone;
       details.IOTA = finalIOTA;
       details.satName = finalSatName;
+      details.pota = finalPOTA;
     }
 
     if (finalDxcc < 1) finalDxcc = callsignToDxcc(finalDXcall);
@@ -1156,15 +1172,16 @@ function addDeDx(
       if (details.px) { details.zone = Number(details.px.charAt(details.px.length - 1)); }
     }
 
+    let fourGrid = details.grid.substr(0, 4);
     if (
       details.state == null &&
       isKnownCallsignUSplus(finalDxcc) &&
-      finalGrid.length > 0
+      fourGrid.length > 0
     )
     {
-      if (details.grid4 in g_gridToState && g_gridToState[details.grid4].length == 1)
+      if (fourGrid in g_gridToState && g_gridToState[fourGrid].length == 1)
       {
-        details.state = g_gridToState[details.grid4][0];
+        details.state = g_gridToState[fourGrid][0];
       }
       lookupCall = true;
     }
@@ -1214,7 +1231,6 @@ function addDeDx(
       g_tracker.worked.call[finalDXcall + band + "dg"] = true;
     }
 
-    var fourGrid = details.grid.substr(0, 4);
     if (fourGrid != "")
     {
       g_tracker.worked.grid[fourGrid + band + mode] = true;
@@ -1293,6 +1309,7 @@ function addDeDx(
     if (details.px)
     {
       g_tracker.worked.px[details.px + band + mode] = true;
+      // store the last one
       g_tracker.worked.px[details.px] = hash;
       g_tracker.worked.px[details.px + mode] = true;
       g_tracker.worked.px[details.px + band] = true;
@@ -1311,6 +1328,7 @@ function addDeDx(
     if (details.cont)
     {
       g_tracker.worked.cont[details.cont + band + mode] = true;
+      // store the last one
       g_tracker.worked.cont[details.cont] = hash;
       g_tracker.worked.cont[details.cont + mode] = true;
       g_tracker.worked.cont[details.cont + band] = true;
@@ -1326,6 +1344,24 @@ function addDeDx(
       }
     }
 
+    if (finalPOTA)
+    {
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA] = true;
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + mode] = true;
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band] = true;
+      g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band + mode] = true;
+      if (isDigi == true)
+      {
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + "dg"] = true;
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band + "dg"] = true;
+      }
+      if (isPhone == true)
+      {
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + "ph"] = true;
+        g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band + "ph"] = true;
+      }
+    }
+    
     worked = true;
     locked = true;
     details.worked = worked;
@@ -1402,6 +1438,7 @@ function addDeDx(
       if (details.px)
       {
         g_tracker.confirmed.px[details.px + band + mode] = true;
+        // store the last one
         g_tracker.confirmed.px[details.px] = hash;
         g_tracker.confirmed.px[details.px + mode] = true;
         g_tracker.confirmed.px[details.px + band] = true;
@@ -1415,6 +1452,7 @@ function addDeDx(
       if (details.cont)
       {
         g_tracker.confirmed.cont[details.cont + band + mode] = true;
+        // store the last one
         g_tracker.confirmed.cont[details.cont] = hash;
         g_tracker.confirmed.cont[details.cont + mode] = true;
         g_tracker.confirmed.cont[details.cont + band] = true;
@@ -1424,6 +1462,20 @@ function addDeDx(
           g_tracker.confirmed.cont[details.cont + band + "dg"] = true;
         }
       }
+
+      // we don't need confirmations, worked is enough
+      /* if (finalPOTA)
+      {
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA] = true;
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + mode] = true;
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + band] = true;
+        g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + band + mode] = true;
+        if (isDigi == true)
+        {
+          g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + "dg"] = true;
+          g_tracker.confirmed.pota[dayAsString + finalDXcall + finalPOTA + band + "dg"] = true;
+        }
+      } */
 
       g_tracker.confirmed.call[finalDXcall + band + mode] = true;
       g_tracker.confirmed.call[finalDXcall] = true;
@@ -1441,27 +1493,18 @@ function addDeDx(
   if (finalDxcc < 1) finalDxcc = callsignToDxcc(finalDXcall);
 
   hash = finalDXcall + band + mode;
-  if (notQso)
+  if (!isQSO)
   {
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
   }
 
-  if (!notQso)
+  if (isQSO)
   {
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == band
-          : g_appSettings.gtBandFilter == band)) &&
-      validateMapMode(mode) &&
-      validatePropMode(finalPropMode)
-    )
+    if (validateMapBandAndMode(band, mode) && validatePropMode(finalPropMode))
     {
       details.rect = qthToQsoBox(
         finalGrid,
         hash,
-        cq,
-        cqdx,
         locked,
         finalDEcall,
         worked,
@@ -1477,19 +1520,12 @@ function addDeDx(
     if (finalDxcc in g_dxccCount) g_dxccCount[finalDxcc]++;
     else g_dxccCount[finalDxcc] = 1;
 
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == band
-          : g_appSettings.gtBandFilter == band)) &&
-      validateMapMode(mode)
-    )
+    if (validateMapBandAndMode(band, mode))
     {
       rect = qthToBox(
         finalGrid,
         finalDXcall,
-        cq,
-        cqdx,
+        false,
         locked,
         finalDEcall,
         band,
@@ -1517,6 +1553,7 @@ function addDeDx(
     newCallsign.distance = 0;
     newCallsign.px = null;
     newCallsign.zone = null;
+    newCallsign.pota = [];
     newCallsign.cnty = finalCnty;
     newCallsign.cont = finalCont;
     if (finalDxcc > -1)
@@ -1544,6 +1581,7 @@ function addDeDx(
       newCallsign.RSTrecv = finalRSTrecv;
     }
     newCallsign.time = finalTime;
+    newCallsign.age = finalTime;
     newCallsign.delta = -1;
     newCallsign.DXcall = finalDEcall;
     newCallsign.rect = rect;
@@ -1560,6 +1598,7 @@ function addDeDx(
     newCallsign.phone = finalPhone;
     newCallsign.IOTA = finalIOTA;
     newCallsign.satName = finalSatName;
+    newCallsign.hash = hash;
 
     if (
       newCallsign.state == null &&
@@ -1591,6 +1630,7 @@ function addDeDx(
     if (callsign.DXcall != "Self" && finalTime > callsign.time)
     {
       callsign.time = finalTime;
+      callsign.age = finalTime;
       callsign.mode = mode;
       callsign.band = band;
       callsign.delta = -1;
@@ -1787,7 +1827,6 @@ function compareCallsignTime(a, b)
 
 function createFlagTipTable(toolElement)
 {
-  var myFlagtip = document.getElementById("myFlagtip");
   var worker = "";
   if (toolElement.size == 1)
   {
@@ -2507,6 +2546,7 @@ function openConditionsWindow()
 }
 
 var g_callRoster = {};
+var g_rosterUpdateTimer = null;
 
 function insertMessageInRoster(
   newMessage,
@@ -2516,7 +2556,13 @@ function insertMessageInRoster(
   hash
 )
 {
-  var now = timeNowSec();
+  if (g_rosterUpdateTimer != null)
+  {
+    clearTimeout(g_rosterUpdateTimer);
+    g_rosterUpdateTimer = null;
+  }
+
+  let now = timeNowSec();
   if (!(hash in g_callRoster))
   {
     g_callRoster[hash] = {};
@@ -2539,6 +2585,13 @@ function insertMessageInRoster(
   g_callRoster[hash].callObj = callObj;
   g_callRoster[hash].DXcall = msgDXcallsign;
   g_callRoster[hash].DEcall = msgDEcallsign;
+
+  g_rosterUpdateTimer = setTimeout(delayedRosterUpdate, 100);
+}
+
+function delayedRosterUpdate()
+{
+  g_rosterUpdateTimer = null;
   goProcessRoster(true);
 }
 
@@ -3502,9 +3555,7 @@ function moonOver(feature)
   }
   g_lastMoon = feature;
 
-  var positionInfo = myMoonTooltip.getBoundingClientRect();
-  myMoonTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
-  myMoonTooltip.style.top = getMouseY() + 22 + "px";
+  moonMove();
   myMoonTooltip.style.zIndex = 499;
   myMoonTooltip.style.display = "block";
 }
@@ -3721,9 +3772,8 @@ function trophyOver(feature)
     "<div style='font-size:15px;color:cyan;' class='roundBorder'>" +
     worker +
     "</div>";
-  var positionInfo = myTrophyTooltip.getBoundingClientRect();
-  myTrophyTooltip.style.left = getMouseX() - positionInfo.width / 2 + "px";
-  myTrophyTooltip.style.top = getMouseY() - positionInfo.height - 22 + "px";
+
+  trophyMove();
   myTrophyTooltip.style.zIndex = 499;
   myTrophyTooltip.style.display = "block";
 }
@@ -3821,12 +3871,11 @@ function mouseDownGrid(longlat, event)
     grid +
     "</div>" +
     worker;
-  var positionInfo = myGridTooltip.getBoundingClientRect();
-  myGridTooltip.style.left = event.pixel[0] - positionInfo.width / 2 + "px";
-  myGridTooltip.style.top = event.pixel[1] - positionInfo.height - 22 + "px";
+  g_MyGridIsUp = true;
+
+  mouseMoveGrid();
   myGridTooltip.style.zIndex = 499;
   myGridTooltip.style.display = "block";
-  g_MyGridIsUp = true;
 }
 
 function mouseMoveGrid()
@@ -3864,9 +3913,7 @@ function mouseOverGtFlag(feature)
 
   createFlagTipTable(feature);
 
-  var positionInfo = myFlagtip.getBoundingClientRect();
-  myFlagtip.style.left = getMouseX() + 15 + "px";
-  myFlagtip.style.top = getMouseY() - positionInfo.height - 5 + "px";
+  gtFlagMove();
 
   myFlagtip.style.zIndex = 499;
   myFlagtip.style.display = "block";
@@ -3923,17 +3970,14 @@ function mouseOverDataItem(mouseEvent, fromHover)
   if (g_mapSettings.mouseOver == false && fromHover == true) return;
 
   g_lastDataGridUp = mouseEvent;
-  var myTooltip = null;
-  var callListLength = 0;
-  var isFlag = false;
 
-  myTooltip = document.getElementById("myTooltip");
-  callListLength = createTooltTipTable(mouseEvent);
-  var positionInfo = myTooltip.getBoundingClientRect();
-  var windowWidth = window.innerWidth;
-  var top = 0;
-  var noRoomLeft = false;
-  var noRoomRight = false;
+  let isFlag = false;
+  let callListLength = createTooltTipTable(mouseEvent);
+  let positionInfo = myTooltip.getBoundingClientRect();
+  let windowWidth = window.innerWidth;
+  let top = 0;
+  let noRoomLeft = false;
+  let noRoomRight = false;
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
@@ -3963,12 +4007,11 @@ function mouseOverDataItem(mouseEvent, fromHover)
 
 function mouseMoveDataItem(mouseEvent)
 {
-  var myTooltip = document.getElementById("myTooltip");
-  var positionInfo = myTooltip.getBoundingClientRect();
-  var windowWidth = window.innerWidth;
-  var top = 0;
-  var noRoomLeft = false;
-  var noRoomRight = false;
+  let positionInfo = myTooltip.getBoundingClientRect();
+  let windowWidth = window.innerWidth;
+  let top = 0;
+  let noRoomLeft = false;
+  let noRoomRight = false;
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
@@ -4132,12 +4175,12 @@ function squareToLatLong(qth)
 
 function iconFeature(center, iconObj, zIndex)
 {
-  var feature = new ol.Feature({
+  let feature = new ol.Feature({
     geometry: new ol.geom.Point(center),
     name: "pin"
   });
 
-  var iconStyle = new ol.style.Style({
+  let iconStyle = new ol.style.Style({
     zIndex: zIndex,
     image: iconObj
   });
@@ -4149,8 +4192,6 @@ function iconFeature(center, iconObj, zIndex)
 function qthToQsoBox(
   iQTH,
   iHash,
-  iCQ,
-  iNew,
   locked,
   DE,
   worked,
@@ -4333,7 +4374,7 @@ function qthToQsoBox(
   return returnRectangle;
 }
 
-function qthToBox(iQTH, iDEcallsign, iCQ, iNew, locked, DE, band, wspr, hash)
+function qthToBox(iQTH, iDEcallsign, iCQ, locked, DE, band, wspr, hash)
 {
   if (g_appSettings.gridViewMode == 2) return null;
 
@@ -5534,6 +5575,7 @@ function initMap()
   createGlobalMapLayer("long-grids", 3000);
   createGlobalMapLayer("short-grids", 8000, 3001);
   createGlobalMapLayer("big-grids", 50000, 3001);
+  createGlobalMapLayer("pota");
   createGlobalMapLayer("psk-flights");
   createGlobalMapLayer("psk-spots");
   createGlobalMapLayer("psk-hop");
@@ -5567,6 +5609,7 @@ function initMap()
       g_layerVectors["long-grids"],
       g_layerVectors["short-grids"],
       g_layerVectors["big-grids"],
+      g_layerVectors.pota,
       g_layerVectors["psk-flights"],
       g_layerVectors["psk-spots"],
       g_layerVectors["psk-hop"],
@@ -5626,6 +5669,7 @@ function initMap()
     var noAward = true;
     var noMoon = true;
     var noTimeZone = true;
+    var noPark = true;
 
     if (g_map.hasFeatureAtPixel(mousePosition))
     {
@@ -5663,6 +5707,15 @@ function initMap()
             break;
           }
 
+          if (features[index].size == 22)
+          {
+            mouseOverPark(features[index]);
+            noPark = false;
+            noFlag = true;
+            noFeature = true;
+            break;
+          }
+          
           if (features[index].size == 6)
           {
             noFeature = false;
@@ -5688,6 +5741,7 @@ function initMap()
     }
     if (noFeature) mouseOutOfDataItem();
     if (noFlag) mouseOutGtFlag();
+    if (noPark) mouseOutPark();
     if (noAward) trophyOut();
     if (noMoon) moonOut();
   });
@@ -5888,6 +5942,7 @@ function mapLoseFocus()
   mouseUpGrid();
   moonOut();
   mouseOutGtFlag();
+  mouseOutPark();
 }
 
 function lineString(points)
@@ -6023,7 +6078,6 @@ function setHomeGridsquare()
   var rect = qthToBox(
     myDEGrid,
     myDEcall,
-    false,
     false,
     true,
     "",
@@ -6245,11 +6299,6 @@ function handleWsjtxADIF(newMessage)
     g_oldQSOTimer = null;
   }
 
-  if (g_ignoreMessages == 0)
-  {
-    onAdiLoadComplete(newMessage.ADIF);
-  }
-
   sendToLogger(newMessage.ADIF);
 }
 
@@ -6431,6 +6480,7 @@ function handleWsjtxStatus(newMessage)
       goProcessRoster();
       redrawGrids();
       redrawSpots();
+      redrawParks();
       redrawPins();
 
       var msg = "";
@@ -6819,16 +6869,17 @@ var g_spotCollector = {};
 function handleWsjtxDecode(newMessage)
 {
   if (g_ignoreMessages == 1 || g_map == null) return;
-  var didAlert = false;
-  var didCustomAlert = false;
-  var validQTH = false;
-  var CQ = false;
-  var DEDX = false;
-  var msgDEcallsign = "";
-  var msgDXcallsign = "";
-  var theirQTH = "";
-  var countryName = "";
-  var newF;
+  let didAlert = false;
+  let didCustomAlert = false;
+  let validQTH = false;
+  let CQ = false;
+  let DEDX = false;
+  let RR73 = false;
+  let msgDEcallsign = "";
+  let msgDXcallsign = "";
+  let theirQTH = "";
+  let countryName = "";
+  let newF;
   if (newMessage.OF > 0)
   {
     newF = Number((newMessage.OF + newMessage.DF) / 1000).formatMhz(3, 3);
@@ -6837,31 +6888,31 @@ function handleWsjtxDecode(newMessage)
   {
     newF = newMessage.DF;
   }
-  theTimeStamp =
+  let theTimeStamp =
     timeNowSec() - (timeNowSec() % 86400) + parseInt(newMessage.TM / 1000);
-  var messageColor = "white";
+  let messageColor = "white";
 
   // Break up the decoded message
-  var decodeWords = newMessage.Msg.split(" ").slice(0, 5);
+  let decodeWords = newMessage.Msg.split(" ").slice(0, 5);
   while (decodeWords[decodeWords.length - 1] == "") decodeWords.pop();
 
   if (decodeWords.length > 1 && newMessage.Msg.indexOf("<...>") == -1)
   {
     if (newMessage.Msg.indexOf("<") != -1)
     {
-      for (var i in decodeWords)
+      for (const i in decodeWords)
       {
         decodeWords[i] = decodeWords[i].replace("<", "").replace(">", "");
       }
     }
 
-    var rect = null;
+    let rect = null;
     // Grab the last word in the decoded message
-    var qth = decodeWords[decodeWords.length - 1].trim();
+    let qth = decodeWords[decodeWords.length - 1].trim();
     if (qth.length == 4)
     {
-      var LETTERS = qth.substr(0, 2);
-      var NUMBERS = qth.substr(2, 2);
+      let LETTERS = qth.substr(0, 2);
+      let NUMBERS = qth.substr(2, 2);
       if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
       {
         theirQTH = LETTERS + NUMBERS;
@@ -6906,23 +6957,26 @@ function handleWsjtxDecode(newMessage)
       msgDEcallsign = decodeWords[1];
     }
 
-    if (g_callRosterWindowHandle.window.g_rosterSettings.wanted.huntRR73 && decodeWords[2] == "RR73")
+    if (decodeWords[2] == "RR73")
     {
-      CQ = true;
-      msgDXcallsign = "RR73";
+      RR73 = true;
     }
 
-    var callsign = null;
+    let callsign = null;
 
-    var hash = msgDEcallsign + newMessage.OB + newMessage.OM;
+    let hash = msgDEcallsign + newMessage.OB + newMessage.OM;
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
 
-    if (validQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
+    if (theirQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
     {
-      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0) { validQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid; }
+      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0)
+      {
+        theirQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.substr(0, 4);
+        validQTH = true;
+      }
     }
 
-    var canPath = false;
+    let canPath = false;
     if (
       (g_appSettings.gtBandFilter.length == 0 ||
         (g_appSettings.gtBandFilter == "auto" && newMessage.OB == myBand) ||
@@ -6937,7 +6991,6 @@ function handleWsjtxDecode(newMessage)
         theirQTH,
         msgDEcallsign,
         CQ,
-        newMessage.NW,
         false,
         msgDXcallsign,
         newMessage.OB,
@@ -6968,7 +7021,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.RSTsent = newMessage.SR;
       newCallsign.RSTrecv = "-";
       newCallsign.time = theTimeStamp;
-      newCallsign.life = newCallsign.age = g_timeNow;
+      newCallsign.life = newCallsign.age = timeNowSec();
       newCallsign.delta = newMessage.DF;
       newCallsign.dt = newMessage.DT.toFixed(2);
       newCallsign.DXcall = msgDXcallsign.trim();
@@ -6980,7 +7033,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.qso = false;
       newCallsign.dxcc = callsignToDxcc(newCallsign.DEcall);
       newCallsign.px = null;
-      newCallsign.pota = null;
+      newCallsign.pota = [];
       newCallsign.zone = null;
       newCallsign.vucc_grids = [];
       newCallsign.propMode = "";
@@ -6988,6 +7041,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.phone = false;
       newCallsign.IOTA = "";
       newCallsign.satName = "";
+      newCallsign.hash = hash;
       if (newCallsign.dxcc != -1)
       {
         newCallsign.px = getWpx(newCallsign.DEcall);
@@ -7053,7 +7107,6 @@ function handleWsjtxDecode(newMessage)
               theirQTH,
               msgDEcallsign,
               CQ,
-              newMessage.NW,
               false,
               msgDXcallsign,
               newMessage.OB,
@@ -7066,7 +7119,7 @@ function handleWsjtxDecode(newMessage)
       }
 
       callsign.time = theTimeStamp;
-      callsign.age = g_timeNow;
+      callsign.age = timeNowSec();
 
       callsign.RSTsent = newMessage.SR;
       callsign.delta = newMessage.DF;
@@ -7080,6 +7133,7 @@ function handleWsjtxDecode(newMessage)
     callsign.instance = newMessage.instance;
     callsign.grid = callsign.grid.substr(0, 4);
     callsign.CQ = CQ;
+    callsign.RR73 = RR73;
 
     if (msgDXcallsign == myDEcall) callsign.qrz = true;
     else callsign.qrz = false;
@@ -7111,9 +7165,34 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    if (g_potaSpots && g_potaSpots.some(item => item.activator === callsign.DEcall))
+    if (g_potaEnabled == 1)
     {
-      callsign.pota = g_potaSpots.filter(item => item.activator === callsign.DEcall)[0];
+      if (callsign.DEcall in g_pota.callSpots || callsign.DEcall in g_pota.callSchedule)
+      {
+        callsign.pota = [];
+        if (callsign.DEcall in g_pota.callSpots)
+        {
+          // copies the entire array
+          callsign.pota = [...g_pota.callSpots[callsign.DEcall]];
+        }
+        else if (callsign.DEcall in g_pota.callSchedule)
+        {
+          let now = Date.now();
+          for (let i in g_pota.callSchedule[callsign.DEcall])
+          {
+            if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start)
+            {
+              callsign.pota.push(g_pota.callSchedule[callsign.DEcall][i].id);
+              break;
+            }
+          }
+        }
+        potaSpotFromDecode(callsign);
+      }
+      else if (CQ == true && msgDXcallsign == "CQ POTA")
+      {
+        callsign.pota = ["?-????"];
+      }
     }
 
     if (newMessage.NW)
@@ -7508,13 +7587,17 @@ function goProcessRoster(isRealtime = false)
   {
     try
     {
-      if (isRealtime == true)
+      if (isRealtime == true && g_callRosterWindowHandle.window.g_rosterSettings.realtime == false)
       {
-        if (g_callRosterWindowHandle.window.g_rosterSettings.realtime == false) { return; }
+        return;
       }
       g_callRosterWindowHandle.window.processRoster(g_callRoster);
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.log("Call Roster exception");
+      console.log(e.message);
+    }
   }
 }
 
@@ -7565,7 +7648,7 @@ function handleWsjtxWSPR(newMessage)
     "WSPR",
     Number(newMessage.Frequency / 1000000).formatBand(),
     false,
-    true,
+    false,
     null,
     callsignToDxcc(newMessage.Callsign),
     null,
@@ -9367,7 +9450,6 @@ function renderStatsBox()
     var gridData = {};
     var wpxData = {};
     var callData = {};
-    var gtData = {};
 
     var long_distance = newDistanceObject();
     var short_distance = newDistanceObject(100000);
@@ -9461,13 +9543,6 @@ function renderStatsBox()
         if (!(wpx in wpxData)) wpxData[wpx] = newStatObject();
 
         workObject(wpxData[wpx], false, band, mode, type, didConfirm);
-      }
-
-      if (who in g_gtCallsigns)
-      {
-        if (!(i in gtData)) gtData[i] = newStatObject();
-
-        gtData[i] = true;
       }
 
       if (cnty != null)
@@ -9962,18 +10037,6 @@ function renderStatsBox()
     worker += createDistanceTable(long_distance, "Longest Distance");
     worker += createDistanceTable(short_distance, "Shortest Distance");
     worker += "<br/>";
-
-    if (g_appSettings.gtShareEnable == true)
-    {
-      scoreSection = "GT Users";
-      worker += "<h1>Worked GridTracker Stations<br/>Online Now</h1>";
-      worker += "</font>";
-      worker += "<font color='white'>";
-      worker += createGtStationsTable(gtData);
-      worker += "<br/>";
-      worker += "</font>";
-    }
-    worker += "</font>";
   }
   catch (e)
   {
@@ -9992,70 +10055,6 @@ function hashNameSort(a, b)
   if (g_QSOhash[a].DEcall > g_QSOhash[b].DEcall) return 1;
   if (g_QSOhash[b].DEcall > g_QSOhash[a].DEcall) return -1;
   return 0;
-}
-
-function createGtStationsTable(obj)
-{
-  var worker =
-    "<table style='display:inline-table;margin:5px;white-space:nowrap;' class='darkTable'>";
-  worker +=
-    "<tr align='center'><th>Call</th><th>Grid</th><th>Sent</th><th>Rcvd</th><th>Mode</th><th>Band</th><th>QSL</th><th>Comment</th><th>DXCC</th><th>Time</th></th></tr>";
-
-  var keys = Object.keys(obj).sort(hashNameSort);
-  for (var key in keys)
-  {
-    var callsign = g_QSOhash[keys[key]];
-    var bgDX = " style='font-weight:bold;color:cyan;' ";
-    var bgDE = " style='font-weight:bold;color:yellow;' ";
-
-    if (typeof callsign.msg == "undefined" || callsign.msg == "") { callsign.msg = "-"; }
-    var ageString = "";
-    if (timeNowSec() - callsign.time < 3601) { ageString = (timeNowSec() - callsign.time).toDHMS(); }
-    else
-    {
-      ageString = userTimeString(callsign.time * 1000);
-    }
-    worker += "<tr><td" + bgDE + ">";
-    worker +=
-      "<div style='display:inline-table;cursor:pointer' onclick='window.opener.startLookup(\"" +
-      callsign.DEcall +
-      "\",\"" +
-      callsign.grid +
-      "\");' >" +
-      callsign.DEcall.formatCallsign() +
-      "</div>";
-    worker += "</td>";
-    worker += "<td style='color:orange'>" + callsign.grid + "</td>";
-    worker += "<td>" + callsign.RSTsent + "</td>";
-    worker += "<td>" + callsign.RSTrecv + "</td>";
-
-    worker +=
-      "</td>" +
-      "<td style='color:lightblue'>" +
-      callsign.mode +
-      "</td>" +
-      "<td style='color:lightgreen'>" +
-      callsign.band +
-      "</td>";
-
-    worker +=
-      "<td align='center'>" + (callsign.confirmed ? "&#10004;" : "") + "</td>";
-
-    worker +=
-      "<td>" +
-      callsign.msg +
-      "</td><td style='color:yellow'>" +
-      g_dxccToAltName[callsign.dxcc] +
-      " <font color='lightgreen'>(" +
-      g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].pp +
-      ")</font></td>" +
-      "<td align='center' style='color:lightblue' >" +
-      ageString +
-      "</td>";
-    worker += "</tr>";
-  }
-  worker += "</table>";
-  return worker;
 }
 
 function createDistanceTable(obj, name)
@@ -10417,26 +10416,33 @@ function validatePropMode(propMode)
   return g_appSettings.gtPropFilter == propMode;
 }
 
-function validateMapMode(mode)
+function validateMapBandAndMode(band, mode)
 {
-  if (g_appSettings.gtModeFilter.length == 0) return true;
-
-  if (g_appSettings.gtModeFilter == "auto") return myMode == mode;
-
-  if (g_appSettings.gtModeFilter == "Digital")
+  if ((g_appSettings.gtBandFilter.length == 0 || (g_appSettings.gtBandFilter == "auto" ? myBand == band : g_appSettings.gtBandFilter == band)))
   {
-    if (mode in g_modes && g_modes[mode]) return true;
+    if (g_appSettings.gtModeFilter.length == 0) return true;
+
+    if (g_appSettings.gtModeFilter == "auto") return myMode == mode;
+
+    if (g_appSettings.gtModeFilter == "Digital")
+    {
+      if (mode in g_modes && g_modes[mode]) return true;
+      return false;
+    }
+    if (g_appSettings.gtModeFilter == "Phone")
+    {
+      if (mode in g_modes_phone && g_modes_phone[mode]) return true;
+      return false;
+    }
+
+    if (g_appSettings.gtModeFilter == "CW" && mode == "CW") return true;
+
+    return g_appSettings.gtModeFilter == mode;
+  }
+  else
+  {
     return false;
   }
-  if (g_appSettings.gtModeFilter == "Phone")
-  {
-    if (mode in g_modes_phone && g_modes_phone[mode]) return true;
-    return false;
-  }
-
-  if (g_appSettings.gtModeFilter == "CW" && mode == "CW") return true;
-
-  return g_appSettings.gtModeFilter == mode;
 }
 
 function redrawGrids()
@@ -10458,22 +10464,13 @@ function redrawGrids()
     g_QSOcount++;
     if (didConfirm) g_QSLcount++;
 
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == g_QSOhash[i].band
-          : g_appSettings.gtBandFilter == g_QSOhash[i].band)) &&
-      validateMapMode(g_QSOhash[i].mode) &&
-      validatePropMode(g_QSOhash[i].propMode)
-    )
+    if (validateMapBandAndMode(g_QSOhash[i].band, g_QSOhash[i].mode) && validatePropMode(g_QSOhash[i].propMode))
     {
       if (g_appSettings.gridViewMode > 1)
       {
         g_QSOhash[i].rect = qthToQsoBox(
           g_QSOhash[i].grid,
           i,
-          false,
-          false,
           false,
           g_QSOhash[i].DXcall,
           g_QSOhash[i].worked,
@@ -10486,8 +10483,6 @@ function redrawGrids()
           qthToQsoBox(
             g_QSOhash[i].vucc_grids[vucc],
             i,
-            false,
-            false,
             false,
             g_QSOhash[i].DXcall,
             g_QSOhash[i].worked,
@@ -10852,21 +10847,13 @@ function redrawGrids()
 
   for (var i in g_liveCallsigns)
   {
-    if (
-      g_appSettings.gridViewMode != 2 &&
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == g_liveCallsigns[i].band
-          : g_appSettings.gtBandFilter == g_liveCallsigns[i].band)) &&
-      validateMapMode(g_liveCallsigns[i].mode)
-    )
+    if (g_appSettings.gridViewMode != 2 && validateMapBandAndMode(g_liveCallsigns[i].band, g_liveCallsigns[i].mode))
     {
       if (g_appSettings.gridViewMode == 1 || g_appSettings.gridViewMode == 3)
       {
         g_liveCallsigns[i].rect = qthToBox(
           g_liveCallsigns[i].grid,
           g_liveCallsigns[i].DEcall,
-          false,
           false,
           false,
           g_liveCallsigns[i].DXcall,
@@ -12851,7 +12838,7 @@ function loadMapSettings()
 
   trafficDecode.checked = g_mapSettings.trafficDecode;
 
-  pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1);";
+  pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
 
   g_bandToColor = JSON.parse(JSON.stringify(g_pskColors));
 
@@ -13153,6 +13140,7 @@ function changeMapLayer()
 
   changePathWidth();
   redrawSpots();
+  redrawParks();
 }
 
 function voiceChangedValue()
@@ -13649,8 +13637,7 @@ var g_startupTable = [
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
   [gtChatSystemInit, "Chat System Initialized"],
-  [getPotaPlaces, "Loading POTA Database"],
-  [getPotaSpots, "Starting POTA Spots Pump"],
+  [initPota, "POTA Initialized"],
   [downloadAcknowledgements, "Contributor Acknowledgements Loaded"],
   [postInit, "Finalizing System"]
 ];
@@ -14479,7 +14466,6 @@ function callookResults(buffer, gridPass)
       callObject.lat = results.location.latitude;
       callObject.lon = results.location.longitude;
       callObject.grid = results.location.gridsquare;
-      callObject.grid4 = callObject.grid.length > 1 ? callObject.grid.substr(0, 4) : "-";
       callObject.efdate = results.otherInfo.grantDate;
       callObject.expdate = results.otherInfo.expiryDate;
       callObject.frn = results.otherInfo.frn;
@@ -14873,7 +14859,10 @@ function getLookupCachedObject(
       {
         callObject.cnty = request.result.cnty;
 
-        if (callObject.cnty in g_countyData) callObject.qual = true;
+        if (callObject.cnty in g_countyData)
+        {
+          callObject.qual = true;
+        }
         else
         {
           callObject.cnty = null;
@@ -14882,19 +14871,31 @@ function getLookupCachedObject(
       }
       return;
     }
-    if (request.result != null && resultFunction) { resultFunction(request.result, gridPass, false); }
-    else if (noResultFunction) noResultFunction(call, gridPass);
+    if (request.result != null && resultFunction)
+    {
+      resultFunction(request.result, gridPass, false);
+    }
+    else if (noResultFunction)
+    {
+      noResultFunction(call, gridPass);
+    }
   };
 
   request.onerror = function (event)
   {
-    if (noResultFunction) noResultFunction(call, gridPass);
+    if (noResultFunction)
+    {
+      noResultFunction(call, gridPass);
+    }
   };
 }
 
 function cacheLookupObject(lookup, gridPass, cacheable = false)
 {
-  if (!("cnty" in lookup)) lookup.cnty = null;
+  if (!("cnty" in lookup))
+  {
+    lookup.cnty = null;
+  }
 
   if (lookup.hasOwnProperty("callsign"))
   {
@@ -15035,11 +15036,14 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
     delete lookup.land;
   }
 
-  if ("grid" in lookup) lookup.grid = lookup.grid.toUpperCase();
+  if ("grid" in lookup)
+  {
+    lookup.grid = lookup.grid.toUpperCase();
+  }
 
   if (lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county"))
   {
-    var foundCounty = false;
+    let foundCounty = false;
 
     if (lookup.cnty == null)
     {
@@ -15049,7 +15053,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
 
     if (lookup.cnty in g_countyData)
     {
-      for (var hash in g_liveCallsigns)
+      for (const hash in g_liveCallsigns)
       {
         if (
           g_liveCallsigns[hash].DEcall == lookup.call &&
@@ -15058,6 +15062,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
         {
           g_liveCallsigns[hash].cnty = lookup.cnty;
           g_liveCallsigns[hash].qual = true;
+          g_liveCallsigns[hash].cntys = 0;
           foundCounty = true;
         }
       }
@@ -15782,19 +15787,34 @@ function mediaCheck()
         g_tracker.worked.px = {};
         g_tracker.confirmed.px = {};
       }
+      
+      if (typeof g_tracker.worked.pota == "undefined")
+      {
+        g_tracker.worked.pota = {};
+        g_tracker.confirmed.pota = {};
+      }
 
       g_QSOhash = data.g_QSOhash;
 
       for (var i in g_QSOhash)
       {
-        if (
-          typeof g_QSOhash[i].px == "undefined" ||
-          g_QSOhash[i].px == null
-        )
+        if (typeof g_QSOhash[i].px == "undefined" || g_QSOhash[i].px == null)
         {
-          if (g_QSOhash[i].dxcc != -1) { g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall); }
-          else g_QSOhash[i].px = null;
+          if (g_QSOhash[i].dxcc != -1)
+          {
+            g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall);
+          }
+          else
+          {
+            g_QSOhash[i].px = null;
+          }
         }
+        
+        if (typeof g_QSOhash[i].pota == "undefined" || g_QSOhash[i].pota == null)
+        {
+          g_QSOhash[i].pota = [];
+        }
+        
         g_QSOcount++;
         if (g_QSOhash[i].confirmed) g_QSLcount++;
       }
@@ -16177,13 +16197,7 @@ function redrawSpots()
       continue;
     }
 
-    if (
-      (g_appSettings.gtBandFilter.length == 0 ||
-        (g_appSettings.gtBandFilter == "auto"
-          ? myBand == report.band
-          : g_appSettings.gtBandFilter == report.band)) &&
-      validateMapMode(report.mode)
-    )
+    if (validateMapBandAndMode(report.band, report.mode))
     {
       if (now - report.when <= g_receptionSettings.viewHistoryTimeSec)
       {

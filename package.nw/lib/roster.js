@@ -21,6 +21,7 @@ var r_currentDXCCs = -1;
 var r_callsignManifest = null;
 var g_rosterSettings = {};
 var g_day = 0;
+var g_dayAsString = "0";
 var g_menu = null;
 var g_callMenu = null;
 var g_ageMenu = null;
@@ -72,6 +73,7 @@ var g_defaultSettings = {
   wantMinDB: false,
   wantMinFreq: false,
   wantMaxFreq: false,
+  wantRRCQ: false,
   maxDT: 0.5,
   minDb: -25,
   minFreq: 0,
@@ -91,7 +93,7 @@ var g_defaultSettings = {
   allOnlyNew: false,
   useRegex: false,
   callsignRegex: "",
-  realtime: false,
+  realtime: true,
   wanted: {
     huntCallsign: false,
     huntGrid: true,
@@ -105,13 +107,14 @@ var g_defaultSettings = {
     huntPX: false,
     huntPOTA: false,
     huntQRZ: true,
-    huntOAMS: false,
-    huntRR73: false
+    huntOAMS: false
   },
   columns: {
+    Callsign: true,
     Band: false,
     Mode: false,
     Calling: true,
+    Grid: true,
     Msg: false,
     DXCC: true,
     Flag: true,
@@ -137,7 +140,7 @@ var g_defaultSettings = {
   },
   reference: 0,
   controls: true,
-  controlsExtended: false,
+  controlsExtended: true,
   compact: false,
   settingProfiles: false,
 
@@ -333,12 +336,13 @@ function viewRoster()
 function realtimeRoster()
 {
   let now = timeNowSec();
-  g_day = now / 86400;
-
+  g_day = parseInt(now / 86400);
+  g_dayAsString = String(g_day);
+  
   if (g_rosterSettings.realtime == false) return;
 
   let timeCols = document.getElementsByClassName("timeCol");
-  for (let x in timeCols)
+  for (const x in timeCols)
   {
     if ((typeof timeCols[x].id != "undefined") && (typeof callRoster[timeCols[x].id.substr(2)] != "undefined"))
     {
@@ -347,7 +351,7 @@ function realtimeRoster()
     }
   }
   let lifeCols = document.getElementsByClassName("lifeCol");
-  for (let x in lifeCols)
+  for (const x in lifeCols)
   {
     if ((typeof lifeCols[x].id != "undefined") && (typeof callRoster[lifeCols[x].id.substr(2)] != "undefined"))
     {
@@ -358,7 +362,7 @@ function realtimeRoster()
   if (g_rosterSettings.columns.Spot)
   {
     let spotCols = document.getElementsByClassName("spotCol");
-    for (let x in spotCols)
+    for (const x in spotCols)
     {
       if ((typeof spotCols[x].id != "undefined") && (typeof callRoster[spotCols[x].id.substr(2)] != "undefined"))
       {
@@ -448,7 +452,7 @@ function updateInstances()
     let worker = "";
 
     let keys = Object.keys(instances).sort();
-    for (let key in keys)
+    for (const key in keys)
     {
       let inst = keys[key];
       let sp = inst.split(" - ");
@@ -544,7 +548,7 @@ function createSelectOptions(
   {
     obj = Object.keys(forObject).sort();
   }
-  for (let k in obj)
+  for (const k in obj)
   {
     let opt = obj[k];
     let option = document.createElement("option");
@@ -622,7 +626,7 @@ function updateAwardList(target = null)
 
   let keys = Object.keys(g_awardTracker).sort();
 
-  for (let key in keys)
+  for (const key in keys)
   {
     let award = g_awardTracker[keys[key]];
     let rule = g_awards[award.sponsor].awards[award.name].rule;
@@ -842,15 +846,18 @@ function setVisual()
     if (g_rosterSettings.controlsExtended)
     {
       RosterControls.className = "extended";
+      instancesWrapper.style.display = "";
     }
     else
     {
       RosterControls.className = "normal";
+      instancesWrapper.style.display = "none";
     }
   }
   else
   {
     RosterControls.className = "hidden";
+    instancesWrapper.style.display = "none";
   }
 
   // Award Hunter
@@ -1010,7 +1017,7 @@ function wantedChanged(element)
     {
       g_rosterSettings.columns[t] = true;
 
-      for (let i = 0; i < g_menu.items.length; ++i)
+      for (const i in g_menu.items)
       {
         if (
           typeof g_menu.items[i].checked != "undefined" &&
@@ -1024,7 +1031,7 @@ function wantedChanged(element)
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (let callHash in window.opener.g_callRoster)
+  for (const callHash in window.opener.g_callRoster)
   {
     window.opener.g_callRoster[callHash].callObj.alerted = false;
   }
@@ -1044,6 +1051,7 @@ function valuesChanged()
   g_rosterSettings.wantMinDB = wantMinDB.checked;
   g_rosterSettings.wantMinFreq = wantMinFreq.checked;
   g_rosterSettings.wantMaxFreq = wantMaxFreq.checked;
+  g_rosterSettings.wantRRCQ = wantRRCQ.checked;
 
   maxDTView.innerHTML = g_rosterSettings.maxDT = maxDT.value;
   minDbView.innerHTML = g_rosterSettings.minDb = minDb.value;
@@ -1480,6 +1488,7 @@ function openIgnoreEdit()
   worker += "</table></div>";
 
   editTables.innerHTML = worker;
+  editView.style.height = (window.innerHeight - 50) + "px";
 }
 
 function onMyKeyDown(event)
@@ -1718,23 +1727,25 @@ function init()
   for (let columnIndex in g_rosterSettings.columnOrder)
   {
     let key = g_rosterSettings.columnOrder[columnIndex];
+    if (key != "Callsign")
+    {
+      let itemx = new nw.MenuItem({
+        type: "checkbox",
+        label: key,
+        checked: g_rosterSettings.columns[key],
+        click: function ()
+        {
+          g_rosterSettings.columns[this.label] = this.checked;
+          if (this.label == "Spot")
+          { window.opener.setRosterSpot(g_rosterSettings.columns.Spot); }
+          writeRosterSettings();
+          window.opener.goProcessRoster();
+          resize();
+        }
+      });
 
-    let itemx = new nw.MenuItem({
-      type: "checkbox",
-      label: key,
-      checked: g_rosterSettings.columns[key],
-      click: function ()
-      {
-        g_rosterSettings.columns[this.label] = this.checked;
-        if (this.label == "Spot")
-        { window.opener.setRosterSpot(g_rosterSettings.columns.Spot); }
-        writeRosterSettings();
-        window.opener.goProcessRoster();
-        resize();
-      }
-    });
-
-    g_menu.append(itemx);
+      g_menu.append(itemx);
+    }
   }
 
   item = new nw.MenuItem({ type: "separator" });
@@ -2027,6 +2038,7 @@ function init()
   wantMinDB.checked = g_rosterSettings.wantMinDB;
   wantMinFreq.checked = g_rosterSettings.wantMinFreq;
   wantMaxFreq.checked = g_rosterSettings.wantMaxFreq;
+  wantRRCQ.checked = g_rosterSettings.wantRRCQ;
 
   maxDTView.innerHTML = maxDT.value = g_rosterSettings.maxDT;
   minDbView.innerHTML = minDb.value = g_rosterSettings.minDb;
@@ -2173,8 +2185,11 @@ function handleContextMenu(ev)
       }
     }
 
-    let name
-    if (ev.target.tagName == "TD") name = ev.target.getAttribute("name");
+    let name = "";
+    if (ev.target.tagName == "TD")
+    {
+      name = ev.target.getAttribute("name");
+    }
 
     if (name == "Callsign")
     {
@@ -2204,7 +2219,7 @@ function handleContextMenu(ev)
       g_targetITUz = ev.target.parentNode.id;
       g_ITUzMenu.popup(mouseX, mouseY);
     }
-    else if (name && name.startsWith("DXCC"))
+    else if (name.startsWith("DXCC"))
     {
       let dxcca = name.split("(");
       let dxcc = parseInt(dxcca[1]);
@@ -2332,29 +2347,9 @@ function processAward(awardName)
   if (Index > -1) mode.splice(Index, 1);
 
   test.mode = mode.length > 0;
-
-  test.confirmed =
-    "qsl_req" in
-    g_awards[g_awardTracker[awardName].sponsor].awards[
-      g_awardTracker[awardName].name
-    ].rule
-      ? g_awards[g_awardTracker[awardName].sponsor].awards[
-        g_awardTracker[awardName].name
-      ].rule.qsl_req == "confirmed"
-      : g_awards[g_awardTracker[awardName].sponsor].qsl_req == "confirmed";
-
+  test.confirmed = "qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule ? g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req == "confirmed" : g_awards[g_awardTracker[awardName].sponsor].qsl_req == "confirmed";
   test.look = "confirmed";
-
-  test.qsl_req =
-    "qsl_req" in
-    g_awards[g_awardTracker[awardName].sponsor].awards[
-      g_awardTracker[awardName].name
-    ].rule
-      ? g_awards[g_awardTracker[awardName].sponsor].awards[
-        g_awardTracker[awardName].name
-      ].rule.qsl_req
-      : g_awards[g_awardTracker[awardName].sponsor].qsl_req;
-
+  test.qsl_req = "qsl_req" in g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule ? g_awards[g_awardTracker[awardName].sponsor].awards[g_awardTracker[awardName].name].rule.qsl_req : g_awards[g_awardTracker[awardName].sponsor].qsl_req;
   test.DEcall = "call" in award.rule;
   test.band = "band" in award.rule && award.rule.band.indexOf("Mixed") == -1;
   test.dxcc = "dxcc" in award.rule;
@@ -2741,7 +2736,7 @@ function testAcont52band(award, obj, baseHash)
 
 function scoreAgrids(award, obj)
 {
-  if (obj.grid)
+  if (obj.grid && obj.grid.length > 0)
   {
     let grid = obj.grid.substr(0, 4);
 
@@ -2760,6 +2755,10 @@ function scoreAgrids(award, obj)
 function testAgrids(award, obj, baseHash)
 {
   if (obj.grid && obj.grid + baseHash in g_tracker[award.test.look].grid)
+  {
+    return false;
+  }
+  if (!obj.grid || obj.grid.length == 0)
   {
     return false;
   }

@@ -249,14 +249,18 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
         {
           isPhone = g_modes_phone[finalMode];
         }
+        // TODO: Revisit when we support more than one park ID
+        let finalPOTA = findAdiField(activeAdifArray[x], "POTA").toUpperCase();
+        if (finalPOTA.length == 0)
+        {
+          finalPOTA = null;
+        }
+        
         if (finalDXcall != "")
         {
           addDeDx(
             finalGrid,
             finalDXcall,
-            false,
-            false,
-            false,
             finalDEcall,
             finalRSTsent,
             finalTime,
@@ -264,7 +268,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             finalMode,
             finalBand,
             confirmed,
-            false,
+            true,
             finalRSTrecv,
             finalDxcc,
             finalState,
@@ -277,7 +281,8 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             isDigital,
             isPhone,
             finalIOTA,
-            finalSatName
+            finalSatName,
+            finalPOTA
           );
         }
       }
@@ -332,9 +337,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             addDeDx(
               finalMyGrid,
               finalDEcall,
-              false,
-              false,
-              false,
               finalDXcall,
               null,
               finalTime,
@@ -342,7 +344,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
               finalMode,
               finalBand,
               false,
-              true,
+              false,
               finalRSTsent,
               finalDxcc,
               null,
@@ -357,9 +359,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             addDeDx(
               finalGrid,
               finalDXcall,
-              false,
-              false,
-              false,
               "-",
               finalRSTsent,
               finalTime,
@@ -367,7 +366,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
               finalMode,
               finalBand,
               false,
-              true,
+              false,
               null,
               finalDxcc,
               null,
@@ -382,9 +381,6 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             addDeDx(
               finalGrid,
               finalDXcall,
-              false,
-              false,
-              false,
               finalDEcall,
               finalRSTsent,
               finalTime,
@@ -392,7 +388,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
               finalMode,
               finalBand,
               false,
-              true,
+              false,
               null,
               finalDxcc,
               null,
@@ -1822,14 +1818,22 @@ function sendToLogger(ADIF)
     localMode = record.SUBMODE;
   }
 
+  let localHash = record.CALL + record.BAND + localMode;
   if (
     (!("GRIDSQUARE" in record) || record.GRIDSQUARE.length == 0) &&
-    record.CALL + record.BAND + localMode in g_liveCallsigns
+    localHash in g_liveCallsigns
   )
   {
-    record.GRIDSQUARE = g_liveCallsigns[
-      record.CALL + record.BAND + localMode
-    ].grid.substr(0, 4);
+    record.GRIDSQUARE = g_liveCallsigns[localHash].grid.substr(0, 4);
+  }
+
+  if (g_potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota.length > 0)
+  {
+    let pota = g_liveCallsigns[localHash].pota[0];
+    if (pota != "?-????")
+    {
+      record.POTA = pota;
+    }
   }
 
   if ("TX_PWR" in record)
@@ -1922,17 +1926,33 @@ function sendToLogger(ADIF)
 function finishSendingReport(record, localMode)
 {
   let report = "";
-
-  for (let key in record)
+  for (const key in record)
   {
-    report += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
+    if (key != "POTA")
+    {
+      report += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
+    }
   }
   report += "<EOR>";
+  
+  // this report is for internal use ONLY!
+  let reportWithPota = "";
+  for (const key in record)
+  {
+    reportWithPota += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";
+  }
+  reportWithPota += "<EOR>";
 
   // Full record dupe check
   if (report != g_lastReport)
   {
     g_lastReport = report;
+    
+    if (g_potaEnabled == 1 && "POTA" in record)
+    {
+      reportPotaQSO(record);
+      addLastTraffic("<font style='color:white'>Spotted to POTA</font>");
+    }
 
     if (
       g_N1MMSettings.enable == true &&
@@ -1966,7 +1986,7 @@ function finishSendingReport(record, localMode)
 
     try
     {
-      onAdiLoadComplete("GT<EOH>" + report);
+      onAdiLoadComplete("GT<EOH>" + reportWithPota);
     }
     catch (e)
     {
@@ -1978,7 +1998,7 @@ function finishSendingReport(record, localMode)
       if (logGTqsoCheckBox.checked == true)
       {
         var fs = require("fs");
-        fs.appendFileSync(g_qsoLogFile, report + "\r\n");
+        fs.appendFileSync(g_qsoLogFile, reportWithPota + "\r\n");
         addLastTraffic(
           "<font style='color:white'>Logged to GridTracker backup</font>"
         );
@@ -2795,7 +2815,7 @@ function getPostJSONBuffer(
       });
       req.on("error", function (err) // eslint-disable-line node/handle-callback-err
       {
-        if (typeof timeoutCallback != "undefined")
+        if (typeof timeoutCallback === "function")
         {
           timeoutCallback(
             file_url,

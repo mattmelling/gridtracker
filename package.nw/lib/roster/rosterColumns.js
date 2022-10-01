@@ -94,8 +94,8 @@ const ROSTER_COLUMNS = {
     compare: callObjSimpleComparer("grid"),
     tableData: (callObj) => ({
       rawAttrs: callObj.style.grid,
-      onClick: `centerOn("${callObj.grid4}")`,
-      html: callObj.grid4
+      onClick: `centerOn("${callObj.grid}")`,
+      html: callObj.grid
     })
   },
 
@@ -104,7 +104,7 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       rawAttrs: callObj.style.calling,
       name: callObj.CQ ? "CQ" : "Calling",
-      html: callObj.DXcall.formatCallsign()
+      html: (g_rosterSettings.wantRRCQ && callObj.RR73) ? "RR73" : callObj.DXcall.formatCallsign()
     })
   },
 
@@ -117,7 +117,7 @@ const ROSTER_COLUMNS = {
     compare: (a, b) => window.opener.myDxccCompare(a.callObj, b.callObj),
     tableData: (callObj) => ({
       title: window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].pp,
-      name: `${callObj.dxcc}`,
+      name: `DXCC (${callObj.dxcc})`,
       rawAttrs: callObj.style.dxcc,
       html: [window.opener.g_dxccToAltName[callObj.dxcc], callObj.dxccSuffix].join("&nbsp;")
     })
@@ -143,6 +143,7 @@ const ROSTER_COLUMNS = {
 
   County: {
     // Not sure why this comparison uses substring, but this is what the original code did
+    // Because we're sorting on the county name, the data contains  "CO,Adams", we don't want to sort by state.
     compare: getterSimpleComparer((elem) => elem.callObj.cnty && elem.callObj.cnty.substr(3)),
     tableData: (callObj) =>
     {
@@ -151,11 +152,12 @@ const ROSTER_COLUMNS = {
         rawAttrs: callObj.style.cnty,
         html: callObj.cnty ? window.opener.g_cntyToCounty[callObj.cnty] : ""
       }
-      if (callObj.cnty && callObj.qual)
+      if (callObj.cnty && callObj.qual == false)
       {
-        attrs.title = "ZIP Code matches multiple counties, click to do a full lookup"
-        attrs.onClick = `lookupZip("${callObj.DEcall}", "${callObj.grid4}")`
-        attrs.html = `¿ ${attrs.html} ?`
+        attrs.title = "Matches multiple counties, click to do a full lookup"
+        attrs.onClick = `window.opener.lookupCallsign("${callObj.DEcall}", "${callObj.grid}")`
+        attrs.html = attrs.html + " +" + String(window.opener.g_zipToCounty[callObj.zipcode].length - 1)
+        attrs.style = "cursor: pointer; color: cyan;"
       }
       return attrs
     }
@@ -306,7 +308,7 @@ const ROSTER_COLUMNS = {
       style: "color: #EEE;",
       class: "lifeCol",
       id: `lm${callObj.hash}`,
-      html: (timeNowSec() - callObj.life).toDHMS15()
+      html: (timeNowSec() - callObj.life).toDHMS()
     })
   },
 
@@ -340,13 +342,12 @@ const ROSTER_COLUMNS = {
   },
 
   Age: {
-    compare: callObjSimpleComparer("time"),
+    compare: callObjSimpleComparer("age"),
     tableData: (callObj) => ({
       style: "color: #EEE;",
       class: "timeCol",
       id: `tm${callObj.hash}`,
-      title: (timeNowSec() - callObj.age).toDHMS(),
-      html: (timeNowSec() - callObj.age).toDHMS15()
+      html: (timeNowSec() - callObj.age).toDHMS()
     })
   },
 
@@ -382,8 +383,8 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "POTA",
       rawAttrs: callObj.style.pota,
-      title: callObj.pota ? callObj.pota.name : "",
-      html: callObj.pota ? callObj.pota.reference : ""
+      title: potaColumnHover(callObj),
+      html: potaColumnRef(callObj)
     })
   },
 
@@ -395,6 +396,36 @@ const ROSTER_COLUMNS = {
       html: wantedColumnParts(callObj).join(" - ", { html: true })
     })
   }
+}
+
+function potaColumnRef(callObj)
+{
+  if (callObj.pota.length > 0)
+  {
+    let value = callObj.pota[0];
+    if (callObj.pota.length > 1)
+    {
+      value += " +" + String(callObj.pota.length - 1);
+    }
+    return value;
+  }
+  else
+  {
+    return "";
+  }
+}
+
+function potaColumnHover(callObj)
+{
+  let value = ""
+  for (let i in callObj.pota)
+  {
+    if (callObj.pota[i] in window.opener.g_pota.parks)
+    {
+      value += callObj.pota[i] + " - " + window.opener.g_pota.parks[callObj.pota[i]].name + "\n";
+    }
+  }
+  return value;
 }
 
 WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
@@ -418,7 +449,19 @@ function wantedColumnParts(callObj, options)
 {
   options = options || {};
 
-  if (!callObj.hunting) return [];
+  if (Object.keys(callObj.hunting).length == 0)
+  {
+    // is this an award reason?
+    // Hack until I talk with seb
+    if (callObj.awardReason != "Callsign")
+    {
+      return callObj.reason;
+    }
+    else
+    {
+      return [];
+    }
+  }
 
   let parts = [];
 

@@ -45,18 +45,6 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
-    if (entry.DXcall == "CQ POTA" && huntPOTA.checked == true)
-    {
-      entry.tx = true;
-      if (callObj.pota == null)
-      {
-        callObj.pota = {
-          reference: "?-????",
-          name: "Unknown Park"
-        }
-      }
-      continue;
-    }
     if (callObj.ituza in g_blockedITUz)
     {
       entry.tx = false;
@@ -72,10 +60,21 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
-    if (g_rosterSettings.cqOnly == true && callObj.CQ == false)
+    if (g_rosterSettings.cqOnly == true)
     {
-      entry.tx = false;
-      continue;
+      if (g_rosterSettings.wantRRCQ)
+      {
+        if (callObj.RR73 == false && callObj.CQ == false)
+        {
+          entry.tx = false;
+          continue;
+        }
+      }
+      else if (callObj.CQ == false)
+      {
+        entry.tx = false;
+        continue;
+      }
     }
     if (g_rosterSettings.useRegex && g_rosterSettings.callsignRegex.length > 0)
     {
@@ -148,13 +147,10 @@ function processRosterFiltering(callRoster, rosterSettings)
         continue;
       }
     }
-    else
+    else if (g_rosterSettings.onlyMyDxcc == true)
     {
-      if (g_rosterSettings.onlyMyDxcc == true)
-      {
-        entry.tx = false;
-        continue;
-      }
+      entry.tx = false;
+      continue;
     }
 
     if (window.opener.g_callsignLookups.lotwUseEnable == true && g_rosterSettings.usesLoTW == true)
@@ -380,12 +376,8 @@ function processRosterFiltering(callRoster, rosterSettings)
             let x = g_awardTracker[award];
 
             // TODO: Move award reason out of exclusions code?
-            callObj.awardReason =
-              g_awards[x.sponsor].awards[x.name].tooltip +
-              " (" +
-              g_awards[x.sponsor].sponsor +
-              ")";
-
+            callObj.awardReason = g_awards[x.sponsor].awards[x.name].tooltip + " (" + g_awards[x.sponsor].sponsor + ")";
+            callObj.reason.push(x.name + " - " + x.sponsor);
             break;
           }
         }

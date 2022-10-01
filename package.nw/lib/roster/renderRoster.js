@@ -1,8 +1,7 @@
 function renderRoster(callRoster, rosterSettings)
 {
   let columnOverrides = {
-    Callsign: true,
-    Grid: true
+    Callsign: true
   }
 
   if (window.opener.g_callsignLookups.eqslUseEnable == true)
@@ -34,6 +33,20 @@ function renderRoster(callRoster, rosterSettings)
     columnOverrides.LoTW = false;
   }
 
+  if (window.opener.g_potaEnabled === 1)
+  {
+    huntingMatrixPotaDiv.style.display = "";
+  }
+  else
+  {
+    huntingMatrixPotaDiv.style.display = "none";
+    columnOverrides.POTA = false;
+  }
+  
+  if (rosterSettings.isAwardTracker)
+  {
+    columnOverrides.Wanted = true;
+  }
   // dealing with spots
   if (g_rosterSettings.columns.Spot == true) onlySpotDiv.style.display = "";
   else onlySpotDiv.style.display = "none";

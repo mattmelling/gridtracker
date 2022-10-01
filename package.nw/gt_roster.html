@@ -172,7 +172,7 @@
               <div>
                 <label><input type="checkbox" id="huntPX" onchange="wantedChanged(this);" /> WPX</label>
               </div>
-              <div>
+              <div id="huntingMatrixPotaDiv">
                 <label title="Parks On The Air">
                   <input type="checkbox" id="huntPOTA" onchange="wantedChanged(this);" /> POTA
                 </label>
@@ -200,9 +200,6 @@
               </div>
               <div>
                 <label><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" /> Cont</label>
-              </div>
-              <div>
-                <label><input type="checkbox" id="huntRR73" onchange="wantedChanged(this);" /> RR73</label>
               </div>
             </div>
           </div>
@@ -320,7 +317,10 @@
               <div id="allOnlyNewDiv">
                 <label><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" /> Only New Calls</label>
               </div>
-
+              
+              <div>
+                <label><input type="checkbox" id="wantRRCQ" onchange="valuesChanged();" /> RR73 as CQ</label>
+              </div>
               <div>
                 <label title="No Decodes Containing...">
                   <input type="checkbox" id="noMsg" onchange="valuesChanged();" />
@@ -376,15 +376,14 @@
               </div>
             </div>
           </div>
-
-          <div id="instancesWrapper" class="secondaryControlGroup" >
-            <h3>Instances</h3>
-            <div id="instancesDiv"></div>
-          </div>
-
         </div>
-      </header>
 
+      </header>
+      
+      <div id="instancesWrapper">
+        <div id="instancesDiv"></div>
+      </div>
+      
       <main id="RosterTable"></main>
     </div>
 

@@ -9452,7 +9452,6 @@ function renderStatsBox()
     var gridData = {};
     var wpxData = {};
     var callData = {};
-    var gtData = {};
 
     var long_distance = newDistanceObject();
     var short_distance = newDistanceObject(100000);
@@ -9546,13 +9545,6 @@ function renderStatsBox()
         if (!(wpx in wpxData)) wpxData[wpx] = newStatObject();
 
         workObject(wpxData[wpx], false, band, mode, type, didConfirm);
-      }
-
-      if (who in g_gtCallsigns)
-      {
-        if (!(i in gtData)) gtData[i] = newStatObject();
-
-        gtData[i] = true;
       }
 
       if (cnty != null)
@@ -10048,17 +10040,6 @@ function renderStatsBox()
     worker += createDistanceTable(short_distance, "Shortest Distance");
     worker += "<br/>";
 
-    if (g_appSettings.gtShareEnable == true)
-    {
-      scoreSection = "GT Users";
-      worker += "<h1>Worked GridTracker Stations<br/>Online Now</h1>";
-      worker += "</font>";
-      worker += "<font color='white'>";
-      worker += createGtStationsTable(gtData);
-      worker += "<br/>";
-      worker += "</font>";
-    }
-    worker += "</font>";
   }
   catch (e)
   {

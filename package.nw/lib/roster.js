@@ -1488,7 +1488,7 @@ function openIgnoreEdit()
   worker += "</table></div>";
 
   editTables.innerHTML = worker;
-  editView.style.height = ( window.innerHeight - 50) + "px";
+  editView.style.height = (window.innerHeight - 50) + "px";
 }
 
 function onMyKeyDown(event)

@@ -464,7 +464,6 @@ function initQSOdata()
   g_tracker.worked = {};
   g_tracker.confirmed = {};
 
-  g_tracker.worked.band = {};
   g_tracker.worked.call = {};
   g_tracker.worked.grid = {};
   g_tracker.worked.dxcc = {};
@@ -476,7 +475,6 @@ function initQSOdata()
   g_tracker.worked.cont = {};
   g_tracker.worked.pota = {};
 
-  g_tracker.confirmed.band = {};
   g_tracker.confirmed.call = {};
   g_tracker.confirmed.grid = {};
   g_tracker.confirmed.dxcc = {};

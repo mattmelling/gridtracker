@@ -8632,7 +8632,7 @@ function lookupValidateCallByElement(elementString)
 {
   if (
     g_lookupWindowHandle != null &&
-    typeof g_statsWindowHandle.window.validateCallByElement !== "undefined"
+    typeof g_lookupWindowHandle.window.validateCallByElement !== "undefined"
   )
   {
     g_lookupWindowHandle.window.validateCallByElement(elementString);
@@ -8642,7 +8642,7 @@ function lookupFocus(selection)
 {
   if (
     g_lookupWindowHandle != null &&
-    typeof g_statsWindowHandle.window.statsFocus !== "undefined"
+    typeof g_lookupWindowHandle.window.statsFocus !== "undefined"
   )
   {
     g_lookupWindowHandle.window.statsFocus(selection);
@@ -13599,6 +13599,11 @@ function postInit()
   openCallRosterWindow(false);
   openConditionsWindow(false);
   showMessaging(false);
+  
+  if (g_developerMode)
+  {
+    devPanel.style.display = "inline-block";
+  }
 }
 
 document.addEventListener("dragover", function (event)

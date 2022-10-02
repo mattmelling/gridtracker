@@ -824,3 +824,58 @@ function lookupUsCallsign(object, writeState = false)
     );
   });
 }
+
+function downloadCtyDat()
+{
+  ctyDatStatus.innerHTML = "<b><i>Downloading...</i></b>";
+  getBuffer(
+    "https://storage.googleapis.com/gt_app/ctydat.json",
+    processCtyDat,
+    null,
+    "https",
+    443
+  );
+}
+
+function processCtyDat(buffer)
+{
+  let data = String(buffer);
+  ctyDatStatus.innerHTML = "Update: " + data.length + " bytes read";
+  try
+  {
+    let ctydata = JSON.parse(data);
+    let file = "./data/mh-root-prefixed.json";
+    if (fs.existsSync(file))
+    {
+      let fileBuf = fs.readFileSync(file, "UTF-8");
+      let worldGeoData = JSON.parse(fileBuf);
+      for (const key in worldGeoData)
+      {
+        if (worldGeoData[key].dxcc in ctydata)
+        {
+          // Skip Guantanamo Bay, hand crafted with love
+          if (worldGeoData[key].dxcc != "105")
+          {
+            worldGeoData[key].prefix = [];
+            
+            let arr = ctydata[worldGeoData[key].dxcc].prefix.substr(0, ctydata[worldGeoData[key].dxcc].prefix.length - 1).split(" ");
+            for (const x in arr)
+            {
+              if (!(arr[x].includes("(")) && !(arr[x].includes("[")) && !(arr[x].includes("<")) && !(arr[x].includes("{")) && !(arr[x].includes("~")))
+              {
+                worldGeoData[key].prefix.push(arr[x]);
+              }
+            }
+            worldGeoData[key].prefix.sort();
+          }
+        }
+      }
+      fs.writeFileSync(file, JSON.stringify(worldGeoData));
+      ctyDatFinal.innerHTML = file + " updated!";
+    }
+  }
+  catch (e)
+  {
+    console.log(e);
+  }
+}

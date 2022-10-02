@@ -2,7 +2,7 @@
 // All rights reserved.
 // See LICENSE for more information.
 
-var fs = require("fs");
+const fs = require("fs");
 
 var callRoster = {};
 var g_blockedCalls = {};
@@ -2073,7 +2073,7 @@ function init()
 
   initDXCCSelector();
 
-  g_timerInterval = setInterval(realtimeRoster, 1000);
+  g_timerInterval = nodeTimers.setInterval(realtimeRoster, 1000);
 
   updateInstances();
 }

@@ -660,8 +660,8 @@ function grabLOtWLog(test)
 
   if (test == false)
   {
-    setTimeout(grabLoTWQSO, 500);
-    setTimeout(grabLoTWQSL, 10000);
+    nodeTimers.setTimeout(grabLoTWQSO, 500);
+    nodeTimers.setTimeout(grabLoTWQSL, 10000);
   }
 }
 

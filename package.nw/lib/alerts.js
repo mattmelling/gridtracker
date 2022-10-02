@@ -316,12 +316,12 @@ var g_testAudioTimer = null;
 
 function changeAudioValues()
 {
-  if (g_testAudioTimer) clearTimeout(g_testAudioTimer);
+  if (g_testAudioTimer) nodeTimers.clearTimeout(g_testAudioTimer);
 
   g_audioSettings.volume = audioVolume.value;
   audioVolumeTd.innerText = parseInt(audioVolume.value * 100) + "%";
 
-  g_testAudioTimer = setTimeout(playTestFile, 200);
+  g_testAudioTimer = nodeTimers.setTimeout(playTestFile, 200);
   saveAlertSettings();
 }
 
@@ -811,13 +811,13 @@ function unflashAlertPopUp()
 
 function displayAlertPopUp(what, message, target)
 {
-  if (g_alertFlasher) clearTimeout(g_alertFlasher);
+  if (g_alertFlasher) nodeTimers.clearTimeout(g_alertFlasher);
 
   alertPopListDiv.innerHTML =
     "<font color='red'><h2>Gathering Alerts<h2></font>";
   alertsPopDiv.style.backgroundColor = "#FFF";
   alertsPopDiv.style.display = "inline-block";
-  g_alertFlasher = setTimeout(unflashAlertPopUp, 100);
+  g_alertFlasher = nodeTimers.setTimeout(unflashAlertPopUp, 100);
 }
 
 function ackAlerts()

@@ -62,36 +62,62 @@ var g_gtParkIconInactive = new ol.style.Icon({
 
 function initPota()
 {
-  potaImg.style.filter = g_potaEnabled == 1 ? "" : "grayscale(1)";
+  potaEnabled.checked = (g_appSettings.potaEnabled == 1);
+  potaMenu.checked = g_appSettings.potaShowMenu;
+  potaButton.style.display = (g_appSettings.potaEnabled == 1 && g_appSettings.potaShowMenu) ? "" : "none";
+  potaImg.style.filter = g_appSettings.potaMapEnabled ? "" : "grayscale(1)";
 
-  getPotaParks();
-}
-
-function togglePota()
-{
-  g_potaEnabled ^= 1;
-  g_appSettings.potaEnabled = g_potaEnabled;
-  potaImg.style.filter = g_potaEnabled == 1 ? "" : "grayscale(1)";
-
-  saveAppSettings();
-
-  if (g_potaEnabled == 1)
+  g_layerSources.pota.clear();
+  g_pota.mapParks = {};
+  
+  if (g_appSettings.potaEnabled == 1)
   {
     getPotaParks();
   }
-  else
+}
+
+function changePotaEnable()
+{
+  g_appSettings.potaEnabled = (potaEnabled.checked == true) ? 1 : 0;
+  potaButton.style.display = (g_appSettings.potaEnabled == 1 && g_appSettings.potaShowMenu) ? "" : "none";
+  if (!g_appSettings.potaEnabled)
   {
     g_layerSources.pota.clear();
-    g_pota.mapParks = {};
   }
+  else
+  {
+    getPotaParks();
+  }
+  
+  saveAppSettings();
   goProcessRoster();
+}
+
+function changePotaMenu()
+{
+  g_appSettings.potaShowMenu = potaMenu.checked;
+  
+  potaButton.style.display = (g_appSettings.potaEnabled == 1 && g_appSettings.potaShowMenu) ? "" : "none";
+  potaImg.style.filter = g_appSettings.potaMapEnabled ? "" : "grayscale(1)";
+  
+  saveAppSettings();
+}
+
+function togglePotaMap()
+{
+  g_appSettings.potaMapEnabled = !g_appSettings.potaMapEnabled;
+  potaImg.style.filter = g_appSettings.potaMapEnabled ? "" : "grayscale(1)";
+
+  saveAppSettings();
+
+  redrawParks();
 }
 
 function redrawParks()
 {
   g_layerSources.pota.clear();
 
-  if (g_potaEnabled == 1)
+  if (g_appSettings.potaEnabled == 1 && g_appSettings.potaMapEnabled)
   {
     g_pota.mapParks = {};
     makeParkFeatures();
@@ -164,7 +190,10 @@ function potaSpotFromDecode(callObj)
     }
     
     // may or may not be on screen, so try
-    addParkSpotFeature(park, g_pota.parkSpots[park][callObj.DEcall]);
+    if (g_appSettings.potaMapEnabled)
+    {
+      addParkSpotFeature(park, g_pota.parkSpots[park][callObj.DEcall]);
+    }
     
     let hash = park + callObj.DEcall;
     if (!(hash in g_pota.rbnReportTimes) || Date.now() > g_pota.rbnReportTimes[hash])
@@ -290,7 +319,7 @@ function addParkSpotFeature(park, report)
 
 function processPotaParks(buffer)
 {
-  if (g_potaEnabled == 1)
+  if (g_appSettings.potaEnabled == 1)
   {
     try
     {
@@ -332,7 +361,7 @@ function getPotaParks()
     g_pota.spotsTimeout = null;
   }
 
-  if (g_mapSettings.offlineMode == false && g_potaEnabled == 1)
+  if (g_mapSettings.offlineMode == false && g_appSettings.potaEnabled == 1)
   {
     getBuffer(
       "https://storage.googleapis.com/gt_app/pota.json?cb=" + Date.now(),
@@ -380,7 +409,7 @@ function uniqueArrayFromArray(input)
 
 function processPotaSpots(buffer)
 {
-  if (g_potaEnabled == 1)
+  if (g_appSettings.potaEnabled == 1)
   {
     try
     {
@@ -439,7 +468,7 @@ function getPotaSpots()
     g_pota.spotsTimeout = null;
   }
 
-  if (g_mapSettings.offlineMode == false && g_potaEnabled == 1)
+  if (g_mapSettings.offlineMode == false && g_appSettings.potaEnabled == 1)
   {
     getBuffer(
       "https://api.pota.app/spot/activator",
@@ -455,7 +484,7 @@ function getPotaSpots()
 
 function processPotaSchedule(buffer)
 {
-  if (g_potaEnabled == 1)
+  if (g_appSettings.potaEnabled == 1)
   {
     try
     {
@@ -513,7 +542,7 @@ function getPotaSchedule()
     g_pota.scheduleTimeout = null;
   }
 
-  if (g_mapSettings.offlineMode == false && g_potaEnabled == 1)
+  if (g_mapSettings.offlineMode == false && g_appSettings.potaEnabled == 1)
   {
     getBuffer(
       "https://api.pota.app/activation",

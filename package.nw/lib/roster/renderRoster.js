@@ -33,7 +33,7 @@ function renderRoster(callRoster, rosterSettings)
     columnOverrides.LoTW = false;
   }
 
-  if (window.opener.g_potaEnabled === 1)
+  if (window.opener.g_appSettings.potaEnabled === 1)
   {
     huntingMatrixPotaDiv.style.display = "";
   }

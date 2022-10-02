@@ -695,9 +695,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <div id="radarButton" onclick="toggleNexrad()" class="iconButton" title="Toggle US Nexrad">
             <img src="./img/radar-button.png" class="buttonImg" />
           </div>
-          <div id="potaButton" onClick="togglePota();" class="iconButton" title="Parks On The Air">
-            <img id="potaImg" src="./img/pota.png" class="buttonImg" />
-          </div>
           <div id="gridOverlayButton" onclick="toggleAllGrids()" class="iconButton" title="Toggle All Grid Overlay">
             <img src="./img/grid-overlay.png" class="buttonImg" />
           </div>
@@ -706,6 +703,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           </div>
           <div id="msgButton" onclick="showMessaging();" class="iconButton" title="Messaging Window">
             <img id="msgImg" src="./img/gt_chat.png" class="buttonImg" />
+          </div>
+          <div id="potaButton" onClick="togglePotaMap();" class="iconButton" title="Parks On The Air">
+            <img id="potaImg" src="./img/pota.png" class="buttonImg" />
           </div>
         </div>
         <div
@@ -1518,6 +1518,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 <td id="oqrsUpdatedTd">Never</td>
                 <td id="oqrsCountTd">0</td>
               </tr>
+            </table>
+          </div>
+          <div id="featureControlDiv" class="mapItem">
+            <table align="center" class="darkTable">
+              <tr>
+                <th colspan="6" style="font-weight: bold; color: yellow">Feature Control</th>
+              </tr>
+              <tr>
+                <th>Feature</th>
+                <th>Enabled</th>
+                <th>Menu Button</th>
+              </tr>
+              <tr>
+                <td>POTA</td>
+                <td>
+                  <input type="checkbox" id="potaEnabled" onclick="changePotaEnable();" />
+                </td>
+                <td>
+                  <input type="checkbox" id="potaMenu" onclick="changePotaMenu();" />
+                </td>
+
+              </tr>
+
             </table>
           </div>
         </div>

@@ -1,238 +1,222 @@
-[
-  {
-    "name": "Mapnik by OpenStreetMap (Intl)",
+{
+  "Mapnik by OpenStreetMap (Intl)": {
     "url": "http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     "attributions": "<a href=\"http://openstreetmap.org/\" target=\"_blank\">OpenStreetMap</a>",
     "minZoom": 0,
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 0
   },
-  {
-    "name": "Mapnik by OpenStreetMap (Deutsche)",
+  "Mapnik by OpenStreetMap (Deutsche)": {
     "url": "http://{a-c}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png",
     "attributions": "<a href=\"http://openstreetmap.de/\" target=\"_blank\">OpenStreetMap Deutschland</a>",
     "minZoom": 0,
-    "maxZoom": 18
+    "maxZoom": 18,
+    "oldIndex": 1
   },
-  {
-    "name": "Mapnik by OpenStreetMap (français)",
+  "Mapnik by OpenStreetMap (français)": {
     "url": "http://{a-c}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
     "attributions": "<a href=\"http://openstreetmap.fr/\" target=\"_blank\">OpenStreetMap France</a>",
     "minZoom": 0,
-    "maxZoom": 18
+    "maxZoom": 18,
+    "oldIndex": 2
   },
-  {
-    "name": "Terrain by Stamen (English)",
+  "Terrain by Stamen (English)": {
     "url": "http://stamen-tiles-{a-d}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"http://stamen.com\">Stamen Design</a>",
     "minZoom": 0,
-    "maxZoom": 18
+    "maxZoom": 18,
+    "oldIndex": 3
   },
-  {
-    "name": "Terrain by Stamen (No Labels)",
+  "Terrain by Stamen (No Labels)": {
     "url": "http://stamen-tiles-{a-d}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"http://stamen.com\">Stamen Design</a>",
     "minZoom": 0,
-    "maxZoom": 18
+    "maxZoom": 18,
+    "oldIndex": 4
   },
-  {
-    "name": "Toner by Stamen (English)",
+  "Toner by Stamen (English)": {
     "url": "http://stamen-tiles-{a-d}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"http://stamen.com\">Stamen Design</a>",
     "minZoom": 0,
-    "maxZoom": 20
+    "maxZoom": 20,
+    "oldIndex": 5
   },
-  {
-    "name": "Toner by Stamen (No Labels)",
+  "Toner by Stamen (No Labels)": {
     "url": "http://stamen-tiles-{a-d}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"http://stamen.com\">Stamen Design</a>",
     "minZoom": 0,
-    "maxZoom": 20
+    "maxZoom": 20,
+    "oldIndex": 6
   },
-  {
-    "name": "TonerLite by Stamen (English)",
+  "TonerLite by Stamen (English)": {
     "url": "http://stamen-tiles-{a-d}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"http://stamen.com\">Stamen Design</a>",
     "minZoom": 0,
-    "maxZoom": 20
+    "maxZoom": 20,
+    "oldIndex": 7
   },
-
-  {
-    "name": "Toner by Stamen (No Labels)(Offline)",
+  "Toner by Stamen (No Labels)(Offline)": {
     "url": "/map/toner-background/{z}/{x}/{y}.png",
     "attributions": "Stamen Design",
     "minZoom": 0,
     "maxZoom": 5,
-    "offline": true
+    "offline": true,
+    "oldIndex": 8
   },
-  {
-    "name": "Hydda by OpenStreetMap Sweden (Intl)",
-    "url": "http://{a-c}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png",
-    "attributions": "<a href=\"http://openstreetmap.se/\" target=\"_blank\">OpenStreetMap Sweden</a>",
-    "minZoom": 0,
-    "maxZoom": 18
-  },
-  {
-    "name": "Hydda by OpenStreetMap Sweden (No Labels)",
-    "url": "http://{a-c}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png",
-    "attributions": "<a href=\"http://openstreetmap.se/\" target=\"_blank\">OpenStreetMap Sweden</a>",
-    "minZoom": 0,
-    "maxZoom": 18
-  },
-  {
-    "name": "National Geographic by Esri (English)",
+  "National Geographic by Esri (English)": {
     "url": "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
     "attributions": "&copy; Esri &mdash; National Geographic",
-    "maxZoom": 16
+    "maxZoom": 16,
+    "oldIndex": 11
   },
-
-  {
-    "name": "Street by Esri (English)",
+  "Street by Esri (English)": {
     "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-    "attributions": "&copy; Esri"
+    "attributions": "&copy; Esri",
+    "oldIndex": 12
   },
-  {
-    "name": "Topographical by Esri (English)",
+  "Topographical by Esri (English)": {
     "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-    "attributions": "&copy; Esri"
+    "attributions": "&copy; Esri",
+    "oldIndex": 13
   },
-  {
-    "name": "Physical by Esri (No Labels)",
+  "Physical by Esri (No Labels)": {
     "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}",
     "attributions": "&copy; Esri",
-    "maxZoom": 8
+    "maxZoom": 8,
+    "oldIndex": 14
   },
-  {
-    "name": "Satellite by Esri (No Labels)",
+  "Satellite by Esri (No Labels)": {
     "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     "attributions": "&copy; Esri",
-    "maxZoom": 18
+    "maxZoom": 18,
+    "oldIndex": 15
   },
-  {
-    "name": "Wikimedia (Intl)",
+  "Wikimedia (Intl)": {
     "url": "http://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>",
     "minZoom": 1,
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 16
   },
-  {
-    "name": "Wikimedia (No Labels)",
+  "Wikimedia (No Labels)": {
     "url": "http://maps.wikimedia.org/osm/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>",
     "minZoom": 1,
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 17
   },
-  {
-    "name": "Watercolor by Stamen (No Labels)",
+  "Watercolor by Stamen (No Labels)": {
     "url": "http://stamen-tiles-{a-d}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png",
     "attributions": "<a target=\"_blank\" href=\"http://stamen.com\">Stamen Design</a>",
     "minZoom": 1,
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 18
   },
-  {
-    "name": "Humanitarian by OpenStreetMap (Intl)",
+  "Humanitarian by OpenStreetMap (Intl)": {
     "url": "http://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
     "attributions": "<a href=\"http://openstreetmap.org/\" target=\"_blank\">OpenStreetMap</a>",
     "minZoom": 0,
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 19
   },
-  {
-    "name": "Dark Gray by Esri (English)",
+  "Dark Gray by Esri (English)": {
     "url": "http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
     "attributions": "&copy; Esri",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 20
   },
-  {
-    "name": "Light Gray by Esri (English)",
+  "Light Gray by Esri (English)": {
     "url": "http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
     "attributions": "&copy; Esri",
-    "maxZoom": 16
+    "maxZoom": 16,
+    "oldIndex": 21
   },
-  {
-    "name": "City Lights by NASA (No Labels)",
+  "City Lights by NASA (No Labels)": {
     "url": "http://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg",
     "attributions": "&copy; NASA",
-    "maxZoom": 8
+    "maxZoom": 8,
+    "oldIndex": 22
   },
-  {
-    "name": "Midnight Commander by Carto (No Labels)",
+  "Midnight Commander by Carto (No Labels)": {
     "url": "https://cartocdn_{a-d}.global.ssl.fastly.net/base-midnight/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 23
   },
-  {
-    "name": "Antique by Carto (Minimal Labels)",
+  "Antique by Carto (Minimal Labels)": {
     "url": "https://cartocdn_{a-d}.global.ssl.fastly.net/base-antique/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 24
   },
-  {
-    "name": "Eco by Carto (Minimal Labels)",
+  "Eco by Carto (Minimal Labels)": {
     "url": "https://cartocdn_{a-d}.global.ssl.fastly.net/base-eco/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 25
   },
-  {
-    "name": "Voyager by Carto (English)",
+  "Voyager by Carto (English)": {
     "url": "https://{a-d}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 26
   },
-  {
-    "name": "Positron by Carto (English)",
+  "Positron by Carto (English)": {
     "url": "https://{a-d}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 27
   },
-  {
-    "name": "Dark Matter by Carto (English)",
+  "Dark Matter by Carto (English)": {
     "url": "https://{a-d}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 28
   },
-  {
-    "name": "Voyager by Carto (No Labels)",
+  "Voyager by Carto (No Labels)": {
     "url": "https://{a-d}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 29
   },
-  {
-    "name": "Positron by Carto (No Labels)",
+  "Positron by Carto (No Labels)": {
     "url": "https://{a-d}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 30
   },
-  {
-    "name": "Dark Matter by Carto (No Labels)",
+  "Dark Matter by Carto (No Labels)": {
     "url": "https://{a-d}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 31
   },
-  {
-    "name": "Geography Class by Mapbox (English)",
+  "Geography Class by Mapbox (English)": {
     "url": "http://{a-b}.tiles.mapbox.com/v3/aj.1x1-degrees/{z}/{x}/{y}.png",
     "attributions": "&copy; mapbox",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 32
   },
-  {
-    "name": "Flat Blue by Carto (No Labels)",
+  "Flat Blue by Carto (No Labels)": {
     "url": "https://cartocdn_{a-d}.global.ssl.fastly.net/base-flatblue/{z}/{x}/{y}.png",
     "attributions": "&copy; Carto",
-    "maxZoom": 19
+    "maxZoom": 19,
+    "oldIndex": 33
   },
-  {
-    "name": "Satellite by MapTiler (No Labels)(Offline)",
+  "Satellite by MapTiler (No Labels)(Offline)": {
     "url": "/map/sat/{z}/{x}/{y}.png",
     "attributions": "MapTiler",
     "minZoom": 0,
     "maxZoom": 5,
-    "offline": true
+    "offline": true,
+    "oldIndex": 34
   },
-  {
-	"name": "HamGames by N0TTL (Intl)(Offline)",
-	"url": "/map/hamgames/{z}/{x}/{y}.png",
-	"attributions": "Mapbox",
-	"minZoom": 0,
-	"maxZoom": 5,
-	"offline": true
+  "HamGames by N0TTL (Intl)(Offline)": {
+    "url": "/map/hamgames/{z}/{x}/{y}.png",
+    "attributions": "Mapbox",
+    "minZoom": 0,
+    "maxZoom": 5,
+    "offline": true,
+    "oldIndex": 35
   }
-]
+}

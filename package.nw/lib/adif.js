@@ -1827,7 +1827,7 @@ function sendToLogger(ADIF)
     record.GRIDSQUARE = g_liveCallsigns[localHash].grid.substr(0, 4);
   }
 
-  if (g_potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota.length > 0)
+  if (g_appSettings.potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota.length > 0)
   {
     let pota = g_liveCallsigns[localHash].pota[0];
     if (pota != "?-????")
@@ -1948,7 +1948,7 @@ function finishSendingReport(record, localMode)
   {
     g_lastReport = report;
     
-    if (g_potaEnabled == 1 && "POTA" in record)
+    if (g_appSettings.potaEnabled == 1 && "POTA" in record)
     {
       reportPotaQSO(record);
       addLastTraffic("<font style='color:white'>Spotted to POTA</font>");

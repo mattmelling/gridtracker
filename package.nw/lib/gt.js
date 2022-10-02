@@ -180,7 +180,6 @@ var g_flightDuration = 30;
 
 var g_crScript = g_appSettings.crScript;
 var g_spotsEnabled = g_appSettings.spotsEnabled;
-var g_potaEnabled = g_appSettings.potaEnabled;
 var g_heatEnabled = g_appSettings.heatEnabled;
 
 var g_myLat = g_mapSettings.latitude;
@@ -7165,7 +7164,7 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    if (g_potaEnabled == 1)
+    if (g_appSettings.potaEnabled == 1)
     {
       if (callsign.DEcall in g_pota.callSpots || callsign.DEcall in g_pota.callSchedule)
       {

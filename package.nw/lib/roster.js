@@ -68,7 +68,7 @@ var g_defaultSettings = {
   callsign: "all",
   hunting: "dxcc",
   huntNeed: "confirmed",
-  requireGrid: true,
+  requireGrid: false,
   wantMaxDT: false,
   wantMinDB: false,
   wantMinFreq: false,
@@ -119,9 +119,9 @@ var g_defaultSettings = {
     DXCC: true,
     Flag: true,
     State: true,
-    County: true,
+    County: false,
     POTA: false,
-    Cont: true,
+    Cont: false,
     dB: true,
     Freq: false,
     DT: false,
@@ -129,7 +129,7 @@ var g_defaultSettings = {
     Azim: true,
     CQz: false,
     ITUz: false,
-    PX: true,
+    PX: false,
     LoTW: false,
     eQSL: false,
     OQRS: false,
@@ -145,7 +145,7 @@ var g_defaultSettings = {
   settingProfiles: false,
 
   sortColumn: "Age",
-  sortReverse: false
+  sortReverse: true
 };
 
 const LOGBOOK_LIVE_BAND_LIVE_MODE = "0";

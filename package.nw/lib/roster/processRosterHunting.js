@@ -15,7 +15,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
 
   const currentYear = new Date().getFullYear();
   const currentYearSuffix = `&rsquo;${currentYear - 2000}`;
-  const potaEnabled = (window.opener.g_potaEnabled === 1);
+  const potaEnabled = (window.opener.g_appSettings.potaEnabled === 1);
   // TODO: Hunting results might be used to filter, based on the "Callsigns: Only Wanted" option,
   //       so maybe we can move this loop first, and add a check to the filtering loop?
 

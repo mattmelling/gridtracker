@@ -5515,20 +5515,61 @@ function initMap()
 
   if (g_maps)
   {
-    var entries = Object.keys(g_maps).sort(myGmapNameCompare);
-
-    for (var lmap in entries)
+    let saveSettings = false;
+    g_maps = Object.keys(g_maps).sort().reduce((obj, key) => { obj[key] = g_maps[key]; return obj;}, {});
+    
+    if (typeof Number(g_mapSettings.mapIndex) == "number")
     {
-      var key = entries[lmap];
+      let foundKey = null;
+      for (const key in g_maps)
+      {
+        if (g_maps[key].oldIndex == g_mapSettings.mapIndex)
+        {
+          g_mapSettings.mapIndex = key;
+          foundKey = key;
+          break;
+        }
+      }
+      if (foundKey == null)
+      {
+        g_mapSettings.mapIndex = def_mapSettings.mapIndex;
+      }
+      saveSettings = true;
+    }
+    
+    if (typeof Number(g_mapSettings.nightMapIndex) == "number")
+    {
+      let foundKey = null;
+      for (const key in g_maps)
+      {
+        if (g_maps[key].oldIndex == g_mapSettings.nightMapIndex)
+        {
+          g_mapSettings.nightMapIndex = key;
+          foundKey = key;
+          break;
+        }
+      }
+      if (foundKey == null)
+      {
+        g_mapSettings.nightMapIndex = def_mapSettings.nightMapIndex;
+      }
+      saveSettings = true;
+    }
+    if (saveSettings)
+    {
+      saveMapSettings();
+    }
+    for (const key in g_maps)
+    {
       g_mapsLayer[key] = new ol.source.XYZ(g_maps[key]);
-      var option = document.createElement("option");
+      let option = document.createElement("option");
       option.value = key;
-      option.text = g_maps[key].name;
+      option.text = key;
       mapSelect.appendChild(option);
 
       option = document.createElement("option");
       option.value = key;
-      option.text = g_maps[key].name;
+      option.text = key;
       mapNightSelect.appendChild(option);
     }
     mapSelect.value = g_mapSettings.mapIndex;

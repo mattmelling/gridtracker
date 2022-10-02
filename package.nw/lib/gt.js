@@ -13599,6 +13599,11 @@ function postInit()
   openCallRosterWindow(false);
   openConditionsWindow(false);
   showMessaging(false);
+  
+  if (g_developerMode)
+  {
+    devPanel.style.display = "inline-block";
+  }
 }
 
 document.addEventListener("dragover", function (event)

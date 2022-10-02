@@ -5516,7 +5516,7 @@ function initMap()
   if (g_maps)
   {
     let saveSettings = false;
-    g_maps = Object.keys(g_maps).sort().reduce((obj, key) => { obj[key] = g_maps[key]; return obj;}, {});
+    g_maps = Object.keys(g_maps).sort().reduce((obj, key) => { obj[key] = g_maps[key]; return obj; }, {});
     
     if (typeof Number(g_mapSettings.mapIndex) == "number")
     {

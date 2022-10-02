@@ -6486,15 +6486,13 @@ function handleWsjtxStatus(newMessage)
 
   if (g_appSettings.clearRosterOnBandChange && g_instances[newMessage.instance].oldStatus)
   {
-    let oldBand = Number(g_instances[newMessage.instance].oldStatus.Frequency / 1000000).formatBand();
-    let newBand = Number(newMessage.Frequency / 1000000).formatBand();
-    if (oldBand != newBand || g_instances[newMessage.instance].oldStatus.MO != newMessage.MO)
+    if (g_instances[newMessage.instance].oldStatus.Band != newMessage.Band || g_instances[newMessage.instance].oldStatus.MO != newMessage.MO)
     {
       for (const call in g_callRoster)
       {
         if (g_callRoster[call].callObj.instance == newMessage.instance) { delete g_callRoster[call]; }
       }
-      if (g_activeInstance != newMessage.instance)
+      if (g_activeInstance == newMessage.instance)
       {
         goProcessRoster();
       }
@@ -6512,7 +6510,7 @@ function handleWsjtxStatus(newMessage)
     var origBand = g_lastBand;
     wsjtxMode.innerHTML = "<font color='orange'>" + newMessage.MO + "</font>";
     myMode = newMessage.MO;
-    myBand = Number(newMessage.Frequency / 1000000).formatBand();
+    myBand = newMessage.Band;
     if (g_lastBand != myBand)
     {
       g_lastBand = myBand;

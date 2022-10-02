@@ -1664,9 +1664,9 @@ function timeoutSetUdpPort()
 
 function setUdpPort()
 {
-  if (g_setNewUdpPortTimeoutHandle != null) { window.clearTimeout(g_setNewUdpPortTimeoutHandle); }
+  if (g_setNewUdpPortTimeoutHandle != null) { nodeTimers.clearTimeout(g_setNewUdpPortTimeoutHandle); }
   lastMsgTimeDiv.innerHTML = "..setting..";
-  g_setNewUdpPortTimeoutHandle = window.setTimeout(timeoutSetUdpPort, 1000);
+  g_setNewUdpPortTimeoutHandle = nodeTimers.setTimeout(timeoutSetUdpPort, 1000);
 }
 
 function changeGridDecay()
@@ -2557,7 +2557,7 @@ function insertMessageInRoster(
 {
   if (g_rosterUpdateTimer != null)
   {
-    clearTimeout(g_rosterUpdateTimer);
+    nodeTimers.clearTimeout(g_rosterUpdateTimer);
     g_rosterUpdateTimer = null;
   }
 
@@ -2585,7 +2585,7 @@ function insertMessageInRoster(
   g_callRoster[hash].DXcall = msgDXcallsign;
   g_callRoster[hash].DEcall = msgDEcallsign;
 
-  g_rosterUpdateTimer = setTimeout(delayedRosterUpdate, 100);
+  g_rosterUpdateTimer = nodeTimers.setTimeout(delayedRosterUpdate, 100);
 }
 
 function delayedRosterUpdate()
@@ -4809,21 +4809,11 @@ function changeAnimateSpeedValue()
 }
 
 var g_animateFrame = 0;
-
 var g_nextDimTime = 0;
 var g_last = 0;
-function animatePaths()
+
+function removeFlightPathsAndDimSquares()
 {
-  requestAnimationFrame(animatePaths);
-
-  g_last ^= g_last;
-  if (g_last == 1) return;
-
-  g_animateFrame++;
-  g_animateFrame %= g_mapSettings.animateSpeed;
-
-  if (g_animateFrame > 0) return;
-
   for (var i = g_flightPaths.length - 1; i >= 0; i--)
   {
     if (g_flightPaths[i].age < g_timeNow)
@@ -4841,6 +4831,19 @@ function animatePaths()
   {
     dimGridsquare();
   }
+}
+
+function animatePaths()
+{
+  requestAnimationFrame(animatePaths);
+
+  g_last ^= g_last;
+  if (g_last == 1) return;
+
+  g_animateFrame++;
+  g_animateFrame %= g_mapSettings.animateSpeed;
+
+  if (g_animateFrame > 0) return;
 
   if (g_mapSettings.animate == false) return;
 
@@ -5435,7 +5438,7 @@ function handleStrike(strike)
 
   let inRange = true;
 
-  if (Math.abs(strike.o - g_myLon) > g_strikeRange) inRange = false;
+  if (myRawGrid.length < 4 || Math.abs(strike.o - g_myLon) > g_strikeRange) inRange = false;
 
   if (Math.abs(strike.a - g_myLat) > g_strikeRange) inRange = false;
 
@@ -5888,13 +5891,13 @@ function toggleNexrad()
     g_Nexrad = createNexRad();
     g_map.addLayer(g_Nexrad);
 
-    if (g_nexradInterval == null) { g_nexradInterval = setInterval(nexradRefresh, 600000); }
+    if (g_nexradInterval == null) { g_nexradInterval = nodeTimers.setInterval(nexradRefresh, 600000); }
   }
   else
   {
     if (g_nexradInterval != null)
     {
-      clearInterval(g_nexradInterval);
+      nodeTimers.clearInterval(g_nexradInterval);
       g_nexradInterval = null;
     }
     if (g_Nexrad)
@@ -6294,7 +6297,7 @@ function handleWsjtxADIF(newMessage)
 {
   if (g_oldQSOTimer)
   {
-    clearTimeout(g_oldQSOTimer);
+    nodeTimers.clearTimeout(g_oldQSOTimer);
     g_oldQSOTimer = null;
   }
 
@@ -6305,13 +6308,13 @@ function handleWsjtxQSO(newMessage)
 {
   if (g_oldQSOTimer)
   {
-    clearTimeout(g_oldQSOTimer);
+    nodeTimers.clearTimeout(g_oldQSOTimer);
     g_oldQSOTimer = null;
   }
 
   g_oldStyleLogMessage = Object.assign({}, newMessage);
 
-  g_oldQSOTimer = setTimeout(oldSendToLogger, 3000);
+  g_oldQSOTimer = nodeTimers.setTimeout(oldSendToLogger, 3000);
 }
 
 function handleWsjtxNotSupported(newMessage) { }
@@ -6458,7 +6461,7 @@ function handleWsjtxStatus(newMessage)
       bandChange = true;
       if (g_pskBandActivityTimerHandle != null)
       {
-        clearInterval(g_pskBandActivityTimerHandle);
+        nodeTimers.clearInterval(g_pskBandActivityTimerHandle);
         g_pskBandActivityTimerHandle = null;
       }
       removePaths();
@@ -6469,7 +6472,7 @@ function handleWsjtxStatus(newMessage)
       modeChange = true;
       if (g_pskBandActivityTimerHandle != null)
       {
-        clearInterval(g_pskBandActivityTimerHandle);
+        nodeTimers.clearInterval(g_pskBandActivityTimerHandle);
         g_pskBandActivityTimerHandle = null;
       }
     }
@@ -9374,7 +9377,7 @@ function showStatBox(resize)
     return;
   }
 
-  if (g_statBoxTimer) clearTimeout(g_statBoxTimer);
+  if (g_statBoxTimer) nodeTimers.clearTimeout(g_statBoxTimer);
 
   if (count > 0)
   {
@@ -9383,7 +9386,7 @@ function showStatBox(resize)
       "&nbsp;<br/>...Parsing Log Entries...<br/>&nbsp;"
     );
     setStatsDivHeight("statViewDiv", "auto");
-    g_statBoxTimer = setTimeout(renderStatsBox, 250);
+    g_statBoxTimer = nodeTimers.setTimeout(renderStatsBox, 250);
   }
   else
   {
@@ -11032,7 +11035,7 @@ function newMessageSetting(whichSetting)
   }
 }
 
-function checkForNewVersion(showUptoDate)
+function checkForNewVersion(showUptoDate = false)
 {
   if (typeof nw != "undefined")
   {
@@ -11058,7 +11061,7 @@ function downloadAcknowledgements()
       80
     );
 
-    setTimeout(downloadAcknowledgements, 8640000);
+    nodeTimers.setTimeout(downloadAcknowledgements, 8640000);
   }
 }
 
@@ -11238,13 +11241,10 @@ function pskGetBandActivity()
 
   if (g_pskBandActivityTimerHandle != null)
   {
-    clearInterval(g_pskBandActivityTimerHandle);
+    nodeTimers.clearInterval(g_pskBandActivityTimerHandle);
   }
 
-  g_pskBandActivityTimerHandle = setInterval(function ()
-  {
-    pskGetBandActivity();
-  }, 601000); // every 20 minutes, 1 second
+  g_pskBandActivityTimerHandle = nodeTimers.setInterval(pskGetBandActivity, 601000); // every 20 minutes, 1 second
 }
 
 function getIniFromApp(appName)
@@ -13041,9 +13041,9 @@ function changeLegendColor(source)
 
   if (g_redrawFromLegendTimeoutHandle != null)
   {
-    clearTimeout(g_redrawFromLegendTimeoutHandle);
+    nodeTimers.clearTimeout(g_redrawFromLegendTimeoutHandle);
   }
-  g_redrawFromLegendTimeoutHandle = setTimeout(redrawGrids, 500);
+  g_redrawFromLegendTimeoutHandle = nodeTimers.setTimeout(redrawGrids, 500);
 }
 
 function toggleLegend()
@@ -13179,7 +13179,7 @@ function initSpeech()
 {
   window.speechSynthesis.onvoiceschanged = function ()
   {
-    setTimeout(timedGetVoices, 500);
+    nodeTimers.setTimeout(timedGetVoices, 500);
   };
   var msg = new SpeechSynthesisUtterance(".");
   msg.lang = g_localeString;
@@ -13504,11 +13504,8 @@ function startupVersionInit()
   stopAskingCheckbox.checked = g_appSettings.stopAskingVersion;
   if (stopAskingCheckbox.checked == false)
   {
-    checkForNewVersion(false);
-    setInterval(function ()
-    {
-      checkForNewVersion(false);
-    }, 86400000);
+    checkForNewVersion();
+    nodeTimers.setInterval(checkForNewVersion, 86400000);
   }
 }
 
@@ -13564,7 +13561,7 @@ function startupEventsAndTimers()
 {
   document.addEventListener("keydown", onMyKeyDown, true);
   document.addEventListener("keyup", onMyKeyUp, false);
-  displayTimeInterval = setInterval(displayTime, 1000);
+  displayTimeInterval = nodeTimers.setInterval(displayTime, 1000);
 }
 
 var g_finishedLoading = false;
@@ -13604,6 +13601,7 @@ function postInit()
   {
     devPanel.style.display = "inline-block";
   }
+  nodeTimers.setInterval(removeFlightPathsAndDimSquares, 2000);
 }
 
 document.addEventListener("dragover", function (event)
@@ -13662,7 +13660,7 @@ function init()
     documentsDiv.style.display = "none";
     startupDiv.style.display = "block";
     startupStatusDiv.innerHTML = "Starting...";
-    setTimeout(startupEngine, 10);
+    nodeTimers.setTimeout(startupEngine, 32);
   }
 }
 
@@ -13673,7 +13671,7 @@ function startupEngine()
     var funcInfo = g_startupTable.shift();
     funcInfo[0]();
     startupStatusDiv.innerHTML = funcInfo[1];
-    setTimeout(startupEngine, 10);
+    nodeTimers.setTimeout(startupEngine, 32);
   }
   else
   {
@@ -14336,10 +14334,10 @@ function lookupCallsign(callsign, gridPass, useCache = true)
   }
   if (g_lookupTimeout != null)
   {
-    window.clearTimeout(g_lookupTimeout);
+    nodeTimers.clearTimeout(g_lookupTimeout);
     g_lookupTimeout = null;
   }
-  g_lookupTimeout = setTimeout(searchLogForCallsign, 500, callsign);
+  g_lookupTimeout = nodeTimers.setTimeout(searchLogForCallsign, 500, callsign);
 
   if (useCache)
   {
@@ -16029,7 +16027,7 @@ function addNewOAMSSpot(cid, db)
   {
     if (g_oamsSpotTimeout !== null)
     {
-      clearTimeout(g_oamsSpotTimeout);
+      nodeTimers.clearTimeout(g_oamsSpotTimeout);
       g_oamsSpotTimeout = null;
     }
     var report;
@@ -16062,7 +16060,7 @@ function addNewOAMSSpot(cid, db)
     if (SNR < 0) SNR = 0;
     report.color = SNR;
 
-    g_oamsSpotTimeout = setTimeout(redrawSpots, 500);
+    g_oamsSpotTimeout = nodeTimers.setTimeout(redrawSpots, 500);
   }
 }
 
@@ -16565,5 +16563,5 @@ function refreshSpotsNoTx()
   redrawSpots();
 }
 
-setInterval(refreshSpotsNoTx, 300000);
-setTimeout(refreshSpotsNoTx, 300000);
+nodeTimers.setInterval(refreshSpotsNoTx, 300000);
+nodeTimers.setTimeout(refreshSpotsNoTx, 300000);

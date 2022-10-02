@@ -92,7 +92,7 @@ function lotwLoadCallsigns()
   {
     var lotwWhenTimer = 86400 * 7 - (now - g_callsignLookups.lotwLastUpdate);
     g_lotwWhenDate = now + lotwWhenTimer;
-    g_lotwLoadTimer = setTimeout(lotwDownload, lotwWhenTimer * 1000);
+    g_lotwLoadTimer = nodeTimers.setTimeout(lotwDownload, lotwWhenTimer * 1000);
   }
 
   if (!fs.existsSync(g_lotwFile))
@@ -131,7 +131,7 @@ function lotwSettingsDisplay()
 
   if (!g_callsignLookups.lotwUseEnable)
   {
-    if (g_lotwLoadTimer != null) clearTimeout(g_lotwLoadTimer);
+    if (g_lotwLoadTimer != null) nodeTimers.clearTimeout(g_lotwLoadTimer);
     g_lotwLoadTimer = null;
     g_lotwCallsigns = Object();
   }
@@ -194,11 +194,11 @@ function processLotwCallsigns(result, flag)
   g_callsignLookups.lotwLastUpdate = timeNowSec();
 
   var now = timeNowSec();
-  if (g_lotwLoadTimer != null) clearTimeout(g_lotwLoadTimer);
+  if (g_lotwLoadTimer != null) nodeTimers.clearTimeout(g_lotwLoadTimer);
 
   var lotwWhenTimer = 86400 * 7 - (now - g_callsignLookups.lotwLastUpdate);
   g_lotwWhenDate = now + lotwWhenTimer;
-  g_lotwLoadTimer = setTimeout(lotwDownload, lotwWhenTimer * 1000);
+  g_lotwLoadTimer = nodeTimers.setTimeout(lotwDownload, lotwWhenTimer * 1000);
 
   if (Object.keys(lotwCallsigns).length > 100)
   {
@@ -218,7 +218,7 @@ function oqrsLoadCallsigns()
   {
     var oqrsWhenTimer = 86400 * 7 - (now - g_callsignLookups.oqrsLastUpdate);
     g_oqrsWhenDate = now + oqrsWhenTimer;
-    g_oqrsLoadTimer = setTimeout(oqrsDownload, oqrsWhenTimer * 1000);
+    g_oqrsLoadTimer = nodeTimers.setTimeout(oqrsDownload, oqrsWhenTimer * 1000);
   }
 
   if (!fs.existsSync(g_oqrsFile))
@@ -253,7 +253,7 @@ function oqrsSettingsDisplay()
 
   if (!g_callsignLookups.oqrsUseEnable)
   {
-    if (g_oqrsLoadTimer != null) clearTimeout(g_oqrsLoadTimer);
+    if (g_oqrsLoadTimer != null) nodeTimers.clearTimeout(g_oqrsLoadTimer);
     g_oqrsLoadTimer = null;
     g_oqrsCallsigns = Object();
   }
@@ -294,11 +294,11 @@ function processoqrsCallsigns(buffer, flag)
   g_callsignLookups.oqrsLastUpdate = timeNowSec();
 
   var now = timeNowSec();
-  if (g_oqrsLoadTimer != null) clearTimeout(g_oqrsLoadTimer);
+  if (g_oqrsLoadTimer != null) nodeTimers.clearTimeout(g_oqrsLoadTimer);
 
   var oqrsWhenTimer = 86400 * 7 - (now - g_callsignLookups.oqrsLastUpdate);
   g_oqrsWhenDate = now + oqrsWhenTimer;
-  g_oqrsLoadTimer = setTimeout(oqrsDownload, oqrsWhenTimer * 1000);
+  g_oqrsLoadTimer = nodeTimers.setTimeout(oqrsDownload, oqrsWhenTimer * 1000);
 
   fs.writeFileSync(g_oqrsFile, JSON.stringify(g_oqrsCallsigns));
   oqrsSettingsDisplay();
@@ -313,7 +313,7 @@ function eqslLoadCallsigns()
   {
     var eqslWhenTimer = 86400 * 7 - (now - g_callsignLookups.eqslLastUpdate);
     g_eqslWhenDate = now + eqslWhenTimer;
-    g_eqslLoadTimer = setTimeout(eqslDownload, eqslWhenTimer * 1000);
+    g_eqslLoadTimer = nodeTimers.setTimeout(eqslDownload, eqslWhenTimer * 1000);
   }
 
   if (!fs.existsSync(g_eqslFile))
@@ -348,7 +348,7 @@ function eqslSettingsDisplay()
 
   if (!g_callsignLookups.eqslUseEnable)
   {
-    if (g_eqslLoadTimer != null) clearTimeout(g_eqslLoadTimer);
+    if (g_eqslLoadTimer != null) nodeTimers.clearTimeout(g_eqslLoadTimer);
     g_eqslLoadTimer = null;
     g_eqslCallsigns = Object();
   }
@@ -395,11 +395,11 @@ function processeqslCallsigns(buffer, flag)
   g_callsignLookups.eqslLastUpdate = timeNowSec();
 
   var now = timeNowSec();
-  if (g_eqslLoadTimer != null) clearTimeout(g_eqslLoadTimer);
+  if (g_eqslLoadTimer != null) nodeTimers.clearTimeout(g_eqslLoadTimer);
 
   var eqslWhenTimer = 86400 * 7 - (now - g_callsignLookups.eqslLastUpdate);
   g_eqslWhenDate = now + eqslWhenTimer;
-  g_eqslLoadTimer = setTimeout(eqslDownload, eqslWhenTimer * 1000);
+  g_eqslLoadTimer = nodeTimers.setTimeout(eqslDownload, eqslWhenTimer * 1000);
 
   if (Object.keys(g_eqslCallsigns).length > 10000)
   { fs.writeFileSync(g_eqslFile, JSON.stringify(g_eqslCallsigns)); }
@@ -411,7 +411,7 @@ function ulsLoadCallsigns()
 {
   if (g_ulsLoadTimer != null)
   {
-    clearTimeout(g_ulsLoadTimer);
+    nodeTimers.clearTimeout(g_ulsLoadTimer);
     g_ulsLoadTimer = null;
   }
 
@@ -421,7 +421,7 @@ function ulsLoadCallsigns()
   {
     var ulsWhenTimer = 86400 * 7 - (now - g_callsignLookups.ulsLastUpdate);
     g_ulsWhenDate = now + ulsWhenTimer;
-    g_ulsLoadTimer = setTimeout(ulsDownload, ulsWhenTimer * 1000);
+    g_ulsLoadTimer = nodeTimers.setTimeout(ulsDownload, ulsWhenTimer * 1000);
     updateCallsignCount();
   }
 }
@@ -507,7 +507,7 @@ function ulsSettingsDisplay()
 
   if (!g_callsignLookups.ulsUseEnable)
   {
-    if (g_ulsLoadTimer != null) clearTimeout(g_ulsLoadTimer);
+    if (g_ulsLoadTimer != null) nodeTimers.clearTimeout(g_ulsLoadTimer);
     g_ulsLoadTimer = null;
     g_ulsCallsignsCount = 0;
     ulsCountTd.innerHTML = g_ulsCallsignsCount;
@@ -658,7 +658,7 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
       {
         if (starting == true)
         {
-          if (g_ulsLoadTimer != null) clearTimeout(g_ulsLoadTimer);
+          if (g_ulsLoadTimer != null) nodeTimers.clearTimeout(g_ulsLoadTimer);
           g_ulsLoadTimer = null;
           g_ulsWhenDate = 0;
           g_ulsCallsignsCount = 0;
@@ -708,11 +708,11 @@ function processulsCallsigns(data, flag, cookies, starting, finished)
   {
     var now = timeNowSec();
 
-    if (g_ulsLoadTimer != null) clearTimeout(g_ulsLoadTimer);
+    if (g_ulsLoadTimer != null) nodeTimers.clearTimeout(g_ulsLoadTimer);
 
     var ulsWhenTimer = 86400 * 7;
     g_ulsWhenDate = ulsWhenTimer + now;
-    g_ulsLoadTimer = setTimeout(ulsDownload, ulsWhenTimer * 1000);
+    g_ulsLoadTimer = nodeTimers.setTimeout(ulsDownload, ulsWhenTimer * 1000);
 
     g_ulsDatabase.transaction(function (tx)
     {

@@ -1,3 +1,5 @@
+const nodeTimers = require("timers");
+
 var s_title = null;
 var s_screenSettings = {};
 var s_zoomLevel = 0;
@@ -25,12 +27,12 @@ function clearAllScreenTimers()
 {
   if (g_windowMoveTimer != null)
   {
-    clearTimeout(g_windowMoveTimer);
+    nodeTimers.clearTimeout(g_windowMoveTimer);
     g_windowMoveTimer = null;
   }
   if (g_windowResizeTimer != null)
   {
-    clearTimeout(g_windowResizeTimer);
+    nodeTimers.clearTimeout(g_windowResizeTimer);
     g_windowResizeTimer = null;
   }
 }
@@ -125,9 +127,9 @@ nw.Window.get().on("move", function (x, y)
 {
   if (g_windowMoveTimer != null)
   {
-    clearTimeout(g_windowMoveTimer);
+    nodeTimers.clearTimeout(g_windowMoveTimer);
   }
-  g_windowMoveTimer = setTimeout(setWindowInfo, 1000);
+  g_windowMoveTimer = nodeTimers.setTimeout(setWindowInfo, 1000);
 });
 
 var g_windowResizeTimer = null;
@@ -135,9 +137,9 @@ nw.Window.get().on("resize", function (w, h)
 {
   if (g_windowResizeTimer != null)
   {
-    clearTimeout(g_windowResizeTimer);
+    nodeTimers.clearTimeout(g_windowResizeTimer);
   }
-  g_windowResizeTimer = setTimeout(setWindowInfo, 1000);
+  g_windowResizeTimer = nodeTimers.setTimeout(setWindowInfo, 1000);
 });
 
 var g_zoomKeys = {

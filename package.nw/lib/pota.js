@@ -268,13 +268,13 @@ function rbnReportResult(buffer, flag, cookies)
   // It worked! process latest spots!
   if (g_pota.spotsTimeout)
   {
-    clearTimeout(g_pota.spotsTimeout);
+    nodeTimers.clearTimeout(g_pota.spotsTimeout);
     g_pota.spotsTimeout = null;
   }
   
   processPotaSpots(String(buffer));
   
-  g_pota.spotsTimeout = setTimeout(getPotaSpots, 300000);
+  g_pota.spotsTimeout = nodeTimers.setTimeout(getPotaSpots, 300000);
 }
 
 function spotFromCallObj(callObj, park, inCount, rbnTime)
@@ -357,7 +357,7 @@ function getPotaParks()
 {
   if (g_pota.parksTimeout)
   {
-    clearTimeout(g_pota.parksTimeout);
+    nodeTimers.clearTimeout(g_pota.parksTimeout);
     g_pota.spotsTimeout = null;
   }
 
@@ -372,7 +372,7 @@ function getPotaParks()
     );
   }
 
-  g_pota.parksTimeout = setTimeout(getPotaParks, 86400000)
+  g_pota.parksTimeout = nodeTimers.setTimeout(getPotaParks, 86400000)
 }
 
 // This is a shallow copy, don't use with objects that contain other objects or arrays
@@ -464,7 +464,7 @@ function getPotaSpots()
 {
   if (g_pota.spotsTimeout)
   {
-    clearTimeout(g_pota.spotsTimeout);
+    nodeTimers.clearTimeout(g_pota.spotsTimeout);
     g_pota.spotsTimeout = null;
   }
 
@@ -479,7 +479,7 @@ function getPotaSpots()
     );
   }
 
-  g_pota.spotsTimeout = setTimeout(getPotaSpots, 300000);
+  g_pota.spotsTimeout = nodeTimers.setTimeout(getPotaSpots, 300000);
 }
 
 function processPotaSchedule(buffer)
@@ -538,7 +538,7 @@ function getPotaSchedule()
 {
   if (g_pota.scheduleTimeout)
   {
-    clearTimeout(g_pota.scheduleTimeout);
+    nodeTimers.clearTimeout(g_pota.scheduleTimeout);
     g_pota.scheduleTimeout = null;
   }
 
@@ -552,7 +552,7 @@ function getPotaSchedule()
       443
     );
   }
-  g_pota.scheduleTimeout = setTimeout(getPotaSchedule, 900000);
+  g_pota.scheduleTimeout = nodeTimers.setTimeout(getPotaSchedule, 900000);
 }
 
 var g_lastPark = null;

@@ -617,7 +617,7 @@ function gtLightningStrike(jsmesg)
 
 function gtChatSystemInit()
 {
-  g_gtEngineInterval = setInterval(gtChatStateMachine, 1000);
+  g_gtEngineInterval = nodeTimers.setInterval(gtChatStateMachine, 1000);
 }
 
 function showGtFlags()

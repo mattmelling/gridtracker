@@ -2375,7 +2375,6 @@ function sendLotwLogEntry(report)
       {
         if (stderr.indexOf("Final Status: Success") < 0)
         {
-          alert(stderr);
           addLastTraffic("<font style='color:red'>Fail log to TQSL</font>");
         }
         else
@@ -2494,23 +2493,20 @@ function qrzSendLogResult(buffer, flag)
         var split = kv[x].split("=");
         arrData[split[0]] = split[1];
       }
-      if (
-        typeof arrData.RESULT == "undefined" ||
-        arrData.RESULT != "OK"
-      )
+      if (typeof arrData.RESULT == "undefined" || arrData.RESULT != "OK")
       {
-        alert(
-          "Error uploading QSO to QRZ.com (" +
-            (arrData.REASON || "Unknown error") +
-            ")"
-        );
         addLastTraffic("<font style='color:red'>Fail log to QRZ.com</font>");
       }
       else
-      { addLastTraffic("<font style='color:white'>Logged to QRZ.com</font>"); }
+      {
+        addLastTraffic("<font style='color:white'>Logged to QRZ.com</font>");
+      }
     }
   }
-  else alert("Error uploading QSO to QRZ.com (No response)");
+  else
+  {
+    addLastTraffic("<font style='color:red'>Fail log to QRZ.com</font>");
+  }
 }
 
 function postDialogRetryCallback(

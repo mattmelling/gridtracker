@@ -11956,26 +11956,34 @@ function popupNewWindows()
     win.on("new-win-policy", function (frame, url, policy)
     {
       policy.forceNewPopup();
-      g_lastUrl = "";
     });
   }
 }
 
-var g_lastUrl = "";
 function lockNewWindows()
 {
   if (typeof nw != "undefined")
   {
-    win.on("new-win-policy", function (frame, url, policy)
-    {
-      if (url != g_lastUrl)
-      {
-        nw.Shell.openExternal(url);
-        g_lastUrl = url;
-      }
-      policy.ignore();
-    });
+    win.on("new-win-policy", newFrame);
   }
+}
+
+var g_lastUrl = "";
+
+function newFrame(frame, url, policy)
+{
+  if (url != g_lastUrl)
+  {
+    nw.Shell.openExternal(url);
+    g_lastUrl = url;
+    nodeTimers.setTimeout(clearLastUrlTimeOut, 5000);
+  }
+  policy.ignore();
+}
+
+function clearLastUrlTimeOut()
+{
+  g_lastUrl = "";
 }
 
 function byName(a, b)

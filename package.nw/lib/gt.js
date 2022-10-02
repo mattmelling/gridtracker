@@ -6520,6 +6520,13 @@ function handleWsjtxStatus(newMessage)
     if (g_pskBandActivityTimerHandle == null) pskGetBandActivity();
     if (bandChange || modeChange)
     {
+      if (g_appSettings.clearRosterOnBandChange)
+      {
+        for (const call in g_callRoster)
+        {
+          if (g_callRoster[call].callObj.instance == newMessage.instance) { delete g_callRoster[call]; }
+        }
+      }
       goProcessRoster();
       redrawGrids();
       redrawSpots();

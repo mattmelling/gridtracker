@@ -6484,6 +6484,21 @@ function handleWsjtxStatus(newMessage)
     }
   }
 
+  if (g_appSettings.clearRosterOnBandChange && g_instances[newMessage.instance].oldStatus)
+  {
+    if (g_instances[newMessage.instance].oldStatus.Band != newMessage.Band || g_instances[newMessage.instance].oldStatus.MO != newMessage.MO)
+    {
+      for (const call in g_callRoster)
+      {
+        if (g_callRoster[call].callObj.instance == newMessage.instance) { delete g_callRoster[call]; }
+      }
+      if (g_activeInstance == newMessage.instance)
+      {
+        goProcessRoster();
+      }
+    }
+  }
+
   if (g_activeInstance == newMessage.instance)
   {
     var sp = newMessage.Id.split(" - ");
@@ -6495,7 +6510,7 @@ function handleWsjtxStatus(newMessage)
     var origBand = g_lastBand;
     wsjtxMode.innerHTML = "<font color='orange'>" + newMessage.MO + "</font>";
     myMode = newMessage.MO;
-    myBand = Number(newMessage.Frequency / 1000000).formatBand();
+    myBand = newMessage.Band;
     if (g_lastBand != myBand)
     {
       g_lastBand = myBand;
@@ -14033,6 +14048,8 @@ function updateWsjtxListener(port)
         g_instancesIndex.push(instanceId);
         g_instances[instanceId].intId = g_instancesIndex.length - 1;
         g_instances[instanceId].crEnable = true;
+        g_instances[instanceId].oldStatus = null;
+        g_instances[instanceId].status = null;
         if (g_instancesIndex.length > 1)
         {
           multiRigCRDiv.style.display = "inline-block";
@@ -14120,7 +14137,7 @@ function updateWsjtxListener(port)
         {
           newMessage.ConfName = null;
         }
-
+        g_instances[instanceId].oldStatus = g_instances[instanceId].status;
         g_instances[instanceId].status = newMessage;
         g_instances[instanceId].valid = true;
       }

@@ -5958,6 +5958,7 @@ function nexradRefresh()
 {
   if (g_Nexrad != null)
   {
+    g_Nexrad.getSource().updateParams({ ol3_salt: Math.random() });
     g_Nexrad.getSource().refresh();
   }
 }

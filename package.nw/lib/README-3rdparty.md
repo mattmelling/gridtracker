@@ -32,4 +32,3 @@ careful when upgrading.
 ## Other Third Party routines
 
 lib/third-party.js
-lib/fw.js -- unused - fireworks when you complete WAS - from Henry N2VFL

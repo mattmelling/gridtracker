@@ -4759,6 +4759,7 @@ function toggleAllGrids()
 {
   g_showAllGrids = !g_showAllGrids;
   setTrophyOverlay(g_currentOverlay);
+  gridOverlayImg.style.filter = g_showAllGrids ? "" : "grayscale(1)";
 }
 
 function changeAnimate()
@@ -5949,6 +5950,8 @@ function toggleNexrad()
   }
 
   g_mapSettings.usNexrad = g_nexradEnable == 1;
+  radarImg.style.filter = g_mapSettings.usNexrad ? "" : "grayscale(1)";
+  saveMapSettings();
 }
 
 function nexradRefresh()
@@ -12441,6 +12444,8 @@ function toggleTimezones()
       g_timezoneLayer = null;
     }
   }
+  
+  timezoneImg.style.filter = g_timezonesEnable == 1 ? "" : "grayscale(1)";
 }
 
 function drawAllGrids()
@@ -12887,6 +12892,9 @@ function loadMapSettings()
   trafficDecode.checked = g_mapSettings.trafficDecode;
 
   pskSpotsImg.style.filter = g_spotsEnabled == 1 ? "" : "grayscale(1)";
+  timezoneImg.style.filter = g_timezonesEnable == 1 ? "" : "grayscale(1)";
+  radarImg.style.filter = g_mapSettings.usNexrad ? "" : "grayscale(1)";
+  gridOverlayImg.style.filter = g_showAllGrids ? "" : "grayscale(1)";
 
   g_bandToColor = JSON.parse(JSON.stringify(g_pskColors));
 

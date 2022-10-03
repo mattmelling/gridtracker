@@ -7,19 +7,20 @@ var gtVersion = parseInt(gtVersionStr.replace(/\./g, ""));
 var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
+var g_readInternalQso = true;
 if (typeof localStorage.currentVersion != "undefined")
 {
   g_startVersion = localStorage.currentVersion;
 }
 
-if (
-  typeof localStorage.currentVersion == "undefined" ||
-  localStorage.currentVersion != String(gtVersion)
-)
+if (typeof localStorage.currentVersion == "undefined" || localStorage.currentVersion != String(gtVersion))
 {
   localStorage.currentVersion = String(gtVersion);
   var gui = require("nw.gui");
   gui.App.clearCache();
+
+  // If the version changed, the interanl qso file is possibly out of date so don't read it
+  g_readInternalQso = false;
 }
 
 var vers = String(gtVersion);
@@ -490,7 +491,6 @@ function initQSOdata()
 var g_offlineLayer = null;
 var g_mapsLayer = Array();
 var g_tileLayer = null;
-var g_mapControl = null;
 var g_mapView = null;
 var g_layerSources = {};
 var g_layerVectors = {};
@@ -528,8 +528,6 @@ var g_zipToCounty = {};
 var g_stateToCounty = {};
 var g_cntyToCounty = {};
 var g_us48Data = {};
-
-var g_startupFunctions = Array();
 
 var g_pskColors = {};
 g_pskColors.OOB = "888888";
@@ -863,6 +861,7 @@ function toggleOffline()
   changeMapValues();
 }
 
+// from GridTracker.html
 function ignoreMessagesToggle()
 {
   g_ignoreMessages ^= 1;
@@ -882,6 +881,7 @@ function ignoreMessagesToggle()
   }
 }
 
+// from GridTracker.html
 function toggleTime()
 {
   g_appSettings.useLocalTime ^= 1;
@@ -914,28 +914,6 @@ function userTimeString(Msec)
   if (Msec != null) dateTime = new Date(Msec);
   else dateTime = new Date();
   return dateToString(dateTime);
-}
-
-function dateToISO8601(dString, tZone)
-{
-  var retDate = "";
-  var tZone = (typeof tZone !== "undefined") ? tZone : "Z";
-  var dateParts = dString.match(/(\d{4}-\d{2}-\d{2})(\s+(\d{2}:\d{2}:\d{2}))?/);
-
-  if (dateParts !== null)
-  {
-    retDate = dateParts[1]
-    if ((typeof dateParts[3]) !== "undefined")
-    {
-      retDate += "T" + dateParts[3] + ".000" + tZone;
-    }
-    else
-    {
-      retDate += "T00:00:00.000" + tZone;
-    }
-  }
-
-  return retDate;
 }
 
 function getWpx(callsign)
@@ -1252,14 +1230,14 @@ function addDeDx(
     }
     if (details.ituz.length > 0)
     {
-      g_tracker.worked.ituz[details.ituz + band + mode] = true;
-      g_tracker.worked.ituz[details.ituz] = true;
-      g_tracker.worked.ituz[details.ituz + mode] = true;
-      g_tracker.worked.ituz[details.ituz + band] = true;
+      g_tracker.worked.ituz[details.ituz + "|" + band + mode] = true;
+      g_tracker.worked.ituz[details.ituz + "|"] = true;
+      g_tracker.worked.ituz[details.ituz + "|" + mode] = true;
+      g_tracker.worked.ituz[details.ituz + "|" + band] = true;
       if (isDigi == true)
       {
-        g_tracker.worked.ituz[details.ituz + "dg"] = true;
-        g_tracker.worked.ituz[details.ituz + band + "dg"] = true;
+        g_tracker.worked.ituz[details.ituz + "|dg"] = true;
+        g_tracker.worked.ituz[details.ituz + "|" + band + "dg"] = true;
       }
     }
     if (
@@ -1272,14 +1250,14 @@ function addDeDx(
     }
     if (details.cqz.length > 0)
     {
-      g_tracker.worked.cqz[details.cqz + band + mode] = true;
-      g_tracker.worked.cqz[details.cqz] = true;
-      g_tracker.worked.cqz[details.cqz + mode] = true;
-      g_tracker.worked.cqz[details.cqz + band] = true;
+      g_tracker.worked.cqz[details.cqz + "|" + band + mode] = true;
+      g_tracker.worked.cqz[details.cqz + "|"] = true;
+      g_tracker.worked.cqz[details.cqz + "|" + mode] = true;
+      g_tracker.worked.cqz[details.cqz + "|" + band] = true;
       if (isDigi == true)
       {
-        g_tracker.worked.cqz[details.cqz + "dg"] = true;
-        g_tracker.worked.cqz[details.cqz + band + "dg"] = true;
+        g_tracker.worked.cqz[details.cqz + "|dg"] = true;
+        g_tracker.worked.cqz[details.cqz + "|" + band + "dg"] = true;
       }
       if (isCurrentYear)
       {
@@ -1290,14 +1268,14 @@ function addDeDx(
     if (details.dxcc > 0)
     {
       var sDXCC = String(details.dxcc);
-      g_tracker.worked.dxcc[sDXCC + band + mode] = true;
-      g_tracker.worked.dxcc[sDXCC] = true;
-      g_tracker.worked.dxcc[sDXCC + mode] = true;
-      g_tracker.worked.dxcc[sDXCC + band] = true;
+      g_tracker.worked.dxcc[sDXCC + "|" + band + mode] = true;
+      g_tracker.worked.dxcc[sDXCC + "|"] = true;
+      g_tracker.worked.dxcc[sDXCC + "|" + mode] = true;
+      g_tracker.worked.dxcc[sDXCC + "|" + band] = true;
       if (isDigi == true)
       {
-        g_tracker.worked.dxcc[sDXCC + "dg"] = true;
-        g_tracker.worked.dxcc[sDXCC + band + "dg"] = true;
+        g_tracker.worked.dxcc[sDXCC + "|dg"] = true;
+        g_tracker.worked.dxcc[sDXCC + "|" + band + "dg"] = true;
       }
       if (isCurrentYear)
       {
@@ -1397,40 +1375,40 @@ function addDeDx(
       }
       if (details.ituz.length > 0)
       {
-        g_tracker.confirmed.ituz[details.ituz + band + mode] = true;
-        g_tracker.confirmed.ituz[details.ituz] = true;
-        g_tracker.confirmed.ituz[details.ituz + mode] = true;
-        g_tracker.confirmed.ituz[details.ituz + band] = true;
+        g_tracker.confirmed.ituz[details.ituz + "|" + band + mode] = true;
+        g_tracker.confirmed.ituz[details.ituz + "|"] = true;
+        g_tracker.confirmed.ituz[details.ituz + "|" + mode] = true;
+        g_tracker.confirmed.ituz[details.ituz + "|" + band] = true;
         if (isDigi == true)
         {
-          g_tracker.confirmed.ituz[details.ituz + "dg"] = true;
-          g_tracker.confirmed.ituz[details.ituz + band + "dg"] = true;
+          g_tracker.confirmed.ituz[details.ituz + "|dg"] = true;
+          g_tracker.confirmed.ituz[details.ituz + "|" + band + "dg"] = true;
         }
       }
       if (details.cqz.length > 0)
       {
-        g_tracker.confirmed.cqz[details.cqz + band + mode] = true;
-        g_tracker.confirmed.cqz[details.cqz] = true;
-        g_tracker.confirmed.cqz[details.cqz + mode] = true;
-        g_tracker.confirmed.cqz[details.cqz + band] = true;
+        g_tracker.confirmed.cqz[details.cqz + "|" + band + mode] = true;
+        g_tracker.confirmed.cqz[details.cqz + "|"] = true;
+        g_tracker.confirmed.cqz[details.cqz + "|" + mode] = true;
+        g_tracker.confirmed.cqz[details.cqz + "|" + band] = true;
         if (isDigi == true)
         {
-          g_tracker.confirmed.cqz[details.cqz + "dg"] = true;
-          g_tracker.confirmed.cqz[details.cqz + band + "dg"] = true;
+          g_tracker.confirmed.cqz[details.cqz + "|dg"] = true;
+          g_tracker.confirmed.cqz[details.cqz + "|" + band + "dg"] = true;
         }
       }
 
       if (details.dxcc > 0)
       {
         var sDXCC = String(details.dxcc);
-        g_tracker.confirmed.dxcc[sDXCC + band + mode] = true;
-        g_tracker.confirmed.dxcc[sDXCC] = true;
-        g_tracker.confirmed.dxcc[sDXCC + mode] = true;
-        g_tracker.confirmed.dxcc[sDXCC + band] = true;
+        g_tracker.confirmed.dxcc[sDXCC + "|" + band + mode] = true;
+        g_tracker.confirmed.dxcc[sDXCC + "|"] = true;
+        g_tracker.confirmed.dxcc[sDXCC + "|" + mode] = true;
+        g_tracker.confirmed.dxcc[sDXCC + "|" + band] = true;
         if (isDigi == true)
         {
-          g_tracker.confirmed.dxcc[sDXCC + "dg"] = true;
-          g_tracker.confirmed.dxcc[sDXCC + band + "dg"] = true;
+          g_tracker.confirmed.dxcc[sDXCC + "|dg"] = true;
+          g_tracker.confirmed.dxcc[sDXCC + "|" + band + "dg"] = true;
         }
       }
 
@@ -15602,10 +15580,10 @@ function searchLogForCallsign(call)
       ")</th><td>";
     for (var band in g_colorBands)
     {
-      if (String(dxcc) + g_colorBands[band] in g_tracker.worked.dxcc)
+      if (String(dxcc) + "|" + g_colorBands[band] in g_tracker.worked.dxcc)
       {
         var strike = "";
-        if (String(dxcc) + g_colorBands[band] in g_tracker.confirmed.dxcc) { strike = "text-decoration: underline overline;"; }
+        if (String(dxcc) + "|" + g_colorBands[band] in g_tracker.confirmed.dxcc) { strike = "text-decoration: underline overline;"; }
         worker +=
           "<div style='" +
           strike +
@@ -15807,7 +15785,7 @@ function mediaCheck()
 
   try
   {
-    if (fs.existsSync(g_NWappData + "internal_qso.json"))
+    if (fs.existsSync(g_NWappData + "internal_qso.json") && g_readInternalQso)
     {
       var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
 

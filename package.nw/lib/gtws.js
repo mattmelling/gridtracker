@@ -249,12 +249,13 @@ function gtChatSendStatus()
   }
 }
 
-function gtChatSendSpots(spotsObject)
+function gtChatSendSpots(spotsObject, detailsObject)
 {
   var msg = Object();
   msg.type = "o";
   msg.uuid = g_appSettings.chatUUID;
   msg.o = spotsObject;
+  msg.d = detailsObject;
   msg = JSON.stringify(msg);
   sendGtJson(msg);
 }
@@ -603,7 +604,24 @@ function gtChatStateMachine()
 
 function gtSpotMessage(jsmesg)
 {
-  addNewOAMSSpot(jsmesg.cid, jsmesg.db);
+  if (jsmesg.cid in g_gtFlagPins)
+  {
+    let frequency, band, mode;
+    if (jsmesg.ex != null)
+    {
+      frequency = Number(jsmesg.ex[0]);
+      band = Number(frequency / 1000000).formatBand();
+      mode = String(jsmesg.ex[1]);
+    }
+    else
+    {
+      frequency = g_gtFlagPins[jsmesg.cid].freq;
+      band = g_gtFlagPins[jsmesg.cid].band;
+      mode = g_gtFlagPins[jsmesg.cid].mode;
+    }
+
+    addNewOAMSSpot(jsmesg.cid, jsmesg.db, frequency, band, mode);
+  }
 }
 
 function gtLightningStrike(jsmesg)

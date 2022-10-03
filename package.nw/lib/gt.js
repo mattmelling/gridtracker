@@ -6704,8 +6704,9 @@ function handleWsjtxStatus(newMessage)
           Object.keys(g_spotCollector).length > 0
         )
         {
-          gtChatSendSpots(g_spotCollector);
+          gtChatSendSpots(g_spotCollector, g_spotDetailsCollector);
           g_spotCollector = {};
+          g_spotDetailsCollector = {};
         }
       }
 
@@ -6927,6 +6928,7 @@ function fitViewBetweenPoints(points, maxZoom = 20)
 }
 
 var g_spotCollector = {};
+var g_spotDetailsCollector = {};
 
 function handleWsjtxDecode(newMessage)
 {
@@ -7293,33 +7295,26 @@ function handleWsjtxDecode(newMessage)
 
         g_lastTraffic.unshift(traffic);
         g_lastTraffic.unshift(userTimeString(null));
-        g_lastTraffic.unshift(
-          "<hr style='border-color:#333;margin-top:0px;margin-bottom:2px;width:80%'>"
-        );
+        g_lastTraffic.unshift("<hr style='border-color:#333;margin-top:0px;margin-bottom:2px;width:80%'>");
         drawTraffic();
         lastMessageWasInfo = true;
       }
 
-      if (
-        g_appSettings.gtSpotEnable === true &&
-        g_appSettings.gtSpotEnable === true &&
-        callsign.DEcall in g_gtCallsigns
-      )
+      if (g_appSettings.gtSpotEnable === true && callsign.DEcall in g_gtCallsigns)
       {
-        if (
-          g_gtCallsigns[callsign.DEcall] in g_gtFlagPins &&
-          g_gtFlagPins[g_gtCallsigns[callsign.DEcall]].o == 1
-        ) { g_spotCollector[g_gtCallsigns[callsign.DEcall]] = callsign.RSTsent; }
+        let key = g_gtCallsigns[callsign.DEcall];
+        if (key in g_gtFlagPins && g_gtFlagPins[key].o == 1)
+        {
+          g_spotCollector[key] = callsign.RSTsent;
+          g_spotDetailsCollector[key] = [callsign.delta + newMessage.OF, callsign.mode];
+        }
       }
     }
 
     if (callsign.dxcc != -1) countryName = g_dxccToAltName[callsign.dxcc];
     if (canPath == true)
     {
-      if (
-        callsign.DXcall.indexOf("CQ") < 0 &&
-        g_appSettings.gridViewMode != 2
-      )
+      if (callsign.DXcall.indexOf("CQ") < 0 && g_appSettings.gridViewMode != 2)
       {
         // Nothing special, we know the callers grid
         if (callsign.grid != "")
@@ -7327,13 +7322,9 @@ function handleWsjtxDecode(newMessage)
           // Our msgDEcallsign is not sending a CQ.
           // Let's see if we can locate who he's talking to in our known list
           var DEcallsign = null;
-          if (
-            callsign.DXcall + newMessage.OB + newMessage.OM in
-            g_liveCallsigns
-          )
+          if (callsign.DXcall + newMessage.OB + newMessage.OM in g_liveCallsigns)
           {
-            DEcallsign =
-              g_liveCallsigns[callsign.DXcall + newMessage.OB + newMessage.OM];
+            DEcallsign = g_liveCallsigns[callsign.DXcall + newMessage.OB + newMessage.OM];
           }
           else if (callsign.DXcall in g_liveCallsigns)
           {
@@ -7385,11 +7376,7 @@ function handleWsjtxDecode(newMessage)
             }
           }
         }
-        else if (
-          g_mapSettings.qrzDxccFallback &&
-          msgDXcallsign == myDEcall &&
-          callsign.dxcc > 0
-        )
+        else if (g_mapSettings.qrzDxccFallback && msgDXcallsign == myDEcall && callsign.dxcc > 0)
         {
           // the caller is calling us, but they don't have a grid, so lookup the DXCC and show it
           var strokeColor = getQrzPathColor();
@@ -7447,13 +7434,7 @@ function handleWsjtxDecode(newMessage)
           }
         }
       }
-      else if (
-        g_mapSettings.CQhilite &&
-        msgDXcallsign.indexOf("CQ ") == 0 &&
-        callsign.grid != "" &&
-        g_appSettings.gridViewMode != 2 &&
-        pathWidthValue.value != 0
-      )
+      else if (g_mapSettings.CQhilite && msgDXcallsign.indexOf("CQ ") == 0 && callsign.grid != "" && g_appSettings.gridViewMode != 2 && pathWidthValue.value != 0)
       {
         var CCd = msgDXcallsign.replace("CQ ", "").split(" ")[0];
         if (CCd.length < 5 && !(CCd in g_pathIgnore))
@@ -7611,14 +7592,15 @@ function shapeFeature(
   feature.size = 2;
   return feature;
 }
+
 function handleWsjtxClear(newMessage)
 {
   for (var hash in g_liveCallsigns)
   {
-    if (
-      g_liveCallsigns[hash].instance == newMessage.instance ||
-      g_liveCallsigns[hash].mode == g_instances[newMessage.instance].status.MO
-    ) { delete g_liveCallsigns[hash]; }
+    if (g_liveCallsigns[hash].instance == newMessage.instance || g_liveCallsigns[hash].mode == g_instances[newMessage.instance].status.MO)
+    {
+      delete g_liveCallsigns[hash];
+    }
   }
   for (var call in g_callRoster)
   {
@@ -7634,8 +7616,8 @@ function handleWsjtxClear(newMessage)
 
 function goProcessRoster(isRealtime = false)
 {
-  var now = timeNowSec();
-  for (var call in g_callRoster)
+  let now = timeNowSec();
+  for (const call in g_callRoster)
   {
     if (now - g_callRoster[call].callObj.age > 300)
     {
@@ -7665,10 +7647,7 @@ function goProcessRoster(isRealtime = false)
 
 function handleClosed(newMessage)
 {
-  if (
-    g_activeInstance == newMessage.Id &&
-    g_instances[newMessage.Id].open == false
-  )
+  if (g_activeInstance == newMessage.Id && g_instances[newMessage.Id].open == false)
   {
     txrxdec.style.backgroundColor = "Purple";
     txrxdec.style.borderColor = "Purple";
@@ -7747,9 +7726,7 @@ function setCenterQTH()
   {
     g_appSettings.centerGridsquare = homeQTHInput.value;
     // Grab home QTH Gridsquare from Center QTH
-    var LL = squareToLatLong(homeQTHInput.value);
-
-    // panTo(ol.proj.fromLonLat([LL.lo2 - (LL.lo2 - LL.lo1) / 2, LL.la2 - ((LL.la2 - LL.la1) / 2)]));
+    let LL = squareToLatLong(homeQTHInput.value);
 
     g_map
       .getView()
@@ -8866,16 +8843,9 @@ function showDXCCsBox()
 
   Object.keys(List).forEach(function (key, i)
   {
-    var band =
-      g_appSettings.gtBandFilter == "auto"
-        ? myBand
-        : g_appSettings.gtBandFilter.length == 0
-          ? ""
-          : g_appSettings.gtBandFilter;
+    var band = g_appSettings.gtBandFilter == "auto" ? myBand : g_appSettings.gtBandFilter.length == 0 ? "" : g_appSettings.gtBandFilter;
     var unconfirmedCallsKey = new UnconfirmedCallsKey(List[key].dxcc, band);
-    if (g_unconfirmedCalls.has(unconfirmedCallsKey.key) &&
-      g_unconfirmedCalls.get(unconfirmedCallsKey.key) != unconfirmedCallsSentinel
-    )
+    if (g_unconfirmedCalls.has(unconfirmedCallsKey.key) && g_unconfirmedCalls.get(unconfirmedCallsKey.key) != unconfirmedCallsSentinel)
     {
       var onMousedown = function (e)
       {
@@ -9030,21 +9000,11 @@ function displayItemList(table, color)
 function showWPXBox()
 {
   var worker = getCurrentBandModeHTML();
-  var band =
-    g_appSettings.gtBandFilter == "auto"
-      ? myBand
-      : g_appSettings.gtBandFilter.length == 0
-        ? ""
-        : g_appSettings.gtBandFilter;
-  var mode =
-    g_appSettings.gtModeFilter == "auto"
-      ? myMode
-      : g_appSettings.gtModeFilter.length == 0
-        ? ""
-        : g_appSettings.gtModeFilter;
+  var band = g_appSettings.gtBandFilter == "auto" ? myBand : g_appSettings.gtBandFilter.length == 0 ? "" : g_appSettings.gtBandFilter;
+  var mode = g_appSettings.gtModeFilter == "auto" ? myMode : g_appSettings.gtModeFilter.length == 0 ? "" : g_appSettings.gtModeFilter;
 
-  if (mode == "Digital") mode = "dg";
-  if (mode == "Phone") mode = "ph";
+  if (mode == "Digital") { mode = "dg"; }
+  if (mode == "Phone") { mode = "ph"; }
 
   var modifier = String(band) + String(mode);
   var worked = 0;
@@ -9054,10 +9014,7 @@ function showWPXBox()
 
   for (var key in g_tracker.worked.px)
   {
-    if (
-      typeof g_tracker.worked.px[key] == "string" &&
-      key + modifier in g_tracker.worked.px
-    )
+    if (typeof g_tracker.worked.px[key] == "string" && key + modifier in g_tracker.worked.px)
     {
       List[key] = key;
     }
@@ -9065,10 +9022,7 @@ function showWPXBox()
 
   for (var key in g_tracker.confirmed.px)
   {
-    if (
-      typeof g_tracker.confirmed.px[key] == "string" &&
-      key + modifier in g_tracker.confirmed.px
-    )
+    if (typeof g_tracker.confirmed.px[key] == "string" && key + modifier in g_tracker.confirmed.px)
     {
       ListConfirmed[key] = key;
     }
@@ -16096,47 +16050,43 @@ function pskSpotResults(buffer, flag)
 
 var g_oamsSpotTimeout = null;
 
-function addNewOAMSSpot(cid, db)
+function addNewOAMSSpot(cid, db, frequency, band, mode)
 {
-  if (cid in g_gtFlagPins)
+  if (g_oamsSpotTimeout !== null)
   {
-    if (g_oamsSpotTimeout !== null)
-    {
-      nodeTimers.clearTimeout(g_oamsSpotTimeout);
-      g_oamsSpotTimeout = null;
-    }
-    var report;
-    var call = g_gtFlagPins[cid].call;
-    var mode = g_gtFlagPins[cid].mode;
-    var grid = g_gtFlagPins[cid].grid.substr(0, 6);
-    var band = g_gtFlagPins[cid].band;
-    var hash = call + mode + band + grid.substr(0, 4);
-
-    if (hash in g_receptionReports.spots)
-    {
-      report = g_receptionReports.spots[hash];
-    }
-    else
-    {
-      report = g_receptionReports.spots[hash] = {};
-      report.call = call;
-      report.band = band;
-      report.grid = grid;
-      report.mode = mode;
-    }
-
-    report.dxcc = g_gtFlagPins[cid].dxcc;
-    report.when = timeNowSec();
-    report.snr = Number(db);
-    report.freq = g_gtFlagPins[cid].freq;
-
-    var SNR = parseInt((parseInt(report.snr) + 25) * 9);
-    if (SNR > 255) SNR = 255;
-    if (SNR < 0) SNR = 0;
-    report.color = SNR;
-
-    g_oamsSpotTimeout = nodeTimers.setTimeout(redrawSpots, 500);
+    nodeTimers.clearTimeout(g_oamsSpotTimeout);
+    g_oamsSpotTimeout = null;
   }
+
+  let report;
+  let call = g_gtFlagPins[cid].call;
+  let grid = g_gtFlagPins[cid].grid.substr(0, 6);
+  let hash = call + mode + band + grid.substr(0, 4);
+
+  if (hash in g_receptionReports.spots)
+  {
+    report = g_receptionReports.spots[hash];
+  }
+  else
+  {
+    report = g_receptionReports.spots[hash] = {};
+    report.call = call;
+    report.band = band;
+    report.grid = grid;
+    report.mode = mode;
+  }
+
+  report.dxcc = g_gtFlagPins[cid].dxcc;
+  report.when = timeNowSec();
+  report.snr = Number(db);
+  report.freq = frequency;
+
+  let SNR = parseInt((parseInt(report.snr) + 25) * 9);
+  if (SNR > 255) SNR = 255;
+  if (SNR < 0) SNR = 0;
+  report.color = SNR;
+
+  g_oamsSpotTimeout = nodeTimers.setTimeout(redrawSpots, 250);
 }
 
 function spotFeature(center)

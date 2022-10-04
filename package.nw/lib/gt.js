@@ -6502,7 +6502,6 @@ function handleWsjtxStatus(newMessage)
         nodeTimers.clearInterval(g_pskBandActivityTimerHandle);
         g_pskBandActivityTimerHandle = null;
       }
-      removePaths();
     }
     if (g_lastMode != myMode)
     {
@@ -6517,6 +6516,7 @@ function handleWsjtxStatus(newMessage)
     if (g_pskBandActivityTimerHandle == null) pskGetBandActivity();
     if (bandChange || modeChange)
     {
+      removePaths();
       goProcessRoster();
       redrawGrids();
       redrawSpots();

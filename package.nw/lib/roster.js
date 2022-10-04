@@ -318,14 +318,40 @@ function hashMaker(start, callObj, reference)
   return "";
 }
 
+var rosterTimeout = null;
+var rosterFocus = false;
+
+function rosterInFocus()
+{
+  rosterFocus = true;
+}
+
+function rosterNoFocus()
+{
+  rosterFocus = false;
+}
+
 function processRoster(roster)
 {
   callRoster = roster;
-  viewRoster();
+  if (rosterTimeout != null)
+  {
+    nodeTimers.clearTimeout(rosterTimeout);
+  }
+
+  if (rosterFocus)
+  {
+    rosterTimeout = nodeTimers.setTimeout(viewRoster, 1500);
+  }
+  else
+  {
+    viewRoster();
+  }
 }
 
 function viewRoster()
 {
+  rosterTimeout = null;
   let rosterSettings = prepareRosterSettings();
   processRosterFiltering(callRoster, rosterSettings);
   processRosterHunting(callRoster, rosterSettings, g_awardTracker);

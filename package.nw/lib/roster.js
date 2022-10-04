@@ -329,6 +329,12 @@ function rosterInFocus()
 function rosterNoFocus()
 {
   rosterFocus = false;
+  if (rosterTimeout != null)
+  {
+    nodeTimers.clearTimeout(rosterTimeout);
+    rosterTimeout = null;
+    viewRoster();
+  }
 }
 
 function processRoster(roster)
@@ -337,6 +343,7 @@ function processRoster(roster)
   if (rosterTimeout != null)
   {
     nodeTimers.clearTimeout(rosterTimeout);
+    rosterTimeout = null;
   }
 
   if (rosterFocus)

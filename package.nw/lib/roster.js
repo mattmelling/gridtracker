@@ -323,7 +323,10 @@ var rosterFocus = false;
 
 function rosterInFocus()
 {
-  rosterFocus = true;
+  if (window.opener.g_appSettings.rosterDelayOnFocus)
+  {
+    rosterFocus = true;
+  }
 }
 
 function rosterNoFocus()
@@ -348,7 +351,7 @@ function processRoster(roster)
 
   if (rosterFocus)
   {
-    rosterTimeout = nodeTimers.setTimeout(viewRoster, 1500);
+    rosterTimeout = nodeTimers.setTimeout(viewRoster, window.opener.g_appSettings.rosterDelayTime);
   }
   else
   {

@@ -2974,6 +2974,33 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </table>
           </div>
           <br />
+          <div class="mapItem">
+            <table align="center">
+              <tr align="center">
+                <td align="center">Call Roster Decode Delay On Focus</td>
+              </tr>
+              <td colspan="2">
+                <input type="checkbox" id="rosterDelayOnFocus" onchange="rosterDelayOnFocusValueChanged(this);" />
+              </td>
+              <tr align="center">
+                <td align="center" id="rosterDelayTimeTd">1500ms</td>
+              </tr>
+              <tr align="center">
+                <td colspan="2">
+                  <input
+                    type="range"
+                    min="50"
+                    max="5000"
+                    value="1500"
+                    step="10"
+                    class="slider"
+                    id="rosterDelayTime"
+                    oninput="changeRosterDelayTime()"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
           <div class="mapItem" id="haltTXDiv" style="display: none">
             <table align="center">
               <tr align="center">

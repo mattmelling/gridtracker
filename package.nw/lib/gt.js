@@ -12837,7 +12837,10 @@ function loadMapSettings()
   haltAllOnTxValue.checked = g_mapSettings.haltAllOnTx;
   strikesAlert.value = g_mapSettings.strikesAlert;
   clearRosterOnBandChange.checked = g_appSettings.clearRosterOnBandChange;
-
+  rosterDelayOnFocus.checked = g_appSettings.rosterDelayOnFocus;
+  rosterDelayTime.value = g_appSettings.rosterDelayTime;
+  rosterDelayTimeTd.innerHTML = rosterDelayTime.value + "ms";
+  
   setStrikesButton();
 
   trafficDecode.checked = g_mapSettings.trafficDecode;
@@ -14281,6 +14284,19 @@ function loadLookupDetails()
 function clearRosterOnBandChangeValueChanged(what)
 {
   g_appSettings.clearRosterOnBandChange = clearRosterOnBandChange.checked;
+  saveAppSettings();
+}
+
+function rosterDelayOnFocusValueChanged(what)
+{
+  g_appSettings.rosterDelayOnFocus = rosterDelayOnFocus.checked;
+  saveAppSettings();
+}
+
+function changeRosterDelayTime()
+{
+  g_appSettings.rosterDelayTime = rosterDelayTime.value;
+  rosterDelayTimeTd.innerHTML = rosterDelayTime.value + "ms";
 }
 
 function lookupValueChanged(what)

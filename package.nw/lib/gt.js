@@ -1149,7 +1149,7 @@ function addDeDx(
       if (details.px) { details.zone = Number(details.px.charAt(details.px.length - 1)); }
     }
 
-    let fourGrid = details.grid.substr(0, 4);
+    var fourGrid = details.grid.substr(0, 4);
     if (
       details.state == null &&
       isKnownCallsignUSplus(finalDxcc) &&
@@ -2539,7 +2539,7 @@ function insertMessageInRoster(
     g_rosterUpdateTimer = null;
   }
 
-  let now = timeNowSec();
+  var now = timeNowSec();
   if (!(hash in g_callRoster))
   {
     g_callRoster[hash] = {};
@@ -3948,13 +3948,13 @@ function mouseOverDataItem(mouseEvent, fromHover)
 
   g_lastDataGridUp = mouseEvent;
 
-  let isFlag = false;
-  let callListLength = createTooltTipTable(mouseEvent);
-  let positionInfo = myTooltip.getBoundingClientRect();
-  let windowWidth = window.innerWidth;
-  let top = 0;
-  let noRoomLeft = false;
-  let noRoomRight = false;
+  var isFlag = false;
+  var callListLength = createTooltTipTable(mouseEvent);
+  var positionInfo = myTooltip.getBoundingClientRect();
+  var windowWidth = window.innerWidth;
+  var top = 0;
+  var noRoomLeft = false;
+  var noRoomRight = false;
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
@@ -3984,11 +3984,11 @@ function mouseOverDataItem(mouseEvent, fromHover)
 
 function mouseMoveDataItem(mouseEvent)
 {
-  let positionInfo = myTooltip.getBoundingClientRect();
-  let windowWidth = window.innerWidth;
-  let top = 0;
-  let noRoomLeft = false;
-  let noRoomRight = false;
+  var positionInfo = myTooltip.getBoundingClientRect();
+  var windowWidth = window.innerWidth;
+  var top = 0;
+  var noRoomLeft = false;
+  var noRoomRight = false;
   if (
     typeof mouseEvent.spot != "undefined" &&
     g_receptionReports.spots[mouseEvent.spot].bearing > 180
@@ -4152,12 +4152,12 @@ function squareToLatLong(qth)
 
 function iconFeature(center, iconObj, zIndex)
 {
-  let feature = new ol.Feature({
+  var feature = new ol.Feature({
     geometry: new ol.geom.Point(center),
     name: "pin"
   });
 
-  let iconStyle = new ol.style.Style({
+  var iconStyle = new ol.style.Style({
     zIndex: zIndex,
     image: iconObj
   });
@@ -5399,10 +5399,10 @@ function toggleStrikeGlobal()
   g_mapSettings.strikesGlobal = g_mapSettings.strikesGlobal == false;
   saveMapSettings();
 
-  let msg = "Local Strikes";
+  var msg = "Local Strikes";
   if (g_mapSettings.strikesGlobal == true) msg = "Global Strikes";
 
-  let worker =
+  var worker =
     "<font color='yellow'>Strike Distance Changed<br/>" + msg + "</font>";
   if (g_mapSettings.strikes == false) { worker += "<br/><font color='red'>Detection is not enabled!</font>"; }
   addLastTraffic(worker);
@@ -5412,10 +5412,10 @@ function toggleStrikeGlobal()
 
 function handleStrike(strike)
 {
-  let index = Date.now();
+  var index = Date.now();
   while (index in g_bolts) index++;
 
-  let inRange = true;
+  var inRange = true;
 
   if (myRawGrid.length < 4 || Math.abs(strike.o - g_myLon) > g_strikeRange) inRange = false;
 
@@ -5439,7 +5439,7 @@ function handleStrike(strike)
   {
     playStrikeAlert();
 
-    let dist =
+    var dist =
       parseInt(
         MyCircle.distance(
           g_myLat,
@@ -5451,12 +5451,12 @@ function handleStrike(strike)
       ).toLocaleString() +
       " " +
       distanceUnit.value.toLowerCase();
-    let azim =
+    var azim =
       parseInt(
         MyCircle.bearing(g_myLat, g_myLon, strike.a, strike.o)
       ).toLocaleString() + "&deg;";
 
-    let worker =
+    var worker =
       "<font style='color:yellow;font-weight:bold'>Lighting Strike Detected!</font><br/>";
     worker +=
       "<font style='color:white'>" + userTimeString(null) + "</font><br/>";
@@ -5494,12 +5494,12 @@ function initMap()
 
   if (g_maps)
   {
-    let saveSettings = false;
+    var saveSettings = false;
     g_maps = Object.keys(g_maps).sort().reduce((obj, key) => { obj[key] = g_maps[key]; return obj; }, {});
     
     if (typeof Number(g_mapSettings.mapIndex) == "number")
     {
-      let foundKey = null;
+      var foundKey = null;
       for (const key in g_maps)
       {
         if (g_maps[key].oldIndex == g_mapSettings.mapIndex)
@@ -5518,7 +5518,7 @@ function initMap()
     
     if (typeof Number(g_mapSettings.nightMapIndex) == "number")
     {
-      let foundKey = null;
+      var foundKey = null;
       for (const key in g_maps)
       {
         if (g_maps[key].oldIndex == g_mapSettings.nightMapIndex)
@@ -5541,7 +5541,7 @@ function initMap()
     for (const key in g_maps)
     {
       g_mapsLayer[key] = new ol.source.XYZ(g_maps[key]);
-      let option = document.createElement("option");
+      var option = document.createElement("option");
       option.value = key;
       option.text = key;
       mapSelect.appendChild(option);
@@ -6911,17 +6911,17 @@ var g_spotDetailsCollector = {};
 function handleWsjtxDecode(newMessage)
 {
   if (g_ignoreMessages == 1 || g_map == null) return;
-  let didAlert = false;
-  let didCustomAlert = false;
-  let validQTH = false;
-  let CQ = false;
-  let DEDX = false;
-  let RR73 = false;
-  let msgDEcallsign = "";
-  let msgDXcallsign = "";
-  let theirQTH = "";
-  let countryName = "";
-  let newF;
+  var didAlert = false;
+  var didCustomAlert = false;
+  var validQTH = false;
+  var CQ = false;
+  var DEDX = false;
+  var RR73 = false;
+  var msgDEcallsign = "";
+  var msgDXcallsign = "";
+  var theirQTH = "";
+  var countryName = "";
+  var newF;
   if (newMessage.OF > 0)
   {
     newF = Number((newMessage.OF + newMessage.DF) / 1000).formatMhz(3, 3);
@@ -6930,12 +6930,12 @@ function handleWsjtxDecode(newMessage)
   {
     newF = newMessage.DF;
   }
-  let theTimeStamp =
+  var theTimeStamp =
     timeNowSec() - (timeNowSec() % 86400) + parseInt(newMessage.TM / 1000);
-  let messageColor = "white";
+  var messageColor = "white";
 
   // Break up the decoded message
-  let decodeWords = newMessage.Msg.split(" ").slice(0, 5);
+  var decodeWords = newMessage.Msg.split(" ").slice(0, 5);
   while (decodeWords[decodeWords.length - 1] == "") decodeWords.pop();
 
   if (decodeWords.length > 1 && newMessage.Msg.indexOf("<...>") == -1)
@@ -6948,13 +6948,13 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    let rect = null;
+    var rect = null;
     // Grab the last word in the decoded message
-    let qth = decodeWords[decodeWords.length - 1].trim();
+    var qth = decodeWords[decodeWords.length - 1].trim();
     if (qth.length == 4)
     {
-      let LETTERS = qth.substr(0, 2);
-      let NUMBERS = qth.substr(2, 2);
+      var LETTERS = qth.substr(0, 2);
+      var NUMBERS = qth.substr(2, 2);
       if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
       {
         theirQTH = LETTERS + NUMBERS;
@@ -7004,9 +7004,9 @@ function handleWsjtxDecode(newMessage)
       RR73 = true;
     }
 
-    let callsign = null;
+    var callsign = null;
 
-    let hash = msgDEcallsign + newMessage.OB + newMessage.OM;
+    var hash = msgDEcallsign + newMessage.OB + newMessage.OM;
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
 
     if (theirQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
@@ -7018,7 +7018,7 @@ function handleWsjtxDecode(newMessage)
       }
     }
 
-    let canPath = false;
+    var canPath = false;
     if (
       (g_appSettings.gtBandFilter.length == 0 ||
         (g_appSettings.gtBandFilter == "auto" && newMessage.OB == myBand) ||
@@ -7219,8 +7219,8 @@ function handleWsjtxDecode(newMessage)
         }
         else if (callsign.DEcall in g_pota.callSchedule)
         {
-          let now = Date.now();
-          for (let i in g_pota.callSchedule[callsign.DEcall])
+          var now = Date.now();
+          for (var i in g_pota.callSchedule[callsign.DEcall])
           {
             if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start)
             {
@@ -7280,7 +7280,7 @@ function handleWsjtxDecode(newMessage)
 
       if (g_appSettings.gtSpotEnable === true && callsign.DEcall in g_gtCallsigns)
       {
-        let key = g_gtCallsigns[callsign.DEcall];
+        var key = g_gtCallsigns[callsign.DEcall];
         if (key in g_gtFlagPins && g_gtFlagPins[key].o == 1)
         {
           g_spotCollector[key] = callsign.RSTsent;
@@ -7594,7 +7594,7 @@ function handleWsjtxClear(newMessage)
 
 function goProcessRoster(isRealtime = false)
 {
-  let now = timeNowSec();
+  var now = timeNowSec();
   for (const call in g_callRoster)
   {
     if (now - g_callRoster[call].callObj.age > 300)
@@ -7704,7 +7704,7 @@ function setCenterQTH()
   {
     g_appSettings.centerGridsquare = homeQTHInput.value;
     // Grab home QTH Gridsquare from Center QTH
-    let LL = squareToLatLong(homeQTHInput.value);
+    var LL = squareToLatLong(homeQTHInput.value);
 
     g_map
       .getView()
@@ -13006,7 +13006,7 @@ function changeMapValues()
 
 function setLegendColor(name, newColor)
 {
-  let legendBox = document.getElementById("LegendDiv" + name);
+  var legendBox = document.getElementById("LegendDiv" + name);
   legendBox.style.backgroundColor = newColor;
   legendBox.style.color = pickTextColorBasedOnBgColorAdvanced(newColor, "#EEEEEE", "#222222");
 }
@@ -13018,7 +13018,7 @@ function setLegendGrid(name, newColor)
 
 function setLegendAndGridSettings()
 {
-  for (let key in g_legendColors)
+  for (var key in g_legendColors)
   {
     setLegendColor(key, g_legendColors[key]);
     setLegendGrid(key, g_legendColors[key]);
@@ -13027,7 +13027,7 @@ function setLegendAndGridSettings()
 
 function resetLegendColors()
 {
-  for (let key in def_legendColors)
+  for (var key in def_legendColors)
   {
     g_legendColors[key] = def_legendColors[key];
   }
@@ -13040,9 +13040,9 @@ function resetLegendColors()
 var g_redrawFromLegendTimeoutHandle = null;
 function changeLegendColor(source)
 {
-  let newColor = source.value;
+  var newColor = source.value;
 
-  let name = source.id.replace("gridValue", "");
+  var name = source.id.replace("gridValue", "");
 
   setLegendColor(name, newColor);
   g_legendColors[name] = newColor;
@@ -15055,7 +15055,7 @@ function cacheLookupObject(lookup, gridPass, cacheable = false)
 
   if (lookup.hasOwnProperty("state") && lookup.hasOwnProperty("county"))
   {
-    let foundCounty = false;
+    var foundCounty = false;
 
     if (lookup.cnty == null)
     {
@@ -15283,7 +15283,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
           distanceUnit.value
         ) * MyCircle.validateRadius(distanceUnit.value)
       ) + distanceUnit.value.toLowerCase() + "</td></tr>";
-    let bearing = parseInt(MyCircle.bearing(g_myLat, g_myLon, Number(lookup.lat), Number(lookup.lon)));
+    var bearing = parseInt(MyCircle.bearing(g_myLat, g_myLon, Number(lookup.lat), Number(lookup.lon)));
     worker += "<tr><td>Azimuth</td><td style='color:yellow'>" + bearing + "&deg;</td></tr>";
   }
   worker += makeRow("Grid", lookup, "grid", true);
@@ -16039,10 +16039,10 @@ function addNewOAMSSpot(cid, db, frequency, band, mode)
     g_oamsSpotTimeout = null;
   }
 
-  let report;
-  let call = g_gtFlagPins[cid].call;
-  let grid = g_gtFlagPins[cid].grid.substr(0, 6);
-  let hash = call + mode + band + grid.substr(0, 4);
+  var report;
+  var call = g_gtFlagPins[cid].call;
+  var grid = g_gtFlagPins[cid].grid.substr(0, 6);
+  var hash = call + mode + band + grid.substr(0, 4);
 
   if (hash in g_receptionReports.spots)
   {
@@ -16062,7 +16062,7 @@ function addNewOAMSSpot(cid, db, frequency, band, mode)
   report.snr = Number(db);
   report.freq = frequency;
 
-  let SNR = parseInt((parseInt(report.snr) + 25) * 9);
+  var SNR = parseInt((parseInt(report.snr) + 25) * 9);
   if (SNR > 255) SNR = 255;
   if (SNR < 0) SNR = 0;
   report.color = SNR;
@@ -16176,25 +16176,25 @@ function createSpot(report, key, fromPoint, addToLayer = true)
 
 function redrawSpots()
 {
-  let shouldSave = false;
-  let now = timeNowSec();
+  var shouldSave = false;
+  var now = timeNowSec();
   g_spotTotalCount = 0;
   g_layerSources["psk-spots"].clear();
   g_layerSources["psk-flights"].clear();
   g_layerSources["psk-hop"].clear();
   g_layerSources["psk-heat"].clear();
 
-  let fromPoint = getPoint(myRawGrid);
+  var fromPoint = getPoint(myRawGrid);
 
   if (g_receptionSettings.mergeSpots == false)
   {
-    let spot = iconFeature(fromPoint, g_gtFlagIcon, 100);
+    var spot = iconFeature(fromPoint, g_gtFlagIcon, 100);
 
     g_layerSources["psk-spots"].addFeature(spot);
     g_layerSources["psk-heat"].addFeature(spot);
   }
 
-  for (let key in g_receptionReports.spots)
+  for (var key in g_receptionReports.spots)
   {
     report = g_receptionReports.spots[key];
 

@@ -326,16 +326,11 @@ function rosterInFocus()
   if (window.opener.g_appSettings.rosterDelayOnFocus)
   {
     rosterFocus = true;
-    RosterTable.style.cursor = "crosshair";
   }
 }
 
 function rosterNoFocus()
 {
-  if (rosterFocus)
-  {
-    RosterTable.style.cursor = "auto";
-  }
   rosterFocus = false;
   if (rosterTimeout != null)
   {
@@ -357,6 +352,7 @@ function processRoster(roster)
   if (rosterFocus)
   {
     rosterTimeout = nodeTimers.setTimeout(viewRoster, window.opener.g_appSettings.rosterDelayTime);
+    rosterDelayDiv.style.display = "inline-block";
   }
   else
   {
@@ -367,6 +363,7 @@ function processRoster(roster)
 function viewRoster()
 {
   rosterTimeout = null;
+  rosterDelayDiv.style.display = "none";
   let rosterSettings = prepareRosterSettings();
   processRosterFiltering(callRoster, rosterSettings);
   processRosterHunting(callRoster, rosterSettings, g_awardTracker);

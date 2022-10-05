@@ -8693,7 +8693,7 @@ function showDXCCsBox()
   var ListNotWorked = {};
   for (var key in g_worldGeoData)
   {
-    if (key != -1)
+    if (key != -1 && Number(g_worldGeoData[key].dxcc) > 0)
     {
       if (g_worldGeoData[key].worked == true)
       {
@@ -9680,16 +9680,19 @@ function renderStatsBox()
         }
       }
 
-      if (!(g_dxccToAltName[finalDxcc] in worldGeoData)) { worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject(); }
+      if (finalDxcc > 0)
+      {
+        if (!(g_dxccToAltName[finalDxcc] in worldGeoData)) { worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject(); }
 
-      workObject(
-        worldGeoData[g_dxccToAltName[finalDxcc]],
-        false,
-        band,
-        mode,
-        type,
-        didConfirm
-      );
+        workObject(
+          worldGeoData[g_dxccToAltName[finalDxcc]],
+          false,
+          band,
+          mode,
+          type,
+          didConfirm
+        );
+      }
 
       if (finalGrid.length > 0)
       {

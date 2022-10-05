@@ -1,6 +1,6 @@
 function renderCompactRosterHeaders()
 {
-  return "<div id=\"buttonsDiv\" style=\"margin-left:0px;white-space:normal;\">";
+  return "<div id=\"buttonsDiv\" style=\"margin-left:0px;white-space:normal;\" onmouseenter='rosterInFocus()' onmouseleave='rosterNoFocus()'>";
 }
 
 function renderCompactRosterRow(callObj)

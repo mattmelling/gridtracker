@@ -326,11 +326,16 @@ function rosterInFocus()
   if (window.opener.g_appSettings.rosterDelayOnFocus)
   {
     rosterFocus = true;
+    RosterTable.style.cursor = "crosshair";
   }
 }
 
 function rosterNoFocus()
 {
+  if (rosterFocus)
+  {
+    RosterTable.style.cursor = "auto";
+  }
   rosterFocus = false;
   if (rosterTimeout != null)
   {

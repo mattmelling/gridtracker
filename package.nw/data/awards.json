@@ -9685,7 +9685,7 @@
           ],
           "cont": "EU",
           "count": [
-            67
+            66
           ],
           "endorse": [
             "Mixed"
@@ -9699,6 +9699,75 @@
         },
         "sponsor": "QRZ",
         "tooltip": "Master of Europe"
+      },
+      "MRCAS": {
+        "name": "MRCAS - Master of Asia",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "cont": "AS",
+          "count": [
+            54
+          ],
+          "endorse": [
+            "Mixed"
+          ],
+          "mode": [
+            "Mixed",
+            "Digital",
+            "Phone"
+          ],
+          "type": "dxcc"
+        },
+        "sponsor": "QRZ",
+        "tooltip": "Master of Asia"
+      },
+      "MRCAF": {
+        "name": "MRCAF - Master of Africa",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "cont": "AF",
+          "count": [
+            76
+          ],
+          "endorse": [
+            "Mixed"
+          ],
+          "mode": [
+            "Mixed",
+            "Digital",
+            "Phone"
+          ],
+          "type": "dxcc"
+        },
+        "sponsor": "QRZ",
+        "tooltip": "Master of Africa"
+      },
+      "MRCNA": {
+        "name": "MRCNA - Master of North America",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "cont": "NA",
+          "count": [
+            49
+          ],
+          "endorse": [
+            "Mixed"
+          ],
+          "mode": [
+            "Mixed",
+            "Digital",
+            "Phone"
+          ],
+          "type": "dxcc"
+        },
+        "sponsor": "QRZ",
+        "tooltip": "Master of North America"
       },
       "MRCSA": {
         "name": "MRCSA - Master of South America",
@@ -9722,6 +9791,29 @@
         },
         "sponsor": "QRZ",
         "tooltip": "Master of South America"
+      },
+      "MRCOC": {
+        "name": "MRCOC - Master of Oceania",
+        "rule": {
+          "band": [
+            "Mixed"
+          ],
+          "cont": "OC",
+          "count": [
+            60
+          ],
+          "endorse": [
+            "Mixed"
+          ],
+          "mode": [
+            "Mixed",
+            "Digital",
+            "Phone"
+          ],
+          "type": "dxcc"
+        },
+        "sponsor": "QRZ",
+        "tooltip": "Master of Oceania"
       },
       "USA": {
         "name": "USA - United States",

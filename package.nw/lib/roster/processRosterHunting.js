@@ -778,7 +778,13 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       // Just in case, don't alert if we worked this callsign alread
       if (didWork && shouldAlert) shouldAlert = false;
 
-      callObj.shouldAlert = shouldAlert;
+      // callObj.shouldAlert ||= shouldAlert; // eslint doesn't like this, why?
+      
+      // If alert was set (award tracker), don't clear it
+      if (!callObj.shouldAlert)
+      {
+        callObj.shouldAlert = shouldAlert;
+      }
 
       callObj.style = colorObject;
 

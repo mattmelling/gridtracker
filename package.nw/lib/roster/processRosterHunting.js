@@ -296,8 +296,8 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         // Hunting for DXCC
         if (huntDXCC.checked)
         {
-          let hash = String(callObj.dxcc) + workHashSuffix;
-          let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + layeredHashSuffix)
+          let hash = String(callObj.dxcc) + "|" + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + "|" + layeredHashSuffix)
 
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.dxcc))
           {
@@ -508,8 +508,8 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
 
           for (const index in callObj.cqza)
           {
-            let hash = callObj.cqza[index] + workHashSuffix;
-            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + layeredHashSuffix);
+            let hash = callObj.cqza[index] + "|" + workHashSuffix;
+            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + "|" + layeredHashSuffix);
             let marathonHash = huntMarathon.checked && `${callObj.cqza[index]}-${currentYear}`;
 
             if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.cqz) huntFound++;
@@ -590,8 +590,8 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
 
           for (const index in callObj.ituza)
           {
-            let hash = callObj.ituza[index] + workHashSuffix;
-            let layeredHash = rosterSettings.layeredMode && (callObj.ituza[index] + layeredHashSuffix)
+            let hash = callObj.ituza[index] + "|" + workHashSuffix;
+            let layeredHash = rosterSettings.layeredMode && (callObj.ituza[index] + "|" + layeredHashSuffix)
 
             if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.ituz) huntFound++;
             if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.ituz) layeredFound++;

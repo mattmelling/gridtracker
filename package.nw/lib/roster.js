@@ -645,10 +645,10 @@ function updateAwardList(target = null)
       g_awards[award.sponsor].sponsor +
       ")\n";
     tooltip += toTitleCase(award.test.qsl_req) + " QSO\n";
-    for (let mode in award.comp.counts)
+    for (const mode in award.comp.counts)
     {
       tooltip += mode + "\n";
-      for (let count in award.comp.counts[mode])
+      for (const count in award.comp.counts[mode])
       {
         endorseTotal++;
         if (award.comp.counts[mode][count].per == 100)
@@ -670,7 +670,7 @@ function updateAwardList(target = null)
         let wrk = "";
         if (Object.keys(award.comp.endorse).length > 0)
         {
-          for (let band in award.comp.endorse[mode])
+          for (const band in award.comp.endorse[mode])
           {
             endorseTotal++;
             if (award.comp.endorse[mode][band][count] == true)
@@ -797,7 +797,7 @@ function createAwardSelector(cell, target, value, forObject)
   selector.style.padding = "1px";
   if (selector.disabled) selector.style.cursor = "auto";
   selector.addEventListener("change", awardValueChanged);
-  for (let opt in forObject)
+  for (const opt in forObject)
   {
     let option = document.createElement("option");
     option.value = forObject[opt];
@@ -871,7 +871,7 @@ function setVisual()
   }
   else
   {
-    for (let key in g_rosterSettings.wanted)
+    for (const key in g_rosterSettings.wanted)
     {
       if (document.getElementById(key))
       { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
@@ -1091,7 +1091,7 @@ function valuesChanged()
   writeRosterSettings();
 
   g_scriptReport = Object();
-  for (let callHash in window.opener.g_callRoster)
+  for (const callHash in window.opener.g_callRoster)
   { window.opener.g_callRoster[callHash].callObj.alerted = false; }
   window.opener.goProcessRoster();
 }
@@ -1151,7 +1151,7 @@ function callsignResult(buffer, flag)
   r_currentUSState = flag;
 
   g_currentUSCallsigns = Object();
-  for (let key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
+  for (const key in rawData.c) g_currentUSCallsigns[rawData.c[key]] = true;
 
   window.opener.goProcessRoster();
 }
@@ -1209,7 +1209,7 @@ function initDXCCSelector()
   });
   let newSelect = document.getElementById("DXCCsSelect");
 
-  for (let i in items)
+  for (const i in items)
   {
     let key = items[i];
 
@@ -1237,7 +1237,7 @@ function manifestResult(buffer, flag)
   r_callsignManifest = JSON.parse(buffer);
   let newSelect = document.getElementById("stateSelect");
 
-  for (let key in r_callsignManifest.cnt)
+  for (const key in r_callsignManifest.cnt)
   {
     let option = document.createElement("option");
     if (window.opener.g_enums[key])
@@ -1545,7 +1545,7 @@ function init()
 
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
-  for (let key in g_rosterSettings.wanted)
+  for (const key in g_rosterSettings.wanted)
   {
     if (document.getElementById(key))
     { document.getElementById(key).checked = g_rosterSettings.wanted[key]; }
@@ -1724,7 +1724,7 @@ function init()
   item = new nw.MenuItem({ type: "separator" });
   g_menu.append(item);
 
-  for (let columnIndex in g_rosterSettings.columnOrder)
+  for (const columnIndex in g_rosterSettings.columnOrder)
   {
     let key = g_rosterSettings.columnOrder[columnIndex];
     if (key != "Callsign")
@@ -2359,7 +2359,7 @@ function processAward(awardName)
 
   g_awardTracker[awardName].stat = {};
 
-  for (let i in window.opener.g_QSOhash)
+  for (const i in window.opener.g_QSOhash)
   {
     let obj = window.opener.g_QSOhash[i];
 
@@ -2592,7 +2592,7 @@ function scoreAdxcc(award, obj)
 
 function testAdxcc(award, obj, baseHash)
 {
-  if (String(obj.dxcc) + baseHash in g_tracker[award.test.look].dxcc)
+  if (String(obj.dxcc) + "|" + baseHash in g_tracker[award.test.look].dxcc)
   {
     return false;
   }
@@ -2939,7 +2939,7 @@ function scoreApxa(award, obj)
   if (obj.px)
   {
     let test = g_awards[award.sponsor].awards[award.name];
-    for (let i in test.rule.pxa)
+    for (const i in test.rule.pxa)
     {
       if (test.rule.pxa[i].indexOf(obj.px) > -1)
       {
@@ -2962,7 +2962,7 @@ function testApxa(award, obj, baseHash)
   if (obj.px)
   {
     let test = g_awards[award.sponsor].awards[award.name];
-    for (let i in test.rule.pxa)
+    for (const i in test.rule.pxa)
     {
       if (test.rule.pxa[i].indexOf(obj.px) > -1)
       {
@@ -2984,9 +2984,9 @@ function scoreAsfx(award, obj)
 {
   let test = g_awards[award.sponsor].awards[award.name];
   let suf = obj.DEcall.replace(obj.px, "");
-  for (let i in test.rule.sfx)
+  for (const i in test.rule.sfx)
   {
-    for (let s in test.rule.sfx[i])
+    for (const s in test.rule.sfx[i])
     {
       if (suf.indexOf(test.rule.sfx[i][s]) == 0)
       {
@@ -3009,9 +3009,9 @@ function testAsfx(award, obj, baseHash)
 {
   let test = g_awards[award.sponsor].awards[award.name];
   let suf = obj.DEcall.replace(obj.px, "");
-  for (let i in test.rule.sfx)
+  for (const i in test.rule.sfx)
   {
-    for (let s in test.rule.sfx[i])
+    for (const s in test.rule.sfx[i])
     {
       if (suf.indexOf(test.rule.sfx[i][s]) == 0)
       {
@@ -3085,7 +3085,7 @@ function scoreAdxcc2band(award, obj)
 
 function testAdxcc2band(award, obj, baseHash)
 {
-  if (String(obj.dxcc) + baseHash in g_tracker[award.test.look].dxcc)
+  if (String(obj.dxcc) + "|" + baseHash in g_tracker[award.test.look].dxcc)
   {
     return false;
   }
@@ -3114,9 +3114,9 @@ function testAcqz(award, obj, baseHash)
   if (obj.cqza)
   {
     let x = 0;
-    for (let z in obj.cqza)
+    for (const z in obj.cqza)
     {
-      if (obj.cqza[z] + baseHash in g_tracker[award.test.look].cqz) x++;
+      if (obj.cqza[z] + "|" + baseHash in g_tracker[award.test.look].cqz) x++;
     }
     if (obj.cqza.length == x) return false;
   }
@@ -3129,9 +3129,9 @@ function scoreAnumsfx(award, obj)
   let px = obj.px.substr(0, obj.px.length - 1);
   let suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (let i in test.rule.numsfx)
+  for (const i in test.rule.numsfx)
   {
-    for (let s in test.rule.numsfx[i])
+    for (const s in test.rule.numsfx[i])
     {
       if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
       {
@@ -3156,9 +3156,9 @@ function testAnumsfx(award, obj)
   let px = obj.px.substr(0, obj.px.length - 1);
   let suf = obj.DEcall.replace(px, "");
   suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (let i in test.rule.numsfx)
+  for (const i in test.rule.numsfx)
   {
-    for (let s in test.rule.numsfx[i])
+    for (const s in test.rule.numsfx[i])
     {
       if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
       {
@@ -3176,7 +3176,7 @@ function scoreApxplus(award, obj)
 
   if (test.rule.pxplus)
   {
-    for (let i in test.rule.pxplus)
+    for (const i in test.rule.pxplus)
     {
       if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
       {
@@ -3200,7 +3200,7 @@ function testApxplus(award, obj)
 
   if (test.rule.pxplus)
   {
-    for (let i in test.rule.pxplus)
+    for (const i in test.rule.pxplus)
     {
       if (obj.DEcall.indexOf(test.rule.pxplus[i]) == 0)
       {
@@ -3223,9 +3223,9 @@ function loadAwardJson()
       g_awards = JSON.parse(fileBuf);
       // fs.writeFileSync("./data/awards.json", JSON.stringify(g_awards,null,2));
 
-      for (let sp in g_awards)
+      for (const sp in g_awards)
       {
-        for (let aw in g_awards[sp].awards)
+        for (const aw in g_awards[sp].awards)
         {
           if (!("unique" in g_awards[sp].awards[aw].rule))
           { g_awards[sp].awards[aw].rule.unique = 1; }

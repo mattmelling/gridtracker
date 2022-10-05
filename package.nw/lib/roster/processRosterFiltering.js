@@ -227,7 +227,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
       if (g_rosterSettings.hunting == "dxcc")
       {
-        let hash = hashMaker(String(callObj.dxcc),
+        let hash = hashMaker(String(callObj.dxcc) + "|",
           callObj, g_rosterSettings.reference);
 
         if (rosterSettings.huntIndex && (hash in rosterSettings.huntIndex.dxcc))
@@ -283,7 +283,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         let huntFound = 0;
         for (index in callObj.cqza)
         {
-          let hash = hashMaker(callObj.cqza[index], callObj, g_rosterSettings.reference);
+          let hash = hashMaker(callObj.cqza[index] + "|", callObj, g_rosterSettings.reference);
 
           if (hash in rosterSettings.huntIndex.cqz) huntFound++;
         }
@@ -306,7 +306,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         let huntFound = 0;
         for (index in callObj.ituza)
         {
-          let hash = hashMaker(callObj.ituza[index], callObj, g_rosterSettings.reference);
+          let hash = hashMaker(callObj.ituza[index] + "|", callObj, g_rosterSettings.reference);
 
           if (hash in rosterSettings.huntIndex.ituz) huntFound++;
         }

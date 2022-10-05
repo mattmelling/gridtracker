@@ -1237,13 +1237,13 @@ function alertCheckDXCC(key, callObj)
 
   if (
     status == "worked" &&
-    String(callObj.dxcc) + hashMaker(callObj.band, callObj.mode) in
+    String(callObj.dxcc) + "|" + hashMaker(callObj.band, callObj.mode) in
       g_tracker.worked.dxcc
   )
   { return 0; }
   if (
     status == "confirmed" &&
-    String(callObj.dxcc) + hashMaker(callObj.band, callObj.mode) in
+    String(callObj.dxcc) + "|" + hashMaker(callObj.band, callObj.mode) in
       g_tracker.confirmed.dxcc
   )
   { return 0; }
@@ -1259,7 +1259,7 @@ function alertCheckCQz(key, callObj)
   var workedFound = (confirmedFound = 0);
   for (index in callObj.cqza)
   {
-    var hash = callObj.cqza[index] + hashMaker(callObj.band, callObj.mode);
+    var hash = callObj.cqza[index] + "|" + hashMaker(callObj.band, callObj.mode);
     if (hash in g_tracker.worked.cqz) workedFound++;
 
     if (hash in g_tracker.confirmed.cqz) confirmedFound++;
@@ -1281,7 +1281,7 @@ function alertCheckITUz(key, callObj)
   var workedFound = (confirmedFound = 0);
   for (index in callObj.ituza)
   {
-    var hash = callObj.ituza[index] + hashMaker(callObj.band, callObj.mode);
+    var hash = callObj.ituza[index] + "|" + hashMaker(callObj.band, callObj.mode);
     if (hash in g_tracker.worked.ituz) workedFound++;
 
     if (hash in g_tracker.confirmed.ituz) confirmedFound++;

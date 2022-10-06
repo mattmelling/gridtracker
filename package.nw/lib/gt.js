@@ -1169,7 +1169,7 @@ function addDeDx(
       details.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
       if (details.dxcc == 390 && details.zone == 1) details.cont = "EU";
     }
- 
+
     details.cnty = finalCnty;
     if (details.cnty)
     {

@@ -839,16 +839,16 @@ function downloadCtyDat()
 
 function processCtyDat(buffer)
 {
-  let data = String(buffer);
+  var data = String(buffer);
   ctyDatStatus.innerHTML = "Update: " + data.length + " bytes read";
   try
   {
-    let ctydata = JSON.parse(data);
-    let file = "./data/mh-root-prefixed.json";
+    var ctydata = JSON.parse(data);
+    var file = "./data/mh-root-prefixed.json";
     if (fs.existsSync(file))
     {
-      let fileBuf = fs.readFileSync(file, "UTF-8");
-      let worldGeoData = JSON.parse(fileBuf);
+      var fileBuf = fs.readFileSync(file, "UTF-8");
+      var worldGeoData = JSON.parse(fileBuf);
       for (const key in worldGeoData)
       {
         if (worldGeoData[key].dxcc in ctydata)
@@ -858,7 +858,7 @@ function processCtyDat(buffer)
           {
             worldGeoData[key].prefix = [];
             
-            let arr = ctydata[worldGeoData[key].dxcc].prefix.substr(0, ctydata[worldGeoData[key].dxcc].prefix.length - 1).split(" ");
+            var arr = ctydata[worldGeoData[key].dxcc].prefix.substr(0, ctydata[worldGeoData[key].dxcc].prefix.length - 1).split(" ");
             for (const x in arr)
             {
               if (!(arr[x].includes("(")) && !(arr[x].includes("[")) && !(arr[x].includes("<")) && !(arr[x].includes("{")) && !(arr[x].includes("~")))
@@ -870,7 +870,7 @@ function processCtyDat(buffer)
           }
         }
       }
-      fs.writeFileSync(file, JSON.stringify(worldGeoData));
+      fs.writeFileSync(file, JSON.stringify(worldGeoData, null, 2));
       ctyDatFinal.innerHTML = file + " updated!";
     }
   }

@@ -861,11 +861,31 @@ function processCtyDat(buffer)
             var arr = ctydata[worldGeoData[key].dxcc].prefix.substr(0, ctydata[worldGeoData[key].dxcc].prefix.length - 1).split(" ");
             for (const x in arr)
             {
-              if (!(arr[x].includes("(")) && !(arr[x].includes("[")) && !(arr[x].includes("<")) && !(arr[x].includes("{")) && !(arr[x].includes("~")))
+              var test = arr[x];
+              var i = arr[x].indexOf("(");
+              if (i > -1)
               {
-                worldGeoData[key].prefix.push(arr[x]);
+                test = test.substr(0, i);
               }
+              i = arr[x].indexOf("[");
+              if (i > -1)
+              {
+                test = test.substr(0, i);
+              }
+              i = arr[x].indexOf("<");
+              if (i > -1)
+              {
+                test = test.substr(0, i);
+              }
+              i = arr[x].indexOf("{");
+              if (i > -1)
+              {
+                test = test.substr(0, i);
+              }
+
+              worldGeoData[key].prefix.push(test);
             }
+            worldGeoData[key].prefix = uniqueArrayFromArray(worldGeoData[key].prefix);
             worldGeoData[key].prefix.sort();
           }
         }

@@ -218,7 +218,7 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "CQz",
       rawAttrs: callObj.style.cqz,
-      html: [callObj.cqza.join(","), callObj.cqzSuffix].join("&nbsp;")
+      html: [callObj.cqz, callObj.cqzSuffix].join("&nbsp;")
     })
   },
 
@@ -227,7 +227,7 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       name: "ITUz",
       rawAttrs: callObj.style.ituz,
-      html: callObj.ituza.join(",")
+      html: callObj.ituz
     })
   },
 

@@ -501,27 +501,24 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for CQ Zones
-        if (huntCQz.checked)
+        if (huntCQz.checked && callObj.cqz)
         {
-          let huntTotal = callObj.cqza.length;
+          let huntTotal = 1;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0, marathonFound = 0;
+          let hash = callObj.cqz + "|" + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (callObj.cqz + "|" + layeredHashSuffix);
+          let marathonHash = huntMarathon.checked && `${callObj.cqz}-${currentYear}`;
 
-          for (const index in callObj.cqza)
+          if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.cqz) huntFound++;
+          if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cqz) layeredFound++;
+          if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cqz) workedFound++;
+          if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.cqz) layeredWorkedFound++;
+          if (marathonHash)
           {
-            let hash = callObj.cqza[index] + "|" + workHashSuffix;
-            let layeredHash = rosterSettings.layeredMode && (callObj.cqza[index] + "|" + layeredHashSuffix);
-            let marathonHash = huntMarathon.checked && `${callObj.cqza[index]}-${currentYear}`;
-
-            if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.cqz) huntFound++;
-            if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.cqz) layeredFound++;
-            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cqz) workedFound++;
-            if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.cqz) layeredWorkedFound++;
-            if (marathonHash)
-            {
-              if (rosterSettings.huntIndex && marathonHash in rosterSettings.huntIndex.cqz) marathonFound++;
-              else if (rosterSettings.workedIndex && marathonHash in rosterSettings.workedIndex.cqz) marathonFound++;
-            }
+            if (rosterSettings.huntIndex && marathonHash in rosterSettings.huntIndex.cqz) marathonFound++;
+            else if (rosterSettings.workedIndex && marathonHash in rosterSettings.workedIndex.cqz) marathonFound++;
           }
+          
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
@@ -583,21 +580,18 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for ITU Zones
-        if (huntITUz.checked == true)
+        if (huntITUz.checked == true && callObj.ituz)
         {
-          let huntTotal = callObj.ituza.length;
+          let huntTotal = 1;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0;
+          let hash = callObj.ituz + "|" + workHashSuffix;
+          let layeredHash = rosterSettings.layeredMode && (callObj.ituz + "|" + layeredHashSuffix)
 
-          for (const index in callObj.ituza)
-          {
-            let hash = callObj.ituza[index] + "|" + workHashSuffix;
-            let layeredHash = rosterSettings.layeredMode && (callObj.ituza[index] + "|" + layeredHashSuffix)
-
-            if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.ituz) huntFound++;
-            if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.ituz) layeredFound++;
-            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.ituz) workedFound++;
-            if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.ituz) layeredWorkedFound++;
-          }
+          if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.ituz) huntFound++;
+          if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.ituz) layeredFound++;
+          if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.ituz) workedFound++;
+          if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.ituz) layeredWorkedFound++;
+          
           if (huntFound != huntTotal)
           {
             shouldAlert = true;

@@ -438,12 +438,15 @@ var g_workingIniPath = "";
 var g_worldGeoData = {};
 var g_prefixToMap = {};
 var g_directCallToDXCC = {};
+var g_directCallToCQzone = {};
+var g_directCallToITUzone = {};
+var g_prefixToCQzone = {};
+var g_prefixToITUzone = {};
 var g_dxccToAltName = {};
 var g_dxccToADIFName = {};
 var g_dxccToGeoData = {};
 var g_gridToDXCC = {};
-var g_gridToCQZone = {};
-var g_gridToITUZone = {};
+
 var g_gridToState = {};
 var g_StateData = {};
 var g_cqZones = {};
@@ -1221,15 +1224,11 @@ function addDeDx(
         g_tracker.worked.grid[fourGrid + band + "dg"] = true;
       }
     }
-    if (
-      details.ituz.length == 0 &&
-      fourGrid in g_gridToITUZone &&
-      g_gridToITUZone[fourGrid].length == 1
-    )
+    if (!details.ituz || details.ituz.length == 0)
     {
-      details.ituz = g_gridToITUZone[fourGrid][0];
+      details.ituz = ituZoneFromCallsign(finalDXcall, details.dxcc);
     }
-    if (details.ituz.length > 0)
+    if (details.ituz)
     {
       g_tracker.worked.ituz[details.ituz + "|" + band + mode] = true;
       g_tracker.worked.ituz[details.ituz + "|"] = true;
@@ -1241,15 +1240,13 @@ function addDeDx(
         g_tracker.worked.ituz[details.ituz + "|" + band + "dg"] = true;
       }
     }
-    if (
-      details.cqz.length == 0 &&
-      fourGrid in g_gridToCQZone &&
-      g_gridToCQZone[fourGrid].length == 1
-    )
+
+    if (!details.cqz || details.cqz.length == 0)
     {
-      details.cqz = g_gridToCQZone[fourGrid][0];
+      details.cqz = cqZoneFromCallsign(finalDXcall, details.dxcc);
     }
-    if (details.cqz.length > 0)
+
+    if (details.cqz)
     {
       g_tracker.worked.cqz[details.cqz + "|" + band + mode] = true;
       g_tracker.worked.cqz[details.cqz + "|"] = true;
@@ -7096,13 +7093,12 @@ function handleWsjtxDecode(newMessage)
           );
         }
 
-        newCallsign.cont =
-          g_worldGeoData[g_dxccToGeoData[newCallsign.dxcc]].continent;
+        newCallsign.cont = g_worldGeoData[g_dxccToGeoData[newCallsign.dxcc]].continent;
         if (newCallsign.dxcc == 390 && newCallsign.zone == 1) { details.cont = "EU"; }
       }
 
-      newCallsign.ituza = Array();
-      newCallsign.cqza = Array();
+      newCallsign.ituz = ituZoneFromCallsign(newCallsign.DEcall, newCallsign.dxcc);
+      newCallsign.cqz = cqZoneFromCallsign(newCallsign.DEcall, newCallsign.dxcc);
       newCallsign.distance = 0;
       newCallsign.heading = 0;
 
@@ -7198,15 +7194,6 @@ function handleWsjtxDecode(newMessage)
         LL.la2 - (LL.la2 - LL.la1) / 2,
         LL.lo2 - (LL.lo2 - LL.lo1) / 2
       );
-
-      if (callsign.grid in g_gridToITUZone)
-      {
-        callsign.ituza = g_gridToITUZone[callsign.grid];
-      }
-      if (callsign.grid in g_gridToCQZone)
-      {
-        callsign.cqza = g_gridToCQZone[callsign.grid];
-      }
     }
 
     if (g_appSettings.potaEnabled == 1)
@@ -7847,10 +7834,8 @@ function showCallsignBox(redraw)
     {
       if (newCallList[x].DEcall == myRawCall) continue;
       var grid = newCallList[x].rect ? newCallList[x].rect.qth : "-";
-      var cqzone =
-        grid in g_gridToCQZone ? g_gridToCQZone[grid].join(", ") : "-";
-      var ituzone =
-        grid in g_gridToITUZone ? g_gridToITUZone[grid].join(", ") : "-";
+      var cqzone = newCallList[x].cqz ? newCallList[x].cqz : "-";
+      var ituzone = newCallList[x].ituz ? newCallList[x].ituz : "-";
       var geo = g_worldGeoData[g_dxccToGeoData[newCallList[x].dxcc]];
       var thisCall = newCallList[x].DEcall.formatCallsign();
       worker +=
@@ -9696,50 +9681,24 @@ function renderStatsBox()
         );
       }
 
+      if (cqz.length > 0)
+      {
+        var name = g_cqZones[cqz].name;
+        if (!(name in cqZones)) cqZones[name] = newStatObject();
+
+        workObject(cqZones[name], false, band, mode, type, didConfirm);
+      }
+
+      if (ituz.length > 0)
+      {
+        if (!(ituz in ituZones)) ituZones[ituz] = newStatObject();
+
+        workObject(ituZones[ituz], false, band, mode, type, didConfirm);
+      }
+
       if (finalGrid.length > 0)
       {
         var gridCheck = finalGrid.substr(0, 4);
-
-        if (cqz.length > 0)
-        {
-          var name = g_cqZones[cqz].name;
-          if (!(name in cqZones)) cqZones[name] = newStatObject();
-
-          workObject(cqZones[name], false, band, mode, type, didConfirm);
-        }
-        else if (gridCheck in g_gridToCQZone)
-        {
-          if (g_gridToCQZone[gridCheck].length == 1)
-          {
-            var name = g_cqZones[g_gridToCQZone[gridCheck][0]].name;
-            if (!(name in cqZones)) cqZones[name] = newStatObject();
-
-            workObject(cqZones[name], false, band, mode, type, didConfirm);
-          }
-        }
-
-        if (ituz.length > 0)
-        {
-          if (!(ituz in ituZones)) ituZones[ituz] = newStatObject();
-
-          workObject(ituZones[ituz], false, band, mode, type, didConfirm);
-        }
-        else if (gridCheck in g_gridToITUZone)
-        {
-          if (g_gridToITUZone[gridCheck].length == 1)
-          {
-            if (!(g_gridToITUZone[gridCheck][0] in ituZones)) { ituZones[g_gridToITUZone[gridCheck][0]] = newStatObject(); }
-
-            workObject(
-              ituZones[g_gridToITUZone[gridCheck][0]],
-              false,
-              band,
-              mode,
-              type,
-              didConfirm
-            );
-          }
-        }
 
         if (!(gridCheck in gridData)) gridData[gridCheck] = newStatObject();
 
@@ -10676,41 +10635,7 @@ function redrawGrids()
               ~~g_cqZones[cqz].confirmed_modes[mode] + 1;
           }
         }
-        else if (gridCheck in g_gridToCQZone)
-        {
-          if (g_gridToCQZone[gridCheck].length == 1)
-          {
-            if (g_cqZones[g_gridToCQZone[gridCheck][0]].worked == false)
-            {
-              g_cqZones[g_gridToCQZone[gridCheck][0]].worked = worked;
-            }
-            if (worked)
-            {
-              g_cqZones[g_gridToCQZone[gridCheck][0]].worked_bands[band] =
-                ~~g_cqZones[g_gridToCQZone[gridCheck][0]].worked_bands[band] +
-                1;
-              g_cqZones[g_gridToCQZone[gridCheck][0]].worked_modes[mode] =
-                ~~g_cqZones[g_gridToCQZone[gridCheck][0]].worked_modes[mode] +
-                1;
-            }
-            if (g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed == false)
-            {
-              g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed = didConfirm;
-            }
-            if (didConfirm)
-            {
-              g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed_bands[band] =
-                ~~g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed_bands[
-                  band
-                ] + 1;
-              g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed_modes[mode] =
-                ~~g_cqZones[g_gridToCQZone[gridCheck][0]].confirmed_modes[
-                  mode
-                ] + 1;
-            }
-          }
-        }
-
+       
         if (ituz.length > 0)
         {
           if (g_ituZones[ituz].worked == false)
@@ -10734,40 +10659,6 @@ function redrawGrids()
               ~~g_ituZones[ituz].confirmed_bands[band] + 1;
             g_ituZones[ituz].confirmed_modes[mode] =
               ~~g_ituZones[ituz].confirmed_modes[mode] + 1;
-          }
-        }
-        else if (gridCheck in g_gridToITUZone)
-        {
-          if (g_gridToITUZone[gridCheck].length == 1)
-          {
-            if (g_ituZones[g_gridToITUZone[gridCheck][0]].worked == false)
-            {
-              g_ituZones[g_gridToITUZone[gridCheck][0]].worked = worked;
-            }
-            if (worked)
-            {
-              g_ituZones[g_gridToITUZone[gridCheck][0]].worked_bands[band] =
-                ~~g_ituZones[g_gridToITUZone[gridCheck][0]].worked_bands[band] +
-                1;
-              g_ituZones[g_gridToITUZone[gridCheck][0]].worked_modes[mode] =
-                ~~g_ituZones[g_gridToITUZone[gridCheck][0]].worked_modes[mode] +
-                1;
-            }
-            if (g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed == false)
-            {
-              g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed = didConfirm;
-            }
-            if (didConfirm)
-            {
-              g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_bands[band] =
-                ~~g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_bands[
-                  band
-                ] + 1;
-              g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_modes[mode] =
-                ~~g_ituZones[g_gridToITUZone[gridCheck][0]].confirmed_modes[
-                  mode
-                ] + 1;
-            }
           }
         }
       }
@@ -12047,6 +11938,60 @@ function callsignToDxcc(insign)
   return -1;
 }
 
+function cqZoneFromCallsign(insign, dxcc)
+{
+  var callsign = insign;
+
+  if (!/\d/.test(callsign) || !/[a-zA-Z]/.test(callsign))
+  {
+    return null;
+  }
+
+  if (callsign in g_directCallToCQzone) { return g_directCallToCQzone[callsign]; }
+
+  for (var x = callsign.length; x > 0; x--)
+  {
+    if (callsign.substr(0, x) in g_prefixToCQzone)
+    {
+      return g_prefixToCQzone[callsign.substr(0, x)];
+    }
+  }
+
+  if (dxcc > 0)
+  {
+    return g_worldGeoData[g_dxccToGeoData[dxcc]].cqzone;
+  }
+
+  return null;
+}
+
+function ituZoneFromCallsign(insign, dxcc)
+{
+  var callsign = insign;
+
+  if (!/\d/.test(callsign) || !/[a-zA-Z]/.test(callsign))
+  {
+    return null;
+  }
+
+  if (callsign in g_directCallToITUzone) { return g_directCallToITUzone[callsign]; }
+
+  for (var x = callsign.length; x > 0; x--)
+  {
+    if (callsign.substr(0, x) in g_prefixToITUzone)
+    {
+      return g_prefixToITUzone[callsign.substr(0, x)];
+    }
+  }
+
+  if (dxcc > 0)
+  {
+    return g_worldGeoData[g_dxccToGeoData[dxcc]].ituzone;
+  }
+
+  return null;
+}
+
 function loadMaidenHeadData()
 {
   var file = "./data/mh-root-prefixed.json";
@@ -12068,14 +12013,40 @@ function loadMaidenHeadData()
 
       for (var x = 0; x < g_worldGeoData[key].prefix.length; x++)
       {
-        if (g_worldGeoData[key].prefix[x].charAt(0) == "=")
-        {
-          g_directCallToDXCC[g_worldGeoData[key].prefix[x].substr(1)] =
-            g_worldGeoData[key].dxcc;
-        }
-        else g_prefixToMap[g_worldGeoData[key].prefix[x]] = key;
+        g_prefixToMap[g_worldGeoData[key].prefix[x]] = key;
       }
       delete g_worldGeoData[key].prefix;
+
+      for (var x = 0; x < g_worldGeoData[key].direct.length; x++)
+      {
+        g_directCallToDXCC[g_worldGeoData[key].direct[x]] = g_worldGeoData[key].dxcc;
+      }
+      delete g_worldGeoData[key].direct;
+
+      for (var val in g_worldGeoData[key].prefixCQ)
+      {
+        g_prefixToCQzone[val] = g_worldGeoData[key].prefixCQ[val];
+      }
+      delete g_worldGeoData[key].prefixCQ;
+
+      for (var val in g_worldGeoData[key].prefixITU)
+      {
+        g_prefixToITUzone[val] = g_worldGeoData[key].prefixITU[val];
+      }
+      delete g_worldGeoData[key].prefixITU;
+
+      for (var val in g_worldGeoData[key].directCQ)
+      {
+        g_directCallToCQzone[val] = g_worldGeoData[key].directCQ[val];
+      }
+      delete g_worldGeoData[key].directCQ;
+
+      for (var val in g_worldGeoData[key].directITU)
+      {
+        g_directCallToITUzone[val] = g_worldGeoData[key].directITU[val];
+      }
+      delete g_worldGeoData[key].directITU;
+
       for (var x = 0; x < g_worldGeoData[key].mh.length; x++)
       {
         if (!(g_worldGeoData[key].mh[x] in g_gridToDXCC)) { g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array(); }
@@ -12270,11 +12241,6 @@ function loadMaidenHeadData()
 
     for (var key in g_cqZones)
     {
-      for (var x = 0; x < g_cqZones[key].mh.length; x++)
-      {
-        if (!(g_cqZones[key].mh[x] in g_gridToCQZone)) { g_gridToCQZone[g_cqZones[key].mh[x]] = Array(); }
-        g_gridToCQZone[g_cqZones[key].mh[x]].push(String(key));
-      }
       delete g_cqZones[key].mh;
     }
 
@@ -12283,11 +12249,6 @@ function loadMaidenHeadData()
 
     for (var key in g_ituZones)
     {
-      for (var x = 0; x < g_ituZones[key].mh.length; x++)
-      {
-        if (!(g_ituZones[key].mh[x] in g_gridToITUZone)) { g_gridToITUZone[g_ituZones[key].mh[x]] = Array(); }
-        g_gridToITUZone[g_ituZones[key].mh[x]].push(String(key));
-      }
       delete g_ituZones[key].mh;
     }
 

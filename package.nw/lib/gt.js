@@ -70,7 +70,6 @@ var g_lookupWindowHandle = null;
 var g_lookupWindowInitialized = false;
 var g_baWindowHandle = null;
 
-
 var g_appSettings = {};
 var g_mapSettings = {};
 var g_legendColors = {};

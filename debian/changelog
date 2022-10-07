@@ -1,7 +1,8 @@
-gridtracker (1.22.1002) unstable; urgency=low
-  - Test build for POTA Enhancements
+gridtracker (1.22.1006) unstable; urgency=low
+  - Test release candidate
 
-  -- Matthew Chambers <nr0q@gridtracker.org>  Mon, 26 Sep 2022 19:00:00 -0000
+  -- Matthew Chambers <nr0q@gridtracker.org>  Mon, 07 Oct 2022 01:01:00 -0000
+
 gridtracker (1.22.0903) unstable; urgency=low
   - Fixed a bug that displayed 1.25m band QSOs incorrectly.
   - Fixed broken DXCC CQ highlighting and Statistics CQ highlighting.

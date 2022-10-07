@@ -23,7 +23,7 @@
     "start": "run --mirror https://dl.nwjs.io/ ."
   },
   "build": {
-    "nwVersion": "0.59.0",
+    "nwVersion": "0.68.1",
     "output": "../dist/.",
     "targets": [
       "zip",

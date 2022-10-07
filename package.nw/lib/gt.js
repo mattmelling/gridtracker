@@ -320,7 +320,7 @@ function saveAndCloseApp()
 
   try
   {
-    if (g_callRosterWindowHandle)
+    if (g_callRosterWindowHandle && g_rosterInitialized)
     {
       g_callRosterWindowHandle.window.writeRosterSettings();
     }
@@ -2522,6 +2522,7 @@ function openConditionsWindow()
   }
 }
 
+var g_rosterInitialized = false;
 var g_callRoster = {};
 var g_rosterUpdateTimer = null;
 
@@ -2629,7 +2630,7 @@ function openCallRosterWindow(show = true)
 
 function updateRosterWorked()
 {
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -2641,7 +2642,7 @@ function updateRosterWorked()
 
 function updateRosterInstances()
 {
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -6418,7 +6419,7 @@ function handleWsjtxStatus(newMessage)
 {
   if (g_ignoreMessages == 1) return;
 
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -7605,7 +7606,7 @@ function goProcessRoster(isRealtime = false)
       continue;
     }
   }
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -16468,7 +16469,7 @@ function changeRosterTop(butt)
 
 function setRosterTop()
 {
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {

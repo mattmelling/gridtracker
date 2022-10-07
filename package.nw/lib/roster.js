@@ -2114,6 +2114,8 @@ function init()
   g_timerInterval = nodeTimers.setInterval(realtimeRoster, 1000);
 
   updateInstances();
+
+  window.opener.g_rosterInitialized = true;
 }
 
 function handleContextMenu(ev)

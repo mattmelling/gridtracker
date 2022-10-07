@@ -1164,7 +1164,7 @@ function addDeDx(
     }
 
     details.cont = finalCont;
-    if (details.cont == null && finalDxcc > 0)
+    if (finalDxcc > 0)
     {
       details.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
       if (details.dxcc == 390 && details.zone == 1) details.cont = "EU";

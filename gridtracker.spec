@@ -1,6 +1,6 @@
 Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        {{{ git_version lead=1.22.1006 }}}
+Version:        {{{ git_version lead=1.22.1007 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        {{{ git_dir_pack }}}
@@ -40,6 +40,8 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Fri Oct 07 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.1007-1
+  - Fix missing callsigns in mh-root when importing BIGCTY
 * Fri Oct 07 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.1006-1
   - Main App:
     - New option in Settings -> Lookups -> Feature Control -> POTA.  When "Enabled", track POTA spots from https://pota.app and auto-report activations. When "Menu Button" checked and menu button active, show active parks following "Map View Filters" rules.

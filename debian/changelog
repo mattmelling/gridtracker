@@ -1,3 +1,8 @@
+gridtracker (1.22.1007) unstable; urgency=low
+  - Fix missing callsigns in mh-root when importing BIGCTY
+
+ -- Matthew Chambers <nr0q@gridtracker.org>  Fri, 07 Oct 2022 17:19:00 -0000
+ 
 gridtracker (1.22.1006) unstable; urgency=low
   - Main App:
     - New option in Settings -> Lookups -> Feature Control -> POTA.  When "Enabled", track POTA spots from https://pota.app and auto-report activations. When "Menu Button" checked and menu button active, show active parks following "Map View Filters" rules.
@@ -22,7 +27,7 @@ gridtracker (1.22.1006) unstable; urgency=low
     - Instances now horizontal between controls and roster table (Resolves Issue #166)
     - New option in Settings -> Call Roster -> "Call Roster Delay On Focus".. when enabled will delay redraw of roster after decode round(s) (Resolves Issue #69)
 
-  -- Matthew Chambers <nr0q@gridtracker.org>  Mon, 07 Oct 2022 01:01:00 -0000
+  -- Matthew Chambers <nr0q@gridtracker.org>  Fri, 07 Oct 2022 01:01:00 -0000
 
 gridtracker (1.22.0903) unstable; urgency=low
   - Fixed a bug that displayed 1.25m band QSOs incorrectly.

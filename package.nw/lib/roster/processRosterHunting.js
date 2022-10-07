@@ -166,24 +166,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
             callObj.style.call = "class='dxCaller'";
           }
         }
-        // award tracker overrides
-        let awardTrackerOverrides = {
-          call: false,
-          grids: false,
-          dxcc: false,
-          states: false,
-          cnty: false,
-          cqz: false,
-          px: false,
-          cont: false
-        };
-        if (g_rosterSettings.reference == LOGBOOK_AWARD_TRACKER)
-        {
-          for (let key in awardTracker)
-          {
-            awardTrackerOverrides[awardTracker[key].rule.type] = true;
-          }
-        }
 
         // Hunting for callsigns
         if (huntCallsign.checked)

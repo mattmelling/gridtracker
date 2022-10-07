@@ -1,6 +1,6 @@
 Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        {{{ git_version lead=1.22.0903 }}}
+Version:        {{{ git_version lead=1.22.1006 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        {{{ git_dir_pack }}}
@@ -40,6 +40,29 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Fri Oct 07 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.1006-1
+  - Main App:
+    - New option in Settings -> Lookups -> Feature Control -> POTA.  When "Enabled", track POTA spots from https://pota.app and auto-report activations. When "Menu Button" checked and menu button active, show active parks following "Map View Filters" rules.
+    - OAMS spotting fixed for multiple-instances (Resolves Issue #170)
+    - St. Maarten continent changed from SA to NA
+    - DXCC none ( ie:  CALL/MM ) no longer counted in Scores or DXCCs stats tabs (Resolves Issue #162)
+    - After long window minimize, restore looks correct.
+    - Fixed dupe check for last QSO partner (chasing bands, not logging)
+    - Prefixes and direct callsign updates from BIGCTY 2022-09-20 (Resolves Issue #144)
+    - Fix issue where logged contacts with certain DXCCs on certain bands show as having worked other entities on 630m (Resolves Issue #134)
+    - Fix NEXRAD not updating (Resolves Issue #138)
+    - Fix buttons not graying when feature toggled off (Resolves Issue #97)
+  - Call Roster:
+    - Fixed right-click on DXCC not showing DXCC ignore menu (Resolves Issue #153)
+    - Fixed "Clear Call Roster On Band Change" bug that caused the roster to blank
+    - Fixed Age column not sorting correctly
+    - Fixed County cell not doing lookups when allowed
+    - Changed County column to show number of potential counties for a callsign
+    - Add "RR73 as CQ" to Exceptions
+    - Added 4 new "Masters of Radio Communications" awards from QRZ.com to Award Tracker
+    - Award Tracker now shows in the Wanted cell the first award that meets criteria
+    - Instances now horizontal between controls and roster table (Resolves Issue #166)
+    - New option in Settings -> Call Roster -> "Call Roster Delay On Focus".. when enabled will delay redraw of roster after decode round(s) (Resolves Issue #69)
 * Sat Sep 03 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.0903-1
   - Fixed a bug that displayed 1.25m band QSOs incorrectly.
   - Fixed broken DXCC CQ highlighting and Statistics CQ highlighting.

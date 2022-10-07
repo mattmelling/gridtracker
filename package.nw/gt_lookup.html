@@ -78,6 +78,7 @@
 
       function init() {
         ValidateCallsign(lookupCallsignInput, null);
+        window.opener.g_lookupWindowInitialized = true;
       }
 
       function addTextToClipboard(data) {

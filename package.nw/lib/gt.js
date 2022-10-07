@@ -67,7 +67,9 @@ var g_conditionsWindowHandle = null;
 var g_chatWindowHandle = null;
 var g_statsWindowHandle = null;
 var g_lookupWindowHandle = null;
+var g_lookupWindowInitialized = false;
 var g_baWindowHandle = null;
+
 
 var g_appSettings = {};
 var g_mapSettings = {};
@@ -7994,7 +7996,7 @@ function getStatsWindowHeight()
 function setLookupDiv(div, worker)
 {
   if (
-    g_lookupWindowHandle &&
+    g_lookupWindowHandle && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window[div].innerHTML !== "undefined"
   )
   {
@@ -8005,7 +8007,7 @@ function setLookupDiv(div, worker)
 function setLookupDivHeight(div, heightWithPx)
 {
   if (
-    g_lookupWindowHandle &&
+    g_lookupWindowHandle && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window[div].style !== "undefined"
   )
   {
@@ -8015,7 +8017,7 @@ function setLookupDivHeight(div, heightWithPx)
 function getLookupWindowHeight()
 {
   if (
-    g_lookupWindowHandle &&
+    g_lookupWindowHandle && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window.window !== "undefined"
   )
   {
@@ -8650,7 +8652,7 @@ function statsFocus(selection)
 function lookupValidateCallByElement(elementString)
 {
   if (
-    g_lookupWindowHandle != null &&
+    g_lookupWindowHandle != null && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window.validateCallByElement !== "undefined"
   )
   {
@@ -8660,7 +8662,7 @@ function lookupValidateCallByElement(elementString)
 function lookupFocus(selection)
 {
   if (
-    g_lookupWindowHandle != null &&
+    g_lookupWindowHandle != null && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window.statsFocus !== "undefined"
   )
   {
@@ -14354,7 +14356,7 @@ function lookupCallsign(callsign, gridPass, useCache = true)
   if (g_mapSettings.offlineMode == true && useCache == false) return;
   g_lastLookupCallsign = callsign;
 
-  if (g_lookupWindowHandle)
+  if (g_lookupWindowHandle && g_lookupWindowInitialized)
   {
     g_lookupWindowHandle.window.lookupCallsignInput.value = callsign;
     lookupValidateCallByElement("lookupCallsignInput");
@@ -15378,7 +15380,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 
 function clearLookup()
 {
-  if (g_lookupWindowHandle)
+  if (g_lookupWindowHandle && g_lookupWindowInitialized)
   {
     g_lookupWindowHandle.window.lookupCallsignInput.value = "";
     lookupValidateCallByElement("lookupCallsignInput");

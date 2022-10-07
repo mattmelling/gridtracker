@@ -2259,7 +2259,7 @@ function handleContextMenu(ev)
       g_targetITUz = ev.target.parentNode.id;
       g_ITUzMenu.popup(mouseX, mouseY);
     }
-    else if (name.startsWith("DXCC"))
+    else if (name && name.startsWith("DXCC"))
     {
       let dxcca = name.split("(");
       let dxcc = parseInt(dxcca[1]);

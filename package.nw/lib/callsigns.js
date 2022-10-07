@@ -829,7 +829,7 @@ function downloadCtyDat()
 {
   ctyDatStatus.innerHTML = "<b><i>Downloading...</i></b>";
   getBuffer(
-    "https://storage.googleapis.com/gt_app/ctydat.json?cb="+Date.now(),
+    "https://storage.googleapis.com/gt_app/ctydat.json?cb=" + Date.now(),
     processCtyDat,
     null,
     "https",

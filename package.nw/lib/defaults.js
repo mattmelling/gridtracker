@@ -63,6 +63,8 @@ var def_appSettings = {
   lookupService: "CALLOOK",
   lookupCallookPreferred: false,
   clearRosterOnBandChange: false,
+  rosterDelayOnFocus: false,
+  rosterDelayTime: 1500,
   moonPath: 0,
   moonTrack: 0,
   mouseTrack: 0,

@@ -67,6 +67,7 @@ var g_conditionsWindowHandle = null;
 var g_chatWindowHandle = null;
 var g_statsWindowHandle = null;
 var g_lookupWindowHandle = null;
+var g_lookupWindowInitialized = false;
 var g_baWindowHandle = null;
 
 var g_appSettings = {};
@@ -320,7 +321,7 @@ function saveAndCloseApp()
 
   try
   {
-    if (g_callRosterWindowHandle)
+    if (g_callRosterWindowHandle && g_rosterInitialized)
     {
       g_callRosterWindowHandle.window.writeRosterSettings();
     }
@@ -2522,6 +2523,7 @@ function openConditionsWindow()
   }
 }
 
+var g_rosterInitialized = false;
 var g_callRoster = {};
 var g_rosterUpdateTimer = null;
 
@@ -2629,7 +2631,7 @@ function openCallRosterWindow(show = true)
 
 function updateRosterWorked()
 {
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -2641,7 +2643,7 @@ function updateRosterWorked()
 
 function updateRosterInstances()
 {
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -6418,7 +6420,7 @@ function handleWsjtxStatus(newMessage)
 {
   if (g_ignoreMessages == 1) return;
 
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -7605,7 +7607,7 @@ function goProcessRoster(isRealtime = false)
       continue;
     }
   }
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {
@@ -7993,7 +7995,7 @@ function getStatsWindowHeight()
 function setLookupDiv(div, worker)
 {
   if (
-    g_lookupWindowHandle &&
+    g_lookupWindowHandle && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window[div].innerHTML !== "undefined"
   )
   {
@@ -8004,7 +8006,7 @@ function setLookupDiv(div, worker)
 function setLookupDivHeight(div, heightWithPx)
 {
   if (
-    g_lookupWindowHandle &&
+    g_lookupWindowHandle && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window[div].style !== "undefined"
   )
   {
@@ -8014,7 +8016,7 @@ function setLookupDivHeight(div, heightWithPx)
 function getLookupWindowHeight()
 {
   if (
-    g_lookupWindowHandle &&
+    g_lookupWindowHandle && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window.window !== "undefined"
   )
   {
@@ -8649,7 +8651,7 @@ function statsFocus(selection)
 function lookupValidateCallByElement(elementString)
 {
   if (
-    g_lookupWindowHandle != null &&
+    g_lookupWindowHandle != null && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window.validateCallByElement !== "undefined"
   )
   {
@@ -8659,7 +8661,7 @@ function lookupValidateCallByElement(elementString)
 function lookupFocus(selection)
 {
   if (
-    g_lookupWindowHandle != null &&
+    g_lookupWindowHandle != null && g_lookupWindowInitialized &&
     typeof g_lookupWindowHandle.window.statsFocus !== "undefined"
   )
   {
@@ -12837,7 +12839,10 @@ function loadMapSettings()
   haltAllOnTxValue.checked = g_mapSettings.haltAllOnTx;
   strikesAlert.value = g_mapSettings.strikesAlert;
   clearRosterOnBandChange.checked = g_appSettings.clearRosterOnBandChange;
-
+  rosterDelayOnFocus.checked = g_appSettings.rosterDelayOnFocus;
+  rosterDelayTime.value = g_appSettings.rosterDelayTime;
+  rosterDelayTimeTd.innerHTML = rosterDelayTime.value + "ms";
+  
   setStrikesButton();
 
   trafficDecode.checked = g_mapSettings.trafficDecode;
@@ -14281,6 +14286,19 @@ function loadLookupDetails()
 function clearRosterOnBandChangeValueChanged(what)
 {
   g_appSettings.clearRosterOnBandChange = clearRosterOnBandChange.checked;
+  saveAppSettings();
+}
+
+function rosterDelayOnFocusValueChanged(what)
+{
+  g_appSettings.rosterDelayOnFocus = rosterDelayOnFocus.checked;
+  saveAppSettings();
+}
+
+function changeRosterDelayTime()
+{
+  g_appSettings.rosterDelayTime = rosterDelayTime.value;
+  rosterDelayTimeTd.innerHTML = rosterDelayTime.value + "ms";
 }
 
 function lookupValueChanged(what)
@@ -14337,7 +14355,7 @@ function lookupCallsign(callsign, gridPass, useCache = true)
   if (g_mapSettings.offlineMode == true && useCache == false) return;
   g_lastLookupCallsign = callsign;
 
-  if (g_lookupWindowHandle)
+  if (g_lookupWindowHandle && g_lookupWindowInitialized)
   {
     g_lookupWindowHandle.window.lookupCallsignInput.value = callsign;
     lookupValidateCallByElement("lookupCallsignInput");
@@ -15361,7 +15379,7 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
 
 function clearLookup()
 {
-  if (g_lookupWindowHandle)
+  if (g_lookupWindowHandle && g_lookupWindowInitialized)
   {
     g_lookupWindowHandle.window.lookupCallsignInput.value = "";
     lookupValidateCallByElement("lookupCallsignInput");
@@ -16452,7 +16470,7 @@ function changeRosterTop(butt)
 
 function setRosterTop()
 {
-  if (g_callRosterWindowHandle)
+  if (g_callRosterWindowHandle && g_rosterInitialized)
   {
     try
     {

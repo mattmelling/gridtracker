@@ -318,14 +318,52 @@ function hashMaker(start, callObj, reference)
   return "";
 }
 
+var rosterTimeout = null;
+var rosterFocus = false;
+
+function rosterInFocus()
+{
+  if (window.opener.g_appSettings.rosterDelayOnFocus)
+  {
+    rosterFocus = true;
+  }
+}
+
+function rosterNoFocus()
+{
+  rosterFocus = false;
+  if (rosterTimeout != null)
+  {
+    nodeTimers.clearTimeout(rosterTimeout);
+    rosterTimeout = null;
+    viewRoster();
+  }
+}
+
 function processRoster(roster)
 {
   callRoster = roster;
-  viewRoster();
+  if (rosterTimeout != null)
+  {
+    nodeTimers.clearTimeout(rosterTimeout);
+    rosterTimeout = null;
+  }
+
+  if (rosterFocus)
+  {
+    rosterTimeout = nodeTimers.setTimeout(viewRoster, window.opener.g_appSettings.rosterDelayTime);
+    rosterDelayDiv.style.display = "inline-block";
+  }
+  else
+  {
+    viewRoster();
+  }
 }
 
 function viewRoster()
 {
+  rosterTimeout = null;
+  rosterDelayDiv.style.display = "none";
   let rosterSettings = prepareRosterSettings();
   processRosterFiltering(callRoster, rosterSettings);
   processRosterHunting(callRoster, rosterSettings, g_awardTracker);
@@ -2076,6 +2114,8 @@ function init()
   g_timerInterval = nodeTimers.setInterval(realtimeRoster, 1000);
 
   updateInstances();
+
+  window.opener.g_rosterInitialized = true;
 }
 
 function handleContextMenu(ev)

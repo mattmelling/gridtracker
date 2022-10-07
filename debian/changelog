@@ -1,6 +1,6 @@
 gridtracker (1.22.1006) unstable; urgency=low
   - Main App:
-    - New option in Settings -> Lookups -> Feature Control -> POTA.  When "Enabled", track POTA spots from https://pota.app and auto-report activations. When "Menu Button" checked and menu button active, show active parks following "Map View FIlters" rules.
+    - New option in Settings -> Lookups -> Feature Control -> POTA.  When "Enabled", track POTA spots from https://pota.app and auto-report activations. When "Menu Button" checked and menu button active, show active parks following "Map View Filters" rules.
     - OAMS spotting fixed for multiple-instances (Resolves Issue #170)
     - St. Maarten continent changed from SA to NA
     - DXCC none ( ie:  CALL/MM ) no longer counted in Scores or DXCCs stats tabs (Resolves Issue #162)
@@ -17,7 +17,7 @@ gridtracker (1.22.1006) unstable; urgency=low
     - Fixed County cell not doing lookups when allowed
     - Changed County column to show number of potential counties for a callsign
     - Add "RR73 as CQ" to Exceptions
-    - Added 4 new "Mastesr of Radio Communications" awards from QRZ.com to Award Tracker
+    - Added 4 new "Masters of Radio Communications" awards from QRZ.com to Award Tracker
     - Award Tracker now shows in the Wanted cell the first award that meets criteria
     - Instances now horizontal between controls and roster table (Resolves Issue #166)
     - New option in Settings -> Call Roster -> "Call Roster Delay On Focus".. when enabled will delay redraw of roster after decode round(s) (Resolves Issue #69)

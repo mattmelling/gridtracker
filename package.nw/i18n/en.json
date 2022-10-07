@@ -175,7 +175,7 @@
     "settings.general.Distance.dg": "Degrees",
     "settings.general.DecodeWaterfall.label": "Decode Traffic Waterfall",
     "settings.general.CheckNewVersion.label": "Check for new version",
-    "settings.general.Language.label": "Language",
+    "settings.general.Language.label": "Language (requires restart)",
     "settings.general.ClearAllSettings.label": "Clear All Settings!",
     "settings.general.ClearSettingSure.label": "Yes, I'm sure!",
     "settings.general.ExportSettings.label": "Export Settings",

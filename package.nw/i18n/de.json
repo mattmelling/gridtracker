@@ -175,7 +175,7 @@
     "settings.general.Distance.dg": "Grad",
     "settings.general.DecodeWaterfall.label": "Wasserfallnachrichten decodieren",
     "settings.general.CheckNewVersion.label": "Nach Updates suchen",
-    "settings.general.Language.label": "Sprache",
+    "settings.general.Language.label": "Sprache (Neustart erforderlich)",
     "settings.general.ClearAllSettings.label": "Einstellungen zurücksetzen!",
     "settings.general.ClearSettingSure.label": "Ja, ich bin sicher!",
     "settings.general.ExportSettings.label": "Einstellungen exportieren",

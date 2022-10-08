@@ -286,6 +286,7 @@ function saveAndCloseApp()
     g_statsWindowHandle.window.saveScreenSettings();
     g_baWindowHandle.window.saveScreenSettings();
     g_lookupWindowHandle.window.saveScreenSettings();
+    g_chatWindowHandle.window.saveScreenSettings();
   }
   catch (e)
   {
@@ -5502,7 +5503,7 @@ function initMap()
     var saveSettings = false;
     g_maps = Object.keys(g_maps).sort().reduce((obj, key) => { obj[key] = g_maps[key]; return obj; }, {});
     
-    if (typeof Number(g_mapSettings.mapIndex) == "number")
+    if (typeof g_mapSettings.mapIndex == "number")
     {
       var foundKey = null;
       for (const key in g_maps)
@@ -5521,7 +5522,7 @@ function initMap()
       saveSettings = true;
     }
     
-    if (typeof Number(g_mapSettings.nightMapIndex) == "number")
+    if (typeof g_mapSettings.nightMapIndex == "number")
     {
       var foundKey = null;
       for (const key in g_maps)

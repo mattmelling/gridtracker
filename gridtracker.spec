@@ -1,6 +1,6 @@
 Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        {{{ git_version lead=1.22.1007 }}}
+Version:        {{{ git_version lead=1.22.1008 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        {{{ git_dir_pack }}}
@@ -40,7 +40,7 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
-* Fri Oct 07 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.1007-1
+* Sat Oct 08 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.1008-1
   - Fix missing callsigns in mh-root when importing BIGCTY
 * Fri Oct 07 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.1006-1
   - Main App:

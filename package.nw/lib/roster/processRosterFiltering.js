@@ -45,12 +45,12 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
-    if (callObj.ituza in g_blockedITUz)
+    if (callObj.ituz in g_blockedITUz)
     {
       entry.tx = false;
       continue;
     }
-    if (callObj.cqza in g_blockedCQz)
+    if (callObj.cqz in g_blockedCQz)
     {
       entry.tx = false;
       continue;
@@ -274,53 +274,39 @@ function processRosterFiltering(callRoster, rosterSettings)
 
       if (g_rosterSettings.hunting == "cq")
       {
-        let huntTotal = callObj.cqza.length;
-        if (huntTotal == 0 || !rosterSettings.huntIndex)
+        if (callObj.cqz == null || !rosterSettings.huntIndex)
         {
           entry.tx = false;
           continue;
         }
-        let huntFound = 0;
-        for (index in callObj.cqza)
-        {
-          let hash = hashMaker(callObj.cqza[index] + "|", callObj, g_rosterSettings.reference);
 
-          if (hash in rosterSettings.huntIndex.cqz) huntFound++;
-        }
-        if (huntFound == huntTotal)
+        let hash = hashMaker(callObj.cqz + "|", callObj, g_rosterSettings.reference);
+
+        if (hash in rosterSettings.huntIndex.cqz)
         {
           entry.tx = false;
           continue;
         }
+
         continue;
       }
 
       if (g_rosterSettings.hunting == "itu")
       {
-        let huntTotal = callObj.ituza.length;
-        if (huntTotal == 0 || !rosterSettings.huntIndex)
-        {
-          entry.tx = false;
-          continue;
-        }
-        let huntFound = 0;
-        for (index in callObj.ituza)
-        {
-          let hash = hashMaker(callObj.ituza[index] + "|", callObj, g_rosterSettings.reference);
-
-          if (hash in rosterSettings.huntIndex.ituz) huntFound++;
-        }
-        if (huntFound == huntTotal)
+        if (callObj.ituz == null || !rosterSettings.huntIndex)
         {
           entry.tx = false;
           continue;
         }
 
-        if (callObj.grid.length == 0)
+        let hash = hashMaker(callObj.ituz + "|", callObj, g_rosterSettings.reference);
+
+        if (hash in rosterSettings.huntIndex.ituz)
         {
           entry.tx = false;
           continue;
         }
+
         continue;
       }
 

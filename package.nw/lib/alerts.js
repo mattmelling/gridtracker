@@ -1253,44 +1253,22 @@ function alertCheckDXCC(key, callObj)
 
 function alertCheckCQz(key, callObj)
 {
-  var workedTotal = (confirmedTotal = callObj.cqza.length);
-  if (workedTotal == 0) return 0;
-
-  var workedFound = (confirmedFound = 0);
-  for (index in callObj.cqza)
-  {
-    var hash = callObj.cqza[index] + "|" + hashMaker(callObj.band, callObj.mode);
-    if (hash in g_tracker.worked.cqz) workedFound++;
-
-    if (hash in g_tracker.confirmed.cqz) confirmedFound++;
-  }
-
   var status = document.getElementById(key + "Need").value;
-  if (status == "worked" && workedFound == workedTotal) return 0;
+  
+  if (status == "worked" && callObj.cqz + "|" + hashMaker(callObj.band, callObj.mode) in g_tracker.worked.cqz) return 0;
 
-  if (status == "confirmed" && confirmedFound == confirmedTotal) return 0;
+  if (status == "confirmed" && callObj.cqz + "|" + hashMaker(callObj.band, callObj.mode) in g_tracker.confirmed.cqz) return 0;
 
   return 1;
 }
 
 function alertCheckITUz(key, callObj)
 {
-  var workedTotal = (confirmedTotal = callObj.ituza.length);
-  if (workedTotal == 0) return 0;
-
-  var workedFound = (confirmedFound = 0);
-  for (index in callObj.ituza)
-  {
-    var hash = callObj.ituza[index] + "|" + hashMaker(callObj.band, callObj.mode);
-    if (hash in g_tracker.worked.ituz) workedFound++;
-
-    if (hash in g_tracker.confirmed.ituz) confirmedFound++;
-  }
-
   var status = document.getElementById(key + "Need").value;
-  if (status == "worked" && workedFound == workedTotal) return 0;
 
-  if (status == "confirmed" && confirmedFound == confirmedTotal) return 0;
+  if (status == "worked" && callObj.ituz + "|" + hashMaker(callObj.band, callObj.mode) in g_tracker.worked.ituz) return 0;
+
+  if (status == "confirmed" && callObj.ituz + "|" + hashMaker(callObj.band, callObj.mode) in g_tracker.confirmed.ituz) return 0;
 
   return 1;
 }

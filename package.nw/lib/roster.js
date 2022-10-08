@@ -1891,7 +1891,7 @@ function init()
     label: "Ignore CQ Zone",
     click: function ()
     {
-      g_blockedCQz[callRoster[g_targetCQz].callObj.cqza] = true;
+      g_blockedCQz[callRoster[g_targetCQz].callObj.cqz] = true;
       storeBlocks();
       window.opener.goProcessRoster();
     }
@@ -1945,7 +1945,7 @@ function init()
     label: "Ignore ITU Zone",
     click: function ()
     {
-      g_blockedITUz[callRoster[g_targetITUz].callObj.ituza] = true;
+      g_blockedITUz[callRoster[g_targetITUz].callObj.ituz] = true;
       storeBlocks();
       window.opener.goProcessRoster();
     }
@@ -2259,7 +2259,7 @@ function handleContextMenu(ev)
       g_targetITUz = ev.target.parentNode.id;
       g_ITUzMenu.popup(mouseX, mouseY);
     }
-    else if (name.startsWith("DXCC"))
+    else if (name && name.startsWith("DXCC"))
     {
       let dxcca = name.split("(");
       let dxcc = parseInt(dxcca[1]);
@@ -3151,14 +3151,9 @@ function scoreAcqz(award, obj)
 
 function testAcqz(award, obj, baseHash)
 {
-  if (obj.cqza)
+  if (obj.cqz)
   {
-    let x = 0;
-    for (const z in obj.cqza)
-    {
-      if (obj.cqza[z] + "|" + baseHash in g_tracker[award.test.look].cqz) x++;
-    }
-    if (obj.cqza.length == x) return false;
+    if (obj.cqz + "|" + baseHash in g_tracker[award.test.look].cqz) return false;
   }
   return true;
 }

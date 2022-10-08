@@ -829,7 +829,7 @@ function downloadCtyDat()
 {
   ctyDatStatus.innerHTML = "<b><i>Downloading...</i></b>";
   getBuffer(
-    "https://storage.googleapis.com/gt_app/ctydat.json",
+    "https://storage.googleapis.com/gt_app/ctydat.json?cb=" + Date.now(),
     processCtyDat,
     null,
     "https",
@@ -851,42 +851,103 @@ function processCtyDat(buffer)
       var worldGeoData = JSON.parse(fileBuf);
       for (const key in worldGeoData)
       {
+        worldGeoData[key].ituzone = null;
+        worldGeoData[key].cqzone = null;
+        worldGeoData[key].prefixITU = {};
+        worldGeoData[key].prefixCQ = {};
+        worldGeoData[key].directITU = {};
+        worldGeoData[key].directCQ = {};
+
         if (worldGeoData[key].dxcc in ctydata)
         {
+          worldGeoData[key].cqzone = Number(ctydata[worldGeoData[key].dxcc].cqzone).pad(2);
+          worldGeoData[key].ituzone = Number(ctydata[worldGeoData[key].dxcc].ituzone).pad(2);
+
           // Skip Guantanamo Bay, hand crafted with love
           if (worldGeoData[key].dxcc != "105")
           {
             worldGeoData[key].prefix = [];
-            
+            worldGeoData[key].direct = [];
+
             var arr = ctydata[worldGeoData[key].dxcc].prefix.substr(0, ctydata[worldGeoData[key].dxcc].prefix.length - 1).split(" ");
             for (const x in arr)
             {
               var test = arr[x];
-              var i = arr[x].indexOf("(");
+              var direct = false;
+              var cq = null;
+              var itu = null;
+              
+              if (test.charAt(0) == "=")
+              {
+                direct = true;
+                test = test.substr(1);
+              }
+              var cqTest = test.match(/\((.*)\)/);
+              if (cqTest)
+              {
+                cq = Number(cqTest[1]).pad(2);
+              }
+              var ituTest = test.match(/\[(.*)\]/);
+              if (ituTest)
+              {
+                itu = Number(ituTest[1]).pad(2);
+              }
+    
+              var i = test.indexOf("(");
               if (i > -1)
               {
                 test = test.substr(0, i);
               }
-              i = arr[x].indexOf("[");
+              i = test.indexOf("[");
               if (i > -1)
               {
                 test = test.substr(0, i);
               }
-              i = arr[x].indexOf("<");
+              i = test.indexOf("<");
               if (i > -1)
               {
                 test = test.substr(0, i);
               }
-              i = arr[x].indexOf("{");
+              i = test.indexOf("{");
               if (i > -1)
               {
                 test = test.substr(0, i);
               }
-
-              worldGeoData[key].prefix.push(test);
+              i = test.indexOf("~");
+              if (i > -1)
+              {
+                test = test.substr(0, i);
+              }
+              
+              if (direct)
+              {
+                worldGeoData[key].direct.push(test);
+                if (cq)
+                {
+                  worldGeoData[key].directCQ[test] = cq;
+                }
+                if (itu)
+                {
+                  worldGeoData[key].directITU[test] = itu;
+                }
+              }
+              else
+              {
+                worldGeoData[key].prefix.push(test);
+                if (cq)
+                {
+                  worldGeoData[key].prefixCQ[test] = cq;
+                }
+                if (itu)
+                {
+                  worldGeoData[key].prefixITU[test] = itu;
+                }
+              }
             }
             worldGeoData[key].prefix = uniqueArrayFromArray(worldGeoData[key].prefix);
             worldGeoData[key].prefix.sort();
+            worldGeoData[key].direct = uniqueArrayFromArray(worldGeoData[key].direct);
+            worldGeoData[key].direct.sort();
           }
         }
       }

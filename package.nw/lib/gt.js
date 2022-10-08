@@ -265,7 +265,6 @@ function saveLogSettings()
 function saveAndCloseApp()
 {
   g_closing = true;
-
   saveReceptionReports();
 
   try
@@ -280,6 +279,13 @@ function saveAndCloseApp()
     data.version = gtVersion;
 
     fs.writeFileSync(g_NWappData + "internal_qso.json", JSON.stringify(data));
+
+    saveScreenSettings();
+    g_conditionsWindowHandle.window.saveScreenSettings();
+    g_callRosterWindowHandle.window.saveScreenSettings();
+    g_statsWindowHandle.window.saveScreenSettings();
+    g_baWindowHandle.window.saveScreenSettings();
+    g_lookupWindowHandle.window.saveScreenSettings();
   }
   catch (e)
   {
@@ -1371,7 +1377,7 @@ function addDeDx(
           g_tracker.confirmed.grid[fourGrid + band + "dg"] = true;
         }
       }
-      if (details.ituz.length > 0)
+      if (details.ituz && details.ituz.length > 0)
       {
         g_tracker.confirmed.ituz[details.ituz + "|" + band + mode] = true;
         g_tracker.confirmed.ituz[details.ituz + "|"] = true;
@@ -1383,7 +1389,7 @@ function addDeDx(
           g_tracker.confirmed.ituz[details.ituz + "|" + band + "dg"] = true;
         }
       }
-      if (details.cqz.length > 0)
+      if (details.cqz && details.cqz.length > 0)
       {
         g_tracker.confirmed.cqz[details.cqz + "|" + band + mode] = true;
         g_tracker.confirmed.cqz[details.cqz + "|"] = true;
@@ -9681,7 +9687,7 @@ function renderStatsBox()
         );
       }
 
-      if (cqz.length > 0)
+      if (cqz && cqz.length > 0)
       {
         var name = g_cqZones[cqz].name;
         if (!(name in cqZones)) cqZones[name] = newStatObject();
@@ -9689,7 +9695,7 @@ function renderStatsBox()
         workObject(cqZones[name], false, band, mode, type, didConfirm);
       }
 
-      if (ituz.length > 0)
+      if (ituz && ituz.length > 0)
       {
         if (!(ituz in ituZones)) ituZones[ituz] = newStatObject();
 
@@ -10580,6 +10586,59 @@ function redrawGrids()
           ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_modes[mode] +
           1;
       }
+
+      if (cqz && cqz.length > 0)
+      {
+        if (g_cqZones[cqz].worked == false)
+        {
+          g_cqZones[cqz].worked = worked;
+        }
+        if (worked)
+        {
+          g_cqZones[cqz].worked_bands[band] =
+            ~~g_cqZones[cqz].worked_bands[band] + 1;
+          g_cqZones[cqz].worked_modes[mode] =
+            ~~g_cqZones[cqz].worked_modes[mode] + 1;
+        }
+        if (g_cqZones[cqz].confirmed == false)
+        {
+          g_cqZones[cqz].confirmed = didConfirm;
+        }
+        if (didConfirm)
+        {
+          g_cqZones[cqz].confirmed_bands[band] =
+            ~~g_cqZones[cqz].confirmed_bands[band] + 1;
+          g_cqZones[cqz].confirmed_modes[mode] =
+            ~~g_cqZones[cqz].confirmed_modes[mode] + 1;
+        }
+      }
+     
+      if (ituz && ituz.length > 0)
+      {
+        if (g_ituZones[ituz].worked == false)
+        {
+          g_ituZones[ituz].worked = worked;
+        }
+        if (worked)
+        {
+          g_ituZones[ituz].worked_bands[band] =
+            ~~g_ituZones[ituz].worked_bands[band] + 1;
+          g_ituZones[ituz].worked_modes[mode] =
+            ~~g_ituZones[ituz].worked_modes[mode] + 1;
+        }
+        if (g_ituZones[ituz].confirmed == false)
+        {
+          g_ituZones[ituz].confirmed = didConfirm;
+        }
+        if (didConfirm)
+        {
+          g_ituZones[ituz].confirmed_bands[band] =
+            ~~g_ituZones[ituz].confirmed_bands[band] + 1;
+          g_ituZones[ituz].confirmed_modes[mode] =
+            ~~g_ituZones[ituz].confirmed_modes[mode] + 1;
+        }
+      }
+      
       if (finalGrid.length > 0)
       {
         var gridCheck = finalGrid.substr(0, 4);
@@ -10607,58 +10666,6 @@ function redrawGrids()
               ~~g_us48Data[gridCheck].confirmed_bands[band] + 1;
             g_us48Data[gridCheck].confirmed_modes[mode] =
               ~~g_us48Data[gridCheck].confirmed_modes[mode] + 1;
-          }
-        }
-
-        if (cqz.length > 0)
-        {
-          if (g_cqZones[cqz].worked == false)
-          {
-            g_cqZones[cqz].worked = worked;
-          }
-          if (worked)
-          {
-            g_cqZones[cqz].worked_bands[band] =
-              ~~g_cqZones[cqz].worked_bands[band] + 1;
-            g_cqZones[cqz].worked_modes[mode] =
-              ~~g_cqZones[cqz].worked_modes[mode] + 1;
-          }
-          if (g_cqZones[cqz].confirmed == false)
-          {
-            g_cqZones[cqz].confirmed = didConfirm;
-          }
-          if (didConfirm)
-          {
-            g_cqZones[cqz].confirmed_bands[band] =
-              ~~g_cqZones[cqz].confirmed_bands[band] + 1;
-            g_cqZones[cqz].confirmed_modes[mode] =
-              ~~g_cqZones[cqz].confirmed_modes[mode] + 1;
-          }
-        }
-       
-        if (ituz.length > 0)
-        {
-          if (g_ituZones[ituz].worked == false)
-          {
-            g_ituZones[ituz].worked = worked;
-          }
-          if (worked)
-          {
-            g_ituZones[ituz].worked_bands[band] =
-              ~~g_ituZones[ituz].worked_bands[band] + 1;
-            g_ituZones[ituz].worked_modes[mode] =
-              ~~g_ituZones[ituz].worked_modes[mode] + 1;
-          }
-          if (g_ituZones[ituz].confirmed == false)
-          {
-            g_ituZones[ituz].confirmed = didConfirm;
-          }
-          if (didConfirm)
-          {
-            g_ituZones[ituz].confirmed_bands[band] =
-              ~~g_ituZones[ituz].confirmed_bands[band] + 1;
-            g_ituZones[ituz].confirmed_modes[mode] =
-              ~~g_ituZones[ituz].confirmed_modes[mode] + 1;
           }
         }
       }

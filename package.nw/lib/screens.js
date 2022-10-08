@@ -16,6 +16,7 @@ function setWindowInfo()
   if (g_screenLost) return;
   var win = nw.Window.get();
   var windowInfo = {};
+
   windowInfo.x = win.x;
   windowInfo.y = win.y;
   windowInfo.width = win.width;
@@ -68,7 +69,9 @@ var screenCB = {
 
 function saveScreenSettings()
 {
-  var setting = { showing: g_isShowing, zoomLevel: s_zoomLevel };
+  setWindowInfo();
+
+  var setting = { showing: g_isShowing, zoomLevel: s_zoomLevel, window: g_windowInfo };
 
   s_screenSettings = JSON.parse(localStorage.screenSettings);
 
@@ -84,9 +87,9 @@ var g_isShowing = false;
 
 nw.Window.get().on("loaded", function ()
 {
-  // Use the first 16 bytes of the title(trimmed) as storage names
+  // Use the first 12 bytes of the title(trimmed) as storage names
   // This cannot be changed as current installs (12,000+) use this naming convention
-  s_title = document.title.substr(0, 16).trim();
+  s_title = document.title.substr(0, 12).trim();
   g_isShowing = false;
   if (typeof localStorage.screenSettings == "undefined")
   {
@@ -102,8 +105,20 @@ nw.Window.get().on("loaded", function ()
   {
     saveScreenSettings();
   }
+  if (!("window" in s_screenSettings[s_title]))
+  {
+    saveScreenSettings();
+  }
   g_isShowing = s_screenSettings[s_title].showing;
   nw.Window.get().zoomLevel = s_zoomLevel = s_screenSettings[s_title].zoomLevel;
+
+  g_windowInfo = s_screenSettings[s_title].window;
+
+  var win = nw.Window.get();
+  win.x = g_windowInfo.x;
+  win.y = g_windowInfo.y;
+  win.width = g_windowInfo.width;
+  win.height = g_windowInfo.height;
 
   // Check the first part of the string, only one window has "GridTracker" in the name.
   // It is reserved to the main app window.
@@ -117,8 +132,8 @@ nw.Window.get().on("loaded", function ()
   }
 
   g_initialScreenCount = nw.Screen.screens.length;
+ 
   setWindowInfo();
-
   document.addEventListener("keydown", onZoomControlDown, true);
 });
 

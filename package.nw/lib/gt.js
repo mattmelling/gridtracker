@@ -265,7 +265,6 @@ function saveLogSettings()
 function saveAndCloseApp()
 {
   g_closing = true;
-
   saveReceptionReports();
 
   try
@@ -280,6 +279,13 @@ function saveAndCloseApp()
     data.version = gtVersion;
 
     fs.writeFileSync(g_NWappData + "internal_qso.json", JSON.stringify(data));
+
+    saveScreenSettings();
+    g_conditionsWindowHandle.window.saveScreenSettings();
+    g_callRosterWindowHandle.window.saveScreenSettings();
+    g_statsWindowHandle.window.saveScreenSettings();
+    g_baWindowHandle.window.saveScreenSettings();
+    g_lookupWindowHandle.window.saveScreenSettings();
   }
   catch (e)
   {

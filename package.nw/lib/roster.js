@@ -1595,11 +1595,13 @@ function init()
     );
   }
   loadSettings();
-  loadRosteri18n();
-  g_timerInterval = setInterval(realtimeRoster, 1000);
   updateInstances();
+
+  // callback to addControls();
+  loadRosteri18n();
 }
 
+// From i18n.js
 function addControls()
 {
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);

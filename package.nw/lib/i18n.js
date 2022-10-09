@@ -25,6 +25,8 @@ function changeLocale()
 {
   g_appSettings.locale = languageLocale.value;
   renderI18n(g_appSettings.locale);
+  saveAppSettings();
+  chrome.runtime.reload();
 }
 
 function loadChildWindowI18n()

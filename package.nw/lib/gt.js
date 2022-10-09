@@ -12213,6 +12213,41 @@ function loadMaidenHeadData()
       }
     }
   }
+
+  var localeDxcc = "./i18n/" + g_appSettings.locale + "-dxcc.json";
+  if (fs.existsSync(localeDxcc))
+  {
+    var fileBuf = fs.readFileSync(localeDxcc, "UTF-8");
+    var langDxcc = JSON.parse(fileBuf);
+    if (langDxcc)
+    {
+      for (var dxcc in langDxcc)
+      {
+        if (dxcc in g_dxccToGeoData)
+        {
+          g_worldGeoData[g_dxccToGeoData[dxcc]].name = langDxcc[dxcc];
+          g_dxccToAltName[dxcc] = langDxcc[dxcc];
+        }
+      }
+    }
+  }
+
+  var localeState = "./i18n/" + g_appSettings.locale + "-state.json";
+  if (fs.existsSync(localeState))
+  {
+    var fileBuf = fs.readFileSync(localeState, "UTF-8");
+    var langState = JSON.parse(fileBuf);
+    if (langState)
+    {
+      for (var state in langState)
+      {
+        if (state in g_StateData)
+        {
+          g_StateData[state].name = langState[state];
+        }
+      }
+    }
+  }
 }
 
 var g_timezonesEnable = 0;

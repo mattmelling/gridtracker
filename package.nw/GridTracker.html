@@ -70,7 +70,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     </div>
     <div>
       <h1>
-        <div id="startupVersionDiv" data-i18n="appname-title">GridTracker</div>
+        <div id="startupVersionDiv">GridTracker</div>
       </h1>
     </div>
     <div>
@@ -1238,11 +1238,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </td>
           </tr>
           <tr align="center" id="lookupCredentials" style="display: none">
-            <td data-i18n="settings.lookup.Username.label">
-              Username<input id="lookupLogin" type="text" class="inputTextValue" size="8"
-                oninput="lookupValueChanged();" /> Password<input id="lookupPassword" type="password"
-                class="inputTextValue" size="8" oninput="lookupValueChanged();" />
-            </td>
+            <td data-i18n="settings.lookup.Username.label">Username</td>
+            <td><input id="lookupLogin" type="text" class="inputTextValue" size="8" oninput="lookupValueChanged();" /></td>
+            <td data-i18n="settings.lookup.Password.label">Password</td>
+            <td><input id="lookupPassword" type="password"    class="inputTextValue" size="8" oninput="lookupValueChanged();" /></td>
             <td>
               <div data-i18n="settings.lookup.QRZTest" class="button" onclick="GetSessionID(lookupQrzTestResult);">Test
               </div>
@@ -1323,8 +1322,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <div id="callsignDatabaseDiv" class="mapItem">
         <table align="center" class="darkTable">
           <tr>
-            <th data-i18n="settings.lookup.Databases.label" colspan="6" style="font-weight: bold; color: yellow">
-              Callsign Databases</th>
+            <th data-i18n="settings.lookup.Databases.label" colspan="6" style="font-weight: bold; color: yellow">Callsign Databases</th>
           </tr>
           <tr>
             <th data-i18n="settings.lookup.Databases.header">Database</th>

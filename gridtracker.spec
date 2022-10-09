@@ -1,6 +1,6 @@
 Name:           {{{ git_name name=gridtracker }}}
 Summary:        GridTracker: An amateur radio companion to WSJT-X or JTDX
-Version:        {{{ git_version lead=1.22.1009 }}}
+Version:        {{{ git_version lead=1.22.1010 }}}
 Release:        1%{?dist}
 BuildArch:      noarch
 Source0:        {{{ git_dir_pack }}}
@@ -40,6 +40,8 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Sun Oct 09 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1010-1
+  - Fix issue with map selection not saving/restoring
 * Sat Oct 08 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1009-1
   - Fix issue with loading logs and generating scores
 * Sat Oct 08 2022 Matthew Chambers <nr0q@gridtracker.org> - 1.22.1008-1

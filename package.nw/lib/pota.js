@@ -218,17 +218,20 @@ function reportPotaRBN(callSpot)
     spotterGrid: callSpot.spotterGrid
   }
   
-  getPostJSONBuffer(
-    "https://api.pota.app/spot",
-    rbnReportResult,
-    null,
-    "https",
-    443,
-    report,
-    10000,
-    null,
-    null
-  );
+  if (Number(report.frequency) > 0)
+  {
+    getPostJSONBuffer(
+      "https://api.pota.app/spot",
+      rbnReportResult,
+      null,
+      "https",
+      443,
+      report,
+      10000,
+      null,
+      null
+    );
+  }
 }
 
 function reportPotaQSO(record)

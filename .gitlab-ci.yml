@@ -94,10 +94,6 @@ win:package:
       7zr e NsProcess.zip -y -o/usr/share/nsis/Include/ Include/nsProcess.nsh
       7zr e NsProcess.zip -y -o/usr/share/nsis/Plugins/x86-unicode/ Plugin/nsProcessW.dll
       mv /usr/share/nsis/Plugins/x86-unicode/nsProcessW.dll /usr/share/nsis/Plugins/x86-unicode/nsProcess.dll
-      ## eval $(ssh-agent -s)
-      ## echo "$NR0Q_PRIV" | tr -d '\r' | ssh-add -
-      ## mkdir -p ~/.ssh; chmod 700 ~/.ssh
-      ## scp -o StrictHostKeyChecking=no -P $NR0Q_SSH_PORT mchambers@$NR0Q_SERVER_ADDRESS:~/codecert.spc ./
   script:
     - |
       # Making our Windows packages 
@@ -107,11 +103,12 @@ win:package:
       npm install --prefer-offline
       npm run dist-win
       for dir in dist/*-win-* ; do
-          if [  -f $dir ] && [[ "$dir" == *"-Setup.exe" ]] ; then
-            echo "deleting broken installer $dir"
-            rm $dir
-          fi
+        if [  -f $dir ] && [[ "$dir" == *"-Setup.exe" ]] ; then
+          echo "deleting broken installer $dir"
+          rm $dir
+        fi
       done
+      rm dist/*-win-*/locales/*.info
       # Now we need to sign the executable before it get's stuffed into Nullsoft
       # using mono signcode
       ## signcode -spc codecert.spc -t http://time.certum.pl/ -a sha256 dist/GridTracker-*-win-*/*.exe

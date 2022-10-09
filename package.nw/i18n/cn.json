@@ -1035,7 +1035,7 @@
     "COMMENT_processRosterFiltering.js": "",
     "rosterFilter.POTA.Unknown": "Unknown Park",
     "COMMENT_rosterColumns.js": "",
-    "rosterColumns.County.title": "ZIP Code matches multiple counties, click to do a full lookup",
+    "rosterColumns.County.title": "matches multiple counties, click to do a full lookup",
     "rosterColumns.LoTW.NoUpdate": "Has not updated a QSO in",
     "rosterColumns.LoTW.LastUpdate": "Last Upload&#10;",
     "rosterColumns.OAMS.user": "Off-Air Message User",

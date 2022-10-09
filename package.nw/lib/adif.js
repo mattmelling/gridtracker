@@ -682,6 +682,7 @@ function tryToDeleteLog(filename)
 var g_lotwCount = 0;
 
 var g_isGettingLOTW = false;
+var g_lotwTest = false;
 
 function grabLOtWLog(test)
 {
@@ -769,26 +770,27 @@ function grabLoTWQSL()
     );
 
     // Fetch QSLs
-    var tQSO = setTimeout(function()
-    {
-      if (test == false) lotwLogLoaded = true;
-      getABuffer(
-        "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
-          lotwLogin.value +
-          "&password=" +
-          encodeURIComponent(lotwPassword.value) +
-          "&qso_query=1&qso_qsl=yes&qso_qsldetail=yes&qso_withown=yes" +
-          lastQSLDateString,
-        lotwCallback,
-        test,
-        "https",
-        443,
-        lotwLogImg,
-        "g_isGettingLOTW",
-        120000
-      );
-    }, 10000);
+    nodeTimers.setTimeout(downloadLoTWQSL, 10000);
   }
+}
+
+function downloadLoTWQSL()
+{
+  getABuffer(
+    "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
+      lotwLogin.value +
+      "&password=" +
+      encodeURIComponent(lotwPassword.value) +
+      "&qso_query=1&qso_qsl=yes&qso_qsldetail=yes&qso_withown=yes" +
+      lastQSLDateString,
+    lotwCallback,
+    null,
+    "https",
+    443,
+    lotwLogImg,
+    "g_isGettingLOTW",
+    120000
+  );
 }
 
 function qrzCallback(buffer, flag)
@@ -1145,7 +1147,6 @@ function loadGtQSOLogFile()
   }
 }
 
-var lotwLogLoaded = false;
 function loadLoTWLogFile()
 {
   var fs = require("fs");
@@ -1157,7 +1158,6 @@ function loadLoTWLogFile()
     g_fromDirectCallNoFileDialog = true;
 
     onAdiLoadComplete(rawAdiBuffer, false);
-    lotwLogLoaded = true;
   }
 }
 

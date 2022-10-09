@@ -15508,8 +15508,7 @@ function is_dir(path)
   }
   catch (e)
   {
-    // lstatSync throws an error if path doesn't exist
-    console.error(e);
+    // lstatSync throws an error if path doesn't exist, which isn't an error so don't send it to console
     return false;
   }
 }

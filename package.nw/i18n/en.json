@@ -493,7 +493,7 @@
     "roster.controls.callsigns.worked": "New",
     "roster.controls.callsigns.confirmed": "New+Unconfirmed",
     "roster.controls.callsigns.all": "All Traffic",
-    "roster.controls.callsigns.hits": "All Traffic/Only Winted",
+    "roster.controls.callsigns.hits": "All Traffic/Only Wanted",
     "roster.controls.hunting.label": "Hunting",
     "roster.controls.hunting.callsign": "Callsign",
     "roster.controls.hunting.grid": "Grid",

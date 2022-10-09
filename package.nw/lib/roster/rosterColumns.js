@@ -442,7 +442,7 @@ WANTED_LABELS = {
   wpx: $.i18n("rosterColumns.Wanted.wpx"),
   call: $.i18n("rosterColumns.Wanted.call"),
   oams: $.i18n("rosterColumns.Wanted.oams"),
-  pota: $.i18n("rosterColumns.Wanted.pota"),
+  pota: $.i18n("rosterColumns.Wanted.pota")
 }
 
 function wantedColumnParts(callObj, options)

@@ -18,9 +18,6 @@
   "webkit": {
     "plugin": true
   },
-  "dependencies": {
-    "jquery": "^3.5.0"
-  },
   "scripts": {
     "test": "eslint .",
     "start": "run --mirror https://dl.nwjs.io/ ."

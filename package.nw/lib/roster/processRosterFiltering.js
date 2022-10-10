@@ -230,8 +230,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
       if (g_rosterSettings.hunting == "dxcc")
       {
-        var hash = hashMaker(String(callObj.dxcc) + "|",
-          callObj, g_rosterSettings.reference);
+        let hash = hashMaker(String(callObj.dxcc) + "|", callObj, g_rosterSettings.reference);
 
         if (rosterSettings.huntIndex && (hash in rosterSettings.huntIndex.dxcc))
         {
@@ -361,7 +360,6 @@ function processRosterFiltering(callRoster, rosterSettings)
 
             // TODO: Move award reason out of exclusions code?
             callObj.awardReason = g_awards[x.sponsor].awards[x.name].tooltip + " (" + g_awards[x.sponsor].sponsor + ")";
-            callObj.reason.push(x.name + " - " + x.sponsor);
             callObj.shouldAlert = true;
             break;
           }

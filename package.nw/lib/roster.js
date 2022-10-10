@@ -907,7 +907,7 @@ function setVisual()
     HuntModeControls.style.display = "none";
     CallsignsControls.style.display = "none";
     AwardTrackerControls.style.display = "";
-    huntingMatrixDiv.style.display = "none";
+    //huntingMatrixDiv.style.display = "none";
     updateAwardList();
   }
   else
@@ -1604,6 +1604,22 @@ function init()
 // From i18n.js
 function addControls()
 {
+  WANTED_LABELS = {
+    cont: $.i18n("rosterColumns.Wanted.cont"),
+    cqz: $.i18n("rosterColumns.Wanted.cqz"),
+    ituz: $.i18n("rosterColumns.Wanted.ituz"),
+    dxcc: $.i18n("rosterColumns.Wanted.dxcc"),
+    dxccMarathon: $.i18n("rosterColumns.Wanted.dxccMarathon"),
+    cqzMarathon: $.i18n("rosterColumns.Wanted.cqzMarathon"),
+    state: $.i18n("rosterColumns.Wanted.state"),
+    grid: $.i18n("rosterColumns.Wanted.grid"),
+    cnty: $.i18n("rosterColumns.Wanted.cnty"),
+    wpx: $.i18n("rosterColumns.Wanted.wpx"),
+    call: $.i18n("rosterColumns.Wanted.call"),
+    oams: $.i18n("rosterColumns.Wanted.oams"),
+    pota: $.i18n("rosterColumns.Wanted.pota")
+  }
+
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
   for (const key in g_rosterSettings.wanted)

@@ -438,7 +438,7 @@ WANTED_LABELS = {
   cqzMarathon: $.i18n("rosterColumns.Wanted.cqzMarathon"),
   state: $.i18n("rosterColumns.Wanted.state"),
   grid: $.i18n("rosterColumns.Wanted.grid"),
-  cnty: $.i18n("rosterColumns.Wanted.county"),
+  cnty: $.i18n("rosterColumns.Wanted.cnty"),
   wpx: $.i18n("rosterColumns.Wanted.wpx"),
   call: $.i18n("rosterColumns.Wanted.call"),
   oams: $.i18n("rosterColumns.Wanted.oams"),
@@ -451,16 +451,7 @@ function wantedColumnParts(callObj, options)
 
   if (Object.keys(callObj.hunting).length == 0)
   {
-    // is this an award reason?
-    // Hack until I talk with seb
-    if (callObj.awardReason != "Callsign")
-    {
-      return callObj.reason;
-    }
-    else
-    {
-      return [];
-    }
+    return [];
   }
 
   let parts = [];

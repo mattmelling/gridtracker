@@ -428,7 +428,7 @@ function potaColumnHover(callObj)
   return value;
 }
 
-WANTED_ORDER = ["regex", "call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
+WANTED_ORDER = ["call", "qrz", "regex", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
 WANTED_LABELS = {
   cont: "Continent",
   cqz: "CQ Zone",

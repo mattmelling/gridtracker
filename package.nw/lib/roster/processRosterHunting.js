@@ -237,7 +237,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
               callObj.reason.push("regex");
               callObj.hunting.regex = "hunted";
               callObj.DEcallHTML = callsign.replace(huntRegexObj, (x, y) => `<span class='regexMatch'>${x}</span>`)
-              if (!callObj.hunting.call)
+              if (!callObj.hunting.call && !callObj.callFlags.worked)
               {
                 callBg = `${call}${inversionAlpha};`;
                 call = bold;

@@ -104,10 +104,10 @@ Number.prototype.formatSignalReport = function ()
   return report;
 };
 
+var CALLSIGN_REGEX = /0/g
 String.prototype.formatCallsign = function ()
 {
-  var re = new RegExp("0", "g");
-  return this.replace(re, "Ø");
+  return this.replace(CALLSIGN_REGEX, "Ø");
 };
 
 Number.prototype.toDHMS = function ()

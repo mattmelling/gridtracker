@@ -60,7 +60,7 @@ const ROSTER_COLUMNS = {
         align: "left",
         onClick: `initiateQso("${callObj.hash}")`,
         rawAttrs: callObj.style.call,
-        html: html = callObj.DEcall.formatCallsign()
+        html: html = (callObj.DEcallHTML || callObj.DEcall).formatCallsign()
       }
 
       let acks = window.opener.g_acknowledgedCalls || {};
@@ -428,7 +428,7 @@ function potaColumnHover(callObj)
   return value;
 }
 
-WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
+WANTED_ORDER = ["regex", "call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
 WANTED_LABELS = {
   cont: "Continent",
   cqz: "CQ Zone",
@@ -441,6 +441,7 @@ WANTED_LABELS = {
   cnty: "County",
   wpx: "WPX",
   call: "Call",
+  regex: "Regex",
   oams: "OAMS",
   pota: "POTA"
 }
@@ -473,6 +474,7 @@ function wantedColumnParts(callObj, options)
     // else if (wanted == "caller") { parts.push("Called"); }
     else if (wanted == "hunted" && field == "qrz") { parts.push("Caller"); }
     else if (wanted == "hunted" && field == "oams") { parts.push("OAMS User"); }
+    else if (wanted == "hunted" && field == "regex") { parts.push("Regex match"); }
     else if (wanted == "hunted") { parts.push(`${options.html ? "<b>" : ""}New ${WANTED_LABELS[field]}${options.html ? "<b>" : ""}`); }
     else if (wanted == "worked") { parts.push(`Worked ${WANTED_LABELS[field]}`); }
     else if (wanted == "mixed") { parts.push(`${callObj.band} ${WANTED_LABELS[field]}`); }

@@ -472,6 +472,10 @@ table.rosterTable thead th:first-child {
   color: #ff0;
 }
 
+.regexMatch {
+  text-decoration: underline;
+}
+
 .dxCaller {
   background-clip: content-box;
   box-shadow: 0 0 4px 4px inset #0f0;

@@ -66,6 +66,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       callObj.hunting = {}
       callObj.callFlags = {}
       callObj.style = callObj.style || {}
+      callObj.DEcallHTML = callObj.DEcall
 
       let colorObject = Object();
 
@@ -96,7 +97,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         "";
 
       let cntyPointer = (callObj.cnty && callObj.qual == false) ? "cursor: pointer;" : "";
-      
+
       let hash = callsign + workHashSuffix;
       let layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
 
@@ -224,6 +225,26 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
               }
             }
           }
+        }
+
+        if (huntRegex.checked == true && g_rosterSettings.huntRegexValue.length > 0)
+        {
+          var huntRegexObj = huntRegexObj || new RegExp(g_rosterSettings.huntRegexValue, "gi")
+          try
+          {
+            if (callsign.match(huntRegexObj))
+            {
+              callObj.reason.push("regex");
+              callObj.hunting.regex = "hunted";
+              callObj.DEcallHTML = callsign.replace(huntRegexObj, (x, y) => `<span class='regexMatch'>${x}</span>`)
+              if (!callObj.hunting.call)
+              {
+                callBg = `${call}${inversionAlpha};`;
+                call = bold;
+              }
+            }
+          }
+          catch (e) {}
         }
 
         // Hunting for "stations calling you"
@@ -493,7 +514,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           {
             shouldAlert = true;
             callObj.reason.push("pota");
-            
+
             callObj.hunting.pota = "hunted";
             potaBg = `${pota}${inversionAlpha};`;
             pota = bold;
@@ -518,7 +539,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
             if (rosterSettings.huntIndex && marathonHash in rosterSettings.huntIndex.cqz) marathonFound++;
             else if (rosterSettings.workedIndex && marathonHash in rosterSettings.workedIndex.cqz) marathonFound++;
           }
-          
+
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
@@ -591,7 +612,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.ituz) layeredFound++;
           if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.ituz) workedFound++;
           if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.ituz) layeredWorkedFound++;
-          
+
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
@@ -773,7 +794,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       if (didWork && shouldAlert) shouldAlert = false;
 
       // callObj.shouldAlert ||= shouldAlert; // eslint doesn't like this, why?
-      
+
       // If alert was set (award tracker), don't clear it
       if (!callObj.shouldAlert)
       {

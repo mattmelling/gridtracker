@@ -428,22 +428,8 @@ function potaColumnHover(callObj)
   return value;
 }
 
-WANTED_ORDER = ["call", "qrz", "regex", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
-WANTED_LABELS = {
-  cont: $.i18n("rosterColumns.Wanted.cont"),
-  cqz: $.i18n("rosterColumns.Wanted.cqz"),
-  ituz: $.i18n("rosterColumns.Wanted.ituz"),
-  dxcc: $.i18n("rosterColumns.Wanted.dxcc"),
-  dxccMarathon: $.i18n("rosterColumns.Wanted.dxccMarathon"),
-  cqzMarathon: $.i18n("rosterColumns.Wanted.cqzMarathon"),
-  state: $.i18n("rosterColumns.Wanted.state"),
-  grid: $.i18n("rosterColumns.Wanted.grid"),
-  cnty: $.i18n("rosterColumns.Wanted.cnty"),
-  wpx: $.i18n("rosterColumns.Wanted.wpx"),
-  call: $.i18n("rosterColumns.Wanted.call"),
-  oams: $.i18n("rosterColumns.Wanted.oams"),
-  pota: $.i18n("rosterColumns.Wanted.pota")
-}
+WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
+WANTED_LABELS = {};
 
 function wantedColumnParts(callObj, options)
 {

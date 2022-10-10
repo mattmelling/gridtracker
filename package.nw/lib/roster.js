@@ -907,7 +907,6 @@ function setVisual()
     HuntModeControls.style.display = "none";
     CallsignsControls.style.display = "none";
     AwardTrackerControls.style.display = "";
-    //huntingMatrixDiv.style.display = "none";
     updateAwardList();
   }
   else

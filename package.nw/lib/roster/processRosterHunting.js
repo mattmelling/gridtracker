@@ -44,7 +44,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
     }
 
     // Only render entries with `tx == true`, ignore the rest
-    if (callObj.dxcc != -1 && entry.tx == true)
+    if (entry.tx == true)
     {
       // In layered mode ("Hunting: mixed") the workHashSuffix becomes a more stricter 'live band',
       // while the layered suffix is a broader 'mixed band'
@@ -294,7 +294,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for DXCC
-        if (huntDXCC.checked)
+        if (huntDXCC.checked && callObj.dxcc && callObj.dxcc != -1)
         {
           let hash = String(callObj.dxcc) + "|" + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + "|" + layeredHashSuffix)

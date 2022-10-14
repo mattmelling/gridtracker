@@ -12,7 +12,7 @@ variables:
   #
   GCLOUD_PROJECT_ID: "cent7-288417"
   GCLOUD_SERVICE_ACCOUNT: /dev/null
-  GCLOUD_DEPLOY_PATH: gs://gt_download/$CI_COMMIT_TAG
+  GCLOUD_DEPLOY_PATH: gs://downloads.gridtracker.org/$CI_COMMIT_TAG
   NR0Q_SERVER_ADDRESS: ""
   NR0Q_SERVER_PASSWORD: ""
 
@@ -307,7 +307,7 @@ sourcerelease:
     assets:
       links:
         - name: Release Packages for $CI_COMMIT_TAG
-          url: https://https://storage.googleapis.com/gt_download/$CI_COMMIT_TAG/
+          url: https://https://downloads.gridtracker.org/$CI_COMMIT_TAG/
           external: true
           link_type: package
   script:

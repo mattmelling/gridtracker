@@ -96,7 +96,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         "";
 
       let cntyPointer = (callObj.cnty && callObj.qual == false) ? "cursor: pointer;" : "";
-      
+
       let hash = callsign + workHashSuffix;
       let layeredHash = layeredHashSuffix && (callsign + layeredHashSuffix)
 
@@ -294,7 +294,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for DXCC
-        if (huntDXCC.checked && callObj.dxcc && callObj.dxcc != -1)
+        if (huntDXCC.checked && callObj.dxcc && callObj.dxcc > 0)
         {
           let hash = String(callObj.dxcc) + "|" + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + "|" + layeredHashSuffix)
@@ -493,7 +493,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           {
             shouldAlert = true;
             callObj.reason.push("pota");
-            
+
             callObj.hunting.pota = "hunted";
             potaBg = `${pota}${inversionAlpha};`;
             pota = bold;
@@ -518,7 +518,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
             if (rosterSettings.huntIndex && marathonHash in rosterSettings.huntIndex.cqz) marathonFound++;
             else if (rosterSettings.workedIndex && marathonHash in rosterSettings.workedIndex.cqz) marathonFound++;
           }
-          
+
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
@@ -591,7 +591,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           if (rosterSettings.layeredMode && layeredHash in rosterSettings.huntIndex.ituz) layeredFound++;
           if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.ituz) workedFound++;
           if (rosterSettings.layeredMode && layeredHash in rosterSettings.workedIndex.ituz) layeredWorkedFound++;
-          
+
           if (huntFound != huntTotal)
           {
             shouldAlert = true;
@@ -773,7 +773,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       if (didWork && shouldAlert) shouldAlert = false;
 
       // callObj.shouldAlert ||= shouldAlert; // eslint doesn't like this, why?
-      
+
       // If alert was set (award tracker), don't clear it
       if (!callObj.shouldAlert)
       {

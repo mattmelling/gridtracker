@@ -319,6 +319,8 @@ update_arch_aur:
   rules:
     # only do this with a manual tag starting with v
     - if: '$CI_COMMIT_TAG =~ /^v.*/ && $AUR_KEY != ""'
+  # Allow AUR to fail without failing the whole pipeline
+  allow_failure: true
   before_script:
     - |
       pacman -Sy; pacman -S --needed --noconfirm openssh git

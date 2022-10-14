@@ -184,22 +184,28 @@
               <div>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" /> CQz</label>
+                <input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.cqzone" for="huntCQz" title="CQ Zones">CQz</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" /> ITUz</label>
+                <input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.ituzone" for="huntITUz" title="ITU Zones">ITUz</label>
               </div>
               <div>
-                <label title='CQ DX Marathon'><input type="checkbox" id="huntMarathon" onchange="wantedChanged(this);" /> Marathon</label>
+                <input type="checkbox" id="huntMarathon" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.marathon" for="huntMarathon" title="CQ DX Marathon">Marathon</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntState" onchange="wantedChanged(this);" /> State</label>
+                <input type="checkbox" id="huntState" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.state" for="huntState" title="State">State</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" /> County</label>
+                <input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.county" for="huntCounty" title="County">County</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" /> Cont</label>
+                <input type="checkbox" id="huntCont" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.cont" for="huntCont" title="Continent">Cont</label>
               </div>
               <div>
                 <label title="Callsign Regular Expression">
@@ -224,15 +230,18 @@
             <h3>Exceptions</h3>
             <div class='columns'>
               <div>
-                <label><input type="checkbox" id="cqOnly" onchange="valuesChanged();" /> CQ Only</label>
+                <input type="checkbox" id="cqOnly" onchange="wantedChanged();" />
+                <label data-i18n="roster.secondary.exceptions.cqOnly" for="cqOnly">CQ Only</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantGrid" onchange="valuesChanged();" /> Has Grid</label>
+                <input type="checkbox" id="wantGrid" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.hasGrid" for="wantGrid">Has Grid</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMinDB" onchange="valuesChanged();" /> Min dB</label>
+                <input type="checkbox" id="wantMinDB" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.minDB" for="wantMinDB">Min dB</label>
                 <input
                   type="range"
                   min="-25"
@@ -246,7 +255,8 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" /> Max DT</label>
+                <input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.maxDT" for="wantMaxDT">Max DT</label>
                 <input
                   type="range"
                   min="0.1"
@@ -260,7 +270,8 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" /> Min freq</label>
+                <input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.minFreq" for="wantMinFreq">Min freq</label>
                 <input
                   type="range"
                   min="0"
@@ -274,7 +285,8 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" /> Max freq</label>
+                <input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.maxFreq" for="wantMaxFreq">Max freq</label>
                 <input
                   type="range"
                   min="500"
@@ -289,7 +301,8 @@
               </div>
 
               <div id="usesLoTWDiv">
-                <label><input type="checkbox" id="usesLoTW" onchange="valuesChanged();" /> Uses LoTW</label>
+                <input type="checkbox" id="usesLoTW" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.usesLoTW" for="usesLoTW">Uses LoTW</label>
 
                 <input
                   title="Max time since their last upload"
@@ -305,37 +318,38 @@
               </div>
 
               <div id="onlySpotDiv">
-                <label><input type="checkbox" id="onlySpot" onchange="valuesChanged();" /> Spotted Me</label>
+                <input type="checkbox" id="onlySpot" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.spottedMe" for="onlySpot">Spotted Me</label>
               </div>
 
               <div>
-                <label>
-                  <input type="checkbox" id="noMyDxcc" onchange="onlyMyDxcc.checked=false; valuesChanged();" />
-                  Not My DXCC
-                </label>
+                <input type="checkbox" id="noMyDxcc" onchange="onlyMyDxcc.checked=false; valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.noMyDXCC" for="noMyDxcc">Not My DXCC</label>
               </div>
 
               <div>
-                <label>
-                  <input type="checkbox" id="onlyMyDxcc" onchange="noMyDxcc.checked=false; valuesChanged();" />
-                  Only My DXCC
-                </label>
+                <input type="checkbox" id="onlyMyDxcc" onchange="noMyDxcc.checked=false; valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.onlyMyDXCC" for="onlyMyDxcc">Only My DXCC</label>
               </div>
 
               <div id="useseQSLDiv">
-                <label><input type="checkbox" id="useseQSL" onchange="valuesChanged();" /> Uses eQSL</label>
+                <input type="checkbox" id="useseQSL" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.useseQSL" for="useseQSL">Uses eQSL</label>
               </div>
 
               <div id="usesOQRSDiv">
-                <label><input type="checkbox" id="usesOQRS" onchange="valuesChanged();" /> Uses OQRS</label>
+                <input type="checkbox" id="usesOQRS" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.usesOQRS" for="usesOQRS">Uses OQRS</label>
               </div>
 
               <div id="allOnlyNewDiv">
-                <label><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" /> Only New Calls</label>
+                <input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.allOnlyNew" for="allOnlyNew">Only New Calls</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantRRCQ" onchange="valuesChanged();" /> RR73 as CQ</label>
+                <input type="checkbox" id="wantRRCQ" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.wantRRCQ" for="wantRRCQ">RR73 as CQ</label>
               </div>
 
               <div>

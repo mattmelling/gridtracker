@@ -307,7 +307,7 @@ sourcerelease:
     assets:
       links:
         - name: Release Packages for $CI_COMMIT_TAG
-          url: https://https://downloads.gridtracker.org/$CI_COMMIT_TAG/
+          url: https://downloads.gridtracker.org/$CI_COMMIT_TAG/
           external: true
           link_type: package
   script:

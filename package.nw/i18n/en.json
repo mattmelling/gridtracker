@@ -222,7 +222,7 @@
     "settings.audio.lighteningAlert.long": "Long",
     "settings.audio.lighteningAlert.voice": "Voice",
     "settings.audio.QSOLogEventFile.label": "QSO Log Event Notification",
-    "settings.logbook.callsigns.hover": "Filter Logbook QSOs to inlcude these Callsigns only (comma seperated)",
+    "settings.logbook.callsigns.hover": "Filter Logbook QSOs to include these Callsigns only (comma seperated)",
     "settings.logbook.callsigns.label": "Working Callsign(s)",
     "settings.logbook.callsigns.enable": "Enable?",
     "settings.logbook.callsigns.callsigns": "Callsign(s)",

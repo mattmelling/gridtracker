@@ -200,6 +200,22 @@
               <div>
                 <label><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" /> Cont</label>
               </div>
+              <div>
+                <label title="Callsign Regular Expression">
+                  <input type="checkbox" id="huntRegex" onchange="wantedChanged(this);" /> Regex
+                </label>
+
+                <input
+                  type="text"
+                  class="inputTextValue"
+                  size="12"
+                  id="huntRegexValue"
+                  onfocus="g_typingInRoster=true;"
+                  onblur="g_typingInRoster=false;"
+                  oninput="valuesChanged();"
+                  onkeydown="blurOnEnter(this);"
+                />
+              </div>
             </div>
           </div>
 
@@ -316,7 +332,7 @@
               <div id="allOnlyNewDiv">
                 <label><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" /> Only New Calls</label>
               </div>
-              
+
               <div>
                 <label><input type="checkbox" id="wantRRCQ" onchange="valuesChanged();" /> RR73 as CQ</label>
               </div>
@@ -330,10 +346,10 @@
                   class="inputTextValue"
                   size="8"
                   id="noMsgValue"
-                  onfocus="g_regFocus=true;"
-                  onblur="g_regFocus=false;"
+                  onfocus="g_typingInRoster=true;"
+                  onblur="g_typingInRoster=false;"
                   oninput="valuesChanged();"
-                  onkeydown="checkForEnter(this);"
+                  onkeydown="blurOnEnter(this);"
                 />
               </div>
 
@@ -347,10 +363,10 @@
                   class="inputTextValue"
                   size="8"
                   id="onlyMsgValue"
-                  onfocus="g_regFocus=true;"
-                  onblur="g_regFocus=false;"
+                  onfocus="g_typingInRoster=true;"
+                  onblur="g_typingInRoster=false;"
                   oninput="valuesChanged();"
-                  onkeydown="checkForEnter(this);"
+                  onkeydown="blurOnEnter(this);"
                 />
               </div>
 
@@ -365,10 +381,10 @@
                   class="inputTextValue"
                   size="12"
                   id="callsignRegex"
-                  onfocus="g_regFocus=true;"
-                  onblur="g_regFocus=false;"
+                  onfocus="g_typingInRoster=true;"
+                  onblur="g_typingInRoster=false;"
                   oninput="valuesChanged();"
-                  onkeydown="checkForEnter(this);"
+                  onkeydown="blurOnEnter(this);"
                 />
               </div>
             </div>
@@ -376,11 +392,11 @@
         </div>
 
       </header>
-      
+
       <div id="instancesWrapper">
         <div id="instancesDiv"></div>
       </div>
-      
+
       <main id="RosterTable"></main>
     </div>
 

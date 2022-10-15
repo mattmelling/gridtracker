@@ -66,6 +66,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       callObj.hunting = {}
       callObj.callFlags = {}
       callObj.style = callObj.style || {}
+      callObj.DEcallHTML = callObj.DEcall
 
       let colorObject = Object();
 
@@ -224,6 +225,26 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
               }
             }
           }
+        }
+
+        if (huntRegex.checked == true && g_rosterSettings.huntRegexValue.length > 0)
+        {
+          var huntRegexObj = huntRegexObj || new RegExp(g_rosterSettings.huntRegexValue, "gi")
+          try
+          {
+            if (callsign.match(huntRegexObj))
+            {
+              callObj.reason.push("regex");
+              callObj.hunting.regex = "hunted";
+              callObj.DEcallHTML = callsign.replace(huntRegexObj, (x, y) => `<span class='regexMatch'>${x}</span>`)
+              if (!callObj.hunting.call && !callObj.callFlags.worked)
+              {
+                callBg = `${call}${inversionAlpha};`;
+                call = bold;
+              }
+            }
+          }
+          catch (e) {}
         }
 
         // Hunting for "stations calling you"

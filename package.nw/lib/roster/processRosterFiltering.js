@@ -78,9 +78,11 @@ function processRosterFiltering(callRoster, rosterSettings)
     }
     if (g_rosterSettings.useRegex && g_rosterSettings.callsignRegex.length > 0)
     {
+      var regexObj = regexObj || new RegExp(g_rosterSettings.callsignRegex, "i")
+
       try
       {
-        if (!call.match(g_rosterSettings.callsignRegex))
+        if (!call.match(regexObj))
         {
           entry.tx = false;
           continue;

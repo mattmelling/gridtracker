@@ -45,7 +45,7 @@ var g_clearCQzIgnoreMainMenu = null;
 var g_clearITUzIgnore = null;
 var g_clearITUzIgnoreMainMenu = null;
 var g_timerInterval = null;
-var g_regFocus = false;
+var g_typingInRoster = false;
 var g_awards = {};
 var g_awardTypes = {};
 var g_awardTracker = {};
@@ -93,6 +93,7 @@ var g_defaultSettings = {
   allOnlyNew: false,
   useRegex: false,
   callsignRegex: "",
+  huntRegexValue: "",
   realtime: true,
   wanted: {
     huntCallsign: false,
@@ -107,7 +108,8 @@ var g_defaultSettings = {
     huntPX: false,
     huntPOTA: false,
     huntQRZ: true,
-    huntOAMS: false
+    huntOAMS: false,
+    huntRegex: false
   },
   columns: {
     Callsign: true,
@@ -376,7 +378,7 @@ function realtimeRoster()
   let now = timeNowSec();
   g_day = parseInt(now / 86400);
   g_dayAsString = String(g_day);
-  
+
   if (g_rosterSettings.realtime == false) return;
 
   let timeCols = document.getElementsByClassName("timeCol");
@@ -953,6 +955,16 @@ function setVisual()
       }
     }
   }
+
+  if (huntRegex.checked == true)
+  {
+    huntRegexValue.style.display = "";
+  }
+  else
+  {
+    huntRegexValue.style.display = "none";
+  }
+
   if (wantMaxDT.checked == true)
   {
     maxDT.style.display = "";
@@ -1066,6 +1078,8 @@ function wantedChanged(element)
     }
   }
 
+  setVisual();
+
   writeRosterSettings();
 
   g_scriptReport = Object();
@@ -1125,6 +1139,7 @@ function valuesChanged()
   g_rosterSettings.allOnlyNew = allOnlyNew.checked;
   g_rosterSettings.useRegex = useRegex.checked;
   g_rosterSettings.callsignRegex = callsignRegex.value;
+  g_rosterSettings.huntRegexValue = huntRegexValue.value;
 
   writeRosterSettings();
 
@@ -1531,13 +1546,13 @@ function openIgnoreEdit()
 
 function onMyKeyDown(event)
 {
-  if (!g_regFocus)
+  if (!g_typingInRoster)
   {
     window.opener.onMyKeyDown(event);
   }
 }
 
-function checkForEnter(ele)
+function blurOnEnter(ele)
 {
   if (event.key === "Enter")
   {
@@ -2105,6 +2120,7 @@ function init()
   allOnlyNew.checked = g_rosterSettings.allOnlyNew;
   useRegex.checked = g_rosterSettings.useRegex;
   callsignRegex.value = g_rosterSettings.callsignRegex;
+  huntRegexValue.value = g_rosterSettings.huntRegexValue;
 
   setVisual();
   document.addEventListener("keydown", onMyKeyDown, false);

@@ -5503,41 +5503,14 @@ function initMap()
     var saveSettings = false;
     g_maps = Object.keys(g_maps).sort().reduce((obj, key) => { obj[key] = g_maps[key]; return obj; }, {});
     
-    if (typeof g_mapSettings.mapIndex == "number")
+    if (!(g_mapSettings.mapIndex in g_maps))
     {
-      var foundKey = null;
-      for (const key in g_maps)
-      {
-        if (g_maps[key].oldIndex == g_mapSettings.mapIndex)
-        {
-          g_mapSettings.mapIndex = key;
-          foundKey = key;
-          break;
-        }
-      }
-      if (foundKey == null)
-      {
-        g_mapSettings.mapIndex = def_mapSettings.mapIndex;
-      }
+      g_mapSettings.mapIndex = def_mapSettings.mapIndex;
       saveSettings = true;
     }
-    
-    if (typeof g_mapSettings.nightMapIndex == "number")
+    if (!(g_mapSettings.nightMapIndex in g_maps))
     {
-      var foundKey = null;
-      for (const key in g_maps)
-      {
-        if (g_maps[key].oldIndex == g_mapSettings.nightMapIndex)
-        {
-          g_mapSettings.nightMapIndex = key;
-          foundKey = key;
-          break;
-        }
-      }
-      if (foundKey == null)
-      {
-        g_mapSettings.nightMapIndex = def_mapSettings.nightMapIndex;
-      }
+      g_mapSettings.nightMapIndex = def_mapSettings.nightMapIndex;
       saveSettings = true;
     }
     if (saveSettings)

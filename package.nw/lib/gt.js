@@ -7225,7 +7225,14 @@ function handleWsjtxDecode(newMessage)
             }
           }
         }
-        potaSpotFromDecode(callsign);
+        if (callsign.pota.length > 0)
+        {
+          potaSpotFromDecode(callsign);
+        }
+        else if (CQ == true && msgDXcallsign == "CQ POTA")
+        {
+          callsign.pota = ["?-????"];
+        }
       }
       else if (CQ == true && msgDXcallsign == "CQ POTA")
       {

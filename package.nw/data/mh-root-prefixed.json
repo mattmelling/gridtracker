@@ -1,6 +1,36 @@
 {
   "0": {
-    "attribution": "Maidenhead(mh) data copyright 2020 Stephen Loomis and Henry Forte, use is granted for others provided this attribution remains in the data",
+    "attribution": "Maidenhead(mh) data copyright 2018 Stephen Loomis (N0TTL) and Henry Forte (N2VFL), use is granted for others provided this attribution remains in the data",
+    "dxcc": "0",
+    "cc": "-",
+    "ccc": "-",
+    "name": "None",
+    "continent": "-",
+    "ituzone": null,
+    "cqzone": null,
+    "timezone": "1",
+    "ccode": "-",
+    "aname": "None",
+    "mh": [],
+    "prefix": [],
+    "worked": false,
+    "confirmed": false,
+    "flag": "un.png",
+    "pp": "-",
+    "lat": 0,
+    "lon": 0,
+    "geo": "deleted",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {},
+    "direct": [],
+    "prefixITU": {},
+    "prefixCQ": {},
+    "directITU": {},
+    "directCQ": {}
+  },
+  "1": {
     "dxcc": "1",
     "cc": "CA",
     "ccc": "CAN",
@@ -2033,7 +2063,7 @@
       "VY0V": "04"
     }
   },
-  "1": {
+  "2": {
     "dxcc": "2",
     "cc": "SA",
     "ccc": "SAU",
@@ -2065,7 +2095,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "2": {
+  "3": {
     "dxcc": "3",
     "cc": "AF",
     "ccc": "AFG",
@@ -2149,7 +2179,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "3": {
+  "4": {
     "dxcc": "4",
     "cc": "MP",
     "ccc": "MNP",
@@ -2184,7 +2214,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "4": {
+  "5": {
     "dxcc": "5",
     "cc": "AX",
     "ccc": "ALA",
@@ -2233,7 +2263,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "5": {
+  "6": {
     "dxcc": "6",
     "cc": "US",
     "ccc": "USA",
@@ -3221,7 +3251,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "6": {
+  "7": {
     "dxcc": "7",
     "cc": "AL",
     "ccc": "ALB",
@@ -3262,7 +3292,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "8": {
+  "9": {
     "dxcc": "9",
     "cc": "AS",
     "ccc": "ASM",
@@ -3313,7 +3343,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "9": {
+  "10": {
     "dxcc": "10",
     "cc": "FR",
     "ccc": "FRA",
@@ -3356,7 +3386,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "10": {
+  "11": {
     "dxcc": "11",
     "cc": "IN",
     "ccc": "IND",
@@ -3404,7 +3434,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "11": {
+  "12": {
     "dxcc": "12",
     "cc": "AI",
     "ccc": "AIA",
@@ -3438,7 +3468,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "12": {
+  "13": {
     "dxcc": "13",
     "cc": "AQ",
     "ccc": "ATA",
@@ -7330,7 +7360,7 @@
       "IA0/IZ1KHY": "29"
     }
   },
-  "13": {
+  "14": {
     "dxcc": "14",
     "cc": "AM",
     "ccc": "ARM",
@@ -7370,7 +7400,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "14": {
+  "15": {
     "dxcc": "15",
     "cc": "RX",
     "ccc": "RUS",
@@ -16691,7 +16721,7 @@
       "UE75VV": "18"
     }
   },
-  "15": {
+  "16": {
     "dxcc": "16",
     "cc": "NZ",
     "ccc": "NZL",
@@ -16725,7 +16755,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "16": {
+  "17": {
     "dxcc": "17",
     "cc": "VE",
     "ccc": "VEN",
@@ -16763,7 +16793,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "17": {
+  "18": {
     "dxcc": "18",
     "cc": "AZ",
     "ccc": "AZE",
@@ -16815,7 +16845,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "18": {
+  "19": {
     "dxcc": "19",
     "cc": "CO",
     "ccc": "COL",
@@ -16847,7 +16877,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "19": {
+  "20": {
     "dxcc": "20",
     "cc": "US",
     "ccc": "USA",
@@ -16884,7 +16914,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "20": {
+  "21": {
     "dxcc": "21",
     "cc": "ES",
     "ccc": "ESP",
@@ -16985,7 +17015,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "21": {
+  "22": {
     "dxcc": "22",
     "cc": "PW",
     "ccc": "PLW",
@@ -17021,7 +17051,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "23": {
+  "24": {
     "dxcc": "24",
     "cc": "BV",
     "ccc": "BVT",
@@ -17057,7 +17087,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "26": {
+  "27": {
     "dxcc": "27",
     "cc": "BY",
     "ccc": "BLR",
@@ -17117,7 +17147,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "28": {
+  "29": {
     "dxcc": "29",
     "cc": "ES",
     "ccc": "ESP",
@@ -17269,7 +17299,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "30": {
+  "31": {
     "dxcc": "31",
     "cc": "KI",
     "ccc": "KIR",
@@ -17306,7 +17336,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "31": {
+  "32": {
     "dxcc": "32",
     "cc": "ES",
     "ccc": "ESP",
@@ -17381,7 +17411,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "32": {
+  "33": {
     "dxcc": "33",
     "cc": "GB",
     "ccc": "GBR",
@@ -17416,7 +17446,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "33": {
+  "34": {
     "dxcc": "34",
     "cc": "NZ",
     "ccc": "NZL",
@@ -17452,7 +17482,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "34": {
+  "35": {
     "dxcc": "35",
     "cc": "CX",
     "ccc": "CXR",
@@ -17502,7 +17532,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "35": {
+  "36": {
     "dxcc": "36",
     "cc": "FR",
     "ccc": "FRA",
@@ -17540,7 +17570,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "36": {
+  "37": {
     "dxcc": "37",
     "cc": "CR",
     "ccc": "CRI",
@@ -17575,7 +17605,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "37": {
+  "38": {
     "dxcc": "38",
     "cc": "CC",
     "ccc": "CCK",
@@ -17626,7 +17656,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "38": {
+  "40": {
     "dxcc": "40",
     "cc": "GR",
     "ccc": "GRC",
@@ -17718,7 +17748,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "39": {
+  "41": {
     "dxcc": "41",
     "cc": "FR",
     "ccc": "FRA",
@@ -17756,7 +17786,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "40": {
+  "43": {
     "dxcc": "43",
     "cc": "PR",
     "ccc": "PRI",
@@ -17792,7 +17822,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "42": {
+  "45": {
     "dxcc": "45",
     "cc": "GR",
     "ccc": "GRC",
@@ -17864,7 +17894,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "43": {
+  "46": {
     "dxcc": "46",
     "cc": "MY",
     "ccc": "MYS",
@@ -18007,7 +18037,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "44": {
+  "47": {
     "dxcc": "47",
     "cc": "CL",
     "ccc": "CHL",
@@ -18050,7 +18080,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "45": {
+  "48": {
     "dxcc": "48",
     "cc": "KI",
     "ccc": "KIR",
@@ -18092,7 +18122,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "46": {
+  "49": {
     "dxcc": "49",
     "cc": "GQ",
     "ccc": "GNQ",
@@ -18131,7 +18161,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "47": {
+  "50": {
     "dxcc": "50",
     "cc": "MX",
     "ccc": "MEX",
@@ -18332,7 +18362,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "48": {
+  "51": {
     "dxcc": "51",
     "cc": "ER",
     "ccc": "ERI",
@@ -18381,7 +18411,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "49": {
+  "52": {
     "dxcc": "52",
     "cc": "EE",
     "ccc": "EST",
@@ -18430,7 +18460,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "50": {
+  "53": {
     "dxcc": "53",
     "cc": "ET",
     "ccc": "ETH",
@@ -18533,7 +18563,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "51": {
+  "54": {
     "dxcc": "54",
     "cc": "RU",
     "ccc": "RUS",
@@ -21877,7 +21907,7 @@
       "UE90K": "17"
     }
   },
-  "53": {
+  "56": {
     "dxcc": "56",
     "cc": "BR",
     "ccc": "BRA",
@@ -21971,7 +22001,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "57": {
+  "60": {
     "dxcc": "60",
     "cc": "BS",
     "ccc": "BHS",
@@ -22022,7 +22052,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "58": {
+  "61": {
     "dxcc": "61",
     "cc": "RU",
     "ccc": "RUS",
@@ -22081,7 +22111,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "59": {
+  "62": {
     "dxcc": "62",
     "cc": "BB",
     "ccc": "BRB",
@@ -22115,7 +22145,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "60": {
+  "63": {
     "dxcc": "63",
     "cc": "GF",
     "ccc": "GUF",
@@ -22169,7 +22199,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "61": {
+  "64": {
     "dxcc": "64",
     "cc": "BM",
     "ccc": "BMU",
@@ -22206,7 +22236,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "62": {
+  "65": {
     "dxcc": "65",
     "cc": "VG",
     "ccc": "VGB",
@@ -22240,7 +22270,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "63": {
+  "66": {
     "dxcc": "66",
     "cc": "BZ",
     "ccc": "BLZ",
@@ -22279,7 +22309,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "66": {
+  "69": {
     "dxcc": "69",
     "cc": "KY",
     "ccc": "CYM",
@@ -22314,7 +22344,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "67": {
+  "70": {
     "dxcc": "70",
     "cc": "CU",
     "ccc": "CUB",
@@ -22372,7 +22402,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "68": {
+  "71": {
     "dxcc": "71",
     "cc": "EC",
     "ccc": "ECU",
@@ -22424,7 +22454,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "69": {
+  "72": {
     "dxcc": "72",
     "cc": "DO",
     "ccc": "DOM",
@@ -22462,7 +22492,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "70": {
+  "74": {
     "dxcc": "74",
     "cc": "SV",
     "ccc": "SLV",
@@ -22500,7 +22530,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "71": {
+  "75": {
     "dxcc": "75",
     "cc": "GE",
     "ccc": "GEO",
@@ -22550,7 +22580,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "72": {
+  "76": {
     "dxcc": "76",
     "cc": "GT",
     "ccc": "GTM",
@@ -22596,7 +22626,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "73": {
+  "77": {
     "dxcc": "77",
     "cc": "GD",
     "ccc": "GRD",
@@ -22631,7 +22661,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "74": {
+  "78": {
     "dxcc": "78",
     "cc": "HT",
     "ccc": "HTI",
@@ -22671,7 +22701,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "75": {
+  "79": {
     "dxcc": "79",
     "cc": "GP",
     "ccc": "GLP",
@@ -22752,7 +22782,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "76": {
+  "80": {
     "dxcc": "80",
     "cc": "HN",
     "ccc": "HND",
@@ -22800,7 +22830,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "77": {
+  "82": {
     "dxcc": "82",
     "cc": "JM",
     "ccc": "JAM",
@@ -22836,7 +22866,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "78": {
+  "84": {
     "dxcc": "84",
     "cc": "MQ",
     "ccc": "MTQ",
@@ -22923,7 +22953,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "79": {
+  "85": {
     "dxcc": "85",
     "cc": "AN",
     "ccc": "ANT",
@@ -22955,7 +22985,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "80": {
+  "86": {
     "dxcc": "86",
     "cc": "NI",
     "ccc": "NIC",
@@ -23006,7 +23036,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "81": {
+  "88": {
     "dxcc": "88",
     "cc": "PA",
     "ccc": "PAN",
@@ -23058,7 +23088,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "82": {
+  "89": {
     "dxcc": "89",
     "cc": "TC",
     "ccc": "TCA",
@@ -23094,7 +23124,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "83": {
+  "90": {
     "dxcc": "90",
     "cc": "TT",
     "ccc": "TTO",
@@ -23130,7 +23160,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "84": {
+  "91": {
     "dxcc": "91",
     "cc": "AW",
     "ccc": "ABW",
@@ -23167,7 +23197,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "85": {
+  "94": {
     "dxcc": "94",
     "cc": "AG",
     "ccc": "ATG",
@@ -23202,7 +23232,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "86": {
+  "95": {
     "dxcc": "95",
     "cc": "DM",
     "ccc": "DMA",
@@ -23236,7 +23266,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "87": {
+  "96": {
     "dxcc": "96",
     "cc": "MS",
     "ccc": "MSR",
@@ -23270,7 +23300,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "88": {
+  "97": {
     "dxcc": "97",
     "cc": "LC",
     "ccc": "LCA",
@@ -23307,7 +23337,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "89": {
+  "98": {
     "dxcc": "98",
     "cc": "VC",
     "ccc": "VCT",
@@ -23342,7 +23372,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "90": {
+  "99": {
     "dxcc": "99",
     "cc": "FR",
     "ccc": "FRA",
@@ -23387,7 +23417,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "91": {
+  "100": {
     "dxcc": "100",
     "cc": "AR",
     "ccc": "ARG",
@@ -27163,7 +27193,7 @@
     },
     "directCQ": {}
   },
-  "93": {
+  "103": {
     "dxcc": "103",
     "cc": "GU",
     "ccc": "GUM",
@@ -27283,7 +27313,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "94": {
+  "104": {
     "dxcc": "104",
     "cc": "BO",
     "ccc": "BOL",
@@ -27398,7 +27428,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "95": {
+  "105": {
     "dxcc": "105",
     "cc": "US",
     "ccc": "USA",
@@ -28108,7 +28138,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "96": {
+  "106": {
     "dxcc": "106",
     "cc": "GG",
     "ccc": "GGY",
@@ -28180,7 +28210,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "97": {
+  "107": {
     "dxcc": "107",
     "cc": "GN",
     "ccc": "GIN",
@@ -28235,7 +28265,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "98": {
+  "108": {
     "dxcc": "108",
     "cc": "BR",
     "ccc": "BRA",
@@ -28917,7 +28947,7 @@
     },
     "directCQ": {}
   },
-  "99": {
+  "109": {
     "dxcc": "109",
     "cc": "GW",
     "ccc": "GNB",
@@ -28957,7 +28987,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "100": {
+  "110": {
     "dxcc": "110",
     "cc": "US",
     "ccc": "USA",
@@ -29693,7 +29723,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "101": {
+  "111": {
     "dxcc": "111",
     "cc": "HM",
     "ccc": "HMD",
@@ -29730,7 +29760,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "102": {
+  "112": {
     "dxcc": "112",
     "cc": "CL",
     "ccc": "CHL",
@@ -29929,7 +29959,7 @@
     },
     "directCQ": {}
   },
-  "104": {
+  "114": {
     "dxcc": "114",
     "cc": "IM",
     "ccc": "IMN",
@@ -30024,7 +30054,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "106": {
+  "116": {
     "dxcc": "116",
     "cc": "CO",
     "ccc": "COL",
@@ -30139,7 +30169,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "107": {
+  "117": {
     "dxcc": "117",
     "cc": "IG",
     "ccc": "CHE",
@@ -30177,7 +30207,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "108": {
+  "118": {
     "dxcc": "118",
     "cc": "SJ",
     "ccc": "SJM",
@@ -30213,7 +30243,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "110": {
+  "120": {
     "dxcc": "120",
     "cc": "EC",
     "ccc": "ECU",
@@ -30274,7 +30304,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "111": {
+  "122": {
     "dxcc": "122",
     "cc": "JE",
     "ccc": "JEY",
@@ -30337,7 +30367,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "112": {
+  "123": {
     "dxcc": "123",
     "cc": "US",
     "ccc": "USA",
@@ -30376,7 +30406,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "113": {
+  "124": {
     "dxcc": "124",
     "cc": "FR",
     "ccc": "FRA",
@@ -30432,7 +30462,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "114": {
+  "125": {
     "dxcc": "125",
     "cc": "CL",
     "ccc": "CHL",
@@ -30475,7 +30505,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "115": {
+  "126": {
     "dxcc": "126",
     "cc": "RU",
     "ccc": "RUS",
@@ -30671,7 +30701,7 @@
       "UA2FM/MM": "13"
     }
   },
-  "117": {
+  "129": {
     "dxcc": "129",
     "cc": "GY",
     "ccc": "GUY",
@@ -30725,7 +30755,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "118": {
+  "130": {
     "dxcc": "130",
     "cc": "KZ",
     "ccc": "KAZ",
@@ -31301,7 +31331,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "119": {
+  "131": {
     "dxcc": "131",
     "cc": "FR",
     "ccc": "FRA",
@@ -31341,7 +31371,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "120": {
+  "132": {
     "dxcc": "132",
     "cc": "PY",
     "ccc": "PRY",
@@ -31406,7 +31436,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "121": {
+  "133": {
     "dxcc": "133",
     "cc": "NZ",
     "ccc": "NZL",
@@ -31446,7 +31476,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "122": {
+  "134": {
     "dxcc": "134",
     "cc": "US",
     "ccc": "USA",
@@ -31478,7 +31508,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "123": {
+  "135": {
     "dxcc": "135",
     "cc": "KG",
     "ccc": "KGZ",
@@ -31555,7 +31585,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "124": {
+  "136": {
     "dxcc": "136",
     "cc": "PE",
     "ccc": "PER",
@@ -31674,7 +31704,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "125": {
+  "137": {
     "dxcc": "137",
     "cc": "KR",
     "ccc": "KOR",
@@ -31740,7 +31770,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "126": {
+  "138": {
     "dxcc": "138",
     "cc": "US",
     "ccc": "USA",
@@ -31777,7 +31807,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "127": {
+  "140": {
     "dxcc": "140",
     "cc": "SR",
     "ccc": "SUR",
@@ -31823,7 +31853,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "128": {
+  "141": {
     "dxcc": "141",
     "cc": "FK",
     "ccc": "FLK",
@@ -31861,7 +31891,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "129": {
+  "142": {
     "dxcc": "142",
     "cc": "IN",
     "ccc": "IND",
@@ -31901,7 +31931,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "130": {
+  "143": {
     "dxcc": "143",
     "cc": "LA",
     "ccc": "LAO",
@@ -31961,7 +31991,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "131": {
+  "144": {
     "dxcc": "144",
     "cc": "UY",
     "ccc": "URY",
@@ -32026,7 +32056,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "132": {
+  "145": {
     "dxcc": "145",
     "cc": "LV",
     "ccc": "LVA",
@@ -32086,7 +32116,7 @@
       "YL2SW/MM": "21"
     }
   },
-  "133": {
+  "146": {
     "dxcc": "146",
     "cc": "LT",
     "ccc": "LTU",
@@ -32156,7 +32186,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "134": {
+  "147": {
     "dxcc": "147",
     "cc": "AU",
     "ccc": "AUS",
@@ -32222,7 +32252,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "135": {
+  "148": {
     "dxcc": "148",
     "cc": "VE",
     "ccc": "VEN",
@@ -32320,7 +32350,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "136": {
+  "149": {
     "dxcc": "149",
     "cc": "PT",
     "ccc": "PRT",
@@ -32373,7 +32403,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "137": {
+  "150": {
     "dxcc": "150",
     "cc": "AU",
     "ccc": "AUS",
@@ -33195,7 +33225,7 @@
       "VK8HLF/J": "29"
     }
   },
-  "138": {
+  "151": {
     "dxcc": "151",
     "cc": "RU",
     "ccc": "RUS",
@@ -33227,7 +33257,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "139": {
+  "152": {
     "dxcc": "152",
     "cc": "MO",
     "ccc": "MAC",
@@ -33262,7 +33292,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "140": {
+  "153": {
     "dxcc": "153",
     "cc": "AU",
     "ccc": "AUS",
@@ -33310,7 +33340,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "142": {
+  "157": {
     "dxcc": "157",
     "cc": "NR",
     "ccc": "NRU",
@@ -33344,7 +33374,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "143": {
+  "158": {
     "dxcc": "158",
     "cc": "VU",
     "ccc": "VUT",
@@ -33389,7 +33419,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "144": {
+  "159": {
     "dxcc": "159",
     "cc": "MV",
     "ccc": "MDV",
@@ -33431,7 +33461,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "145": {
+  "160": {
     "dxcc": "160",
     "cc": "TO",
     "ccc": "TON",
@@ -33475,7 +33505,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "146": {
+  "161": {
     "dxcc": "161",
     "cc": "CO",
     "ccc": "COL",
@@ -33518,7 +33548,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "147": {
+  "162": {
     "dxcc": "162",
     "cc": "NC",
     "ccc": "NCL",
@@ -33582,7 +33612,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "148": {
+  "163": {
     "dxcc": "163",
     "cc": "PG",
     "ccc": "PNG",
@@ -33686,7 +33716,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "150": {
+  "165": {
     "dxcc": "165",
     "cc": "MU",
     "ccc": "MUS",
@@ -33721,7 +33751,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "151": {
+  "166": {
     "dxcc": "166",
     "cc": "US",
     "ccc": "USA",
@@ -33826,7 +33856,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "152": {
+  "167": {
     "dxcc": "167",
     "cc": "SE",
     "ccc": "SWE",
@@ -33860,7 +33890,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "153": {
+  "168": {
     "dxcc": "168",
     "cc": "MH",
     "ccc": "MHL",
@@ -33912,7 +33942,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "154": {
+  "169": {
     "dxcc": "169",
     "cc": "YT",
     "ccc": "MYT",
@@ -33961,7 +33991,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "155": {
+  "170": {
     "dxcc": "170",
     "cc": "NZ",
     "ccc": "NZL",
@@ -34064,7 +34094,7 @@
       "ZL1CT/MM": "34"
     }
   },
-  "156": {
+  "171": {
     "dxcc": "171",
     "cc": "AU",
     "ccc": "AUS",
@@ -34103,7 +34133,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "157": {
+  "172": {
     "dxcc": "172",
     "cc": "PN",
     "ccc": "PCN",
@@ -34139,7 +34169,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "158": {
+  "173": {
     "dxcc": "173",
     "cc": "FM",
     "ccc": "FSM",
@@ -34196,7 +34226,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "159": {
+  "174": {
     "dxcc": "174",
     "cc": "US",
     "ccc": "USA",
@@ -34234,7 +34264,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "160": {
+  "175": {
     "dxcc": "175",
     "cc": "PF",
     "ccc": "PYF",
@@ -34313,7 +34343,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "161": {
+  "176": {
     "dxcc": "176",
     "cc": "FJ",
     "ccc": "FJI",
@@ -34363,7 +34393,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "162": {
+  "177": {
     "dxcc": "177",
     "cc": "JP",
     "ccc": "JPN",
@@ -34434,7 +34464,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "164": {
+  "179": {
     "dxcc": "179",
     "cc": "MD",
     "ccc": "MDA",
@@ -34477,7 +34507,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "165": {
+  "180": {
     "dxcc": "180",
     "cc": "GR",
     "ccc": "GRC",
@@ -34516,7 +34546,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "166": {
+  "181": {
     "dxcc": "181",
     "cc": "MZ",
     "ccc": "MOZ",
@@ -34614,7 +34644,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "167": {
+  "182": {
     "dxcc": "182",
     "cc": "US",
     "ccc": "USA",
@@ -34650,7 +34680,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "170": {
+  "185": {
     "dxcc": "185",
     "cc": "SB",
     "ccc": "SLB",
@@ -34707,7 +34737,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "171": {
+  "187": {
     "dxcc": "187",
     "cc": "NE",
     "ccc": "NER",
@@ -34809,7 +34839,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "172": {
+  "188": {
     "dxcc": "188",
     "cc": "NU",
     "ccc": "NIU",
@@ -34844,7 +34874,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "173": {
+  "189": {
     "dxcc": "189",
     "cc": "NF",
     "ccc": "NFK",
@@ -34904,7 +34934,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "174": {
+  "190": {
     "dxcc": "190",
     "cc": "WS",
     "ccc": "WSM",
@@ -34940,7 +34970,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "175": {
+  "191": {
     "dxcc": "191",
     "cc": "NZ",
     "ccc": "NZL",
@@ -35019,7 +35049,7 @@
     },
     "directCQ": {}
   },
-  "176": {
+  "192": {
     "dxcc": "192",
     "cc": "JP",
     "ccc": "JPN",
@@ -35058,7 +35088,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "177": {
+  "193": {
     "dxcc": "193",
     "cc": "JP",
     "ccc": "JPN",
@@ -35093,7 +35123,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "179": {
+  "195": {
     "dxcc": "195",
     "cc": "GQ",
     "ccc": "GNQ",
@@ -35127,7 +35157,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "181": {
+  "197": {
     "dxcc": "197",
     "cc": "US",
     "ccc": "USA",
@@ -35164,7 +35194,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "183": {
+  "199": {
     "dxcc": "199",
     "cc": "NO",
     "ccc": "NOR",
@@ -35198,7 +35228,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "185": {
+  "201": {
     "dxcc": "201",
     "cc": "ZA",
     "ccc": "ZAF",
@@ -35235,7 +35265,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "186": {
+  "202": {
     "dxcc": "202",
     "cc": "PR",
     "ccc": "PRI",
@@ -35539,7 +35569,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "187": {
+  "203": {
     "dxcc": "203",
     "cc": "AD",
     "ccc": "AND",
@@ -35573,7 +35603,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "188": {
+  "204": {
     "dxcc": "204",
     "cc": "MX",
     "ccc": "MEX",
@@ -35625,7 +35655,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "189": {
+  "205": {
     "dxcc": "205",
     "cc": "AC",
     "ccc": "ASC",
@@ -35659,7 +35689,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "190": {
+  "206": {
     "dxcc": "206",
     "cc": "AT",
     "ccc": "AUT",
@@ -35749,7 +35779,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "191": {
+  "207": {
     "dxcc": "207",
     "cc": "MU",
     "ccc": "MUS",
@@ -35783,7 +35813,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "193": {
+  "209": {
     "dxcc": "209",
     "cc": "BE",
     "ccc": "BEL",
@@ -35867,7 +35897,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "195": {
+  "211": {
     "dxcc": "211",
     "cc": "CA",
     "ccc": "CAN",
@@ -35902,7 +35932,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "196": {
+  "212": {
     "dxcc": "212",
     "cc": "BG",
     "ccc": "BGR",
@@ -35953,7 +35983,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "197": {
+  "213": {
     "dxcc": "213",
     "cc": "FR",
     "ccc": "FRA",
@@ -35998,7 +36028,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "198": {
+  "214": {
     "dxcc": "214",
     "cc": "FR",
     "ccc": "FRA",
@@ -36036,7 +36066,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "199": {
+  "215": {
     "dxcc": "215",
     "cc": "CY",
     "ccc": "CYP",
@@ -36083,7 +36113,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "200": {
+  "216": {
     "dxcc": "216",
     "cc": "NI",
     "ccc": "NIC",
@@ -36131,7 +36161,7 @@
       "HK3JJH/HK0A": "08"
     }
   },
-  "201": {
+  "217": {
     "dxcc": "217",
     "cc": "CL",
     "ccc": "CHL",
@@ -36175,7 +36205,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "203": {
+  "219": {
     "dxcc": "219",
     "cc": "ST",
     "ccc": "STP",
@@ -36211,7 +36241,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "204": {
+  "221": {
     "dxcc": "221",
     "cc": "DK",
     "ccc": "DNK",
@@ -36326,7 +36356,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "205": {
+  "222": {
     "dxcc": "222",
     "cc": "FO",
     "ccc": "FRO",
@@ -36364,7 +36394,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "206": {
+  "223": {
     "dxcc": "223",
     "cc": "GB",
     "ccc": "GBR",
@@ -36481,7 +36511,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "207": {
+  "224": {
     "dxcc": "224",
     "cc": "FI",
     "ccc": "FIN",
@@ -36806,7 +36836,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "208": {
+  "225": {
     "dxcc": "225",
     "cc": "IT",
     "ccc": "ITA",
@@ -36924,7 +36954,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "210": {
+  "227": {
     "dxcc": "227",
     "cc": "FR",
     "ccc": "FRA",
@@ -37040,7 +37070,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "213": {
+  "230": {
     "dxcc": "230",
     "cc": "DE",
     "ccc": "DEU",
@@ -37350,7 +37380,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "215": {
+  "232": {
     "dxcc": "232",
     "cc": "SO",
     "ccc": "SOM",
@@ -37433,7 +37463,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "216": {
+  "233": {
     "dxcc": "233",
     "cc": "GI",
     "ccc": "GIB",
@@ -37470,7 +37500,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "217": {
+  "234": {
     "dxcc": "234",
     "cc": "GS",
     "ccc": "SGS",
@@ -37531,7 +37561,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "218": {
+  "235": {
     "dxcc": "235",
     "cc": "GS",
     "ccc": "SGS",
@@ -37582,7 +37612,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "219": {
+  "236": {
     "dxcc": "236",
     "cc": "GR",
     "ccc": "GRC",
@@ -37700,7 +37730,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "220": {
+  "237": {
     "dxcc": "237",
     "cc": "GL",
     "ccc": "GRL",
@@ -38148,7 +38178,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "221": {
+  "238": {
     "dxcc": "238",
     "cc": "GB",
     "ccc": "GBR",
@@ -38192,7 +38222,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "222": {
+  "239": {
     "dxcc": "239",
     "cc": "HU",
     "ccc": "HUN",
@@ -38247,7 +38277,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "223": {
+  "240": {
     "dxcc": "240",
     "cc": "GS",
     "ccc": "SGS",
@@ -38285,7 +38315,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "224": {
+  "241": {
     "dxcc": "241",
     "cc": "GB",
     "ccc": "GBR",
@@ -38393,7 +38423,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "225": {
+  "242": {
     "dxcc": "242",
     "cc": "IS",
     "ccc": "ISL",
@@ -38456,7 +38486,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "227": {
+  "245": {
     "dxcc": "245",
     "cc": "IE",
     "ccc": "IRL",
@@ -38515,7 +38545,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "228": {
+  "246": {
     "dxcc": "246",
     "cc": "MT",
     "ccc": "MLT",
@@ -38549,7 +38579,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "229": {
+  "247": {
     "dxcc": "247",
     "cc": "PH",
     "ccc": "PHL",
@@ -38609,7 +38639,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "230": {
+  "248": {
     "dxcc": "248",
     "cc": "IT",
     "ccc": "ITA",
@@ -38899,7 +38929,7 @@
       "II0PN/MM": "40"
     }
   },
-  "231": {
+  "249": {
     "dxcc": "249",
     "cc": "KN",
     "ccc": "KNA",
@@ -38933,7 +38963,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "232": {
+  "250": {
     "dxcc": "250",
     "cc": "SH",
     "ccc": "SHN",
@@ -38968,7 +38998,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "233": {
+  "251": {
     "dxcc": "251",
     "cc": "LI",
     "ccc": "LIE",
@@ -39003,7 +39033,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "234": {
+  "252": {
     "dxcc": "252",
     "cc": "CA",
     "ccc": "CAN",
@@ -39037,7 +39067,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "235": {
+  "253": {
     "dxcc": "253",
     "cc": "BR",
     "ccc": "BRA",
@@ -39100,7 +39130,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "236": {
+  "254": {
     "dxcc": "254",
     "cc": "LU",
     "ccc": "LUX",
@@ -39139,7 +39169,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "237": {
+  "256": {
     "dxcc": "256",
     "cc": "PT",
     "ccc": "PRT",
@@ -39184,7 +39214,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "238": {
+  "257": {
     "dxcc": "257",
     "cc": "MT",
     "ccc": "MLT",
@@ -39235,7 +39265,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "240": {
+  "259": {
     "dxcc": "259",
     "cc": "SJ",
     "ccc": "SJM",
@@ -39313,7 +39343,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "241": {
+  "260": {
     "dxcc": "260",
     "cc": "MC",
     "ccc": "MCO",
@@ -39349,7 +39379,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "243": {
+  "262": {
     "dxcc": "262",
     "cc": "TJ",
     "ccc": "TJK",
@@ -39404,7 +39434,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "244": {
+  "263": {
     "dxcc": "263",
     "cc": "NL",
     "ccc": "NLD",
@@ -39638,7 +39668,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "246": {
+  "265": {
     "dxcc": "265",
     "cc": "IE",
     "ccc": "IRL",
@@ -40089,7 +40119,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "247": {
+  "266": {
     "dxcc": "266",
     "cc": "NO",
     "ccc": "NOR",
@@ -40307,7 +40337,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "250": {
+  "269": {
     "dxcc": "269",
     "cc": "PL",
     "ccc": "POL",
@@ -40429,7 +40459,7 @@
       "SP1NY/MM": "34"
     }
   },
-  "251": {
+  "270": {
     "dxcc": "270",
     "cc": "TK",
     "ccc": "TKL",
@@ -40465,7 +40495,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "253": {
+  "272": {
     "dxcc": "272",
     "cc": "PT",
     "ccc": "PRT",
@@ -40526,7 +40556,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "254": {
+  "273": {
     "dxcc": "273",
     "cc": "BR",
     "ccc": "BRA",
@@ -40590,7 +40620,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "255": {
+  "274": {
     "dxcc": "274",
     "cc": "GB",
     "ccc": "GBR",
@@ -40625,7 +40655,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "256": {
+  "275": {
     "dxcc": "275",
     "cc": "RO",
     "ccc": "ROU",
@@ -40694,7 +40724,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "257": {
+  "276": {
     "dxcc": "276",
     "cc": "FR",
     "ccc": "FRA",
@@ -40740,7 +40770,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "258": {
+  "277": {
     "dxcc": "277",
     "cc": "CA",
     "ccc": "CAN",
@@ -40781,7 +40811,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "259": {
+  "278": {
     "dxcc": "278",
     "cc": "SM",
     "ccc": "SMR",
@@ -40815,7 +40845,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "260": {
+  "279": {
     "dxcc": "279",
     "cc": "GB",
     "ccc": "GBR",
@@ -41805,7 +41835,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "261": {
+  "280": {
     "dxcc": "280",
     "cc": "TM",
     "ccc": "TKM",
@@ -41883,7 +41913,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "262": {
+  "281": {
     "dxcc": "281",
     "cc": "ES",
     "ccc": "ESP",
@@ -42162,7 +42192,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "263": {
+  "282": {
     "dxcc": "282",
     "cc": "TV",
     "ccc": "TUV",
@@ -42200,7 +42230,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "264": {
+  "283": {
     "dxcc": "283",
     "cc": "CY",
     "ccc": "CYP",
@@ -42236,7 +42266,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "265": {
+  "284": {
     "dxcc": "284",
     "cc": "SE",
     "ccc": "SWE",
@@ -42416,7 +42446,7 @@
       "8S8ODEN/MM": "40"
     }
   },
-  "266": {
+  "285": {
     "dxcc": "285",
     "cc": "VI",
     "ccc": "VIR",
@@ -42517,7 +42547,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "267": {
+  "286": {
     "dxcc": "286",
     "cc": "UG",
     "ccc": "UGA",
@@ -42570,7 +42600,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "268": {
+  "287": {
     "dxcc": "287",
     "cc": "CH",
     "ccc": "CHE",
@@ -42622,7 +42652,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "269": {
+  "288": {
     "dxcc": "288",
     "cc": "UA",
     "ccc": "UKR",
@@ -42791,7 +42821,46 @@
       "UT5FA/MM": "09"
     }
   },
-  "270": {
+  "289": {
+    "dxcc": "289",
+    "cc": "UN",
+    "ccc": "UNS",
+    "name": "United Nations HQ",
+    "continent": "NA",
+    "ituzone": "08",
+    "cqzone": "05",
+    "timezone": "1",
+    "ccode": "999",
+    "aname": "United Nations HQ",
+    "mh": [
+      "FN30"
+    ],
+    "prefix": [],
+    "worked": false,
+    "confirmed": false,
+    "flag": "un.png",
+    "pp": "4U1U",
+    "lat": 40.750272,
+    "lon": -73.967649,
+    "geo": "deleted",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {},
+    "direct": [
+      "4U1UN",
+      "4U50SPACE",
+      "4U60UN",
+      "4U64UN",
+      "4U70UN",
+      "4U75UN"
+    ],
+    "prefixITU": {},
+    "prefixCQ": {},
+    "directITU": {},
+    "directCQ": {}
+  },
+  "291": {
     "dxcc": "291",
     "cc": "US",
     "ccc": "USA",
@@ -55514,7 +55583,7 @@
       "KL7JFR": "05"
     }
   },
-  "271": {
+  "292": {
     "dxcc": "292",
     "cc": "UZ",
     "ccc": "UZB",
@@ -55596,7 +55665,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "272": {
+  "293": {
     "dxcc": "293",
     "cc": "VN",
     "ccc": "VNM",
@@ -55672,7 +55741,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "273": {
+  "294": {
     "dxcc": "294",
     "cc": "GB",
     "ccc": "GBR",
@@ -56542,7 +56611,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "274": {
+  "295": {
     "dxcc": "295",
     "cc": "VA",
     "ccc": "VAT",
@@ -56578,7 +56647,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "275": {
+  "296": {
     "dxcc": "296",
     "cc": "RS",
     "ccc": "SRB",
@@ -56639,7 +56708,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "276": {
+  "297": {
     "dxcc": "297",
     "cc": "US",
     "ccc": "USA",
@@ -56676,7 +56745,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "277": {
+  "298": {
     "dxcc": "298",
     "cc": "WF",
     "ccc": "WLF",
@@ -56713,7 +56782,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "278": {
+  "299": {
     "dxcc": "299",
     "cc": "MY",
     "ccc": "MYS",
@@ -56771,7 +56840,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "279": {
+  "301": {
     "dxcc": "301",
     "cc": "KI",
     "ccc": "KIR",
@@ -56827,7 +56896,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "280": {
+  "302": {
     "dxcc": "302",
     "cc": "EH",
     "ccc": "ESH",
@@ -56881,7 +56950,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "281": {
+  "303": {
     "dxcc": "303",
     "cc": "AU",
     "ccc": "AUS",
@@ -56924,7 +56993,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "282": {
+  "304": {
     "dxcc": "304",
     "cc": "BH",
     "ccc": "BHR",
@@ -56961,7 +57030,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "283": {
+  "305": {
     "dxcc": "305",
     "cc": "BD",
     "ccc": "BGD",
@@ -57012,7 +57081,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "284": {
+  "306": {
     "dxcc": "306",
     "cc": "BT",
     "ccc": "BTN",
@@ -57053,7 +57122,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "286": {
+  "308": {
     "dxcc": "308",
     "cc": "CR",
     "ccc": "CRI",
@@ -57095,7 +57164,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "287": {
+  "309": {
     "dxcc": "309",
     "cc": "MM",
     "ccc": "MMR",
@@ -57191,7 +57260,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "288": {
+  "312": {
     "dxcc": "312",
     "cc": "KH",
     "ccc": "KHM",
@@ -57240,7 +57309,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "289": {
+  "315": {
     "dxcc": "315",
     "cc": "LK",
     "ccc": "LKA",
@@ -57287,7 +57356,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "290": {
+  "318": {
     "dxcc": "318",
     "cc": "CN",
     "ccc": "CHN",
@@ -63955,7 +64024,7 @@
       "BD5QDM/9": "23"
     }
   },
-  "291": {
+  "321": {
     "dxcc": "321",
     "cc": "HK",
     "ccc": "HKG",
@@ -63990,7 +64059,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "292": {
+  "324": {
     "dxcc": "324",
     "cc": "IN",
     "ccc": "IND",
@@ -64256,7 +64325,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "293": {
+  "327": {
     "dxcc": "327",
     "cc": "ID",
     "ccc": "IDN",
@@ -65036,7 +65105,7 @@
     },
     "directCQ": {}
   },
-  "294": {
+  "330": {
     "dxcc": "330",
     "cc": "IR",
     "ccc": "IRN",
@@ -65180,7 +65249,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "295": {
+  "333": {
     "dxcc": "333",
     "cc": "IQ",
     "ccc": "IRQ",
@@ -65252,7 +65321,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "296": {
+  "336": {
     "dxcc": "336",
     "cc": "IL",
     "ccc": "ISR",
@@ -65342,7 +65411,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "297": {
+  "339": {
     "dxcc": "339",
     "cc": "JP",
     "ccc": "JPN",
@@ -65474,7 +65543,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "298": {
+  "342": {
     "dxcc": "342",
     "cc": "JO",
     "ccc": "JOR",
@@ -65518,7 +65587,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "299": {
+  "344": {
     "dxcc": "344",
     "cc": "KP",
     "ccc": "PRK",
@@ -65572,7 +65641,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "300": {
+  "345": {
     "dxcc": "345",
     "cc": "BN",
     "ccc": "BRN",
@@ -65607,7 +65676,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "301": {
+  "348": {
     "dxcc": "348",
     "cc": "KW",
     "ccc": "KWT",
@@ -65651,7 +65720,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "302": {
+  "354": {
     "dxcc": "354",
     "cc": "LB",
     "ccc": "LBN",
@@ -65692,7 +65761,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "303": {
+  "363": {
     "dxcc": "363",
     "cc": "MN",
     "ccc": "MNG",
@@ -65866,7 +65935,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "304": {
+  "369": {
     "dxcc": "369",
     "cc": "NP",
     "ccc": "NPL",
@@ -65916,7 +65985,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "305": {
+  "370": {
     "dxcc": "370",
     "cc": "OM",
     "ccc": "OMN",
@@ -66037,7 +66106,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "306": {
+  "372": {
     "dxcc": "372",
     "cc": "PK",
     "ccc": "PAK",
@@ -66144,7 +66213,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "307": {
+  "375": {
     "dxcc": "375",
     "cc": "PH",
     "ccc": "PHL",
@@ -66248,7 +66317,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "308": {
+  "376": {
     "dxcc": "376",
     "cc": "QA",
     "ccc": "QAT",
@@ -66291,7 +66360,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "309": {
+  "378": {
     "dxcc": "378",
     "cc": "SA",
     "ccc": "SAU",
@@ -66475,7 +66544,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "310": {
+  "379": {
     "dxcc": "379",
     "cc": "SC",
     "ccc": "SYC",
@@ -66515,7 +66584,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "311": {
+  "381": {
     "dxcc": "381",
     "cc": "SG",
     "ccc": "SGP",
@@ -66551,7 +66620,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "312": {
+  "382": {
     "dxcc": "382",
     "cc": "DJ",
     "ccc": "DJI",
@@ -66589,7 +66658,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "313": {
+  "384": {
     "dxcc": "384",
     "cc": "SY",
     "ccc": "SYR",
@@ -66643,7 +66712,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "314": {
+  "386": {
     "dxcc": "386",
     "cc": "TW",
     "ccc": "TWN",
@@ -66694,7 +66763,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "315": {
+  "387": {
     "dxcc": "387",
     "cc": "TH",
     "ccc": "THA",
@@ -66775,7 +66844,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "316": {
+  "390": {
     "dxcc": "390",
     "cc": "TR",
     "ccc": "TUR",
@@ -66938,7 +67007,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "317": {
+  "391": {
     "dxcc": "391",
     "cc": "AE",
     "ccc": "ARE",
@@ -67020,7 +67089,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "318": {
+  "400": {
     "dxcc": "400",
     "cc": "DZ",
     "ccc": "DZA",
@@ -67199,7 +67268,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "319": {
+  "401": {
     "dxcc": "401",
     "cc": "AO",
     "ccc": "AGO",
@@ -67313,7 +67382,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "320": {
+  "402": {
     "dxcc": "402",
     "cc": "BW",
     "ccc": "BWA",
@@ -67382,7 +67451,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "321": {
+  "404": {
     "dxcc": "404",
     "cc": "BI",
     "ccc": "BDI",
@@ -67421,7 +67490,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "322": {
+  "406": {
     "dxcc": "406",
     "cc": "CM",
     "ccc": "CMR",
@@ -67491,7 +67560,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "323": {
+  "408": {
     "dxcc": "408",
     "cc": "CF",
     "ccc": "CAF",
@@ -67566,7 +67635,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "324": {
+  "409": {
     "dxcc": "409",
     "cc": "CV",
     "ccc": "CPV",
@@ -67606,7 +67675,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "325": {
+  "410": {
     "dxcc": "410",
     "cc": "TD",
     "ccc": "TCD",
@@ -67721,7 +67790,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "326": {
+  "411": {
     "dxcc": "411",
     "cc": "KM",
     "ccc": "COM",
@@ -67757,7 +67826,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "327": {
+  "412": {
     "dxcc": "412",
     "cc": "CG",
     "ccc": "COG",
@@ -67821,7 +67890,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "328": {
+  "414": {
     "dxcc": "414",
     "cc": "CD",
     "ccc": "COD",
@@ -67987,7 +68056,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "329": {
+  "416": {
     "dxcc": "416",
     "cc": "BJ",
     "ccc": "BEN",
@@ -68033,7 +68102,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "330": {
+  "420": {
     "dxcc": "420",
     "cc": "GA",
     "ccc": "GAB",
@@ -68089,7 +68158,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "331": {
+  "422": {
     "dxcc": "422",
     "cc": "GM",
     "ccc": "GMB",
@@ -68127,7 +68196,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "332": {
+  "424": {
     "dxcc": "424",
     "cc": "GH",
     "ccc": "GHA",
@@ -68183,7 +68252,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "333": {
+  "428": {
     "dxcc": "428",
     "cc": "CI",
     "ccc": "CIV",
@@ -68240,7 +68309,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "334": {
+  "430": {
     "dxcc": "430",
     "cc": "KE",
     "ccc": "KEN",
@@ -68315,7 +68384,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "335": {
+  "432": {
     "dxcc": "432",
     "cc": "LS",
     "ccc": "LSO",
@@ -68354,7 +68423,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "336": {
+  "434": {
     "dxcc": "434",
     "cc": "LR",
     "ccc": "LBR",
@@ -68404,7 +68473,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "337": {
+  "436": {
     "dxcc": "436",
     "cc": "LY",
     "ccc": "LBY",
@@ -68539,7 +68608,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "338": {
+  "438": {
     "dxcc": "438",
     "cc": "MG",
     "ccc": "MDG",
@@ -68619,7 +68688,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "339": {
+  "440": {
     "dxcc": "440",
     "cc": "MW",
     "ccc": "MWI",
@@ -68667,7 +68736,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "340": {
+  "442": {
     "dxcc": "442",
     "cc": "ML",
     "ccc": "MLI",
@@ -68780,7 +68849,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "341": {
+  "444": {
     "dxcc": "444",
     "cc": "MR",
     "ccc": "MRT",
@@ -68878,7 +68947,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "342": {
+  "446": {
     "dxcc": "446",
     "cc": "MA",
     "ccc": "MAR",
@@ -68953,7 +69022,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "343": {
+  "450": {
     "dxcc": "450",
     "cc": "NG",
     "ccc": "NGA",
@@ -69043,7 +69112,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "344": {
+  "452": {
     "dxcc": "452",
     "cc": "ZW",
     "ccc": "ZWE",
@@ -69110,7 +69179,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "345": {
+  "453": {
     "dxcc": "453",
     "cc": "RE",
     "ccc": "REU",
@@ -69162,7 +69231,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "346": {
+  "454": {
     "dxcc": "454",
     "cc": "RW",
     "ccc": "RWA",
@@ -69199,7 +69268,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "347": {
+  "456": {
     "dxcc": "456",
     "cc": "SN",
     "ccc": "SEN",
@@ -69251,7 +69320,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "348": {
+  "458": {
     "dxcc": "458",
     "cc": "SL",
     "ccc": "SLE",
@@ -69291,7 +69360,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "349": {
+  "460": {
     "dxcc": "460",
     "cc": "FJ",
     "ccc": "FJI",
@@ -69338,7 +69407,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "350": {
+  "462": {
     "dxcc": "462",
     "cc": "ZA",
     "ccc": "ZAF",
@@ -69490,7 +69559,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "351": {
+  "464": {
     "dxcc": "464",
     "cc": "NA",
     "ccc": "NAM",
@@ -69586,7 +69655,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "352": {
+  "466": {
     "dxcc": "466",
     "cc": "SD",
     "ccc": "SDN",
@@ -69724,7 +69793,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "353": {
+  "468": {
     "dxcc": "468",
     "cc": "SZ",
     "ccc": "SWZ",
@@ -69765,7 +69834,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "354": {
+  "470": {
     "dxcc": "470",
     "cc": "TZ",
     "ccc": "TZA",
@@ -69852,7 +69921,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "355": {
+  "474": {
     "dxcc": "474",
     "cc": "TN",
     "ccc": "TUN",
@@ -69908,7 +69977,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "356": {
+  "478": {
     "dxcc": "478",
     "cc": "EG",
     "ccc": "EGY",
@@ -70012,7 +70081,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "357": {
+  "480": {
     "dxcc": "480",
     "cc": "BF",
     "ccc": "BFA",
@@ -70069,7 +70138,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "358": {
+  "482": {
     "dxcc": "482",
     "cc": "ZM",
     "ccc": "ZMB",
@@ -70152,7 +70221,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "359": {
+  "483": {
     "dxcc": "483",
     "cc": "TG",
     "ccc": "TGO",
@@ -70193,7 +70262,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "361": {
+  "489": {
     "dxcc": "489",
     "cc": "FJ",
     "ccc": "FJI",
@@ -70231,7 +70300,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "362": {
+  "490": {
     "dxcc": "490",
     "cc": "KI",
     "ccc": "KIR",
@@ -70266,7 +70335,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "363": {
+  "492": {
     "dxcc": "492",
     "cc": "YE",
     "ccc": "YEM",
@@ -70345,7 +70414,7 @@
       "7O6T": "37"
     }
   },
-  "365": {
+  "497": {
     "dxcc": "497",
     "cc": "HR",
     "ccc": "HRV",
@@ -70417,7 +70486,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "366": {
+  "499": {
     "dxcc": "499",
     "cc": "SI",
     "ccc": "SVN",
@@ -70462,7 +70531,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "367": {
+  "501": {
     "dxcc": "501",
     "cc": "BA",
     "ccc": "BIH",
@@ -70507,7 +70576,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "368": {
+  "502": {
     "dxcc": "502",
     "cc": "MK",
     "ccc": "MKD",
@@ -70545,7 +70614,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "369": {
+  "503": {
     "dxcc": "503",
     "cc": "CZ",
     "ccc": "CZE",
@@ -70597,7 +70666,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "370": {
+  "504": {
     "dxcc": "504",
     "cc": "SK",
     "ccc": "SVK",
@@ -70640,7 +70709,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "371": {
+  "505": {
     "dxcc": "505",
     "cc": "TW",
     "ccc": "TWN",
@@ -70682,7 +70751,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "372": {
+  "506": {
     "dxcc": "506",
     "cc": "PH",
     "ccc": "PHL",
@@ -70716,7 +70785,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "373": {
+  "507": {
     "dxcc": "507",
     "cc": "SB",
     "ccc": "SLB",
@@ -70753,7 +70822,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "374": {
+  "508": {
     "dxcc": "508",
     "cc": "PF",
     "ccc": "PYF",
@@ -70832,7 +70901,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "375": {
+  "509": {
     "dxcc": "509",
     "cc": "FR",
     "ccc": "FRA",
@@ -70906,7 +70975,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "376": {
+  "510": {
     "dxcc": "510",
     "cc": "PS",
     "ccc": "PSE",
@@ -70941,7 +71010,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "377": {
+  "511": {
     "dxcc": "511",
     "cc": "TL",
     "ccc": "TLS",
@@ -70980,7 +71049,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "378": {
+  "512": {
     "dxcc": "512",
     "cc": "GB",
     "ccc": "GBR",
@@ -71021,7 +71090,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "379": {
+  "513": {
     "dxcc": "513",
     "cc": "PN",
     "ccc": "PCN",
@@ -71060,7 +71129,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "380": {
+  "514": {
     "dxcc": "514",
     "cc": "ME",
     "ccc": "MNE",
@@ -71098,7 +71167,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "381": {
+  "515": {
     "dxcc": "515",
     "cc": "US",
     "ccc": "USA",
@@ -71139,7 +71208,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "382": {
+  "516": {
     "dxcc": "516",
     "cc": "FR",
     "ccc": "FRA",
@@ -71188,7 +71257,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "383": {
+  "517": {
     "dxcc": "517",
     "cc": "AN",
     "ccc": "ANT",
@@ -71222,7 +71291,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "384": {
+  "518": {
     "dxcc": "518",
     "cc": "SX",
     "ccc": "SXM",
@@ -71258,7 +71327,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "385": {
+  "519": {
     "dxcc": "519",
     "cc": "AN",
     "ccc": "ANT",
@@ -71293,7 +71362,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "386": {
+  "520": {
     "dxcc": "520",
     "cc": "BQ",
     "ccc": "BES",
@@ -71327,7 +71396,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "387": {
+  "521": {
     "dxcc": "521",
     "cc": "SS",
     "ccc": "SSD",
@@ -71406,7 +71475,7 @@
     "directITU": {},
     "directCQ": {}
   },
-  "388": {
+  "522": {
     "dxcc": "522",
     "cc": "XK",
     "ccc": "XKX",
@@ -71431,75 +71500,6 @@
     "pp": "Z6",
     "lat": 42.648,
     "lon": 21.006,
-    "geo": "deleted",
-    "worked_bands": {},
-    "confirmed_bands": {},
-    "worked_modes": {},
-    "confirmed_modes": {},
-    "direct": [],
-    "prefixITU": {},
-    "prefixCQ": {},
-    "directITU": {},
-    "directCQ": {}
-  },
-  "389": {
-    "dxcc": "289",
-    "cc": "UN",
-    "ccc": "UNS",
-    "name": "United Nations HQ",
-    "continent": "NA",
-    "ituzone": "08",
-    "cqzone": "05",
-    "timezone": "1",
-    "ccode": "999",
-    "aname": "United Nations HQ",
-    "mh": [
-      "FN30"
-    ],
-    "prefix": [],
-    "worked": false,
-    "confirmed": false,
-    "flag": "un.png",
-    "pp": "4U1U",
-    "lat": 40.750272,
-    "lon": -73.967649,
-    "geo": "deleted",
-    "worked_bands": {},
-    "confirmed_bands": {},
-    "worked_modes": {},
-    "confirmed_modes": {},
-    "direct": [
-      "4U1UN",
-      "4U50SPACE",
-      "4U60UN",
-      "4U64UN",
-      "4U70UN",
-      "4U75UN"
-    ],
-    "prefixITU": {},
-    "prefixCQ": {},
-    "directITU": {},
-    "directCQ": {}
-  },
-  "390": {
-    "dxcc": "0",
-    "cc": "-",
-    "ccc": "-",
-    "name": "None",
-    "continent": "-",
-    "ituzone": null,
-    "cqzone": null,
-    "timezone": "1",
-    "ccode": "-",
-    "aname": "None",
-    "mh": [],
-    "prefix": [],
-    "worked": false,
-    "confirmed": false,
-    "flag": "un.png",
-    "pp": "-",
-    "lat": 0,
-    "lon": 0,
     "geo": "deleted",
     "worked_bands": {},
     "confirmed_bands": {},

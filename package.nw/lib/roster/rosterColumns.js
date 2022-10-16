@@ -116,7 +116,7 @@ const ROSTER_COLUMNS = {
   DXCC: {
     compare: (a, b) => window.opener.myDxccCompare(a.callObj, b.callObj),
     tableData: (callObj) => ({
-      title: window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].pp,
+      title: window.opener.g_dxccInfo[callObj.dxcc].pp,
       name: `DXCC (${callObj.dxcc})`,
       rawAttrs: callObj.style.dxcc,
       html: [window.opener.g_dxccToAltName[callObj.dxcc], callObj.dxccSuffix].join("&nbsp;")
@@ -128,7 +128,7 @@ const ROSTER_COLUMNS = {
     tableData: (callObj) => ({
       align: "center",
       style: "margin:0; padding:0;",
-      html: `<img style='padding-top:3px' src='./img/flags/16/${window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].flag}'>`
+      html: `<img style='padding-top:3px' src='./img/flags/16/${window.opener.g_dxccInfo[callObj.dxcc].flag}'>`
     })
   },
 

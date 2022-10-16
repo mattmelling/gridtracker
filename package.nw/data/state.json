@@ -208,7 +208,11 @@
       "DP52",
       "DP62"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-NU": {
     "postal": "CA-NU",
@@ -742,7 +746,11 @@
       "FO79",
       "FO69"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-YT": {
     "postal": "CA-YT",
@@ -805,7 +813,11 @@
       "CP12",
       "CP22"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-MB": {
     "postal": "CA-MB",
@@ -868,7 +880,11 @@
       "DO98",
       "DO99"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-SK": {
     "postal": "CA-SK",
@@ -926,7 +942,11 @@
       "DO59",
       "DN99"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-AB": {
     "postal": "CA-AB",
@@ -983,7 +1003,11 @@
       "DO41",
       "DO45"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-BC": {
     "postal": "CA-BC",
@@ -1079,7 +1103,11 @@
       "CO85",
       "CO33"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-ON": {
     "postal": "CA-ON",
@@ -1183,7 +1211,11 @@
       "FN24",
       "FN25"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-QC": {
     "postal": "CA-QC",
@@ -1334,7 +1366,11 @@
       "FN45",
       "FN57"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-NB": {
     "postal": "CA-NB",
@@ -1351,7 +1387,11 @@
       "FN86",
       "FN64"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-NS": {
     "postal": "CA-NS",
@@ -1371,7 +1411,11 @@
       "GN06",
       "FN97"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-NL": {
     "postal": "CA-NL",
@@ -1433,19 +1477,43 @@
       "GN16",
       "GN28"
     ],
-    "dxcc": 1
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "CA-PE": {
     "postal": "CA-PE",
     "name": "Prince Edward Island",
-    "mh": ["FN86", "FN85", "FN96", "FN76", "FN77", "FN87"],
-    "dxcc": 1
+    "mh": [
+      "FN86",
+      "FN85",
+      "FN96",
+      "FN76",
+      "FN77",
+      "FN87"
+    ],
+    "dxcc": 1,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MA": {
     "postal": "US-MA",
     "name": "Massachusetts",
-    "mh": ["FN51", "FN32", "FN42", "FN41"],
-    "dxcc": 291
+    "mh": [
+      "FN51",
+      "FN32",
+      "FN42",
+      "FN41"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MN": {
     "postal": "US-MN",
@@ -1478,7 +1546,11 @@
       "EN43",
       "EN44"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MT": {
     "postal": "US-MT",
@@ -1513,7 +1585,11 @@
       "DN17",
       "DN46"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-ND": {
     "postal": "US-ND",
@@ -1540,7 +1616,11 @@
       "EN08",
       "EN18"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-ID": {
     "postal": "US-ID",
@@ -1567,7 +1647,11 @@
       "DN32",
       "DN42"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-WA": {
     "postal": "US-WA",
@@ -1592,7 +1676,11 @@
       "DN05",
       "DN16"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-AZ": {
     "postal": "US-AZ",
@@ -1626,7 +1714,11 @@
       "GM13",
       "HM46"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-CA": {
     "postal": "US-CA",
@@ -1670,7 +1762,11 @@
       "CN81",
       "CN91"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-CO": {
     "postal": "US-CO",
@@ -1693,7 +1789,11 @@
       "DN70",
       "DN80"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-NV": {
     "postal": "US-NV",
@@ -1718,7 +1818,11 @@
       "DN11",
       "DN21"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-NM": {
     "postal": "US-NM",
@@ -1747,7 +1851,11 @@
       "DM62",
       "DM72"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-OR": {
     "postal": "US-OR",
@@ -1779,7 +1887,11 @@
       "DN06",
       "DN16"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-UT": {
     "postal": "US-UT",
@@ -1805,7 +1917,11 @@
       "DN31",
       "DN41"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-WY": {
     "postal": "US-WY",
@@ -1828,7 +1944,11 @@
       "DN64",
       "DN74"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-AR": {
     "postal": "US-AR",
@@ -1848,7 +1968,11 @@
       "EM55",
       "EM46"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-IA": {
     "postal": "US-IA",
@@ -1870,7 +1994,11 @@
       "EN33",
       "EN43"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-KS": {
     "postal": "US-KS",
@@ -1892,7 +2020,11 @@
       "DM97",
       "DM87"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MO": {
     "postal": "US-MO",
@@ -1918,7 +2050,11 @@
       "EM46",
       "EM56"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-NE": {
     "postal": "US-NE",
@@ -1941,7 +2077,11 @@
       "DN82",
       "DN80"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-OK": {
     "postal": "US-OK",
@@ -1962,7 +2102,11 @@
       "DM86",
       "DM96"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-SD": {
     "postal": "US-SD",
@@ -1986,7 +2130,11 @@
       "DN74",
       "DN75"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-LA": {
     "postal": "US-LA",
@@ -2006,7 +2154,11 @@
       "EM42",
       "EM51"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-TX": {
     "postal": "US-TX",
@@ -2063,37 +2215,82 @@
       "EM04",
       "EM23"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-CT": {
     "postal": "US-CT",
     "name": "Connecticut",
-    "mh": ["FN30", "FN31", "FN41", "FN32", "FN42"],
-    "dxcc": 291
+    "mh": [
+      "FN30",
+      "FN31",
+      "FN41",
+      "FN32",
+      "FN42"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-NH": {
     "postal": "US-NH",
     "name": "New Hampshire",
-    "mh": ["FN45", "FN42", "FN32", "FN33", "FN44", "FN34", "FN43"],
-    "dxcc": 291
+    "mh": [
+      "FN45",
+      "FN42",
+      "FN32",
+      "FN33",
+      "FN44",
+      "FN34",
+      "FN43"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-RI": {
     "postal": "US-RI",
     "name": "Rhode Island",
-    "mh": ["FN41", "FN42"],
-    "dxcc": 291
+    "mh": [
+      "FN41",
+      "FN42"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-DC": {
     "postal": "US-DC",
     "name": "District Of Columbia",
-    "mh": ["FM18"],
-    "dxcc": 291
+    "mh": [
+      "FM18"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-GU": {
     "postal": "US-GU",
     "name": "Guam",
-    "mh": ["QK23"],
-    "dxcc": 103
+    "mh": [
+      "QK23"
+    ],
+    "dxcc": 103,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MH": {
     "postal": "US-MH",
@@ -2119,31 +2316,68 @@
       "RK41",
       "RK44"
     ],
-    "dxcc": 168
+    "dxcc": 168,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-PR": {
     "postal": "US-PR",
     "name": "Puerto Rico",
-    "mh": ["FK67", "FK68", "FK77", "FK78"],
-    "dxcc": 202
+    "mh": [
+      "FK67",
+      "FK68",
+      "FK77",
+      "FK78"
+    ],
+    "dxcc": 202,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-VI": {
     "postal": "US-VI",
     "name": "Virgin Islands",
-    "mh": ["FK77", "FK78"],
-    "dxcc": 285
+    "mh": [
+      "FK77",
+      "FK78"
+    ],
+    "dxcc": 285,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MP": {
     "postal": "US-MP",
     "name": "Northern Mariana Islands",
-    "mh": ["LH89"],
-    "dxcc": 4
+    "mh": [
+      "LH89"
+    ],
+    "dxcc": 4,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-VT": {
     "postal": "US-VT",
     "name": "Vermont",
-    "mh": ["FN33", "FN34", "FN35", "FN44", "FN32", "FN45"],
-    "dxcc": 291
+    "mh": [
+      "FN33",
+      "FN34",
+      "FN35",
+      "FN44",
+      "FN32",
+      "FN45"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-AL": {
     "postal": "US-AL",
@@ -2164,7 +2398,11 @@
       "EM64",
       "EM74"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-FL": {
     "postal": "US-FL",
@@ -2187,7 +2425,11 @@
       "EM80",
       "EM90"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-GA": {
     "postal": "US-GA",
@@ -2208,7 +2450,11 @@
       "EM74",
       "EM84"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MS": {
     "postal": "US-MS",
@@ -2224,7 +2470,11 @@
       "EM41",
       "EM51"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-SC": {
     "postal": "US-SC",
@@ -2242,7 +2492,11 @@
       "EM85",
       "EM95"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-IL": {
     "postal": "US-IL",
@@ -2266,7 +2520,11 @@
       "EM69",
       "EN60"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-IN": {
     "postal": "US-IN",
@@ -2284,7 +2542,11 @@
       "EN71",
       "EN61"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-KY": {
     "postal": "US-KY",
@@ -2304,7 +2566,11 @@
       "EM88",
       "EM79"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-NC": {
     "postal": "US-NC",
@@ -2327,7 +2593,11 @@
       "EM86",
       "EM85"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-OH": {
     "postal": "US-OH",
@@ -2347,7 +2617,11 @@
       "EN81",
       "EN92"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-TN": {
     "postal": "US-TN",
@@ -2364,7 +2638,11 @@
       "EM55",
       "EM45"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-VA": {
     "postal": "US-VA",
@@ -2386,7 +2664,11 @@
       "FM17",
       "FM27"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-WI": {
     "postal": "US-WI",
@@ -2411,7 +2693,11 @@
       "EN56",
       "EN47"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-WV": {
     "postal": "US-WV",
@@ -2430,25 +2716,60 @@
       "EN90",
       "FN00"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-DE": {
     "postal": "US-DE",
     "name": "Delaware",
-    "mh": ["FM28", "FM29"],
-    "dxcc": 291
+    "mh": [
+      "FM28",
+      "FM29"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MD": {
     "postal": "US-MD",
     "name": "Maryland",
-    "mh": ["FM17", "FM27", "FM08", "FM18", "FM28", "FM09", "FM19", "FM29"],
-    "dxcc": 291
+    "mh": [
+      "FM17",
+      "FM27",
+      "FM08",
+      "FM18",
+      "FM28",
+      "FM09",
+      "FM19",
+      "FM29"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-NJ": {
     "postal": "US-NJ",
     "name": "New Jersey",
-    "mh": ["FM29", "FN20", "FN30", "FN21", "FN31", "FM28"],
-    "dxcc": 291
+    "mh": [
+      "FM29",
+      "FN20",
+      "FN30",
+      "FN21",
+      "FN31",
+      "FM28"
+    ],
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-NY": {
     "postal": "US-NY",
@@ -2473,7 +2794,11 @@
       "FN14",
       "FN03"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-PA": {
     "postal": "US-PA",
@@ -2494,7 +2819,11 @@
       "FN01",
       "EN90"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-ME": {
     "postal": "US-ME",
@@ -2514,7 +2843,11 @@
       "FN57",
       "FN67"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "US-MI": {
     "postal": "US-MI",
@@ -2547,19 +2880,38 @@
       "EN58",
       "EN68"
     ],
-    "dxcc": 291
+    "dxcc": 291,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-DIF": {
     "postal": "MX-DIF",
     "name": "Distrito Federal",
-    "mh": ["EK09"],
-    "dxcc": 50
+    "mh": [
+      "EK09"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-AGU": {
     "postal": "MX-AGU",
     "name": "Aguascalientes",
-    "mh": ["DL81", "DL91", "DL82", "DL92"],
-    "dxcc": 50
+    "mh": [
+      "DL81",
+      "DL91",
+      "DL82",
+      "DL92"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-BCN": {
     "postal": "MX-BCN",
@@ -2576,7 +2928,11 @@
       "DM22",
       "DM21"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-BCS": {
     "postal": "MX-BCS",
@@ -2598,7 +2954,11 @@
       "DL52",
       "DL42"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-CAM": {
     "postal": "MX-CAM",
@@ -2614,13 +2974,30 @@
       "EK38",
       "EK49"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-CHP": {
     "postal": "MX-CHP",
     "name": "Chiapas",
-    "mh": ["EK47", "EK37", "EK36", "EK26", "EK35", "EK34", "EK45", "EK46"],
-    "dxcc": 50
+    "mh": [
+      "EK47",
+      "EK37",
+      "EK36",
+      "EK26",
+      "EK35",
+      "EK34",
+      "EK45",
+      "EK46"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-CHH": {
     "postal": "MX-CHH",
@@ -2650,7 +3027,11 @@
       "DL77",
       "DL78"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-COA": {
     "postal": "MX-COA",
@@ -2670,13 +3051,26 @@
       "DL88",
       "DL87"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-COL": {
     "postal": "MX-COL",
     "name": "Colima",
-    "mh": ["DK89", "DK79", "DK88", "DK78"],
-    "dxcc": 50
+    "mh": [
+      "DK89",
+      "DK79",
+      "DK88",
+      "DK78"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-DUR": {
     "postal": "MX-DUR",
@@ -2695,25 +3089,59 @@
       "DL83",
       "DL72"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-GUA": {
     "postal": "MX-GUA",
     "name": "Guanajuato",
-    "mh": ["DL91", "EL01", "DL90", "DL80", "DK99"],
-    "dxcc": 50
+    "mh": [
+      "DL91",
+      "EL01",
+      "DL90",
+      "DL80",
+      "DK99"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-GRO": {
     "postal": "MX-GRO",
     "name": "Guerrero",
-    "mh": ["EK08", "DK98", "DK88", "DK87", "DK97", "EK07", "EK06"],
-    "dxcc": 50
+    "mh": [
+      "EK08",
+      "DK98",
+      "DK88",
+      "DK87",
+      "DK97",
+      "EK07",
+      "EK06"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-HID": {
     "postal": "MX-HID",
     "name": "Hidalgo",
-    "mh": ["EL01", "EL00", "EK09"],
-    "dxcc": 50
+    "mh": [
+      "EL01",
+      "EL00",
+      "EK09"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-JAL": {
     "postal": "MX-JAL",
@@ -2729,31 +3157,76 @@
       "DL70",
       "DL71"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-MIC": {
     "postal": "MX-MIC",
     "name": "Michoacán",
-    "mh": ["DL80", "DL90", "DK99", "DK98", "DK88", "DK87", "DK89"],
-    "dxcc": 50
+    "mh": [
+      "DL80",
+      "DL90",
+      "DK99",
+      "DK98",
+      "DK88",
+      "DK87",
+      "DK89"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-MOR": {
     "postal": "MX-MOR",
     "name": "Morelos",
-    "mh": ["EK09", "EK08"],
-    "dxcc": 50
+    "mh": [
+      "EK09",
+      "EK08"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-MEX": {
     "postal": "MX-MEX",
     "name": "México",
-    "mh": ["EK09", "EL00", "DK99", "DK98", "EK08", "DL90"],
-    "dxcc": 50
+    "mh": [
+      "EK09",
+      "EL00",
+      "DK99",
+      "DK98",
+      "EK08",
+      "DL90"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-NAY": {
     "postal": "MX-NAY",
     "name": "Nayarit",
-    "mh": ["DL72", "DL71", "DL81", "DL70", "DL61", "DL73"],
-    "dxcc": 50
+    "mh": [
+      "DL72",
+      "DL71",
+      "DL81",
+      "DL70",
+      "DL61",
+      "DL73"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-NLE": {
     "postal": "MX-NLE",
@@ -2770,7 +3243,11 @@
       "DL93",
       "EL03"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-OAX": {
     "postal": "MX-OAX",
@@ -2789,31 +3266,83 @@
       "EK06",
       "EK07"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-PUE": {
     "postal": "MX-PUE",
     "name": "Puebla",
-    "mh": ["EL10", "EL00", "EK19", "EK09", "EK18", "EK17", "EK07", "EK08"],
-    "dxcc": 50
+    "mh": [
+      "EL10",
+      "EL00",
+      "EK19",
+      "EK09",
+      "EK18",
+      "EK17",
+      "EK07",
+      "EK08"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-QUE": {
     "postal": "MX-QUE",
     "name": "Querétaro",
-    "mh": ["DL90", "EL00", "EL01", "DL91"],
-    "dxcc": 50
+    "mh": [
+      "DL90",
+      "EL00",
+      "EL01",
+      "DL91"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-ROO": {
     "postal": "MX-ROO",
     "name": "Quintana Roo",
-    "mh": ["EL61", "EL60", "EL50", "EK59", "EK69", "EK58", "EK68", "EK57"],
-    "dxcc": 50
+    "mh": [
+      "EL61",
+      "EL60",
+      "EL50",
+      "EK59",
+      "EK69",
+      "EK58",
+      "EK68",
+      "EK57"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-SLP": {
     "postal": "MX-SLP",
     "name": "San Luis Potosí",
-    "mh": ["DL94", "DL93", "DL83", "DL92", "DL82", "EL02", "EL01", "DL91"],
-    "dxcc": 50
+    "mh": [
+      "DL94",
+      "DL93",
+      "DL83",
+      "DL92",
+      "DL82",
+      "EL02",
+      "EL01",
+      "DL91"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-SIN": {
     "postal": "MX-SIN",
@@ -2832,7 +3361,11 @@
       "DL55",
       "DL54"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-SON": {
     "postal": "MX-SON",
@@ -2857,13 +3390,28 @@
       "DL39",
       "DL38"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-TAB": {
     "postal": "MX-TAB",
     "name": "Tabasco",
-    "mh": ["EK38", "EK47", "EK48", "EK37", "EK28", "EK27"],
-    "dxcc": 50
+    "mh": [
+      "EK38",
+      "EK47",
+      "EK48",
+      "EK37",
+      "EK28",
+      "EK27"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-TAM": {
     "postal": "MX-TAM",
@@ -2883,13 +3431,24 @@
       "EL14",
       "DL92"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-TLA": {
     "postal": "MX-TLA",
     "name": "Tlaxcala",
-    "mh": ["EK09", "EK19"],
-    "dxcc": 50
+    "mh": [
+      "EK09",
+      "EK19"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-VER": {
     "postal": "MX-VER",
@@ -2908,13 +3467,29 @@
       "EL02",
       "EL12"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-YUC": {
     "postal": "MX-YUC",
     "name": "Yucatán",
-    "mh": ["EL40", "EL50", "EK59", "EL60", "EL61", "EL51", "EL41"],
-    "dxcc": 50
+    "mh": [
+      "EL40",
+      "EL50",
+      "EK59",
+      "EL60",
+      "EL61",
+      "EL51",
+      "EL41"
+    ],
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "MX-ZAC": {
     "postal": "MX-ZAC",
@@ -2933,7 +3508,11 @@
       "DL73",
       "DL72"
     ],
-    "dxcc": 50
+    "dxcc": 50,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-NSW": {
     "name": "New South Wales",
@@ -2994,7 +3573,11 @@
       "QF35",
       "QF36"
     ],
-    "dxcc": 150
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-VIC": {
     "name": "Victoria",
@@ -3023,7 +3606,11 @@
       "QF23",
       "QF06"
     ],
-    "dxcc": 150
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-QLD": {
     "name": "Queensland",
@@ -3131,7 +3718,11 @@
       "QG35",
       "QG34"
     ],
-    "dxcc": 150
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-TAS": {
     "name": "Tasmania",
@@ -3155,7 +3746,11 @@
       "QE26",
       "QE27"
     ],
-    "dxcc": 150
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-SA": {
     "name": "South Australia",
@@ -3227,7 +3822,11 @@
       "PF87",
       "PF67"
     ],
-    "dxcc": 150
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-WA": {
     "name": "Western Australia",
@@ -3386,7 +3985,11 @@
       "PG23",
       "PG33"
     ],
-    "dxcc": 150
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-NT": {
     "name": "Northern Territory",
@@ -3467,19 +4070,42 @@
       "PH51",
       "PH69"
     ],
-    "dxcc": 150
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "AU-ACT": {
     "name": "Australian Capital Territory",
     "postal": "AU-ACT",
-    "mh": ["QF44"],
-    "dxcc": 150
+    "mh": [
+      "QF44"
+    ],
+    "dxcc": 150,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-BW": {
     "name": "Baden-Württemberg",
     "dxcc": 230,
-    "mh": ["JN49", "JN59", "JN58", "JN57", "JN47", "JN37", "JN38", "JN48"],
-    "postal": "DE-BW"
+    "mh": [
+      "JN49",
+      "JN59",
+      "JN58",
+      "JN57",
+      "JN47",
+      "JN37",
+      "JN38",
+      "JN48"
+    ],
+    "postal": "DE-BW",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-BY": {
     "name": "Bayern",
@@ -3498,169 +4124,451 @@
       "JN48",
       "JN59"
     ],
-    "postal": "DE-BY"
+    "postal": "DE-BY",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-BE": {
     "name": "Berlin",
     "dxcc": 230,
-    "mh": ["JO62"],
-    "postal": "DE-BE"
+    "mh": [
+      "JO62"
+    ],
+    "postal": "DE-BE",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-BB": {
     "name": "Brandenburg",
     "dxcc": 230,
-    "mh": ["JO61", "JO71", "JO72", "JO62", "JO52", "JO53", "JO63", "JO73"],
-    "postal": "DE-BB"
+    "mh": [
+      "JO61",
+      "JO71",
+      "JO72",
+      "JO62",
+      "JO52",
+      "JO53",
+      "JO63",
+      "JO73"
+    ],
+    "postal": "DE-BB",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-HB": {
     "name": "Bremen",
     "dxcc": 230,
-    "mh": ["JO43"],
-    "postal": "DE-HB"
+    "mh": [
+      "JO43"
+    ],
+    "postal": "DE-HB",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-HH": {
     "name": "Hamburg",
     "dxcc": 230,
-    "mh": ["JO43", "JO53"],
-    "postal": "DE-HH"
+    "mh": [
+      "JO43",
+      "JO53"
+    ],
+    "postal": "DE-HH",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-HE": {
     "name": "Hessen",
     "dxcc": 230,
-    "mh": ["JN49", "JO30", "JN39", "JO40", "JO50", "JO41", "JO51"],
-    "postal": "DE-HE"
+    "mh": [
+      "JN49",
+      "JO30",
+      "JN39",
+      "JO40",
+      "JO50",
+      "JO41",
+      "JO51"
+    ],
+    "postal": "DE-HE",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-MV": {
     "name": "Mecklenburg-Vorpommern",
     "dxcc": 230,
-    "mh": ["JO53", "JO63", "JO73", "JO64", "JO74", "JO54"],
-    "postal": "DE-MV"
+    "mh": [
+      "JO53",
+      "JO63",
+      "JO73",
+      "JO64",
+      "JO74",
+      "JO54"
+    ],
+    "postal": "DE-MV",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-NI": {
     "name": "Niedersachsen",
     "dxcc": 230,
-    "mh": ["JO32", "JO33", "JO43", "JO53", "JO52", "JO51", "JO41", "JO42"],
-    "postal": "DE-NI"
+    "mh": [
+      "JO32",
+      "JO33",
+      "JO43",
+      "JO53",
+      "JO52",
+      "JO51",
+      "JO41",
+      "JO42"
+    ],
+    "postal": "DE-NI",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-NW": {
     "name": "Nordrhein-Westfalen",
     "dxcc": 230,
-    "mh": ["JO42", "JO32", "JO31", "JO21", "JO20", "JO30", "JO40", "JO41"],
-    "postal": "DE-NW"
+    "mh": [
+      "JO42",
+      "JO32",
+      "JO31",
+      "JO21",
+      "JO20",
+      "JO30",
+      "JO40",
+      "JO41"
+    ],
+    "postal": "DE-NW",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-RP": {
     "name": "Rheinland-Pfalz",
     "dxcc": 230,
-    "mh": ["JN49", "JN48", "JN39", "JO30", "JO40"],
-    "postal": "DE-RP"
+    "mh": [
+      "JN49",
+      "JN48",
+      "JN39",
+      "JO30",
+      "JO40"
+    ],
+    "postal": "DE-RP",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-SL": {
     "name": "Saarland",
     "dxcc": 230,
-    "mh": ["JN39"],
-    "postal": "DE-SL"
+    "mh": [
+      "JN39"
+    ],
+    "postal": "DE-SL",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-SN": {
     "name": "Sachsen",
     "dxcc": 230,
-    "mh": ["JO70", "JO71", "JO61", "JO60", "JO50"],
-    "postal": "DE-SN"
+    "mh": [
+      "JO70",
+      "JO71",
+      "JO61",
+      "JO60",
+      "JO50"
+    ],
+    "postal": "DE-SN",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-ST": {
     "name": "Sachsen-Anhalt",
     "dxcc": 230,
-    "mh": ["JO52", "JO62", "JO53", "JO61", "JO60", "JO51"],
-    "postal": "DE-ST"
+    "mh": [
+      "JO52",
+      "JO62",
+      "JO53",
+      "JO61",
+      "JO60",
+      "JO51"
+    ],
+    "postal": "DE-ST",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-SH": {
     "name": "Schleswig-Holstein",
     "dxcc": 230,
-    "mh": ["JO43", "JO53", "JO54", "JO44", "JO45"],
-    "postal": "DE-SH"
+    "mh": [
+      "JO43",
+      "JO53",
+      "JO54",
+      "JO44",
+      "JO45"
+    ],
+    "postal": "DE-SH",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "DE-TH": {
     "name": "Thüringen",
     "dxcc": 230,
-    "mh": ["JO50", "JO60", "JO61", "JO51", "JO41", "JO40"],
-    "postal": "DE-TH"
+    "mh": [
+      "JO50",
+      "JO60",
+      "JO61",
+      "JO51",
+      "JO41",
+      "JO40"
+    ],
+    "postal": "DE-TH",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-A": {
     "postal": "FR-A",
     "dxcc": 227,
-    "mh": ["JN38", "JN37", "JN48", "JN49", "JN39"],
-    "name": "Alsace"
+    "mh": [
+      "JN38",
+      "JN37",
+      "JN48",
+      "JN49",
+      "JN39"
+    ],
+    "name": "Alsace",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-B": {
     "postal": "FR-B",
     "dxcc": 227,
-    "mh": ["IN93", "IN92", "JN03", "JN04", "JN05", "IN95", "IN94"],
-    "name": "Aquitaine"
+    "mh": [
+      "IN93",
+      "IN92",
+      "JN03",
+      "JN04",
+      "JN05",
+      "IN95",
+      "IN94"
+    ],
+    "name": "Aquitaine",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-C": {
     "postal": "FR-C",
     "dxcc": 227,
-    "mh": ["JN14", "JN16", "JN26", "JN24", "JN25", "JN15"],
-    "name": "Auvergne"
+    "mh": [
+      "JN14",
+      "JN16",
+      "JN26",
+      "JN24",
+      "JN25",
+      "JN15"
+    ],
+    "name": "Auvergne",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-E": {
     "postal": "FR-E",
     "dxcc": 227,
-    "mh": ["IN78", "IN88", "IN98", "IN97", "IN87", "IN77"],
-    "name": "Bretagne"
+    "mh": [
+      "IN78",
+      "IN88",
+      "IN98",
+      "IN97",
+      "IN87",
+      "IN77"
+    ],
+    "name": "Bretagne",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-D": {
     "postal": "FR-D",
     "dxcc": 227,
-    "mh": ["JN27", "JN28", "JN18", "JN17", "JN16", "JN26"],
-    "name": "Bourgogne"
+    "mh": [
+      "JN27",
+      "JN28",
+      "JN18",
+      "JN17",
+      "JN16",
+      "JN26"
+    ],
+    "name": "Bourgogne",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-F": {
     "postal": "FR-F",
     "dxcc": 227,
-    "mh": ["JN18", "JN17", "JN16", "JN06", "JN07", "JN08"],
-    "name": "Centre"
+    "mh": [
+      "JN18",
+      "JN17",
+      "JN16",
+      "JN06",
+      "JN07",
+      "JN08"
+    ],
+    "name": "Centre",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-G": {
     "postal": "FR-G",
     "dxcc": 227,
-    "mh": ["JN29", "JO20", "JN19", "JN18", "JN17", "JN27", "JN28"],
-    "name": "Champagne-Ardenne"
+    "mh": [
+      "JN29",
+      "JO20",
+      "JN19",
+      "JN18",
+      "JN17",
+      "JN27",
+      "JN28"
+    ],
+    "name": "Champagne-Ardenne",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-H": {
     "postal": "FR-H",
     "dxcc": 227,
-    "mh": ["JN43", "JN42", "JN41"],
-    "name": "Corse"
+    "mh": [
+      "JN43",
+      "JN42",
+      "JN41"
+    ],
+    "name": "Corse",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-I": {
     "postal": "FR-I",
     "dxcc": 227,
-    "mh": ["JN26", "JN36", "JN27", "JN37", "JN38"],
-    "name": "Franche-Comté"
+    "mh": [
+      "JN26",
+      "JN36",
+      "JN27",
+      "JN37",
+      "JN38"
+    ],
+    "name": "Franche-Comté",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-K": {
     "postal": "FR-K",
     "dxcc": 227,
-    "mh": ["JN02", "JN12", "JN23", "JN13", "JN03", "JN14", "JN24"],
-    "name": "Languedoc-Roussillon"
+    "mh": [
+      "JN02",
+      "JN12",
+      "JN23",
+      "JN13",
+      "JN03",
+      "JN14",
+      "JN24"
+    ],
+    "name": "Languedoc-Roussillon",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-L": {
     "postal": "FR-L",
     "dxcc": 227,
-    "mh": ["JN05", "JN06", "JN16", "JN15", "JN04", "JN14"],
-    "name": "Limousin"
+    "mh": [
+      "JN05",
+      "JN06",
+      "JN16",
+      "JN15",
+      "JN04",
+      "JN14"
+    ],
+    "name": "Limousin",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-M": {
     "postal": "FR-M",
     "dxcc": 227,
-    "mh": ["JN39", "JN29", "JN38", "JN28", "JN27", "JN37"],
-    "name": "Lorraine"
+    "mh": [
+      "JN39",
+      "JN29",
+      "JN38",
+      "JN28",
+      "JN27",
+      "JN37"
+    ],
+    "name": "Lorraine",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-P": {
     "postal": "FR-P",
     "dxcc": 227,
-    "mh": ["IN99", "JN09", "JN08", "IN98"],
-    "name": "Basse-Normandie"
+    "mh": [
+      "IN99",
+      "JN09",
+      "JN08",
+      "IN98"
+    ],
+    "name": "Basse-Normandie",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-N": {
     "postal": "FR-N",
@@ -3677,37 +4585,98 @@
       "IN93",
       "IN94"
     ],
-    "name": "Midi-Pyrénées"
+    "name": "Midi-Pyrénées",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-O": {
     "postal": "FR-O",
     "dxcc": 227,
-    "mh": ["JO10", "JO11", "JO20", "JN29", "JO00"],
-    "name": "Nord-Pas-de-Calais"
+    "mh": [
+      "JO10",
+      "JO11",
+      "JO20",
+      "JN29",
+      "JO00"
+    ],
+    "name": "Nord-Pas-de-Calais",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-R": {
     "postal": "FR-R",
     "dxcc": 227,
-    "mh": ["IN96", "IN86", "IN87", "IN98", "JN08", "JN07", "IN97"],
-    "name": "Pays de la Loire"
+    "mh": [
+      "IN96",
+      "IN86",
+      "IN87",
+      "IN98",
+      "JN08",
+      "JN07",
+      "IN97"
+    ],
+    "name": "Pays de la Loire",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-S": {
     "postal": "FR-S",
     "dxcc": 227,
-    "mh": ["JO00", "JN09", "JO10", "JN19", "JN29", "JN18", "JM07", "JJ23"],
-    "name": "Picardie"
+    "mh": [
+      "JO00",
+      "JN09",
+      "JO10",
+      "JN19",
+      "JN29",
+      "JN18",
+      "JM07",
+      "JJ23"
+    ],
+    "name": "Picardie",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-T": {
     "postal": "FR-T",
     "dxcc": 227,
-    "mh": ["IN95", "JN05", "IN96", "IN97", "JN06", "JN07"],
-    "name": "Poitou-Charentes"
+    "mh": [
+      "IN95",
+      "JN05",
+      "IN96",
+      "IN97",
+      "JN06",
+      "JN07"
+    ],
+    "name": "Poitou-Charentes",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-U": {
     "postal": "FR-U",
     "dxcc": 227,
-    "mh": ["JN34", "JN35", "JN24", "JN23", "JN33", "JN32"],
-    "name": "Provence-Alpes-Côte d'Azur"
+    "mh": [
+      "JN34",
+      "JN35",
+      "JN24",
+      "JN23",
+      "JN33",
+      "JN32"
+    ],
+    "name": "Provence-Alpes-Côte d'Azur",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-V": {
     "postal": "FR-V",
@@ -3723,18 +4692,311 @@
       "JN26",
       "JN16"
     ],
-    "name": "Rhône-Alpes"
+    "name": "Rhône-Alpes",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-Q": {
     "postal": "FR-Q",
     "dxcc": 227,
-    "mh": ["JN09", "JN08", "JO00"],
-    "name": "Haute-Normandie"
+    "mh": [
+      "JN09",
+      "JN08",
+      "JO00"
+    ],
+    "name": "Haute-Normandie",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   },
   "FR-J": {
     "postal": "FR-J",
     "dxcc": 227,
-    "mh": ["JN09", "JN19", "JN18", "JN08", "HK37"],
-    "name": "Île-de-France"
+    "mh": [
+      "JN09",
+      "JN19",
+      "JN18",
+      "JN08",
+      "HK37"
+    ],
+    "name": "Île-de-France",
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
+  },
+  "US-AK": {
+    "postal": "US-AK",
+    "name": "Alaska",
+    "mh": [
+      "AO01",
+      "AO11",
+      "AO12",
+      "AO21",
+      "AO22",
+      "AO32",
+      "AO42",
+      "AO47",
+      "AO52",
+      "AO53",
+      "AO56",
+      "AO63",
+      "AO64",
+      "AO69",
+      "AO74",
+      "AO79",
+      "AO84",
+      "AO85",
+      "AO88",
+      "AO89",
+      "AO94",
+      "AO95",
+      "AO96",
+      "AO98",
+      "AO99",
+      "AP30",
+      "AP43",
+      "AP52",
+      "AP53",
+      "AP54",
+      "AP55",
+      "AP60",
+      "AP61",
+      "AP64",
+      "AP65",
+      "AP66",
+      "AP68",
+      "AP70",
+      "AP71",
+      "AP72",
+      "AP73",
+      "AP74",
+      "AP75",
+      "AP76",
+      "AP77",
+      "AP78",
+      "AP80",
+      "AP81",
+      "AP82",
+      "AP83",
+      "AP84",
+      "AP85",
+      "AP86",
+      "AP87",
+      "AP88",
+      "AP89",
+      "AP90",
+      "AP91",
+      "AP92",
+      "AP93",
+      "AP94",
+      "AP95",
+      "AP96",
+      "AP97",
+      "AP98",
+      "AP99",
+      "AQ80",
+      "AQ90",
+      "BO04",
+      "BO05",
+      "BO06",
+      "BO07",
+      "BO08",
+      "BO09",
+      "BO16",
+      "BO17",
+      "BO18",
+      "BO19",
+      "BO25",
+      "BO26",
+      "BO27",
+      "BO28",
+      "BO29",
+      "BO36",
+      "BO37",
+      "BO38",
+      "BO39",
+      "BO48",
+      "BO49",
+      "BO59",
+      "BO69",
+      "BO79",
+      "BO89",
+      "BO99",
+      "BP00",
+      "BP01",
+      "BP02",
+      "BP03",
+      "BP04",
+      "BP05",
+      "BP06",
+      "BP07",
+      "BP08",
+      "BP09",
+      "BP10",
+      "BP11",
+      "BP12",
+      "BP13",
+      "BP14",
+      "BP15",
+      "BP16",
+      "BP17",
+      "BP18",
+      "BP19",
+      "BP20",
+      "BP21",
+      "BP22",
+      "BP23",
+      "BP24",
+      "BP25",
+      "BP26",
+      "BP27",
+      "BP28",
+      "BP29",
+      "BP30",
+      "BP31",
+      "BP32",
+      "BP33",
+      "BP34",
+      "BP35",
+      "BP36",
+      "BP37",
+      "BP38",
+      "BP39",
+      "BP40",
+      "BP41",
+      "BP42",
+      "BP43",
+      "BP44",
+      "BP45",
+      "BP46",
+      "BP47",
+      "BP48",
+      "BP49",
+      "BP50",
+      "BP51",
+      "BP52",
+      "BP53",
+      "BP54",
+      "BP55",
+      "BP56",
+      "BP57",
+      "BP58",
+      "BP59",
+      "BP60",
+      "BP61",
+      "BP62",
+      "BP63",
+      "BP64",
+      "BP65",
+      "BP66",
+      "BP67",
+      "BP68",
+      "BP69",
+      "BP70",
+      "BP71",
+      "BP72",
+      "BP73",
+      "BP74",
+      "BP75",
+      "BP76",
+      "BP77",
+      "BP78",
+      "BP79",
+      "BP80",
+      "BP81",
+      "BP82",
+      "BP83",
+      "BP84",
+      "BP85",
+      "BP86",
+      "BP87",
+      "BP88",
+      "BP89",
+      "BP90",
+      "BP91",
+      "BP92",
+      "BP93",
+      "BP94",
+      "BP95",
+      "BP96",
+      "BP97",
+      "BP98",
+      "BP99",
+      "BQ00",
+      "BQ10",
+      "BQ11",
+      "BQ20",
+      "BQ21",
+      "BQ30",
+      "BQ40",
+      "BQ50",
+      "BQ60",
+      "BQ70",
+      "BQ80",
+      "CO08",
+      "CO09",
+      "CO17",
+      "CO18",
+      "CO19",
+      "CO25",
+      "CO26",
+      "CO27",
+      "CO28",
+      "CO29",
+      "CO34",
+      "CO35",
+      "CO36",
+      "CO37",
+      "CO38",
+      "CO44",
+      "CO45",
+      "CO46",
+      "CO55",
+      "CP00",
+      "RO62",
+      "RO63",
+      "RO72",
+      "RO81",
+      "RO82",
+      "RO91",
+      "RO92"
+    ],
+    "dxcc": 6,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
+  },
+  "US-HI": {
+    "postal": "US-HI",
+    "name": "Hawaii",
+    "mh": [
+      "AL36",
+      "AL45",
+      "AL55",
+      "AL64",
+      "AL65",
+      "AL73",
+      "AL91",
+      "AL92",
+      "AL93",
+      "BK19",
+      "BK28",
+      "BK29",
+      "BL01",
+      "BL02",
+      "BL10",
+      "BL11",
+      "BL20"
+    ],
+    "dxcc": 110,
+    "worked_bands": {},
+    "confirmed_bands": {},
+    "worked_modes": {},
+    "confirmed_modes": {}
   }
 }

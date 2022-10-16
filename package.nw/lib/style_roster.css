@@ -75,7 +75,7 @@ select option {
   border-radius: 8px;
   text-indent: 0.2px;
   text-overflow: "";
-  text-align: right;
+  text-align: left;
   padding: 5px;
 }
 

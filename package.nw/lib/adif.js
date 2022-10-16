@@ -186,7 +186,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
         let finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
         if (finalDxcc == 0) finalDxcc = Number(callsignToDxcc(finalDXcall));
 
-        if (!(finalDxcc in g_dxccToGeoData))
+        if (!(finalDxcc in g_dxccInfo))
         { finalDxcc = Number(callsignToDxcc(finalDXcall)); }
 
         // If my callsign isn't present, it must be for me anyway

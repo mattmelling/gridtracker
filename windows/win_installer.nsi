@@ -110,13 +110,15 @@ Section "Program Files (Required)"
     SectionIn 1 2 RO
     SetOverwrite ifdiff
 
+    RmDir /r $InstDir
+    
     SetOutPath $InstDir
     File /r "${BUILDPATH}/dist/GridTracker-${VERSION}-win-x86/*"
 
     CreateDirectory "${SMPATH}"
     CreateShortcut "${SMPATH}\${NAME}.lnk" "$InstDir\${NAME}.exe"
     CreateShortcut "${SMPATH}\Help Wiki.lnk" "${HELPURL}" "" "$InstDir\gridview.ico"
-    CreateShortcut "${SMPATH}\Uninstall.lnk" $INSTDIR\uninstall.exe
+    CreateShortcut "${SMPATH}\Uninstall.lnk" $InstDir\uninstall.exe
 
     WriteRegStr HKLM "${REGPATH_UNINSTSUBKEY}" "DisplayName" "${NAME}"
     WriteRegStr HKLM "${REGPATH_UNINSTSUBKEY}" "DisplayVersion" "${VERSION}"

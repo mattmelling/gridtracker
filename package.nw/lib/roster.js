@@ -1267,7 +1267,7 @@ function initDXCCSelector()
     let key = items[i];
 
     if (
-      window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].geo !=
+      window.opener.g_dxccInfo[key].geo !=
       "deleted"
     )
     {
@@ -1276,7 +1276,7 @@ function initDXCCSelector()
       option.text =
         window.opener.g_dxccToAltName[key] +
         " (" +
-        window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp +
+        window.opener.g_dxccInfo[key].pp +
         ")";
 
       newSelect.appendChild(option);
@@ -1485,7 +1485,7 @@ function openIgnoreEdit()
         "<tr><td align=left style='color:#FFA500' >" +
         window.opener.g_dxccToAltName[key] +
         " (" +
-        window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[key]].pp +
+        window.opener.g_dxccInfo[key].pp +
         ")</td><td style='cursor:pointer;' onclick='deleteDxccIgnore(\"" +
         key +
         "\")'><img src='/img/trash_24x48.png' style='height:17px;margin:-1px;margin-bottom:-3px;padding:0px'></td></tr>";

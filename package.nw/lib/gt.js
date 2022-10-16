@@ -447,7 +447,7 @@ var g_mainBorderColor = "#222222FF";
 var g_pushPinMode = false;
 var g_pskBandActivityTimerHandle = null;
 var g_workingIniPath = "";
-var g_worldGeoData = {};
+var g_dxccInfo = {};
 var g_prefixToMap = {};
 var g_directCallToDXCC = {};
 var g_directCallToCQzone = {};
@@ -456,7 +456,6 @@ var g_prefixToCQzone = {};
 var g_prefixToITUzone = {};
 var g_dxccToAltName = {};
 var g_dxccToADIFName = {};
-var g_dxccToGeoData = {};
 var g_gridToDXCC = {};
 
 var g_gridToState = {};
@@ -644,7 +643,7 @@ g_viewInfo[1] = ["g_cqZones", "CQ Zones", 0, 0, 40];
 g_viewInfo[2] = ["g_ituZones", "ITU Zones", 0, 0, 90];
 g_viewInfo[3] = ["g_wacZones", "Continents", 0, 0, 7];
 g_viewInfo[4] = ["g_wasZones", "US States", 0, 0, 50];
-g_viewInfo[5] = ["g_worldGeoData", "DXCCs", 0, 0, 340];
+g_viewInfo[5] = ["g_dxccInfo", "DXCCs", 0, 0, 340];
 g_viewInfo[6] = ["g_countyData", "US Counties", 0, 0, 3220];
 g_viewInfo[7] = ["g_us48Data", "US Continental Grids", 0, 0, 488];
 
@@ -1182,7 +1181,7 @@ function addDeDx(
     details.cont = finalCont;
     if (finalDxcc > 0)
     {
-      details.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
+      details.cont = g_dxccInfo[finalDxcc].continent;
       if (details.dxcc == 390 && details.zone == 1) details.cont = "EU";
     }
 
@@ -1555,7 +1554,7 @@ function addDeDx(
 
       if (newCallsign.cont == null)
       {
-        newCallsign.cont = g_worldGeoData[g_dxccToGeoData[finalDxcc]].continent;
+        newCallsign.cont = g_dxccInfo[finalDxcc].continent;
         if (newCallsign.dxcc == 390 && newCallsign.zone == 1) { newCallsign.cont = "EU"; }
       }
     }
@@ -1844,7 +1843,7 @@ function createFlagTipTable(toolElement)
       "<tr><td>DXCC</td><td style='color:orange;'>" +
       dxccName +
       " <font color='lightgreen'>(" +
-      g_worldGeoData[g_dxccToGeoData[dxcc]].pp +
+      g_dxccInfo[dxcc].pp +
       ")</font></td>";
 
     worker +=
@@ -2026,7 +2025,7 @@ function createSpotTipTable(toolElement)
           "<tr><td>DXCC</td><td style='color:orange;'>" +
           g_dxccToAltName[report.dxcc] +
           " <font color='lightgreen'>(" +
-          g_worldGeoData[g_dxccToGeoData[report.dxcc]].pp +
+          g_dxccInfo[report.dxcc].pp +
           ")</font></td>";
       }
 
@@ -2264,7 +2263,7 @@ function createTooltTipTable(toolElement)
       "</td><td style='color:yellow'>" +
       g_dxccToAltName[callsign.dxcc] +
       " <font color='lightgreen'>(" +
-      g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].pp +
+      g_dxccInfo[callsign.dxcc].pp +
       ")</font></td>" +
       "<td align='center' style='color:lightblue' >" +
       ageString +
@@ -2378,7 +2377,7 @@ function createTooltTipTableLogbook(toolElement)
       "<td style='color:yellow'>" +
       g_dxccToAltName[callsign.dxcc] +
       " <font color='lightgreen'>(" +
-      g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].pp +
+      g_dxccInfo[callsign.dxcc].pp +
       ")</font></td>" +
       "<td align='center' style='color:lightblue' >" +
       ageString +
@@ -3386,25 +3385,25 @@ function setTrophyOverlay(which)
   }
   if (which == 5)
   {
-    for (key in g_worldGeoData)
+    for (key in g_dxccInfo)
     {
       var boxColor = "#FF000015";
       var borderColor = "#0000FFFF";
       var borderWeight = 1;
-      if (didConfirm(g_worldGeoData[key]))
+      if (didConfirm(g_dxccInfo[key]))
       {
         boxColor = "#00FF0066";
       }
-      else if (didWork(g_worldGeoData[key]))
+      else if (didWork(g_dxccInfo[key]))
       {
         boxColor = "#FFFF0066";
       }
 
-      if (g_worldGeoData[key].geo != "deleted")
+      if (g_dxccInfo[key].geo != "deleted")
       {
         g_currentShapes[key] = shapeFeature(
           key,
-          g_worldGeoData[key].geo,
+          g_dxccInfo[key].geo,
           "dxcc",
           boxColor,
           borderColor,
@@ -3602,15 +3601,15 @@ function trophyOver(feature)
     trophy = "US State";
     infoObject = g_wasZones[name];
   }
-  if (key == "dxcc" && name in g_worldGeoData)
+  if (key == "dxcc" && name in g_dxccInfo)
   {
     trophy = "DXCC";
     var ref = name;
-    infoObject = g_worldGeoData[ref];
+    infoObject = g_dxccInfo[ref];
     name =
-      g_worldGeoData[ref].name +
+      g_dxccInfo[ref].name +
       " <font color='orange'>(" +
-      g_worldGeoData[ref].pp +
+      g_dxccInfo[ref].pp +
       ")</font>";
   }
   if (key == "usc")
@@ -3634,11 +3633,7 @@ function trophyOver(feature)
         {
           for (var y = 0; y < g_gridToState[name].length; y++)
           {
-            if (
-              g_gridToDXCC[name][x] ==
-              g_StateData[g_gridToState[name][y]].dxcc &&
-              g_gridToDXCC[name][x] == 291
-            )
+            if (g_gridToDXCC[name][x] == g_StateData[g_gridToState[name][y]].dxcc && g_gridToDXCC[name][x] == 291)
             {
               zone += g_StateData[g_gridToState[name][y]].name + ", ";
             }
@@ -3826,7 +3821,7 @@ function mouseDownGrid(longlat, event)
         "<td>" +
         g_dxccToAltName[g_gridToDXCC[grid][x]] +
         " <font color='lightgreen'>(" +
-        g_worldGeoData[g_dxccToGeoData[g_gridToDXCC[grid][x]]].pp +
+        g_dxccInfo[g_gridToDXCC[grid][x]].pp +
         ")</font></td>";
     }
     if (grid in g_gridToState)
@@ -4983,14 +4978,14 @@ function clearQsoGrids()
 
   g_qsoGrids = {};
 
-  for (var key in g_worldGeoData)
+  for (var key in g_dxccInfo)
   {
-    g_worldGeoData[key].worked = false;
-    g_worldGeoData[key].confirmed = false;
-    g_worldGeoData[key].worked_bands = {};
-    g_worldGeoData[key].confirmed_bands = {};
-    g_worldGeoData[key].worked_modes = {};
-    g_worldGeoData[key].confirmed_modes = {};
+    g_dxccInfo[key].worked = false;
+    g_dxccInfo[key].confirmed = false;
+    g_dxccInfo[key].worked_bands = {};
+    g_dxccInfo[key].confirmed_bands = {};
+    g_dxccInfo[key].worked_modes = {};
+    g_dxccInfo[key].confirmed_modes = {};
   }
   for (var key in g_cqZones)
   {
@@ -6701,8 +6696,8 @@ function handleWsjtxStatus(newMessage)
         )
         {
           var dxcc = callsignToDxcc(DXcall);
-          var Lat = g_worldGeoData[g_dxccToGeoData[dxcc]].lat;
-          var Lon = g_worldGeoData[g_dxccToGeoData[dxcc]].lon;
+          var Lat = g_dxccInfo[dxcc].lat;
+          var Lon = g_dxccInfo[dxcc].lon;
           fitViewBetweenPoints(
             [getPoint(myRawGrid), ol.proj.fromLonLat([Lon, Lat])],
             15
@@ -6764,12 +6759,12 @@ function handleWsjtxStatus(newMessage)
         )
         {
           var dxcc = callsignToDxcc(DXcall);
-          Lat = g_worldGeoData[g_dxccToGeoData[dxcc]].lat;
-          Lon = g_worldGeoData[g_dxccToGeoData[dxcc]].lon;
+          Lat = g_dxccInfo[dxcc].lat;
+          Lon = g_dxccInfo[dxcc].lon;
 
           toPoint = ol.proj.fromLonLat([Lon, Lat]);
 
-          var locality = g_worldGeoData[g_dxccToGeoData[dxcc]].geo;
+          var locality = g_dxccInfo[dxcc].geo;
           if (locality == "deleted") locality = null;
 
           if (locality != null)
@@ -7078,7 +7073,7 @@ function handleWsjtxDecode(newMessage)
           );
         }
 
-        newCallsign.cont = g_worldGeoData[g_dxccToGeoData[newCallsign.dxcc]].continent;
+        newCallsign.cont = g_dxccInfo[newCallsign.dxcc].continent;
         if (newCallsign.dxcc == 390 && newCallsign.zone == 1) { details.cont = "EU"; }
       }
 
@@ -7348,8 +7343,8 @@ function handleWsjtxDecode(newMessage)
           {
             var toPoint = getPoint(DEcallsign.grid);
 
-            var Lat = g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].lat;
-            var Lon = g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].lon;
+            var Lat = g_dxccInfo[callsign.dxcc].lat;
+            var Lon = g_dxccInfo[callsign.dxcc].lon;
             var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
 
             try
@@ -7379,7 +7374,7 @@ function handleWsjtxDecode(newMessage)
 
             var feature = shapeFeature(
               "qrz",
-              g_worldGeoData[g_dxccToGeoData[callsign.dxcc]].geo,
+              g_dxccInfo[callsign.dxcc].geo,
               "qrz",
               "#FFFF0010",
               "#FF0000FF",
@@ -7417,8 +7412,11 @@ function handleWsjtxDecode(newMessage)
             // Check the prefix for dxcc direct
             if (CCd in g_prefixToMap)
             {
-              locality = g_worldGeoData[g_prefixToMap[CCd]].geo;
-              if (locality == "deleted") locality = null;
+              locality = g_dxccInfo[g_prefixToMap[CCd]].geo;
+              if (locality == "deleted")
+              {
+                locality = null;
+              }
             }
           }
 
@@ -7828,7 +7826,7 @@ function showCallsignBox(redraw)
       var grid = newCallList[x].rect ? newCallList[x].rect.qth : "-";
       var cqzone = newCallList[x].cqz ? newCallList[x].cqz : "-";
       var ituzone = newCallList[x].ituz ? newCallList[x].ituz : "-";
-      var geo = g_worldGeoData[g_dxccToGeoData[newCallList[x].dxcc]];
+      var geo = g_dxccInfo[newCallList[x].dxcc];
       var thisCall = newCallList[x].DEcall.formatCallsign();
       worker +=
         "<tr><td align=left style='color:#ff0;cursor:pointer'  onClick='window.opener.startLookup(\"" +
@@ -7898,10 +7896,10 @@ function showCallsignBox(redraw)
       {
         var item = {};
         item.total = g_dxccCount[key];
-        item.confirmed = g_worldGeoData[g_dxccToGeoData[key]].confirmed;
-        item.worked = g_worldGeoData[g_dxccToGeoData[key]].worked;
+        item.confirmed = g_dxccInfo[key].confirmed;
+        item.worked = g_dxccInfo[key].worked;
         item.dxcc = key;
-        item.flag = g_worldGeoData[g_dxccToGeoData[key]].flag;
+        item.flag = g_dxccInfo[key].flag;
         List[g_dxccToAltName[key]] = item;
         heard++;
       }
@@ -8228,10 +8226,8 @@ function showWorkedBox(sortIndex, nextPage, redraw)
         }
       }
 
-      var pp =
-        g_dxccToGeoData[list[key].dxcc] in g_worldGeoData
-          ? g_worldGeoData[g_dxccToGeoData[list[key].dxcc]].pp
-          : "?";
+      var pp = list[key].dxcc in g_dxccInfo ? g_dxccInfo[list[key].dxcc].pp : "?";
+
       dxccs[g_dxccToAltName[list[key].dxcc] + " (" + pp + ")"] = list[key].dxcc;
     }
 
@@ -8430,14 +8426,14 @@ function showWorkedBox(sortIndex, nextPage, redraw)
           "<td style='color:orange'>" +
           g_dxccToAltName[key.dxcc] +
           " <font color='lightgreen'>(" +
-          (g_dxccToGeoData[key.dxcc] in g_worldGeoData
-            ? g_worldGeoData[g_dxccToGeoData[key.dxcc]].pp
+          (key.dxcc in g_dxccInfo
+            ? g_dxccInfo[key.dxcc].pp
             : "?") +
           ")</font></td>";
         worker +=
           "<td align=center style='margin:0;padding:0' ><img style='padding-top:4px' src='./img/flags/16/" +
-          (g_dxccToGeoData[key.dxcc] in g_worldGeoData
-            ? g_worldGeoData[g_dxccToGeoData[key.dxcc]].flag
+          (key.dxcc in g_dxccInfo
+            ? g_dxccInfo[key.dxcc].flag
             : "_United Nations.png") +
           "'></td>";
         worker +=
@@ -8670,42 +8666,42 @@ function showDXCCsBox()
   var List = {};
   var ListConfirmed = {};
   var ListNotWorked = {};
-  for (var key in g_worldGeoData)
+  for (var key in g_dxccInfo)
   {
-    if (key != -1 && Number(g_worldGeoData[key].dxcc) > 0)
+    if (key != -1 && Number(g_dxccInfo[key].dxcc) > 0)
     {
-      if (g_worldGeoData[key].worked == true)
+      if (g_dxccInfo[key].worked == true)
       {
         var item = {};
-        item.dxcc = g_worldGeoData[key].dxcc;
+        item.dxcc = g_dxccInfo[key].dxcc;
 
-        item.flag = g_worldGeoData[key].flag;
-        item.confirmed = g_worldGeoData[key].confirmed;
-        List[g_worldGeoData[key].name] = item;
+        item.flag = g_dxccInfo[key].flag;
+        item.confirmed = g_dxccInfo[key].confirmed;
+        List[g_dxccInfo[key].name] = item;
         worked++;
       }
-      if (g_worldGeoData[key].confirmed == true)
+      if (g_dxccInfo[key].confirmed == true)
       {
         var item = {};
-        item.dxcc = g_worldGeoData[key].dxcc;
+        item.dxcc = g_dxccInfo[key].dxcc;
 
-        item.flag = g_worldGeoData[key].flag;
-        item.confirmed = g_worldGeoData[key].confirmed;
-        ListConfirmed[g_worldGeoData[key].name] = item;
+        item.flag = g_dxccInfo[key].flag;
+        item.confirmed = g_dxccInfo[key].confirmed;
+        ListConfirmed[g_dxccInfo[key].name] = item;
         confirmed++;
       }
       if (
-        g_worldGeoData[key].worked == false &&
-        g_worldGeoData[key].confirmed == false &&
-        g_worldGeoData[key].pp != "" &&
-        g_worldGeoData[key].geo != "deleted"
+        g_dxccInfo[key].worked == false &&
+        g_dxccInfo[key].confirmed == false &&
+        g_dxccInfo[key].pp != "" &&
+        g_dxccInfo[key].geo != "deleted"
       )
       {
         var item = {};
-        item.dxcc = g_worldGeoData[key].dxcc;
-        item.flag = g_worldGeoData[key].flag;
-        item.confirmed = g_worldGeoData[key].confirmed;
-        ListNotWorked[g_worldGeoData[key].name] = item;
+        item.dxcc = g_dxccInfo[key].dxcc;
+        item.flag = g_dxccInfo[key].flag;
+        item.confirmed = g_dxccInfo[key].confirmed;
+        ListNotWorked[g_dxccInfo[key].name] = item;
         needed++;
       }
     }
@@ -10548,28 +10544,28 @@ function redrawGrids()
         }
       }
 
-      if (g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked == false)
+      if (g_dxccInfo[finalDxcc].worked == false)
       {
-        g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked = worked;
+        g_dxccInfo[finalDxcc].worked = worked;
       }
       if (worked)
       {
-        g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_bands[band] =
-          ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_bands[band] + 1;
-        g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_modes[mode] =
-          ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].worked_modes[mode] + 1;
+        g_dxccInfo[finalDxcc].worked_bands[band] =
+          ~~g_dxccInfo[finalDxcc].worked_bands[band] + 1;
+        g_dxccInfo[finalDxcc].worked_modes[mode] =
+          ~~g_dxccInfo[finalDxcc].worked_modes[mode] + 1;
       }
-      if (g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed == false)
+      if (g_dxccInfo[finalDxcc].confirmed == false)
       {
-        g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed = didConfirm;
+        g_dxccInfo[finalDxcc].confirmed = didConfirm;
       }
       if (didConfirm)
       {
-        g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_bands[band] =
-          ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_bands[band] +
+        g_dxccInfo[finalDxcc].confirmed_bands[band] =
+          ~~g_dxccInfo[finalDxcc].confirmed_bands[band] +
           1;
-        g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_modes[mode] =
-          ~~g_worldGeoData[g_dxccToGeoData[finalDxcc]].confirmed_modes[mode] +
+        g_dxccInfo[finalDxcc].confirmed_modes[mode] =
+          ~~g_dxccInfo[finalDxcc].confirmed_modes[mode] +
           1;
       }
 
@@ -11925,7 +11921,7 @@ function callsignToDxcc(insign)
   {
     if (callsign.substr(0, x) in g_prefixToMap)
     {
-      return Number(g_worldGeoData[g_prefixToMap[callsign.substr(0, x)]].dxcc);
+      return Number(g_dxccInfo[g_prefixToMap[callsign.substr(0, x)]].dxcc);
     }
   }
   return -1;
@@ -11952,7 +11948,7 @@ function cqZoneFromCallsign(insign, dxcc)
 
   if (dxcc > 0)
   {
-    return g_worldGeoData[g_dxccToGeoData[dxcc]].cqzone;
+    return g_dxccInfo[dxcc].cqzone;
   }
 
   return null;
@@ -11979,7 +11975,7 @@ function ituZoneFromCallsign(insign, dxcc)
 
   if (dxcc > 0)
   {
-    return g_worldGeoData[g_dxccToGeoData[dxcc]].ituzone;
+    return g_dxccInfo[dxcc].ituzone;
   }
 
   return null;
@@ -11991,66 +11987,56 @@ function loadMaidenHeadData()
   if (fs.existsSync(file))
   {
     var fileBuf = fs.readFileSync(file, "UTF-8");
-    g_worldGeoData = JSON.parse(fileBuf);
+    g_dxccInfo = JSON.parse(fileBuf);
 
-    for (var key in g_worldGeoData)
+    for (var key in g_dxccInfo)
     {
-      g_worldGeoData[key].geo = "deleted";
-      g_worldGeoData[key].worked_bands = {};
-      g_worldGeoData[key].confirmed_bands = {};
-      g_worldGeoData[key].worked_modes = {};
-      g_worldGeoData[key].confirmed_modes = {};
-      g_dxccToAltName[g_worldGeoData[key].dxcc] = g_worldGeoData[key].name;
-      g_dxccToADIFName[g_worldGeoData[key].dxcc] = g_worldGeoData[key].aname;
-      g_dxccToGeoData[g_worldGeoData[key].dxcc] = key;
+      g_dxccToAltName[g_dxccInfo[key].dxcc] = g_dxccInfo[key].name;
+      g_dxccToADIFName[g_dxccInfo[key].dxcc] = g_dxccInfo[key].aname;
 
-      for (var x = 0; x < g_worldGeoData[key].prefix.length; x++)
+      for (var x = 0; x < g_dxccInfo[key].prefix.length; x++)
       {
-        g_prefixToMap[g_worldGeoData[key].prefix[x]] = key;
+        g_prefixToMap[g_dxccInfo[key].prefix[x]] = key;
       }
-      delete g_worldGeoData[key].prefix;
+      delete g_dxccInfo[key].prefix;
 
-      for (var x = 0; x < g_worldGeoData[key].direct.length; x++)
+      for (var x = 0; x < g_dxccInfo[key].direct.length; x++)
       {
-        g_directCallToDXCC[g_worldGeoData[key].direct[x]] = g_worldGeoData[key].dxcc;
+        g_directCallToDXCC[g_dxccInfo[key].direct[x]] = g_dxccInfo[key].dxcc;
       }
-      delete g_worldGeoData[key].direct;
+      delete g_dxccInfo[key].direct;
 
-      for (var val in g_worldGeoData[key].prefixCQ)
+      for (var val in g_dxccInfo[key].prefixCQ)
       {
-        g_prefixToCQzone[val] = g_worldGeoData[key].prefixCQ[val];
+        g_prefixToCQzone[val] = g_dxccInfo[key].prefixCQ[val];
       }
-      delete g_worldGeoData[key].prefixCQ;
+      delete g_dxccInfo[key].prefixCQ;
 
-      for (var val in g_worldGeoData[key].prefixITU)
+      for (var val in g_dxccInfo[key].prefixITU)
       {
-        g_prefixToITUzone[val] = g_worldGeoData[key].prefixITU[val];
+        g_prefixToITUzone[val] = g_dxccInfo[key].prefixITU[val];
       }
-      delete g_worldGeoData[key].prefixITU;
+      delete g_dxccInfo[key].prefixITU;
 
-      for (var val in g_worldGeoData[key].directCQ)
+      for (var val in g_dxccInfo[key].directCQ)
       {
-        g_directCallToCQzone[val] = g_worldGeoData[key].directCQ[val];
+        g_directCallToCQzone[val] = g_dxccInfo[key].directCQ[val];
       }
-      delete g_worldGeoData[key].directCQ;
+      delete g_dxccInfo[key].directCQ;
 
-      for (var val in g_worldGeoData[key].directITU)
+      for (var val in g_dxccInfo[key].directITU)
       {
-        g_directCallToITUzone[val] = g_worldGeoData[key].directITU[val];
+        g_directCallToITUzone[val] = g_dxccInfo[key].directITU[val];
       }
-      delete g_worldGeoData[key].directITU;
+      delete g_dxccInfo[key].directITU;
 
-      for (var x = 0; x < g_worldGeoData[key].mh.length; x++)
+      for (var x = 0; x < g_dxccInfo[key].mh.length; x++)
       {
-        if (!(g_worldGeoData[key].mh[x] in g_gridToDXCC)) { g_gridToDXCC[g_worldGeoData[key].mh[x]] = Array(); }
-        g_gridToDXCC[g_worldGeoData[key].mh[x]].push(g_worldGeoData[key].dxcc);
+        if (!(g_dxccInfo[key].mh[x] in g_gridToDXCC)) { g_gridToDXCC[g_dxccInfo[key].mh[x]] = Array(); }
+        g_gridToDXCC[g_dxccInfo[key].mh[x]].push(g_dxccInfo[key].dxcc);
       }
 
-      if (
-        g_worldGeoData[key].dxcc != 291 &&
-        g_worldGeoData[key].dxcc != 110 &&
-        g_worldGeoData[key].dxcc != 6
-      ) { delete g_worldGeoData[key].mh; }
+      if (g_dxccInfo[key].dxcc != 291) { delete g_dxccInfo[key].mh; }
     }
 
     file = "./data/dxcc.json";
@@ -12060,8 +12046,9 @@ function loadMaidenHeadData()
     for (var key in dxccGeo.features)
     {
       var dxcc = dxccGeo.features[key].properties.dxcc_entity_code;
-      g_worldGeoData[g_dxccToGeoData[dxcc]].geo = dxccGeo.features[key];
+      g_dxccInfo[dxcc].geo = dxccGeo.features[key];
     }
+
     file = "./data/counties.json";
     files = fs.readFileSync(file);
     var countyData = JSON.parse(files);
@@ -12071,10 +12058,8 @@ function loadMaidenHeadData()
       if (!(countyData[id].properties.st in g_stateToCounty)) { g_stateToCounty[countyData[id].properties.st] = Array(); }
       g_stateToCounty[countyData[id].properties.st].push(id);
 
-      var cnty =
-        countyData[id].properties.st +
-        "," +
-        countyData[id].properties.n.toUpperCase().replaceAll(" ", "");
+      var cnty = countyData[id].properties.st + "," + countyData[id].properties.n.toUpperCase().replaceAll(" ", "");
+
       if (!(cnty in g_cntyToCounty)) { g_cntyToCounty[cnty] = countyData[id].properties.n.toProperCase(); }
 
       g_countyData[cnty] = {};
@@ -12101,86 +12086,8 @@ function loadMaidenHeadData()
     countyData = null;
 
     g_shapeData = JSON.parse(fs.readFileSync(g_shapeFile));
-    for (var key in g_shapeData)
-    {
-      if (g_shapeData[key].properties.alias == key) { g_shapeData[key].properties.alias = null; }
-      else if (
-        g_shapeData[key].properties.alias &&
-        g_shapeData[key].properties.alias.length > 2 &&
-        (g_shapeData[key].properties.alias.indexOf("US") == 0 ||
-          g_shapeData[key].properties.alias.indexOf("CA") == 0)
-      ) { g_shapeData[key].properties.alias = null; }
-      if (
-        g_shapeData[key].properties.alias &&
-        g_shapeData[key].properties.alias.length < 2
-      ) { g_shapeData[key].properties.alias = null; }
-      if (g_shapeData[key].properties.alias != null)
-      {
-        if (key.indexOf("CN-") == 0)
-        {
-          if (g_shapeData[key].properties.alias == key.replace("CN-", "")) { g_shapeData[key].properties.alias = null; }
-        }
-      }
-      if (
-        g_shapeData[key].properties.alias != null &&
-        g_shapeData[key].properties.alias.length != 2
-      ) { g_shapeData[key].properties.alias = null; }
-    }
-
-    // finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6
-    // Create "US" shape from US Dxcc geos
-    var x = g_worldGeoData[g_dxccToGeoData[291]].geo.geometry;
-    var y = g_shapeData.AK.geometry;
-    var z = g_shapeData.HI.geometry;
-
-    var feature = {
-      type: "Feature",
-      geometry: {
-        type: "GeometryCollection",
-        geometries: [x, y, z]
-      },
-      properties: {
-        name: "United States",
-        center: g_worldGeoData[g_dxccToGeoData[291]].geo.properties.center,
-        postal: "US",
-        type: "Country"
-      }
-    };
-    g_shapeData.US = feature;
-
-    y = g_shapeData.OC.geometry;
-    z = g_shapeData.AU.geometry;
-    q = g_shapeData.AN.geometry;
-
-    feature = {
-      type: "Feature",
-      geometry: {
-        type: "GeometryCollection",
-        geometries: [y, z, q]
-      },
-      properties: {
-        name: "Oceania",
-        center: [167.97602, -29.037824],
-        postal: "OC",
-        type: "Continent"
-      }
-    };
-    g_shapeData.OC = feature;
-    g_shapeData.AU.properties.type = "Country";
 
     g_StateData = JSON.parse(fs.readFileSync("./data/state.json"));
-
-    g_StateData["US-AK"] = {};
-    g_StateData["US-AK"].postal = "US-AK";
-    g_StateData["US-AK"].name = "Alaska";
-    g_StateData["US-AK"].mh = g_worldGeoData[5].mh;
-    g_StateData["US-AK"].dxcc = 6;
-
-    g_StateData["US-HI"] = {};
-    g_StateData["US-HI"].postal = "US-HI";
-    g_StateData["US-HI"].name = "Hawaii";
-    g_StateData["US-HI"].mh = g_worldGeoData[100].mh;
-    g_StateData["US-HI"].dxcc = 110;
 
     for (var key in g_StateData)
     {
@@ -12189,11 +12096,8 @@ function loadMaidenHeadData()
         if (!(g_StateData[key].mh[x] in g_gridToState)) { g_gridToState[g_StateData[key].mh[x]] = Array(); }
         g_gridToState[g_StateData[key].mh[x]].push(g_StateData[key].postal);
       }
-      g_StateData[key].worked_bands = {};
-      g_StateData[key].confirmed_bands = {};
-      g_StateData[key].worked_modes = {};
-      g_StateData[key].confirmed_modes = {};
     }
+
     file = "./data/phone.json";
     fileBuf = fs.readFileSync(file, "UTF-8");
     g_phonetics = JSON.parse(fileBuf);
@@ -12201,21 +12105,18 @@ function loadMaidenHeadData()
     fileBuf = fs.readFileSync(file, "UTF-8");
     g_enums = JSON.parse(fileBuf);
 
-    for (var key in g_worldGeoData)
+    for (var key in g_dxccInfo)
     {
-      if (
-        g_worldGeoData[key].pp != "" &&
-        g_worldGeoData[key].geo != "deleted"
-      )
+      if (g_dxccInfo[key].pp != "" && g_dxccInfo[key].geo != "deleted")
       {
-        g_enums[g_worldGeoData[key].dxcc] = g_worldGeoData[key].name;
+        g_enums[g_dxccInfo[key].dxcc] = g_dxccInfo[key].name;
       }
-      if (key == 270)
+      if (key == 291)
       {
         // US Mainland
-        for (var mh in g_worldGeoData[key].mh)
+        for (var mh in g_dxccInfo[key].mh)
         {
-          var sqr = g_worldGeoData[key].mh[mh];
+          var sqr = g_dxccInfo[key].mh[mh];
 
           g_us48Data[sqr] = {};
           g_us48Data[sqr].name = sqr;
@@ -12226,24 +12127,15 @@ function loadMaidenHeadData()
           g_us48Data[sqr].worked_modes = {};
           g_us48Data[sqr].confirmed_modes = {};
         }
+        delete g_dxccInfo[key].mh;
       }
     }
 
     fileBuf = fs.readFileSync("./data/cqzone.json");
     g_cqZones = JSON.parse(fileBuf);
 
-    for (var key in g_cqZones)
-    {
-      delete g_cqZones[key].mh;
-    }
-
     fileBuf = fs.readFileSync("./data/ituzone.json");
     g_ituZones = JSON.parse(fileBuf);
-
-    for (var key in g_ituZones)
-    {
-      delete g_ituZones[key].mh;
-    }
 
     for (var key in g_StateData)
     {
@@ -12266,31 +12158,6 @@ function loadMaidenHeadData()
         }
       }
     }
-    var name = "Alaska";
-    var shapeKey = "AK";
-    g_wasZones[name] = {};
-    g_wasZones[name].geo = g_shapeData[shapeKey];
-
-    g_wasZones[name].worked = false;
-    g_wasZones[name].confirmed = false;
-
-    g_wasZones[name].worked_bands = {};
-    g_wasZones[name].confirmed_bands = {};
-    g_wasZones[name].worked_modes = {};
-    g_wasZones[name].confirmed_modes = {};
-
-    name = "Hawaii";
-    shapeKey = "HI";
-    g_wasZones[name] = {};
-    g_wasZones[name].geo = g_shapeData[shapeKey];
-
-    g_wasZones[name].worked = false;
-    g_wasZones[name].confirmed = false;
-
-    g_wasZones[name].worked_bands = {};
-    g_wasZones[name].confirmed_bands = {};
-    g_wasZones[name].worked_modes = {};
-    g_wasZones[name].confirmed_modes = {};
 
     for (var key in g_shapeData)
     {
@@ -14348,7 +14215,7 @@ function continueWithLookup(callsign, gridPass)
     if (dxcc in g_dxccToAltName)
     {
       where = g_dxccToAltName[dxcc];
-      ccode = g_worldGeoData[g_dxccToGeoData[dxcc]].ccode;
+      ccode = g_dxccInfo[dxcc].ccode;
     }
     else where = "Unknown";
     if (ccode == 840)
@@ -14390,7 +14257,7 @@ function continueWithLookup(callsign, gridPass)
     if (dxcc in g_dxccToAltName)
     {
       where = g_dxccToAltName[dxcc];
-      ccode = g_worldGeoData[g_dxccToGeoData[dxcc]].ccode;
+      ccode = g_dxccInfo[dxcc].ccode;
     }
     else where = "Unknown";
     if (ccode == 840)
@@ -15090,11 +14957,11 @@ function displayLookupObject(lookup, gridPass, fromCache = false)
   worker += getLookProp(lookup, "call").toUpperCase().formatCallsign();
   worker += "</td>";
   worker += "<td align='center' style='margin:0;padding:0'>";
-  if (lookup.dxcc > 0 && lookup.dxcc in g_dxccToGeoData)
+  if (lookup.dxcc > 0 && lookup.dxcc in g_dxccInfo)
   {
     worker +=
       "<img style='padding-top:4px' src='./img/flags/24/" +
-      g_worldGeoData[g_dxccToGeoData[lookup.dxcc]].flag +
+      g_dxccInfo[lookup.dxcc].flag +
       "'>";
   }
   worker += "</td>";
@@ -15551,7 +15418,7 @@ function searchLogForCallsign(call)
       "<tr><th style='color:orange'>" +
       g_dxccToAltName[dxcc] +
       " (" +
-      g_worldGeoData[g_dxccToGeoData[dxcc]].pp +
+      g_dxccInfo[dxcc].pp +
       ")</th><td>";
     for (var band in g_colorBands)
     {

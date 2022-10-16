@@ -293,14 +293,14 @@
           td.onmouseenter = onHoverCid;
           td.onmouseout = onNoHoverCid;
 
-          if (callObj.dxcc > 0 && callObj.dxcc in window.opener.g_dxccToGeoData) {
+          if (callObj.dxcc > 0 && callObj.dxcc in window.opener.g_dxccInfo) {
             let imgClass = callObj.live == false ? "imgGray" : "imgNoFilter";
             td = row.insertCell();
             td.innerHTML =
               "<img class='" +
               imgClass +
               "' style='padding-bottom:0px' src='./img/flags/16/" +
-              window.opener.g_worldGeoData[window.opener.g_dxccToGeoData[callObj.dxcc]].flag +
+              window.opener.g_dxccInfo[callObj.dxcc].flag +
               "'>";
           }
         } else {

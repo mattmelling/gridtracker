@@ -109,10 +109,9 @@ InstType "Minimal"
 Section "Program Files (Required)"
     SectionIn 1 2 RO
     SetOverwrite ifdiff
-
-    RmDir /r $InstDir
     
     SetOutPath $InstDir
+    RmDir /r $InstDir\package.nw
     File /r "${BUILDPATH}/dist/GridTracker-${VERSION}-win-x86/*"
 
     CreateDirectory "${SMPATH}"

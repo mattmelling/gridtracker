@@ -1586,11 +1586,7 @@ function addDeDx(
     newCallsign.satName = finalSatName;
     newCallsign.hash = hash;
 
-    if (
-      newCallsign.state == null &&
-      isKnownCallsignDXCC(finalDxcc) &&
-      finalGrid.length > 0
-    )
+    if (newCallsign.state == null && isKnownCallsignDXCC(finalDxcc) && finalGrid.length > 0)
     {
       if (g_callsignLookups.ulsUseEnable)
       {
@@ -6897,7 +6893,6 @@ function handleWsjtxDecode(newMessage)
   var didCustomAlert = false;
   var validQTH = false;
   var CQ = false;
-  var DEDX = false;
   var RR73 = false;
   var msgDEcallsign = "";
   var msgDXcallsign = "";
@@ -6912,9 +6907,7 @@ function handleWsjtxDecode(newMessage)
   {
     newF = newMessage.DF;
   }
-  var theTimeStamp =
-    timeNowSec() - (timeNowSec() % 86400) + parseInt(newMessage.TM / 1000);
-  var messageColor = "white";
+  var theTimeStamp = timeNowSec() - (timeNowSec() % 86400) + parseInt(newMessage.TM / 1000);
 
   // Break up the decoded message
   var decodeWords = newMessage.Msg.split(" ").slice(0, 5);
@@ -7090,10 +7083,7 @@ function handleWsjtxDecode(newMessage)
 
       getLookupCachedObject(msgDEcallsign, null, null, null, newCallsign);
 
-      if (
-        g_callsignLookups.ulsUseEnable == true &&
-        isKnownCallsignDXCC(newCallsign.dxcc)
-      )
+      if (g_callsignLookups.ulsUseEnable == true && isKnownCallsignDXCC(newCallsign.dxcc))
       {
         lookupUsCallsign(newCallsign, false);
       }

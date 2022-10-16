@@ -92,6 +92,7 @@ var g_defaultSettings = {
   onlySpot: false,
   allOnlyNew: false,
   useRegex: false,
+  noUnknownDXCC: true,
   callsignRegex: "",
   huntRegexValue: "",
   realtime: true,
@@ -1140,6 +1141,7 @@ function valuesChanged()
   g_rosterSettings.useRegex = useRegex.checked;
   g_rosterSettings.callsignRegex = callsignRegex.value;
   g_rosterSettings.huntRegexValue = huntRegexValue.value;
+  g_rosterSettings.noUnknownDXCC = noUnknownDXCC.checked;
 
   writeRosterSettings();
 
@@ -2121,6 +2123,8 @@ function init()
   useRegex.checked = g_rosterSettings.useRegex;
   callsignRegex.value = g_rosterSettings.callsignRegex;
   huntRegexValue.value = g_rosterSettings.huntRegexValue;
+
+  noUnknownDXCC.checked = g_rosterSettings.noUnknownDXCC;
 
   setVisual();
   document.addEventListener("keydown", onMyKeyDown, false);

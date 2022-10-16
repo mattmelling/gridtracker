@@ -26,6 +26,11 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
+    if (g_rosterSettings.noUnknownDXCC && callObj.dxcc === -1)
+    {
+      entry.tx = false;
+      continue;
+    }
     if (window.opener.g_instances[callObj.instance].crEnable == false)
     {
       entry.tx = false;
@@ -36,10 +41,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       entry.tx = false;
       continue;
     }
-    if (
-      entry.DXcall + " from All" in g_blockedCQ ||
-      entry.DXcall + " from " + window.opener.g_dxccToAltName[callObj.dxcc] in g_blockedCQ
-    )
+    if (entry.DXcall + " from All" in g_blockedCQ || entry.DXcall + " from " + window.opener.g_dxccToAltName[callObj.dxcc] in g_blockedCQ)
     {
       entry.tx = false;
       continue;

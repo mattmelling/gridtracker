@@ -1,5 +1,11 @@
 gridtracker (1.22.1016) unstable; urgency=low
-  - Testing some performance boosts
+  - Fix issue with map blanking when upgrading
+  - Fix some POTA callers not showing in call roster
+  - Fix DXCC none (/MM) not showing in call roster
+  - New wanted callsign Regex in call roster
+  - New 'No Unknown DXCC' exception in call roster
+  - Award tracker now shows wanted options for highlighting
+  - Small performance improvements and installation size reduction
 
  -- Matthew Chambers <nr0q@gridtracker.org>  Sun, 16 Oct 2022 19:55:00 -0000
 gridtracker (1.22.1010) unstable; urgency=low

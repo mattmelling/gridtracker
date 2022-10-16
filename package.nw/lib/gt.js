@@ -20,7 +20,12 @@ if (typeof localStorage.currentVersion == "undefined" || localStorage.currentVer
   gui.App.clearCache();
 
   // If the version changed, the interanl qso file is possibly out of date so don't read it
-  g_readInternalQso = false;
+  // 1221010 introduced "|"s in DXCC, CQ and ITU g_tracker so older data is no longer valid
+  // update this number if anything in the internal_qso format has changed
+  if (gtVersion < 1221010)
+  {
+    g_readInternalQso = false;
+  }
 }
 
 var vers = String(gtVersion);

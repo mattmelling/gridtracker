@@ -2,12 +2,11 @@ function processRosterFiltering(callRoster, rosterSettings)
 {
   // First loop, exclude calls, mostly based on "Exceptions" settings
   // this whole section is full of individual if's that could be broken out
-  for (let callHash in callRoster)
+  for (const callHash in callRoster)
   {
-    let entry = callRoster[callHash];
-    let callObj = entry.callObj;
-
-    let call = entry.DEcall;
+    var entry = callRoster[callHash];
+    var callObj = entry.callObj;
+    var call = entry.DEcall;
 
     entry.tx = true;
     callObj.shouldAlert = false;
@@ -164,7 +163,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
       if (g_rosterSettings.maxLoTW < 27)
       {
-        let months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
+        var months = (g_day - window.opener.g_lotwCallsigns[call]) / 30;
         if (months > g_rosterSettings.maxLoTW)
         {
           entry.tx = false;
@@ -199,7 +198,7 @@ function processRosterFiltering(callRoster, rosterSettings)
         continue;
       }
 
-      let hash = hashMaker(call, callObj, g_rosterSettings.reference);
+      var hash = hashMaker(call, callObj, g_rosterSettings.reference);
       if (rosterSettings.callMode == "worked" && hash in g_worked.call)
       {
         entry.tx = false;
@@ -213,7 +212,7 @@ function processRosterFiltering(callRoster, rosterSettings)
 
       if (g_rosterSettings.hunting == "grid")
       {
-        let hash = hashMaker(callObj.grid.substr(0, 4),
+        var hash = hashMaker(callObj.grid.substr(0, 4),
           callObj, g_rosterSettings.reference);
         if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.grid)
         {
@@ -229,7 +228,7 @@ function processRosterFiltering(callRoster, rosterSettings)
       }
       if (g_rosterSettings.hunting == "dxcc")
       {
-        let hash = hashMaker(String(callObj.dxcc) + "|",
+        var hash = hashMaker(String(callObj.dxcc) + "|",
           callObj, g_rosterSettings.reference);
 
         if (rosterSettings.huntIndex && (hash in rosterSettings.huntIndex.dxcc))
@@ -256,7 +255,7 @@ function processRosterFiltering(callRoster, rosterSettings)
           entry.tx = false;
           continue;
         }
-        let hash = hashMaker(String(callObj.px),
+        var hash = hashMaker(String(callObj.px),
           callObj, g_rosterSettings.reference);
 
         if (rosterSettings.huntIndex && (hash in rosterSettings.huntIndex.px))
@@ -276,7 +275,7 @@ function processRosterFiltering(callRoster, rosterSettings)
           continue;
         }
 
-        let hash = hashMaker(callObj.cqz + "|", callObj, g_rosterSettings.reference);
+        var hash = hashMaker(callObj.cqz + "|", callObj, g_rosterSettings.reference);
 
         if (hash in rosterSettings.huntIndex.cqz)
         {
@@ -295,7 +294,7 @@ function processRosterFiltering(callRoster, rosterSettings)
           continue;
         }
 
-        let hash = hashMaker(callObj.ituz + "|", callObj, g_rosterSettings.reference);
+        var hash = hashMaker(callObj.ituz + "|", callObj, g_rosterSettings.reference);
 
         if (hash in rosterSettings.huntIndex.ituz)
         {
@@ -308,13 +307,13 @@ function processRosterFiltering(callRoster, rosterSettings)
 
       if (g_rosterSettings.hunting == "usstates" && window.opener.g_callsignLookups.ulsUseEnable == true)
       {
-        let state = callObj.state;
-        let finalDxcc = callObj.dxcc;
+        var state = callObj.state;
+        var finalDxcc = callObj.dxcc;
         if (finalDxcc == 291 || finalDxcc == 110 || finalDxcc == 6)
         {
           if (state in window.opener.g_StateData)
           {
-            let hash = hashMaker(state, callObj, g_rosterSettings.reference);
+            var hash = hashMaker(state, callObj, g_rosterSettings.reference);
 
             if (rosterSettings.huntIndex && hash in rosterSettings.huntIndex.state)
             {
@@ -343,19 +342,20 @@ function processRosterFiltering(callRoster, rosterSettings)
         continue;
       }
     }
+
     if (rosterSettings.isAwardTracker)
     {
-      let tx = false;
-      let baseHash = hashMaker("", callObj, g_rosterSettings.reference);
+      var tx = false;
+      var baseHash = hashMaker("", callObj, g_rosterSettings.reference);
 
-      for (let award in g_awardTracker)
+      for (const award in g_awardTracker)
       {
         if (g_awardTracker[award].enable)
         {
           tx = testAward(award, callObj, baseHash);
           if (tx)
           {
-            let x = g_awardTracker[award];
+            var x = g_awardTracker[award];
 
             // TODO: Move award reason out of exclusions code?
             callObj.awardReason = g_awards[x.sponsor].awards[x.name].tooltip + " (" + g_awards[x.sponsor].sponsor + ")";
@@ -364,11 +364,6 @@ function processRosterFiltering(callRoster, rosterSettings)
             break;
           }
         }
-      }
-
-      if (callObj.shouldAlert == false && rosterSettings.onlyHits == true && callObj.qrz == false)
-      {
-        tx = false
       }
 
       entry.tx = tx;

@@ -150,7 +150,7 @@ function lotwValuesChanged()
 
   setAlertVisual();
   goProcessRoster();
-  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
+  if (g_rosterInitialized) g_callRosterWindowHandle.window.resize();
 }
 
 function lotwDownload(fromSettings)
@@ -272,7 +272,7 @@ function oqrsValuesChanged()
 
   setAlertVisual();
   goProcessRoster();
-  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
+  if (g_rosterInitialized) g_callRosterWindowHandle.window.resize();
 }
 
 function oqrsDownload(fromSettings)
@@ -367,7 +367,7 @@ function eqslValuesChanged()
 
   setAlertVisual();
   goProcessRoster();
-  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
+  if (g_rosterInitialized) g_callRosterWindowHandle.window.resize();
 }
 
 function eqslDownload(fromSettings)
@@ -531,7 +531,7 @@ function ulsValuesChanged()
 
   ulsSettingsDisplay();
   goProcessRoster();
-  if (g_callRosterWindowHandle) g_callRosterWindowHandle.window.resize();
+  if (g_rosterInitialized) g_callRosterWindowHandle.window.resize();
 }
 
 function ulsDownload()

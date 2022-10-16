@@ -333,7 +333,7 @@ function saveAndCloseApp()
 
   try
   {
-    if (g_callRosterWindowHandle && g_rosterInitialized)
+    if (g_rosterInitialized)
     {
       g_callRosterWindowHandle.window.writeRosterSettings();
     }
@@ -2618,19 +2618,22 @@ function openCallRosterWindow(show = true)
   {
     try
     {
-      if (g_callRosterWindowHandle.window.g_isShowing == false)
+      if (g_rosterInitialized)
       {
-        g_callRosterWindowHandle.show();
-        g_callRosterWindowHandle.window.g_isShowing = true;
-        g_callRosterWindowHandle.window.saveScreenSettings();
-        g_callRosterWindowHandle.focus();
-        goProcessRoster();
-      }
-      else
-      {
-        g_callRosterWindowHandle.window.g_isShowing = false;
-        g_callRosterWindowHandle.window.saveScreenSettings();
-        g_callRosterWindowHandle.hide();
+        if (g_callRosterWindowHandle.window.g_isShowing == false)
+        {
+          g_callRosterWindowHandle.show();
+          g_callRosterWindowHandle.window.g_isShowing = true;
+          g_callRosterWindowHandle.window.saveScreenSettings();
+          g_callRosterWindowHandle.focus();
+          goProcessRoster();
+        }
+        else
+        {
+          g_callRosterWindowHandle.window.g_isShowing = false;
+          g_callRosterWindowHandle.window.saveScreenSettings();
+          g_callRosterWindowHandle.hide();
+        }
       }
     }
     catch (e) { }
@@ -2639,7 +2642,7 @@ function openCallRosterWindow(show = true)
 
 function updateRosterWorked()
 {
-  if (g_callRosterWindowHandle && g_rosterInitialized)
+  if (g_rosterInitialized)
   {
     try
     {
@@ -2651,7 +2654,7 @@ function updateRosterWorked()
 
 function updateRosterInstances()
 {
-  if (g_callRosterWindowHandle && g_rosterInitialized)
+  if (g_rosterInitialized)
   {
     try
     {
@@ -6397,7 +6400,7 @@ function handleWsjtxStatus(newMessage)
 {
   if (g_ignoreMessages == 1) return;
 
-  if (g_callRosterWindowHandle && g_rosterInitialized)
+  if (g_rosterInitialized)
   {
     try
     {
@@ -7584,7 +7587,7 @@ function goProcessRoster(isRealtime = false)
       continue;
     }
   }
-  if (g_callRosterWindowHandle && g_rosterInitialized)
+  if (g_rosterInitialized)
   {
     try
     {
@@ -16291,7 +16294,7 @@ function changeRosterTop(butt)
 
 function setRosterTop()
 {
-  if (g_callRosterWindowHandle && g_rosterInitialized)
+  if (g_rosterInitialized)
   {
     try
     {

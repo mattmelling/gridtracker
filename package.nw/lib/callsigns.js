@@ -848,28 +848,28 @@ function processCtyDat(buffer)
     if (fs.existsSync(file))
     {
       var fileBuf = fs.readFileSync(file, "UTF-8");
-      var worldGeoData = JSON.parse(fileBuf);
-      for (const key in worldGeoData)
+      var dxccInfo = JSON.parse(fileBuf);
+      for (const key in dxccInfo)
       {
-        worldGeoData[key].ituzone = null;
-        worldGeoData[key].cqzone = null;
-        worldGeoData[key].prefixITU = {};
-        worldGeoData[key].prefixCQ = {};
-        worldGeoData[key].directITU = {};
-        worldGeoData[key].directCQ = {};
+        dxccInfo[key].ituzone = null;
+        dxccInfo[key].cqzone = null;
+        dxccInfo[key].prefixITU = {};
+        dxccInfo[key].prefixCQ = {};
+        dxccInfo[key].directITU = {};
+        dxccInfo[key].directCQ = {};
 
-        if (worldGeoData[key].dxcc in ctydata)
+        if (key in ctydata)
         {
-          worldGeoData[key].cqzone = Number(ctydata[worldGeoData[key].dxcc].cqzone).pad(2);
-          worldGeoData[key].ituzone = Number(ctydata[worldGeoData[key].dxcc].ituzone).pad(2);
+          dxccInfo[key].cqzone = Number(ctydata[key].cqzone).pad(2);
+          dxccInfo[key].ituzone = Number(ctydata[key].ituzone).pad(2);
 
           // Skip Guantanamo Bay, hand crafted with love
-          if (worldGeoData[key].dxcc != "105")
+          if (key != "105")
           {
-            worldGeoData[key].prefix = [];
-            worldGeoData[key].direct = [];
+            dxccInfo[key].prefix = [];
+            dxccInfo[key].direct = [];
 
-            var arr = ctydata[worldGeoData[key].dxcc].prefix.substr(0, ctydata[worldGeoData[key].dxcc].prefix.length - 1).split(" ");
+            var arr = ctydata[key].prefix.substr(0, ctydata[key].prefix.length - 1).split(" ");
             for (const x in arr)
             {
               var test = arr[x];
@@ -921,37 +921,37 @@ function processCtyDat(buffer)
               
               if (direct)
               {
-                worldGeoData[key].direct.push(test);
+                dxccInfo[key].direct.push(test);
                 if (cq)
                 {
-                  worldGeoData[key].directCQ[test] = cq;
+                  dxccInfo[key].directCQ[test] = cq;
                 }
                 if (itu)
                 {
-                  worldGeoData[key].directITU[test] = itu;
+                  dxccInfo[key].directITU[test] = itu;
                 }
               }
               else
               {
-                worldGeoData[key].prefix.push(test);
+                dxccInfo[key].prefix.push(test);
                 if (cq)
                 {
-                  worldGeoData[key].prefixCQ[test] = cq;
+                  dxccInfo[key].prefixCQ[test] = cq;
                 }
                 if (itu)
                 {
-                  worldGeoData[key].prefixITU[test] = itu;
+                  dxccInfo[key].prefixITU[test] = itu;
                 }
               }
             }
-            worldGeoData[key].prefix = uniqueArrayFromArray(worldGeoData[key].prefix);
-            worldGeoData[key].prefix.sort();
-            worldGeoData[key].direct = uniqueArrayFromArray(worldGeoData[key].direct);
-            worldGeoData[key].direct.sort();
+            dxccInfo[key].prefix = uniqueArrayFromArray(dxccInfo[key].prefix);
+            dxccInfo[key].prefix.sort();
+            dxccInfo[key].direct = uniqueArrayFromArray(dxccInfo[key].direct);
+            dxccInfo[key].direct.sort();
           }
         }
       }
-      fs.writeFileSync(file, JSON.stringify(worldGeoData, null, 2));
+      fs.writeFileSync(file, JSON.stringify(dxccInfo, null, 2));
       ctyDatFinal.innerHTML = file + " updated!";
     }
   }

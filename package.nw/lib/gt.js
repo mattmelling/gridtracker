@@ -9410,7 +9410,7 @@ function renderStatsBox()
   var scoreSection = "Initial";
   try
   {
-    var worldGeoData = {};
+    var dxccInfo = {};
     var cqZones = {};
     var ituZones = {};
     var wasZones = {};
@@ -9657,10 +9657,10 @@ function renderStatsBox()
 
       if (finalDxcc > 0)
       {
-        if (!(g_dxccToAltName[finalDxcc] in worldGeoData)) { worldGeoData[g_dxccToAltName[finalDxcc]] = newStatObject(); }
+        if (!(g_dxccToAltName[finalDxcc] in dxccInfo)) { dxccInfo[g_dxccToAltName[finalDxcc]] = newStatObject(); }
 
         workObject(
-          worldGeoData[g_dxccToAltName[finalDxcc]],
+          dxccInfo[g_dxccToAltName[finalDxcc]],
           false,
           band,
           mode,
@@ -9699,8 +9699,8 @@ function renderStatsBox()
     var stats = {};
     var output = {};
 
-    worldGeoData.order = 1;
-    stats.DXCC = worldGeoData;
+    dxccInfo.order = 1;
+    stats.DXCC = dxccInfo;
     stats.GRID = gridData;
     stats.CQ = cqZones;
     stats.ITU = ituZones;

@@ -1571,6 +1571,8 @@ function resize()
 
 function init()
 {
+  window.opener.g_rosterInitialized = true;
+
   g_callsignDatabaseDXCC = window.opener.g_callsignDatabaseDXCC;
   g_callsignDatabaseUS = window.opener.g_callsignDatabaseUS;
   g_callsignDatabaseUSplus = window.opener.g_callsignDatabaseUSplus;
@@ -2101,8 +2103,7 @@ function init()
   maxFreqView.innerHTML = maxFreq.value = g_rosterSettings.maxFreq;
 
   maxLoTW.value = g_rosterSettings.maxLoTW;
-  maxLoTWView.innerHTML =
-    maxLoTW.value < 27 ? Number(maxLoTW.value).toYM() : "<b>&infin;</b>";
+  maxLoTWView.innerHTML = maxLoTW.value < 27 ? Number(maxLoTW.value).toYM() : "<b>&infin;</b>";
 
   cqOnly.checked = g_rosterSettings.cqOnly;
   noMyDxcc.checked = g_rosterSettings.noMyDxcc;
@@ -2134,8 +2135,6 @@ function init()
   g_timerInterval = nodeTimers.setInterval(realtimeRoster, 1000);
 
   updateInstances();
-
-  window.opener.g_rosterInitialized = true;
 }
 
 function handleContextMenu(ev)
@@ -3180,44 +3179,49 @@ function testAcqz(award, obj, baseHash)
 
 function scoreAnumsfx(award, obj)
 {
-  let test = g_awards[award.sponsor].awards[award.name];
-  let px = obj.px.substr(0, obj.px.length - 1);
-  let suf = obj.DEcall.replace(px, "");
-  suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (const i in test.rule.numsfx)
+  if (obj.px)
   {
-    for (const s in test.rule.numsfx[i])
+    let test = g_awards[award.sponsor].awards[award.name];
+    let px = obj.px.substr(0, obj.px.length - 1);
+    let suf = obj.DEcall.replace(px, "");
+    suf = suf.substr(0, test.rule.numsfx[0][0].length);
+    for (const i in test.rule.numsfx)
     {
-      if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
+      for (const s in test.rule.numsfx[i])
       {
-        if (!(i in award.stat)) award.stat[i] = newAwardCountObject();
-        return workAwardObject(
-          award.stat[i],
-          obj.band,
-          obj.mode,
-          obj.digital,
-          obj.phone
-        );
+        if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
+        {
+          if (!(i in award.stat)) award.stat[i] = newAwardCountObject();
+          return workAwardObject(
+            award.stat[i],
+            obj.band,
+            obj.mode,
+            obj.digital,
+            obj.phone
+          );
+        }
       }
     }
   }
-
   return false;
 }
 
 function testAnumsfx(award, obj)
 {
-  let test = g_awards[award.sponsor].awards[award.name];
-  let px = obj.px.substr(0, obj.px.length - 1);
-  let suf = obj.DEcall.replace(px, "");
-  suf = suf.substr(0, test.rule.numsfx[0][0].length);
-  for (const i in test.rule.numsfx)
+  if (obj.px)
   {
-    for (const s in test.rule.numsfx[i])
+    let test = g_awards[award.sponsor].awards[award.name];
+    let px = obj.px.substr(0, obj.px.length - 1);
+    let suf = obj.DEcall.replace(px, "");
+    suf = suf.substr(0, test.rule.numsfx[0][0].length);
+    for (const i in test.rule.numsfx)
     {
-      if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
+      for (const s in test.rule.numsfx[i])
       {
-        return false;
+        if (suf.indexOf(test.rule.numsfx[i][s]) == 0)
+        {
+          return false;
+        }
       }
     }
   }

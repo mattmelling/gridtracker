@@ -1615,6 +1615,7 @@ function addControls()
     cnty: $.i18n("rosterColumns.Wanted.cnty"),
     wpx: $.i18n("rosterColumns.Wanted.wpx"),
     call: $.i18n("rosterColumns.Wanted.call"),
+    regex: $.i18n("rosterColumns.Wanted.regex"),
     oams: $.i18n("rosterColumns.Wanted.oams"),
     pota: $.i18n("rosterColumns.Wanted.pota")
   }

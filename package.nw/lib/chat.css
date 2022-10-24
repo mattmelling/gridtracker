@@ -1,0 +1,106 @@
+table,
+th,
+td,
+body,
+input {
+    color: #fff;
+    white-space: nowrap;
+    font-family: Sans-Serif;
+    font-size: 13px;
+    text-align: auto;
+}
+.boxDisplay {
+    margin: 1px;
+    padding: 2px;
+    border-width: 2px;
+    border-color: #aaa;
+    border-style: inset;
+    vertical-align: top;
+    -webkit-border-radius: 4px;
+}
+textarea {
+    width: 100%;
+    resize: none;
+    font-size: 15px;
+}
+.self {
+    color: #ffff00;
+    font-weight: bold;
+}
+.them {
+    color: #00ffff;
+    font-weight: bold;
+}
+.system {
+    color: #ff0000;
+    font-weight: bold;
+}
+.when {
+    color: #777777;
+    font-size: 12px;
+}
+.msgText {
+    color: #eeeeee;
+    font-size: 15px;
+}
+.msgTextUnicode {
+    color: #eeeeee;
+    font-size: 15px;
+}
+
+body {
+    background-image: url(img/gridtracker10.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+#callsign {
+color: #00ffff;
+font-weight: bold;
+}
+#country,
+#dxcc {
+color: #ffff00;
+font-weight: bold;
+}
+#grid {
+color: orange;
+font-weight: bold;
+}
+#band {
+color: #009900;
+font-weight: bold;
+}
+#mode {
+color: #ee0000;
+font-weight: bold;
+}
+
+.rosterOn {
+    color: #ffffff;
+}
+
+.rosterOff {
+    color: #777777;
+}
+
+.imgGray {
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+
+.imgNoFilter {
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tr:hover td {
+    box-shadow: inset 0px 11px 6px -8px #888, inset 0px -11px 6px -8px #888;
+}

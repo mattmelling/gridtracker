@@ -50,6 +50,7 @@ var def_appSettings = {
   gtSpotEnable: true,
   heatEnabled: 0,
   loadAdifAtStartup: false,
+  locale: "en",
   lookupLoginCq: "",
   lookupLoginQrz: "",
   lookupLoginQth: "",

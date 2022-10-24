@@ -133,7 +133,6 @@ function loadAllSettings()
     def_adifLogSettings
   );
   g_msgSettings = loadDefaultsAndMerge("msgSettings", def_msgSettings);
-
   g_receptionSettings = loadDefaultsAndMerge(
     "receptionSettings",
     def_receptionSettings
@@ -295,7 +294,7 @@ function saveAndCloseApp()
   }
   catch (e)
   {
-    console.log(e);
+    console.error(e);
   }
 
   if (g_map)
@@ -317,7 +316,7 @@ function saveAndCloseApp()
     }
     catch (e)
     {
-      console.log(e);
+      console.error(e);
     }
   }
 
@@ -346,7 +345,10 @@ function saveAndCloseApp()
     g_baWindowHandle.window.close(true);
     g_callRosterWindowHandle.window.close(true);
   }
-  catch (e) { }
+  catch (e)
+  {
+    console.error(e);
+  }
   nw.App.quit();
 }
 
@@ -2099,7 +2101,7 @@ function createSpotTipTable(toolElement)
   }
   catch (err)
   {
-    console.log("Unexpected error at createSpotTipTable", toolElement, err)
+    console.error("Unexpected error at createSpotTipTable", toolElement, err)
   }
 }
 
@@ -2435,7 +2437,10 @@ function renderTooltipWindow(feature)
       g_popupWindowHandle.width = parseInt(positionInfo.width) + 20;
       g_popupWindowHandle.height = parseInt(positionInfo.height) + 50;
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -2523,7 +2528,10 @@ function openConditionsWindow()
         g_conditionsWindowHandle.hide();
       }
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -2608,6 +2616,7 @@ function openCallRosterWindow(show = true)
         });
       }
     );
+
     lockNewWindows();
   }
   else
@@ -2632,7 +2641,10 @@ function openCallRosterWindow(show = true)
         }
       }
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -2644,7 +2656,10 @@ function updateRosterWorked()
     {
       g_callRosterWindowHandle.window.updateWorked();
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -2656,7 +2671,10 @@ function updateRosterInstances()
     {
       g_callRosterWindowHandle.window.updateInstances();
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -2713,7 +2731,10 @@ function openStatsWindow(show = true)
         g_statsWindowHandle.hide();
       }
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -2758,7 +2779,10 @@ function showMessaging(show = true, cid)
       g_chatWindowHandle.focus();
       if (typeof cid != "undefined") g_chatWindowHandle.window.openId(cid);
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -2812,7 +2836,10 @@ function onRightClickGridSquare(feature)
       {
         renderTooltipWindow(feature);
       }
-      catch (e) { }
+      catch (e)
+      {
+        console.error(e);
+      }
     }
     mouseOutOfDataItem();
   }
@@ -4037,7 +4064,10 @@ function reloadInfo(bandOrMode)
     {
       g_statsWindowHandle.window.reloadInfo();
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -6402,7 +6432,10 @@ function handleWsjtxStatus(newMessage)
     {
       g_callRosterWindowHandle.window.processStatus(newMessage);
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 
   if (g_activeInstance == "")
@@ -6798,7 +6831,7 @@ function handleWsjtxStatus(newMessage)
           }
           catch (err)
           {
-            console.log("Unexpected error inside handleWsjtxStatus", err)
+            console.error("Unexpected error inside handleWsjtxStatus", err)
           }
         }
       }
@@ -7318,7 +7351,7 @@ function handleWsjtxDecode(newMessage)
               }
               catch (err)
               {
-                console.log("Unexpected error inside handleWsjtxDecode 1", err)
+                console.error("Unexpected error inside handleWsjtxDecode 1", err)
               }
             }
           }
@@ -7362,7 +7395,7 @@ function handleWsjtxDecode(newMessage)
             }
             catch (err)
             {
-              console.log("Unexpected error inside handleWsjtxDecode 2", err)
+              console.error("Unexpected error inside handleWsjtxDecode 2", err)
             }
 
             var feature = shapeFeature(
@@ -7458,7 +7491,7 @@ function handleWsjtxDecode(newMessage)
             }
             catch (err)
             {
-              console.log("Unexpected error inside handleWsjtxDecode 3", err)
+              console.error("Unexpected error inside handleWsjtxDecode 3", err)
             }
           }
         }
@@ -8589,7 +8622,7 @@ function showWorkedBox(sortIndex, nextPage, redraw)
   }
   catch (e)
   {
-    console.log(e);
+    console.error(e);
   }
 }
 
@@ -8624,6 +8657,7 @@ function lookupValidateCallByElement(elementString)
     g_lookupWindowHandle.window.validateCallByElement(elementString);
   }
 }
+
 function lookupFocus(selection)
 {
   if (
@@ -9123,7 +9157,10 @@ function openBaWindow(show = true)
         g_baWindowHandle.hide();
       }
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -9175,7 +9212,10 @@ function openLookupWindow(show = false)
         g_lookupWindowHandle.window.saveScreenSettings();
       }
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 
@@ -10813,7 +10853,10 @@ function setGtShareButtons()
       {
         g_chatWindowHandle.hide();
       }
-      catch (e) { }
+      catch (e)
+      {
+        console.error(e);
+      }
     }
   }
 
@@ -12170,6 +12213,41 @@ function loadMaidenHeadData()
       }
     }
   }
+
+  var localeDxcc = "./i18n/" + g_appSettings.locale + "-dxcc.json";
+  if (fs.existsSync(localeDxcc))
+  {
+    var fileBuf = fs.readFileSync(localeDxcc, "UTF-8");
+    var langDxcc = JSON.parse(fileBuf);
+    if (langDxcc)
+    {
+      for (const dxcc in langDxcc)
+      {
+        if (dxcc in g_dxccInfo)
+        {
+          g_dxccInfo[dxcc].name = langDxcc[dxcc];
+          g_dxccToAltName[dxcc] = langDxcc[dxcc];
+        }
+      }
+    }
+  }
+
+  var localeState = "./i18n/" + g_appSettings.locale + "-state.json";
+  if (fs.existsSync(localeState))
+  {
+    var fileBuf = fs.readFileSync(localeState, "UTF-8");
+    var langState = JSON.parse(fileBuf);
+    if (langState)
+    {
+      for (const state in langState)
+      {
+        if (state in g_StateData)
+        {
+          g_StateData[state].name = langState[state];
+        }
+      }
+    }
+  }
 }
 
 var g_timezonesEnable = 0;
@@ -12434,6 +12512,7 @@ function readAcksFromDisk()
   catch (e)
   {
     // file failed to load, probably not downloaded
+    console.error(e);
   }
 }
 
@@ -13090,6 +13169,7 @@ function loadViewSettings()
   gtModeFilter.value = g_appSettings.gtModeFilter;
   gtPropFilter.value = g_appSettings.gtPropFilter;
   distanceUnit.value = g_appSettings.distanceUnit;
+  languageLocale.value = g_appSettings.locale;
   N1MMIpInput.value = g_N1MMSettings.ip;
   N1MMPortInput.value = g_N1MMSettings.port;
   buttonN1MMCheckBox.checked = g_N1MMSettings.enable;
@@ -13381,7 +13461,10 @@ function startupButtonsAndInputs()
 
     setGtShareButtons();
   }
-  catch (e) { }
+  catch (e)
+  {
+    console.error(e);
+  }
 }
 
 function startupEventsAndTimers()
@@ -13444,6 +13527,7 @@ document.addEventListener("drop", function (event)
 
 var g_startupTable = [
   [startupVersionInit, "Completed Version Check"],
+  [loadi18n, "Loading Locales"],
   [qsoBackupFileInit, "QSO Backup Initialized"],
   [callsignServicesInit, "Callsign Services Initialized"],
   [loadMapSettings, "Map Settings Initialized"],
@@ -13463,6 +13547,7 @@ var g_startupTable = [
   [initSoundCards, "Sounds Initialized"],
   [loadPortSettings, "Loaded Network Settings"],
   [loadLookupDetails, "Callsign Lookup Details Loaded"],
+  [renderLocale, "Rendering Locale"],
   [startupEventsAndTimers, "Set Events and Timers"],
   [registerHotKeys, "Registered Hotkeys"],
   [gtChatSystemInit, "Chat System Initialized"],
@@ -13733,7 +13818,10 @@ function updateWsjtxListener(port)
       {
         g_wsjtUdpServer.dropMembership(g_appSettings.wsjtIP);
       }
-      catch (e) { }
+      catch (e)
+      {
+        console.error(e);
+      }
     }
     g_wsjtUdpServer.close();
     g_wsjtUdpServer = null;
@@ -15455,7 +15543,7 @@ function is_dir(path)
   }
   catch (e)
   {
-    // lstatSync throws an error if path doesn't exist
+    // lstatSync throws an error if path doesn't exist, which isn't an error so don't send it to console
     return false;
   }
 }
@@ -15485,7 +15573,7 @@ function purgeUserFiles(userDir, systemDir)
         }
         catch (e)
         {
-          console.log(e);
+          console.error(e);
         }
       }
     }
@@ -15699,7 +15787,10 @@ function saveReceptionReports()
       JSON.stringify(g_receptionReports)
     );
   }
-  catch (e) { }
+  catch (e)
+  {
+    console.error(e);
+  }
 }
 
 function loadReceptionReports()
@@ -16002,7 +16093,7 @@ function createSpot(report, key, fromPoint, addToLayer = true)
   }
   catch (err)
   {
-    console.log("Unexpected error inside createSpot", report, err)
+    console.error("Unexpected error inside createSpot", report, err)
   }
 }
 
@@ -16290,7 +16381,10 @@ function setRosterTop()
     {
       g_callRosterWindowHandle.setAlwaysOnTop(g_appSettings.rosterAlwaysOnTop);
     }
-    catch (e) { }
+    catch (e)
+    {
+      console.error(e);
+    }
   }
 }
 

@@ -907,7 +907,6 @@ function setVisual()
     HuntModeControls.style.display = "none";
     CallsignsControls.style.display = "none";
     AwardTrackerControls.style.display = "";
-    huntingMatrixDiv.style.display = "none";
     updateAwardList();
   }
   else
@@ -1576,15 +1575,12 @@ function init()
   g_callsignDatabaseDXCC = window.opener.g_callsignDatabaseDXCC;
   g_callsignDatabaseUS = window.opener.g_callsignDatabaseUS;
   g_callsignDatabaseUSplus = window.opener.g_callsignDatabaseUSplus;
-
   loadAwardJson();
 
   updateWorked();
-
   // addAllAwards();
 
   window.addEventListener("message", receiveMessage, false);
-
   lockNewWindows();
 
   if (window.opener.g_mapSettings.offlineMode == false)
@@ -1597,8 +1593,32 @@ function init()
       80
     );
   }
-
   loadSettings();
+  updateInstances();
+
+  // callback to addControls();
+  loadRosteri18n();
+}
+
+// From i18n.js
+function addControls()
+{
+  WANTED_LABELS = {
+    cont: $.i18n("rosterColumns.Wanted.cont"),
+    cqz: $.i18n("rosterColumns.Wanted.cqz"),
+    ituz: $.i18n("rosterColumns.Wanted.ituz"),
+    dxcc: $.i18n("rosterColumns.Wanted.dxcc"),
+    dxccMarathon: $.i18n("rosterColumns.Wanted.dxccMarathon"),
+    cqzMarathon: $.i18n("rosterColumns.Wanted.cqzMarathon"),
+    state: $.i18n("rosterColumns.Wanted.state"),
+    grid: $.i18n("rosterColumns.Wanted.grid"),
+    cnty: $.i18n("rosterColumns.Wanted.cnty"),
+    wpx: $.i18n("rosterColumns.Wanted.wpx"),
+    call: $.i18n("rosterColumns.Wanted.call"),
+    regex: $.i18n("rosterColumns.Wanted.regex"),
+    oams: $.i18n("rosterColumns.Wanted.oams"),
+    pota: $.i18n("rosterColumns.Wanted.pota")
+  }
 
   window.opener.setRosterSpot(g_rosterSettings.columns.Spot);
 
@@ -1610,25 +1630,26 @@ function init()
 
   g_menu = new nw.Menu();
   g_compactMenu = new nw.Menu();
-
+  let showControlsText = $.i18n("roster.menu.ShowControls");
+  let hideControlsText = $.i18n("roster.menu.HideControls");
   let item = new nw.MenuItem({
     type: "normal",
-    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
+    label: g_rosterSettings.controls ? hideControlsText : showControlsText,
     click: function ()
     {
       if (this.label == "Hide Controls")
       {
-        this.label = "Show Controls";
+        this.label = showControlsText;
         g_rosterSettings.controls = false;
       }
       else
       {
-        this.label = "Hide Controls";
+        this.label = hideControlsText;
         g_rosterSettings.controls = true;
       }
       g_compactMenu.items[0].label = g_rosterSettings.controls
-        ? "Hide Controls"
-        : "Show Controls";
+        ? hideControlsText
+        : showControlsText;
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       setVisual();
     }
@@ -1637,22 +1658,22 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: g_rosterSettings.controls ? "Hide Controls" : "Show Controls",
+    label: g_rosterSettings.controls ? hideControlsText : showControlsText,
     click: function ()
     {
-      if (this.label == "Hide Controls")
+      if (this.label == hideControlsText)
       {
-        this.label = "Show Controls";
+        this.label = showControlsText;
         g_rosterSettings.controls = false;
       }
       else
       {
-        this.label = "Hide Controls";
+        this.label = hideControlsText;
         g_rosterSettings.controls = true;
       }
       g_menu.items[0].label = g_rosterSettings.controls
-        ? "Hide Controls"
-        : "Show Controls";
+        ? hideControlsText
+        : showControlsText;
       localStorage.rosterSettings = JSON.stringify(g_rosterSettings);
       setVisual();
     }
@@ -1661,7 +1682,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Compact Mode",
+    label: $.i18n("roster.menu.CompactMode"),
     click: function ()
     {
       g_rosterSettings.compact = true;
@@ -1673,7 +1694,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Roster Mode",
+    label: $.i18n("roster.menu.RosterMode"),
     click: function ()
     {
       g_rosterSettings.compact = false;
@@ -1687,7 +1708,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Lookup",
+    label: $.i18n("roster.menu.Lookup"),
     click: function ()
     {
       callLookup(g_targetHash, "");
@@ -1698,7 +1719,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Gen Msgs",
+    label: $.i18n("roster.menu.GenMesg"),
     click: function ()
     {
       callGenMessage(g_targetHash, "");
@@ -1713,7 +1734,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Ignore Call",
+    label: $.i18n("roster.menu.IgnoreCall"),
     click: function ()
     {
       let thisCall = callRoster[g_targetHash].DEcall;
@@ -1729,7 +1750,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Lookup",
+    label: $.i18n("roster.menu.Lookup"),
     click: function ()
     {
       callingLookup(g_targetHash, "");
@@ -1740,7 +1761,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "normal",
-    label: "Gen Msgs",
+    label: $.i18n("roster.menu.GenMesg"),
     click: function ()
     {
       callingGenMessage(g_targetHash, "");
@@ -1754,7 +1775,7 @@ function init()
 
   item = new nw.MenuItem({
     type: "checkbox",
-    label: "Realtime",
+    label: $.i18n("roster.menu.Realtime"),
     checked: g_rosterSettings.realtime,
     click: function ()
     {
@@ -1770,7 +1791,7 @@ function init()
 
   g_menuItemForCurrentColumn = new nw.MenuItem({
     type: "normal",
-    label: "Move Column Left",
+    label: $.i18n("roster.menu.MoveLeft"),
     click: function ()
     {
       moveColumnLeft(g_currentColumnName);
@@ -2131,7 +2152,6 @@ function init()
   document.addEventListener("keydown", onMyKeyDown, false);
 
   initDXCCSelector();
-
   g_timerInterval = nodeTimers.setInterval(realtimeRoster, 1000);
 
   updateInstances();

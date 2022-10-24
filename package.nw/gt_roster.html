@@ -21,7 +21,16 @@
     <link id="roster" rel="stylesheet" href="./lib/style_roster.css" />
     <script src="./lib/protos.js" type="text/javascript"></script>
     <script src="./lib/third-party.js" type="text/javascript"></script>
-    <script src="./lib/roster.js" type="text/javascript"></script>
+    <script src="./lib/jquery-3.6.1.min.js"></script>
+    <script src="./lib/CLDRPluralRuleParser.js" type="text/javascript"></script>
+    <script src="./lib/jquery.i18n.js" type="text/javascript"></script>
+    <script src="./lib/jquery.i18n.messagestore.js" type="text/javascript"></script>
+    <script src="./lib/jquery.i18n.fallbacks.js" type="text/javascript"></script>
+    <script src="./lib/jquery.i18n.parser.js" type="text/javascript"></script>
+    <script src="./lib/jquery.i18n.emitter.js" type="text/javascript"></script>
+    <script src="./lib/jquery.i18n.language.js" type="text/javascript"></script>
+    <script src="./lib/i18n.js" type="text/javascript"></script>
+    <script src="./lib/roster.js " type="text/javascript"></script>
     <script src="./lib/roster/prepareRosterSettings.js" type="text/javascript"></script>
     <script src="./lib/roster/processRosterFiltering.js" type="text/javascript"></script>
     <script src="./lib/roster/processRosterHunting.js" type="text/javascript"></script>
@@ -31,84 +40,73 @@
     <script src="./lib/roster/rosterColumns.js" type="text/javascript"></script>
     <script src="./lib/roster/rosterColumnFunctions.js" type="text/javascript"></script>
     <script src="./lib/roster/sendAlerts.js" type="text/javascript"></script>
-    <script src="./lib/screens.js"></script>
+    <script src="./lib/screens.js" type="text/javascript"></script>
   </head>
   <body onload="init()" class="roster" oncontextmenu="return handleContextMenu(event);">
     <div id="MainCallRoster">
       <header id="RosterControls">
         <div id="TransmitControls">
-          <div
-            id="txrxdec"
-            style="
-              background-color: Green;
-              border-style: outset;
-              border-color: yellow;
-              border-width: 3px;
-              margin: 2px;
-            "
-            class="roundBorder"
-          >
-            Waiting…
+          <div id="txrxdec" style=" background-color: Green; border-style: outset; border-color: yellow; border-width: 3px; margin: 2px;" class="roundBorder">
+          Waiting…
           </div>
           <div class="button" style="margin: 3px" onclick="window.opener.haltAllTx(true);">Halt Tx</div>
         </div>
 
         <div id="MoreLessControls">
-          <div class="link" onclick="toggleMoreControls()" id="ShowMoreControlsLink">More Controls</div>
-          <div class="link" onclick="toggleMoreControls()" id="ShowFewerControlsLink">Fewer Controls</div>
+          <div data-i18n="roster.controls.more" class="link" onclick="toggleMoreControls()" id="ShowMoreControlsLink">More Controls</div>
+          <div data-i18n="roster.controls.less" class="link" onclick="toggleMoreControls()" id="ShowFewerControlsLink">Fewer Controls</div>
         </div>
 
         <div id="MainRosterControls">
           <div id="LogbookControls">
-            <label>Logbook</label>
+            <label data-i18n="roster.controls.logbook.label">Logbook</label>
             <select id="referenceNeed" onchange="valuesChanged();">
-              <option value="6">Award Tracker</option>
-              <option value="0">Live Band &amp; Mode</option>
-              <option value="1">Live Band, Mix Modes</option>
-              <option value="2">Live Band, Digi Modes</option>
-              <option value="3">Mix Band, Live Mode</option>
-              <option value="4">Mix Band &amp; Modes</option>
-              <option value="5">Mix Band &amp; Digi Modes</option>
+              <option data-i18n="roster.controls.logbook.awardTracker" value="6">Award Tracker</option>
+              <option data-i18n="roster.controls.logbook.liveBandMode" value="0">Live Band &amp; Mode</option>
+              <option data-i18n="roster.controls.logbook.liveBandMixMode" value="1">Live Band, Mix Modes</option>
+              <option data-i18n="roster.controls.logbook.liveBandDigiMode" value="2">Live Band, Digi Modes</option>
+              <option data-i18n="roster.controls.logbook.mixBandLiveMode" value="3">Mix Band, Live Mode</option>
+              <option data-i18n="roster.controls.logbook.mixBandMode" value="4">Mix Band &amp; Modes</option>
+              <option data-i18n="roster.controls.logbook.mixBandDigiMode" value="5">Mix Band &amp; Digi Modes</option>
             </select>
           </div>
 
           <div id="CallsignsControls">
-            <label>Callsigns</label>
+            <label data-i18n="roster.controls.callsigns.label">Callsigns</label>
             <select id="callsignNeed" onchange="valuesChanged();">
-              <option value="worked">New</option>
-              <option value="confirmed">New+Unconfirmed</option>
-              <option value="all">All Traffic</option>
-              <option value="hits">All Traffic/Only Wanted</option>
+              <option data-i18n="roster.controls.callsigns.worked" value="worked">New</option>
+              <option data-i18n="roster.controls.callsigns.confirmed" value="confirmed">New+Unconfirmed</option>
+              <option data-i18n="roster.controls.callsigns.all" value="all">All Traffic</option>
+              <option data-i18n="roster.controls.callsigns.hits" value="hits">All Traffic/Only Wanted</option>
             </select>
           </div>
 
           <div id="HuntModeControls">
-            <label>Hunting</label>
-
+            <label data-i18n="roster.controls.hunting.label">Hunting</label>
             <select id="huntMode" onchange="valuesChanged();" value="callsign">
-              <option value="callsign">Callsign</option>
-              <option value="grid">Grid</option>
-              <option value="dxcc">DXCC</option>
-              <option value="dxccs">DXCC (Single)</option>
-              <option value="cq">CQ Zone</option>
-              <option value="itu">ITU Zone</option>
-              <option value="usstates">US States (WAS)</option>
-              <option value="usstate">US State (Single)</option>
-              <option value="wpx">Prefix (WPX)</option>
+              <option data-i18n="roster.controls.hunting.callsign" value="callsign">Callsign</option>
+              <option data-i18n="roster.controls.hunting.grid" value="grid">Grid</option>
+              <option data-i18n="roster.controls.hunting.dxcc" value="dxcc">DXCC</option>
+              <option data-i18n="roster.controls.hunting.dxccSingle" value="dxccs">DXCC (Single)</option>
+              <option data-i18n="roster.controls.hunting.cqZone" value="cq">CQ Zone</option>
+              <option data-i18n="roster.controls.hunting.ituZone" value="itu">ITU Zone</option>
+              <option data-i18n="roster.controls.hunting.usStates" value="usstates">US States (WAS)</option>
+              <option data-i18n="roster.controls.hunting.usState" value="usstate">US State (Single)</option>
+              <option  data-i18n="roster.controls.hunting.wpx"value="wpx">Prefix (WPX)</option>
             </select>
 
             <select id="huntNeed" onchange="valuesChanged();">
-              <option value="worked">New</option>
-              <option value="confirmed">New+Unconfirmed</option>
-              <option value="mixed">Mixed</option>
+              <option data-i18n="roster.controls.huntNeed.worked" value="worked">New</option>
+              <option data-i18n="roster.controls.huntNeed.confirmed" value="confirmed">New+Unconfirmed</option>
+              <option data-i18n="roster.controls.huntNeed.mixed" value="mixed">Mixed</option>
             </select>
 
             <select id="stateSelect" onchange="valuesChanged();">
-              <option value="" selected="true">Select Territory</option>
+              <option data-i18n="roster.controls.huntState.label"value="" selected="true">Select Territory</option>
             </select>
 
             <select id="DXCCsSelect" onchange="valuesChanged();" id="HuntDXCCsControls">
-              <option value="-1" selected="true">Select DXCC</option>
+              <option data-i18n="roster.controls.huntDXCC.label" value="-1" selected="true">Select DXCC</option>
             </select>
           </div>
 
@@ -117,30 +115,30 @@
           <div id="AwardTrackerControls">
             <div id="AwardWantedList"></div>
 
-            <div class="button" onclick="openAwardPopup()">Add Awards</div>
+            <div data-i18n="roster.controls.awardTracker.addButton" class="button" onclick="openAwardPopup()">Add Awards</div>
 
             <div id="awardHunterDiv" style="display: none;">
               <table style="padding: 15px">
                 <tr>
-                  <th align="center">New Award Tracker</th>
+                  <th data-i18n="roster.controls.awardTracker.new" align="center">New Award Tracker</th>
                 </tr>
                 <tr>
                   <td align="left">
                     <select id="awardSponsor" onchange="awardSponsorChanged();">
-                      <option value="" disabled selected>Sponsor</option>
+                      <option data-i18n="roster.controls.awardTracker.sponsor" value="" disabled selected>Sponsor</option>
                     </select>
                   </td>
                 </tr>
                 <tr>
                   <td align="left">
                     <select id="awardName" onchange="awardNameChanged();">
-                      <option value="" disabled selected>Name</option>
+                      <option data-i18n="roster.controls.awardTracker.name" value="" disabled selected>Name</option>
                     </select>
                   </td>
                 </tr>
                 <tr>
                   <td align="center">
-                    <div class="button" style="margin: 3px" onclick="closeAwardPopup()">Done</div>
+                    <div data-i18n="roster.controls.awardTracker.add" class="button" style="margin: 3px" onclick="closeAwardPopup()">Done</div>
                   </td>
                 </tr>
               </table>
@@ -151,59 +149,67 @@
 
         <div id="SecondaryRosterControls">
           <div id="huntingMatrixDiv" class="secondaryControlGroup">
-            <h3>Wanted</h3>
+            <h3 data-i18n="roster.secondary.wanted.label">Wanted</h3>
 
             <div class='columns'>
               <div>
-                <label><input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);" /> Callsign</label>
+                <input type="checkbox" id="huntCallsign" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.callsign" for="huntCallsign">Callsign</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntGrid" onchange="wantedChanged(this);" /> Grid</label>
+                <input type="checkbox" id="huntGrid" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.grid" for="huntGrid">Grid</label>
               </div>
               <div>
-                <label ><input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);" /> DXCC</label>
+                <input type="checkbox" id="huntDXCC" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.dxcc" for="huntDXCC">DXCC</label>
               </div>
               <div>
-                <label title="Stations calling *you*">
-                  <input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);" /> QRZ
-                </label>
+                <input type="checkbox" id="huntQRZ" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.qrz" for="huntQRZ" title="Stations calling *you*">QRZ</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntPX" onchange="wantedChanged(this);" /> WPX</label>
+                <input type="checkbox" id="huntPX" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.wpx" for="huntPX">WPX</label>
               </div>
               <div id="huntingMatrixPotaDiv">
-                <label title="Parks On The Air">
-                  <input type="checkbox" id="huntPOTA" onchange="wantedChanged(this);" /> POTA
-                </label>
+                <input type="checkbox" id="huntPOTA" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.pota" for="huntPOTA" title="Parks On The Air">POTA</label>
               </div>
-              <div>
-                <label title="Off-Air Message Service Users">
-                  <input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);" /> OAMS
-                </label>
+               <div>
+                <input type="checkbox" id="huntOAMS" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.OAMS" for="huntOAMS" title="Off-Air Message Service Users">OAMS</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" /> CQz</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" /> ITUz</label>
+                <input type="checkbox" id="huntCQz" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.cqzone" for="huntCQz" title="CQ Zones">CQz</label>
               </div>
               <div>
-                <label title='CQ DX Marathon'><input type="checkbox" id="huntMarathon" onchange="wantedChanged(this);" /> Marathon</label>
+                <input type="checkbox" id="huntITUz" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.ituzone" for="huntITUz" title="ITU Zones">ITUz</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntState" onchange="wantedChanged(this);" /> State</label>
+                <input type="checkbox" id="huntMarathon" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.marathon" for="huntMarathon" title="CQ DX Marathon">Marathon</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" /> County</label>
+                <input type="checkbox" id="huntState" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.state" for="huntState" title="State">State</label>
               </div>
               <div>
-                <label><input type="checkbox" id="huntCont" onchange="wantedChanged(this);" /> Cont</label>
+                <input type="checkbox" id="huntCounty" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.county" for="huntCounty" title="County">County</label>
               </div>
               <div>
-                <label title="Callsign Regular Expression">
-                  <input type="checkbox" id="huntRegex" onchange="wantedChanged(this);" /> Regex
-                </label>
+                <input type="checkbox" id="huntCont" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.cont" for="huntCont" title="Continent">Continent</label>
+              </div>
+              <div>
+                <input type="checkbox" id="huntRegex" onchange="wantedChanged(this);" />
+                <label data-i18n="roster.secondary.wanted.regex" title="Callsign Regular Expression">Regex</label>
 
                 <input
                   type="text"
@@ -223,15 +229,18 @@
             <h3>Exceptions</h3>
             <div class='columns'>
               <div>
-                <label><input type="checkbox" id="cqOnly" onchange="valuesChanged();" /> CQ Only</label>
+                <input type="checkbox" id="cqOnly" onchange="wantedChanged();" />
+                <label data-i18n="roster.secondary.exceptions.cqOnly" for="cqOnly">CQ Only</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantGrid" onchange="valuesChanged();" /> Has Grid</label>
+                <input type="checkbox" id="wantGrid" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.hasGrid" for="wantGrid">Has Grid</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMinDB" onchange="valuesChanged();" /> Min dB</label>
+                <input type="checkbox" id="wantMinDB" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.minDB" for="wantMinDB">Min dB</label>
                 <input
                   type="range"
                   min="-25"
@@ -245,7 +254,8 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" /> Max DT</label>
+                <input type="checkbox" id="wantMaxDT" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.maxDT" for="wantMaxDT">Max DT</label>
                 <input
                   type="range"
                   min="0.1"
@@ -259,7 +269,8 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" /> Min freq</label>
+                <input type="checkbox" id="wantMinFreq" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.minFreq" for="wantMinFreq">Min freq</label>
                 <input
                   type="range"
                   min="0"
@@ -273,7 +284,8 @@
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" /> Max freq</label>
+                <input type="checkbox" id="wantMaxFreq" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.maxFreq" for="wantMaxFreq">Max freq</label>
                 <input
                   type="range"
                   min="500"
@@ -288,7 +300,8 @@
               </div>
 
               <div id="usesLoTWDiv">
-                <label><input type="checkbox" id="usesLoTW" onchange="valuesChanged();" /> Uses LoTW</label>
+                <input type="checkbox" id="usesLoTW" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.usesLoTW" for="usesLoTW">Uses LoTW</label>
 
                 <input
                   title="Max time since their last upload"
@@ -304,37 +317,38 @@
               </div>
 
               <div id="onlySpotDiv">
-                <label><input type="checkbox" id="onlySpot" onchange="valuesChanged();" /> Spotted Me</label>
+                <input type="checkbox" id="onlySpot" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.spottedMe" for="onlySpot">Spotted Me</label>
               </div>
 
               <div>
-                <label>
-                  <input type="checkbox" id="noMyDxcc" onchange="onlyMyDxcc.checked=false; valuesChanged();" />
-                  Not My DXCC
-                </label>
+                <input type="checkbox" id="noMyDxcc" onchange="onlyMyDxcc.checked=false; valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.noMyDXCC" for="noMyDxcc">Not My DXCC</label>
               </div>
 
               <div>
-                <label>
-                  <input type="checkbox" id="onlyMyDxcc" onchange="noMyDxcc.checked=false; valuesChanged();" />
-                  Only My DXCC
-                </label>
+                <input type="checkbox" id="onlyMyDxcc" onchange="noMyDxcc.checked=false; valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.onlyMyDXCC" for="onlyMyDxcc">Only My DXCC</label>
               </div>
 
               <div id="useseQSLDiv">
-                <label><input type="checkbox" id="useseQSL" onchange="valuesChanged();" /> Uses eQSL</label>
+                <input type="checkbox" id="useseQSL" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.useseQSL" for="useseQSL">Uses eQSL</label>
               </div>
 
               <div id="usesOQRSDiv">
-                <label><input type="checkbox" id="usesOQRS" onchange="valuesChanged();" /> Uses OQRS</label>
+                <input type="checkbox" id="usesOQRS" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.usesOQRS" for="usesOQRS">Uses OQRS</label>
               </div>
 
               <div id="allOnlyNewDiv">
-                <label><input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" /> Only New Calls</label>
+                <input type="checkbox" id="allOnlyNew" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.allOnlyNew" for="allOnlyNew">Only New Calls</label>
               </div>
 
               <div>
-                <label><input type="checkbox" id="wantRRCQ" onchange="valuesChanged();" /> RR73 as CQ</label>
+                <input type="checkbox" id="wantRRCQ" onchange="valuesChanged();" />
+                <label data-i18n="roster.secondary.exceptions.wantRRCQ" for="wantRRCQ">RR73 as CQ</label>
               </div>
 
               <div>

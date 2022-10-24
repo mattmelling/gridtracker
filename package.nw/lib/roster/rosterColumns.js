@@ -154,7 +154,7 @@ const ROSTER_COLUMNS = {
       }
       if (callObj.cnty && callObj.qual == false)
       {
-        attrs.title = "Matches multiple counties, click to do a full lookup"
+        attrs.title = $.i18n("rosterColumns.County.title")
         attrs.onClick = `window.opener.lookupCallsign("${callObj.DEcall}", "${callObj.grid}")`
         attrs.html = attrs.html + " +" + String(window.opener.g_zipToCounty[callObj.zipcode].length - 1)
         attrs.style = "cursor: pointer; color: cyan;"
@@ -253,7 +253,7 @@ const ROSTER_COLUMNS = {
             return {
               style: "color: yellow;",
               align: "center",
-              title: `Has not updated a QSO in ${Number(months).toYM()}`,
+              title: `${$.i18n("rosterColumns.LoTW.NoUpdate")} ${Number(months).toYM()}`,
               html: "?"
             }
           }
@@ -262,7 +262,7 @@ const ROSTER_COLUMNS = {
             return {
               style: "color: #0F0;",
               align: "center",
-              title: `Last Upload&#10;${
+              title: `${$.i18n("rosterColumns.LoTW.LastUpdate")}${
                 window.opener.userDayString(window.opener.g_lotwCallsigns[callObj.DEcall] * 86400000)
               }`,
               html: "&#10004;"
@@ -274,7 +274,7 @@ const ROSTER_COLUMNS = {
           return {
             style: "color: #0F0;",
             align: "center",
-            title: `Last Upload&#10;${
+            title: `${$.i18n("rosterColumns.LoTW.LastUpdate")}${
               window.opener.userDayString(window.opener.g_lotwCallsigns[callObj.DEcall] * 86400000)
             }`,
             html: "&#10004;"
@@ -428,23 +428,8 @@ function potaColumnHover(callObj)
   return value;
 }
 
-WANTED_ORDER = ["call", "qrz", "regex", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
-WANTED_LABELS = {
-  cont: "Continent",
-  cqz: "CQ Zone",
-  ituz: "ITU Zone",
-  dxcc: "DXCC",
-  dxccMarathon: "Marathon DXCC",
-  cqzMarathon: "Marathon CQ Zone",
-  state: "State",
-  grid: "Grid",
-  cnty: "County",
-  wpx: "WPX",
-  call: "Call",
-  regex: "Regex",
-  oams: "OAMS",
-  pota: "POTA"
-}
+WANTED_ORDER = ["call", "qrz", "cont", "dxcc", "cqz", "ituz", "dxccMarathon", "cqzMarathon", "state", "pota", "grid", "cnty", "wpx", "oams"];
+WANTED_LABELS = {};
 
 function wantedColumnParts(callObj, options)
 {
@@ -452,16 +437,7 @@ function wantedColumnParts(callObj, options)
 
   if (Object.keys(callObj.hunting).length == 0)
   {
-    // is this an award reason?
-    // Hack until I talk with seb
-    if (callObj.awardReason != "Callsign")
-    {
-      return callObj.reason;
-    }
-    else
-    {
-      return [];
-    }
+    return [];
   }
 
   let parts = [];

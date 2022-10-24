@@ -136,7 +136,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       // We only do hunt highlighting when showing all entries
       // This means "Callsigns: All Traffic", "Callsigns: All Traffic/Only Wanted"
       // There is no highlighting in other modes
-      if (rosterSettings.callMode == "all" && rosterSettings.isAwardTracker == false)
+      if (rosterSettings.callMode == "all")
       {
         // Skip when "only new calls"
         // Questions: Move to the first loop? Why only skip new calls in "all traffic" and not other modes?
@@ -167,8 +167,30 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           }
         }
 
+        // award tracker overrides
+        let awardTrackerOverrides = {
+          call: false,
+          grids: false,
+          dxcc: false,
+          states: false,
+          cnty: false,
+          cqz: false,
+          px: false,
+          cont: false
+        };
+        if (g_rosterSettings.reference == LOGBOOK_AWARD_TRACKER)
+        {
+          for (let key in awardTracker)
+          {
+            if (awardTracker[key].enable)
+            {
+              awardTrackerOverrides[awardTracker[key].rule.type] = true;
+            }
+          }
+        }
+
         // Hunting for callsigns
-        if (huntCallsign.checked)
+        if (huntCallsign.checked || awardTrackerOverrides.call)
         {
           let hash = callsign + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (callsign + layeredHashSuffix)
@@ -176,7 +198,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.call))
           {
             shouldAlert = true;
-
             callObj.reason.push("call");
 
             if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.call)
@@ -266,7 +287,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for grids
-        if (huntGrid.checked && callObj.grid.length > 1)
+        if ((huntGrid.checked || awardTrackerOverrides.grids) && callObj.grid.length > 1)
         {
           let hash = callObj.grid.substr(0, 4) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (callObj.grid.substr(0, 4) + layeredHashSuffix)
@@ -274,7 +295,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.grid))
           {
             shouldAlert = true;
-
             callObj.reason.push("grid");
 
             if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.grid)
@@ -316,7 +336,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for DXCC
-        if (huntDXCC.checked && callObj.dxcc && callObj.dxcc > 0)
+        if (huntDXCC.checked || awardTrackerOverrides.dxcc)
         {
           let hash = String(callObj.dxcc) + "|" + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.dxcc) + "|" + layeredHashSuffix)
@@ -324,7 +344,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.dxcc))
           {
             shouldAlert = true;
-
             callObj.reason.push("dxcc");
 
             if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.dxcc)
@@ -387,7 +406,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for US States
-        if (huntState.checked && window.opener.g_callsignLookups.ulsUseEnable == true)
+        if ((huntState.checked || awardTrackerOverrides.states) && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
           let stateSearch = callObj.state;
           let finalDxcc = callObj.dxcc;
@@ -401,7 +420,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
               if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.state))
               {
                 shouldAlert = true;
-
                 callObj.reason.push("state");
 
                 if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.state)
@@ -445,7 +463,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for US Counties
-        if (huntCounty.checked && window.opener.g_callsignLookups.ulsUseEnable == true)
+        if ((huntCounty.checked || awardTrackerOverrides.cnty) && window.opener.g_callsignLookups.ulsUseEnable == true)
         {
           let finalDxcc = callObj.dxcc;
           if (
@@ -523,7 +541,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for CQ Zones
-        if (huntCQz.checked && callObj.cqz)
+        if ((huntCQz.checked || awardTrackerOverrides.cqz) && callObj.cqz)
         {
           let huntTotal = 1;
           let huntFound = 0, layeredFound = 0, workedFound = 0, layeredWorkedFound = 0, marathonFound = 0;
@@ -658,7 +676,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for WPX (Prefixes)
-        if (huntPX.checked && callObj.px)
+        if ((huntPX.checked || awardTrackerOverrides.px) && callObj.px)
         {
           let hash = String(callObj.px) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.px) + layeredHashSuffix)
@@ -666,7 +684,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.px))
           {
             shouldAlert = true;
-
             callObj.reason.push("wpx");
 
             if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.px)
@@ -708,7 +725,7 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for Continents
-        if (huntCont.checked && callObj.cont)
+        if ((huntCont.checked || awardTrackerOverrides.cont) && callObj.cont)
         {
           let hash = String(callObj.cont) + workHashSuffix;
           let layeredHash = rosterSettings.layeredMode && (String(callObj.cont) + layeredHashSuffix)
@@ -716,7 +733,6 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
           if (rosterSettings.huntIndex && !(hash in rosterSettings.huntIndex.cont))
           {
             shouldAlert = true;
-
             callObj.reason.push("cont");
 
             if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.cont)

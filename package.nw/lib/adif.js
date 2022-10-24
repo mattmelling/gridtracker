@@ -108,6 +108,36 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
   {
     let finalMode = "";
 
+    let appLoTW_RXQSO = findAdiField(
+      activeAdifArray[x],
+      "APP_LoTW_RXQSO"
+    );
+
+    if (appLoTW_RXQSO != "")
+    {
+      let dRXQSO = Date.parse(appLoTW_RXQSO);
+      let dLastLOTW_QSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
+      if ((isNaN(dRXQSO) == false) && (isNaN(dLastLOTW_QSO) == false) && (dRXQSO > dLastLOTW_QSO))
+      {
+        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+      }
+    }
+
+    let appLoTW_RXQSL = findAdiField(
+      activeAdifArray[x],
+      "APP_LoTW_RXQSL"
+    );
+
+    if (appLoTW_RXQSL != "")
+    {
+      let dRXQSL = Date.parse(appLoTW_RXQSL);
+      let dLastLOTW_QSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
+      if ((isNaN(dRXQSL) == false) && (isNaN(dLastLOTW_QSL) == false) && (dRXQSL > dLastLOTW_QSL))
+      {
+        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+      }
+    }
+
     if (activeAdifArray[x].length > 3)
     {
       if (activeAdifLogMode)
@@ -652,6 +682,7 @@ function tryToDeleteLog(filename)
 var g_lotwCount = 0;
 
 var g_isGettingLOTW = false;
+var g_lotwTest = false;
 
 function grabLOtWLog(test)
 {
@@ -737,7 +768,29 @@ function grabLoTWQSL()
       "g_isGettingLOTW",
       120000
     );
+
+    // Fetch QSLs
+    nodeTimers.setTimeout(downloadLoTWQSL, 10000);
   }
+}
+
+function downloadLoTWQSL()
+{
+  getABuffer(
+    "https://lotw.arrl.org/lotwuser/lotwreport.adi?login=" +
+      lotwLogin.value +
+      "&password=" +
+      encodeURIComponent(lotwPassword.value) +
+      "&qso_query=1&qso_qsl=yes&qso_qsldetail=yes&qso_withown=yes" +
+      lastQSLDateString,
+    lotwCallback,
+    null,
+    "https",
+    443,
+    lotwLogImg,
+    "g_isGettingLOTW",
+    120000
+  );
 }
 
 function qrzCallback(buffer, flag)
@@ -1094,7 +1147,6 @@ function loadGtQSOLogFile()
   }
 }
 
-var lotwLogLoaded = false;
 function loadLoTWLogFile()
 {
   var fs = require("fs");
@@ -1106,7 +1158,6 @@ function loadLoTWLogFile()
     g_fromDirectCallNoFileDialog = true;
 
     onAdiLoadComplete(rawAdiBuffer, false);
-    lotwLogLoaded = true;
   }
 }
 

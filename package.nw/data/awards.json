@@ -4497,7 +4497,7 @@
         "tooltip": "5-Band One Hundred Countries"
       },
       "OHCA60": {
-        "name": "OHCA60 - One Hundred Counties - 60m",
+        "name": "OHCA60 - One Hundred Countries - 60m",
         "rule": {
           "band": [
             "60m"
@@ -4512,7 +4512,7 @@
           "type": "dxcc"
         },
         "sponsor": "FT8DMC",
-        "tooltip": "One Hundred Counties - 60m"
+        "tooltip": "One Hundred Countries - 60m"
       },
       "PASA": {
         "name": "PASA - Panamanian Stations",

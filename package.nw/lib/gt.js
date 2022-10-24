@@ -12221,11 +12221,11 @@ function loadMaidenHeadData()
     var langDxcc = JSON.parse(fileBuf);
     if (langDxcc)
     {
-      for (var dxcc in langDxcc)
+      for (const dxcc in langDxcc)
       {
-        if (dxcc in g_dxccToGeoData)
+        if (dxcc in g_dxccInfo)
         {
-          g_worldGeoData[g_dxccToGeoData[dxcc]].name = langDxcc[dxcc];
+          g_dxccInfo[dxcc].name = langDxcc[dxcc];
           g_dxccToAltName[dxcc] = langDxcc[dxcc];
         }
       }
@@ -12239,7 +12239,7 @@ function loadMaidenHeadData()
     var langState = JSON.parse(fileBuf);
     if (langState)
     {
-      for (var state in langState)
+      for (const state in langState)
       {
         if (state in g_StateData)
         {

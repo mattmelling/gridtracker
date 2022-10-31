@@ -3243,7 +3243,6 @@ function setTrophyOverlay(which)
     {
       g_layerVectors["line-grids"].setVisible(false);
       g_layerVectors["big-grids"].setVisible(false);
-      g_layerVectors["short-grids"].setVisible(false);
       g_layerVectors["long-grids"].setVisible(false);
     }
     if (g_timezoneLayer)
@@ -3289,7 +3288,6 @@ function setTrophyOverlay(which)
       {
         g_layerVectors["line-grids"].setVisible(false);
         g_layerVectors["big-grids"].setVisible(false);
-        g_layerVectors["short-grids"].setVisible(false);
         g_layerVectors["long-grids"].setVisible(false);
       }
     }
@@ -5607,9 +5605,8 @@ function initMap()
   createGlobalMapLayer("live");
   createGlobalMapLayer("live-pins");
   createGlobalMapLayer("line-grids");
-  createGlobalMapLayer("long-grids", 3000);
-  createGlobalMapLayer("short-grids", 8000, 3001);
-  createGlobalMapLayer("big-grids", 50000, 3001);
+  createGlobalMapLayer("long-grids", 4500);
+  createGlobalMapLayer("big-grids", 50000, 4501);
   createGlobalMapLayer("pota");
   createGlobalMapLayer("psk-flights");
   createGlobalMapLayer("psk-spots");
@@ -5642,7 +5639,6 @@ function initMap()
       g_layerVectors["live-pins"],
       g_layerVectors["line-grids"],
       g_layerVectors["long-grids"],
-      g_layerVectors["short-grids"],
       g_layerVectors["big-grids"],
       g_layerVectors.pota,
       g_layerVectors["psk-flights"],
@@ -12379,26 +12375,6 @@ function drawAllGrids()
                 color: "#88888888",
                 width: 1
               }),
-              text: String(a) + String(b),
-              offsetY: 1
-            })
-          });
-          feature.setStyle(featureStyle);
-          g_layerSources["short-grids"].addFeature(feature);
-
-          feature = new ol.Feature({
-            geometry: new ol.geom.Point(point),
-            name: String(a) + String(b)
-          });
-
-          featureStyle = new ol.style.Style({
-            text: new ol.style.Text({
-              fill: new ol.style.Fill({ color: "#000" }),
-              font: "normal 16px sans-serif",
-              stroke: new ol.style.Stroke({
-                color: "#88888888",
-                width: 1
-              }),
               text:
                 String.fromCharCode(x) +
                 String.fromCharCode(y) +
@@ -12426,7 +12402,7 @@ function drawAllGrids()
           font: "normal 24px sans-serif",
           stroke: new ol.style.Stroke({
             color: "#88888888",
-            width: 1
+            width: 2
           }),
           text: String.fromCharCode(x) + String.fromCharCode(y)
         })

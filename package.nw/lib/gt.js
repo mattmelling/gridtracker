@@ -11573,41 +11573,26 @@ function ValidateGridsquareOnly4(inputText, validDiv)
 
 function validateGridFromString(inputText)
 {
+  var validGrid = false;
   if (inputText.length == 4 || inputText.length == 6)
   {
-    var gridSquare = "";
-    var LETTERS = inputText.substr(0, 2).toUpperCase();
-    var NUMBERS = inputText.substr(2, 2).toUpperCase();
+    var LETTERS = inputText.substr(0, 2);
+    var NUMBERS = inputText.substr(2, 2);
     if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
     {
-      gridSquare = LETTERS + NUMBERS;
+      validGrid = true;
     }
-    if (inputText.length > 4)
+    if (validGrid && inputText.length == 6)
     {
-      var LETTERS_SUB = inputText.substr(4, 2).toUpperCase();
-      gridSquare = "";
-      if (
-        /^[A-R]+$/.test(LETTERS) &&
-        /^[0-9]+$/.test(NUMBERS) &&
-        /^[A-Xa-x]+$/.test(LETTERS_SUB)
-      )
+      var LETTERS_SUB = inputText.substr(4, 2);
+      if (!(/^[A-Xa-x]+$/.test(LETTERS_SUB)))
       {
-        gridSquare = LETTERS + NUMBERS + LETTERS_SUB;
+        validGrid = false;
       }
     }
-    if (gridSquare != "")
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
   }
-  else
-  {
-    return false;
-  }
+
+  return validGrid;
 }
 
 function ValidateGridsquare(inputText, validDiv)

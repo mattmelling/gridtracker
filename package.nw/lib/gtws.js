@@ -393,7 +393,7 @@ function makeGtPin(obj)
 
     if (obj.grid.length != 4 && obj.grid.length != 6) return;
 
-    if (validateGridFromString(obj.grid, null) == false) return;
+    if (validateGridFromString(obj.grid) == false) return;
 
     if (
       g_appSettings.gtFlagImgSrc == 2 &&

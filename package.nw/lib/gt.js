@@ -796,6 +796,7 @@ function cycleGridView()
   gridViewButton.innerHTML = g_gridViewArray[g_appSettings.gridViewMode];
 
   redrawGrids();
+  saveAppSettings();
 }
 
 function toggleEarth()
@@ -4238,7 +4239,7 @@ function qthToQsoBox(
   }
 
   var zIndex = 2;
-  var entityVisibility = Number(g_appSettings.gridViewMode) > 1;
+  var entityVisibility = g_appSettings.gridViewMode > 1;
   var returnRectangle = null;
   if (g_appSettings.sixWideMode == 0) iQTH = iQTH.substr(0, 4);
   else iQTH = iQTH.substr(0, 6);
@@ -4268,7 +4269,7 @@ function qthToQsoBox(
       // Valid QTH
       var triangleView = false;
       if (
-        Number(g_appSettings.gridViewMode) == 3 &&
+        g_appSettings.gridViewMode == 3 &&
         iQTH in g_liveGrids &&
         entityVisibility == true &&
         g_pushPinMode == false
@@ -4944,7 +4945,7 @@ function dimGridsquare()
       {
         g_layerSources.live.removeFeature(g_liveGrids[i].rectangle);
 
-        if (Number(g_appSettings.gridViewMode) == 3 && i in g_qsoGrids)
+        if (g_appSettings.gridViewMode == 3 && i in g_qsoGrids)
         {
           if (g_qsoGrids[i].isTriangle)
           {
@@ -13464,6 +13465,7 @@ function startupEventsAndTimers()
 var g_finishedLoading = false;
 function postInit()
 {
+  setGridViewMode(g_appSettings.gridViewMode);
   redrawSpots();
   checkForSettings();
   updateForwardListener();

@@ -161,17 +161,28 @@
       }
 
       function makeCallsignRow(callObj, show) {
-        let oldRow = document.getElementById(callObj.cid);
-
-        if (!oldRow) {
-          let newCall = callObj.call.formatCallsign();
-          let x = 0;
-          for (x = 0; x < allCallTable.rows.length &&  newCall > allCallTable.rows[x].cells[0].innerHTML; x++) 
+  
+        if (callObj.row == null) 
+        {
+          var low = 0;
+          var mid = 0;
+          var high = allCallTable.rows.length;
+        
+          while (low < high) 
           {
-            // just count
+              mid = (low + high) >>> 1;
+              if (allCallTable.rows[mid].cells[0].innerHTML < callObj.fCall) 
+              {
+                low = mid + 1;
+              }
+              else
+              {
+                high = mid;
+              }
           }
 
-          let row = allCallTable.insertRow(x);
+          var row = allCallTable.insertRow(low);
+          callObj.row = row;
           row.id = callObj.cid;
 
           row.style.cursor = "pointer";
@@ -179,15 +190,15 @@
           row.onclick = openIdCid;
           row.oncontextmenu = openLookupCid;
 
-          let td = row.insertCell();
+          var td = row.insertCell();
 
           td.className = callObj.live == false ? "rosterOff" : "rosterOn";
-          td.innerHTML = newCall;
+          td.innerHTML = callObj.fCall;
           td.onmouseenter = onHoverCid;
           td.onmouseout = onNoHoverCid;
 
           if (callObj.dxcc > 0 && callObj.dxcc in window.opener.g_dxccInfo) {
-            let imgClass = callObj.live == false ? "imgGray" : "imgNoFilter";
+            var imgClass = callObj.live == false ? "imgGray" : "imgNoFilter";
             td = row.insertCell();
             td.innerHTML =
               "<img class='" +
@@ -197,16 +208,16 @@
               "'>";
           }
         } else {
-          oldRow.style.display = show ? "" : "none";
+          callObj.row.style.display = show ? "" : "none";
         }
       }
 
       function showAllCallsigns() {
-        let count = 0;
-        for (let x in window.opener.g_gtFlagPins) {
-          let obj = window.opener.g_gtFlagPins[x];
+        var count = 0;
+        for (var x in window.opener.g_gtFlagPins) {
+          var obj = window.opener.g_gtFlagPins[x];
           if (obj.call != "" && obj.call != "NOCALL" && obj.canmsg == true) {
-            let show = true;
+            var show = true;
             try {
               if (searchBox.value.length > 0 && !obj.call.match(searchBox.value)) {
                 show = false;

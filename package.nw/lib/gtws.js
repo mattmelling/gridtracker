@@ -316,7 +316,7 @@ function gtChatUpdateCall(jsmesg)
   {
     g_gtFlagPins[cid] = Object();
     g_gtFlagPins[cid].pin = null;
-
+    g_gtFlagPins[cid].row = null;
     g_gtFlagPins[cid].ids = Object();
     g_gtFlagPins[cid].ids[id] = true;
   }
@@ -324,6 +324,7 @@ function gtChatUpdateCall(jsmesg)
 
   g_gtFlagPins[cid].cid = jsmesg.cid;
   g_gtFlagPins[cid].call = jsmesg.call;
+  g_gtFlagPins[cid].fCall = jsmesg.call.formatCallsign();
   g_gtFlagPins[cid].grid = jsmesg.grid;
   g_gtFlagPins[cid].freq = jsmesg.freq;
   g_gtFlagPins[cid].band = jsmesg.band;
@@ -443,10 +444,12 @@ function gtChatNewList(jsmesg)
         g_gtFlagPins[cid].ids = Object();
         g_gtFlagPins[cid].ids[id] = true;
         g_gtFlagPins[cid].pin = null;
+        g_gtFlagPins[cid].row = null;
       }
 
       g_gtIdToCid[id] = cid;
       g_gtFlagPins[cid].call = jsmesg.data.calls[key];
+      g_gtFlagPins[cid].fCall = g_gtFlagPins[cid].call.formatCallsign();
       g_gtFlagPins[cid].grid = jsmesg.data.grid[key];
       g_gtFlagPins[cid].freq = jsmesg.data.freq[key];
       g_gtFlagPins[cid].band = jsmesg.data.band[key];

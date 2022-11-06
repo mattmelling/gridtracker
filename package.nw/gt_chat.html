@@ -215,7 +215,7 @@
 
       function showAllCallsigns() {
         var count = 0;
-        for (var x in window.opener.g_gtFlagPins) {
+        for (const x in window.opener.g_gtFlagPins) {
           var obj = window.opener.g_gtFlagPins[x];
           if (obj.call != "" && obj.call != "NOCALL" && obj.canmsg == true) {
             var show = true;
@@ -274,7 +274,7 @@
       function showAllMessages() {
         if (Object.keys(window.opener.g_gtMessages).length > 0) {
           var worker = "<table style='width:100%;'>";
-          for (var key in window.opener.g_gtMessages) {
+          for (const key in window.opener.g_gtMessages) {
             worker +=
               "<tr style='cursor:pointer;vertical-align:bottom;'><td align=left onclick=\"openId('" + key + "');\">";
             if (key in window.opener.g_gtUnread) worker += "🔥";

@@ -217,7 +217,7 @@
         var count = 0;
         for (const x in window.opener.g_gtFlagPins) {
           var obj = window.opener.g_gtFlagPins[x];
-          if (obj.call != "" && obj.call != "NOCALL" && obj.canmsg == true) {
+          if (obj.canmsg == true && obj.call != "" && obj.call != "NOCALL") {
             var show = true;
             try {
               if (searchBox.value.length > 0 && !obj.call.match(searchBox.value)) {

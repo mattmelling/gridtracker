@@ -33,14 +33,11 @@ function processRosterFiltering(callRoster, rosterSettings)
     callObj.reason = Array();
     callObj.awardReason = "Callsign";
 
-    if (!CALLSIGN_REGEXP.match(call))
-    {
-      entry.tx = false
-      continue;
-    }
-    else
+    if (!call || !call.match(CALLSIGN_REGEXP))
     {
       console.error(`Invalid Callsign ${call}`, entry)
+      entry.tx = false
+      continue;
     }
 
     if (rosterSettings.now - callObj.age > window.opener.g_mapSettings.rosterTime)

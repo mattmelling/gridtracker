@@ -1,19 +1,22 @@
-// The REGEX below comes from https://github.com/ham2k/ham2k/tree/main/libs/data/callsigns
-//
-// Prefixes should be [letter], [letter letter], [digit letter] or [letter digit],
-//
-// Countries with prefixes that end in a digit
-//   The only allocated prefixes that can have a single letter are:
-//   B (China), F (France), G (United Kingdom), I (Italy), K (USA), M (UK), N (USA), R (Russia) or W (USA)
-//
-//   Any other single letter prefix followed by a digit means the prefix includes the digit
-//
-// Exceptions
-//   Eswatini uses 3DA, a [digit letter letter] suffix
-
 // Basic regexp that identifies a callsign and any pre- and post-indicators.
 const CALLSIGN_REGEXP =
-  /^([A-Z0-9]+\/){0,1}(3D[A-Z0-9]|[0-9][A-Z][0-9]|[ACDEHJLOPQSTUVXYZ][0-9]|[A-Z]{1,2}[0-9])([A-Z0-9]+)(\/[A-Z0-9/]+){0,1}$/
+  /^([A-Z0-9]+\/){0,1}([0-9][A-Z]{1,2}[0-9]|[A-Z]{1,2}[0-9])([A-Z0-9]+)(\/[A-Z0-9/]+){0,1}$/
+/*
+  `^ ... $`
+    to ensure the callsign has no extraneous characters
+
+  `( [A-Z0-9]+ \/ ){0,1}`
+    to match an optional preindicator, separated by `\/` from the rest of the call
+
+  `( [0-9][A-Z]{1,2}[0-9] | [A-Z]{1,2}[0-9] )`
+    to match either number-letter-number, number-letter-letter-number, letter-number and letter-letter-number prefixes
+
+  `( [A-Z0-9]+ )`
+    for the rest of the callsign, which must include at least one more letter or digit after the prefix
+
+  `( \/ [A-Z0-9/]+ ){0,1}`
+    for a optional list of postindicators separated by `\/` from the rest of the call
+ */
 
 function processRosterFiltering(callRoster, rosterSettings)
 {

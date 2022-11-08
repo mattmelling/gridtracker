@@ -1,3 +1,20 @@
+// The REGEX below comes from https://github.com/ham2k/ham2k/tree/main/libs/data/callsigns
+//
+// Prefixes should be [letter], [letter letter], [digit letter] or [letter digit],
+//
+// Countries with prefixes that end in a digit
+//   The only allocated prefixes that can have a single letter are:
+//   B (China), F (France), G (United Kingdom), I (Italy), K (USA), M (UK), N (USA), R (Russia) or W (USA)
+//
+//   Any other single letter prefix followed by a digit means the prefix includes the digit
+//
+// Exceptions
+//   Eswatini uses 3DA, a [digit letter letter] suffix
+
+// Basic regexp that identifies a callsign and any pre- and post-indicators.
+const CALLSIGN_REGEXP =
+  /^([A-Z0-9]+\/){0,1}(3D[A-Z0-9]|[0-9][A-Z][0-9]|[ACDEHJLOPQSTUVXYZ][0-9]|[A-Z]{1,2}[0-9])([A-Z0-9]+)(\/[A-Z0-9/]+){0,1}$/
+
 function processRosterFiltering(callRoster, rosterSettings)
 {
   // First loop, exclude calls, mostly based on "Exceptions" settings
@@ -12,6 +29,16 @@ function processRosterFiltering(callRoster, rosterSettings)
     callObj.shouldAlert = false;
     callObj.reason = Array();
     callObj.awardReason = "Callsign";
+
+    if (!CALLSIGN_REGEXP.match(call))
+    {
+      entry.tx = false
+      continue;
+    }
+    else
+    {
+      console.error(`Invalid Callsign ${call}`, entry)
+    }
 
     if (rosterSettings.now - callObj.age > window.opener.g_mapSettings.rosterTime)
     {

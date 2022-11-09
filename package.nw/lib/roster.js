@@ -1725,12 +1725,27 @@ function addControls()
       callGenMessage(g_targetHash, "");
     }
   });
-
   g_callMenu.append(item);
 
   item = new nw.MenuItem({ type: "separator" });
-
   g_callMenu.append(item);
+
+  if (window.opener.g_pstrotatorSettings.enable)
+  {
+    item = new nw.MenuItem({
+      type: "normal",
+      label: $.i18n("roster.menu.AimRotator"),
+      click: function ()
+      {
+        let target = callRoster[g_targetHash]
+        window.opener.aimRotator(target, "");
+      }
+    });
+    g_callMenu.append(item);
+
+    item = new nw.MenuItem({ type: "separator" });
+    g_callMenu.append(item);
+  }
 
   item = new nw.MenuItem({
     type: "normal",
@@ -1747,7 +1762,6 @@ function addControls()
   g_callMenu.append(item);
 
   g_callingMenu = new nw.Menu();
-
   item = new nw.MenuItem({
     type: "normal",
     label: $.i18n("roster.menu.Lookup"),
@@ -1772,6 +1786,23 @@ function addControls()
 
   item = new nw.MenuItem({ type: "separator" });
   g_menu.append(item);
+
+  if (window.opener.g_pstrotatorSettings.enable)
+  {
+    item = new nw.MenuItem({
+      type: "normal",
+      label: $.i18n("roster.menu.AimRotator"),
+      click: function ()
+      {
+        let target = callRoster[g_targetHash]
+        window.opener.aimRotator(target, "");
+      }
+    });
+    g_callingMenu.append(item);
+
+    item = new nw.MenuItem({ type: "separator" });
+    g_callingMenu.append(item);
+  }
 
   item = new nw.MenuItem({
     type: "checkbox",

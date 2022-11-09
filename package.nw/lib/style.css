@@ -619,7 +619,8 @@ a {
   margin: 0;
   display: none;
   background-color: black;
-  padding: 2px;
+  padding: 6px;
+  padding-bottom: 10px;
   text-align: center;
   width: auto;
   border: 1px solid blue;
@@ -627,7 +628,8 @@ a {
   vertical-align: top;
   -webkit-border-radius: 6px;
   white-space: normal;
-
+  max-height: 600px;
+  overflow: auto;
   /* animation: fadeEffect .3s;  Fading effect takes 1 second */
 }
 

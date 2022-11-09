@@ -60,6 +60,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <script src="./lib/shadow.js" type="text/javascript"></script>
   <script src="./lib/gtws.js" type="text/javascript"></script>
   <script src="./lib/pota.js" type="text/javascript"></script>
+  <script src="./lib/services/pstrotator.js" type="text/javascript"></script>
   <script src="./lib/gt.js" type="text/javascript"></script>
 </head>
 
@@ -2073,9 +2074,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       </div>
     </div>
     <div id="logSettingsDiv" class="settingsTabcontent">
-      <div id="LoadAdifOnStartupDiv"
-        style="left: 0; padding: 1px; overflow: auto; overflow-x: hidden; display: inline-block; height: 602px"
-        class="roundBorder">
         <table class="darkTable" align="center">
           <tr>
             <th data-i18n="settings.logging.tableheader.source">Source/Sync</th>
@@ -2438,7 +2436,33 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <td></td>
           </tr>
         </table>
-      </div>
+
+        <h2 data-i18n="settings.logging.other.title">Other Services</h2>
+        <table class="darkTable" align="center">
+          <tr>
+            <th data-i18n="settings.logging.otherheader.service">Service</th>
+            <th data-i18n="settings.logging.otherheader.active">Active?</th>
+            <th data-i18n="settings.logging.otherheader.details">Details</th>
+          </tr>
+          <tr>
+            <td data-i18n="settings.logging.pstrotator.label">PSTRotator</td>
+            <td>
+              <input type="checkbox" checked="false" class="inputTextValue" id="pstrotatorCheckBox"
+                onclick=" ValidateIPaddress(pstrotatorIpInput, this); ValidatePort(pstrotatorPortInput, this, null ); pstrotatorServiceChanged(); " />
+            </td>
+            <td>
+              <label data-i18n="settings.logging.pstrotator.details.IP" for="pstrotastorIpInput">IP</label>
+              <input id="pstrotatorIpInput" type="text" class="inputTextValue" maxlength="15" size="15"
+                onkeypress='return validIpKeys(event.charCode);'
+                oninput="ValidateIPaddress(this, pstrotatorCheckBox); pstrotatorServiceChanged(); " />
+              <label data-i18n="settings.logging.pstrotator.details.Port" for="pstrotatorPortInput">UDP Port</label>
+              <input id="pstrotatorPortInput" type="text" class="inputTextValue" maxlength="5" size="5" onkeypress='return
+                  validNumberKeys(event.charCode);' oninput="ValidatePort(this, pstrotatorCheckBox, null );
+                  pstrotatorServiceChanged(); " />
+            </td>
+          </tr>
+        </table>
+
     </div>
     <div id="callRosterDiv" class="settingsTabcontent">
       <div class="mapItem">

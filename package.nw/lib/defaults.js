@@ -234,7 +234,6 @@ var def_HRDLogbookLogSettings = {
   port: 7826,
   ip: "127.0.0.1"
 };
-
 var def_acLogSettings = {
   enable: false,
   port: 1100,

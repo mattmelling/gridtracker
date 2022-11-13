@@ -347,7 +347,7 @@
     "settings.logging.otherheader.service": "Service",
     "settings.logging.otherheader.active": "Active?",
     "settings.logging.otherheader.details": "Details",
-    "settings.logging.pstrotator.label": "PST Rotator",
+    "settings.logging.pstrotator.label": "CatRotator / PstRotator",
     "settings.logging.pstrotator.details.IP": "IP",
     "settings.logging.pstrotator.details.Port": "UDP Port",
     "settings.callroster.AlwaysOnTop.label": "Window Always On Top",

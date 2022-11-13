@@ -8,15 +8,6 @@
  *   https://groups.io/g/PstRotator/message/5825
  *
  */
-
-validSettings.push("pstrotatorSettings")
-
-var def_pstrotatorSettings = {
-  enable: false,
-  port: 12000,
-  ip: "127.0.0.1"
-};
-
 var g_pstrotatorSettings = {};
 
 function pstrotatorServiceChanged()
@@ -45,10 +36,11 @@ function pstrotatorServiceChanged()
   g_pstrotatorSettings.ip = pstrotatorIpInput.value;
   g_pstrotatorSettings.port = pstrotatorPortInput.value;
 
-  localStorage.pstrotatorSettings = JSON.stringify(g_pstrotatorSettings);
+  saveLogSettings();
 }
 
-function aimRotator(info) {
+function aimRotator(info)
+{
   const { callObj } = info
 
   if (

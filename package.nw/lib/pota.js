@@ -447,7 +447,7 @@ function processPotaSpots(buffer)
             {
               g_pota.parkSpots[newSpot.reference][newSpot.activator] = newSpot;
             }
-         }
+          }
         }
         else
         {

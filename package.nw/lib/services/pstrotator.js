@@ -55,15 +55,17 @@ function aimRotator(info) {
     g_pstrotatorSettings.enable == true &&
     g_pstrotatorSettings.port > 0 &&
     g_pstrotatorSettings.ip.length > 4 &&
-    (callObj.azimuth || callObj.grid)
+    (callObj.heading || callObj.grid)
   )
   {
     let payload = "<PST>"
-    if (callObj.azimuth)
+
+    if (callObj.heading)
     {
-      payload += `<AZIMUTH>${callObj.azimuth}</AZIMUTH>`
+      payload += `<AZIMUTH>${Math.round(callObj.heading)}</AZIMUTH>`
     }
-    else
+
+    if (callObj.grid)
     {
       payload += `<QRA>${callObj.grid}</QRA>`
     }

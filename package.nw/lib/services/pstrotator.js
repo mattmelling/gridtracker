@@ -55,12 +55,12 @@ function aimRotator(info) {
     g_pstrotatorSettings.enable == true &&
     g_pstrotatorSettings.port > 0 &&
     g_pstrotatorSettings.ip.length > 4 &&
-    (callObj.heading || callObj.grid)
+    (callObj.distance > 0 || callObj.grid)
   )
   {
     let payload = "<PST>"
 
-    if (callObj.heading)
+    if (callObj.distance > 0)
     {
       payload += `<AZIMUTH>${Math.round(callObj.heading)}</AZIMUTH>`
     }
@@ -84,7 +84,7 @@ function aimRotator(info) {
     }
     catch (e)
     {
-      addLastTraffic("<font style='color:red'>Exception HRD Log</font>");
+      addLastTraffic("<font style='color:red'>UDP aimRotator failed</font>");
     }
   }
 }

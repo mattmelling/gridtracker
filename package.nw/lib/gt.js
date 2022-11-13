@@ -144,6 +144,10 @@ function loadAllSettings()
     "HRDLogbookLogSettings",
     def_HRDLogbookLogSettings
   );
+  g_pstrotatorSettings = loadDefaultsAndMerge(
+    "pstrotatorSettings",
+    def_pstrotatorSettings
+  );
   g_acLogSettings = loadDefaultsAndMerge("acLogSettings", def_acLogSettings);
   g_trustedQslSettings = loadDefaultsAndMerge(
     "trustedQslSettings",
@@ -262,6 +266,7 @@ function saveLogSettings()
   localStorage.log4OMSettings = JSON.stringify(g_log4OMSettings);
   localStorage.dxkLogSettings = JSON.stringify(g_dxkLogSettings);
   localStorage.HRDLogbookLogSettings = JSON.stringify(g_HRDLogbookLogSettings);
+  localStorage.pstrotatorSettings = JSON.stringify(g_pstrotatorSettings);
   localStorage.acLogSettings = JSON.stringify(g_acLogSettings);
   localStorage.trustedQslSettings = JSON.stringify(g_trustedQslSettings);
 }
@@ -1077,7 +1082,7 @@ function addDeDx(
   var qsoDate = new Date(1970, 0, 1); qsoDate.setSeconds(finalTime);
   var isCurrentYear = (qsoDate.getFullYear() == currentYear);
   var dayAsString = String(parseInt(finalTime / 86400));
-  
+
   var callsign = null;
   var rect = null;
   var worked = false;
@@ -1349,7 +1354,7 @@ function addDeDx(
         g_tracker.worked.pota[dayAsString + finalDXcall + finalPOTA + band + "ph"] = true;
       }
     }
-    
+
     worked = true;
     locked = true;
     details.worked = worked;
@@ -5531,7 +5536,7 @@ function initMap()
   {
     var saveSettings = false;
     g_maps = Object.keys(g_maps).sort().reduce((obj, key) => { obj[key] = g_maps[key]; return obj; }, {});
-    
+
     if (!(g_mapSettings.mapIndex in g_maps))
     {
       g_mapSettings.mapIndex = def_mapSettings.mapIndex;
@@ -5745,7 +5750,7 @@ function initMap()
             noFeature = true;
             break;
           }
-          
+
           if (features[index].size == 6)
           {
             noFeature = false;
@@ -10627,7 +10632,7 @@ function redrawGrids()
             ~~g_cqZones[cqz].confirmed_modes[mode] + 1;
         }
       }
-     
+
       if (ituz && ituz.length > 0)
       {
         if (g_ituZones[ituz].worked == false)
@@ -10653,7 +10658,7 @@ function redrawGrids()
             ~~g_ituZones[ituz].confirmed_modes[mode] + 1;
         }
       }
-      
+
       if (finalGrid.length > 0)
       {
         var gridCheck = finalGrid.substr(0, 4);
@@ -12289,7 +12294,7 @@ function toggleTimezones()
       g_timezoneLayer = null;
     }
   }
-  
+
   timezoneImg.style.filter = g_timezonesEnable == 1 ? "" : "grayscale(1)";
 }
 
@@ -12735,7 +12740,7 @@ function loadMapSettings()
   rosterDelayOnFocus.checked = g_appSettings.rosterDelayOnFocus;
   rosterDelayTime.value = g_appSettings.rosterDelayTime;
   rosterDelayTimeTd.innerHTML = rosterDelayTime.value + "ms";
-  
+
   setStrikesButton();
 
   trafficDecode.checked = g_mapSettings.trafficDecode;
@@ -13200,6 +13205,12 @@ function loadViewSettings()
   ValidatePort(hrdLogbookPortInput, buttonHrdLogbookCheckBox, null);
   ValidateIPaddress(hrdLogbookIpInput, buttonHrdLogbookCheckBox, null);
 
+  pstrotatorIpInput.value = g_pstrotatorSettings.ip;
+  pstrotatorPortInput.value = g_pstrotatorSettings.port;
+  pstrotatorCheckBox.checked = g_pstrotatorSettings.enable;
+  ValidatePort(pstrotatorPortInput, pstrotatorCheckBox, null);
+  ValidateIPaddress(pstrotatorIpInput, pstrotatorCheckBox, null);
+
   spotHistoryTimeValue.value = parseInt(
     g_receptionSettings.viewHistoryTimeSec / 60
   );
@@ -13506,7 +13517,7 @@ function postInit()
   openCallRosterWindow(false);
   openConditionsWindow(false);
   showMessaging(false);
-  
+
   if (g_developerMode)
   {
     devPanel.style.display = "inline-block";
@@ -15719,7 +15730,7 @@ function mediaCheck()
         g_tracker.worked.px = {};
         g_tracker.confirmed.px = {};
       }
-      
+
       if (typeof g_tracker.worked.pota == "undefined")
       {
         g_tracker.worked.pota = {};
@@ -15741,12 +15752,12 @@ function mediaCheck()
             g_QSOhash[i].px = null;
           }
         }
-        
+
         if (typeof g_QSOhash[i].pota == "undefined" || g_QSOhash[i].pota == null)
         {
           g_QSOhash[i].pota = [];
         }
-        
+
         g_QSOcount++;
         if (g_QSOhash[i].confirmed) g_QSLcount++;
       }

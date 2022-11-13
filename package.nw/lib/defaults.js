@@ -27,7 +27,8 @@ var validSettings = [
   "startupLogs",
   "trustedQslSettings",
   "screenSettings",
-  "legendColors"
+  "legendColors",
+  "pstrotatorSettings"
 ];
 
 var def_appSettings = {
@@ -234,7 +235,6 @@ var def_HRDLogbookLogSettings = {
   port: 7826,
   ip: "127.0.0.1"
 };
-
 var def_acLogSettings = {
   enable: false,
   port: 1100,
@@ -276,4 +276,10 @@ var def_legendColors = {
   CQDX: "#00FFFF",
   QRZ: "#FFFF00",
   QTH: "#FFA600"
+};
+
+var def_pstrotatorSettings = {
+  enable: false,
+  port: 12000,
+  ip: "127.0.0.1"
 };

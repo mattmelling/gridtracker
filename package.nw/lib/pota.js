@@ -427,20 +427,27 @@ function processPotaSpots(buffer)
           newSpot.spotTime = Date.parse(newSpot.spotTime + "Z");
           newSpot.frequency = parseInt(newSpot.frequency) / 1000;
           newSpot.band = newSpot.frequency.formatBand();
-          (g_pota.callSpots[newSpot.activator] = g_pota.callSpots[newSpot.activator] || []).push(newSpot.reference);
-          
-          if (!(newSpot.reference in g_pota.parkSpots))
+          if (newSpot.spotter == newSpot.activator && newSpot.comments.match(/qrt/gi))
           {
-            g_pota.parkSpots[newSpot.reference] = {};
-          }
-          if (newSpot.activator in g_pota.parkSpots[newSpot.reference])
-          {
-            g_pota.parkSpots[newSpot.reference][newSpot.activator] = fillObjectFromTemplate(g_pota.parkSpots[newSpot.reference][newSpot.activator], newSpot);
+            // don't add the spot, they have self-QRT'ed
           }
           else
           {
-            g_pota.parkSpots[newSpot.reference][newSpot.activator] = newSpot;
-          }
+            (g_pota.callSpots[newSpot.activator] = g_pota.callSpots[newSpot.activator] || []).push(newSpot.reference);
+            
+            if (!(newSpot.reference in g_pota.parkSpots))
+            {
+              g_pota.parkSpots[newSpot.reference] = {};
+            }
+            if (newSpot.activator in g_pota.parkSpots[newSpot.reference])
+            {
+              g_pota.parkSpots[newSpot.reference][newSpot.activator] = fillObjectFromTemplate(g_pota.parkSpots[newSpot.reference][newSpot.activator], newSpot);
+            }
+            else
+            {
+              g_pota.parkSpots[newSpot.reference][newSpot.activator] = newSpot;
+            }
+         }
         }
         else
         {

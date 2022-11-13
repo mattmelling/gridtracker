@@ -1,8 +1,8 @@
 {
   "name": "GridTracker",
   "product_string_do_not_use": "gridtracker",
-  "version": "1.22.1024",
-  "betaVersion": "Ernte",
+  "version": "1.22.1113",
+  "betaVersion": "Snow",
   "description": "GridTracker, an amateur radio companion",
   "author": "GridTracker.org",
   "license": "BSD-3-Clause",

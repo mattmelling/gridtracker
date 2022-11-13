@@ -796,6 +796,7 @@ function cycleGridView()
   gridViewButton.innerHTML = g_gridViewArray[g_appSettings.gridViewMode];
 
   redrawGrids();
+  saveAppSettings();
 }
 
 function toggleEarth()
@@ -3243,7 +3244,6 @@ function setTrophyOverlay(which)
     {
       g_layerVectors["line-grids"].setVisible(false);
       g_layerVectors["big-grids"].setVisible(false);
-      g_layerVectors["short-grids"].setVisible(false);
       g_layerVectors["long-grids"].setVisible(false);
     }
     if (g_timezoneLayer)
@@ -3289,7 +3289,6 @@ function setTrophyOverlay(which)
       {
         g_layerVectors["line-grids"].setVisible(false);
         g_layerVectors["big-grids"].setVisible(false);
-        g_layerVectors["short-grids"].setVisible(false);
         g_layerVectors["long-grids"].setVisible(false);
       }
     }
@@ -4240,7 +4239,7 @@ function qthToQsoBox(
   }
 
   var zIndex = 2;
-  var entityVisibility = Number(g_appSettings.gridViewMode) > 1;
+  var entityVisibility = g_appSettings.gridViewMode > 1;
   var returnRectangle = null;
   if (g_appSettings.sixWideMode == 0) iQTH = iQTH.substr(0, 4);
   else iQTH = iQTH.substr(0, 6);
@@ -4270,7 +4269,7 @@ function qthToQsoBox(
       // Valid QTH
       var triangleView = false;
       if (
-        Number(g_appSettings.gridViewMode) == 3 &&
+        g_appSettings.gridViewMode == 3 &&
         iQTH in g_liveGrids &&
         entityVisibility == true &&
         g_pushPinMode == false
@@ -4946,7 +4945,7 @@ function dimGridsquare()
       {
         g_layerSources.live.removeFeature(g_liveGrids[i].rectangle);
 
-        if (Number(g_appSettings.gridViewMode) == 3 && i in g_qsoGrids)
+        if (g_appSettings.gridViewMode == 3 && i in g_qsoGrids)
         {
           if (g_qsoGrids[i].isTriangle)
           {
@@ -5607,9 +5606,8 @@ function initMap()
   createGlobalMapLayer("live");
   createGlobalMapLayer("live-pins");
   createGlobalMapLayer("line-grids");
-  createGlobalMapLayer("long-grids", 3000);
-  createGlobalMapLayer("short-grids", 8000, 3001);
-  createGlobalMapLayer("big-grids", 50000, 3001);
+  createGlobalMapLayer("long-grids", 4500);
+  createGlobalMapLayer("big-grids", 50000, 4501);
   createGlobalMapLayer("pota");
   createGlobalMapLayer("psk-flights");
   createGlobalMapLayer("psk-spots");
@@ -5642,7 +5640,6 @@ function initMap()
       g_layerVectors["live-pins"],
       g_layerVectors["line-grids"],
       g_layerVectors["long-grids"],
-      g_layerVectors["short-grids"],
       g_layerVectors["big-grids"],
       g_layerVectors.pota,
       g_layerVectors["psk-flights"],
@@ -11576,41 +11573,26 @@ function ValidateGridsquareOnly4(inputText, validDiv)
 
 function validateGridFromString(inputText)
 {
+  var validGrid = false;
   if (inputText.length == 4 || inputText.length == 6)
   {
-    var gridSquare = "";
-    var LETTERS = inputText.substr(0, 2).toUpperCase();
-    var NUMBERS = inputText.substr(2, 2).toUpperCase();
+    var LETTERS = inputText.substr(0, 2);
+    var NUMBERS = inputText.substr(2, 2);
     if (/^[A-R]+$/.test(LETTERS) && /^[0-9]+$/.test(NUMBERS))
     {
-      gridSquare = LETTERS + NUMBERS;
+      validGrid = true;
     }
-    if (inputText.length > 4)
+    if (validGrid && inputText.length == 6)
     {
-      var LETTERS_SUB = inputText.substr(4, 2).toUpperCase();
-      gridSquare = "";
-      if (
-        /^[A-R]+$/.test(LETTERS) &&
-        /^[0-9]+$/.test(NUMBERS) &&
-        /^[A-Xa-x]+$/.test(LETTERS_SUB)
-      )
+      var LETTERS_SUB = inputText.substr(4, 2);
+      if (!(/^[A-Xa-x]+$/.test(LETTERS_SUB)))
       {
-        gridSquare = LETTERS + NUMBERS + LETTERS_SUB;
+        validGrid = false;
       }
     }
-    if (gridSquare != "")
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
   }
-  else
-  {
-    return false;
-  }
+
+  return validGrid;
 }
 
 function ValidateGridsquare(inputText, validDiv)
@@ -12379,26 +12361,6 @@ function drawAllGrids()
                 color: "#88888888",
                 width: 1
               }),
-              text: String(a) + String(b),
-              offsetY: 1
-            })
-          });
-          feature.setStyle(featureStyle);
-          g_layerSources["short-grids"].addFeature(feature);
-
-          feature = new ol.Feature({
-            geometry: new ol.geom.Point(point),
-            name: String(a) + String(b)
-          });
-
-          featureStyle = new ol.style.Style({
-            text: new ol.style.Text({
-              fill: new ol.style.Fill({ color: "#000" }),
-              font: "normal 16px sans-serif",
-              stroke: new ol.style.Stroke({
-                color: "#88888888",
-                width: 1
-              }),
               text:
                 String.fromCharCode(x) +
                 String.fromCharCode(y) +
@@ -12426,7 +12388,7 @@ function drawAllGrids()
           font: "normal 24px sans-serif",
           stroke: new ol.style.Stroke({
             color: "#88888888",
-            width: 1
+            width: 2
           }),
           text: String.fromCharCode(x) + String.fromCharCode(y)
         })
@@ -13488,6 +13450,7 @@ function startupEventsAndTimers()
 var g_finishedLoading = false;
 function postInit()
 {
+  setGridViewMode(g_appSettings.gridViewMode);
   redrawSpots();
   checkForSettings();
   updateForwardListener();

@@ -1,10 +1,7 @@
 let languages = {
   en: "i18n/en.json",
-  es: "i18n/es.json",
   cn: "i18n/cn.json",
-  cnt: "i18n/cn-t.json",
-  de: "i18n/de.json",
-  ja: "i18n/ja.json"
+  cnt: "i18n/cn-t.json"
 };
 
 function loadi18n()

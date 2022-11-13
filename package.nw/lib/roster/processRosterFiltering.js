@@ -1,3 +1,23 @@
+// Basic regexp that identifies a callsign and any pre- and post-indicators.
+const CALLSIGN_REGEXP =
+  /^([A-Z0-9]+\/){0,1}([0-9][A-Z]{1,2}[0-9]|[A-Z]{1,2}[0-9])([A-Z0-9]+)(\/[A-Z0-9/]+){0,1}$/
+/*
+  `^ ... $`
+    to ensure the callsign has no extraneous characters
+
+  `( [A-Z0-9]+ \/ ){0,1}`
+    to match an optional preindicator, separated by `\/` from the rest of the call
+
+  `( [0-9][A-Z]{1,2}[0-9] | [A-Z]{1,2}[0-9] )`
+    to match either number-letter-number, number-letter-letter-number, letter-number and letter-letter-number prefixes
+
+  `( [A-Z0-9]+ )`
+    for the rest of the callsign, which must include at least one more letter or digit after the prefix
+
+  `( \/ [A-Z0-9/]+ ){0,1}`
+    for a optional list of postindicators separated by `\/` from the rest of the call
+ */
+
 function processRosterFiltering(callRoster, rosterSettings)
 {
   // First loop, exclude calls, mostly based on "Exceptions" settings
@@ -12,6 +32,13 @@ function processRosterFiltering(callRoster, rosterSettings)
     callObj.shouldAlert = false;
     callObj.reason = Array();
     callObj.awardReason = "Callsign";
+
+    if (!call || !call.match(CALLSIGN_REGEXP))
+    {
+      console.error(`Invalid Callsign ${call}`, entry)
+      entry.tx = false
+      continue;
+    }
 
     if (rosterSettings.now - callObj.age > window.opener.g_mapSettings.rosterTime)
     {

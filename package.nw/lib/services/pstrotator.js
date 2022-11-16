@@ -47,23 +47,12 @@ function aimRotator(info)
     g_pstrotatorSettings.enable == true &&
     g_pstrotatorSettings.port > 0 &&
     g_pstrotatorSettings.ip.length > 4 &&
-    (callObj.distance > 0 || callObj.grid)
+    (callObj.distance > 0)
   )
   {
-    let payload = "<PST>"
-
-    if (callObj.distance > 0)
-    {
-      payload += `<AZIMUTH>${Math.round(callObj.heading)}</AZIMUTH>`
-    }
-
-    if (callObj.grid)
-    {
-      payload += `<QRA>${callObj.grid}</QRA>`
-    }
-
-    payload += "</PST>"
-
+    // If we have a .grid, we have a .distance and .heading, so just send the heading
+    let payload = `<PST><AZIMUTH>${Math.round(callObj.heading)}</AZIMUTH></PST>`;
+    
     try
     {
       sendUdpMessage(
@@ -72,7 +61,14 @@ function aimRotator(info)
         parseInt(g_pstrotatorSettings.port),
         g_pstrotatorSettings.ip
       );
-      addLastTraffic(`<font style='color:white'>Aiming rotator towards ${data.DEcall}</font>`);
+      if (callObj.DEcall)
+      {
+        addLastTraffic(`<font style='color:white'>Aiming rotator at ${callObj.DEcall}</font>`);
+      }
+      else
+      {
+        addLastTraffic(`<font style='color:white'>Aiming rotator to ${callObj.heading}&deg;</font>`);
+      }
     }
     catch (e)
     {

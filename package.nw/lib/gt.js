@@ -5821,6 +5821,17 @@ function initMap()
     }
 
     if (shouldReturn) return true;
+    
+    if (event.pointerEvent.buttons == 1 && event.pointerEvent.ctrlKey == true)
+    {
+      var LL = ol.proj.toLonLat(event.coordinate);
+      var info = {};
+      info.callObj = {};
+      info.callObj.distance = 1; // We just need the heading, but distance makes it valid
+      info.callObj.heading = parseInt(MyCircle.bearing(g_myLat, g_myLon, LL[1], LL[0]));
+      aimRotator(info);
+    }
+
     if (event.pointerEvent.buttons == 2 && g_currentOverlay == 0)
     {
       mouseDownGrid(ol.proj.toLonLat(event.coordinate), event);

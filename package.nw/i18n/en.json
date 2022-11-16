@@ -212,7 +212,7 @@
     "settings.audio.Speech.Pitch.label": "Speech Pitch",
     "settings.audio.Speech.Volume.label": "Speech Volume",
     "settings.audio.Speech.Phonetics.label": "Phonetics",
-    "settings.audio.Speech.Phonetics.hover": "Speak Callsigns and Gridquares phonetically",
+    "settings.audio.Speech.Phonetics.hover": "Speak Callsigns and Gridsquares phonetically",
     "settings.audio.Device.label": "Audio Device",
     "settings.audio.File.Volume.label": "File Audio Volume",
     "settings.audio.lighteningAlert.label": "Lightening Strike Audio Alert",

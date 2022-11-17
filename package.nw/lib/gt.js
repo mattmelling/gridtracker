@@ -7019,15 +7019,6 @@ function handleWsjtxDecode(newMessage)
     var hash = msgDEcallsign + newMessage.OB + newMessage.OM;
     if (hash in g_liveCallsigns) callsign = g_liveCallsigns[hash];
 
-    if (theirQTH == "" && msgDEcallsign in g_gtCallsigns && g_gtCallsigns[msgDEcallsign] in g_gtFlagPins)
-    {
-      if (g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.length > 0)
-      {
-        theirQTH = g_gtFlagPins[g_gtCallsigns[msgDEcallsign]].grid.substr(0, 4);
-        validQTH = true;
-      }
-    }
-
     var canPath = false;
     if (
       (g_appSettings.gtBandFilter.length == 0 ||

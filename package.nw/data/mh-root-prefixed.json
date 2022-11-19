@@ -66660,7 +66660,9 @@
     "confirmed_bands": {},
     "worked_modes": {},
     "confirmed_modes": {},
-    "direct": [],
+    "direct": [
+      "VERSION"
+    ],
     "prefixITU": {},
     "prefixCQ": {},
     "directITU": {},

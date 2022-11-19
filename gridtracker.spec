@@ -50,7 +50,7 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
   -- Ctrl-Left-click in Map to Aim
   - Improved callsign validation in Call Roster
   - Grid-overlay (Hotkey B) performance boost
-  - BIGCTY update from October 17th
+  - BIGCTY update from November 14th
   - Performance improvements
 * Sun Oct 16 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1016-1
   - Fix issue with map blanking when upgrading

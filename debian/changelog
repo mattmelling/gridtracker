@@ -8,7 +8,7 @@ gridtracker (1.22.1119) unstable; urgency=low
   -- Ctrl-Left-click in Map to Aim
   - Improved callsign validation in Call Roster
   - Grid-overlay (Hotkey B) performance boost
-  - BIGCTY update from October 17th
+  - BIGCTY update from November 14th
   - Performance improvements
  -- Tag Loomis <n0ttl@gridtracker.org>  Sat, 19 Nov 2022 12:00:00 -0000
 

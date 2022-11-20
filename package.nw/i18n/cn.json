@@ -10,6 +10,8 @@
   },
     "COMMENT_GridTracker.html": "",
 	"appname-title": "GridTracker",
+    "sidebarNoMessages": "waiting for message",
+    "sidebarNoDataYet": "...no data yet...",
 	"appname-sub-title": "Grid网格追踪助手",
     "statupStatusDiv": "初始化启动",
     "documents.Div1": "您的存档目录<div id='searchedDocFolder'></div> 未找到。",

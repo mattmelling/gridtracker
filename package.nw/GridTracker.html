@@ -297,7 +297,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       </div>
       <div id="operatingMode" style="margin: 0; margin-bottom: 1px; cursor: pointer" onclick="ignoreMessagesToggle()"
         title="Click to ignore incoming messages">
-        <div id="txrxdec" style="background-color: Green; border-style: outset; border-color: yellow; border-width: 3px"
+        <div data-i18n="sidebarNoMessages" id="txrxdec" style="background-color: Green; border-style: outset; border-color: yellow; border-width: 3px"
           class="roundBorder">
           waiting for message
         </div>
@@ -312,9 +312,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             margin-bottom: 1px;
             padding: 0px;
           " title="PSK-Reporter Band Activity" oncontextmenu="toggleBaWindow(event)">
-        <div id="graphDiv" style="bottom: 0; position: absolute; width: 100%; padding: 0px; margin-bottom: 2px">
-          <br />...no data yet...<br />
-          &nbsp;
+        <div data-i18n="sidebarNoDataYet" id="graphDiv" style="bottom: 0; position: absolute; width: 100%; padding: 0px; margin-bottom: 2px">
+         ...no data yet...
         </div>
       </div>
 

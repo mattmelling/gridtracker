@@ -10,6 +10,8 @@
     "COMMENT_GridTracker.html": "",
 	"appname-title": "GridTracker",
 	"appname-sub-title": "An Amateur Radio Companion",
+    "sidebarNoMessages": "waiting for message",
+    "sidebarNoDataYet": "...no data yet...",
     "statupStatusDiv": "Initial Startup",
     "documents.Div1": "Your Documents folder <div id='searchedDocFolder'></div> could not be located.",
     "documents.Div2": "GridTracker can not continue without it.",

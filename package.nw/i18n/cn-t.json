@@ -11,6 +11,8 @@
     "COMMENT_GridTracker.html": "",
 	"appname-title": "GridTracker",
 	"appname-sub-title": "GridTracker網格追蹤助手",
+    "sidebarNoMessages": "waiting for message",
+    "sidebarNoDataYet": "...no data yet...",
     "statupStatusDiv": "初始化啟動",
     "documents.Div1": "您的存檔目錄<div id='searchedDocFolder'></div> 未找到。",
     "documents.Div2": "沒有存檔目錄, GridTracker將無法繼續。",

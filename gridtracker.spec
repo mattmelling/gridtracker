@@ -40,6 +40,8 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Tue Nov 22 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1122-1
+  - WSPR decoding corrupting QSO data fix!
 * Sat Nov 19 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1119-1
   - New Internationalization support (Settings → General → Language)
   -- English, 简体中文, 繁體中文 with German and Spanish in the works

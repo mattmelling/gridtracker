@@ -7,7 +7,6 @@ var gtVersion = parseInt(gtVersionStr.replace(/\./g, ""));
 var gtBeta = pjson.betaVersion;
 
 var g_startVersion = 0;
-var g_readInternalQso = true;
 if (typeof localStorage.currentVersion != "undefined")
 {
   g_startVersion = localStorage.currentVersion;
@@ -18,14 +17,6 @@ if (typeof localStorage.currentVersion == "undefined" || localStorage.currentVer
   localStorage.currentVersion = String(gtVersion);
   var gui = require("nw.gui");
   gui.App.clearCache();
-
-  // If the version changed, the interanl qso file is possibly out of date so don't read it
-  // 1221010 introduced "|"s in DXCC, CQ and ITU g_tracker so older data is no longer valid
-  // update this number if anything in the internal_qso format has changed
-  if (gtVersion < 1221010)
-  {
-    g_readInternalQso = false;
-  }
 }
 
 var vers = String(gtVersion);
@@ -81,7 +72,11 @@ var g_legendColors = {};
 var g_adifLogSettings = {};
 var g_msgSettings = {};
 var g_receptionSettings = {};
-var g_receptionReports = {};
+var g_receptionReports = {
+  lastDownloadTimeSec: 0,
+  lastSequenceNumber: "0",
+  spots: {}
+};
 var g_N1MMSettings = {};
 var g_log4OMSettings = {};
 var g_dxkLogSettings = {};
@@ -7659,19 +7654,10 @@ function handleWsjtxWSPR(newMessage)
   addDeDx(
     newMessage.Grid,
     newMessage.Callsign,
-    false,
-    false,
-    false,
     "-",
     Number(newMessage.SR),
     timeNowSec(),
-    "Pwr:" +
-    newMessage.Power +
-    " Freq:" +
-    Number(newMessage.Frequency / 1000).formatMhz(3, 3) +
-    " Delta:" +
-    Number(newMessage.DT).toFixed(2) +
-    " Drift:" +
+    "Pwr:" + newMessage.Power + " Freq:" + Number(newMessage.Frequency / 1000).formatMhz(3, 3) + " Delta:" + Number(newMessage.DT).toFixed(2) + " Drift:" +
     newMessage.Drift,
     "WSPR",
     Number(newMessage.Frequency / 1000000).formatBand(),
@@ -15684,50 +15670,60 @@ function mediaCheck()
 
   try
   {
-    if (fs.existsSync(g_NWappData + "internal_qso.json") && g_readInternalQso)
+    if (fs.existsSync(g_NWappData + "internal_qso.json"))
     {
       var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
 
-      g_tracker = data.tracker;
-
-      if (typeof g_tracker.worked.px == "undefined")
+      if (g_startVersion == data.version)
       {
-        g_tracker.worked.px = {};
-        g_tracker.confirmed.px = {};
-      }
+        g_tracker = data.tracker;
 
-      if (typeof g_tracker.worked.pota == "undefined")
-      {
-        g_tracker.worked.pota = {};
-        g_tracker.confirmed.pota = {};
-      }
-
-      g_QSOhash = data.g_QSOhash;
-
-      for (var i in g_QSOhash)
-      {
-        if (typeof g_QSOhash[i].px == "undefined" || g_QSOhash[i].px == null)
+        if (typeof g_tracker.worked.px == "undefined")
         {
-          if (g_QSOhash[i].dxcc != -1)
-          {
-            g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall);
-          }
-          else
-          {
-            g_QSOhash[i].px = null;
-          }
+          g_tracker.worked.px = {};
+          g_tracker.confirmed.px = {};
         }
 
-        if (typeof g_QSOhash[i].pota == "undefined" || g_QSOhash[i].pota == null)
+        if (typeof g_tracker.worked.pota == "undefined")
         {
-          g_QSOhash[i].pota = [];
+          g_tracker.worked.pota = {};
+          g_tracker.confirmed.pota = {};
         }
 
-        g_QSOcount++;
-        if (g_QSOhash[i].confirmed) g_QSLcount++;
-      }
+        g_QSOhash = data.g_QSOhash;
 
+        for (var i in g_QSOhash)
+        {
+          if (typeof g_QSOhash[i].px == "undefined" || g_QSOhash[i].px == null)
+          {
+            if (g_QSOhash[i].dxcc != -1)
+            {
+              g_QSOhash[i].px = getWpx(g_QSOhash[i].DEcall);
+            }
+            else
+            {
+              g_QSOhash[i].px = null;
+            }
+          }
+
+          if (typeof g_QSOhash[i].pota == "undefined" || g_QSOhash[i].pota == null)
+          {
+            g_QSOhash[i].pota = [];
+          }
+
+          g_QSOcount++;
+          if (g_QSOhash[i].confirmed) g_QSLcount++;
+        }
+      }
+      else
+      {
+        clearLogFilesAndCounts();
+      }
       fs.unlinkSync(g_NWappData + "internal_qso.json");
+    }
+    else
+    {
+      clearLogFilesAndCounts();
     }
     loadReceptionReports();
   }

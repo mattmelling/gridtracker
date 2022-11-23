@@ -1,4 +1,4 @@
-// GridTracker Copyright © 2022 GridTracker.org
+// GridTracker Copyright © 2022 GridTracker.org 
 // All rights reserved.
 // See LICENSE for more information.
 const pjson = require("./package.json");
@@ -275,13 +275,13 @@ function saveAndCloseApp()
   {
     var data = {};
 
+    data.version = gtVersion;
     data.tracker = g_tracker;
 
     for (var key in g_QSOhash) g_QSOhash[key].rect = null;
 
     data.g_QSOhash = g_QSOhash;
-    data.version = gtVersion;
-
+    
     fs.writeFileSync(g_NWappData + "internal_qso.json", JSON.stringify(data));
 
     saveScreenSettings();
@@ -386,8 +386,6 @@ var g_liveGrids = {};
 var g_qsoGrids = {};
 var g_liveCallsigns = {};
 
-var g_lastCallsignCount = 0;
-
 var g_flightPaths = Array();
 var g_flightPathOffset = 0;
 var g_flightPathLineDash = [9, 3, 3];
@@ -434,17 +432,13 @@ g_pathIgnore.CQ = true;
 var g_replaceCQ = {};
 g_replaceCQ.ASIA = "AS";
 
-var g_searchBand = "dummy";
-
 var g_myDXCC = -1;
-
 var g_QSOhash = {};
 var g_QSLcount = 0;
 var g_QSOcount = 0;
 var g_ignoreMessages = 0;
 var g_lastTimeSinceMessageInSeconds = timeNowSec();
 var g_loadQSOs = false;
-var g_fromDirectCallNoFileDialog = false;
 var g_mainBorderColor = "#222222FF";
 var g_pushPinMode = false;
 var g_pskBandActivityTimerHandle = null;
@@ -775,7 +769,7 @@ function qsoTriangleGrid(i)
 
 function setGridViewMode(mode)
 {
-  g_appSettings.gridViewMode = mode;
+  g_appSettings.gridViewMode = Number(mode);
   gridViewButton.innerHTML = g_gridViewArray[g_appSettings.gridViewMode];
   redrawGrids();
   goProcessRoster();
@@ -5146,17 +5140,7 @@ function clearOrLoadQSOs()
 
 function clearAndLoadQSOs()
 {
-  initQSOdata();
-  g_QSOhash = {};
-  g_QSLcount = 0;
-  g_QSOcount = 0;
-  setTrophyOverlay(g_currentOverlay);
-  redrawGrids();
-
-  updateLogbook();
-  updateRosterWorked();
-  goProcessRoster();
-
+  clearQSOs();
   startupAdifLoadCheck();
 }
 
@@ -5190,18 +5174,8 @@ function clearLogFilesAndCounts()
 
 function getCurrentBandModeHTML()
 {
-  var band =
-    g_appSettings.gtBandFilter == "auto"
-      ? myBand + " (Auto)"
-      : g_appSettings.gtBandFilter.length == 0
-        ? "Mixed Bands"
-        : g_appSettings.gtBandFilter;
-  var mode =
-    g_appSettings.gtModeFilter == "auto"
-      ? myMode + " (Auto)"
-      : g_appSettings.gtModeFilter.length == 0
-        ? "Mixed Modes"
-        : g_appSettings.gtModeFilter;
+  var band = g_appSettings.gtBandFilter == "auto" ? myBand + " (Auto)" : g_appSettings.gtBandFilter.length == 0 ? "Mixed Bands" : g_appSettings.gtBandFilter;
+  var mode = g_appSettings.gtModeFilter == "auto" ? myMode + " (Auto)" : g_appSettings.gtModeFilter.length == 0 ? "Mixed Modes" : g_appSettings.gtModeFilter;
   return (
     "<div style='vertical-align:top;display:inline-block;margin-bottom:3px;color:lightgreen;font-weight:bold;font-size:larger'>Viewing: <text style='color:yellow'>" +
     band +
@@ -5211,13 +5185,9 @@ function getCurrentBandModeHTML()
   );
 }
 
-var displayTimeInterval = null;
-
 var g_currentDay = 0;
 var g_nightTime = false;
-
 var g_currentNightState = false;
-
 var g_timeNow = timeNowSec();
 
 function displayTime()
@@ -5293,13 +5263,6 @@ function timeNowSec()
 {
   return parseInt(Date.now() / 1000);
 }
-
-var g_geo = null;
-var g_feats = null;
-
-var g_liveHoverInteraction = null;
-var g_gtFlagHoverInteraction = null;
-var g_trophyHoverInteraction = null;
 
 function createGlobalHeatmapLayer(name, radius, blur)
 {
@@ -7827,7 +7790,6 @@ function showCallsignBox(redraw)
     if (g_callsignLookups.lotwUseEnable == true) worker += "<th>LoTW</th>";
     if (g_callsignLookups.eqslUseEnable == true) worker += "<th>eQSL</th>";
     if (g_callsignLookups.oqrsUseEnable == true) worker += "<th>OQRS</th>";
-    g_lastCallsignCount = g_newCallsignCount;
     for (var x in g_liveCallsigns)
     {
       if (g_liveCallsigns[x].dxcc != -1)
@@ -13432,7 +13394,9 @@ function startupEventsAndTimers()
 {
   document.addEventListener("keydown", onMyKeyDown, true);
   document.addEventListener("keyup", onMyKeyUp, false);
-  displayTimeInterval = nodeTimers.setInterval(displayTime, 1000);
+
+  // Clock timer update every second
+  nodeTimers.setInterval(displayTime, 1000);
 }
 
 var g_finishedLoading = false;
@@ -15674,7 +15638,7 @@ function mediaCheck()
     {
       var data = JSON.parse(fs.readFileSync(g_NWappData + "internal_qso.json"));
 
-      if (g_startVersion == data.version)
+      if (gtVersion == data.version)
       {
         g_tracker = data.tracker;
 

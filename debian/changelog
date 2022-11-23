@@ -1,3 +1,9 @@
+gridtracker (1.22.1123) unstable; urgency=low
+  - LoTW QSL downloading issue fixed
+  - CQ Only in Call Roster fixed
+  - Failure to start on some installs
+-- Tag Loomis <n0ttl@gridtracker.org>  Wed, 23 Nov 2022 00:00:00 -0000
+
 gridtracker (1.22.1122) unstable; urgency=low
   - WSPR decoding corrupting QSO data fix!
 -- Tag Loomis <n0ttl@gridtracker.org>  Tue, 22 Nov 2022 00:00:00 -0000

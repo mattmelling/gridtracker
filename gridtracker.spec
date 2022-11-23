@@ -40,6 +40,10 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Wed Nov 23 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1123-1
+  - LoTW QSL downloading issue fixed
+  - CQ Only in Call Roster fixed
+  - Failure to start on some installs
 * Tue Nov 22 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1122-1
   - WSPR decoding corrupting QSO data fix!
 * Sat Nov 19 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1119-1

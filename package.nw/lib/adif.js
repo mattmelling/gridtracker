@@ -1,7 +1,7 @@
 // GridTracker Copyright © 2022 GridTracker.org
 // All rights reserved.
 // See LICENSE for more information.
-
+var g_fromDirectCallNoFileDialog = false;
 var selectStartupLink = null;
 
 function dragOverHandler(ev)
@@ -83,13 +83,14 @@ function findAdiField(row, field)
 
 function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
 {
-  let rawAdiBuffer = "";
+  var rawAdiBuffer = "";
   if (typeof adiBuffer == "object") rawAdiBuffer = String(adiBuffer);
   else rawAdiBuffer = adiBuffer;
 
-  let activeAdifArray = Array();
-  let activeAdifLogMode = true;
-  let eQSLfile = false;
+  var activeAdifArray = Array();
+  var activeAdifLogMode = true;
+  var eQSLfile = false;
+  var lotwTimestampUpdated = false;
 
   if (rawAdiBuffer.indexOf("PSKReporter") > -1) activeAdifLogMode = false;
 
@@ -97,174 +98,61 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
 
   if (rawAdiBuffer.length > 1)
   {
-    let regex = new RegExp("<EOR>", "i");
+    var regex = new RegExp("<EOH>", "ig");
+    rawAdiBuffer = rawAdiBuffer.replaceAll(regex, "");
+  }
+
+  if (rawAdiBuffer.length > 1)
+  {
+    var regex = new RegExp("<EOR>", "i");
     activeAdifArray = rawAdiBuffer.split(regex);
   }
 
-  let dateTime = new Date();
-  let dupes = 0;
-
-  for (let x = 0; x < activeAdifArray.length; x++)
+  for (var x = 0; x < activeAdifArray.length; x++)
   {
-    let finalMode = "";
-
-    let appLoTW_RXQSO = findAdiField(
-      activeAdifArray[x],
-      "APP_LoTW_RXQSO"
-    );
-
-    if (appLoTW_RXQSO != "")
-    {
-      let dRXQSO = Date.parse(appLoTW_RXQSO);
-      let dLastLOTW_QSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
-      if ((isNaN(dRXQSO) == false) && (isNaN(dLastLOTW_QSO) == false) && (dRXQSO > dLastLOTW_QSO))
-      {
-        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
-      }
-    }
-
-    let appLoTW_RXQSL = findAdiField(
-      activeAdifArray[x],
-      "APP_LoTW_RXQSL"
-    );
-
-    if (appLoTW_RXQSL != "")
-    {
-      let dRXQSL = Date.parse(appLoTW_RXQSL);
-      let dLastLOTW_QSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
-      if ((isNaN(dRXQSL) == false) && (isNaN(dLastLOTW_QSL) == false) && (dRXQSL > dLastLOTW_QSL))
-      {
-        g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
-      }
-    }
-
     if (activeAdifArray[x].length > 3)
     {
       if (activeAdifLogMode)
       {
-        let confirmed = false;
-        let finalGrid = findAdiField(
-          activeAdifArray[x],
-          "GRIDSQUARE"
-        ).toUpperCase();
-        let vuccGrids = findAdiField(
-          activeAdifArray[x],
-          "VUCC_GRIDS"
-        ).toUpperCase();
-        let finalVucc = [];
-        let finalDXcall = findAdiField(activeAdifArray[x], "CALL").replace(
-          "_",
-          "/"
-        );
-        let finalDEcall = findAdiField(
-          activeAdifArray[x],
-          "STATION_CALLSIGN"
-        ).replace("_", "/");
-
-        if (finalDEcall == "") finalDEcall = myDEcall;
-        if (
-          g_appSettings.workingCallsignEnable &&
-          !(finalDEcall in g_appSettings.workingCallsigns)
-        )
-        { continue; }
-        let finalRSTsent = findAdiField(activeAdifArray[x], "RST_SENT");
-        let finalRSTrecv = findAdiField(activeAdifArray[x], "RST_RCVD");
-        let finalBand = findAdiField(activeAdifArray[x], "BAND").toLowerCase();
-        let dateVal = findAdiField(activeAdifArray[x], "QSO_DATE");
-        let timeVal = findAdiField(activeAdifArray[x], "TIME_ON");
-        let finalState = findAdiField(
-          activeAdifArray[x],
-          "STATE"
-        ).toUpperCase();
-        if (finalState.length == 0) finalState = null;
-        let finalPropMode = findAdiField(
-          activeAdifArray[x],
-          "PROP_MODE"
-        ).toUpperCase();
-        let finalSatName = findAdiField(
-          activeAdifArray[x],
-          "SAT_NAME"
-        ).toUpperCase();
-        let finalCont = findAdiField(activeAdifArray[x], "CONT").toUpperCase();
-        if (finalCont.length == 0) finalCont = null;
-        let finalCnty = findAdiField(activeAdifArray[x], "CNTY").toUpperCase();
-        if (finalCnty.length == 0) finalCnty = null;
-        else
+        var appLoTW_RXQSO = findAdiField(activeAdifArray[x], "APP_LOTW_RXQSO");
+        if (appLoTW_RXQSO != "")
         {
-          finalCnty = finalCnty.replaceAll(" ", "");
+          var dRXQSO = Date.parse(appLoTW_RXQSO);
+          var dLastLOTW_QSO = Date.parse(g_adifLogSettings.lastFetch.lotw_qso);
+          if ((isNaN(dRXQSO) == false) && (isNaN(dLastLOTW_QSO) == false) && (dRXQSO > dLastLOTW_QSO))
+          {
+            g_adifLogSettings.lastFetch.lotw_qso = appLoTW_RXQSO;
+            lotwTimestampUpdated = true;
+          }
         }
-        let finalMode = findAdiField(activeAdifArray[x], "MODE").toUpperCase();
-        let subMode = findAdiField(activeAdifArray[x], "SUBMODE");
-        if (subMode == "FT4" && (finalMode == "MFSK" || finalMode == "DATA"))
-        { finalMode = "FT4"; }
-        if (subMode == "JS8" && finalMode == "MFSK") finalMode = "JS8";
-
-        if (finalBand == "oob" || finalBand == "")
+    
+        var appLoTW_RXQSL = findAdiField(activeAdifArray[x], "APP_LOTW_RXQSL");
+        if (appLoTW_RXQSL != "")
         {
-          finalBand = Number(
-            findAdiField(activeAdifArray[x], "FREQ")
-          ).formatBand();
+          var dRXQSL = Date.parse(appLoTW_RXQSL);
+          var dLastLOTW_QSL = Date.parse(g_adifLogSettings.lastFetch.lotw_qsl);
+          if ((isNaN(dRXQSL) == false) && (isNaN(dLastLOTW_QSL) == false) && (dRXQSL > dLastLOTW_QSL))
+          {
+            g_adifLogSettings.lastFetch.lotw_qsl = appLoTW_RXQSL;
+            lotwTimestampUpdated = true;
+          }
         }
 
-        let finalMsg = findAdiField(activeAdifArray[x], "COMMENT");
-        let finalQslMsg = findAdiField(activeAdifArray[x], "QSLMSG");
-        let finalQslMsgIntl = findAdiField(activeAdifArray[x], "QSLMSG_INTL");
-        if (finalQslMsg.length > 1) finalMsg = finalQslMsg;
-        if (finalQslMsgIntl.length > 1 && finalMsg == "")
-        { finalMsg = finalQslMsgIntl; }
+        var finalDEcall = findAdiField(activeAdifArray[x], "STATION_CALLSIGN").replace("_", "/");
+        if (finalDEcall == "")
+        {
+          finalDEcall = myDEcall;
+        }
 
-        let finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
-        if (finalDxcc == 0) finalDxcc = Number(callsignToDxcc(finalDXcall));
+        if (g_appSettings.workingCallsignEnable && !(finalDEcall in g_appSettings.workingCallsigns))
+        {
+          // not in the working callsigns, move to next
+          continue;
+        }
 
-        if (!(finalDxcc in g_dxccInfo))
-        { finalDxcc = Number(callsignToDxcc(finalDXcall)); }
-
-        // If my callsign isn't present, it must be for me anyway
-
-        let finalCqZone = findAdiField(activeAdifArray[x], "CQZ");
-        if (finalCqZone.length == 1) finalCqZone = "0" + finalCqZone;
-
-        if (parseInt(finalCqZone) < 1 || parseInt(finalCqZone) > 40)
-        { finalCqZone = ""; }
-        finalCqZone = String(finalCqZone);
-        let finalItuZone = findAdiField(activeAdifArray[x], "ITUZ");
-        if (finalItuZone.length == 1) finalItuZone = "0" + finalItuZone;
-
-        if (parseInt(finalItuZone) < 1 || parseInt(finalItuZone) > 90)
-        { finalItuZone = ""; }
-        finalItuZone = String(finalItuZone);
-
-        let finalIOTA = findAdiField(activeAdifArray[x], "IOTA").toUpperCase();
-
-        let qrzConfirmed = findAdiField(
-          activeAdifArray[x],
-          "APP_QRZLOG_STATUS"
-        ).toUpperCase();
-        let lotwConfirmed1 = findAdiField(
-          activeAdifArray[x],
-          "QSL_RCVD"
-        ).toUpperCase();
-        let lotw_qsl_rcvd = findAdiField(
-          activeAdifArray[x],
-          "LOTW_QSL_RCVD"
-        ).toUpperCase();
-        let eqsl_qsl_rcvd = findAdiField(
-          activeAdifArray[x],
-          "EQSL_QSL_RCVD"
-        ).toUpperCase();
-
-        if (
-          qrzConfirmed == "C" ||
-          lotw_qsl_rcvd == "Y" ||
-          lotw_qsl_rcvd == "V" ||
-          lotwConfirmed1 == "Y" ||
-          eqsl_qsl_rcvd == "Y" ||
-          eqsl_qsl_rcvd == "V" ||
-          eQSLfile == true
-        )
-        { confirmed = true; }
-
-        let dateTime = new Date(
+        var dateVal = findAdiField(activeAdifArray[x], "QSO_DATE");
+        var timeVal = findAdiField(activeAdifArray[x], "TIME_ON");
+        var dateTime = new Date(
           Date.UTC(
             dateVal.substr(0, 4),
             parseInt(dateVal.substr(4, 2)) - 1,
@@ -275,13 +163,112 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
           )
         );
 
-        let finalTime = parseInt(dateTime.getTime() / 1000);
+        var finalTime = parseInt(dateTime.getTime() / 1000);
 
-        if (
-          g_appSettings.workingDateEnable &&
-          finalTime < g_appSettings.workingDate
-        )
-        { continue; }
+        if (g_appSettings.workingDateEnable && finalTime < g_appSettings.workingDate)
+        {
+          // Not after our working date
+          continue;
+        }
+
+        var confirmed = false;
+        var finalDXcall = findAdiField(activeAdifArray[x], "CALL").replace("_", "/");
+        var finalGrid = findAdiField(activeAdifArray[x], "GRIDSQUARE").toUpperCase();
+        var vuccGrids = findAdiField(activeAdifArray[x], "VUCC_GRIDS").toUpperCase();
+        var finalVucc = [];
+        var finalRSTsent = findAdiField(activeAdifArray[x], "RST_SENT");
+        var finalRSTrecv = findAdiField(activeAdifArray[x], "RST_RCVD");
+        var finalBand = findAdiField(activeAdifArray[x], "BAND").toLowerCase();
+        if (finalBand == "" || finalBand == "oob")
+        {
+          finalBand = Number(findAdiField(activeAdifArray[x], "FREQ")).formatBand();
+        }
+        var finalState = findAdiField(activeAdifArray[x], "STATE").toUpperCase();
+        if (finalState.length == 0) finalState = null;
+        var finalPropMode = findAdiField(activeAdifArray[x], "PROP_MODE").toUpperCase();
+        var finalSatName = findAdiField(activeAdifArray[x], "SAT_NAME").toUpperCase();
+        var finalCont = findAdiField(activeAdifArray[x], "CONT").toUpperCase();
+        if (finalCont.length == 0)
+        {
+          finalCont = null;
+        }
+        var finalCnty = findAdiField(activeAdifArray[x], "CNTY").toUpperCase();
+        if (finalCnty.length == 0)
+        {
+          finalCnty = null;
+        }
+        else
+        {
+          // GT references internally with NO spaces, this is important       
+          finalCnty = finalCnty.replaceAll(" ", "");
+        }
+        var finalMode = findAdiField(activeAdifArray[x], "MODE").toUpperCase();
+        var subMode = findAdiField(activeAdifArray[x], "SUBMODE");
+        if (subMode == "FT4" && (finalMode == "MFSK" || finalMode == "DATA"))
+        {
+          // Internal assigment only
+          finalMode = "FT4"
+        }
+        if (subMode == "JS8" && finalMode == "MFSK")
+        {
+          // Internal assigment only
+          finalMode = "JS8";
+        }
+
+        var finalMsg = findAdiField(activeAdifArray[x], "COMMENT");
+        var finalQslMsg = findAdiField(activeAdifArray[x], "QSLMSG");
+        var finalQslMsgIntl = findAdiField(activeAdifArray[x], "QSLMSG_INTL");
+        if (finalQslMsg.length > 1)
+        {
+          finalMsg = finalQslMsg;
+        }
+        if (finalQslMsgIntl.length > 1 && finalMsg == "")
+        {
+          finalMsg = finalQslMsgIntl;
+        }
+
+        var finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
+        if (finalDxcc == 0)
+        {
+          finalDxcc = Number(callsignToDxcc(finalDXcall));
+        }
+
+        if (!(finalDxcc in g_dxccInfo))
+        {
+          finalDxcc = Number(callsignToDxcc(finalDXcall));
+        }
+
+        // If my callsign isn't present, it must be for me anyway
+
+        var finalCqZone = findAdiField(activeAdifArray[x], "CQZ");
+        if (finalCqZone.length == 1)
+        {
+          finalCqZone = "0" + finalCqZone;
+        }
+
+        if (parseInt(finalCqZone) < 1 || parseInt(finalCqZone) > 40)
+        {
+          finalCqZone = "";
+        }
+        finalCqZone = String(finalCqZone);
+        var finalItuZone = findAdiField(activeAdifArray[x], "ITUZ");
+        if (finalItuZone.length == 1) finalItuZone = "0" + finalItuZone;
+
+        if (parseInt(finalItuZone) < 1 || parseInt(finalItuZone) > 90)
+        { finalItuZone = ""; }
+        finalItuZone = String(finalItuZone);
+
+        var finalIOTA = findAdiField(activeAdifArray[x], "IOTA").toUpperCase();
+
+        var qrzConfirmed = findAdiField(activeAdifArray[x], "APP_QRZLOG_STATUS").toUpperCase();
+        var lotwConfirmed1 = findAdiField(activeAdifArray[x], "QSL_RCVD").toUpperCase();
+        var lotw_qsl_rcvd = findAdiField(activeAdifArray[x], "LOTW_QSL_RCVD").toUpperCase();
+        var eqsl_qsl_rcvd = findAdiField(activeAdifArray[x], "EQSL_QSL_RCVD").toUpperCase();
+
+        if (qrzConfirmed == "C" || lotw_qsl_rcvd == "Y" || lotw_qsl_rcvd == "V" || lotwConfirmed1 == "Y" || eqsl_qsl_rcvd == "Y" || eqsl_qsl_rcvd == "V" || eQSLfile == true)
+        {
+          confirmed = true;
+        }
 
         finalGrid = finalGrid.substr(0, 6);
         if (!validateGridFromString(finalGrid)) finalGrid = "";
@@ -291,8 +278,8 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
           finalGrid = finalVucc[0];
           finalVucc.shift();
         }
-        let isDigital = false;
-        let isPhone = false;
+        var isDigital = false;
+        var isPhone = false;
         if (finalMode in g_modes)
         {
           isDigital = g_modes[finalMode];
@@ -302,7 +289,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
           isPhone = g_modes_phone[finalMode];
         }
         // TODO: Revisit when we support more than one park ID
-        let finalPOTA = findAdiField(activeAdifArray[x], "POTA").toUpperCase();
+        var finalPOTA = findAdiField(activeAdifArray[x], "POTA").toUpperCase();
         if (finalPOTA.length == 0)
         {
           finalPOTA = null;
@@ -340,25 +327,25 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
       }
       else
       {
-        let finalMyGrid = findAdiField(
+        var finalMyGrid = findAdiField(
           activeAdifArray[x],
           "MY_GRIDSQUARE"
         ).toUpperCase();
-        let finalGrid = findAdiField(
+        var finalGrid = findAdiField(
           activeAdifArray[x],
           "GRIDSQUARE"
         ).toUpperCase();
-        let finalDXcall = findAdiField(activeAdifArray[x], "CALL");
-        let finalDEcall = findAdiField(activeAdifArray[x], "OPERATOR");
-        let finalRSTsent = findAdiField(activeAdifArray[x], "APP_PSKREP_SNR");
-        let dateVal = findAdiField(activeAdifArray[x], "QSO_DATE");
-        let timeVal = findAdiField(activeAdifArray[x], "TIME_ON");
-        let finalMode = findAdiField(activeAdifArray[x], "MODE");
-        let finalBand = Number(
+        var finalDXcall = findAdiField(activeAdifArray[x], "CALL");
+        var finalDEcall = findAdiField(activeAdifArray[x], "OPERATOR");
+        var finalRSTsent = findAdiField(activeAdifArray[x], "APP_PSKREP_SNR");
+        var dateVal = findAdiField(activeAdifArray[x], "QSO_DATE");
+        var timeVal = findAdiField(activeAdifArray[x], "TIME_ON");
+        var finalMode = findAdiField(activeAdifArray[x], "MODE");
+        var finalBand = Number(
           findAdiField(activeAdifArray[x], "FREQ")
         ).formatBand();
-        let finalMsg = "-";
-        let finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
+        var finalMsg = "-";
+        var finalDxcc = Number(findAdiField(activeAdifArray[x], "DXCC"));
         if (finalDxcc == 0)
         {
           if (finalDXcall == myDEcall) finalDxcc = callsignToDxcc(finalDEcall);
@@ -367,7 +354,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
 
         finalGrid = finalGrid.substr(0, 6);
 
-        let dateTime = new Date(
+        var dateTime = new Date(
           Date.UTC(
             dateVal.substr(0, 4),
             parseInt(dateVal.substr(4, 2)) - 1,
@@ -377,7 +364,7 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
             timeVal.substr(4, 2)
           )
         );
-        let finalTime = parseInt(dateTime.getTime() / 1000);
+        var finalTime = parseInt(dateTime.getTime() / 1000);
         if (
           finalGrid != "" &&
           finalDXcall != "" &&
@@ -453,6 +440,11 @@ function onAdiLoadComplete(adiBuffer, saveAdifFile, adifFileName, newFile)
         }
       }
     }
+  }
+
+  if (lotwTimestampUpdated)
+  {
+    saveLogSettings();
   }
 
   redrawGrids();
@@ -906,9 +898,7 @@ function ValidateText(inputText)
 function pskCallback(buffer, flag)
 {
   g_fromDirectCallNoFileDialog = true;
-  var rawAdiBuffer = String(buffer);
-
-  onAdiLoadComplete(rawAdiBuffer, false);
+  onAdiLoadComplete(buffer, false);
 }
 
 var g_isGettingPsk = false;
@@ -1012,7 +1002,7 @@ fileSelector.onchange = function ()
 {
   if (this.files && this.files[0])
   {
-    let path = this.value.replace(this.files[0].name, "");
+    var path = this.value.replace(this.files[0].name, "");
     fileSelector.setAttribute("nwworkingdir", path);
 
     var reader = new FileReader();
@@ -1056,7 +1046,7 @@ startupFileSelector.onchange = function ()
     g_startupLogs.push(newObject);
     localStorage.startupLogs = JSON.stringify(g_startupLogs);
 
-    let path = this.value.replace(this.files[0].name, "");
+    var path = this.value.replace(this.files[0].name, "");
     startupFileSelector.setAttribute("nwworkingdir", path);
 
     setAdifStartup(loadAdifCheckBox);
@@ -1139,11 +1129,8 @@ function loadGtQSOLogFile()
 
   if (fs.existsSync(g_qsoLogFile))
   {
-    var rawAdiBuffer = fs.readFileSync(g_qsoLogFile);
-
     g_fromDirectCallNoFileDialog = true;
-
-    onAdiLoadComplete(rawAdiBuffer, false);
+    onAdiLoadComplete(fs.readFileSync(g_qsoLogFile), false);
   }
 }
 
@@ -1153,11 +1140,8 @@ function loadLoTWLogFile()
 
   if (fs.existsSync(g_LoTWLogFile))
   {
-    var rawAdiBuffer = fs.readFileSync(g_LoTWLogFile);
-
     g_fromDirectCallNoFileDialog = true;
-
-    onAdiLoadComplete(rawAdiBuffer, false);
+    onAdiLoadComplete(fs.readFileSync(g_LoTWLogFile), false);
   }
 }
 
@@ -1166,9 +1150,8 @@ function loadWsjtLogFile()
   var fs = require("fs");
   if (fs.existsSync(g_workingIniPath + "wsjtx_log.adi"))
   {
-    var rawAdiBuffer = fs.readFileSync(g_workingIniPath + "wsjtx_log.adi");
     g_fromDirectCallNoFileDialog = true;
-    onAdiLoadComplete(rawAdiBuffer, false);
+    onAdiLoadComplete(fs.readFileSync(g_workingIniPath + "wsjtx_log.adi"), false);
   }
 }
 
@@ -1357,9 +1340,8 @@ function startupAdifLoadFunction()
     {
       if (fs.existsSync(g_startupLogs[i].file))
       {
-        var rawAdiBuffer = fs.readFileSync(g_startupLogs[i].file);
         g_fromDirectCallNoFileDialog = true;
-        onAdiLoadComplete(rawAdiBuffer, false);
+        onAdiLoadComplete(fs.readFileSync(g_startupLogs[i].file), false);
       }
     }
     catch (e) {}
@@ -1478,10 +1460,10 @@ function getABuffer(
   timeoutX
 )
 {
-  let url = require("url");
-  let http = require(mode);
-  let fileBuffer = null;
-  let options = null;
+  var url = require("url");
+  var http = require(mode);
+  var fileBuffer = null;
+  var options = null;
 
   options = {
     host: url.parse(file_url).host, // eslint-disable-line node/no-deprecated-api
@@ -1498,10 +1480,10 @@ function getABuffer(
     imgToGray.style.webkitFilter = "invert(100%) grayscale(1)";
   }
 
-  let req = http.request(options, function (res)
+  var req = http.request(options, function (res)
   {
-    let fsize = res.headers["content-length"];
-    let cookies = null;
+    var fsize = res.headers["content-length"];
+    var cookies = null;
     if (typeof res.headers["set-cookie"] != "undefined")
     { cookies = res.headers["set-cookie"]; }
 
@@ -1513,7 +1495,7 @@ function getABuffer(
 
         if (typeof imgToGray != "undefined")
         {
-          let percent = 0;
+          var percent = 0;
           if (fsize > 0) percent = parseInt((fileBuffer.length / fsize) * 100);
           else percent = parseInt(((fileBuffer.length / 100000) * 100) % 100);
           imgToGray.parentNode.style.background =
@@ -1882,16 +1864,16 @@ var g_adifLookupMap = {
 
 function sendToLogger(ADIF)
 {
-  let regex = new RegExp("<EOH>", "i");
-  let record = parseADIFRecord(ADIF.split(regex)[1]);
-  let localMode = record.MODE;
+  var regex = new RegExp("<EOH>", "i");
+  var record = parseADIFRecord(ADIF.split(regex)[1]);
+  var localMode = record.MODE;
 
   if (localMode == "MFSK" && "SUBMODE" in record)
   {
     localMode = record.SUBMODE;
   }
 
-  let localHash = record.CALL + record.BAND + localMode;
+  var localHash = record.CALL + record.BAND + localMode;
   if (
     (!("GRIDSQUARE" in record) || record.GRIDSQUARE.length == 0) &&
     localHash in g_liveCallsigns
@@ -1902,7 +1884,7 @@ function sendToLogger(ADIF)
 
   if (g_appSettings.potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota.length > 0)
   {
-    let pota = g_liveCallsigns[localHash].pota[0];
+    var pota = g_liveCallsigns[localHash].pota[0];
     if (pota != "?-????")
     {
       record.POTA = pota;
@@ -1934,7 +1916,7 @@ function sendToLogger(ADIF)
 
   if (!("DXCC" in record))
   {
-    let dxcc = callsignToDxcc(record.CALL);
+    var dxcc = callsignToDxcc(record.CALL);
     if (dxcc == -1) dxcc = 0;
     record.DXCC = String(dxcc);
   }
@@ -1947,7 +1929,7 @@ function sendToLogger(ADIF)
 
   if (g_appSettings.lookupMerge == true)
   {
-    let request = g_Idb
+    var request = g_Idb
       .transaction(["lookups"], "readwrite")
       .objectStore("lookups")
       .get(record.CALL);
@@ -1956,8 +1938,8 @@ function sendToLogger(ADIF)
     {
       if (request.result)
       {
-        let lookup = request.result;
-        for (let key in lookup)
+        var lookup = request.result;
+        for (var key in lookup)
         {
           if (key in g_adifLookupMap)
           {
@@ -1998,7 +1980,7 @@ function sendToLogger(ADIF)
 
 function finishSendingReport(record, localMode)
 {
-  let report = "";
+  var report = "";
   for (const key in record)
   {
     if (key != "POTA")
@@ -2009,7 +1991,7 @@ function finishSendingReport(record, localMode)
   report += "<EOR>";
   
   // this report is for internal use ONLY!
-  let reportWithPota = "";
+  var reportWithPota = "";
   for (const key in record)
   {
     reportWithPota += "<" + key + ":" + Buffer.byteLength(record[key]) + ">" + record[key] + " ";

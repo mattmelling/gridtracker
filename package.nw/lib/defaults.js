@@ -186,8 +186,8 @@ var def_adifLogSettings = {
   },
   downloads: {},
   lastFetch: {
-    lotw_qso: "1970-01-01",
-    lotw_qsl: "1970-01-01"
+    lotw_qso: "1940-01-01",
+    lotw_qsl: "1940-01-01"
   }
 };
 

@@ -205,6 +205,12 @@
       function makeCallsignRow(callObj, show)
       {
         var obj = document.getElementById(callObj.cid);
+        if (obj && obj.fCall != callObj.fCall)
+        {
+          // callsign changed
+          allCallDiv.removeChild(obj);
+          obj = null;
+        }
         if (!obj) 
         {
           var low = 0;

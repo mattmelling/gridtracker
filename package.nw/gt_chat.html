@@ -204,6 +204,7 @@
 
       function makeCallsignRow(callObj, show)
       {
+        var isNewObj = false;
         var obj = document.getElementById(callObj.cid);
         if (obj && obj.fCall != callObj.fCall)
         {
@@ -213,6 +214,7 @@
         }
         if (!obj) 
         {
+          isNewObj = true; 
           var low = 0;
           var mid = 0;
           var target = null;
@@ -260,6 +262,65 @@
           }
           obj.style.display = show ? "" : "none";
         }
+        return isNewObj;
+      }
+
+      function updateCallsign(id)
+      {
+        var count = parseInt(userCount.innerHTML);
+        var shouldCount = false;
+        if (id in window.opener.g_gtFlagPins)
+        {
+          var obj = window.opener.g_gtFlagPins[id];
+          if (obj.call != "" && obj.call != "NOCALL") 
+          {
+            var show = true;
+            try {
+              if (searchBox.value.length > 0 && !obj.call.match(searchBox.value))
+              {
+                show = false;
+              }
+            }
+            catch (e) {}
+
+            if (g_viewBand > 0 && window.opener.myBand != obj.band) show = false;
+
+            if (g_viewMode > 0 && window.opener.myMode != obj.mode) show = false;
+
+            if (obj.canmsg == false) show = false;
+
+            if (makeCallsignRow(obj, show) && show)
+            {
+              count++;
+            }
+
+            if (obj.cid == g_currentId && messageInput.disabled == true && obj.live == true)
+            {
+              messageTextDiv.innerHTML += makeViewMessage("system", "GT", "Session resumed", null);
+              messageInput.value = "";
+              scrollDown(messageTextDiv);
+              messageInput.disabled = false;
+            }
+          }
+          if (id == g_currentId)
+          {
+            updateBar(g_currentId);
+          }
+
+        }
+        else
+        {
+          var obj = document.getElementById(id);
+          if (obj)
+          {
+            if (obj.style.display == "")
+            {
+              count--;
+            }
+            allCallDiv.removeChild(obj);
+          }
+        }
+        userCount.innerHTML = count;
       }
 
       function showAllCallsigns()
@@ -319,14 +380,18 @@
         if (g_viewBand)
         {
           viewBand.innerHTML = window.opener.myBand;
-        } else {
+        }
+        else 
+        {
           viewBand.innerHTML = "All";
         }
 
         if (g_viewMode)
         {
           viewMode.innerHTML = window.opener.myMode;
-        } else {
+        }
+        else
+        {
           viewMode.innerHTML = "All";
         }
 
@@ -336,31 +401,32 @@
 
       function showAllMessages()
       {
+        activeCallsignsDiv.innerHTML = "<font color='gray'>no message history</font>";
         if (Object.keys(window.opener.g_gtMessages).length > 0)
         {
-          var worker = "<table style='width:100%;'>";
+          var worker = "";
           for (const key in window.opener.g_gtMessages)
           {
-            worker += "<tr style='cursor:pointer;vertical-align:bottom;'><td align=left onclick=\"openId('" + key + "');\">";
-            if (key in window.opener.g_gtUnread) worker += "🔥";
-            else worker += "💬";
+            if (key in window.opener.g_gtFlagPins)
+            {
+              worker += "<tr style='cursor:pointer;vertical-align:bottom;'><td align=left onclick=\"openId('" + key + "');\">";
+              if (key in window.opener.g_gtUnread)
+              {
+                worker += "🔥";
+              }
+              else
+              {
+                worker += "💬";
+              }
 
-            worker +=
-              "</td><td align=left style='color:cyan;' onclick=\"openId('" +
-              key +
-              "');\" >" +
-              window.opener.g_gtFlagPins[key].call.formatCallsign() +
-              "</td>";
-            worker +=
-              "<td align=right title='Clear Messages' style='padding-bottom:2px' onclick=\"clearMessage('" +
-              key +
-              "');\"  >❌</td></tr>";
+              worker += "</td><td align=left style='color:cyan;' onclick=\"openId('" + key + "');\" >" + window.opener.g_gtFlagPins[key].call.formatCallsign() + "</td>";
+              worker += "<td align=right title='Clear Messages' style='padding-bottom:2px' onclick=\"clearMessage('" + key + "');\"  >❌</td></tr>";
+            }
           }
-
-          worker += "</table>";
-          activeCallsignsDiv.innerHTML = worker;
-        } else {
-          activeCallsignsDiv.innerHTML = "<font color='gray'>no message history</font>";
+          if (worker.length > 0)
+          {
+            activeCallsignsDiv.innerHTML = "<table style='width:100%;'>" + worker + "</table>";
+          }
         }
       }
 
@@ -434,14 +500,6 @@
           messageInput.value = "...this session is no longer available...";
           scrollDown(messageTextDiv);
           messageInput.disabled = true;
-        }
-        else
-        {
-          var obj = document.getElementById(id);
-          if (obj)
-          {
-            allCallDiv.removeChild(obj);
-          }
         }
       }
 

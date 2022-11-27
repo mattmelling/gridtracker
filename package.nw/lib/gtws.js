@@ -297,7 +297,7 @@ function gtChatRemoveCall(jsmesg)
           delete g_gtFlagPins[cid];
         }
 
-        updateChatWindow();
+        updateChatWindow(cid);
       }
     }
     delete g_gtIdToCid[id];
@@ -354,7 +354,7 @@ function gtChatUpdateCall(jsmesg)
   }
   g_gtChatlistChangeCount++;
   g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
-  updateChatWindow();
+  updateChatWindow(cid);
 }
 
 function gtChatGetList()
@@ -693,13 +693,20 @@ function notifyNoChat(id)
   }
 }
 
-function updateChatWindow()
+function updateChatWindow(id = null)
 {
   if (g_chatWindowHandle != null)
   {
     try
     {
-      g_chatWindowHandle.window.updateEverything();
+      if (id)
+      {
+        g_chatWindowHandle.window.updateCallsign(id);
+      }
+      else
+      {
+        g_chatWindowHandle.window.updateEverything();
+      }
     }
     catch (e) {}
   }

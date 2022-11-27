@@ -1,3 +1,5 @@
+
+div,
 table,
 th,
 td,
@@ -75,21 +77,24 @@ font-weight: bold;
 color: #ee0000;
 font-weight: bold;
 }
-
+#appSource {
+    color: rgb(86, 184, 250);
+    font-weight: bold;
+}
 .rosterOn {
     color: #ffffff;
+    text-align: left;
 }
 
 .rosterOff {
     color: #777777;
+    text-align: left;
 }
 
 .imgGray {
     -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
 }
 
-.imgNoFilter {
-}
 
 input:focus,
 textarea:focus,

@@ -316,7 +316,6 @@ function gtChatUpdateCall(jsmesg)
   {
     g_gtFlagPins[cid] = Object();
     g_gtFlagPins[cid].pin = null;
-    g_gtFlagPins[cid].row = null;
     g_gtFlagPins[cid].ids = Object();
     g_gtFlagPins[cid].ids[id] = true;
   }
@@ -444,7 +443,6 @@ function gtChatNewList(jsmesg)
         g_gtFlagPins[cid].ids = Object();
         g_gtFlagPins[cid].ids[id] = true;
         g_gtFlagPins[cid].pin = null;
-        g_gtFlagPins[cid].row = null;
       }
 
       g_gtIdToCid[id] = cid;

@@ -23,44 +23,54 @@
     <script src="./lib/third-party.js" type="text/javascript"></script>
     <script src="./lib/screens.js"></script>
     <script type="text/javascript">
-      var g_rosterSettings = null;
+   
+      var g_knownSources = {};
+      g_knownSources.GT = "GridTracker";
+      g_knownSources.L4 = "Log4OM";
 
-      document.addEventListener("dragover", function (event) {
+      document.addEventListener("dragover", function (event)
+      {
         event.preventDefault();
       });
 
-      document.addEventListener("drop", function (event) {
+      document.addEventListener("drop", function (event)
+      {
         event.preventDefault();
       });
 
-      function timeNowSec() {
+      function timeNowSec()
+      {
         return parseInt(Date.now() / 1000);
       }
 
-      function lockNewWindows() {
-        if (typeof nw != "undefined") {
-          var gui = require("nw.gui");
-          var win = gui.Window.get();
-          win.on("new-win-policy", function (frame, url, policy) {
-            gui.Shell.openExternal(url);
-            policy.ignore();
-          });
-        }
+      function lockNewWindows()
+      {
+        var gui = require("nw.gui");
+        var win = gui.Window.get();
+        win.on("new-win-policy", function (frame, url, policy)
+        {
+          gui.Shell.openExternal(url);
+          policy.ignore();
+        });
       }
 
-      function scrollDown(objDiv) {
+      function scrollDown(objDiv)
+      {
         objDiv.scrollTop = objDiv.scrollHeight;
       }
 
-      function scrollUp(objDiv) {
+      function scrollUp(objDiv)
+      {
         objDiv.scrollTop = 0;
       }
 
-      function htmlEntities(str) {
+      function htmlEntities(str)
+      {
         return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
       }
 
-      function userAgrees() {
+      function userAgrees()
+      {
         window.opener.g_appSettings.gtAgree = "user agrees to messaging";
         noticeDiv.style.display = "none";
         wrapperDiv.style.display = "block";
@@ -68,28 +78,28 @@
 
       document.addEventListener("keyup", handleKey, false);
 
-      function handleKey(event) {
-        if (event.key === "Enter") {
+      function handleKey(event)
+      {
+        if (event.key === "Enter")
+        {
           // Do work
           var msg = messageInput.value.trim();
-          if (
-            msg.length > 0 &&
-            g_currentId != 0 &&
-            g_currentId in window.opener.g_gtFlagPins &&
-            window.opener.g_gtFlagPins[g_currentId].canmsg == true
-          ) {
+          if (msg.length > 0 && g_currentId != 0 && g_currentId in window.opener.g_gtFlagPins && window.opener.g_gtFlagPins[g_currentId].canmsg == true) 
+          {
             var worker = "";
             // No message history, so lets clear the div
             if (!(g_currentId in window.opener.g_gtMessages)) messageTextDiv.innerHTML = "";
 
-            if (g_currentId in window.opener.g_gtSentAwayToCid) {
+            if (g_currentId in window.opener.g_gtSentAwayToCid)
+            {
               var thisMsg = "Returned from away.";
               window.opener.gtSendMessage(thisMsg, g_currentId);
               worker = makeViewMessage("self", window.opener.myDEcall, thisMsg);
               messageTextDiv.innerHTML += worker;
               delete window.opener.g_gtSentAwayToCid[g_currentId];
             }
-            if (window.opener.g_msgSettings.msgAwaySelect == 1) {
+            if (window.opener.g_msgSettings.msgAwaySelect == 1)
+            {
               window.opener.msgAwaySelect.value = 0;
               window.opener.newMessageSetting(window.opener.msgAwaySelect);
             }
@@ -102,13 +112,17 @@
         }
       }
 
-      function init() {
+      function init()
+      {
         lockNewWindows();
 
-        if (window.opener.g_appSettings.gtAgree != "user agrees to messaging") {
+        if (window.opener.g_appSettings.gtAgree != "user agrees to messaging")
+        {
           noticeDiv.style.display = "block";
           wrapperDiv.style.display = "none";
-        } else {
+        }
+        else
+        {
           noticeDiv.style.display = "none";
           wrapperDiv.style.display = "inline-block";
           Resize();
@@ -118,60 +132,113 @@
 
       var g_viewBand = 0;
 
-      function toggleBand() {
+      function toggleBand()
+      {
         g_viewBand ^= 1;
         showAllCallsigns();
       }
 
       var g_viewMode = 0;
 
-      function toggleMode() {
+      function toggleMode()
+      {
         g_viewMode ^= 1;
         showAllCallsigns();
       }
 
-      function openIdCid(from) {
-        if (typeof window.opener.g_gtFlagPins[from.currentTarget.id] != "undefined") {
+      function openIdCid(from)
+      {
+        if (from.currentTarget.id in window.opener.g_gtFlagPins)
+        {
           openId(from.currentTarget.id);
-        } else allCallTable.deleteRow(from.currentTarget.rowIndex);
-      }
-
-      function openLookupCid(from) {
-        from.preventDefault();
-
-        if (typeof window.opener.g_gtFlagPins[from.currentTarget.id] != "undefined") {
-          doLookup(window.opener.g_gtFlagPins[from.currentTarget.id].call);
-        } else allCallTable.deleteRow(from.currentTarget.rowIndex);
-      }
-
-      function onHoverCid(from) {
-        var cid = from.currentTarget.parentNode.id;
-        if (typeof window.opener.g_gtFlagPins[cid] != "undefined") {
-          from.currentTarget.title =
-            window.opener.g_gtFlagPins[cid].band +
-            " , " +
-            window.opener.g_gtFlagPins[cid].mode +
-            " , " +
-            window.opener.g_dxccToAltName[window.opener.g_gtFlagPins[cid].dxcc];
+        }
+        else 
+        {
+          var obj = document.getElementById(from.currentTarget.id);
+          if (obj)
+          {
+            allCallDiv.removeChild(obj);
+          }
         }
       }
 
-      function onNoHoverCid(from) {
-        from.currentTarget.title = null;
+      function openLookupCid(from)
+      {
+        from.preventDefault();
+
+        if (from.currentTarget.id in window.opener.g_gtFlagPins)
+        {
+          doLookup(window.opener.g_gtFlagPins[from.currentTarget.id].call);
+        }
+        else 
+        {
+          var obj = document.getElementById(from.currentTarget.id);
+          if (obj)
+          {
+            allCallDiv.removeChild(obj);
+          }
+        }
       }
 
-      function makeCallsignRow(callObj, show) {
-  
-        if (callObj.row == null) 
+      function onHoverCid(from) 
+      {
+        var cid = from.currentTarget.id;
+        if (cid in window.opener.g_gtFlagPins)
+        {
+          from.currentTarget.title = window.opener.g_gtFlagPins[cid].band + " , " + window.opener.g_gtFlagPins[cid].mode + " , " + window.opener.g_dxccToAltName[window.opener.g_gtFlagPins[cid].dxcc];
+        }
+        else
+        {
+          var obj = document.getElementById(cid);
+          if (obj)
+          {
+            allCallDiv.removeChild(obj);
+          }
+        }
+      }
+
+      function insertAfter(newNode, referenceNode)
+      {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+      }
+
+      function makeCallsignRow(callObj, show)
+      {
+        var obj = document.getElementById(callObj.cid);
+        if (obj && obj.fCall != callObj.fCall)
+        {
+          // callsign changed
+          allCallDiv.removeChild(obj);
+          obj = null;
+        }
+        if (!obj) 
         {
           var low = 0;
           var mid = 0;
-          var high = allCallTable.rows.length;
-        
+          var target = null;
+          var high = allCallDiv.childElementCount;
+
+          var newDiv = document.createElement("div");
+          newDiv.id =  callObj.cid;
+          newDiv.fCall = callObj.fCall;
+          newDiv.onmouseenter = onHoverCid;
+          newDiv.style.cursor = "pointer";
+          newDiv.style.display = show ? "" : "none";
+          newDiv.onclick = openIdCid;
+          newDiv.oncontextmenu = openLookupCid;
+         
+          var worker = "<div id='"+callObj.cid +"CALL' style='clear:both;' class='"+ (callObj.live == false ? "rosterOff" : "rosterOn") + "'>" + callObj.fCall;
+          if (callObj.dxcc > 0 && callObj.dxcc in window.opener.g_dxccInfo)
+          {
+            worker += "<img  src='./img/flags/16/" + window.opener.g_dxccInfo[callObj.dxcc].flag +"' style='float:right;'>";
+          }
+          worker += "</div>";
+          newDiv.innerHTML = worker;
+
           while (low < high) 
           {
               mid = (low + high) >>> 1;
-              if (allCallTable.rows[mid].fCall < callObj.fCall) 
+              if (allCallDiv.childNodes[mid].fCall < callObj.fCall) 
               {
                 low = mid + 1;
               }
@@ -179,56 +246,44 @@
               {
                 high = mid;
               }
+              target = allCallDiv.childNodes[low];
           }
 
-          var row = allCallTable.insertRow(low);
-          callObj.row = row;
-          row.id = callObj.cid;
-          row.fCall = callObj.fCall;
-
-          row.style.cursor = "pointer";
-          row.style.display = show ? "" : "none";
-          row.onclick = openIdCid;
-          row.oncontextmenu = openLookupCid;
-
-          var td = row.insertCell();
-
-          td.className = callObj.live == false ? "rosterOff" : "rosterOn";
-          td.innerHTML = callObj.fCall;
-          td.onmouseenter = onHoverCid;
-          td.onmouseout = onNoHoverCid;
-
-          if (callObj.dxcc > 0 && callObj.dxcc in window.opener.g_dxccInfo) {
-            var imgClass = callObj.live == false ? "imgGray" : "imgNoFilter";
-            td = row.insertCell();
-            td.innerHTML =
-              "<img class='" +
-              imgClass +
-              "' style='padding-bottom:0px' src='./img/flags/16/" +
-              window.opener.g_dxccInfo[callObj.dxcc].flag +
-              "'>";
+          allCallDiv.insertBefore(newDiv, target);
+        } 
+        else 
+        {
+          var callDiv = document.getElementById(callObj.cid + "CALL");
+          if (callDiv)
+          {
+            callDiv.className = (callObj.live == false ? "rosterOff" : "rosterOn");
           }
-        } else {
-          callObj.row.style.display = show ? "" : "none";
+          obj.style.display = show ? "" : "none";
         }
       }
 
-      function showAllCallsigns() {
+      function showAllCallsigns()
+      {
         var count = 0;
-        for (const x in window.opener.g_gtFlagPins) {
+        for (const x in window.opener.g_gtFlagPins)
+        {
           var obj = window.opener.g_gtFlagPins[x];
-          if (obj.canmsg == true && obj.call != "" && obj.call != "NOCALL") 
+          if (obj.call != "" && obj.call != "NOCALL") 
           {
             var show = true;
             try {
-              if (searchBox.value.length > 0 && !obj.call.match(searchBox.value)) {
+              if (searchBox.value.length > 0 && !obj.call.match(searchBox.value))
+              {
                 show = false;
               }
-            } catch (e) {}
+            }
+            catch (e) {}
 
             if (g_viewBand > 0 && window.opener.myBand != obj.band) show = false;
 
             if (g_viewMode > 0 && window.opener.myMode != obj.mode) show = false;
+
+            if (obj.canmsg == false) show = false;
 
             if (show) 
             {
@@ -237,40 +292,39 @@
 
             makeCallsignRow(obj, show);
 
-            if (obj.cid == g_currentId && messageInput.disabled == true && obj.live == true) {
+            if (obj.cid == g_currentId && messageInput.disabled == true && obj.live == true)
+            {
               messageTextDiv.innerHTML += makeViewMessage("system", "GT", "Session resumed", null);
               messageInput.value = "";
               scrollDown(messageTextDiv);
               messageInput.disabled = false;
             }
           }
-          else if (obj.row)
-          {
-            obj.row.style.display = "none";
-            delete obj.row;
-          }
         }
-
-        if (typeof allCallTable.childNodes != "undefined" && 0 in allCallTable.childNodes) {
-          for (var x = 0; x < allCallTable.childNodes[0].rows.length; x++) {
-            if (!(allCallTable.childNodes[0].rows[x].id in window.opener.g_gtFlagPins)) {
-              var close = allCallTable.childNodes[0].rows[x];
-              allCallTable.deleteRow(close.rowIndex);
-              x = 0; // start over!
-              close = null;
+        
+        if(allCallDiv.childElementCount > 0)
+        {
+          for (var x = allCallDiv.childNodes.length-1; x > -1;  x--)
+          {
+            if (!(allCallDiv.childNodes[x].id in window.opener.g_gtFlagPins))
+            {
+              allCallDiv.removeChild(allCallDiv.childNodes[x]);
             }
           }
         }
+
         updateBar(g_currentId);
         userCount.innerHTML = count;
 
-        if (g_viewBand) {
+        if (g_viewBand)
+        {
           viewBand.innerHTML = window.opener.myBand;
         } else {
           viewBand.innerHTML = "All";
         }
 
-        if (g_viewMode) {
+        if (g_viewMode)
+        {
           viewMode.innerHTML = window.opener.myMode;
         } else {
           viewMode.innerHTML = "All";
@@ -280,12 +334,14 @@
         Resize();
       }
 
-      function showAllMessages() {
-        if (Object.keys(window.opener.g_gtMessages).length > 0) {
+      function showAllMessages()
+      {
+        if (Object.keys(window.opener.g_gtMessages).length > 0)
+        {
           var worker = "<table style='width:100%;'>";
-          for (const key in window.opener.g_gtMessages) {
-            worker +=
-              "<tr style='cursor:pointer;vertical-align:bottom;'><td align=left onclick=\"openId('" + key + "');\">";
+          for (const key in window.opener.g_gtMessages)
+          {
+            worker += "<tr style='cursor:pointer;vertical-align:bottom;'><td align=left onclick=\"openId('" + key + "');\">";
             if (key in window.opener.g_gtUnread) worker += "🔥";
             else worker += "💬";
 
@@ -308,13 +364,17 @@
         }
       }
 
-      function clearMessage(what) {
-        try {
+      function clearMessage(what)
+      {
+        try
+        {
           if (what in window.opener.g_gtMessages) delete window.opener.g_gtMessages[what];
           if (what in window.opener.g_gtUnread) delete window.opener.g_gtUnread[what];
-        } catch (e) {}
+        } 
+        catch (e) {}
 
-        if (what == g_currentId) {
+        if (what == g_currentId)
+        {
           g_currentId = "";
           openId(what);
         }
@@ -322,20 +382,23 @@
         Resize();
       }
 
-      function updateEverything() {
+      function updateEverything()
+      {
         showAllCallsigns();
       }
 
       var g_currentId = 0;
 
       var regex = /[^\u0000-\u00ff]/; // Small performance gain from pre-compiling the regex
-      function containsDoubleByte(str) {
+      function containsDoubleByte(str)
+      {
         if (!str.length) return false;
         if (str.charCodeAt(0) > 255) return true;
         return regex.test(str);
       }
 
-      function makeViewMessage(className, who, msg, when) {
+      function makeViewMessage(className, who, msg, when)
+      {
         var who = "<text class='" + className + "'>" + who.formatCallsign() + "</text>";
         var time = "<text class='when'>" + window.opener.userTimeString(when) + "</text>";
         var worker = who + " " + time + "</br>";
@@ -345,7 +408,8 @@
         return worker;
       }
 
-      function newChatMessage(id, jsmesg) {
+      function newChatMessage(id, jsmesg)
+      {
         if (id == g_currentId) {
           var worker = makeViewMessage("them", window.opener.g_gtFlagPins[id].call, jsmesg.msg, jsmesg.when);
           if (id in window.opener.g_gtUnread) delete window.opener.g_gtUnread[id];
@@ -356,32 +420,48 @@
         return false;
       }
 
-      function closeMessageArea() {
+      function closeMessageArea()
+      {
         messageAreaDiv.style.display = "none";
         g_currentId = 0;
       }
 
-      function notifyNoChat(id) {
-        if (id == g_currentId) {
+      function notifyNoChat(id)
+      {
+        if (id == g_currentId)
+        {
           messageTextDiv.innerHTML += makeViewMessage("system", "GT", "Session ended", null);
           messageInput.value = "...this session is no longer available...";
           scrollDown(messageTextDiv);
           messageInput.disabled = true;
         }
+        else
+        {
+          var obj = document.getElementById(id);
+          if (obj)
+          {
+            allCallDiv.removeChild(obj);
+          }
+        }
       }
 
-      function updateBar(id) {
+      function updateBar(id)
+      {
         if (id == 0) return;
 
-        if (id in window.opener.g_gtFlagPins) {
+        if (id in window.opener.g_gtFlagPins)
+        {
           callsign.innerHTML = window.opener.g_gtFlagPins[id].call.formatCallsign();
           country.innerHTML = window.opener.g_dxccToAltName[window.opener.g_gtFlagPins[id].dxcc];
           grid.innerHTML = window.opener.g_gtFlagPins[id].grid;
           band.innerHTML = window.opener.g_gtFlagPins[id].band;
           mode.innerHTML = window.opener.g_gtFlagPins[id].mode;
+          appSource.innerHTML = window.opener.g_gtFlagPins[id].src in g_knownSources ? g_knownSources[window.opener.g_gtFlagPins[id].src] : window.opener.g_gtFlagPins[id].src;
         }
       }
-      function openId(id) {
+
+      function openId(id)
+      {
         updateBar(id);
         // already displayed?
         if (id == g_currentId && messageAreaDiv.style.display == "inline-block") return;
@@ -389,8 +469,10 @@
         if (!(id in window.opener.g_gtFlagPins)) return;
 
         var worker = "";
-        if (id in window.opener.g_gtMessages && window.opener.g_gtMessages[id].history.length > 0) {
-          for (msg in window.opener.g_gtMessages[id].history) {
+        if (id in window.opener.g_gtMessages && window.opener.g_gtMessages[id].history.length > 0)
+        {
+          for (msg in window.opener.g_gtMessages[id].history)
+          {
             if (window.opener.g_gtMessages[id].history[msg].id != 0)
               worker += makeViewMessage(
                 "them",
@@ -406,7 +488,8 @@
                 window.opener.g_gtMessages[id].history[msg].when
               );
           }
-          if (id in window.opener.g_gtUnread) {
+          if (id in window.opener.g_gtUnread)
+          {
             delete window.opener.g_gtUnread[id];
             showAllCallsigns();
           }
@@ -415,7 +498,8 @@
         g_currentId = id;
         messageAreaDiv.style.display = "inline-block";
 
-        if (window.opener.g_gtFlagPins[id].live == false) {
+        if (window.opener.g_gtFlagPins[id].live == false)
+        {
           notifyNoChat(id);
         } else {
           messageInput.disabled = false;
@@ -425,8 +509,10 @@
         Resize();
       }
 
-      if (!String.linkify) {
-        String.prototype.linkify = function () {
+      if (!String.linkify)
+      {
+        String.prototype.linkify = function ()
+        {
           // http://, https://, ftp://
           var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
 
@@ -442,7 +528,8 @@
         };
       }
 
-      function Resize() {
+      function Resize()
+      {
         var height = window.innerHeight;
         var width = window.innerWidth;
 
@@ -460,8 +547,10 @@
         allCallsignsDiv.style.bottom = activeCallsignsDiv.clientHeight + 8 + "px";
       }
 
-      function KeepUpper(inputText) {
-        if (inputText.value.length > 0) {
+      function KeepUpper(inputText)
+      {
+        if (inputText.value.length > 0)
+        {
           inputText.value = inputText.value.toUpperCase();
           clearSearch.style.display = "block";
         } else {
@@ -470,7 +559,8 @@
         showAllCallsigns();
       }
 
-      function doLookup(what) {
+      function doLookup(what)
+      {
         if (typeof what == "string") window.opener.startLookup(what, "");
       }
     </script>
@@ -511,8 +601,7 @@
         "
       >
         <div id="messageInfoDiv" class="boxDisplay">
-          <text id="callsign"></text> / <text id="country"></text> / <text id="grid"></text> / <text id="band"></text> /
-          <text id="mode"></text>
+          <text id="callsign"></text> / <text id="country"></text> / <text id="grid"></text> / <text id="band"></text> / <text id="mode"></text> / <text id="appSource"></text> 
         </div>
         <div id="messageTextDiv" class="boxDisplay" style="overflow: auto; user-select: text"></div>
         <div id="messageInputDiv" style="position: fixed; bottom: 3px">
@@ -602,7 +691,7 @@
           width: 132px;
         "
       >
-        <table style="width: 100%" id="allCallTable"></table>
+        <div style="width: 100%" id="allCallDiv"></div>
       </div>
       <div
         id="activeCallsignsDiv"

@@ -313,7 +313,7 @@ function gtChatUpdateCall(jsmesg)
   {
     g_gtFlagPins[cid].ids[id] = true;
     // Did they move grid location?
-    if (g_gtFlagPins[cid].pin != null)
+    if (jsmesg.grid != g_gtFlagPins[cid].grid && g_gtFlagPins[cid].pin != null)
     {
       // remove pin from map here
       if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))

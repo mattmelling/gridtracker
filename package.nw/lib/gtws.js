@@ -165,7 +165,8 @@ function gtClosedSocket()
   g_gtState = ChatState.none;
 }
 
-var g_lastConnectAttempt = 0;
+// Connect 15 seconds after startup
+var g_lastConnectAttempt = parseInt(Date.now() / 1000) - 15;
 
 function gtCanConnect()
 {

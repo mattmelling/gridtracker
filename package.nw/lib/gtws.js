@@ -47,6 +47,7 @@ var g_gtStatusCount = 0;
 var g_gtStatusTime = 500;
 var g_gtMaxChatMessages = 100;
 var g_gtNeedUsersList = true;
+var g_gtUuidValid = false;
 
 var g_gtLiveStatusUpdate = false;
 
@@ -183,6 +184,7 @@ function gtSetIdle()
     g_gtState = ChatState.idle;
     g_lastGtStatus = "";
   }
+  g_gtUuidValid = false;
 }
 
 function gtStatusCheck()
@@ -211,11 +213,11 @@ function gtStatusCheck()
   }
 }
 
-function sendGtJson(json)
+function sendGtJson(json, isUUIDrequest = false)
 {
   if (g_gtChatSocket != null)
   {
-    if (g_gtChatSocket.readyState === WebSocket.OPEN)
+    if (g_gtChatSocket.readyState === WebSocket.OPEN && (isUUIDrequest || g_gtUuidValid))
     {
       g_gtChatSocket.send(json);
     }
@@ -561,7 +563,7 @@ function gtChatSendUUID()
   msg.call = myDEcall;
   msg.ver = gtShortVersion;
 
-  sendGtJson(JSON.stringify(msg));
+  sendGtJson(JSON.stringify(msg), true);
 }
 
 function gtChatSetUUID(jsmesg)
@@ -569,6 +571,7 @@ function gtChatSetUUID(jsmesg)
   g_appSettings.chatUUID = jsmesg.uuid;
   myChatId = jsmesg.id;
 
+  g_gtUuidValid = true;
   gtChatSendStatus();
 
   g_gtState = ChatState.status;

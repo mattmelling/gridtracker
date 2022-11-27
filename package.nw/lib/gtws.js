@@ -165,17 +165,23 @@ function gtClosedSocket()
   g_gtState = ChatState.none;
 }
 
+var g_lastConnectAttempt = 0;
+
 function gtCanConnect()
 {
+  g_lastConnectAttempt = timeNowSec();
   g_gtState = ChatState.connect;
 }
 
 function gtSetIdle()
 {
-  g_gtStatusCount = 0;
-  g_gtNeedUsersList = true;
-  g_gtState = ChatState.idle;
-  g_lastGtStatus = "";
+  if (timeNowSec() - g_lastConnectAttempt >= 30)
+  {
+    g_gtStatusCount = 0;
+    g_gtNeedUsersList = true;
+    g_gtState = ChatState.idle;
+    g_lastGtStatus = "";
+  }
 }
 
 function gtStatusCheck()
@@ -220,7 +226,8 @@ function sendGtJson(json)
       }
     }
   }
-  else g_gtState = ChatState.closed;
+  // if we don't have a socketHandle, don't go changing the state willy nilly!
+  // else g_gtState = ChatState.closed;
 }
 
 var g_lastGtStatus = "";
@@ -370,7 +377,9 @@ function redrawPins()
     makeGtPin(g_gtFlagPins[cid]);
 
     if (g_gtFlagPins[cid].pin != null)
-    { g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin); }
+    {
+      g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin);
+    }
   }
 }
 
@@ -381,7 +390,9 @@ function makeGtPin(obj)
     if (obj.pin)
     {
       if (g_layerSources.gtflags.hasFeature(obj.pin))
-      { g_layerSources.gtflags.removeFeature(obj.pin); }
+      {
+        g_layerSources.gtflags.removeFeature(obj.pin);
+      }
       delete obj.pin;
       obj.pin = null;
     }
@@ -394,19 +405,13 @@ function makeGtPin(obj)
 
     if (validateGridFromString(obj.grid) == false) return;
 
-    if (
-      g_appSettings.gtFlagImgSrc == 2 &&
-      (obj.mode != myMode || obj.band != myBand)
-    )
-    { return; }
+    if (g_appSettings.gtFlagImgSrc == 2 && (obj.mode != myMode || obj.band != myBand))
+    {
+      return;
+    }
 
-    var LL = squareToLatLongAll(obj.grid);
-    var myLonLat = [
-      LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-      LL.la2 - (LL.la2 - LL.la1) / 2
-    ];
-
-    obj.pin = iconFeature(ol.proj.fromLonLat(myLonLat), g_gtFlagIcon, 100);
+    var LL = squareToCenter(obj.grid);
+    obj.pin = iconFeature(ol.proj.fromLonLat([LL.o, LL.a]), g_gtFlagIcon, 100);
     obj.pin.key = obj.cid;
     obj.pin.isGtFlag = true;
     obj.pin.size = 1;
@@ -570,10 +575,7 @@ function gtChatSetUUID(jsmesg)
 
 function gtChatStateMachine()
 {
-  if (
-    g_appSettings.gtShareEnable == true &&
-    g_mapSettings.offlineMode == false
-  )
+  if (g_appSettings.gtShareEnable == true && g_mapSettings.offlineMode == false)
   {
     var now = timeNowSec();
     g_gtStateToFunction[g_gtState]();
@@ -584,10 +586,7 @@ function gtChatStateMachine()
     }
     else msgImg.style.webkitFilter = "";
 
-    if (
-      g_msgSettings.msgFrequencySelect > 0 &&
-      Object.keys(g_gtUnread).length > 0
-    )
+    if (g_msgSettings.msgFrequencySelect > 0 && Object.keys(g_gtUnread).length > 0)
     {
       if (now - g_lastChatMsgAlert > g_msgSettings.msgFrequencySelect * 60)
       {

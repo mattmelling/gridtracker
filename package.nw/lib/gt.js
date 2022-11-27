@@ -175,6 +175,7 @@ loadAllSettings();
 
 var myDEcall = g_appSettings.myDEcall;
 var myDEGrid = g_appSettings.myDEGrid;
+var myDXGrid = "";
 var myMode = g_appSettings.myMode;
 var myBand = g_appSettings.myBand;
 var myRawFreq = g_appSettings.myRawFreq;
@@ -1823,67 +1824,19 @@ function createFlagTipTable(toolElement)
       workColor = "#00FF00";
     }
 
-    worker +=
-      "<div style='background-color:" +
-      workColor +
-      ";color:#000;font-weight:bold;font-size:18px;border:2px solid gray;margin:0px' class='roundBorder'>" +
-      g_gtFlagPins[key].call.formatCallsign() +
-      "</div>";
+    worker += "<div style='background-color:" + workColor + ";color:#000;font-weight:bold;font-size:18px;border:2px solid gray;margin:0px' class='roundBorder'>" + g_gtFlagPins[key].call.formatCallsign() + "</div>";
 
     worker += "<table id='tooltipTable' class='darkTable' >";
+    worker += "<tr><td>DXCC</td><td style='color:orange;'>" + dxccName + " <font color='lightgreen'>(" + g_dxccInfo[dxcc].pp + ")</font></td>";
+    worker += "<tr><td>Grid</td><td style='color:cyan;' >" + g_gtFlagPins[key].grid + "</td></tr>";
+    worker += "<tr><td>Freq</td><td style='color:lightgreen' >" + Number(g_gtFlagPins[key].freq / 1000).formatMhz(3, 3) + " <font color='yellow'>(" + Number(g_gtFlagPins[key].freq / 1000000).formatBand() + ")</font></td></tr>";
+    worker += "<tr><td>Mode</td><td style='color:orange' >" + g_gtFlagPins[key].mode + "</td></tr>";
 
-    worker +=
-      "<tr><td>DXCC</td><td style='color:orange;'>" +
-      dxccName +
-      " <font color='lightgreen'>(" +
-      g_dxccInfo[dxcc].pp +
-      ")</font></td>";
-
-    worker +=
-      "<tr><td>Grid</td><td style='color:cyan;' >" +
-      g_gtFlagPins[key].grid +
-      "</td></tr>";
-
-    worker +=
-      "<tr><td>Freq</td><td style='color:lightgreen' >" +
-      Number(g_gtFlagPins[key].freq / 1000).formatMhz(3, 3) +
-      " <font color='yellow'>(" +
-      Number(g_gtFlagPins[key].freq / 1000000).formatBand() +
-      ")</font></td></tr>";
-
-    worker +=
-      "<tr><td>Mode</td><td style='color:orange' >" +
-      g_gtFlagPins[key].mode +
-      "</td></tr>";
-
-    var LL = squareToLatLongAll(g_gtFlagPins[key].grid);
-
-    var bearing = parseInt(
-      MyCircle.bearing(
-        g_myLat,
-        g_myLon,
-        LL.la2 - (LL.la2 - LL.la1) / 2,
-        LL.lo2 - (LL.lo2 - LL.lo1) / 2
-      )
-    );
-    worker +=
-      "<tr><td>Dist</td><td style='color:cyan'>" +
-      parseInt(
-        MyCircle.distance(
-          g_myLat,
-          g_myLon,
-          LL.la2 - (LL.la2 - LL.la1) / 2,
-          LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-          distanceUnit.value
-        ) * MyCircle.validateRadius(distanceUnit.value)
-      ) +
-      distanceUnit.value.toLowerCase() +
-      "</td></tr>";
-    worker +=
-      "<tr><td>Azim</td><td style='color:yellow'>" +
-      bearing +
-      "&deg;</td></tr>";
-
+    var LL = squareToCenter(g_gtFlagPins[key].grid);
+    var bearing = parseInt(MyCircle.bearing(g_myLat, g_myLon, LL.a, LL.o));
+    
+    worker += "<tr><td>Dist</td><td style='color:cyan'>" + parseInt(MyCircle.distance(g_myLat, g_myLon, LL.a, LL.o, distanceUnit.value) * MyCircle.validateRadius(distanceUnit.value)) + distanceUnit.value.toLowerCase() + "</td></tr>";
+    worker += "<tr><td>Azim</td><td style='color:yellow'>" + bearing + "&deg;</td></tr>";
     worker += "</table>";
   }
   else if (toolElement.size == 73)
@@ -1992,94 +1945,35 @@ function createSpotTipTable(toolElement)
       g_layerSources["psk-hop"].clear();
       var report = g_receptionReports.spots[toolElement.spot];
 
-      var LL = squareToLatLongAll(myRawGrid);
-      var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-      var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-      var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
+      var LL = squareToCenter(myRawGrid);
+      var fromPoint = ol.proj.fromLonLat([LL.o, LL.a]);
 
-      worker =
-        "<table id='tooltipTable' class='darkTable' ><tr><th colspan=2 style='color:cyan'>Rx Spot</th></tr>";
-      worker +=
-        "<tr><td>Age</td><td>" +
-        Number(now - report.when).toDHMS() +
-        "</td></tr>";
-      worker +=
-        "<tr><td>dB</td><td style='color:#DD44DD' >" +
-        Number(report.snr).formatSignalReport() +
-        "</td></tr>";
-      worker +=
-        "<tr><td>Call</td><td style='color:#ff0' >" +
-        report.call.formatCallsign() +
-        "</td></tr>";
+      worker = "<table id='tooltipTable' class='darkTable' ><tr><th colspan=2 style='color:cyan'>Rx Spot</th></tr>";
+      worker += "<tr><td>Age</td><td>" + Number(now - report.when).toDHMS() + "</td></tr>";
+      worker += "<tr><td>dB</td><td style='color:#DD44DD' >" + Number(report.snr).formatSignalReport() + "</td></tr>";
+      worker += "<tr><td>Call</td><td style='color:#ff0' >" + report.call.formatCallsign() + "</td></tr>";
 
       if (report.dxcc > 0)
       {
-        worker +=
-          "<tr><td>DXCC</td><td style='color:orange;'>" +
-          g_dxccToAltName[report.dxcc] +
-          " <font color='lightgreen'>(" +
-          g_dxccInfo[report.dxcc].pp +
-          ")</font></td>";
+        worker += "<tr><td>DXCC</td><td style='color:orange;'>" + g_dxccToAltName[report.dxcc] + " <font color='lightgreen'>(" + g_dxccInfo[report.dxcc].pp + ")</font></td>";
       }
 
-      worker +=
-        "<tr><td>Grid</td><td style='color:cyan;cursor:pointer' >" +
-        report.grid +
-        "</td></tr>";
-      worker +=
-        "<tr><td>Freq</td><td style='color:lightgreen' >" +
-        report.freq.formatMhz() +
-        " <font color='yellow'>(" +
-        report.band +
-        ")</font></td></tr>";
-      worker +=
-        "<tr><td>Mode</td><td style='color:orange' >" +
-        report.mode +
-        "</td></tr>";
+      worker += "<tr><td>Grid</td><td style='color:cyan;cursor:pointer' >" + report.grid + "</td></tr>";
+      worker += "<tr><td>Freq</td><td style='color:lightgreen' >" + report.freq.formatMhz() + " <font color='yellow'>(" + report.band + ")</font></td></tr>";
+      worker += "<tr><td>Mode</td><td style='color:orange' >" + report.mode + "</td></tr>";
 
-      LL = squareToLatLongAll(report.grid);
+      LL = squareToCenter(report.grid);
 
-      report.bearing = parseInt(
-        MyCircle.bearing(
-          g_myLat,
-          g_myLon,
-          LL.la2 - (LL.la2 - LL.la1) / 2,
-          LL.lo2 - (LL.lo2 - LL.lo1) / 2
-        )
-      );
-      worker +=
-        "<tr><td>Dist</td><td style='color:cyan'>" +
-        parseInt(
-          MyCircle.distance(
-            g_myLat,
-            g_myLon,
-            LL.la2 - (LL.la2 - LL.la1) / 2,
-            LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-            distanceUnit.value
-          ) * MyCircle.validateRadius(distanceUnit.value)
-        ) +
-        distanceUnit.value.toLowerCase() +
-        "</td></tr>";
-      worker +=
-        "<tr><td>Azim</td><td style='color:yellow'>" +
-        report.bearing +
-        "&deg;</td></tr>";
-
-      worker +=
-        "<tr><td>Time</td><td>" +
-        userTimeString(report.when * 1000) +
-        "</td></tr>";
-
+      report.bearing = parseInt(MyCircle.bearing(g_myLat, g_myLon, LL.a, LL.o));
+      worker += "<tr><td>Dist</td><td style='color:cyan'>" + parseInt(MyCircle.distance(g_myLat, g_myLon, LL.a, LL.o, distanceUnit.value) * MyCircle.validateRadius(distanceUnit.value)) + distanceUnit.value.toLowerCase() + "</td></tr>";
+      worker += "<tr><td>Azim</td><td style='color:yellow'>" + report.bearing + "&deg;</td></tr>";
+      worker += "<tr><td>Time</td><td>" + userTimeString(report.when * 1000) + "</td></tr>";
       worker += "</table>";
 
       var strokeWeight = pathWidthValue.value;
+      var toPoint = ol.proj.fromLonLat([LL.o, LL.a]);
 
-      Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-      Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-
-      var toPoint = ol.proj.fromLonLat([Lon, Lat]);
-
-      var feature = flightFeature(
+      flightFeature(
         [fromPoint, toPoint],
         {
           weight: strokeWeight,
@@ -4085,6 +3979,15 @@ function twoWideToLatLong(qth)
   LatLong.la2 = la2;
   LatLong.lo2 = lo2;
   return LatLong;
+}
+
+function squareToCenter(qth)
+{
+  var LL = squareToLatLongAll(qth);
+  var obj = {};
+  obj.a = LL.la2 - (LL.la2 - LL.la1) / 2;
+  obj.o = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
+  return obj;
 }
 
 function squareToLatLongAll(qth)
@@ -6155,15 +6058,9 @@ function haltAllTx(allTx = false)
 
 function initiateQso(thisCall)
 {
-  if (
-    thisCall in g_callRoster &&
-    g_callRoster[thisCall].message.instance in g_instances
-  )
+  if (thisCall in g_callRoster && g_callRoster[thisCall].message.instance in g_instances)
   {
-    if (
-      g_mapSettings.focusRig &&
-      g_activeInstance != g_callRoster[thisCall].message.instance
-    )
+    if (g_mapSettings.focusRig && g_activeInstance != g_callRoster[thisCall].message.instance)
     {
       activeRig(g_callRoster[thisCall].message.instance);
     }
@@ -6204,11 +6101,7 @@ function spotLookupAndSetCall(spot)
   var mode = g_receptionReports.spots[spot].mode;
   for (var instance in g_instances)
   {
-    if (
-      g_instances[instance].valid &&
-      g_instances[instance].status.Band == band &&
-      g_instances[instance].status.MO == mode
-    )
+    if (g_instances[instance].valid && g_instances[instance].status.Band == band && g_instances[instance].status.MO == mode)
     {
       setCallAndGrid(call, grid, instance);
       return;
@@ -6217,7 +6110,7 @@ function spotLookupAndSetCall(spot)
   setCallAndGrid(call, grid, null);
 }
 
-function setCallAndGrid(callsign, grid, instance = null)
+function setCallAndGrid(callsign, grid, instance = null, genMessages = true)
 {
   var thisInstance = null;
   var port;
@@ -6230,7 +6123,10 @@ function setCallAndGrid(callsign, grid, instance = null)
       port = g_instances[instance].remote.port;
       address = g_instances[instance].remote.address;
     }
-    else alert("major instance error");
+    else
+    {
+      alert("major instance error");
+    }
   }
   else
   {
@@ -6241,7 +6137,7 @@ function setCallAndGrid(callsign, grid, instance = null)
       address = g_instances[g_activeInstance].remote.address;
     }
   }
-  if (thisInstance && thisInstance.TxEnabled == 0)
+  if (thisInstance && (thisInstance.TxEnabled == 0 || genMessages == false))
   {
     var responseArray = Buffer.alloc(1024);
     var length = 0;
@@ -6255,25 +6151,50 @@ function setCallAndGrid(callsign, grid, instance = null)
     length = encodeQBOOL(responseArray, length, thisInstance.Fastmode);
     length = encodeQUINT32(responseArray, length, thisInstance.TRP);
     length = encodeQUINT32(responseArray, length, thisInstance.RxDF);
-    length = encodeQUTF8(responseArray, length, callsign);
+   
+    if (genMessages == true)
+    {
+      length = encodeQUTF8(responseArray, length, callsign);
 
-    var hash = liveHash(callsign, thisInstance.Band, thisInstance.MO);
-    if (hash in g_liveCallsigns && g_liveCallsigns[hash].grid.length > 1) { grid = g_liveCallsigns[hash].grid; }
+      var hash = liveHash(callsign, thisInstance.Band, thisInstance.MO);
+      if (hash in g_liveCallsigns && g_liveCallsigns[hash].grid.length > 1) { grid = g_liveCallsigns[hash].grid; }
 
-    if (grid.length == 0) grid = " ";
+      if (grid.length == 0) grid = " ";
 
-    length = encodeQUTF8(responseArray, length, grid);
-    length = encodeQBOOL(responseArray, length, 1);
+      length = encodeQUTF8(responseArray, length, grid);
+      length = encodeQBOOL(responseArray, length, 1);
+      
+      responseArray = responseArray.slice(0, length);
+      wsjtUdpMessage(responseArray, responseArray.length, port, address);
+      addLastTraffic("<font color='lightgreen'>Generated Msgs</font>");
+    }
+    else
+    {
+      // Callsign
+      length = encodeQUTF8(responseArray, length, " ");
+      // Grid
+      length = encodeQUTF8(responseArray, length, " ");
+      length = encodeQBOOL(responseArray, length, 1);
+      
+      responseArray = responseArray.slice(0, length);
+      wsjtUdpMessage(responseArray, responseArray.length, port, address);
 
-    responseArray = responseArray.slice(0, length);
-    wsjtUdpMessage(responseArray, responseArray.length, port, address);
-    addLastTraffic("<font color='lightgreen'>Generated Msgs</font>");
+      responseArray = Buffer.alloc(1024);
+      length = 0;
+      length = encodeQUINT32(responseArray, length, thisInstance.magic_key);
+      length = encodeQUINT32(responseArray, length, thisInstance.schema_number);
+      length = encodeQUINT32(responseArray, length, 9);
+      length = encodeQUTF8(responseArray, length, thisInstance.Id);
+      length = encodeQUTF8(responseArray, length, "");
+      length = encodeQBOOL(responseArray, length, 0);
+
+      responseArray = responseArray.slice(0, length);
+      wsjtUdpMessage(responseArray, responseArray.length, port, address);
+    }
   }
-  if (thisInstance && thisInstance.TxEnabled == 1)
+  if (thisInstance && thisInstance.TxEnabled == 1 && genMessages == true)
   {
-    addLastTraffic(
-      "<font color='yellow'>Transmit Enabled!</font><br/><font color='yellow'>Generate Msgs Aborted</font>"
-    );
+    addLastTraffic("<font color='yellow'>Transmit Enabled!</font><br/><font color='yellow'>Generate Msgs Aborted</font>");
   }
 }
 
@@ -6321,7 +6242,6 @@ function handleWsjtxQSO(newMessage)
 
 function handleWsjtxNotSupported(newMessage) { }
 
-var g_gtShareCount = 0;
 var g_lastBand = "";
 var g_lastMode = "";
 
@@ -6389,9 +6309,9 @@ function activeRig(instance)
   }
 }
 
-var g_lastDecodeCallsign = "";
 var g_lastTransmitCallsign = {};
 var g_lastStatusCallsign = {};
+var g_lastTxMessage = "";
 
 function handleWsjtxStatus(newMessage)
 {
@@ -6431,11 +6351,7 @@ function handleWsjtxStatus(newMessage)
 
     if (!(newMessage.instance in g_lastStatusCallsign)) { g_lastStatusCallsign[newMessage.instance] = ""; }
 
-    if (
-      lookupOnTx.checked == true &&
-      newMessage.Transmitting == 1 &&
-      g_lastTransmitCallsign[newMessage.instance] != DXcall
-    )
+    if (lookupOnTx.checked == true && newMessage.Transmitting == 1 && g_lastTransmitCallsign[newMessage.instance] != DXcall)
     {
       openLookupWindow(true);
       g_lastTransmitCallsign[newMessage.instance] = DXcall;
@@ -6470,8 +6386,7 @@ function handleWsjtxStatus(newMessage)
 
     var bandChange = false;
     var modeChange = false;
-    var origMode = g_lastMode;
-    var origBand = g_lastBand;
+
     wsjtxMode.innerHTML = "<font color='orange'>" + newMessage.MO + "</font>";
     myMode = newMessage.MO;
     myBand = newMessage.Band;
@@ -6505,28 +6420,20 @@ function handleWsjtxStatus(newMessage)
       redrawParks();
       redrawPins();
 
-      var msg = "";
-
-      msg += "<font color='yellow'>" + myBand + "</font> / ";
-      msg += "<font color='orange'>" + myMode + "</font>";
+      var msg = "<font color='yellow'>" + myBand + "</font> / <font color='orange'>" + myMode + "</font>";
       addLastTraffic(msg);
       ackAlerts();
       updateChatWindow();
     }
-    myRawFreq = newMessage.Frequency;
-    frequency.innerHTML =
-      "<font color='lightgreen'>" +
-      Number(newMessage.Frequency / 1000).formatMhz(3, 3) +
-      " Hz </font><font color='yellow'>(" +
-      myBand +
-      ")</font>";
-    myRawCall = newMessage.DEcall.trim();
 
+    myRawFreq = newMessage.Frequency;
+    frequency.innerHTML = "<font color='lightgreen'>" + Number(newMessage.Frequency / 1000).formatMhz(3, 3) + " Hz </font><font color='yellow'>(" + myBand + ")</font>";
+    myRawCall = newMessage.DEcall.trim();
     myRawGrid = newMessage.DEgrid.trim().substr(0, 6);
 
-    var LL = squareToLatLongAll(myRawGrid);
-    g_mapSettings.latitude = g_myLat = LL.la2 - (LL.la2 - LL.la1) / 2;
-    g_mapSettings.longitude = g_myLon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
+    var LL = squareToCenter(myRawGrid);
+    g_mapSettings.latitude = g_myLat = LL.a;
+    g_mapSettings.longitude = g_myLon = LL.o;
     if (myRawGrid != g_lastRawGrid)
     {
       g_lastRawGrid = myRawGrid;
@@ -6545,6 +6452,18 @@ function handleWsjtxStatus(newMessage)
       dxCallBoxDiv.className = "DXCallBoxConfirmed";
     }
 
+    if (newMessage.Transmitting == 1 && newMessage.TxMessage && g_lastTxMessage != newMessage.TxMessage)
+    {
+      g_lastTxMessage = newMessage.TxMessage;
+      addLastTraffic(newMessage.TxMessage);
+      if (newMessage.TxMessage.substr(0, 2) == "CQ" && DXcall.length > 0)
+      {
+        setCallAndGrid("", "", newMessage.instance, false);
+        DXcall = "";
+        newMessage.DXgrid = "";
+      }
+    }
+
     g_localDXcall = DXcall;
     localDXcall.innerHTML = DXcall.formatCallsign();
     if (localDXcall.innerHTML.length == 0)
@@ -6556,10 +6475,7 @@ function handleWsjtxStatus(newMessage)
 
     if (myDXGrid.length == 0 && hash in g_liveCallsigns)
     {
-      localDXGrid.innerHTML = myDXGrid = g_liveCallsigns[hash].grid.substr(
-        0,
-        4
-      );
+      localDXGrid.innerHTML = myDXGrid = g_liveCallsigns[hash].grid.substr(0, 4);
     }
 
     if (localDXGrid.innerHTML.length == 0)
@@ -6570,39 +6486,28 @@ function handleWsjtxStatus(newMessage)
     }
     else
     {
-      var LL = squareToLatLongAll(myDXGrid);
-      localDXDistance.innerHTML =
-        parseInt(
-          MyCircle.distance(
-            g_myLat,
-            g_myLon,
-            LL.la2 - (LL.la2 - LL.la1) / 2,
-            LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-            distanceUnit.value
-          ) * MyCircle.validateRadius(distanceUnit.value)
-        ) + distanceUnit.value.toLowerCase();
-      localDXAzimuth.innerHTML =
-        parseInt(
-          MyCircle.bearing(
-            g_myLat,
-            g_myLon,
-            LL.la2 - (LL.la2 - LL.la1) / 2,
-            LL.lo2 - (LL.lo2 - LL.lo1) / 2
-          )
-        ) + "&deg;";
+      var LL = squareToCenter(myDXGrid);
+      localDXDistance.innerHTML = parseInt(MyCircle.distance(g_myLat, g_myLon, LL.a, distanceUnit.value) * MyCircle.validateRadius(distanceUnit.value)) + distanceUnit.value.toLowerCase();
+      localDXAzimuth.innerHTML = parseInt(MyCircle.bearing(g_myLat, g_myLon, LL.a, LL.o)) + "&deg;";
     }
+
     if (localDXcall.innerHTML != "-")
     {
-      localDXReport.innerHTML = Number(
-        newMessage.Report.trim()
-      ).formatSignalReport();
-      if (DXcall.length > 0) { localDXCountry.innerHTML = g_dxccToAltName[callsignToDxcc(DXcall)]; }
-      else localDXCountry.innerHTML = "&nbsp;";
+      localDXReport.innerHTML = Number(newMessage.Report.trim()).formatSignalReport();
+      if (DXcall.length > 0)
+      {
+        localDXCountry.innerHTML = g_dxccToAltName[callsignToDxcc(DXcall)];
+      }
+      else
+      {
+        localDXCountry.innerHTML = "&nbsp;";
+      }
     }
     else
     {
       localDXReport.innerHTML = localDXCountry.innerHTML = "";
     }
+
     myDEcall = newMessage.DEcall;
     myDEGrid = newMessage.DEgrid.trim().substr(0, 6);
     if (myDEGrid.length > 0) setHomeGridsquare();
@@ -6632,37 +6537,24 @@ function handleWsjtxStatus(newMessage)
         if (g_appSettings.gtShareEnable == "true")
         {
           g_gtLiveStatusUpdate = true;
-          g_gtShareCount++;
         }
-        else g_gtShareCount = 0;
 
         if (bandChange || modeChange) reloadInfo(bandChange || modeChange);
         var worker = "";
 
-        worker +=
-          "<div  style='vertical-align:top;display:inline-block;margin-right:8px;'>";
+        worker += "<div  style='vertical-align:top;display:inline-block;margin-right:8px;'>";
         worker += "<table class='darkTable' align=center>";
-        worker +=
-          "<tr><th colspan=7>Last " +
-          g_lastMessages.length +
-          " Decoded Messages</th></tr>";
-        worker +=
-          "<tr><th>Time</th><th>dB</th><th>DT</th><th>Freq</th><th>Mode</th><th>Message</th><th>DXCC</th></tr>";
+        worker += "<tr><th colspan=7>Last " + g_lastMessages.length + " Decoded Messages</th></tr>";
+        worker += "<tr><th>Time</th><th>dB</th><th>DT</th><th>Freq</th><th>Mode</th><th>Message</th><th>DXCC</th></tr>";
 
         worker += g_lastMessages.join("");
 
         worker += "</table></div>";
 
         setStatsDiv("decodeLastListDiv", worker);
-        setStatsDivHeight(
-          "decodeLastListDiv",
-          getStatsWindowHeight() + 26 + "px"
-        );
+        setStatsDivHeight("decodeLastListDiv", getStatsWindowHeight() + 26 + "px");
 
-        if (
-          g_appSettings.gtShareEnable === true &&
-          Object.keys(g_spotCollector).length > 0
-        )
+        if (g_appSettings.gtShareEnable === true && Object.keys(g_spotCollector).length > 0)
         {
           gtChatSendSpots(g_spotCollector, g_spotDetailsCollector);
           g_spotCollector = {};
@@ -6677,10 +6569,7 @@ function handleWsjtxStatus(newMessage)
 
     if (newMessage.TxEnabled)
     {
-      if (
-        g_mapSettings.fitQRZ &&
-        (!g_spotsEnabled || g_receptionSettings.mergeSpots)
-      )
+      if (g_mapSettings.fitQRZ && (!g_spotsEnabled || g_receptionSettings.mergeSpots))
       {
         if (g_lastMapView == null)
         {
@@ -6692,19 +6581,12 @@ function handleWsjtxStatus(newMessage)
         {
           fitViewBetweenPoints([getPoint(myRawGrid), getPoint(myDXGrid)]);
         }
-        else if (
-          g_mapSettings.qrzDxccFallback &&
-          DXcall.length > 0 &&
-          callsignToDxcc(DXcall) > 0
-        )
+        else if (g_mapSettings.qrzDxccFallback && DXcall.length > 0 && callsignToDxcc(DXcall) > 0)
         {
           var dxcc = callsignToDxcc(DXcall);
           var Lat = g_dxccInfo[dxcc].lat;
           var Lon = g_dxccInfo[dxcc].lon;
-          fitViewBetweenPoints(
-            [getPoint(myRawGrid), ol.proj.fromLonLat([Lon, Lat])],
-            15
-          );
+          fitViewBetweenPoints([getPoint(myRawGrid), ol.proj.fromLonLat([Lon, Lat])], 15);
         }
       }
     }
@@ -6721,6 +6603,7 @@ function handleWsjtxStatus(newMessage)
     if (newMessage.Transmitting == 0)
     {
       // Not Transmitting
+      g_lastTxMessage = "";
       g_layerSources.transmit.clear();
       g_transmitFlightPath = null;
     }
@@ -6733,53 +6616,31 @@ function handleWsjtxStatus(newMessage)
       txrxdec.innerHTML = "TRANSMIT";
       g_layerSources.transmit.clear();
       g_transmitFlightPath = null;
-      if (
-        qrzPathWidthValue.value != 0 &&
-        g_appSettings.gridViewMode != 2 &&
-        validateGridFromString(myRawGrid)
-      )
+
+      if (qrzPathWidthValue.value != 0 && g_appSettings.gridViewMode != 2 && validateGridFromString(myRawGrid))
       {
         var strokeColor = getQrzPathColor();
         var strokeWeight = qrzPathWidthValue.value;
-        var LL = squareToLatLongAll(myRawGrid);
-        var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-        var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-        var fromPoint = ol.proj.fromLonLat([Lon, Lat]);
+        var LL = squareToCenter(myRawGrid);
+        var fromPoint = ol.proj.fromLonLat([LL.o, LL.a]);
         var toPoint = null;
 
         if (validateGridFromString(myDXGrid))
         {
-          LL = squareToLatLongAll(myDXGrid);
-          Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-          Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-
-          toPoint = ol.proj.fromLonLat([Lon, Lat]);
+          LL = squareToCenter(myDXGrid);
+          toPoint = ol.proj.fromLonLat([LL.o, LL.a]);
         }
-        else if (
-          g_mapSettings.qrzDxccFallback &&
-          DXcall.length > 0 &&
-          callsignToDxcc(DXcall) > 0
-        )
+        else if (g_mapSettings.qrzDxccFallback && DXcall.length > 0 && callsignToDxcc(DXcall) > 0)
         {
           var dxcc = callsignToDxcc(DXcall);
-          Lat = g_dxccInfo[dxcc].lat;
-          Lon = g_dxccInfo[dxcc].lon;
-
-          toPoint = ol.proj.fromLonLat([Lon, Lat]);
+          toPoint = ol.proj.fromLonLat([g_dxccInfo[dxcc].lon, g_dxccInfo[dxcc].lat]);
 
           var locality = g_dxccInfo[dxcc].geo;
           if (locality == "deleted") locality = null;
 
           if (locality != null)
           {
-            var feature = shapeFeature(
-              "qrz",
-              locality,
-              "qrz",
-              "#FFFF0010",
-              "#FF0000FF",
-              1.0
-            );
+            var feature = shapeFeature("qrz", locality, "qrz", "#FFFF0010", "#FF0000FF", 1.0);
             g_layerSources.transmit.addFeature(feature);
           }
         }
@@ -6847,14 +6708,12 @@ function drawTraffic()
   }
   trafficDiv.innerHTML = worker;
 }
+
 function getPoint(grid)
 {
-  var LL = squareToLatLongAll(grid);
-  var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-  var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-  return ol.proj.fromLonLat([Lon, Lat]);
+  var LL = squareToCenter(grid);
+  return ol.proj.fromLonLat([LL.o, LL.a]);
 }
-var g_showCQRU = true;
 
 function fitViewBetweenPoints(points, maxZoom = 20)
 {
@@ -7143,25 +7002,13 @@ function handleWsjtxDecode(newMessage)
     callsign.CQ = CQ;
     callsign.RR73 = RR73;
 
-    if (msgDXcallsign == myDEcall) callsign.qrz = true;
-    else callsign.qrz = false;
+    callsign.qrz = (msgDXcallsign == myDEcall);
 
     if (callsign.grid.length > 0 && callsign.distance == 0)
     {
-      var LL = squareToLatLongAll(callsign.grid);
-      callsign.distance = MyCircle.distance(
-        g_myLat,
-        g_myLon,
-        LL.la2 - (LL.la2 - LL.la1) / 2,
-        LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-        distanceUnit.value
-      );
-      callsign.heading = MyCircle.bearing(
-        g_myLat,
-        g_myLon,
-        LL.la2 - (LL.la2 - LL.la1) / 2,
-        LL.lo2 - (LL.lo2 - LL.lo1) / 2
-      );
+      var LL = squareToCenter(callsign.grid);
+      callsign.distance = MyCircle.distance(g_myLat, g_myLon, LL.a, LL.o, distanceUnit.value);
+      callsign.heading = MyCircle.bearing(g_myLat, g_myLon, LL.a, LL.o);
     }
 
     if (g_appSettings.potaEnabled == 1)
@@ -9524,16 +9371,8 @@ function renderStatsBox()
 
       if (finalGrid.length > 0)
       {
-        LL = squareToLatLongAll(finalGrid);
-        unit = parseInt(
-          MyCircle.distance(
-            g_myLat,
-            g_myLon,
-            LL.la2 - (LL.la2 - LL.la1) / 2,
-            LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-            distanceUnit.value
-          ) * MyCircle.validateRadius(distanceUnit.value)
-        );
+        LL = squareToCenter(finalGrid);
+        unit = parseInt(MyCircle.distance(g_myLat, g_myLon, LL.a, LL.o, distanceUnit.value) * MyCircle.validateRadius(distanceUnit.value));
 
         if (unit > long_distance.worked_unit)
         {
@@ -12324,9 +12163,7 @@ function drawAllGrids()
         }
       }
 
-      var LL = twoWideToLatLong(
-        String.fromCharCode(x) + String.fromCharCode(y)
-      );
+      var LL = twoWideToLatLong(String.fromCharCode(x) + String.fromCharCode(y));
       var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
       var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
       var point = ol.proj.fromLonLat([Lon, Lat]);
@@ -13913,6 +13750,15 @@ function updateWsjtxListener(port)
         else
         {
           newMessage.ConfName = null;
+        }
+        if (message.length > 0)
+        {
+          newMessage.TxMessage = decodeQUTF8(message);
+          message = message.slice(g_qtToSplice);
+        }
+        else
+        {
+          newMessage.TxMessage = null;
         }
         g_instances[instanceId].oldStatus = g_instances[instanceId].status;
         g_instances[instanceId].status = newMessage;
@@ -15945,38 +15791,33 @@ function createSpot(report, key, fromPoint, addToLayer = true)
 {
   try
   {
-    var LL = squareToLatLongAll(report.grid);
+    var LL = squareToCenter(report.grid);
 
-    if (isNaN(LL.la1))
+    if (isNaN(LL.a))
     {
       // Bad value in grid, don't map //
       return;
     }
 
-    var Lat = LL.la2 - (LL.la2 - LL.la1) / 2;
-    var Lon = LL.lo2 - (LL.lo2 - LL.lo1) / 2;
-
-    var spot = spotFeature([Lon, Lat]);
+    var spot = spotFeature([LL.o, LL.a]);
 
     var colorNoAlpha = "#" + g_bandToColor[report.band];
     var colorAlpha = intAlphaToRGB(colorNoAlpha, report.color);
     var spotColor = colorAlpha;
 
-    var workingColor =
-      g_mapSettings.nightMapEnable && g_nightTime
-        ? g_receptionSettings.pathNightColor
-        : g_receptionSettings.pathColor;
+    var workingColor = g_mapSettings.nightMapEnable && g_nightTime ? g_receptionSettings.pathNightColor : g_receptionSettings.pathColor;
 
     if (workingColor != -1)
     {
-      var testColor =
-        workingColor < 1
-          ? "#0000000"
-          : workingColor == 361
-            ? "#FFFFFF"
-            : "hsla(" + workingColor + ", 100%, 50%," + report.color / 255 + ")";
-      if (workingColor < 1 || workingColor == 361) { spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color); }
-      else spotColor = testColor;
+      var testColor = workingColor < 1 ? "#0000000" : workingColor == 361 ? "#FFFFFF" : "hsla(" + workingColor + ", 100%, 50%," + report.color / 255 + ")";
+      if (workingColor < 1 || workingColor == 361)
+      {
+        spotColor = intAlphaToRGB(testColor.substr(0, 7), report.color);
+      }
+      else
+      {
+        spotColor = testColor;
+      }
     }
 
     featureStyle = new ol.style.Style({
@@ -15993,7 +15834,7 @@ function createSpot(report, key, fromPoint, addToLayer = true)
     spot.size = 6; // Mouseover detection
     g_layerSources["psk-spots"].addFeature(spot);
 
-    var toPoint = ol.proj.fromLonLat([Lon, Lat]);
+    var toPoint = ol.proj.fromLonLat([LL.o, LL.a]);
 
     var lonLat = new ol.geom.Point(toPoint);
 
@@ -16015,7 +15856,7 @@ function createSpot(report, key, fromPoint, addToLayer = true)
             ? g_spotNightFlightColor
             : g_spotFlightColor;
 
-      var feature = flightFeature(
+      flightFeature(
         [fromPoint, toPoint],
         {
           weight: strokeWeight,

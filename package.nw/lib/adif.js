@@ -2394,8 +2394,7 @@ function sendLotwLogEntry(report)
     lotwStation.value.length > 0
   )
   {
-    var header =
-      "Generated " + userTimeString(null) + " for " + myDEcall + "\r\n\r\n";
+    var header = "Generated " + userTimeString(null) + " for " + myDEcall + "\r\n\r\n";
     var pid = "GridTracker";
     var pver = String(gtVersion);
     header += "<PROGRAMID:" + pid.length + ">" + pid + "\r\n";

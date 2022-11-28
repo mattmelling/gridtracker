@@ -577,6 +577,8 @@ function gtChatSetUUID(jsmesg)
   g_gtState = ChatState.status;
 }
 
+var g_getEngineWasRunning = false;
+
 function gtChatStateMachine()
 {
   if (g_appSettings.gtShareEnable == true && g_mapSettings.offlineMode == false)
@@ -597,12 +599,17 @@ function gtChatStateMachine()
         alertChatMessage();
       }
     }
+    g_getEngineWasRunning = true;
   }
   else
   {
-    closeGtSocket();
-    g_gtChatlistChangeCount = 0;
-    g_lastGtStatus = "";
+    if (g_getEngineWasRunning == true)
+    {
+      g_getEngineWasRunning = false;
+      closeGtSocket();
+      g_gtChatlistChangeCount = 0;
+      g_lastGtStatus = "";
+    }
   }
 }
 

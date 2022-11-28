@@ -573,7 +573,8 @@ function gtChatSetUUID(jsmesg)
 
   g_gtUuidValid = true;
   gtChatSendStatus();
-
+  g_gtLiveStatusUpdate = false;
+  g_gtStatusCount = g_gtStatusTime;
   g_gtState = ChatState.status;
 }
 

@@ -6311,7 +6311,7 @@ function activeRig(instance)
 
 var g_lastTransmitCallsign = {};
 var g_lastStatusCallsign = {};
-var g_lastTxMessage = "";
+var g_lastTxMessage = null;
 
 function handleWsjtxStatus(newMessage)
 {
@@ -6452,7 +6452,7 @@ function handleWsjtxStatus(newMessage)
       dxCallBoxDiv.className = "DXCallBoxConfirmed";
     }
 
-    if (g_developerMode && newMessage.Transmitting == 1 && newMessage.TxMessage && g_lastTxMessage != newMessage.TxMessage)
+    if (g_appSettings.clearOnCQ && newMessage.Transmitting == 1 && newMessage.TxMessage && g_lastTxMessage != newMessage.TxMessage)
     {
       g_lastTxMessage = newMessage.TxMessage;
       if (newMessage.TxMessage.substring(0, 2) == "CQ" && DXcall.length > 0)
@@ -6602,7 +6602,7 @@ function handleWsjtxStatus(newMessage)
     if (newMessage.Transmitting == 0)
     {
       // Not Transmitting
-      g_lastTxMessage = "";
+      g_lastTxMessage = null;
       g_layerSources.transmit.clear();
       g_transmitFlightPath = null;
     }
@@ -12918,6 +12918,12 @@ function setPins()
   }
 }
 
+function changeClearOnCQ()
+{
+  g_appSettings.clearOnCQ = clearOnCQ.checked;
+  saveAppSettings();
+}
+
 function loadViewSettings()
 {
   gtBandFilter.value = g_appSettings.gtBandFilter;
@@ -12979,6 +12985,8 @@ function loadViewSettings()
   lookupCloseLog.checked = g_appSettings.lookupCloseLog;
   lookupMerge.checked = g_appSettings.lookupMerge;
   lookupMissingGrid.checked = g_appSettings.lookupMissingGrid;
+
+  clearOnCQ.checked = g_appSettings.clearOnCQ;
 
   if (g_appSettings.lookupMerge == true)
   {

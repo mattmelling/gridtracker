@@ -36,6 +36,7 @@ var def_appSettings = {
   rosterAlwaysOnTop: false,
   centerGridsquare: "",
   chatUUID: "",
+  clearOnCQ: false,
   crScript: 0,
   distanceUnit: "MI",
   earthImgSrc: 0,

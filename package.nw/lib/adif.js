@@ -1381,8 +1381,7 @@ function setAdifStartup(checkbox)
       worker += "<table class='darkTable'>";
       for (var i in g_startupLogs)
       {
-        worker +=
-          "<tr title='" +
+        worker += "<tr title='" +
           g_startupLogs[i].file +
           "'><td>" +
           g_startupLogs[i].name +

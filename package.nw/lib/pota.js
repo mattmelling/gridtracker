@@ -236,7 +236,7 @@ function reportPotaRBN(callSpot)
       comments: callSpot.comments,
       activatorGrid: callSpot.activatorGrid,
       spotterGrid: callSpot.spotterGrid
-    }
+    };
     
     if (Number(report.frequency) > 0)
     {
@@ -267,7 +267,7 @@ function reportPotaQSO(record)
     comments: record.COMMENT ? record.COMMENT : "",
     activatorGrid: record.GRIDSQUARE ? record.GRIDSQUARE : "",
     spotterGrid: record.MY_GRIDSQUARE ? record.MY_GRIDSQUARE : ""
-  }
+  };
   
   if ("SUBMODE" in record)
   {

@@ -40,6 +40,12 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
+* Tue Nov 29 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1129-1
+  - Fixed CPU usage issue with messaging
+  - Fixed Logging -> Local File(s) not showing files selected
+  - Honor POTA spot expiration
+  - New option 'Clear DX Call, DX Grid, Tx1-Tx5 when calling CQ in WSJT-X'
+  -- Settings -> Lookups -> Feature Control -> Clear on CQ
 * Wed Nov 23 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1123-1
   - LoTW QSL downloading issue fixed
   - CQ Only in Call Roster fixed

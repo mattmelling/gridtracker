@@ -1379,7 +1379,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 <td>
                   <input type="checkbox" id="potaMenu" onclick="changePotaMenu();" />
                 </td>
-
+              </tr>
+              <tr>
+                <td>Clear on CQ</td>
+                <td>
+                  <input type="checkbox" id="clearOnCQ" onclick="changeClearOnCQ();" />
+                </td>
               </tr>
 
         </table>
@@ -2111,12 +2116,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 <table align="center" class="subtable">
                   <tr>
                     <td>
-                      <div data-i18n="settings.logging.LocalFiles.details.add" class="button" id="selectAdifButton">Add
-                        File</div>
+                      <div data-i18n="settings.logging.LocalFiles.details.add" class="button" id="selectAdifButton">Add File</div>
                     </td>
                     <td>
-                      <div data-i18n="settings.logging.LocalFiles.details.noFiles" id="startupLogFileDiv">No file(s)
-                        selected</div>
+                      <div id="startupLogFileDiv"></div>
                     </td>
                   </tr>
                 </table>

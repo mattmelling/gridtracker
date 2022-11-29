@@ -6452,10 +6452,10 @@ function handleWsjtxStatus(newMessage)
       dxCallBoxDiv.className = "DXCallBoxConfirmed";
     }
 
-    if (newMessage.Transmitting == 1 && newMessage.TxMessage && g_lastTxMessage != newMessage.TxMessage)
+    if (g_developerMode && newMessage.Transmitting == 1 && newMessage.TxMessage && g_lastTxMessage != newMessage.TxMessage)
     {
       g_lastTxMessage = newMessage.TxMessage;
-      if (newMessage.TxMessage.substr(0, 2) == "CQ" && DXcall.length > 0)
+      if (newMessage.TxMessage.substring(0, 2) == "CQ" && DXcall.length > 0)
       {
         setCallAndGrid("", "", newMessage.instance, false);
         DXcall = "";

@@ -210,7 +210,6 @@ function potaSpotFromDecode(callObj)
     }
     else
     {
-      console.log("No spot data found");
       if (!(callObj.DEcall in g_pota.callSpots))
       {
         console.log("No call spot: " + callObj.DEcall);

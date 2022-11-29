@@ -1882,12 +1882,11 @@ function sendToLogger(ADIF)
     record.GRIDSQUARE = g_liveCallsigns[localHash].grid.substr(0, 4);
   }
 
-  if (g_appSettings.potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota.length > 0)
+  if (g_appSettings.potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota)
   {
-    var pota = g_liveCallsigns[localHash].pota[0];
-    if (pota != "?-????")
+    if (g_liveCallsigns[localHash].pota != "?-????")
     {
-      record.POTA = pota;
+      record.POTA = g_liveCallsigns[localHash].pota;
     }
   }
 

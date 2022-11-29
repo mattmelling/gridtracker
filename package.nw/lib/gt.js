@@ -1537,7 +1537,7 @@ function addDeDx(
     newCallsign.distance = 0;
     newCallsign.px = null;
     newCallsign.zone = null;
-    newCallsign.pota = [];
+    newCallsign.pota = null;
     newCallsign.cnty = finalCnty;
     newCallsign.cont = finalCont;
     if (finalDxcc > -1)
@@ -6455,7 +6455,6 @@ function handleWsjtxStatus(newMessage)
     if (newMessage.Transmitting == 1 && newMessage.TxMessage && g_lastTxMessage != newMessage.TxMessage)
     {
       g_lastTxMessage = newMessage.TxMessage;
-      addLastTraffic(newMessage.TxMessage);
       if (newMessage.TxMessage.substr(0, 2) == "CQ" && DXcall.length > 0)
       {
         setCallAndGrid("", "", newMessage.instance, false);
@@ -6904,7 +6903,7 @@ function handleWsjtxDecode(newMessage)
       newCallsign.qso = false;
       newCallsign.dxcc = callsignToDxcc(newCallsign.DEcall);
       newCallsign.px = null;
-      newCallsign.pota = [];
+      newCallsign.pota = null;
       newCallsign.zone = null;
       newCallsign.vucc_grids = [];
       newCallsign.propMode = "";
@@ -7013,38 +7012,40 @@ function handleWsjtxDecode(newMessage)
 
     if (g_appSettings.potaEnabled == 1)
     {
+      callsign.pota = null;
       if (callsign.DEcall in g_pota.callSpots || callsign.DEcall in g_pota.callSchedule)
       {
-        callsign.pota = [];
+        var now = Date.now();
         if (callsign.DEcall in g_pota.callSpots)
         {
-          // copies the entire array
-          callsign.pota = [...g_pota.callSpots[callsign.DEcall]];
+          if (g_pota.callSpots[callsign.DEcall] in g_pota.parkSpots && g_pota.parkSpots[g_pota.callSpots[callsign.DEcall]][callsign.DEcall].expire > now)
+          {
+            callsign.pota = g_pota.callSpots[callsign.DEcall];
+          }
         }
         else if (callsign.DEcall in g_pota.callSchedule)
         {
-          var now = Date.now();
           for (var i in g_pota.callSchedule[callsign.DEcall])
           {
             if (now < g_pota.callSchedule[callsign.DEcall][i].end && now >= g_pota.callSchedule[callsign.DEcall][i].start)
             {
-              callsign.pota.push(g_pota.callSchedule[callsign.DEcall][i].id);
+              callsign.pota = g_pota.callSchedule[callsign.DEcall][i].id;
               break;
             }
           }
         }
-        if (callsign.pota.length > 0)
+        if (callsign.pota)
         {
           potaSpotFromDecode(callsign);
         }
         else if (CQ == true && msgDXcallsign == "CQ POTA")
         {
-          callsign.pota = ["?-????"];
+          callsign.pota = "?-????";
         }
       }
       else if (CQ == true && msgDXcallsign == "CQ POTA")
       {
-        callsign.pota = ["?-????"];
+        callsign.pota = "?-????";
       }
     }
 
@@ -15516,11 +15517,8 @@ function mediaCheck()
             }
           }
 
-          if (typeof g_QSOhash[i].pota == "undefined" || g_QSOhash[i].pota == null)
-          {
-            g_QSOhash[i].pota = [];
-          }
-
+          g_QSOhash[i].pota = null;
+          
           g_QSOcount++;
           if (g_QSOhash[i].confirmed) g_QSLcount++;
         }

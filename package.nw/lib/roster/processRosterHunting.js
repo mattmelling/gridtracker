@@ -518,17 +518,15 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for POTAs
-        if (potaEnabled && huntPOTA.checked == true && callObj.pota.length > 0)
+        if (potaEnabled && huntPOTA.checked == true && callObj.pota)
         {
-          let huntTotal = callObj.pota.length;
+          let huntTotal = 1;
           let workedFound = 0;
 
-          for (const index in callObj.pota)
-          {
-            let hash = g_dayAsString + callsign + callObj.pota[index] + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
+          let hash = g_dayAsString + callsign + callObj.pota + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
 
-            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
-          }
+          if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
+          
           if (workedFound != huntTotal)
           {
             shouldAlert = true;

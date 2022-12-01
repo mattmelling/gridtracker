@@ -54,7 +54,7 @@ var g_gtLiveStatusUpdate = false;
 var myChatId = 0;
 
 var myRoom = 0;
-var g_gtChatlistChangeCount = 0;
+
 var g_gtCurrentMessageCount = 0;
 
 function gtConnectChat()
@@ -352,7 +352,6 @@ function gtChatUpdateCall(jsmesg)
       g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin);
     }
   }
-  g_gtChatlistChangeCount++;
   g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
   updateChatWindow(cid);
 }
@@ -476,7 +475,6 @@ function gtChatNewList(jsmesg)
       }
     }
   }
-  g_gtChatlistChangeCount++;
 
   updateChatWindow();
 }
@@ -608,7 +606,6 @@ function gtChatStateMachine()
     {
       g_getEngineWasRunning = false;
       closeGtSocket();
-      g_gtChatlistChangeCount = 0;
       g_lastGtStatus = "";
     }
   }
@@ -730,9 +727,9 @@ function newChatMessage(id, jsmesg)
     try
     {
       hasFocus = g_chatWindowHandle.window.newChatMessage(id, jsmesg);
+      g_chatWindowHandle.window.messagesRedraw();
     }
     catch (e) {}
-    updateChatWindow();
   }
   return hasFocus;
 }

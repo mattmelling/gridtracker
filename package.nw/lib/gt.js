@@ -10638,22 +10638,30 @@ function setGtShareButtons()
     g_layerVectors.gtflags.setVisible(false);
     clearGtFlags();
     // Clear list
-    g_gtFlagPins = {};
+    g_gtFlagPins = Object()
+    g_gtMessages = Object();
+    g_gtUnread = Object();
+    g_gtIdToCid = Object();
+    g_gtCallsigns = Object();
+    g_gtSentAwayToCid = Object();
+    
     if (g_chatWindowHandle != null)
     {
       try
       {
         g_chatWindowHandle.hide();
+        g_chatWindowHandle.window.allCallDiv.innerHTML = "";
+        g_chatWindowHandle.window.updateCount();
       }
       catch (e)
       {
         console.error(e);
       }
     }
+    goProcessRoster();
   }
 
-  gtShareFlagImg.src =
-    g_gtShareFlagImageArray[g_appSettings.gtShareEnable == false ? 0 : 1];
+  gtShareFlagImg.src = g_gtShareFlagImageArray[g_appSettings.gtShareEnable == false ? 0 : 1];
 }
 
 function setMulticastIp()

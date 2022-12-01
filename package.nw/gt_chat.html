@@ -267,7 +267,6 @@
 
       function updateCallsign(id)
       {
-        var count = parseInt(userCount.innerHTML);
         if (id in window.opener.g_gtFlagPins)
         {
           var obj = window.opener.g_gtFlagPins[id];
@@ -288,10 +287,7 @@
 
             if (obj.canmsg == false) show = false;
 
-            if (makeCallsignRow(obj, show) && show)
-            {
-              count++;
-            }
+            makeCallsignRow(obj, show);
 
             if (obj.cid == g_currentId && messageInput.disabled == true && obj.live == true)
             {
@@ -312,19 +308,44 @@
           var obj = document.getElementById(id);
           if (obj)
           {
-            if (obj.style.display == "")
-            {
-              count--;
-            }
             allCallDiv.removeChild(obj);
+          }
+        }
+        updateCount();
+      }
+
+      function updateCount()
+      {
+        var count = 0;
+        if(allCallDiv.childElementCount > 0)
+        {
+          for (var x = allCallDiv.childNodes.length-1; x > -1;  x--)
+          {
+            if (allCallDiv.childNodes[x].style.display != "none")
+            {
+              count++;
+            }
           }
         }
         userCount.innerHTML = count;
       }
 
-      function showAllCallsigns()
+      function removeAllChildNodes(parent) 
       {
-        var count = 0;
+        while (parent.firstChild) 
+        {
+          parent.removeChild(parent.firstChild);
+        }
+      }
+
+      function showAllCallsigns(justSearching = false)
+      {
+        allCallDiv.style.display = "none";
+        if (justSearching == false)
+        {
+          removeAllChildNodes(allCallDiv);
+        }
+
         for (const x in window.opener.g_gtFlagPins)
         {
           var obj = window.opener.g_gtFlagPins[x];
@@ -345,11 +366,6 @@
 
             if (obj.canmsg == false) show = false;
 
-            if (show) 
-            {
-              count++;
-            }
-
             makeCallsignRow(obj, show);
 
             if (obj.cid == g_currentId && messageInput.disabled == true && obj.live == true)
@@ -362,19 +378,8 @@
           }
         }
         
-        if(allCallDiv.childElementCount > 0)
-        {
-          for (var x = allCallDiv.childNodes.length-1; x > -1;  x--)
-          {
-            if (!(allCallDiv.childNodes[x].id in window.opener.g_gtFlagPins))
-            {
-              allCallDiv.removeChild(allCallDiv.childNodes[x]);
-            }
-          }
-        }
-
         updateBar(g_currentId);
-        userCount.innerHTML = count;
+        updateCount();
 
         if (g_viewBand)
         {
@@ -394,6 +399,13 @@
           viewMode.innerHTML = "All";
         }
 
+        allCallDiv.style.display = "";
+
+        messagesRedraw();
+      }
+
+      function messagesRedraw()
+      {
         showAllMessages();
         Resize();
       }
@@ -443,8 +455,7 @@
           g_currentId = "";
           openId(what);
         }
-        showAllMessages();
-        Resize();
+        messagesRedraw();
       }
 
       function updateEverything()
@@ -548,7 +559,8 @@
           if (id in window.opener.g_gtUnread)
           {
             delete window.opener.g_gtUnread[id];
-            showAllCallsigns();
+            updateCallsign(id);
+            showAllMessages();
           }
         }
         messageTextDiv.innerHTML = worker;
@@ -613,7 +625,7 @@
         } else {
           clearSearch.style.display = "none";
         }
-        showAllCallsigns();
+        showAllCallsigns(true);
       }
 
       function doLookup(what)

@@ -300,8 +300,8 @@ function gtChatRemoveCall(jsmesg)
         updateChatWindow(cid);
       }
     }
-    delete g_gtIdToCid[id];
   }
+  delete g_gtIdToCid[id];
 }
 
 function gtChatUpdateCall(jsmesg)
@@ -425,14 +425,13 @@ function gtChatNewList(jsmesg)
 {
   clearGtFlags();
 
-  for (var cid in g_gtFlagPins)
-  {
-    g_gtFlagPins[cid].live = false;
-    if (!(cid in g_gtMessages))
-    {
-      delete g_gtFlagPins[cid];
-    }
-  }
+  // starting clean if we're getting a new chat list
+  g_gtFlagPins = Object()
+  g_gtMessages = Object();
+  g_gtUnread = Object();
+  g_gtIdToCid = Object();
+  g_gtCallsigns = Object();
+  g_gtSentAwayToCid = Object();
 
   for (var key in jsmesg.data.calls)
   {

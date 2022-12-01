@@ -38,7 +38,6 @@ var g_gtChatSocket = null;
 var g_gtFlagPins = Object();
 var g_gtMessages = Object();
 var g_gtUnread = Object();
-var g_gtIdToCid = Object();
 var g_gtCallsigns = Object();
 var g_gtSentAwayToCid = Object();
 
@@ -273,35 +272,47 @@ function gtChatSendSpots(spotsObject, detailsObject)
 function gtChatRemoveCall(jsmesg)
 {
   var id = jsmesg.id;
-  if (id in g_gtIdToCid)
+  var cid = jsmesg.cid;
+
+  if (cid in g_gtFlagPins)
   {
-    var cid = g_gtIdToCid[id];
-    if (cid in g_gtFlagPins)
+    if (id in g_gtFlagPins[cid].ids)
     {
       delete g_gtFlagPins[cid].ids[id];
-      if (Object.keys(g_gtFlagPins[cid].ids).length == 0)
-      {
-        if (g_gtFlagPins[cid].pin != null)
-        {
-          // remove pin from map here
-          if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))
-          { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
-          delete g_gtFlagPins[cid].pin;
-          g_gtFlagPins[cid].pin = null;
-        }
-        g_gtFlagPins[cid].live = false;
-        notifyNoChat(cid);
-        if (!(cid in g_gtMessages))
-        {
-          delete g_gtCallsigns[g_gtFlagPins[cid].call];
-          delete g_gtFlagPins[cid];
-        }
+    }
+    else
+    {
+      console.log("drop: No such id in gtCall:");
+      console.log(jsmesg);
+      console.log(g_gtFlagPins[cid].ids);
+    }
 
-        updateChatWindow(cid);
+    if (Object.keys(g_gtFlagPins[cid].ids).length == 0)
+    {
+      if (g_gtFlagPins[cid].pin != null)
+      {
+        // remove pin from map here
+        if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))
+        { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
+        delete g_gtFlagPins[cid].pin;
+        g_gtFlagPins[cid].pin = null;
       }
+      g_gtFlagPins[cid].live = false;
+      notifyNoChat(cid);
+      if (!(cid in g_gtMessages))
+      {
+        delete g_gtCallsigns[g_gtFlagPins[cid].call];
+        delete g_gtFlagPins[cid];
+      }
+
+      updateChatWindow(cid);
     }
   }
-  delete g_gtIdToCid[id];
+  else
+  {
+    console.log("drop: No such cid in gtCall");
+    console.log(jsmesg);
+  }
 }
 
 function gtChatUpdateCall(jsmesg)
@@ -329,7 +340,6 @@ function gtChatUpdateCall(jsmesg)
     g_gtFlagPins[cid].ids = Object();
     g_gtFlagPins[cid].ids[id] = true;
   }
-  g_gtIdToCid[jsmesg.id] = jsmesg.cid;
 
   g_gtFlagPins[cid].cid = jsmesg.cid;
   g_gtFlagPins[cid].call = jsmesg.call;
@@ -429,7 +439,6 @@ function gtChatNewList(jsmesg)
   g_gtFlagPins = Object()
   g_gtMessages = Object();
   g_gtUnread = Object();
-  g_gtIdToCid = Object();
   g_gtCallsigns = Object();
   g_gtSentAwayToCid = Object();
 
@@ -451,7 +460,6 @@ function gtChatNewList(jsmesg)
         g_gtFlagPins[cid].pin = null;
       }
 
-      g_gtIdToCid[id] = cid;
       g_gtFlagPins[cid].call = jsmesg.data.calls[key];
       g_gtFlagPins[cid].fCall = g_gtFlagPins[cid].call.formatCallsign();
       g_gtFlagPins[cid].grid = jsmesg.data.grid[key];

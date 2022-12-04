@@ -40,7 +40,7 @@ DESTDIR=${RPM_BUILD_ROOT} make clean
 %license %{_docdir}/%{name}/
 
 %changelog
-* Tue Nov 29 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1129-1
+* Sun Dec 04 2022 Tag Loomis <n0ttl@gridtracker.org> - 1.22.1204-1
   - Fixed CPU usage issue with messaging
   - Fixed Logging -> Local File(s) not showing files selected
   - Honor POTA spot expiration

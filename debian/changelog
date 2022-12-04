@@ -1,10 +1,10 @@
-gridtracker (1.22.1129) unstable; urgency=low
+gridtracker (1.22.1204) unstable; urgency=low
   - Fixed CPU usage issue with messaging
   - Fixed Logging -> Local File(s) not showing files selected
   - Honor POTA spot expiration
   - New option 'Clear DX Call, DX Grid, Tx1-Tx5 when calling CQ in WSJT-X'
   -- Settings -> Lookups -> Feature Control -> Clear on CQ
--- Tag Loomis <n0ttl@gridtracker.org>  Tue, 29 Nov 2022 00:00:00 -0000
+-- Tag Loomis <n0ttl@gridtracker.org>  Sun, 04 Dec 2022 00:00:00 -0000
 
 gridtracker (1.22.1123) unstable; urgency=low
   - LoTW QSL downloading issue fixed

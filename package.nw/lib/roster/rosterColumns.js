@@ -400,14 +400,9 @@ const ROSTER_COLUMNS = {
 
 function potaColumnRef(callObj)
 {
-  if (callObj.pota.length > 0)
+  if (callObj.pota)
   {
-    let value = callObj.pota[0];
-    if (callObj.pota.length > 1)
-    {
-      value += " +" + String(callObj.pota.length - 1);
-    }
-    return value;
+    return callObj.pota;
   }
   else
   {
@@ -417,14 +412,13 @@ function potaColumnRef(callObj)
 
 function potaColumnHover(callObj)
 {
-  let value = ""
-  for (let i in callObj.pota)
+  let value = "";
+
+  if (callObj.pota in window.opener.g_pota.parks)
   {
-    if (callObj.pota[i] in window.opener.g_pota.parks)
-    {
-      value += callObj.pota[i] + " - " + window.opener.g_pota.parks[callObj.pota[i]].name + "\n";
-    }
+    value += callObj.pota + " - " + window.opener.g_pota.parks[callObj.pota].name + "\n";
   }
+  
   return value;
 }
 

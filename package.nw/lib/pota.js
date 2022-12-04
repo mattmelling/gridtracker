@@ -24,6 +24,7 @@ var g_potaSpotTemplate = {
   band: "",
   reference: "",
   spotTime: 0,
+  expire: 0,
   spotter: "",
   comments: "",
   source: "GT",
@@ -132,10 +133,10 @@ function makeParkFeatures()
     {
       if (park in g_pota.parks)
       {
-        let parkObj = Object.assign({}, g_parkTemplate);
+        var parkObj = Object.assign({}, g_parkTemplate);
         for (const call in g_pota.parkSpots[park])
         {
-          let report = g_pota.parkSpots[park][call];
+          var report = g_pota.parkSpots[park][call];
           if (parkObj.feature == null && validateMapBandAndMode(report.band, report.mode))
           {
             parkObj.feature = iconFeature(ol.proj.fromLonLat([Number(g_pota.parks[park].longitude), Number(g_pota.parks[park].latitude)]), g_gtParkIconActive, 1);
@@ -158,85 +159,105 @@ function makeParkFeatures()
 
 function potaSpotFromDecode(callObj)
 {
-  for (const i in callObj.pota)
+  if (myDEcall != "" && myDEcall != "NOCALL")
   {
-    let park = callObj.pota[i];
-    let spotObj = null;
+    var park = callObj.pota;
 
-    if (!(callObj.DEcall in g_pota.callSpots))
+    if (callObj.DEcall in g_pota.callSpots && park in g_pota.parkSpots)
     {
-      // new call and park
-      g_pota.callSpots[callObj.DEcall] = [park];
-    }
-    else if (!g_pota.callSpots[callObj.DEcall].includes(park))
-    {
-      // new park
-      g_pota.callSpots[callObj.DEcall].push(park);
-    }
+      // update spot
+      var newObj = spotFromCallObj(callObj, park, g_pota.parkSpots[park][callObj.DEcall].count);
+      g_pota.parkSpots[park][callObj.DEcall] = fillObjectFromTemplate(g_pota.parkSpots[park][callObj.DEcall], newObj);
 
-    if (!(park in g_pota.parkSpots))
-    {
-      g_pota.parkSpots[park] = {};
-      g_pota.parkSpots[park][callObj.DEcall] = spotFromCallObj(callObj, park, 0, 0);
+      // may or may not be on screen, so try
+      if (g_appSettings.potaMapEnabled)
+      {
+        addParkSpotFeature(park, g_pota.parkSpots[park][callObj.DEcall]);
+      }
+      
+      var hash = park + callObj.DEcall;
+      if (!(hash in g_pota.rbnReportTimes) || Date.now() > g_pota.rbnReportTimes[hash])
+      {
+        g_pota.rbnReportTimes[hash] = Date.now() + g_pota.rbnFrequency;
+        reportPotaRBN(g_pota.parkSpots[park][callObj.DEcall]);
+      }
     }
-    else if (!(callObj.DEcall in g_pota.parkSpots[park]))
+    else if (callObj.DEcall in g_pota.callSchedule)
     {
-      g_pota.parkSpots[park][callObj.DEcall] = spotFromCallObj(callObj, park, 0, 0);
+      // Looks like it's scheduled, so it's new
+      g_pota.callSpots[callObj.DEcall] = park;
+
+      if (!(park in g_pota.parkSpots))
+      {
+        g_pota.parkSpots[park] = {};
+      }
+      
+      var newObj = spotFromCallObj(callObj, park, 0);
+      newObj.expire = newObj.spotTime + 300000;
+      g_pota.parkSpots[park][callObj.DEcall] = newObj;
+
+      if (g_appSettings.potaMapEnabled)
+      {
+        addParkSpotFeature(park, g_pota.parkSpots[park][callObj.DEcall]);
+      }
+      
+      var hash = park + callObj.DEcall;
+      if (!(hash in g_pota.rbnReportTimes) || Date.now() > g_pota.rbnReportTimes[hash])
+      {
+        g_pota.rbnReportTimes[hash] = Date.now() + g_pota.rbnFrequency;
+        reportPotaRBN(g_pota.parkSpots[park][callObj.DEcall]);
+      }
     }
     else
     {
-      // update spot
-      g_pota.parkSpots[park][callObj.DEcall] = spotFromCallObj(callObj, park, g_pota.parkSpots[park][callObj.DEcall].count);
-    }
-    
-    // may or may not be on screen, so try
-    if (g_appSettings.potaMapEnabled)
-    {
-      addParkSpotFeature(park, g_pota.parkSpots[park][callObj.DEcall]);
-    }
-    
-    let hash = park + callObj.DEcall;
-    if (!(hash in g_pota.rbnReportTimes) || Date.now() > g_pota.rbnReportTimes[hash])
-    {
-      g_pota.rbnReportTimes[hash] = Date.now() + g_pota.rbnFrequency;
-      reportPotaRBN(g_pota.parkSpots[park][callObj.DEcall]);
+      if (!(callObj.DEcall in g_pota.callSpots))
+      {
+        console.log("No call spot: " + callObj.DEcall);
+      }
+      if (!(park in g_pota.parkSpots))
+      {
+        console.log("No park spot: " + park);
+      }
     }
   }
 }
 
 function reportPotaRBN(callSpot)
 {
-  let report = {
-    activator: callSpot.activator,
-    spotter: myDEcall + "-#",
-    frequency: String(parseInt(callSpot.frequency * 1000)),
-    reference: callSpot.reference,
-    mode: callSpot.mode,
-    source: "RBN",
-    comments: callSpot.comments,
-    activatorGrid: callSpot.activatorGrid,
-    spotterGrid: callSpot.spotterGrid
-  }
-  
-  if (Number(report.frequency) > 0)
+  if (Date.now() < callSpot.expire)
   {
-    getPostJSONBuffer(
-      "https://api.pota.app/spot",
-      rbnReportResult,
-      null,
-      "https",
-      443,
-      report,
-      10000,
-      null,
-      null
-    );
+    var report = {
+      activator: callSpot.activator,
+      spotter: myDEcall + "-#",
+      frequency: String(parseInt(callSpot.frequency * 1000)),
+      reference: callSpot.reference,
+      mode: callSpot.mode,
+      source: "RBN",
+      comments: callSpot.comments,
+      activatorGrid: callSpot.activatorGrid,
+      spotterGrid: callSpot.spotterGrid
+    };
+    
+    if (Number(report.frequency) > 0)
+    {
+      getPostJSONBuffer(
+        "https://api.pota.app/spot",
+        rbnReportResult,
+        null,
+        "https",
+        443,
+        report,
+        10000,
+        null,
+        null
+      );
+    }
   }
 }
 
 function reportPotaQSO(record)
 {
-  let report = {
+  var report = {
     activator: record.CALL,
     spotter: record.STATION_CALLSIGN,
     frequency: record.FREQ,
@@ -246,7 +267,7 @@ function reportPotaQSO(record)
     comments: record.COMMENT ? record.COMMENT : "",
     activatorGrid: record.GRIDSQUARE ? record.GRIDSQUARE : "",
     spotterGrid: record.MY_GRIDSQUARE ? record.MY_GRIDSQUARE : ""
-  }
+  };
   
   if ("SUBMODE" in record)
   {
@@ -282,7 +303,7 @@ function rbnReportResult(buffer, flag, cookies)
 
 function spotFromCallObj(callObj, park, inCount, rbnTime)
 {
-  let callSpot = {
+  var callSpot = {
     activator: callObj.DEcall,
     activatorGrid: callObj.grid,
     spotter: myDEcall + "-#",
@@ -301,7 +322,7 @@ function spotFromCallObj(callObj, park, inCount, rbnTime)
 
 function addParkSpotFeature(park, report)
 {
-  let parkObj = Object.assign({}, g_parkTemplate);
+  var parkObj = Object.assign({}, g_parkTemplate);
   if (park in g_pota.mapParks)
   {
     parkObj = g_pota.mapParks[park];
@@ -326,11 +347,11 @@ function processPotaParks(buffer)
   {
     try
     {
-      let data = JSON.parse(buffer);
-      let newParks = data.parks;
+      var data = JSON.parse(buffer);
+      var newParks = data.parks;
       for (const park in newParks)
       {
-        let locations = newParks[park].locationDesc.split(",");
+        var locations = newParks[park].locationDesc.split(",");
         for (const i in locations)
         {
           if (locations[i] in data.locations)
@@ -381,7 +402,7 @@ function getPotaParks()
 // This is a shallow copy, don't use with objects that contain other objects or arrays
 function fillObjectFromTemplate(template, input)
 {
-  let object = {};
+  var object = {};
   for (const key in template)
   {
     if (key in input)
@@ -399,7 +420,7 @@ function fillObjectFromTemplate(template, input)
 
 function uniqueArrayFromArray(input)
 {
-  let unique = [];
+  var unique = [];
   input.forEach((c) =>
   {
     if (!unique.includes(c))
@@ -416,49 +437,42 @@ function processPotaSpots(buffer)
   {
     try
     {
-      let spots = JSON.parse(buffer);
+      var spots = JSON.parse(buffer);
       g_pota.callSpots = {};
       g_pota.parkSpots = {};
       for (const spot in spots)
       {
         if (spots[spot].reference in g_pota.parks)
         {
-          let newSpot = fillObjectFromTemplate(g_potaSpotTemplate, spots[spot]);
+          var newSpot = fillObjectFromTemplate(g_potaSpotTemplate, spots[spot]);
           newSpot.spotTime = Date.parse(newSpot.spotTime + "Z");
           newSpot.frequency = parseInt(newSpot.frequency) / 1000;
+          newSpot.expire = newSpot.spotTime + (Number(newSpot.expire) * 1000);
           newSpot.band = newSpot.frequency.formatBand();
           if (newSpot.spotter == newSpot.activator && newSpot.comments.match(/qrt/gi))
           {
             // don't add the spot, they have self-QRT'ed
           }
+          else if (Date.now() > newSpot.expire)
+          {
+            // Spot is expired!
+          }
           else
           {
-            (g_pota.callSpots[newSpot.activator] = g_pota.callSpots[newSpot.activator] || []).push(newSpot.reference);
+            g_pota.callSpots[newSpot.activator] = newSpot.reference;
             
             if (!(newSpot.reference in g_pota.parkSpots))
             {
               g_pota.parkSpots[newSpot.reference] = {};
             }
-            if (newSpot.activator in g_pota.parkSpots[newSpot.reference])
-            {
-              g_pota.parkSpots[newSpot.reference][newSpot.activator] = fillObjectFromTemplate(g_pota.parkSpots[newSpot.reference][newSpot.activator], newSpot);
-            }
-            else
-            {
-              g_pota.parkSpots[newSpot.reference][newSpot.activator] = newSpot;
-            }
+ 
+            g_pota.parkSpots[newSpot.reference][newSpot.activator] = newSpot;
           }
         }
         else
         {
           console.log("PotaSpots: unknown park id: " + spots[spot].reference);
         }
-      }
-
-      // Sanity dedupe checks
-      for (const spot in g_pota.callSpots)
-      {
-        g_pota.callSpots[spot] = uniqueArrayFromArray(g_pota.callSpots[spot]);
       }
       
       redrawParks();
@@ -498,12 +512,12 @@ function processPotaSchedule(buffer)
   {
     try
     {
-      let schedules = JSON.parse(buffer);
+      var schedules = JSON.parse(buffer);
       g_pota.callSchedule = {};
       g_pota.parkSchedule = {};
       for (const i in schedules)
       {
-        let newObj = {};
+        var newObj = {};
         newObj.id = schedules[i].reference;
         newObj.start = Date.parse(schedules[i].startDate + "T" + schedules[i].startTime + "Z");
         newObj.end = Date.parse(schedules[i].endDate + "T" + schedules[i].endTime + "Z");
@@ -608,10 +622,10 @@ function mouseParkMove()
 
 function createParkTipTable(toolElement)
 {
-  let worker = "";
+  var worker = "";
 
-  let key = toolElement.key;
-  let now = Date.now();
+  var key = toolElement.key;
+  var now = Date.now();
 
   worker += "<div style='background-color:#000;color:lightgreen;font-weight:bold;font-size:12px;border:1px solid gray;margin:0px' class='roundBorder'>" +
     key +
@@ -645,8 +659,8 @@ function createParkTipTable(toolElement)
     buffer += "<tr><th>Activator</th><th>Start</th><th>End</th><th>Frequencies</th><th>Comment</th></tr>";
     for (const i in g_pota.parkSchedule[key])
     {
-      let start = g_pota.parkSchedule[key][i].start;
-      let end = g_pota.parkSchedule[key][i].end;
+      var start = g_pota.parkSchedule[key][i].start;
+      var end = g_pota.parkSchedule[key][i].end;
       if (now < end)
       {
         buffer += "<tr>";

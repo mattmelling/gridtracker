@@ -38,7 +38,6 @@ var g_gtChatSocket = null;
 var g_gtFlagPins = Object();
 var g_gtMessages = Object();
 var g_gtUnread = Object();
-var g_gtIdToCid = Object();
 var g_gtCallsigns = Object();
 var g_gtSentAwayToCid = Object();
 
@@ -47,13 +46,14 @@ var g_gtStatusCount = 0;
 var g_gtStatusTime = 500;
 var g_gtMaxChatMessages = 100;
 var g_gtNeedUsersList = true;
+var g_gtUuidValid = false;
 
 var g_gtLiveStatusUpdate = false;
 
 var myChatId = 0;
 
 var myRoom = 0;
-var g_gtChatlistChangeCount = 0;
+
 var g_gtCurrentMessageCount = 0;
 
 function gtConnectChat()
@@ -165,17 +165,25 @@ function gtClosedSocket()
   g_gtState = ChatState.none;
 }
 
+// Connect 15 seconds after startup
+var g_lastConnectAttempt = parseInt(Date.now() / 1000) - 15;
+
 function gtCanConnect()
 {
+  g_lastConnectAttempt = timeNowSec();
   g_gtState = ChatState.connect;
 }
 
 function gtSetIdle()
 {
-  g_gtStatusCount = 0;
-  g_gtNeedUsersList = true;
-  g_gtState = ChatState.idle;
-  g_lastGtStatus = "";
+  if (timeNowSec() - g_lastConnectAttempt >= 30)
+  {
+    g_gtStatusCount = 0;
+    g_gtNeedUsersList = true;
+    g_gtState = ChatState.idle;
+    g_lastGtStatus = "";
+  }
+  g_gtUuidValid = false;
 }
 
 function gtStatusCheck()
@@ -204,11 +212,11 @@ function gtStatusCheck()
   }
 }
 
-function sendGtJson(json)
+function sendGtJson(json, isUUIDrequest = false)
 {
   if (g_gtChatSocket != null)
   {
-    if (g_gtChatSocket.readyState === WebSocket.OPEN)
+    if (g_gtChatSocket.readyState === WebSocket.OPEN && (isUUIDrequest || g_gtUuidValid))
     {
       g_gtChatSocket.send(json);
     }
@@ -220,7 +228,8 @@ function sendGtJson(json)
       }
     }
   }
-  else g_gtState = ChatState.closed;
+  // if we don't have a socketHandle, don't go changing the state willy nilly!
+  // else g_gtState = ChatState.closed;
 }
 
 var g_lastGtStatus = "";
@@ -263,34 +272,46 @@ function gtChatSendSpots(spotsObject, detailsObject)
 function gtChatRemoveCall(jsmesg)
 {
   var id = jsmesg.id;
-  if (id in g_gtIdToCid)
+  var cid = jsmesg.cid;
+
+  if (cid in g_gtFlagPins)
   {
-    var cid = g_gtIdToCid[id];
-    if (cid in g_gtFlagPins)
+    if (id in g_gtFlagPins[cid].ids)
     {
       delete g_gtFlagPins[cid].ids[id];
-      if (Object.keys(g_gtFlagPins[cid].ids).length == 0)
+    }
+    else
+    {
+      console.log("drop: No such id in g_gtFlagPins.ids:");
+      console.log(jsmesg);
+      console.log(g_gtFlagPins[cid].ids);
+    }
+    
+    if (Object.keys(g_gtFlagPins[cid].ids).length == 0)
+    {
+      delete g_gtCallsigns[g_gtFlagPins[cid].call][cid];
+
+      if (g_gtFlagPins[cid].pin != null)
       {
-        if (g_gtFlagPins[cid].pin != null)
-        {
-          // remove pin from map here
-          if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))
-          { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
-          delete g_gtFlagPins[cid].pin;
-          g_gtFlagPins[cid].pin = null;
-        }
-        g_gtFlagPins[cid].live = false;
-        notifyNoChat(cid);
-        if (!(cid in g_gtMessages))
+        // remove pin from map here
+        if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))
+        { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
+        delete g_gtFlagPins[cid].pin;
+        g_gtFlagPins[cid].pin = null;
+      }
+      g_gtFlagPins[cid].live = false;
+      notifyNoChat(cid);
+      if (!(cid in g_gtMessages))
+      {
+        if (Object.keys(g_gtCallsigns[g_gtFlagPins[cid].call]).length == 0)
         {
           delete g_gtCallsigns[g_gtFlagPins[cid].call];
-          delete g_gtFlagPins[cid];
         }
-
-        updateChatWindow();
+        delete g_gtFlagPins[cid];
       }
+
+      updateChatWindow(cid);
     }
-    delete g_gtIdToCid[id];
   }
 }
 
@@ -303,13 +324,18 @@ function gtChatUpdateCall(jsmesg)
   {
     g_gtFlagPins[cid].ids[id] = true;
     // Did they move grid location?
-    if (g_gtFlagPins[cid].pin != null)
+    if (jsmesg.grid != g_gtFlagPins[cid].grid && g_gtFlagPins[cid].pin != null)
     {
       // remove pin from map here
       if (g_layerSources.gtflags.hasFeature(g_gtFlagPins[cid].pin))
       { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
       delete g_gtFlagPins[cid].pin;
       g_gtFlagPins[cid].pin = null;
+    }
+    // Changed callsign?
+    if (g_gtFlagPins[cid].call != jsmesg.call)
+    {
+      delete g_gtCallsigns[g_gtFlagPins[cid].call][cid];
     }
   }
   else
@@ -319,7 +345,6 @@ function gtChatUpdateCall(jsmesg)
     g_gtFlagPins[cid].ids = Object();
     g_gtFlagPins[cid].ids[id] = true;
   }
-  g_gtIdToCid[jsmesg.id] = jsmesg.cid;
 
   g_gtFlagPins[cid].cid = jsmesg.cid;
   g_gtFlagPins[cid].call = jsmesg.call;
@@ -342,9 +367,15 @@ function gtChatUpdateCall(jsmesg)
       g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin);
     }
   }
-  g_gtChatlistChangeCount++;
-  g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
-  updateChatWindow();
+
+  if (!(g_gtFlagPins[cid].call in g_gtCallsigns))
+  {
+    // Can happen when a user changes callsign
+    g_gtCallsigns[g_gtFlagPins[cid].call] = Object();
+  }
+  g_gtCallsigns[g_gtFlagPins[cid].call][cid] = true;
+
+  updateChatWindow(cid);
 }
 
 function gtChatGetList()
@@ -370,7 +401,9 @@ function redrawPins()
     makeGtPin(g_gtFlagPins[cid]);
 
     if (g_gtFlagPins[cid].pin != null)
-    { g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin); }
+    {
+      g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin);
+    }
   }
 }
 
@@ -381,7 +414,9 @@ function makeGtPin(obj)
     if (obj.pin)
     {
       if (g_layerSources.gtflags.hasFeature(obj.pin))
-      { g_layerSources.gtflags.removeFeature(obj.pin); }
+      {
+        g_layerSources.gtflags.removeFeature(obj.pin);
+      }
       delete obj.pin;
       obj.pin = null;
     }
@@ -394,19 +429,13 @@ function makeGtPin(obj)
 
     if (validateGridFromString(obj.grid) == false) return;
 
-    if (
-      g_appSettings.gtFlagImgSrc == 2 &&
-      (obj.mode != myMode || obj.band != myBand)
-    )
-    { return; }
+    if (g_appSettings.gtFlagImgSrc == 2 && (obj.mode != myMode || obj.band != myBand))
+    {
+      return;
+    }
 
-    var LL = squareToLatLongAll(obj.grid);
-    var myLonLat = [
-      LL.lo2 - (LL.lo2 - LL.lo1) / 2,
-      LL.la2 - (LL.la2 - LL.la1) / 2
-    ];
-
-    obj.pin = iconFeature(ol.proj.fromLonLat(myLonLat), g_gtFlagIcon, 100);
+    var LL = squareToCenter(obj.grid);
+    obj.pin = iconFeature(ol.proj.fromLonLat([LL.o, LL.a]), g_gtFlagIcon, 100);
     obj.pin.key = obj.cid;
     obj.pin.isGtFlag = true;
     obj.pin.size = 1;
@@ -418,14 +447,12 @@ function gtChatNewList(jsmesg)
 {
   clearGtFlags();
 
-  for (var cid in g_gtFlagPins)
-  {
-    g_gtFlagPins[cid].live = false;
-    if (!(cid in g_gtMessages))
-    {
-      delete g_gtFlagPins[cid];
-    }
-  }
+  // starting clean if we're getting a new chat list
+  g_gtFlagPins = Object()
+  g_gtMessages = Object();
+  g_gtUnread = Object();
+  g_gtCallsigns = Object();
+  g_gtSentAwayToCid = Object();
 
   for (var key in jsmesg.data.calls)
   {
@@ -445,7 +472,6 @@ function gtChatNewList(jsmesg)
         g_gtFlagPins[cid].pin = null;
       }
 
-      g_gtIdToCid[id] = cid;
       g_gtFlagPins[cid].call = jsmesg.data.calls[key];
       g_gtFlagPins[cid].fCall = g_gtFlagPins[cid].call.formatCallsign();
       g_gtFlagPins[cid].grid = jsmesg.data.grid[key];
@@ -458,7 +484,13 @@ function gtChatNewList(jsmesg)
       g_gtFlagPins[cid].o = jsmesg.data.o[key];
       g_gtFlagPins[cid].dxcc = callsignToDxcc(g_gtFlagPins[cid].call);
       g_gtFlagPins[cid].live = true;
-      g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
+
+      if (!(g_gtFlagPins[cid].call in g_gtCallsigns))
+      {
+        g_gtCallsigns[g_gtFlagPins[cid].call] = Object();
+      }
+
+      g_gtCallsigns[g_gtFlagPins[cid].call][cid] = true;
 
       makeGtPin(g_gtFlagPins[cid]);
 
@@ -468,7 +500,6 @@ function gtChatNewList(jsmesg)
       }
     }
   }
-  g_gtChatlistChangeCount++;
 
   updateChatWindow();
 }
@@ -555,7 +586,7 @@ function gtChatSendUUID()
   msg.call = myDEcall;
   msg.ver = gtShortVersion;
 
-  sendGtJson(JSON.stringify(msg));
+  sendGtJson(JSON.stringify(msg), true);
 }
 
 function gtChatSetUUID(jsmesg)
@@ -563,17 +594,18 @@ function gtChatSetUUID(jsmesg)
   g_appSettings.chatUUID = jsmesg.uuid;
   myChatId = jsmesg.id;
 
+  g_gtUuidValid = true;
   gtChatSendStatus();
-
+  g_gtLiveStatusUpdate = false;
+  g_gtStatusCount = g_gtStatusTime;
   g_gtState = ChatState.status;
 }
 
+var g_getEngineWasRunning = false;
+
 function gtChatStateMachine()
 {
-  if (
-    g_appSettings.gtShareEnable == true &&
-    g_mapSettings.offlineMode == false
-  )
+  if (g_appSettings.gtShareEnable == true && g_mapSettings.offlineMode == false)
   {
     var now = timeNowSec();
     g_gtStateToFunction[g_gtState]();
@@ -584,22 +616,23 @@ function gtChatStateMachine()
     }
     else msgImg.style.webkitFilter = "";
 
-    if (
-      g_msgSettings.msgFrequencySelect > 0 &&
-      Object.keys(g_gtUnread).length > 0
-    )
+    if (g_msgSettings.msgFrequencySelect > 0 && Object.keys(g_gtUnread).length > 0)
     {
       if (now - g_lastChatMsgAlert > g_msgSettings.msgFrequencySelect * 60)
       {
         alertChatMessage();
       }
     }
+    g_getEngineWasRunning = true;
   }
   else
   {
-    closeGtSocket();
-    g_gtChatlistChangeCount = 0;
-    g_lastGtStatus = "";
+    if (g_getEngineWasRunning == true)
+    {
+      g_getEngineWasRunning = false;
+      closeGtSocket();
+      g_lastGtStatus = "";
+    }
   }
 }
 
@@ -690,13 +723,20 @@ function notifyNoChat(id)
   }
 }
 
-function updateChatWindow()
+function updateChatWindow(id = null)
 {
   if (g_chatWindowHandle != null)
   {
     try
     {
-      g_chatWindowHandle.window.updateEverything();
+      if (id)
+      {
+        g_chatWindowHandle.window.updateCallsign(id);
+      }
+      else
+      {
+        g_chatWindowHandle.window.updateEverything();
+      }
     }
     catch (e) {}
   }
@@ -712,9 +752,9 @@ function newChatMessage(id, jsmesg)
     try
     {
       hasFocus = g_chatWindowHandle.window.newChatMessage(id, jsmesg);
+      g_chatWindowHandle.window.messagesRedraw();
     }
     catch (e) {}
-    updateChatWindow();
   }
   return hasFocus;
 }

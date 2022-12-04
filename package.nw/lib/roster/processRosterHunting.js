@@ -117,16 +117,20 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       }
 
       // Calls that have OAMS chat support
-      if (
-        callsign in window.opener.g_gtCallsigns &&
-        window.opener.g_gtCallsigns[callsign] in window.opener.g_gtFlagPins &&
-        window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[callsign]].canmsg == true
-      )
+      if (callsign in window.opener.g_gtCallsigns)
       {
-        callObj.callFlags.oams = true;
-        // grab the CID
-        callObj.gt = window.opener.g_gtCallsigns[callsign];
-        hasGtPin = true;
+        callObj.gt = 0;
+        for (const cid in window.opener.g_gtCallsigns[callsign])
+        {
+          if (cid in window.opener.g_gtFlagPins && window.opener.g_gtFlagPins[cid].canmsg == true)
+          {
+            // found the first one we can message, break now
+            callObj.callFlags.oams = true;
+            callObj.gt = cid;
+            hasGtPin = true;
+            break;
+          }
+        }
       }
       else
       {
@@ -518,17 +522,15 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
         }
 
         // Hunting for POTAs
-        if (potaEnabled && huntPOTA.checked == true && callObj.pota.length > 0)
+        if (potaEnabled && huntPOTA.checked == true && callObj.pota)
         {
-          let huntTotal = callObj.pota.length;
+          let huntTotal = 1;
           let workedFound = 0;
 
-          for (const index in callObj.pota)
-          {
-            let hash = g_dayAsString + callsign + callObj.pota[index] + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
+          let hash = g_dayAsString + callsign + callObj.pota + (rosterSettings.layeredMode ? layeredHashSuffix : workHashSuffix);
 
-            if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
-          }
+          if (rosterSettings.workedIndex && hash in rosterSettings.workedIndex.pota) workedFound++;
+          
           if (workedFound != huntTotal)
           {
             shouldAlert = true;

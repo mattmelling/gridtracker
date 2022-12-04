@@ -1381,8 +1381,7 @@ function setAdifStartup(checkbox)
       worker += "<table class='darkTable'>";
       for (var i in g_startupLogs)
       {
-        worker +=
-          "<tr title='" +
+        worker += "<tr title='" +
           g_startupLogs[i].file +
           "'><td>" +
           g_startupLogs[i].name +
@@ -1882,12 +1881,11 @@ function sendToLogger(ADIF)
     record.GRIDSQUARE = g_liveCallsigns[localHash].grid.substr(0, 4);
   }
 
-  if (g_appSettings.potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota.length > 0)
+  if (g_appSettings.potaEnabled == 1 && localHash in g_liveCallsigns && g_liveCallsigns[localHash].pota)
   {
-    var pota = g_liveCallsigns[localHash].pota[0];
-    if (pota != "?-????")
+    if (g_liveCallsigns[localHash].pota != "?-????")
     {
-      record.POTA = pota;
+      record.POTA = g_liveCallsigns[localHash].pota;
     }
   }
 
@@ -2394,8 +2392,7 @@ function sendLotwLogEntry(report)
     lotwStation.value.length > 0
   )
   {
-    var header =
-      "Generated " + userTimeString(null) + " for " + myDEcall + "\r\n\r\n";
+    var header = "Generated " + userTimeString(null) + " for " + myDEcall + "\r\n\r\n";
     var pid = "GridTracker";
     var pver = String(gtVersion);
     header += "<PROGRAMID:" + pid.length + ">" + pid + "\r\n";

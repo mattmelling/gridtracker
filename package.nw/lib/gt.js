@@ -7092,11 +7092,13 @@ function handleWsjtxDecode(newMessage)
 
       if (g_appSettings.gtSpotEnable === true && callsign.DEcall in g_gtCallsigns)
       {
-        var key = g_gtCallsigns[callsign.DEcall];
-        if (key in g_gtFlagPins && g_gtFlagPins[key].o == 1)
+        for (const cid in g_gtCallsigns[callsign.DEcall])
         {
-          g_spotCollector[key] = callsign.RSTsent;
-          g_spotDetailsCollector[key] = [callsign.delta + newMessage.OF, callsign.mode];
+          if (cid in g_gtFlagPins && g_gtFlagPins[cid].o == 1)
+          {
+            g_spotCollector[cid] = callsign.RSTsent;
+            g_spotDetailsCollector[cid] = [callsign.delta + newMessage.OF, callsign.mode];
+          }
         }
       }
     }
@@ -10641,7 +10643,6 @@ function setGtShareButtons()
     g_gtFlagPins = Object()
     g_gtMessages = Object();
     g_gtUnread = Object();
-    g_gtIdToCid = Object();
     g_gtCallsigns = Object();
     g_gtSentAwayToCid = Object();
     

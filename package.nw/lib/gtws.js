@@ -282,13 +282,15 @@ function gtChatRemoveCall(jsmesg)
     }
     else
     {
-      console.log("drop: No such id in gtCall:");
+      console.log("drop: No such id in g_gtFlagPins.ids:");
       console.log(jsmesg);
       console.log(g_gtFlagPins[cid].ids);
     }
-
+    
     if (Object.keys(g_gtFlagPins[cid].ids).length == 0)
     {
+      delete g_gtCallsigns[g_gtFlagPins[cid].call][cid];
+
       if (g_gtFlagPins[cid].pin != null)
       {
         // remove pin from map here
@@ -301,17 +303,15 @@ function gtChatRemoveCall(jsmesg)
       notifyNoChat(cid);
       if (!(cid in g_gtMessages))
       {
-        delete g_gtCallsigns[g_gtFlagPins[cid].call];
+        if (Object.keys(g_gtCallsigns[g_gtFlagPins[cid].call]).length == 0)
+        {
+          delete g_gtCallsigns[g_gtFlagPins[cid].call];
+        }
         delete g_gtFlagPins[cid];
       }
 
       updateChatWindow(cid);
     }
-  }
-  else
-  {
-    console.log("drop: No such cid in gtCall");
-    console.log(jsmesg);
   }
 }
 
@@ -331,6 +331,11 @@ function gtChatUpdateCall(jsmesg)
       { g_layerSources.gtflags.removeFeature(g_gtFlagPins[cid].pin); }
       delete g_gtFlagPins[cid].pin;
       g_gtFlagPins[cid].pin = null;
+    }
+    // Changed callsign?
+    if (g_gtFlagPins[cid].call != jsmesg.call)
+    {
+      delete g_gtCallsigns[g_gtFlagPins[cid].call][cid];
     }
   }
   else
@@ -362,7 +367,14 @@ function gtChatUpdateCall(jsmesg)
       g_layerSources.gtflags.addFeature(g_gtFlagPins[cid].pin);
     }
   }
-  g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
+
+  if (!(g_gtFlagPins[cid].call in g_gtCallsigns))
+  {
+    // Can happen when a user changes callsign
+    g_gtCallsigns[g_gtFlagPins[cid].call] = Object();
+  }
+  g_gtCallsigns[g_gtFlagPins[cid].call][cid] = true;
+
   updateChatWindow(cid);
 }
 
@@ -472,7 +484,13 @@ function gtChatNewList(jsmesg)
       g_gtFlagPins[cid].o = jsmesg.data.o[key];
       g_gtFlagPins[cid].dxcc = callsignToDxcc(g_gtFlagPins[cid].call);
       g_gtFlagPins[cid].live = true;
-      g_gtCallsigns[g_gtFlagPins[cid].call] = cid;
+
+      if (!(g_gtFlagPins[cid].call in g_gtCallsigns))
+      {
+        g_gtCallsigns[g_gtFlagPins[cid].call] = Object();
+      }
+
+      g_gtCallsigns[g_gtFlagPins[cid].call][cid] = true;
 
       makeGtPin(g_gtFlagPins[cid]);
 

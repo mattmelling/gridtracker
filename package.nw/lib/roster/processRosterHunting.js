@@ -117,16 +117,20 @@ function processRosterHunting(callRoster, rosterSettings, awardTracker)
       }
 
       // Calls that have OAMS chat support
-      if (
-        callsign in window.opener.g_gtCallsigns &&
-        window.opener.g_gtCallsigns[callsign] in window.opener.g_gtFlagPins &&
-        window.opener.g_gtFlagPins[window.opener.g_gtCallsigns[callsign]].canmsg == true
-      )
+      if (callsign in window.opener.g_gtCallsigns)
       {
-        callObj.callFlags.oams = true;
-        // grab the CID
-        callObj.gt = window.opener.g_gtCallsigns[callsign];
-        hasGtPin = true;
+        callObj.gt = 0;
+        for (const cid in window.opener.g_gtCallsigns[callsign])
+        {
+          if (cid in window.opener.g_gtFlagPins && window.opener.g_gtFlagPins[cid].canmsg == true)
+          {
+            // found the first one we can message, break now
+            callObj.callFlags.oams = true;
+            callObj.gt = cid;
+            hasGtPin = true;
+            break;
+          }
+        }
       }
       else
       {
